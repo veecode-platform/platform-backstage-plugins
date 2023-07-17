@@ -16,9 +16,9 @@ import SyncIcon from '@material-ui/icons/Sync';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StopIcon from '@material-ui/icons/Stop';
 import LanguageIcon from '@material-ui/icons/Language';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 import { WorkflowListExample } from '../../mocks/WorkflowListExample';
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 
 const useStyles = makeStyles({
   title:{

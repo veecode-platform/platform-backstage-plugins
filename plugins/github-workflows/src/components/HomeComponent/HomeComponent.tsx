@@ -2,6 +2,7 @@ import { Content, ContentHeader, Header, HeaderLabel,Page, SupportButton } from 
 import { Grid } from '@material-ui/core'
 import React from 'react'
 import { WorkflowList } from '../WorkflowList'
+import { WorkFlowCard } from '../WorkFlowCard'
 
 export const HomeComponent = () => {
   return (
@@ -18,9 +19,9 @@ export const HomeComponent = () => {
         <Grid item>
           <WorkflowList />
         </Grid>
-        {/* <Grid item>
-          <ExampleFetchComponent />
-        </Grid> */}
+        <Grid item lg={6}>
+          <WorkFlowCard/>
+        </Grid>
       </Grid>
     </Content>
   </Page>
