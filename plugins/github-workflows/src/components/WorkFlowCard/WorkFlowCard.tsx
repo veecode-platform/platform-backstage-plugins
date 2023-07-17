@@ -1,6 +1,6 @@
 import React from 'react';
 import { InfoCard } from '@backstage/core-components';
-import { Box, Paper, Typography, makeStyles } from '@material-ui/core';
+import { Paper, Typography, makeStyles } from '@material-ui/core';
 import { Button } from './Button';
 
 
