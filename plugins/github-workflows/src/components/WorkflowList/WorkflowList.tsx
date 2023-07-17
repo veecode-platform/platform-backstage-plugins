@@ -42,6 +42,7 @@ const useStyles = makeStyles({
   action: {
     width: '90%',
     verticalAlign: 'middle',
+    cursor: 'pointer'
   },
   url: {
     display: 'flex',
