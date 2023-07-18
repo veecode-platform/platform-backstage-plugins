@@ -13,7 +13,7 @@ export const GithubWorkflowsPage = githubWorkflowsPlugin.provide(
   createRoutableExtension({
     name: 'GithubWorkflowsPage',
     component: () =>
-      import('./components/HomeComponent').then(m => m.HomeComponent),
+      import('./components/GithubWorkflowsOverview').then(m => m.GithubWorkflowsOverview),
     mountPoint: rootRouteRef,
   }),
 );

@@ -4,7 +4,7 @@ import React from 'react'
 import { WorkflowList } from '../WorkflowList'
 import { WorkFlowCard } from '../WorkFlowCard'
 
-export const HomeComponent = () => {
+export const GithubWorkflowsOverview = () => {
   return (
     <Page themeId="tool">
     <Header title="Welcome to github-workflows!" subtitle="Platform Plugin">
