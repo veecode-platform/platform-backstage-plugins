@@ -49,9 +49,9 @@ export const WorkFlowCard = () => {
     <Paper>
       <InfoCard title={TitleBar}>
         <Typography className={classes.workflowsGroup}>
-          <WorkFlowItem status="ok"> Update-SO  </WorkFlowItem>
-          <WorkFlowItem status="ok"> Build-image  </WorkFlowItem>
-          <WorkFlowItem status="ok"> Deploy-project </WorkFlowItem>
+          <WorkFlowItem status="running"> Update-SO  </WorkFlowItem>
+          <WorkFlowItem status="warning"> Build-image  </WorkFlowItem>
+          <WorkFlowItem status="pending"> Deploy-project </WorkFlowItem>
         </Typography>
       </InfoCard>
     </Paper>
