@@ -1,11 +1,7 @@
 import React from 'react';
 import { InfoCard } from '@backstage/core-components';
 import { Paper, Typography, makeStyles } from '@material-ui/core';
-import { Button } from './Button';
-import { 
-  StatusOK } from '@backstage/core-components';
-import SyncIcon from '@material-ui/icons/Sync';
-
+import { WorkFlowItem } from './WorkFlowItem';
 
 
 const useStyles = makeStyles(theme => ({
@@ -13,7 +9,7 @@ const useStyles = makeStyles(theme => ({
     paddingLeft: '1.5rem',
     fontSize: '1.5rem'
   },
-  buttonsGroup:{
+  workflowsGroup:{
       width: '95%',
       margin: 'auto',
       display: 'flex',
@@ -32,10 +28,11 @@ const useStyles = makeStyles(theme => ({
 
       },
       '&::-webkit-scrollbar-track': {
-        background: '#ededed',
+        background: 'transparent',
         height: '2px'
       }
-  }
+  },
+
 }));
 
 export const WorkFlowCard = () => {
@@ -51,10 +48,10 @@ export const WorkFlowCard = () => {
   return (
     <Paper>
       <InfoCard title={TitleBar}>
-        <Typography className={classes.buttonsGroup}>
-         <Button><StatusOK/>Update-SO <SyncIcon/></Button>
-         <Button><StatusOK/>Build-image <SyncIcon/></Button>
-         <Button><StatusOK/>Deploy-project <SyncIcon/></Button>
+        <Typography className={classes.workflowsGroup}>
+          <WorkFlowItem status="ok"> Update-SO  </WorkFlowItem>
+          <WorkFlowItem status="ok"> Build-image  </WorkFlowItem>
+          <WorkFlowItem status="ok"> Deploy-project </WorkFlowItem>
         </Typography>
       </InfoCard>
     </Paper>
