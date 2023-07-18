@@ -49,7 +49,7 @@ export const WorkFlowCard = () => {
     <Paper>
       <InfoCard title={TitleBar}>
         <Typography className={classes.workflowsGroup}>
-          <WorkFlowItem status="running"> Update-SO  </WorkFlowItem>
+          <WorkFlowItem status="aborted"> Update-SO  </WorkFlowItem>
           <WorkFlowItem status="warning"> Build-image  </WorkFlowItem>
           <WorkFlowItem status="pending"> Deploy-project </WorkFlowItem>
         </Typography>

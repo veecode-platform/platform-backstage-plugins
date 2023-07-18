@@ -13,6 +13,7 @@ import {
   StatusPending,
   StatusRunning,
   StatusWarning } from '@backstage/core-components';
+import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
 
 type WorkFlowItemProps = {
   children: ReactNode | string,
@@ -23,7 +24,7 @@ const useStyles = makeStyles(theme =>({
     workflow:{
       padding: '.8rem 3rem',
       background: 'transparent',
-      border: '1px solid #979696',
+      border: `1px solid ${theme.palette.border}`,
       borderRadius: '30px',
       fontSize: '1rem',
       display: 'flex',
@@ -49,21 +50,21 @@ export const WorkFlowItem = ({status,children}:WorkFlowItemProps) => {
     <div 
       className={classes.workflow}
       >
-      {status === "ok" && <StatusOK/>}
-      {status === "error" && <StatusError/>}
-      {status === "pending" && <StatusPending/>}
-      {status === "aborted" && <StatusAborted/>}
-      {status === "running" && <StatusRunning/>}
-      {status === "warning" && <StatusWarning/>}
+      {status === StatusWorkflowEnum.completed && <StatusOK/>}
+      {status === StatusWorkflowEnum.error && <StatusError/>}
+      {status === StatusWorkflowEnum.pending && <StatusPending/>}
+      {status === StatusWorkflowEnum.aborted && <StatusAborted/>}
+      {status === StatusWorkflowEnum.running && <StatusRunning/>}
+      {status === StatusWorkflowEnum.warning && <StatusWarning/>}
       {children} 
       <span
         className={classes.clickable}>
-        {status === "ok" && <SyncIcon/>}
-        {status === "error" && <ReplayIcon/>}
-        {status === "pending" && <TimerIcon/>}
-        {status === "aborted" && <HighlightOffIcon/>}
-        {status === "running" && <HourglassEmptyIcon/>}
-        {status === "warning" && <ErrorOutlineIcon/>}
+        {status === StatusWorkflowEnum.completed && <SyncIcon/>}
+        {status === StatusWorkflowEnum.error && <ReplayIcon/>}
+        {status === StatusWorkflowEnum.pending && <TimerIcon/>}
+        {status === StatusWorkflowEnum.aborted && <HighlightOffIcon/>}
+        {status === StatusWorkflowEnum.running && <HourglassEmptyIcon/>}
+        {status === StatusWorkflowEnum.warning && <ErrorOutlineIcon/>}
       </span>
     </div>
   )

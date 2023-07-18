@@ -13,14 +13,17 @@ import {
   StatusWarning } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 import SyncIcon from '@material-ui/icons/Sync';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import StopIcon from '@material-ui/icons/Stop';
+import ReplayIcon from '@material-ui/icons/Replay';
+import TimerIcon from '@material-ui/icons/Timer';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import LanguageIcon from '@material-ui/icons/Language';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 import { WorkflowListExample } from '../../mocks/WorkflowListExample';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   title:{
     paddingLeft: '2rem',
     fontSize: '1.5rem'
@@ -31,13 +34,13 @@ const useStyles = makeStyles({
     right: '2%',
     padding: '.5rem 2rem',
     background: 'transparent',
-    border: '1px solid #979696',
+    border: `1px solid ${theme.palette.border}`,
     borderRadius: '30px',
     fontSize: '1rem',
     display: 'flex',
     alignItems: 'center',
     gap: '1rem',
-    color: '#979696'
+    color: theme.palette.border
   },
   action: {
     width: '90%',
@@ -50,7 +53,7 @@ const useStyles = makeStyles({
     justifyContent: 'center',
     gap: '1rem'
   }
-});
+}));
 
 type Item = {
     id: string,
@@ -79,19 +82,21 @@ export const DenseTable = ({ items }: DenseTableProps) => {
       status: (
         <>
          {item.status === StatusWorkflowEnum.completed && <StatusOK>{item.status}</StatusOK>}
-         {item.status === StatusWorkflowEnum.paused && <StatusAborted>{item.status}</StatusAborted>}
-         {item.status === StatusWorkflowEnum.failed && <StatusError>{item.status}</StatusError>}
-         {item.status === StatusWorkflowEnum.failed && <StatusPending>{item.status}</StatusPending>}
-         {item.status === StatusWorkflowEnum.failed && <StatusRunning>{item.status}</StatusRunning>}
-         {item.status === StatusWorkflowEnum.failed && <StatusWarning>{item.status}</StatusWarning>}
+         {item.status === StatusWorkflowEnum.error && <StatusError>{item.status}</StatusError>}
+         {item.status === StatusWorkflowEnum.pending && <StatusPending>{item.status}</StatusPending>}
+         {item.status === StatusWorkflowEnum.aborted && <StatusAborted>{item.status}</StatusAborted>}
+         {item.status === StatusWorkflowEnum.running && <StatusRunning>{item.status}</StatusRunning>}
+         {item.status === StatusWorkflowEnum.warning && <StatusWarning>{item.status}</StatusWarning>}
         </>
         ),
       action: (
         <div className={classes.action}>
           {item.status === StatusWorkflowEnum.completed && <SyncIcon/>}
-          {item.status === StatusWorkflowEnum.paused && <PlayArrowIcon/>}
-          {item.status === StatusWorkflowEnum.failed && <SyncIcon/>} 
-          {item.status === StatusWorkflowEnum.run && <StopIcon/>} 
+          {item.status === StatusWorkflowEnum.error && <ReplayIcon/>}
+          {item.status === StatusWorkflowEnum.pending && <TimerIcon/>} 
+          {item.status === StatusWorkflowEnum.aborted && <HighlightOffIcon/>}
+          {item.status === StatusWorkflowEnum.running && <HourglassEmptyIcon/>} 
+          {item.status === StatusWorkflowEnum.warning && <ErrorOutlineIcon/>}
         </div>
       ),
       url: (

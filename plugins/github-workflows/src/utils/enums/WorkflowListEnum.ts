@@ -1,6 +1,8 @@
 export enum StatusWorkflowEnum {
-    failed = "failed",
-    paused = "paused",
     completed = "completed",
-    run = "run"
+    error = "error",
+    pending = "pending",
+    aborted = "aborted",
+    running = "running",
+    warning = "warning"
 }
