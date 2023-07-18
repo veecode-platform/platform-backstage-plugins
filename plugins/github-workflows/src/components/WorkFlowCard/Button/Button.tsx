@@ -1,17 +1,11 @@
 import { makeStyles } from '@material-ui/core';
-import React from 'react'
+import React, { ReactNode } from 'react';
 
-const useStyles = makeStyles({
-    title:{
-      paddingLeft: '1.5rem',
-      fontSize: '1.5rem'
-    },
-    cards:{
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        padding: '1rem'
-    },
+type ButtonProps = {
+  children: ReactNode | string
+}
+
+const useStyles = makeStyles(theme =>({
     button:{
       padding: '.8rem 3rem',
       background: 'transparent',
@@ -20,15 +14,20 @@ const useStyles = makeStyles({
       fontSize: '1rem',
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'center',
       gap: '1rem',
+      color: theme.palette.text.primary,
+      minWidth: '235px',
     }
-  });
+  }));
 
-export const Button = () => {
+export const Button = ({children}:ButtonProps) => {
 
   const classes = useStyles();
 
   return (
-    <button className={classes.button}>Update-SO</button>
+    <button className={classes.button}>
+      {children}
+    </button>
   )
 }

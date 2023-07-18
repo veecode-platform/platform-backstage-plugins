@@ -19,7 +19,7 @@ export const HomeComponent = () => {
         <Grid item>
           <WorkflowList />
         </Grid>
-        <Grid item lg={6}>
+        <Grid item lg={8}>
           <WorkFlowCard/>
         </Grid>
       </Grid>

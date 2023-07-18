@@ -16,7 +16,7 @@ import SyncIcon from '@material-ui/icons/Sync';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StopIcon from '@material-ui/icons/Stop';
 import LanguageIcon from '@material-ui/icons/Language';
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import FilterListIcon from '@material-ui/icons/FilterList';
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 import { WorkflowListExample } from '../../mocks/WorkflowListExample';
 
@@ -105,7 +105,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
   const TitleBar = (
       <>
         <span className={classes.title}>All Workflows</span>
-        <button className={classes.button}>Logs <PlayCircleOutlineIcon/></button>
+        <button className={classes.button}>Logs <FilterListIcon/></button>
       </>
   )
 
