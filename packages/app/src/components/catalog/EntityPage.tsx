@@ -14,7 +14,7 @@ import {
   EntityDependsOnResourcesCard,
   EntityHasComponentsCard,
   EntityHasResourcesCard,
-  EntityHasSubcomponentsCard,
+  // EntityHasSubcomponentsCard,
   EntityHasSystemsCard,
   EntityLayout,
   EntityLinksCard,
@@ -55,6 +55,7 @@ import {
 
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
+import { WorkFlowCard, WorkflowTable } from '@veecode-platform/plugin-github-workflows/src/components';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -121,12 +122,20 @@ const overviewContent = (
       <EntityCatalogGraphCard variant="gridItem" height={400} />
     </Grid>
 
+    {/* Githubworkflows plugin */}
+    <Grid item lg={12}>
+     <WorkflowTable/>
+    </Grid>
+    <Grid item lg={8}>
+     <WorkFlowCard/>
+    </Grid>
+
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
     </Grid>
-    <Grid item md={8} xs={12}>
+    {/* <Grid item md={8} xs={12}>
       <EntityHasSubcomponentsCard variant="gridItem" />
-    </Grid>
+    </Grid> */}
   </Grid>
 );
 
