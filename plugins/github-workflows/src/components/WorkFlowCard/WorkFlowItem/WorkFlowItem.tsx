@@ -1,4 +1,4 @@
-import { Box, Tooltip, makeStyles } from '@material-ui/core';
+import { Box, Tooltip, Typography, makeStyles } from '@material-ui/core';
 import React from 'react';
 import SyncIcon from '@material-ui/icons/Sync';
 import ReplayIcon from '@material-ui/icons/Replay';
@@ -131,7 +131,11 @@ export const WorkFlowItem = ({status,conclusion, workflowName}:WorkFlowItemProps
         conclusion={conclusion ? conclusion : ''}
         icon
       />
-      {truncateString(workflowName,13)} 
+      <Tooltip title={workflowName} placement="top">
+        <Typography>
+          {truncateString(workflowName,13)}
+        </Typography>
+      </Tooltip>
       <Box
         role="button"
         className={classes.clickable}>
