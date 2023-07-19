@@ -1,4 +1,4 @@
-import { Box, makeStyles } from '@material-ui/core';
+import { Box, Tooltip, makeStyles } from '@material-ui/core';
 import React from 'react';
 import SyncIcon from '@material-ui/icons/Sync';
 import ReplayIcon from '@material-ui/icons/Replay';
@@ -7,6 +7,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
 import { WorkFlowStatus } from '../../WorkFlowStatus';
+import { truncateString } from '../../../utils/common';
 
 type WorkFlowItemProps = {
   workflowName: string,
@@ -62,13 +63,28 @@ const useStyles = makeStyles(theme =>({
       case StatusWorkflowEnum.failure:
       case StatusWorkflowEnum.skipped:
       case StatusWorkflowEnum.timeOut:
-        return <ReplayIcon/>;
+        return (
+          <Tooltip title="Run again" placement="right">
+            <ReplayIcon/>
+          </Tooltip>
+          );
       case StatusWorkflowEnum.queued:
-        return <TimerIcon/>;
+        return (
+          <Tooltip title="Please wait" placement="right">
+            <TimerIcon/>
+          </Tooltip>);
       case StatusWorkflowEnum.inProgress:
-        return <RefreshIcon className={classes.inProgress}/>
+        return (
+          <Tooltip title="Stop" placement="right">
+            <RefreshIcon className={classes.inProgress}/>
+          </Tooltip>
+        );
       case StatusWorkflowEnum.aborted:
-        return <PlayCircleOutlineIcon/>;
+        return (
+          <Tooltip title="Run again" placement="right">
+             <PlayCircleOutlineIcon/>
+          </Tooltip>
+        );
       case StatusWorkflowEnum.completed:
           switch (conclusion?.toLocaleLowerCase()){
             case StatusWorkflowEnum.failure:
@@ -76,14 +92,29 @@ const useStyles = makeStyles(theme =>({
             case StatusWorkflowEnum.failure:
             case StatusWorkflowEnum.skipped:
             case StatusWorkflowEnum.timeOut:
-              return <ReplayIcon/>;
+              return (
+              <Tooltip title="Run again" placement="right">
+                <ReplayIcon/>
+              </Tooltip>
+              );
             case StatusWorkflowEnum.aborted:
-                return <PlayCircleOutlineIcon/>
+                return (
+                  <Tooltip title="Try again" placement="right">
+                    <PlayCircleOutlineIcon/>
+                  </Tooltip>);
               default:
-              return <SyncIcon/> ;              
+              return (
+              <Tooltip title="Run" placement="right">
+                <SyncIcon/>
+              </Tooltip>
+              ) ;              
       };
       default:
-        return <SyncIcon/>;
+        return (
+          <Tooltip title="Run" placement="right">
+            <SyncIcon/>
+          </Tooltip>
+          ) ;  
     }
   }
 
@@ -100,7 +131,7 @@ export const WorkFlowItem = ({status,conclusion, workflowName}:WorkFlowItemProps
         conclusion={conclusion ? conclusion : ''}
         icon
       />
-      {workflowName} 
+      {truncateString(workflowName,13)} 
       <Box
         role="button"
         className={classes.clickable}>
