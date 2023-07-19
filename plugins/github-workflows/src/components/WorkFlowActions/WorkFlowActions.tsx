@@ -39,7 +39,8 @@ export const WorkFlowActions = ({status, conclusion}:WorkFlowActionsProps) => {
             return <RefreshIcon className={classes.inProgress}/>
         case StatusWorkflowEnum.completed:
             switch (conclusion?.toLocaleLowerCase()){
-                case StatusWorkflowEnum.skipped || StatusWorkflowEnum.canceled:
+                case StatusWorkflowEnum.skipped:
+                case StatusWorkflowEnum.canceled:
                     return <HighlightOffIcon/>;
                 case StatusWorkflowEnum.timeOut:
                     return  <TimerIcon/>;

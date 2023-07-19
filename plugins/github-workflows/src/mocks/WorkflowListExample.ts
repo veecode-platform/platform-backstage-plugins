@@ -4,7 +4,7 @@ export const WorkflowListExample = {
         "id": "dfsdfhsjdfsw",
         "name": "Update-SO",
         "status": "completed",
-        "conclusion": "completed",
+        "conclusion": "canceled",
         "url": "https://github.com",
       },
       {

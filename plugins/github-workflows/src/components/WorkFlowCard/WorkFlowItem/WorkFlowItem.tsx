@@ -57,7 +57,11 @@ const useStyles = makeStyles(theme =>({
     const classes = useStyles();
 
     switch (status?.toLocaleLowerCase()) {
-      case StatusWorkflowEnum.failure || StatusWorkflowEnum.canceled || StatusWorkflowEnum.failure || StatusWorkflowEnum.skipped || StatusWorkflowEnum.timeOut:
+      case StatusWorkflowEnum.failure:
+      case StatusWorkflowEnum.canceled:
+      case StatusWorkflowEnum.failure:
+      case StatusWorkflowEnum.skipped:
+      case StatusWorkflowEnum.timeOut:
         return <ReplayIcon/>;
       case StatusWorkflowEnum.queued:
         return <TimerIcon/>;
@@ -67,7 +71,11 @@ const useStyles = makeStyles(theme =>({
         return <PlayCircleOutlineIcon/>;
       case StatusWorkflowEnum.completed:
           switch (conclusion?.toLocaleLowerCase()){
-            case StatusWorkflowEnum.failure || StatusWorkflowEnum.canceled || StatusWorkflowEnum.failure || StatusWorkflowEnum.skipped || StatusWorkflowEnum.timeOut:
+            case StatusWorkflowEnum.failure:
+            case StatusWorkflowEnum.canceled:
+            case StatusWorkflowEnum.failure:
+            case StatusWorkflowEnum.skipped:
+            case StatusWorkflowEnum.timeOut:
               return <ReplayIcon/>;
             case StatusWorkflowEnum.aborted:
                 return <PlayCircleOutlineIcon/>
