@@ -1,23 +1,22 @@
-import { makeStyles } from '@material-ui/core';
-import React, { ReactNode } from 'react';
+import { Box, makeStyles } from '@material-ui/core';
+import React from 'react';
 import SyncIcon from '@material-ui/icons/Sync';
 import ReplayIcon from '@material-ui/icons/Replay';
 import TimerIcon from '@material-ui/icons/Timer';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
-import { 
-  StatusError,
-  StatusAborted,
-  StatusOK,
-  StatusPending,
-  StatusRunning,
-  StatusWarning } from '@backstage/core-components';
+import RefreshIcon from '@material-ui/icons/Refresh';
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
+import { WorkFlowStatus } from '../../WorkFlowStatus';
 
 type WorkFlowItemProps = {
-  children: ReactNode | string,
-  status: string,
+  workflowName: string,
+  conclusion?:string,
+  status?: string,
+}
+
+type StatusActionCardProps = {
+  status?: string,
+  conclusion?: string
 }
 
 const useStyles = makeStyles(theme =>({
@@ -39,33 +38,68 @@ const useStyles = makeStyles(theme =>({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center'
+    },
+    inProgress:{
+      animation: '$spin 2s linear infinite'
+    },
+    '@keyframes spin':{
+      '0%':{
+        transform: 'rotate(0deg)'
+      },
+      '100%': {
+        transform: 'rotate(360deg)'
+      }
     }
   }));
 
-export const WorkFlowItem = ({status,children}:WorkFlowItemProps) => {
+  export const StatusActionCard = ({status,conclusion}:StatusActionCardProps) => {
+
+    const classes = useStyles();
+
+    switch (status?.toLocaleLowerCase()) {
+      case StatusWorkflowEnum.failure || StatusWorkflowEnum.canceled || StatusWorkflowEnum.failure || StatusWorkflowEnum.skipped || StatusWorkflowEnum.timeOut:
+        return <ReplayIcon/>;
+      case StatusWorkflowEnum.queued:
+        return <TimerIcon/>;
+      case StatusWorkflowEnum.inProgress:
+        return <RefreshIcon className={classes.inProgress}/>
+      case StatusWorkflowEnum.aborted:
+        return <PlayCircleOutlineIcon/>;
+      case StatusWorkflowEnum.completed:
+          switch (conclusion?.toLocaleLowerCase()){
+            case StatusWorkflowEnum.failure || StatusWorkflowEnum.canceled || StatusWorkflowEnum.failure || StatusWorkflowEnum.skipped || StatusWorkflowEnum.timeOut:
+              return <ReplayIcon/>;
+            case StatusWorkflowEnum.aborted:
+                return <PlayCircleOutlineIcon/>
+              default:
+              return <SyncIcon/> ;              
+      };
+      default:
+        return <SyncIcon/>;
+    }
+  }
+
+export const WorkFlowItem = ({status,conclusion, workflowName}:WorkFlowItemProps) => {
 
   const classes = useStyles();
 
   return (
-    <div 
+    <Box 
       className={classes.workflow}
       >
-      {status === StatusWorkflowEnum.completed && <StatusOK/>}
-      {status === StatusWorkflowEnum.error && <StatusError/>}
-      {status === StatusWorkflowEnum.pending && <StatusPending/>}
-      {status === StatusWorkflowEnum.aborted && <StatusAborted/>}
-      {status === StatusWorkflowEnum.running && <StatusRunning/>}
-      {status === StatusWorkflowEnum.warning && <StatusWarning/>}
-      {children} 
-      <span
+      <WorkFlowStatus
+        status={status}
+        conclusion={conclusion ? conclusion : ''}
+        icon
+      />
+      {workflowName} 
+      <Box
+        role="button"
         className={classes.clickable}>
-        {status === StatusWorkflowEnum.completed && <SyncIcon/>}
-        {status === StatusWorkflowEnum.error && <ReplayIcon/>}
-        {status === StatusWorkflowEnum.pending && <TimerIcon/>}
-        {status === StatusWorkflowEnum.aborted && <HighlightOffIcon/>}
-        {status === StatusWorkflowEnum.running && <HourglassEmptyIcon/>}
-        {status === StatusWorkflowEnum.warning && <ErrorOutlineIcon/>}
-      </span>
-    </div>
+        <StatusActionCard
+          status={status}
+         />
+      </Box>
+    </Box>
   )
 }

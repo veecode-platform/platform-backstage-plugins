@@ -3,7 +3,6 @@ import { InfoCard } from '@backstage/core-components';
 import { Paper, Typography, makeStyles } from '@material-ui/core';
 import { WorkFlowItem } from './WorkFlowItem';
 
-
 const useStyles = makeStyles(theme => ({
   title:{
     paddingLeft: '1.5rem',
@@ -35,13 +34,14 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
+
 export const WorkFlowCard = () => {
   
   const classes = useStyles();
 
   const TitleBar = (
     <>
-      <span className={classes.title}>Workflows</span>
+      <Typography className={classes.title}>Workflows</Typography>
     </>
     )
 
@@ -49,9 +49,9 @@ export const WorkFlowCard = () => {
     <Paper>
       <InfoCard title={TitleBar}>
         <Typography className={classes.workflowsGroup}>
-          <WorkFlowItem status="aborted"> Update-SO  </WorkFlowItem>
-          <WorkFlowItem status="warning"> Build-image  </WorkFlowItem>
-          <WorkFlowItem status="pending"> Deploy-project </WorkFlowItem>
+          <WorkFlowItem status="in_progress" workflowName="Update-SO"/>
+          <WorkFlowItem status="warning" conclusion="" workflowName="Build-image"/>
+          <WorkFlowItem status="pending" conclusion="" workflowName="Deploy-project"/>
         </Typography>
       </InfoCard>
     </Paper>

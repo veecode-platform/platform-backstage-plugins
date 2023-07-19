@@ -4,7 +4,8 @@ import {
   Table, 
   TableColumn,
   Progress,
-  ResponseErrorPanel
+  ResponseErrorPanel,
+  Link
  } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 import LanguageIcon from '@material-ui/icons/Language';
@@ -12,7 +13,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { WorkflowListExample } from '../../mocks/WorkflowListExample';
 import { WorkFlowStatus } from '../WorkFlowStatus';
 import { WorkFlowActions } from '../WorkFlowActions';
-import { Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   title:{
@@ -87,7 +88,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
       ),
       source: (
         <Box className={classes.source}>
-            <LanguageIcon/> <a href={item.url} title='Visite workflow' target="_blank">{item.url}</a>
+            <LanguageIcon/> <Link to={item.url} title='Visite workflow' target="_blank">{item.url}</Link>
          </Box>
          ),
     };
@@ -95,8 +96,8 @@ export const DenseTable = ({ items }: DenseTableProps) => {
 
   const TitleBar = (
       <>
-        <span className={classes.title}>All Workflows</span>
-        <button className={classes.button}>Logs <FilterListIcon/></button>
+        <Typography className={classes.title}>All Workflows</Typography>
+        <Box role="button" className={classes.button}>Logs <FilterListIcon/></Box>
       </>
   )
 
