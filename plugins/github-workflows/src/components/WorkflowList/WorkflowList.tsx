@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     verticalAlign: 'middle',
     cursor: 'pointer'
   },
-  url: {
+  source: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -73,7 +73,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
     { title: 'Name', field: 'name',  width:'1fr', align:'center'},
     { title: 'Status', field: 'status', width:'1fr', align:'center' },
     { title: 'Action', field: 'action', width:'1fr', align:'center' },
-    { title: 'Url', field: 'url', width:'1fr', align:'center'},
+    { title: 'Source', field: 'source', width:'1fr', align:'center'},
   ];
 
   const data = items.map(item => {
@@ -99,8 +99,8 @@ export const DenseTable = ({ items }: DenseTableProps) => {
           {item.status === StatusWorkflowEnum.warning && <ErrorOutlineIcon/>}
         </div>
       ),
-      url: (
-        <div className={classes.url}>
+      source: (
+        <div className={classes.source}>
             <LanguageIcon/> <a href={item.url} title='Visite workflow' target="_blank">{item.url}</a>
          </div>
          ),
