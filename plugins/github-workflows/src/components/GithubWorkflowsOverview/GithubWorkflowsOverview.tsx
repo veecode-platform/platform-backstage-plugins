@@ -1,7 +1,7 @@
 import { Content, ContentHeader, Header, HeaderLabel,Page, SupportButton } from '@backstage/core-components'
 import { Grid } from '@material-ui/core'
 import React from 'react'
-import { WorkflowList } from '../WorkflowList'
+import { WorkflowTable } from '../WorkflowTable'
 import { WorkFlowCard } from '../WorkFlowCard'
 
 export const GithubWorkflowsOverview = () => {
@@ -17,7 +17,7 @@ export const GithubWorkflowsOverview = () => {
       </ContentHeader>
       <Grid container spacing={3} direction="column">
         <Grid item>
-          <WorkflowList />
+          <WorkflowTable />
         </Grid>
         <Grid item lg={8}>
           <WorkFlowCard/>

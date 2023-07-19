@@ -111,7 +111,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
   );
 };
 
-export const WorkflowList = () => {
+export const WorkflowTable = () => {
 
   const { value, loading, error } = useAsync(async (): Promise<Item[]> => {
     // Would use fetch in a real world example
