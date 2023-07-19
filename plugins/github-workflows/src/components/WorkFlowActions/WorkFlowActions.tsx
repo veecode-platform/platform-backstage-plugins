@@ -5,7 +5,7 @@ import ReplayIcon from '@material-ui/icons/Replay';
 import TimerIcon from '@material-ui/icons/Timer';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Tooltip } from '@material-ui/core';
 
 type WorkFlowActionsProps = {
     status?: string,
@@ -34,22 +34,47 @@ export const WorkFlowActions = ({status, conclusion}:WorkFlowActionsProps) => {
     
     switch (status.toLocaleLowerCase()) {
         case StatusWorkflowEnum.queued:
-            return <TimerIcon/>
+            return (
+              <Tooltip title="Please wait" placement="right">
+                <TimerIcon/>
+              </Tooltip>
+            );
         case StatusWorkflowEnum.inProgress:
-            return <RefreshIcon className={classes.inProgress}/>
+            return (
+              <Tooltip title="Stop" placement="right">
+               <RefreshIcon className={classes.inProgress}/>
+              </Tooltip>
+            )
         case StatusWorkflowEnum.completed:
             switch (conclusion?.toLocaleLowerCase()){
                 case StatusWorkflowEnum.skipped:
                 case StatusWorkflowEnum.canceled:
-                    return <HighlightOffIcon/>;
+                    return (
+                    <Tooltip title="Try again" placement="right">
+                    <HighlightOffIcon/>
+                    </Tooltip>);
                 case StatusWorkflowEnum.timeOut:
-                    return  <TimerIcon/>;
+                    return  (
+                    <Tooltip title="Re-run" placement="right">
+                      <TimerIcon/>
+                    </Tooltip>
+                    );
                 case StatusWorkflowEnum.failure:
-                    return  <ReplayIcon/>;
+                    return ( 
+                      <Tooltip title="Re-run" placement="right">
+                        <ReplayIcon/>
+                      </Tooltip>
+                      );
                 default:
-                return <SyncIcon/> ;              
+                return (
+                  <Tooltip title="Re-run" placement="right">
+                    <SyncIcon/> 
+                  </Tooltip>
+                );              
         }
         default: 
-            return <TimerIcon/>;
+            return (<Tooltip title="Is pending, wait..." placement="right">
+              <TimerIcon/>
+              </Tooltip>);
     }
 }

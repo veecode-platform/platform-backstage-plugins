@@ -70,7 +70,7 @@ const useStyles = makeStyles(theme =>({
           );
       case StatusWorkflowEnum.queued:
         return (
-          <Tooltip title="Please wait" placement="right">
+          <Tooltip title="Is pending, wait..." placement="right">
             <TimerIcon/>
           </Tooltip>);
       case StatusWorkflowEnum.inProgress:
