@@ -44,6 +44,15 @@ integrations:
     #   token: ${GHE_TOKEN}
 
 proxy:
+  '/github-workflows':
+    target: https://api.github.com/repos/veecode-platform/api-demo-today/actions/workflows
+    headers: 
+      Authorization: Bearer ${GITHUB_TOKEN}
+      Accept: application/vnd.github+json
+      X-GitHub-Api-Version: "2022-11-28"
+
+    
+
   ### Example for how to add a proxy endpoint for the frontend.
   ### A typical reason to do this is to handle HTTPS and CORS for internal services.
   # '/test':

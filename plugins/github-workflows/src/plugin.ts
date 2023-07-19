@@ -1,12 +1,23 @@
-import { createPlugin, createRoutableExtension } from '@backstage/core-plugin-api';
-
+import { createApiFactory, createRoutableExtension, createPlugin, discoveryApiRef } from '@backstage/core-plugin-api';
 import { rootRouteRef } from './routes';
+import { githubWorkflowsApiRef, GithubWorkflowsApiClient } from './api';
 
 export const githubWorkflowsPlugin = createPlugin({
-  id: 'github-workflows',
+  id: 'githubWorkflows',
   routes: {
     root: rootRouteRef,
   },
+  apis: [
+    createApiFactory({
+      api: githubWorkflowsApiRef,
+      deps: { discoveryApi: discoveryApiRef },
+      factory: ({discoveryApi}) => {
+        return new GithubWorkflowsApiClient({
+          discoveryApi: discoveryApi
+        })
+      }
+    })
+  ]
 });
 
 export const GithubWorkflowsPage = githubWorkflowsPlugin.provide(
