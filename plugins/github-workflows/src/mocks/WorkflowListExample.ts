@@ -17,15 +17,15 @@ export const WorkflowListExample = {
       {
         "id": "df47487sjdfsw",
         "name": "Build-Image",
-        "status": "error",
-        "conclusion": "completed",
+        "status": "in_progress",
+        "conclusion": "",
         "url": "https://github.com",
       },
       {
         "id": "dfserwwwqdfsw",
         "name": "Register-Catalog",
-        "status": "aborted",
-        "conclusion": "",
+        "status": "completed",
+        "conclusion": "aborted",
         "url": "https://github.com",
       },
       {

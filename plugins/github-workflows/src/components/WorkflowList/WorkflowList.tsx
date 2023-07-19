@@ -75,14 +75,14 @@ export const DenseTable = ({ items }: DenseTableProps) => {
       status: (
         <WorkFlowStatus
           status={item.status}
-          conclusion={item.conclusion ?? null}
+          conclusion={item.conclusion}
          />
         ),
       action: (
         <Box className={classes.action}>
           <WorkFlowActions
             status={item.status}
-            conclusion={item.conclusion ?? null}
+            conclusion={item.conclusion}
          />
         </Box>
       ),

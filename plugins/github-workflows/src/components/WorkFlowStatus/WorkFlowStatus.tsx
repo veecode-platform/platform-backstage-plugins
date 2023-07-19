@@ -27,7 +27,7 @@ export const WorkFlowStatus = ({status, conclusion, icon}:WorkFlowStatusProps) =
             );
         case StatusWorkflowEnum.completed:
             switch (conclusion?.toLocaleLowerCase()){
-                case StatusWorkflowEnum.skipped || StatusWorkflowEnum.canceled:
+                case StatusWorkflowEnum.skipped || StatusWorkflowEnum.canceled || StatusWorkflowEnum.aborted:
                     return (
                         <>
                             <StatusAborted /> {!icon && "Aborted"}
@@ -45,12 +45,12 @@ export const WorkFlowStatus = ({status, conclusion, icon}:WorkFlowStatusProps) =
                           <StatusError /> {!icon && "Error"}
                         </>
                       );
-                        default:
+                default:
                 return (
                     <>
-                    <StatusOK /> {!icon && "Completed"}
+                        <StatusOK /> {!icon && "Completed"}
                     </>
-          );                  
+                    );                  
         }
         default: 
             return (
