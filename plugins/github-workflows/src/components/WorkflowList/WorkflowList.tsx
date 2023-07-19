@@ -4,24 +4,15 @@ import {
   Table, 
   TableColumn,
   Progress,
-  ResponseErrorPanel,
-  StatusError,
-  StatusAborted,
-  StatusOK,
-  StatusPending,
-  StatusRunning,
-  StatusWarning } from '@backstage/core-components';
+  ResponseErrorPanel
+ } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
-import SyncIcon from '@material-ui/icons/Sync';
-import ReplayIcon from '@material-ui/icons/Replay';
-import TimerIcon from '@material-ui/icons/Timer';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
-import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import LanguageIcon from '@material-ui/icons/Language';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 import { WorkflowListExample } from '../../mocks/WorkflowListExample';
+import { WorkFlowStatus } from '../WorkFlowStatus';
+import { WorkFlowActions } from '../WorkFlowActions';
+import { Box } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   title:{
@@ -59,6 +50,7 @@ type Item = {
     id: string,
     name: string,
     status: string,
+    conclusion: string,
     url: string,
 };
 
@@ -80,29 +72,23 @@ export const DenseTable = ({ items }: DenseTableProps) => {
     return {
       name: item.name,
       status: (
-        <>
-         {item.status === StatusWorkflowEnum.completed && <StatusOK>{item.status}</StatusOK>}
-         {item.status === StatusWorkflowEnum.error && <StatusError>{item.status}</StatusError>}
-         {item.status === StatusWorkflowEnum.pending && <StatusPending>{item.status}</StatusPending>}
-         {item.status === StatusWorkflowEnum.aborted && <StatusAborted>{item.status}</StatusAborted>}
-         {item.status === StatusWorkflowEnum.running && <StatusRunning>{item.status}</StatusRunning>}
-         {item.status === StatusWorkflowEnum.warning && <StatusWarning>{item.status}</StatusWarning>}
-        </>
+        <WorkFlowStatus
+          status={item.status}
+          conclusion={item.conclusion ?? null}
+         />
         ),
       action: (
-        <div className={classes.action}>
-          {item.status === StatusWorkflowEnum.completed && <SyncIcon/>}
-          {item.status === StatusWorkflowEnum.error && <ReplayIcon/>}
-          {item.status === StatusWorkflowEnum.pending && <TimerIcon/>} 
-          {item.status === StatusWorkflowEnum.aborted && <HighlightOffIcon/>}
-          {item.status === StatusWorkflowEnum.running && <HourglassEmptyIcon/>} 
-          {item.status === StatusWorkflowEnum.warning && <ErrorOutlineIcon/>}
-        </div>
+        <Box className={classes.action}>
+          <WorkFlowActions
+            status={item.status}
+            conclusion={item.conclusion ?? null}
+         />
+        </Box>
       ),
       source: (
-        <div className={classes.source}>
+        <Box className={classes.source}>
             <LanguageIcon/> <a href={item.url} title='Visite workflow' target="_blank">{item.url}</a>
-         </div>
+         </Box>
          ),
     };
   });

@@ -1,8 +1,10 @@
 export enum StatusWorkflowEnum {
     completed = "completed",
-    error = "error",
-    pending = "pending",
+    failure = "failure",
+    queued = "queued",
     aborted = "aborted",
-    running = "running",
-    warning = "warning"
+    inProgress = "in_progress",
+    skipped = "skipped",
+    canceled = "canceled",
+    timeOut = "timed_out"
 }
