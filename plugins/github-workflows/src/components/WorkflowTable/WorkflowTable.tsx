@@ -9,30 +9,27 @@ import {
  } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 import LanguageIcon from '@material-ui/icons/Language';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import { WorkflowListExample } from '../../mocks/WorkflowListExample';
 import { WorkFlowStatus } from '../WorkFlowStatus';
 import { WorkFlowActions } from '../WorkFlowActions';
 import { Box, Typography } from '@material-ui/core';
+import { SelectBranch } from '../SelectBranch';
 
 const useStyles = makeStyles(theme => ({
   title:{
     paddingLeft: '2rem',
     fontSize: '1.5rem'
   },
-  button:{
+  options:{
     position: 'absolute',
-    top: '20%',
+    top: '0%',
     right: '2%',
-    padding: '.5rem 2rem',
     background: 'transparent',
-    border: `1px solid ${theme.palette.border}`,
     borderRadius: '30px',
     fontSize: '1rem',
     display: 'flex',
     alignItems: 'center',
-    gap: '1rem',
-    color: theme.palette.border
+    color: theme.palette.border,
   },
   action: {
     width: '90%',
@@ -97,7 +94,9 @@ export const DenseTable = ({ items }: DenseTableProps) => {
   const TitleBar = (
       <>
         <Typography className={classes.title}>All Workflows</Typography>
-        <Box role="button" className={classes.button}>Logs <FilterListIcon/></Box>
+        <Box role="select" className={classes.options}>
+            <SelectBranch/>
+        </Box>
       </>
   )
 

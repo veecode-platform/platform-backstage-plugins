@@ -1,6 +1,6 @@
 import React from 'react';
 import { InfoCard } from '@backstage/core-components';
-import { Paper, Typography, makeStyles } from '@material-ui/core';
+import { Box, Paper, Typography, makeStyles } from '@material-ui/core';
 import { WorkFlowItem } from './WorkFlowItem';
 
 const useStyles = makeStyles(theme => ({
@@ -48,11 +48,11 @@ export const WorkFlowCard = () => {
   return (
     <Paper>
       <InfoCard title={TitleBar}>
-        <Typography className={classes.workflowsGroup}>
+        <Box className={classes.workflowsGroup}>
           <WorkFlowItem status="in_progress" workflowName="Update-SO"/>
           <WorkFlowItem status="warning" conclusion="" workflowName="Build-image"/>
           <WorkFlowItem status="pending" conclusion="" workflowName="Deploy-project"/>
-        </Typography>
+        </Box>
       </InfoCard>
     </Paper>
   )
