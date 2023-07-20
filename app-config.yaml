@@ -45,7 +45,8 @@ integrations:
 
 proxy:
   '/github-workflows':
-    target: https://api.github.com/repos/veecode-platform/api-demo-today/actions/workflows
+    target: https://api.github.com/repos
+    allowedHeaders: ['Authorization', 'X-GitHub-Api-Version']
     headers: 
       Authorization: Bearer ${GITHUB_TOKEN}
       Accept: application/vnd.github+json
