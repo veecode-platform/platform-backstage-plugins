@@ -62,6 +62,10 @@ export interface GithubWorkflowsApi {
     */
     getWorkflowRunById(runId: string, githubRepoSlug: string): Promise<workflowRun>;
     /**
+    * get latest workflow run
+    */
+    getLatestWorkflowRun(workflowId: string, githubRepoSlug: string): Promise<workflowRun>;
+    /**
     * dispatch a run from a branch of a workflow
     */
     startWorkflowRun(workflowId: string, githubRepoSlug: string, branch: string): Promise<workflowRun>;
@@ -135,6 +139,11 @@ class Client {
         return await this.fetch<workflowRun>(`/actions/runs/${runId}`, githubRepoSlug)
     }
 
+    async getLatestWorkflowRun(workflowId: string, githubRepoSlug: string){
+        const response = await this.fetch<workflowRunsResponseFromApi>(`/actions/workflows/${workflowId}/runs`, githubRepoSlug)
+        return response.workflow_runs[0]
+    }
+
     async startWorkflow(workflowId: string, githubRepoSlug: string, branch: string){
         const headers: RequestInit  = {
             method: "POST",
@@ -177,6 +186,9 @@ export class GithubWorkflowsApiClient implements GithubWorkflowsApi {
 
     async getWorkflowRunById(runId: string, githubRepoSlug: string): Promise<workflowRun> {
         return this.client.getWorkflowRunById(runId, githubRepoSlug)
+    }
+    async getLatestWorkflowRun(workflowId: string, githubRepoSlug: string): Promise<workflowRun> {
+        return this.client.getLatestWorkflowRun(workflowId, githubRepoSlug)
     }
     
     async startWorkflowRun(workflowId: string, githubRepoSlug: string, branch: string): Promise<workflowRun> {
