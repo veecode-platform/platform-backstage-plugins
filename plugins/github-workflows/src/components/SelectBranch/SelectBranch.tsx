@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Select } from '@backstage/core-components';
+import { Select, SelectedItems } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
 import { githubWorkflowsApiRef } from '../../api';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
@@ -13,9 +13,10 @@ type OptionsProps = {
 };
 
 export const SelectBranch = () => {
-  const { branches, setBranches } = useContext(GithubWorkflowsContext);
+  const { branch, setBranchState } = useContext(GithubWorkflowsContext);
   const api = useApi(githubWorkflowsApiRef);
   const { projectName } = useEntityAnnotations(entityMock);
+  const [branches, setBranches] = useState<Branches[]>([]);
   const [options, setOptions] = useState<OptionsProps[]>([]);
 
   useEffect(() => {
@@ -40,11 +41,17 @@ export const SelectBranch = () => {
     }
   }, [branches]);
 
+  const handleSelectChange = (event: SelectedItems) => {
+    const selectedValue = event;
+    setBranchState(selectedValue as string); 
+  };
+
   return (
     <Select
-      onChange={() => {}}
+      onChange={handleSelectChange}
       placeholder="selecione o branch"
       label=""
+      selected={branch!}
       items={options}
     />
   );
