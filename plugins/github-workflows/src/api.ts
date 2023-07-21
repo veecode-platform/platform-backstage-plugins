@@ -1,43 +1,6 @@
 import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
+import { Branches, Workflow, WorkflowResponseFromApi, WorkflowRun, WorkflowRunsResponseFromApi } from './utils/types';
 // import { Entity } from '@backstage/catalog-model';
-
-interface workflow {
-    id: number;
-    nodeId: string;
-    name: string;
-    path: string;
-    state: string;
-    createdAt: string;
-    updatedAt: string;
-    url: string;
-    htmlUrl: string;
-    badgeUrl: string;
-}
-interface workflowResponseFromApi {
-    totalCount: number;
-    workflows: workflow[];
-}
-
-interface workflowRun {  
-    id: string;
-    name: string;
-    headBranch: string;
-    event: string;
-    status: string;
-    conclusion: string;
-    runStartedAt: string;
-    createdAt: string;
-    updatedAt: string;
-}
-interface workflowRunsResponseFromApi {
-    totalCount: number;
-    workflow_runs: workflowRun[];
-}
-
-interface branches {
-    name: string;
-    protected: boolean;
-}
 
 const GITHUB_WORKFLOWS_DEFAULT_PROXY_URL = "/github-workflows"
 
@@ -48,27 +11,27 @@ export interface GithubWorkflowsApi {
     * possible to filter by workflow file name
     * Ex filter => ["application-dashboards.yml", "another.yaml"]
     */
-    listWorkflows(githubRepoSlug: string, filter?: string[]): Promise<workflow[]>;
+    listWorkflows(githubRepoSlug: string, filter?: string[]): Promise<Workflow[]>;
     /**
     * list branches from a repository
     */
-    listBranchesFromRepo(githubRepoSlug: string): Promise<branches[]>;
+    listBranchesFromRepo(githubRepoSlug: string): Promise<Branches[]>;
     /**
     * list all runs from a workflow
     */
-    listWorkflowRuns(workflowId: string, githubRepoSlug: string): Promise<workflowRun[]>;
+    listWorkflowRuns(workflowId: string, githubRepoSlug: string): Promise<WorkflowRun[]>;
     /**
     * get a single run by id from a workflow
     */
-    getWorkflowRunById(runId: string, githubRepoSlug: string): Promise<workflowRun>;
+    getWorkflowRunById(runId: string, githubRepoSlug: string): Promise<WorkflowRun>;
     /**
     * get latest workflow run
     */
-    getLatestWorkflowRun(workflowId: string, githubRepoSlug: string): Promise<workflowRun>;
+    getLatestWorkflowRun(workflowId: string, githubRepoSlug: string): Promise<WorkflowRun>;
     /**
     * dispatch a run from a branch of a workflow
     */
-    startWorkflowRun(workflowId: string, githubRepoSlug: string, branch: string): Promise<workflowRun>;
+    startWorkflowRun(workflowId: string, githubRepoSlug: string, branch: string): Promise<WorkflowRun>;
     /**
     * stop a run from a worflow
     */
@@ -118,7 +81,7 @@ class Client {
     }
 
     async listWorkflows(githubRepoSlug: string, filter?: string[]) {
-        const response = await this.fetch<workflowResponseFromApi>("/actions/workflows", githubRepoSlug)
+        const response = await this.fetch<WorkflowResponseFromApi>("/actions/workflows", githubRepoSlug)
         if(!filter) return response.workflows
         const filteredWorkflows = response.workflows.filter(
             workflow => filter.includes(regexFileName(workflow.path))
@@ -127,20 +90,20 @@ class Client {
     }
 
     async listWorkflowRuns(workflowId: string, githubRepoSlug: string){
-        const response = await this.fetch<workflowRunsResponseFromApi>(`/actions/workflows/${workflowId}/runs`, githubRepoSlug)
+        const response = await this.fetch<WorkflowRunsResponseFromApi>(`/actions/workflows/${workflowId}/runs`, githubRepoSlug)
         return response.workflow_runs
     }
 
     async listBranchesFromRepo(githubRepoSlug: string){
-        return await this.fetch<branches[]>("/branches", githubRepoSlug)
+        return await this.fetch<Branches[]>("/branches", githubRepoSlug)
     }
 
     async getWorkflowRunById(runId: string, githubRepoSlug: string){
-        return await this.fetch<workflowRun>(`/actions/runs/${runId}`, githubRepoSlug)
+        return await this.fetch<WorkflowRun>(`/actions/runs/${runId}`, githubRepoSlug)
     }
 
     async getLatestWorkflowRun(workflowId: string, githubRepoSlug: string){
-        const response = await this.fetch<workflowRunsResponseFromApi>(`/actions/workflows/${workflowId}/runs`, githubRepoSlug)
+        const response = await this.fetch<WorkflowRunsResponseFromApi>(`/actions/workflows/${workflowId}/runs`, githubRepoSlug)
         return response.workflow_runs[0]
     }
 
@@ -172,27 +135,27 @@ export class GithubWorkflowsApiClient implements GithubWorkflowsApi {
         this.client = new Client(opts);
     }
 
-    async listWorkflows(githubRepoSlug: string, filter?: string[]): Promise<workflow[]> {
+    async listWorkflows(githubRepoSlug: string, filter?: string[]): Promise<Workflow[]> {
         return this.client.listWorkflows(githubRepoSlug, filter)
     }
 
-    async listWorkflowRuns(workflowId: string, githubRepoSlug: string): Promise<workflowRun[]> {
+    async listWorkflowRuns(workflowId: string, githubRepoSlug: string): Promise<WorkflowRun[]> {
         return this.client.listWorkflowRuns(workflowId, githubRepoSlug) 
     }
 
-    async listBranchesFromRepo(githubRepoSlug: string): Promise<branches[]> {
+    async listBranchesFromRepo(githubRepoSlug: string): Promise<Branches[]> {
         return this.client.listBranchesFromRepo(githubRepoSlug)
     }
 
-    async getWorkflowRunById(runId: string, githubRepoSlug: string): Promise<workflowRun> {
+    async getWorkflowRunById(runId: string, githubRepoSlug: string): Promise<WorkflowRun> {
         return this.client.getWorkflowRunById(runId, githubRepoSlug)
     }
     
-    async getLatestWorkflowRun(workflowId: string, githubRepoSlug: string): Promise<workflowRun> {
+    async getLatestWorkflowRun(workflowId: string, githubRepoSlug: string): Promise<WorkflowRun> {
         return this.client.getLatestWorkflowRun(workflowId, githubRepoSlug)
     }
     
-    async startWorkflowRun(workflowId: string, githubRepoSlug: string, branch: string): Promise<workflowRun> {
+    async startWorkflowRun(workflowId: string, githubRepoSlug: string, branch: string): Promise<WorkflowRun> {
         return this.client.startWorkflow(workflowId, githubRepoSlug, branch)  
     }
 
