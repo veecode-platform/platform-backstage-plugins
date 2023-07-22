@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
   Table, 
@@ -9,11 +9,12 @@ import {
  } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 import LanguageIcon from '@material-ui/icons/Language';
-import { WorkflowListExample } from '../../mocks/WorkflowListExample';
 import { WorkFlowStatus } from '../WorkFlowStatus';
 import { WorkFlowActions } from '../WorkFlowActions';
 import { Box, Typography } from '@material-ui/core';
 import { SelectBranch } from '../SelectBranch';
+import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
+import { WorkflowResultsProps } from '../../utils/types';
 
 const useStyles = makeStyles(theme => ({
   title:{
@@ -44,16 +45,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-type Item = {
-    id: string,
-    name: string,
-    status: string,
-    conclusion: string,
-    url: string,
-};
-
 type DenseTableProps = {
-  items: Item[];
+  items: WorkflowResultsProps[] | [];
 };
 
 export const DenseTable = ({ items }: DenseTableProps) => {
@@ -85,7 +78,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
       ),
       source: (
         <Box className={classes.source}>
-            <LanguageIcon/> <Link to={item.url} title='Visite workflow' target="_blank">{item.url}</Link>
+            <LanguageIcon/> <Link to={item.source ?? ''} title='Visite workflow' target="_blank">{item.source}</Link>
          </Box>
          ),
     };
@@ -112,9 +105,14 @@ export const DenseTable = ({ items }: DenseTableProps) => {
 
 export const WorkflowTable = () => {
 
-  const { value, loading, error } = useAsync(async (): Promise<Item[]> => {
-    // Would use fetch in a real world example
-    return WorkflowListExample.results;
+  const { workflowsState } = useContext(GithubWorkflowsContext);
+  
+  const { value, loading, error } = useAsync(async (): Promise<WorkflowResultsProps[] | []> => {
+
+    if(workflowsState){
+      return workflowsState;
+    }  
+    return []
   }, []);
 
   if (loading) {

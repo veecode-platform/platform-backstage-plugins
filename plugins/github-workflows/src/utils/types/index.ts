@@ -7,7 +7,7 @@ export interface Workflow {
     createdAt: string;
     updatedAt: string;
     url: string;
-    htmlUrl: string;
+    html_url: string;
     badgeUrl: string;
 }
 export interface WorkflowResponseFromApi {
@@ -16,7 +16,7 @@ export interface WorkflowResponseFromApi {
 }
 
 export interface WorkflowRun {  
-    id: string;
+    id: number;
     name: string;
     headBranch: string;
     event: string;
@@ -42,3 +42,11 @@ export interface Commit {
     sha: string ,
     url: string
 }
+
+export interface WorkflowResultsProps {
+    id?: number,
+    name?: string,
+    status?: string,
+    conclusion?: string,
+    source?:  string
+  }
