@@ -74,6 +74,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
           <WorkFlowActions
             status={item.status}
             conclusion={item.conclusion}
+            workflowId={item.id}
          />
         </Box>
       ),

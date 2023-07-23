@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 import SyncIcon from '@material-ui/icons/Sync';
 import ReplayIcon from '@material-ui/icons/Replay';
@@ -6,8 +6,11 @@ import TimerIcon from '@material-ui/icons/Timer';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles, Tooltip } from '@material-ui/core';
+import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
+import { WorkflowResultsProps } from '../../utils/types';
 
 type WorkFlowActionsProps = {
+    workflowId?: number,
     status?: string,
     conclusion?: string
 }
@@ -26,49 +29,100 @@ const useStyles = makeStyles({
     }
   });
 
-export const WorkFlowActions = ({status, conclusion}:WorkFlowActionsProps) => {
+export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActionsProps) => {
     
+    const [workFlowSelected, setWorkFlowSelected] = useState<WorkflowResultsProps>();
+    const { projectName, branch, workflowsState ,handleStartWorkflowRun, handleStopWorkflowRun } = useContext(GithubWorkflowsContext);
     const classes = useStyles();
 
     if(!status) return null;
+
+    useEffect(()=>{
+      if(workflowsState){
+        const workFlowFilter = workflowsState.filter((w:WorkflowResultsProps) => {
+          if(w.id === workflowId) return w;
+          return null
+        });
+        setWorkFlowSelected(workFlowFilter as WorkflowResultsProps);
+        console.log(workFlowFilter)
+      }
+    },[]);
+
+    const handleClickActions = async (status:string) => {
+        if(workFlowSelected){
+          switch (status) {
+            case StatusWorkflowEnum.completed:
+            case StatusWorkflowEnum.failure:
+            case StatusWorkflowEnum.aborted:
+            case StatusWorkflowEnum.skipped:
+            case StatusWorkflowEnum.canceled:
+            case StatusWorkflowEnum.timeOut:
+            case StatusWorkflowEnum.default:
+              return await handleStartWorkflowRun( workFlowSelected.id as number, projectName,  branch!);
+            case StatusWorkflowEnum.inProgress:
+              return handleStopWorkflowRun(workFlowSelected.lastRunId as number, projectName);
+            default:
+              break;
+          }
+        }
+    }
     
     switch (status.toLocaleLowerCase()) {
         case StatusWorkflowEnum.queued:
             return (
               <Tooltip title="Please wait" placement="right">
-                <TimerIcon/>
+                <TimerIcon
+                  onClick={()=>handleClickActions(StatusWorkflowEnum.queued)}
+                  />
               </Tooltip>
             );
         case StatusWorkflowEnum.inProgress:
             return (
               <Tooltip title="Stop" placement="right">
-               <RefreshIcon className={classes.inProgress}/>
+               <RefreshIcon 
+                  className={classes.inProgress} 
+                  onClick={()=>handleClickActions(StatusWorkflowEnum.inProgress)}
+                   />
               </Tooltip>
             )
         case StatusWorkflowEnum.completed:
             switch (conclusion?.toLocaleLowerCase()){
                 case StatusWorkflowEnum.skipped:
+                    return (
+                    <Tooltip title="Try again" placement="right">
+                    <HighlightOffIcon
+                      onClick={()=>handleClickActions(StatusWorkflowEnum.skipped)}
+                     />
+                    </Tooltip>);
                 case StatusWorkflowEnum.canceled:
                     return (
                     <Tooltip title="Try again" placement="right">
-                    <HighlightOffIcon/>
+                    <HighlightOffIcon
+                      onClick={()=>handleClickActions(StatusWorkflowEnum.canceled)}
+                    />
                     </Tooltip>);
                 case StatusWorkflowEnum.timeOut:
                     return  (
                     <Tooltip title="Re-run" placement="right">
-                      <TimerIcon/>
+                      <TimerIcon
+                       onClick={()=>handleClickActions(StatusWorkflowEnum.timeOut)}
+                      />
                     </Tooltip>
                     );
                 case StatusWorkflowEnum.failure:
                     return ( 
                       <Tooltip title="Re-run" placement="right">
-                        <ReplayIcon/>
+                        <ReplayIcon
+                         onClick={()=>handleClickActions(StatusWorkflowEnum.failure)}
+                         />
                       </Tooltip>
                       );
                 default:
                 return (
                   <Tooltip title="Re-run" placement="right">
-                    <SyncIcon/> 
+                    <SyncIcon
+                     onClick={()=>handleClickActions(StatusWorkflowEnum.default)}
+                     /> 
                   </Tooltip>
                 );              
         }

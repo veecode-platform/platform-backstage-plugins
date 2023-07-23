@@ -37,12 +37,13 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
       const workflows = await api.listWorkflows(projectName);
       if (workflows) {
         const newWorkflowsState = await Promise.all(workflows.map(async (w) => {
-          const data = await handleLatestWorkFlow(w.id, projectName);
+          const data = await latestWorkFlow(w.id, projectName);
           return {
             id: w.id,
             name: w.name,
             status: data?.status as string,
             conclusion: data?.conclusion as string,
+            lastRunId: data?.runId as number,
             source: w.html_url as string,
           };
         }));
@@ -56,11 +57,12 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
     }
   };
 
-  const handleLatestWorkFlow = async (workFlowId:number, projectSlug: string) => {
+  const latestWorkFlow = async (workFlowId:number, projectSlug: string) => {
      try{
       const data = await api.getLatestWorkflowRun(workFlowId.toString(),projectSlug);
           if(data){
             return {
+              runId: data.id,
               status: data.status,
               conclusion: data.conclusion
             }
@@ -70,6 +72,17 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
      catch(error){
         console.error("Error:", error);
        throw error;
+     }
+  }
+
+  const getWorkflowRunById = async (runId: string,projectSlug: string) => {
+    try{
+      const response = api.getWorkflowRunById(runId.toString(), projectSlug);
+      return response
+     }
+     catch(error){
+      console.error("Error:", error);
+      throw error;
      }
   }
 
@@ -84,9 +97,9 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
      }
   };
 
-  const handleStopWorkflowRun = (runId: string, projectSlug: string) => {
+  const handleStopWorkflowRun = (runId: number, projectSlug: string) => {
     try{
-      const response = api.stopWorkflowRun(runId, projectSlug);
+      const response = api.stopWorkflowRun(runId.toString(), projectSlug);
       return response
      }
      catch(error){
@@ -96,7 +109,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
   }
 
   return (
-    <GithubWorkflowsContext.Provider value={{ listAllWorkflows, branch, setBranchState, workflowsState, handleLatestWorkFlow, handleStartWorkflowRun, handleStopWorkflowRun}}>
+    <GithubWorkflowsContext.Provider value={{ listAllWorkflows, projectName, branch, setBranchState, workflowsState, latestWorkFlow, getWorkflowRunById, handleStartWorkflowRun, handleStopWorkflowRun}}>
       {children}
     </GithubWorkflowsContext.Provider>
   );

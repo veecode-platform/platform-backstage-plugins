@@ -46,6 +46,7 @@ export interface Commit {
 export interface WorkflowResultsProps {
     id?: number,
     name?: string,
+    lastRunId?: number,
     status?: string,
     conclusion?: string,
     source?:  string

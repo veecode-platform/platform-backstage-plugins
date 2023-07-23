@@ -6,5 +6,6 @@ export enum StatusWorkflowEnum {
     inProgress = "in_progress",
     skipped = "skipped",
     canceled = "canceled",
-    timeOut = "timed_out"
+    timeOut = "timed_out",
+    default = "default"
 }
