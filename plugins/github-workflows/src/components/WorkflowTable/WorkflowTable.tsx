@@ -15,6 +15,7 @@ import { Box, Typography } from '@material-ui/core';
 import { SelectBranch } from '../SelectBranch';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import { WorkflowResultsProps } from '../../utils/types';
+import { truncateString } from '../../utils/common';
 
 const useStyles = makeStyles(theme => ({
   title:{
@@ -78,7 +79,10 @@ export const DenseTable = ({ items }: DenseTableProps) => {
       ),
       source: (
         <Box className={classes.source}>
-            <LanguageIcon/> <Link to={item.source ?? ''} title='Visite workflow' target="_blank">{item.source}</Link>
+            <LanguageIcon/> 
+            <Link to={item.source ?? ''} title='Visite workflow' target="_blank">
+              {truncateString(item.source as string, 40)}
+            </Link>
          </Box>
          ),
     };
@@ -105,14 +109,11 @@ export const DenseTable = ({ items }: DenseTableProps) => {
 
 export const WorkflowTable = () => {
 
-  const { workflowsState } = useContext(GithubWorkflowsContext);
+  const { listAllWorkflows } = useContext(GithubWorkflowsContext);
   
   const { value, loading, error } = useAsync(async (): Promise<WorkflowResultsProps[] | []> => {
-
-    if(workflowsState){
-      return workflowsState;
-    }  
-    return []
+      const data = await listAllWorkflows();
+      return data ?? []
   }, []);
 
   if (loading) {

@@ -15,46 +15,46 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
   const { projectName } = useEntityAnnotations(entityMock);
   const api = useApi(githubWorkflowsApiRef);
 
-  useEffect(()=>{
-    if(branch){
-      localStorage.setItem('branch-selected',branch)
-    }
-  },[branch]);
+  useEffect(() => {
+    listAllWorkflows();
+  }, []);
 
   useEffect(()=>{
-    if(!branch){
-      setBranch(localStorage.getItem('branch-selected'))
+    if(!branch) setBranch(localStorage.getItem('branch-selected'));   
+    if(!workflowsState) {
+      const workflowsStorage = localStorage.getItem('all-workflows');
+      if(workflowsStorage) setWorkflowsState(JSON.parse(workflowsStorage));
     }
   },[]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const workflows = await api.listWorkflows(projectName);
-        if (workflows) {
-          const newWorkflowsState = await Promise.all(workflows.map(async (w) => {
-            const data = await handleLatestWorkFlow(w.id, projectName);
-            return {
-              id: w.id,
-              name: w.name,
-              status: data?.status as string,
-              conclusion: data?.conclusion as string,
-              source: w.html_url as string,
-            };
-          }));
-          setWorkflowsState(newWorkflowsState);
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const setBranchState = (branch: string) => {
     setBranch(branch);
+    localStorage.setItem('branch-selected',branch);
   }
+
+  const listAllWorkflows = async () => {
+    try {
+      const workflows = await api.listWorkflows(projectName);
+      if (workflows) {
+        const newWorkflowsState = await Promise.all(workflows.map(async (w) => {
+          const data = await handleLatestWorkFlow(w.id, projectName);
+          return {
+            id: w.id,
+            name: w.name,
+            status: data?.status as string,
+            conclusion: data?.conclusion as string,
+            source: w.html_url as string,
+          };
+        }));
+        setWorkflowsState(newWorkflowsState);
+        localStorage.setItem('all-workflows', JSON.stringify(newWorkflowsState));
+        return newWorkflowsState;
+      }
+      else return null;
+    } catch (error) {
+      throw error
+    }
+  };
 
   const handleLatestWorkFlow = async (workFlowId:number, projectSlug: string) => {
      try{
@@ -96,7 +96,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
   }
 
   return (
-    <GithubWorkflowsContext.Provider value={{ branch, setBranchState, workflowsState, handleLatestWorkFlow, handleStartWorkflowRun, handleStopWorkflowRun}}>
+    <GithubWorkflowsContext.Provider value={{ listAllWorkflows, branch, setBranchState, workflowsState, handleLatestWorkFlow, handleStartWorkflowRun, handleStopWorkflowRun}}>
       {children}
     </GithubWorkflowsContext.Provider>
   );
