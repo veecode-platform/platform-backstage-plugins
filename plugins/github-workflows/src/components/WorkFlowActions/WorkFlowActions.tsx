@@ -37,16 +37,12 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
 
     if(!status) return null;
 
-    useEffect(()=>{
-      if(workflowsState){
-        const workFlowFilter = workflowsState.filter((w:WorkflowResultsProps) => {
-          if(w.id === workflowId) return w;
-          return null
-        });
-        setWorkFlowSelected(workFlowFilter as WorkflowResultsProps);
-        console.log(workFlowFilter)
+    useEffect(() => {
+      if (workflowsState) {
+        const workFlowFilter = workflowsState.find((w: WorkflowResultsProps) => w.id === workflowId);
+        setWorkFlowSelected(workFlowFilter);
       }
-    },[]);
+    }, [workflowsState, workflowId]);
 
     const handleClickActions = async (status:string) => {
         if(workFlowSelected){
@@ -61,6 +57,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
               return await handleStartWorkflowRun( workFlowSelected.id as number, projectName,  branch!);
             case StatusWorkflowEnum.inProgress:
               return handleStopWorkflowRun(workFlowSelected.lastRunId as number, projectName);
+              return;
             default:
               break;
           }
