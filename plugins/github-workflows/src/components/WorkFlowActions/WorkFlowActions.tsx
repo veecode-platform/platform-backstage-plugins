@@ -57,7 +57,6 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
               return await handleStartWorkflowRun( workFlowSelected.id as number, projectName,  branch!);
             case StatusWorkflowEnum.inProgress:
               return handleStopWorkflowRun(workFlowSelected.lastRunId as number, projectName);
-              return;
             default:
               break;
           }
