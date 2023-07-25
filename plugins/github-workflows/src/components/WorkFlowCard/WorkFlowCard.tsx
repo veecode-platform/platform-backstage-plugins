@@ -40,6 +40,7 @@ type WorkFlowCardProps = {
   workFlowId:number,
   lastRunId: number,
   status: string,
+  conclusion: string,
   workFlowName: string
 }
 
@@ -62,14 +63,14 @@ export const Cards = ({items}:CardsProps) => {
       <InfoCard title={TitleBar}>
         <Box className={classes.workflowsGroup}>
           { items.map( item => 
-          <WorkFlowItem 
-            key={item.workFlowId} 
-            status={item.status}
-            workflowName={item.workFlowName}
-            />)
+            <WorkFlowItem 
+              key={item.workFlowId} 
+              status={item.status}
+              conclusion={item.conclusion}
+              workflowName={item.workFlowName}
+              />
+            )
           }
-          {/* <WorkFlowItem status="warning" conclusion="" workflowName="Build-image"/>
-          <WorkFlowItem status="pending" conclusion="" workflowName="Deploy-project"/> */}
         </Box>
       </InfoCard>
     </Paper>
@@ -89,6 +90,7 @@ export const WorkFlowCard = () => {
                     workFlowId: w.id as number,
                     lastRunId: w.lastRunId as number,
                     status: w.status as string,
+                    conclusion: w.conclusion as string,
                     workFlowName: w.name as string
                }
       }
