@@ -1,23 +1,14 @@
 import { Box, Tooltip, Typography, makeStyles } from '@material-ui/core';
 import React from 'react';
-import SyncIcon from '@material-ui/icons/Sync';
-import ReplayIcon from '@material-ui/icons/Replay';
-import TimerIcon from '@material-ui/icons/Timer';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
-import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
 import { WorkFlowStatus } from '../../WorkFlowStatus';
 import { truncateString } from '../../../utils/common';
+import { WorkFlowActions } from '../../WorkFlowActions';
 
 type WorkFlowItemProps = {
+  id: number,
   workflowName: string,
   conclusion?:string,
   status?: string,
-}
-
-type StatusActionCardProps = {
-  status?: string,
-  conclusion?: string
 }
 
 const useStyles = makeStyles(theme =>({
@@ -53,72 +44,7 @@ const useStyles = makeStyles(theme =>({
     }
   }));
 
-  export const StatusActionCard = ({status,conclusion}:StatusActionCardProps) => {
-
-    const classes = useStyles();
-
-    switch (status?.toLocaleLowerCase()) {
-      case StatusWorkflowEnum.failure:
-      case StatusWorkflowEnum.canceled:
-      case StatusWorkflowEnum.failure:
-      case StatusWorkflowEnum.skipped:
-      case StatusWorkflowEnum.timeOut:
-        return (
-          <Tooltip title="Run again" placement="right">
-            <ReplayIcon/>
-          </Tooltip>
-          );
-      case StatusWorkflowEnum.queued:
-        return (
-          <Tooltip title="Is pending, wait..." placement="right">
-            <TimerIcon/>
-          </Tooltip>);
-      case StatusWorkflowEnum.inProgress:
-        return (
-          <Tooltip title="Stop" placement="right">
-            <RefreshIcon className={classes.inProgress}/>
-          </Tooltip>
-        );
-      case StatusWorkflowEnum.aborted:
-        return (
-          <Tooltip title="Run again" placement="right">
-             <PlayCircleOutlineIcon/>
-          </Tooltip>
-        );
-      case StatusWorkflowEnum.completed:
-          switch (conclusion?.toLocaleLowerCase()){
-            case StatusWorkflowEnum.failure:
-            case StatusWorkflowEnum.canceled:
-            case StatusWorkflowEnum.failure:
-            case StatusWorkflowEnum.skipped:
-            case StatusWorkflowEnum.timeOut:
-              return (
-              <Tooltip title="Run again" placement="right">
-                <ReplayIcon/>
-              </Tooltip>
-              );
-            case StatusWorkflowEnum.aborted:
-                return (
-                  <Tooltip title="Try again" placement="right">
-                    <PlayCircleOutlineIcon/>
-                  </Tooltip>);
-              default:
-              return (
-              <Tooltip title="Run" placement="right">
-                <SyncIcon/>
-              </Tooltip>
-              ) ;              
-      };
-      default:
-        return (
-          <Tooltip title="Run" placement="right">
-            <SyncIcon/>
-          </Tooltip>
-          ) ;  
-    }
-  }
-
-export const WorkFlowItem = ({status,conclusion, workflowName}:WorkFlowItemProps) => {
+export const WorkFlowItem = ({id, status,conclusion, workflowName}:WorkFlowItemProps) => {
 
   const classes = useStyles();
 
@@ -139,9 +65,13 @@ export const WorkFlowItem = ({status,conclusion, workflowName}:WorkFlowItemProps
       <Box
         role="button"
         className={classes.clickable}>
-        <StatusActionCard
+        {/* <StatusActionCard
           status={status}
-         />
+         /> */}
+        <WorkFlowActions
+            status={status}
+            conclusion={conclusion}
+            workflowId={id}/>
       </Box>
     </Box>
   )

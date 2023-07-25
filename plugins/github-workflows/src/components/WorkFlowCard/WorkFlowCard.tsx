@@ -64,6 +64,7 @@ export const Cards = ({items}:CardsProps) => {
         <Box className={classes.workflowsGroup}>
           { items.map( item => 
             <WorkFlowItem 
+              id={item.workFlowId}
               key={item.workFlowId} 
               status={item.status}
               conclusion={item.conclusion}
