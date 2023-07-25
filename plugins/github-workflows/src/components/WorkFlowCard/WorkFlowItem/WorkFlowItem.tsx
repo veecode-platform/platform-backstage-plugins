@@ -65,9 +65,6 @@ export const WorkFlowItem = ({id, status,conclusion, workflowName}:WorkFlowItemP
       <Box
         role="button"
         className={classes.clickable}>
-        {/* <StatusActionCard
-          status={status}
-         /> */}
         <WorkFlowActions
             status={status}
             conclusion={conclusion}
