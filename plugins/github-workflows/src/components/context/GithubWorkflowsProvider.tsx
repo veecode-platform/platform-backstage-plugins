@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {  useState } from "react";
+import { useState } from "react";
 import { GithubWorkflowsContext } from './GithubWorkflowsContext';
 import { useApi } from '@backstage/core-plugin-api';
 import { githubWorkflowsApiRef } from '../../api';
@@ -10,8 +10,8 @@ import { WorkflowResultsProps } from '../../utils/types';
 
 export const GithubWorkflowsProvider: React.FC = ({ children }) => {
 
-  const [branch, setBranch] = useState<string|null>(localStorage.getItem('branch-selected')??null);
-  const [ workflowsState, setWorkflowsState] = useState<WorkflowResultsProps[]|null>(null);
+  const [branch, setBranch] = useState<string | null>(localStorage.getItem('branch-selected') ?? null);
+  const [workflowsState, setWorkflowsState] = useState<WorkflowResultsProps[] | null>(null);
   const { projectName, workflows } = useEntityAnnotations(entityMock);
   const api = useApi(githubWorkflowsApiRef);
 
@@ -19,17 +19,17 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
     listAllWorkflows();
   }, []);
 
-  useEffect(()=>{
-    if(!branch) setBranch(localStorage.getItem('branch-selected'));   
-    if(!workflowsState) {
+  useEffect(() => {
+    if (!branch) setBranch(localStorage.getItem('branch-selected'));
+    if (!workflowsState) {
       const workflowsStorage = localStorage.getItem('all-workflows');
-      if(workflowsStorage) setWorkflowsState(JSON.parse(workflowsStorage));
+      if (workflowsStorage) setWorkflowsState(JSON.parse(workflowsStorage));
     }
-  },[]);
+  }, []);
 
   const setBranchState = (branch: string) => {
     setBranch(branch);
-    localStorage.setItem('branch-selected',branch);
+    localStorage.setItem('branch-selected', branch);
   }
 
   const listAllWorkflows = async () => {
@@ -58,90 +58,102 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
     }
   };
 
-  const latestWorkFlow = async (workFlowId:number, projectSlug: string) => {
-     try{
-      const data = await api.getLatestWorkflowRun(workFlowId.toString(),projectSlug);
-          if(data){
-            return {
-              runId: data.id,
-              status: data.status,
-              conclusion: data.conclusion
-            }
-          }
-          return null
+  const latestWorkFlow = async (workFlowId: number, projectSlug: string) => {
+    try {
+      const data = await api.getLatestWorkflowRun(workFlowId.toString(), projectSlug);
+      if (data) {
+        return {
+          runId: data.id,
+          status: data.status,
+          conclusion: data.conclusion
+        }
       }
-     catch(error){
-        console.error("Error:", error);
-       throw error;
-     }
+      return null
+    }
+    catch (error) {
+      console.error("Error:", error);
+      throw error;
+    }
   };
 
   const workflowByAnnotation = async () => {
-    try{
+    try {
       const workflowsList = await listAllWorkflows();
-      console.log(workflowsList)
-      const workFlowsResult : WorkflowResultsProps[] = [];
-          if(workflowsList){
-            workflows.forEach( workflow => {
-              workflowsList.filter((w:WorkflowResultsProps) => {
-                if(w.path?.includes(workflow)){ 
-                  workFlowsResult.push({
-                    id: w.id,
-                    name: w.name,
-                    lastRunId: w.lastRunId,
-                    status: w.status,
-                    conclusion: w.conclusion,
-                    source:  w.source,
-                    path: w.path
-                  })
-              };
-                return workFlowsResult
+      const workFlowsResult: WorkflowResultsProps[] = [];
+      if (workflowsList) {
+        workflows.forEach(workflow => {
+          workflowsList.filter((w: WorkflowResultsProps) => {
+            if (w.path?.includes(workflow)) {
+              workFlowsResult.push({
+                id: w.id,
+                name: w.name,
+                lastRunId: w.lastRunId,
+                status: w.status,
+                conclusion: w.conclusion,
+                source: w.source,
+                path: w.path
               })
-            })
-        }
-        return workFlowsResult
+            };
+            return workFlowsResult
+          })
+        })
+      }
+      return workFlowsResult
     }
-    catch(error){
+    catch (error) {
       console.log(error)
       throw error
     }
-}
+  }
 
-  const getWorkflowRunById = async (runId: string,projectSlug: string) => {
-    try{
+  const getWorkflowRunById = async (runId: string, projectSlug: string) => {
+    try {
       const response = api.getWorkflowRunById(runId.toString(), projectSlug);
       return response
-     }
-     catch(error){
+    }
+    catch (error) {
       console.error("Error:", error);
       throw error;
-     }
+    }
   }
 
   const handleStartWorkflowRun = async (workFlowId: number, projectSlug: string, branch: string) => {
-     try{
+    try {
       const response = api.startWorkflowRun(workFlowId.toString(), projectSlug, branch);
       return response
-     }
-     catch(error){
+    }
+    catch (error) {
       console.error("Error:", error);
       throw error;
-     }
+    }
   };
 
   const handleStopWorkflowRun = (runId: number, projectSlug: string) => {
-    try{
+    try {
       const response = api.stopWorkflowRun(runId.toString(), projectSlug);
       return response
-     }
-     catch(error){
+    }
+    catch (error) {
       console.error("Error:", error);
       throw error;
-     }
+    }
   }
 
   return (
-    <GithubWorkflowsContext.Provider value={{ listAllWorkflows, projectName, workflows,  branch, setBranchState, workflowsState, latestWorkFlow, workflowByAnnotation,  getWorkflowRunById, handleStartWorkflowRun, handleStopWorkflowRun}}>
+    <GithubWorkflowsContext.Provider
+      value={{
+        listAllWorkflows,
+        projectName,
+        workflows,
+        branch,
+        setBranchState,
+        workflowsState,
+        latestWorkFlow,
+        workflowByAnnotation,
+        getWorkflowRunById,
+        handleStartWorkflowRun,
+        handleStopWorkflowRun
+      }}>
       {children}
     </GithubWorkflowsContext.Provider>
   );

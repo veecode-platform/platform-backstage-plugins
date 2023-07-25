@@ -8,15 +8,15 @@ type WorkFlowStatusProps = {
     icon?: boolean
 }
 
-export const WorkFlowStatus = ({status, conclusion, icon}:WorkFlowStatusProps) => {
-  
-    if(!status) return null;
-    
+export const WorkFlowStatus = ({ status, conclusion, icon }: WorkFlowStatusProps) => {
+
+    if (!status) return null;
+
     switch (status.toLocaleLowerCase()) {
         case StatusWorkflowEnum.queued:
             return (
                 <>
-                  <StatusPending /> {!icon && "Queued"}
+                    <StatusPending /> {!icon && "Queued"}
                 </>
             );
         case StatusWorkflowEnum.inProgress:
@@ -26,7 +26,7 @@ export const WorkFlowStatus = ({status, conclusion, icon}:WorkFlowStatusProps) =
                 </>
             );
         case StatusWorkflowEnum.completed:
-            switch (conclusion?.toLocaleLowerCase()){
+            switch (conclusion?.toLocaleLowerCase()) {
                 case StatusWorkflowEnum.skipped:
                 case StatusWorkflowEnum.canceled:
                 case StatusWorkflowEnum.aborted:
@@ -38,26 +38,26 @@ export const WorkFlowStatus = ({status, conclusion, icon}:WorkFlowStatusProps) =
                 case StatusWorkflowEnum.timeOut:
                     return (
                         <>
-                          <StatusWarning /> {!icon && "Timed out"}
+                            <StatusWarning /> {!icon && "Timed out"}
                         </>
-                      );
+                    );
                 case StatusWorkflowEnum.failure:
                     return (
                         <>
-                          <StatusError /> {!icon && "Error"}
+                            <StatusError /> {!icon && "Error"}
                         </>
-                      );
+                    );
                 default:
-                return (
-                    <>
-                        <StatusOK /> {!icon && "Completed"}
-                    </>
-                    );                  
-        }
-        default: 
+                    return (
+                        <>
+                            <StatusOK /> {!icon && "Completed"}
+                        </>
+                    );
+            }
+        default:
             return (
                 <>
-                    <StatusPending/> {!icon && "Pending"}
+                    <StatusPending /> {!icon && "Pending"}
                 </>
             )
     }
