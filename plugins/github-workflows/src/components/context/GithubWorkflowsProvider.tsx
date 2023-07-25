@@ -12,7 +12,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
 
   const [branch, setBranch] = useState<string|null>(localStorage.getItem('branch-selected')??null);
   const [ workflowsState, setWorkflowsState] = useState<WorkflowResultsProps[]|null>(null);
-  const { projectName } = useEntityAnnotations(entityMock);
+  const { projectName, workflows } = useEntityAnnotations(entityMock);
   const api = useApi(githubWorkflowsApiRef);
 
   useEffect(() => {
@@ -45,6 +45,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
             conclusion: data?.conclusion as string,
             lastRunId: data?.runId as number,
             source: w.html_url as string,
+            path: w.path as string
           };
         }));
         setWorkflowsState(newWorkflowsState);
@@ -73,7 +74,38 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
         console.error("Error:", error);
        throw error;
      }
-  }
+  };
+
+  const workflowByAnnotation = async () => {
+    try{
+      const workflowsList = await listAllWorkflows();
+      console.log(workflowsList)
+      const workFlowsResult : WorkflowResultsProps[] = [];
+          if(workflowsList){
+            workflows.forEach( workflow => {
+              workflowsList.filter((w:WorkflowResultsProps) => {
+                if(w.path?.includes(workflow)){ 
+                  workFlowsResult.push({
+                    id: w.id,
+                    name: w.name,
+                    lastRunId: w.lastRunId,
+                    status: w.status,
+                    conclusion: w.conclusion,
+                    source:  w.source,
+                    path: w.path
+                  })
+              };
+                return workFlowsResult
+              })
+            })
+        }
+        return workFlowsResult
+    }
+    catch(error){
+      console.log(error)
+      throw error
+    }
+}
 
   const getWorkflowRunById = async (runId: string,projectSlug: string) => {
     try{
@@ -109,7 +141,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
   }
 
   return (
-    <GithubWorkflowsContext.Provider value={{ listAllWorkflows, projectName, branch, setBranchState, workflowsState, latestWorkFlow, getWorkflowRunById, handleStartWorkflowRun, handleStopWorkflowRun}}>
+    <GithubWorkflowsContext.Provider value={{ listAllWorkflows, projectName, workflows,  branch, setBranchState, workflowsState, latestWorkFlow, workflowByAnnotation,  getWorkflowRunById, handleStartWorkflowRun, handleStopWorkflowRun}}>
       {children}
     </GithubWorkflowsContext.Provider>
   );

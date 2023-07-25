@@ -49,5 +49,6 @@ export interface WorkflowResultsProps {
     lastRunId?: number,
     status?: string,
     conclusion?: string,
-    source?:  string
+    source?:  string,
+    path?: string
   }

@@ -45,22 +45,27 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
     }, [workflowsState, workflowId]);
 
     const handleClickActions = async (status:string) => {
-        if(workFlowSelected){
-          switch (status) {
-            case StatusWorkflowEnum.completed:
-            case StatusWorkflowEnum.failure:
-            case StatusWorkflowEnum.aborted:
-            case StatusWorkflowEnum.skipped:
-            case StatusWorkflowEnum.canceled:
-            case StatusWorkflowEnum.timeOut:
-            case StatusWorkflowEnum.default:
-              return await handleStartWorkflowRun( workFlowSelected.id as number, projectName,  branch!);
-            case StatusWorkflowEnum.inProgress:
-              return handleStopWorkflowRun(workFlowSelected.lastRunId as number, projectName);
-            default:
-              break;
+       try{
+          if(workFlowSelected){
+            switch (status) {
+              case StatusWorkflowEnum.completed:
+              case StatusWorkflowEnum.failure:
+              case StatusWorkflowEnum.aborted:
+              case StatusWorkflowEnum.skipped:
+              case StatusWorkflowEnum.canceled:
+              case StatusWorkflowEnum.timeOut:
+              case StatusWorkflowEnum.default:
+                return await handleStartWorkflowRun( workFlowSelected.id as number, projectName,  branch!);
+              case StatusWorkflowEnum.inProgress:
+                return handleStopWorkflowRun(workFlowSelected.lastRunId as number, projectName);
+              default:
+                break;
+            }
           }
-        }
+       }
+       catch(error){
+        throw error
+       }
     }
     
     switch (status.toLocaleLowerCase()) {

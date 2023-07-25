@@ -1,9 +1,9 @@
 import { Content, ContentHeader, Header, HeaderLabel,Page, SupportButton } from '@backstage/core-components'
 import { Grid } from '@material-ui/core'
 import React from 'react'
-import { WorkflowTable } from '../WorkflowTable'
-import { WorkFlowCard } from '../WorkFlowCard'
+import { WorkflowTable } from '../WorkFlowTable'
 import { GithubWorkflowsProvider } from '../context/GithubWorkflowsProvider'
+import { WorkFlowCard } from '../WorkFlowCard'
 
 export const GithubWorkflowsOverview = () => {
 

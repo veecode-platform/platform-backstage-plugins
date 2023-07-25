@@ -1,7 +1,9 @@
-import React from 'react';
-import { InfoCard } from '@backstage/core-components';
+import React, { useContext } from 'react';
+import { InfoCard, Progress, ResponseErrorPanel } from '@backstage/core-components';
 import { Box, Paper, Typography, makeStyles } from '@material-ui/core';
 import { WorkFlowItem } from './WorkFlowItem';
+import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
+import useAsync from 'react-use/lib/useAsync';
 
 const useStyles = makeStyles(theme => ({
   title:{
@@ -34,8 +36,18 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
+type WorkFlowCardProps = {
+  workFlowId:number,
+  lastRunId: number,
+  status: string,
+  workFlowName: string
+}
 
-export const WorkFlowCard = () => {
+type CardsProps = {
+  items: WorkFlowCardProps[] | []
+}
+
+export const Cards = ({items}:CardsProps) => {
   
   const classes = useStyles();
 
@@ -49,15 +61,47 @@ export const WorkFlowCard = () => {
     <Paper>
       <InfoCard title={TitleBar}>
         <Box className={classes.workflowsGroup}>
-          <WorkFlowItem status="in_progress" workflowName="Update-SO"/>
-          <WorkFlowItem status="warning" conclusion="" workflowName="Build-image"/>
-          <WorkFlowItem status="pending" conclusion="" workflowName="Deploy-project"/>
+          { items.map( item => 
+          <WorkFlowItem 
+            key={item.workFlowId} 
+            status={item.status}
+            workflowName={item.workFlowName}
+            />)
+          }
+          {/* <WorkFlowItem status="warning" conclusion="" workflowName="Build-image"/>
+          <WorkFlowItem status="pending" conclusion="" workflowName="Deploy-project"/> */}
         </Box>
       </InfoCard>
     </Paper>
   )
 }
 
-export const ButtonWorkFlow = () => {
+export const WorkFlowCard = () => {
 
-}
+  const { workflowByAnnotation } = useContext(GithubWorkflowsContext);
+  
+  const { value, loading, error } = useAsync(async (): Promise<WorkFlowCardProps[] | []> => {
+    const workflowsByAnnotationResult = await workflowByAnnotation();
+
+    const data = workflowsByAnnotationResult.map(
+      w => {
+        return {
+                    workFlowId: w.id as number,
+                    lastRunId: w.lastRunId as number,
+                    status: w.status as string,
+                    workFlowName: w.name as string
+               }
+      }
+    )
+
+      return  data || []
+  }, []);
+
+  if (loading) {
+    return <Progress />;
+  } else if (error) {
+    return <ResponseErrorPanel error={error} />;
+  }
+
+  return <Cards items={value || []} />;
+};
