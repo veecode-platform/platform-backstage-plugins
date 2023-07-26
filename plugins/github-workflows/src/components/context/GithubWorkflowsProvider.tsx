@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from "react";
 import { GithubWorkflowsContext } from './GithubWorkflowsContext';
-import { useApi } from '@backstage/core-plugin-api';
+import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { githubWorkflowsApiRef } from '../../api';
 import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
 import { entityMock } from '../../mocks/component';
@@ -14,6 +14,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
   const [workflowsState, setWorkflowsState] = useState<WorkflowResultsProps[] | null>(null);
   const { projectName, workflows } = useEntityAnnotations(entityMock);
   const api = useApi(githubWorkflowsApiRef);
+  const errorApi = useApi(errorApiRef);
 
   useEffect(() => {
     listAllWorkflows();
@@ -53,9 +54,10 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
         return newWorkflowsState;
       }
       else return null;
-    } catch (error) {
-      throw error
-    }
+    } catch (e:any) {
+      errorApi.post(e);
+      return null
+     }
   };
 
   const latestWorkFlow = async (workFlowId: number, projectSlug: string) => {
@@ -70,10 +72,10 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
       }
       return null
     }
-    catch (error) {
-      console.error("Error:", error);
-      throw error;
-    }
+    catch (e:any) {
+      errorApi.post(e);
+      return null
+     }
   };
 
   const workflowByAnnotation = async () => {
@@ -100,10 +102,10 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
       }
       return workFlowsResult
     }
-    catch (error) {
-      console.log(error)
-      throw error
-    }
+    catch (e:any) {
+      errorApi.post(e);
+      return null
+     }
   }
 
   const getWorkflowRunById = async (runId: string, projectSlug: string) => {
@@ -111,32 +113,28 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
       const response = api.getWorkflowRunById(runId.toString(), projectSlug);
       return response
     }
-    catch (error) {
-      console.error("Error:", error);
-      throw error;
-    }
+    catch (e:any) {
+      errorApi.post(e);
+      return null
+     }
   }
 
   const handleStartWorkflowRun = async (workFlowId: number, projectSlug: string, branch: string) => {
     try {
-      const response = api.startWorkflowRun(workFlowId.toString(), projectSlug, branch);
-      return response
+      await api.startWorkflowRun(workFlowId.toString(), projectSlug, branch);
     }
-    catch (error) {
-      console.error("Error:", error);
-      throw error;
-    }
+    catch (e:any) {
+      errorApi.post(e);
+     }
   };
 
-  const handleStopWorkflowRun = (runId: number, projectSlug: string) => {
+  const handleStopWorkflowRun = async (runId: number, projectSlug: string) => {
     try {
-      const response = api.stopWorkflowRun(runId.toString(), projectSlug);
-      return response
+      await api.stopWorkflowRun(runId.toString(), projectSlug);
     }
-    catch (error) {
-      console.error("Error:", error);
-      throw error;
-    }
+    catch (e:any) {
+      errorApi.post(e)
+     }
   }
 
   return (

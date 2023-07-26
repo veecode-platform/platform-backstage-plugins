@@ -85,7 +85,7 @@ export const WorkFlowCard = () => {
   const { value, loading, error } = useAsync(async (): Promise<WorkFlowCardProps[] | []> => {
     const workflowsByAnnotationResult = await workflowByAnnotation();
 
-    const data = workflowsByAnnotationResult.map(
+    const data = workflowsByAnnotationResult?.map(
       w => {
         return {
           workFlowId: w.id as number,

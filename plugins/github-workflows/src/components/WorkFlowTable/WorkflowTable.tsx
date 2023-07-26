@@ -5,17 +5,19 @@ import {
   TableColumn,
   Progress,
   ResponseErrorPanel,
-  Link
+  Link,
+  EmptyState
  } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 import LanguageIcon from '@material-ui/icons/Language';
 import { WorkFlowStatus } from '../WorkFlowStatus';
 import { WorkFlowActions } from '../WorkFlowActions';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Button, Typography } from '@material-ui/core';
 import { SelectBranch } from '../SelectBranch';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import { WorkflowResultsProps } from '../../utils/types';
 import { truncateString } from '../../utils/common';
+import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 
 const useStyles = makeStyles(theme => ({
   title:{
@@ -110,7 +112,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
 
 export const WorkflowTable = () => {
 
-  const { listAllWorkflows } = useContext(GithubWorkflowsContext);
+  const { listAllWorkflows, projectName } = useContext(GithubWorkflowsContext);
   
   const { value, loading, error } = useAsync(async (): Promise<WorkflowResultsProps[] | []> => {
       const data = await listAllWorkflows();
@@ -119,9 +121,34 @@ export const WorkflowTable = () => {
 
   if (loading) {
     return <Progress />;
-  } else if (error) {
+  }
+
+  if(!error && !value) {
+    return (
+      <EmptyState
+      missing="data"
+      title="No Workflow Data"
+      description="This component has GitHub Actions enabled, but no data was found. Have you created any Workflows? Click the button below to create a new Workflow."
+      action={
+        <Button
+          variant="contained"
+          color="primary"
+          href={`https://${projectName}/actions/new`}
+        >
+          Create new Workflow
+        </Button>
+      }
+    />
+    )
+  }
+  
+  if (error) {
     return <ResponseErrorPanel error={error} />;
   }
 
-  return <DenseTable items={value || []} />;
+  return (
+    <ErrorBoundary>
+      <DenseTable items={value || []} />
+    </ErrorBoundary>
+  );
 };
