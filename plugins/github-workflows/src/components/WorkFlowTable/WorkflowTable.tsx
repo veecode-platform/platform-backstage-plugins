@@ -133,7 +133,7 @@ export const WorkflowTable = () => {
         <Button
           variant="contained"
           color="primary"
-          href={`https://${projectName}/actions/new`}
+          href={`https://github.com/${projectName}/actions/new`}
         >
           Create new Workflow
         </Button>

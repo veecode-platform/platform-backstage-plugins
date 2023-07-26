@@ -12,7 +12,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
 
   const [branch, setBranch] = useState<string | null>(localStorage.getItem('branch-selected') ?? null);
   const [workflowsState, setWorkflowsState] = useState<WorkflowResultsProps[] | null>(null);
-  const { projectName, workflows } = useEntityAnnotations(entityMock);
+  const { projectName } = useEntityAnnotations(entityMock);
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
 
@@ -78,12 +78,12 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
      }
   };
 
-  const workflowByAnnotation = async () => {
+  const workflowByAnnotation = async (annotations: string[]) => {
     try {
       const workflowsList = await listAllWorkflows();
       const workFlowsResult: WorkflowResultsProps[] = [];
       if (workflowsList) {
-        workflows.forEach(workflow => {
+        annotations.forEach(workflow => {
           workflowsList.filter((w: WorkflowResultsProps) => {
             if (w.path?.includes(workflow)) {
               workFlowsResult.push({
@@ -142,7 +142,6 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
       value={{
         listAllWorkflows,
         projectName,
-        workflows,
         branch,
         setBranchState,
         workflowsState,
