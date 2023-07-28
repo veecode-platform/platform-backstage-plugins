@@ -35,18 +35,17 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
 
   const listAllWorkflows = async () => {
     try {
-      const workflows = await api.listWorkflows(projectName);
-      if (workflows) {
+      const workflows = await api.listWorkflowsRefactor(projectName, branch!);
+      if(workflows){
         const newWorkflowsState = await Promise.all(workflows.map(async (w) => {
-          const data = await latestWorkFlow(w.id, projectName);
           return {
-            id: w.id,
-            name: w.name,
-            status: data?.status as string,
-            conclusion: data?.conclusion as string,
-            lastRunId: data?.runId as number,
-            source: w.html_url as string,
-            path: w.path as string
+            id: w.workflow.id,
+            name: w.workflow.name,
+            status: w.latestRun.status,
+            conclusion: w.latestRun.conclusion,
+            lastRunId: w.latestRun.id,
+            source: w.workflow.url,
+            path: w.workflow.path
           };
         }));
         setWorkflowsState(newWorkflowsState);
@@ -54,29 +53,11 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
         return newWorkflowsState;
       }
       else return null;
-    } catch (e:any) {
+    } catch(e:any){
       errorApi.post(e);
-      return null
-     }
-  };
-
-  const latestWorkFlow = async (workFlowId: number, projectSlug: string) => {
-    try {
-      const data = await api.getLatestWorkflowRun(workFlowId.toString(), projectSlug);
-      if (data) {
-        return {
-          runId: data.id,
-          status: data.status,
-          conclusion: data.conclusion
-        }
-      }
-      return null
+      return null;
     }
-    catch (e:any) {
-      errorApi.post(e);
-      return null
-     }
-  };
+  }
 
   const workflowByAnnotation = async (annotations: string[]) => {
     try {
@@ -145,7 +126,6 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
         branch,
         setBranchState,
         workflowsState,
-        latestWorkFlow,
         workflowByAnnotation,
         getWorkflowRunById,
         handleStartWorkflowRun,
