@@ -196,7 +196,7 @@ class Client {
 
     async listWorkflowsRefactor(githubRepoSlug: string, branch: string, filter?: string[]){
         const workflows = await this.listWorkflows(githubRepoSlug, filter)
-        const response = await Promise.all(workflows.map(async (workflow)=>{
+        const response = await Promise.all(workflows.map(async (workflow): Promise<Workflows> => {
             const latestWorkflowRun = await this.getLatestWorkflowRun(workflow.id.toString(), githubRepoSlug)
             const dispatchParameters = await this.listWorkflowsDispatchParameters(githubRepoSlug, workflow.path, branch)
             return {
