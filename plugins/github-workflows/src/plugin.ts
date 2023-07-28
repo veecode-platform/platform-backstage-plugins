@@ -1,4 +1,4 @@
-import { createApiFactory, createRoutableExtension, createPlugin, discoveryApiRef } from '@backstage/core-plugin-api';
+import { createApiFactory, createRoutableExtension, createPlugin, discoveryApiRef, createComponentExtension } from '@backstage/core-plugin-api';
 import { rootRouteRef } from './routes';
 import { githubWorkflowsApiRef, GithubWorkflowsApiClient } from './api';
 
@@ -28,3 +28,23 @@ export const GithubWorkflowsPage = githubWorkflowsPlugin.provide(
     mountPoint: rootRouteRef,
   }),
 );
+
+export const GithubWorkflowsList = githubWorkflowsPlugin.provide(
+  createComponentExtension({
+    name: 'GithubWorkflowsList',
+    component: {
+      lazy: () =>
+        import('./components/WorkFlowTable').then(m => m.WorkflowTable),
+    },
+  })
+)
+
+export const GithubWorkflowsCard = githubWorkflowsPlugin.provide(
+  createComponentExtension({
+    name: 'GithubWorkflowsCard',
+    component: {
+      lazy: () =>
+        import('./components/WorkFlowCard').then(m => m.WorkFlowCard),
+    },
+  })
+)
