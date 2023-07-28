@@ -123,12 +123,12 @@ const overviewContent = (
     </Grid>
 
     {/* Githubworkflows plugin */}
-    <Grid item lg={12}>
+    {/* <Grid item lg={12}>
      <WorkflowTable/>
     </Grid>
     <Grid item lg={8}>
      <WorkFlowCard/>
-    </Grid>
+    </Grid> */}
 
     <Grid item md={4} xs={12}>
       <EntityLinksCard />

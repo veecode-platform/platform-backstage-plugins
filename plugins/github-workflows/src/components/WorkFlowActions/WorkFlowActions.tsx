@@ -8,6 +8,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles, Tooltip } from '@material-ui/core';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import { WorkflowResultsProps } from '../../utils/types';
+import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 
 type WorkFlowActionsProps = {
     workflowId?: number,
@@ -34,6 +35,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
     const [workFlowSelected, setWorkFlowSelected] = useState<WorkflowResultsProps>();
     const { projectName, branch, workflowsState ,handleStartWorkflowRun, handleStopWorkflowRun } = useContext(GithubWorkflowsContext);
     const classes = useStyles();
+    const errorApi = useApi(errorApiRef);
 
     if(!status) return null;
 
@@ -55,16 +57,18 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
               case StatusWorkflowEnum.canceled:
               case StatusWorkflowEnum.timeOut:
               case StatusWorkflowEnum.default:
-                return await handleStartWorkflowRun( workFlowSelected.id as number, projectName,  branch!);
+                await handleStartWorkflowRun( workFlowSelected.id as number, projectName,  branch!);
+                return;
               case StatusWorkflowEnum.inProgress:
-                return handleStopWorkflowRun(workFlowSelected.lastRunId as number, projectName);
+                await handleStopWorkflowRun(workFlowSelected.lastRunId as number, projectName);
+                return;
               default:
                 break;
             }
           }
        }
-       catch(error){
-        throw error
+       catch (e:any) {
+        errorApi.post(e)
        }
     }
     

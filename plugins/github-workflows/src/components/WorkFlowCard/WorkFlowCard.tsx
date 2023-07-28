@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
-import { InfoCard, Progress, ResponseErrorPanel } from '@backstage/core-components';
+import { InfoCard, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
 import { Box, Paper, Typography, makeStyles } from '@material-ui/core';
 import { WorkFlowItem } from './WorkFlowItem';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import useAsync from 'react-use/lib/useAsync';
+import { WORKFLOW_ANNOTATION, useEntityAnnotations } from '../../hooks/useEntityAnnotations';
+import { entityMock } from '../../mocks/component';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -81,11 +83,18 @@ export const Cards = ({ items }: CardsProps) => {
 export const WorkFlowCard = () => {
 
   const { workflowByAnnotation } = useContext(GithubWorkflowsContext);
+  const { workflows } = useEntityAnnotations(entityMock);
+
+  if(!workflows){
+    return (
+      <MissingAnnotationEmptyState annotation={WORKFLOW_ANNOTATION} />
+    )
+  }
 
   const { value, loading, error } = useAsync(async (): Promise<WorkFlowCardProps[] | []> => {
-    const workflowsByAnnotationResult = await workflowByAnnotation();
+    const workflowsByAnnotationResult = await workflowByAnnotation(workflows);
 
-    const data = workflowsByAnnotationResult.map(
+    const data = workflowsByAnnotationResult?.map(
       w => {
         return {
           workFlowId: w.id as number,

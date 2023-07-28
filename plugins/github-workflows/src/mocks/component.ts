@@ -26,7 +26,7 @@ export const entityMock = {
         'github.com/project-slug': 'ValberJunior/LoginNextJS',
         'backstage.io/techdocs-ref': 'dir:.',
         'argocd/app-name': 'LoginNextJS',
-        'github.com/workflows': 'nextjs.yml'
+        'github.com/workflows': 'nextjs.yml,nextjs.yml,nextjs.yml'
       },
     },
     spec: {

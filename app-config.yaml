@@ -5,13 +5,16 @@ app:
 organization:
   name: VeeCode platform backstage plugins
 
+permission:
+  enabled: true
+
 backend:
   # Used for enabling authentication, secret is shared by all backend plugins
   # See https://backstage.io/docs/auth/service-to-service-auth for
   # information on the format
-  # auth:
-  #   keys:
-  #     - secret: ${BACKEND_SECRET}
+  auth:
+    keys:
+      - secret: ${BACKEND_AUTH_SECRET_KEY}
   baseUrl: http://localhost:7007
   listen:
     port: 7007
@@ -30,14 +33,14 @@ backend:
   database:
     client: better-sqlite3
     connection: ':memory:'
+  cache:
+    store: memory
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
 integrations:
   github:
     - host: github.com
-      # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
-      # about setting up the GitHub integration here: https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
-      token: ${GITHUB_TOKEN}
+      token: ${GITHUB_TOKEN_SECRET}
     ### Example for how to add your GitHub Enterprise instance using the API:
     # - host: ghe.example.net
     #   apiBaseUrl: https://ghe.example.net/api/v3
@@ -51,9 +54,6 @@ proxy:
       Authorization: Bearer ${GITHUB_TOKEN}
       Accept: application/vnd.github+json
       X-GitHub-Api-Version: "2022-11-28"
-
-    
-
   ### Example for how to add a proxy endpoint for the frontend.
   ### A typical reason to do this is to handle HTTPS and CORS for internal services.
   # '/test':
@@ -72,13 +72,18 @@ techdocs:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
 auth:
-  # see https://backstage.io/docs/auth/ to learn about auth providers
-  providers: {}
+  environment: development
+  providers: 
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
 catalog:
+ 
     ## Uncomment these lines to add more example data
     # - type: url
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
