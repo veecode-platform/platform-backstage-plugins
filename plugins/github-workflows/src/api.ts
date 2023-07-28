@@ -1,9 +1,35 @@
 import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
 import { Branches, Workflow, WorkflowResponseFromApi, WorkflowRun, WorkflowRunsResponseFromApi } from './utils/types';
+import YAML from "js-yaml"
 // import { Entity } from '@backstage/catalog-model';
 
 const GITHUB_WORKFLOWS_DEFAULT_PROXY_URL = "/github-workflows"
 
+export interface WorkflowDispatchParameters {
+    name: string
+    description: string
+    required: boolean
+    type: boolean | number | "choice" | string
+    default: string
+    options?: Array<any>
+}
+
+export interface Workflows {
+    workflow: {
+        id: number
+        name: string
+        state: string
+        url: string
+        createdAt: string
+        updatedAt: string
+    }
+    latestRun: {
+        id: number
+        status: string
+        conclusion: string
+    }
+    parameters: WorkflowDispatchParameters[]
+}
 
 export interface GithubWorkflowsApi {
     /**
@@ -31,11 +57,19 @@ export interface GithubWorkflowsApi {
     /**
     * dispatch a run from a branch of a workflow
     */
-    startWorkflowRun(workflowId: string, githubRepoSlug: string, branch: string): Promise<WorkflowRun>;
+    startWorkflowRun(workflowId: string, githubRepoSlug: string, branch: string, inputs?: object): Promise<WorkflowRun>;
     /**
     * stop a run from a worflow
     */
     stopWorkflowRun(runId: string, githubRepoSlug: string): Promise<void>;
+    /**
+    * list workflow dispatch parameters from definition
+    */
+    listWorkflowDispatchParameters(githubRepoSlug: string, filePath: string, branch: string): Promise<WorkflowDispatchParameters[]>;
+    /**
+    * list workflows refactor to include usefull
+    */
+    listWorkflowsRefactor(githubRepoSlug: string, branch: string, filter?: string[]): Promise<Workflows[]>;
 }
 
 export const githubWorkflowsApiRef = createApiRef<GithubWorkflowsApi>({
@@ -66,68 +100,127 @@ class Client {
 
     public async fetch<T = any>(input: string, githubRepoSlug: string, init?: RequestInit): Promise<T> {
         const apiUrl = await this.apiUrl(githubRepoSlug);
-    
+
         const resp = await fetch(`${apiUrl}${input}`, init);
         if (!resp.ok) {
-          throw new Error(`Request failed with ${resp.status} ${resp.statusText}`);
+            throw new Error(`Request failed with ${resp.status} ${resp.statusText}`);
         }
-    
+
         return await resp.json();
     }
 
     async apiUrl(githubRepoSlug: string) {
         const baseUrl = await this.discoveryApi.getBaseUrl("proxy")
-        return `${baseUrl}${this.proxyPath}/${githubRepoSlug}` 
+        return `${baseUrl}${this.proxyPath}/${githubRepoSlug}`
     }
 
     async listWorkflows(githubRepoSlug: string, filter?: string[]) {
         const response = await this.fetch<WorkflowResponseFromApi>("/actions/workflows", githubRepoSlug)
-        if(!filter) return response.workflows
+        if (!filter) return response.workflows
         const filteredWorkflows = response.workflows.filter(
             workflow => filter.includes(regexFileName(workflow.path))
         )
         return filteredWorkflows
     }
 
-    async listWorkflowRuns(workflowId: string, githubRepoSlug: string){
+    async listWorkflowRuns(workflowId: string, githubRepoSlug: string) {
         const response = await this.fetch<WorkflowRunsResponseFromApi>(`/actions/workflows/${workflowId}/runs`, githubRepoSlug)
         return response.workflow_runs
     }
 
-    async listBranchesFromRepo(githubRepoSlug: string){
+    async listBranchesFromRepo(githubRepoSlug: string) {
         return await this.fetch<Branches[]>("/branches", githubRepoSlug)
     }
 
-    async getWorkflowRunById(runId: string, githubRepoSlug: string){
+    async getWorkflowRunById(runId: string, githubRepoSlug: string) {
         return await this.fetch<WorkflowRun>(`/actions/runs/${runId}`, githubRepoSlug)
     }
 
-    async getLatestWorkflowRun(workflowId: string, githubRepoSlug: string){
+    async getLatestWorkflowRun(workflowId: string, githubRepoSlug: string) {
         const response = await this.fetch<WorkflowRunsResponseFromApi>(`/actions/workflows/${workflowId}/runs`, githubRepoSlug)
         return response.workflow_runs[0]
     }
 
-    async startWorkflow(workflowId: string, githubRepoSlug: string, branch: string){
-        const headers: RequestInit  = {
+    async startWorkflow(workflowId: string, githubRepoSlug: string, branch: string, inputs?: object) {
+        const body: {ref:string, inputs?: object} = {
+            ref: branch
+        }
+        if(inputs) body.inputs = inputs
+        const headers: RequestInit = {
             method: "POST",
-            body: JSON.stringify({
+            body: JSON.stringify(body)
+            /* body: JSON.stringify({
                 ref: branch
-            })        
+            })*/
         }
         await this.fetch(`/actions/workflows/${workflowId}/dispatches`, githubRepoSlug, headers)
         return (await this.listWorkflowRuns(workflowId, githubRepoSlug))[0]
     }
 
-    async stopWorkFlowRun(runId: string, githubRepoSlug: string,){
-        const headers: RequestInit  = {
-            method: "POST"        
+    async stopWorkFlowRun(runId: string, githubRepoSlug: string) {
+        const headers: RequestInit = {
+            method: "POST"
         }
         const response = await this.fetch(`/actions/runs/${runId}/cancel`, githubRepoSlug, headers)
         return response
     }
+
+    async getFileContentFromPath(githubRepoSlug: string, filePath: string, branch: string) {
+        const response = await this.fetch(`/contents/${filePath}?ref=${branch}`, githubRepoSlug)
+        const yamlContent = YAML.load(Buffer.from(response.content, 'base64').toString('utf8')) as any
+        return yamlContent
+    }
+
+    async listWorkflowsDispatchParameters(githubRepoSlug: string, filePath: string, branch: string) {
+        const yamlContent = await this.getFileContentFromPath(githubRepoSlug, filePath, branch)
+        if (!yamlContent.on?.workflow_dispatch?.inputs) return []
+        const inputs = yamlContent.on.workflow_dispatch?.inputs
+        
+        const mapedInputs: WorkflowDispatchParameters[] = Object.keys(inputs).map((input) => {
+            const currentInput = inputs[input]
+            const result: WorkflowDispatchParameters = {
+                name: input,
+                description: currentInput.description ?? "",
+                default: currentInput.default ?? "",
+                required: currentInput.required ?? false,
+                type: currentInput.type ?? "string"
+            }
+            if (currentInput.type === "choice") {
+                result.options = currentInput.options
+            }
+            return result
+        })
+        return mapedInputs
+    }
+
+    async listWorkflowsRefactor(githubRepoSlug: string, branch: string, filter?: string[]){
+        const workflows = await this.listWorkflows(githubRepoSlug, filter)
+        const response = await Promise.all(workflows.map(async (workflow)=>{
+            const latestWorkflowRun = await this.getLatestWorkflowRun(workflow.id.toString(), githubRepoSlug)
+            const dispatchParameters = await this.listWorkflowsDispatchParameters(githubRepoSlug, workflow.path, branch)
+            return {
+                workflow: {
+                    id: workflow.id,
+                    name: workflow.name,
+                    state: workflow.state,
+                    url: workflow.html_url,
+                    createdAt: workflow.createdAt,
+                    updatedAt: workflow.updatedAt
+                },
+                latestRun: {
+                    id: latestWorkflowRun.id,
+                    status: latestWorkflowRun.status,
+                    conclusion: latestWorkflowRun.conclusion
+
+                },
+                parameters: dispatchParameters
+            }
+        }))
+        return response
+    }
 }
 
-export class GithubWorkflowsApiClient implements GithubWorkflowsApi { 
+export class GithubWorkflowsApiClient implements GithubWorkflowsApi {
 
     private readonly client: Client;
 
@@ -140,7 +233,7 @@ export class GithubWorkflowsApiClient implements GithubWorkflowsApi {
     }
 
     async listWorkflowRuns(workflowId: string, githubRepoSlug: string): Promise<WorkflowRun[]> {
-        return this.client.listWorkflowRuns(workflowId, githubRepoSlug) 
+        return this.client.listWorkflowRuns(workflowId, githubRepoSlug)
     }
 
     async listBranchesFromRepo(githubRepoSlug: string): Promise<Branches[]> {
@@ -150,16 +243,24 @@ export class GithubWorkflowsApiClient implements GithubWorkflowsApi {
     async getWorkflowRunById(runId: string, githubRepoSlug: string): Promise<WorkflowRun> {
         return this.client.getWorkflowRunById(runId, githubRepoSlug)
     }
-    
+
     async getLatestWorkflowRun(workflowId: string, githubRepoSlug: string): Promise<WorkflowRun> {
         return this.client.getLatestWorkflowRun(workflowId, githubRepoSlug)
     }
-    
+
     async startWorkflowRun(workflowId: string, githubRepoSlug: string, branch: string): Promise<WorkflowRun> {
-        return this.client.startWorkflow(workflowId, githubRepoSlug, branch)  
+        return this.client.startWorkflow(workflowId, githubRepoSlug, branch)
     }
 
     async stopWorkflowRun(runId: string, githubRepoSlug: string): Promise<void> {
         return this.client.stopWorkFlowRun(runId, githubRepoSlug)
+    }
+
+    async listWorkflowDispatchParameters(githubRepoSlug: string, filePath: string, branch: string): Promise<WorkflowDispatchParameters[]> {
+        return this.client.listWorkflowsDispatchParameters(githubRepoSlug, filePath, branch)
+    }
+
+    async listWorkflowsRefactor(githubRepoSlug: string, branch: string, filter?: string[]): Promise<any[]> {
+        return this.client.listWorkflowsRefactor(githubRepoSlug, branch, filter)
     }
 }
