@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { InfoCard, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
+import { ErrorBoundary, InfoCard, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
 import { Box, Paper, Typography, makeStyles } from '@material-ui/core';
 import { WorkFlowItem } from './WorkFlowItem';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
@@ -115,5 +115,9 @@ export const WorkFlowCard = () => {
     return <ResponseErrorPanel error={error} />;
   }
 
-  return <Cards items={value || []} />;
+  return (
+    <ErrorBoundary>
+       <Cards items={value || []} />
+    </ErrorBoundary>
+    );
 };
