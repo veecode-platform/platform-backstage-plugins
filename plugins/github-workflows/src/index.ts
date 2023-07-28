@@ -1,1 +1,2 @@
-export { githubWorkflowsPlugin, GithubWorkflowsPage } from './plugin';
+export * from './plugin';
+export { isGithubWorkflowsAvailable } from './hooks'

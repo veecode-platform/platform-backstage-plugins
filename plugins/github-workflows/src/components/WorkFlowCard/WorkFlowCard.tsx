@@ -6,6 +6,8 @@ import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import useAsync from 'react-use/lib/useAsync';
 import { WORKFLOW_ANNOTATION, useEntityAnnotations } from '../../hooks/useEntityAnnotations';
 import { entityMock } from '../../mocks/component';
+import { Entity } from '@backstage/catalog-model';
+import { useEntity } from '@backstage/plugin-catalog-react';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -81,6 +83,10 @@ export const Cards = ({ items }: CardsProps) => {
 }
 
 export const WorkFlowCard = () => {
+   
+  const { entity } = useEntity();
+
+  console.log(entity)
 
   const { workflowByAnnotation } = useContext(GithubWorkflowsContext);
   const { workflows } = useEntityAnnotations(entityMock);

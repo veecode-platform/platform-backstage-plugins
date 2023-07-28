@@ -33,7 +33,7 @@ import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
-import { GithubWorkflowsPage } from '@veecode-platform/plugin-github-workflows';
+import { GithubWorkflowsOverview } from '@veecode-platform/plugin-github-workflows';
 import { providers } from './identityProviders';
 
 const app = createApp({
@@ -107,7 +107,7 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
-    <Route path="/github-workflows" element={<GithubWorkflowsPage />} />
+    <Route path="/github-workflows" element={<GithubWorkflowsOverview />} />
   </FlatRoutes>
 );
 

@@ -55,7 +55,10 @@ import {
 
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
-import { WorkFlowCard, WorkflowTable } from '@veecode-platform/plugin-github-workflows/src/components';
+
+// test
+import { isGithubWorkflowsAvailable, GithubWorkflowsCard } from '@veecode-platform/plugin-github-workflows'
+
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -122,13 +125,13 @@ const overviewContent = (
       <EntityCatalogGraphCard variant="gridItem" height={400} />
     </Grid>
 
-    {/* Githubworkflows plugin */}
-    {/* <Grid item lg={12}>
-     <WorkflowTable/>
-    </Grid>
-    <Grid item lg={8}>
-     <WorkFlowCard/>
-    </Grid> */}
+    <EntitySwitch>
+      <EntitySwitch.Case if={isGithubWorkflowsAvailable}>
+        <Grid item xs={12}>
+            <GithubWorkflowsCard />
+        </Grid>
+      </EntitySwitch.Case>
+    </EntitySwitch>
 
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
