@@ -262,7 +262,7 @@ export class GithubWorkflowsApiClient implements GithubWorkflowsApi {
         return this.client.listWorkflowsDispatchParameters(githubRepoSlug, filePath, branch)
     }
 
-    async listWorkflowsRefactor(githubRepoSlug: string, branch: string, filter?: string[]): Promise<any[]> {
+    async listWorkflowsRefactor(githubRepoSlug: string, branch: string, filter?: string[]): Promise<Workflows[]> {
         return this.client.listWorkflowsRefactor(githubRepoSlug, branch, filter)
     }
 }
