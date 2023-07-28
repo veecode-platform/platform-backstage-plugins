@@ -23,12 +23,12 @@ export interface Workflows {
         path: string
         createdAt: string
         updatedAt: string
-    }
+    },
     latestRun: {
         id: number
         status: string
         conclusion: string
-    }
+    },
     parameters: WorkflowDispatchParameters[]
 }
 
