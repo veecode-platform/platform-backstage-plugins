@@ -20,6 +20,7 @@ export interface Workflows {
         name: string
         state: string
         url: string
+        path: string
         createdAt: string
         updatedAt: string
     }
@@ -204,6 +205,7 @@ class Client {
                     name: workflow.name,
                     state: workflow.state,
                     url: workflow.html_url,
+                    path: workflow.path,
                     createdAt: workflow.createdAt,
                     updatedAt: workflow.updatedAt
                 },
