@@ -5,9 +5,8 @@ import { WorkFlowItem } from './WorkFlowItem';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import useAsync from 'react-use/lib/useAsync';
 import { WORKFLOW_ANNOTATION, useEntityAnnotations } from '../../hooks/useEntityAnnotations';
-import { entityMock } from '../../mocks/component';
-import { Entity } from '@backstage/catalog-model';
 import { useEntity } from '@backstage/plugin-catalog-react';
+import { Entity } from '@backstage/catalog-model';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -85,11 +84,8 @@ export const Cards = ({ items }: CardsProps) => {
 export const WorkFlowCard = () => {
    
   const { entity } = useEntity();
-
-  console.log(entity)
-
+  const { projectName, workflows } = useEntityAnnotations(entity as Entity)
   const { workflowByAnnotation } = useContext(GithubWorkflowsContext);
-  const { workflows } = useEntityAnnotations(entityMock);
 
   if(!workflows){
     return (
@@ -98,7 +94,7 @@ export const WorkFlowCard = () => {
   }
 
   const { value, loading, error } = useAsync(async (): Promise<WorkFlowCardProps[] | []> => {
-    const workflowsByAnnotationResult = await workflowByAnnotation(workflows);
+    const workflowsByAnnotationResult = await workflowByAnnotation(projectName, workflows);
 
     const data = workflowsByAnnotationResult?.map(
       w => {

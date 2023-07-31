@@ -3,8 +3,6 @@ import { useState } from "react";
 import { GithubWorkflowsContext } from './GithubWorkflowsContext';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { githubWorkflowsApiRef } from '../../api';
-import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
-import { entityMock } from '../../mocks/component';
 import { WorkflowResultsProps } from '../../utils/types';
 
 
@@ -12,13 +10,9 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
 
   const [branch, setBranch] = useState<string | null>(localStorage.getItem('branch-selected') ?? null);
   const [workflowsState, setWorkflowsState] = useState<WorkflowResultsProps[] | null>(null);
-  const { projectName } = useEntityAnnotations(entityMock);
+  // const { entity } = useEntity();
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
-
-  useEffect(() => {
-    listAllWorkflows();
-  }, []);
 
   useEffect(() => {
     if (!branch) setBranch(localStorage.getItem('branch-selected'));
@@ -33,7 +27,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
     localStorage.setItem('branch-selected', branch);
   }
 
-  const listAllWorkflows = async () => {
+  const listAllWorkflows = async (projectName: string) => {
     try {
       const workflows = await api.listWorkflowsRefactor(projectName, branch!);
       if(workflows){
@@ -59,9 +53,9 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
     }
   }
 
-  const workflowByAnnotation = async (annotations: string[]) => {
+  const workflowByAnnotation = async (projectName: string, annotations: string[]) => {
     try {
-      const workflowsList = await listAllWorkflows();
+      const workflowsList = await listAllWorkflows(projectName);
       const workFlowsResult: WorkflowResultsProps[] = [];
       if (workflowsList) {
         annotations.forEach(workflow => {
@@ -122,7 +116,6 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
     <GithubWorkflowsContext.Provider
       value={{
         listAllWorkflows,
-        projectName,
         branch,
         setBranchState,
         workflowsState,
