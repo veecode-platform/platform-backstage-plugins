@@ -18,6 +18,10 @@ import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import { WorkflowResultsProps } from '../../utils/types';
 import { truncateString } from '../../utils/common';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+import { useEntityAnnotations } from '../../hooks';
+import { useEntity } from '@backstage/plugin-catalog-react';
+import { Entity } from '@backstage/catalog-model';
+
 
 const useStyles = makeStyles(theme => ({
   title:{
@@ -112,10 +116,13 @@ export const DenseTable = ({ items }: DenseTableProps) => {
 
 export const WorkflowTable = () => {
 
-  const { listAllWorkflows, projectName } = useContext(GithubWorkflowsContext);
+  const { entity } = useEntity();
+  const { projectName } = useEntityAnnotations(entity as Entity);
+
+  const { listAllWorkflows } = useContext(GithubWorkflowsContext);
   
   const { value, loading, error } = useAsync(async (): Promise<WorkflowResultsProps[] | []> => {
-      const data = await listAllWorkflows();
+      const data = await listAllWorkflows(projectName);
       return data ?? []
   }, []);
 

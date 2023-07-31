@@ -3,8 +3,6 @@ import { useState } from "react";
 import { GithubWorkflowsContext } from './GithubWorkflowsContext';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { githubWorkflowsApiRef } from '../../api';
-import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
-import { entityMock } from '../../mocks/component';
 import { WorkflowResultsProps } from '../../utils/types';
 
 
@@ -12,13 +10,8 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
 
   const [branch, setBranch] = useState<string | null>(localStorage.getItem('branch-selected') ?? null);
   const [workflowsState, setWorkflowsState] = useState<WorkflowResultsProps[] | null>(null);
-  const { projectName } = useEntityAnnotations(entityMock);
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
-
-  useEffect(() => {
-    listAllWorkflows();
-  }, []);
 
   useEffect(() => {
     if (!branch) setBranch(localStorage.getItem('branch-selected'));
@@ -33,20 +26,19 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
     localStorage.setItem('branch-selected', branch);
   }
 
-  const listAllWorkflows = async () => {
+  const listAllWorkflows = async (projectName: string) => {
     try {
-      const workflows = await api.listWorkflows(projectName);
-      if (workflows) {
+      const workflows = await api.listWorkflowsRefactor(projectName, branch!);
+      if(workflows){
         const newWorkflowsState = await Promise.all(workflows.map(async (w) => {
-          const data = await latestWorkFlow(w.id, projectName);
           return {
-            id: w.id,
-            name: w.name,
-            status: data?.status as string,
-            conclusion: data?.conclusion as string,
-            lastRunId: data?.runId as number,
-            source: w.html_url as string,
-            path: w.path as string
+            id: w.workflow.id,
+            name: w.workflow.name,
+            status: w.latestRun.status,
+            conclusion: w.latestRun.conclusion,
+            lastRunId: w.latestRun.id,
+            source: w.workflow.url,
+            path: w.workflow.path
           };
         }));
         setWorkflowsState(newWorkflowsState);
@@ -54,33 +46,15 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
         return newWorkflowsState;
       }
       else return null;
-    } catch (e:any) {
+    } catch(e:any){
       errorApi.post(e);
-      return null
-     }
-  };
-
-  const latestWorkFlow = async (workFlowId: number, projectSlug: string) => {
-    try {
-      const data = await api.getLatestWorkflowRun(workFlowId.toString(), projectSlug);
-      if (data) {
-        return {
-          runId: data.id,
-          status: data.status,
-          conclusion: data.conclusion
-        }
-      }
-      return null
+      return null;
     }
-    catch (e:any) {
-      errorApi.post(e);
-      return null
-     }
-  };
+  }
 
-  const workflowByAnnotation = async (annotations: string[]) => {
+  const workflowByAnnotation = async (projectName: string, annotations: string[]) => {
     try {
-      const workflowsList = await listAllWorkflows();
+      const workflowsList = await listAllWorkflows(projectName);
       const workFlowsResult: WorkflowResultsProps[] = [];
       if (workflowsList) {
         annotations.forEach(workflow => {
@@ -124,6 +98,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
       await api.startWorkflowRun(workFlowId.toString(), projectSlug, branch);
     }
     catch (e:any) {
+      console.log(e)
       errorApi.post(e);
      }
   };
@@ -141,11 +116,9 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
     <GithubWorkflowsContext.Provider
       value={{
         listAllWorkflows,
-        projectName,
         branch,
         setBranchState,
         workflowsState,
-        latestWorkFlow,
         workflowByAnnotation,
         getWorkflowRunById,
         handleStartWorkflowRun,
