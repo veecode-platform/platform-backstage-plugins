@@ -57,7 +57,7 @@ import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 
 // test
-import { isGithubWorkflowsAvailable, GithubWorkflowsCard, GithubWorkflowsOverview } from '@veecode-platform/plugin-github-workflows'
+import { isGithubWorkflowsAvailable, GithubWorkflowsCard, GithubWorkflowsList } from '@veecode-platform/plugin-github-workflows'
 
 
 const techdocsContent = (
@@ -127,11 +127,15 @@ const overviewContent = (
 
     <EntitySwitch>
       <EntitySwitch.Case if={isGithubWorkflowsAvailable}>
-        <Grid item xs={12}>
+        <Grid item lg={8} xs={12}>
             <GithubWorkflowsCard />
         </Grid>
       </EntitySwitch.Case>
     </EntitySwitch>
+
+    <Grid item lg={12}>
+      <GithubWorkflowsList/>
+    </Grid>
 
     
     <Grid item md={4} xs={12}>
