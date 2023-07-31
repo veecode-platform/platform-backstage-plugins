@@ -4,8 +4,10 @@ import { useApi } from '@backstage/core-plugin-api';
 import { githubWorkflowsApiRef } from '../../api';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
-import { entityMock } from '../../mocks/component';
 import { Branches } from '../../utils/types';
+import { useEntity } from '@backstage/plugin-catalog-react';
+import { Entity } from '@backstage/catalog-model';
+
 
 type OptionsProps = {
   label: string;
@@ -13,9 +15,12 @@ type OptionsProps = {
 };
 
 export const SelectBranch = () => {
+  
+
   const { branch, setBranchState } = useContext(GithubWorkflowsContext);
   const api = useApi(githubWorkflowsApiRef);
-  const { projectName } = useEntityAnnotations(entityMock);
+  const { entity } = useEntity();
+  const { projectName } = useEntityAnnotations(entity as Entity);
   const [branches, setBranches] = useState<Branches[]>([]);
   const [options, setOptions] = useState<OptionsProps[]>([]);
 
