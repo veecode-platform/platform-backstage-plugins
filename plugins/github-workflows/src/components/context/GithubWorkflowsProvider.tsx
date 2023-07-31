@@ -98,6 +98,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
       await api.startWorkflowRun(workFlowId.toString(), projectSlug, branch);
     }
     catch (e:any) {
+      console.log(e)
       errorApi.post(e);
      }
   };

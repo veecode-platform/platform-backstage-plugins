@@ -9,6 +9,9 @@ import { makeStyles, Tooltip } from '@material-ui/core';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import { WorkflowResultsProps } from '../../utils/types';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
+import { useEntity } from '@backstage/plugin-catalog-react';
+import { Entity } from '@backstage/catalog-model';
+import { useEntityAnnotations } from '../../hooks';
 
 type WorkFlowActionsProps = {
     workflowId?: number,
@@ -31,9 +34,11 @@ const useStyles = makeStyles({
   });
 
 export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActionsProps) => {
-    
+
+    const { entity } = useEntity();  
+    const { projectName } = useEntityAnnotations(entity as Entity);
     const [workFlowSelected, setWorkFlowSelected] = useState<WorkflowResultsProps>();
-    const { projectName, branch, workflowsState ,handleStartWorkflowRun, handleStopWorkflowRun } = useContext(GithubWorkflowsContext);
+    const { branch, workflowsState ,handleStartWorkflowRun, handleStopWorkflowRun } = useContext(GithubWorkflowsContext);
     const classes = useStyles();
     const errorApi = useApi(errorApiRef);
 
