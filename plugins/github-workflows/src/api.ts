@@ -107,6 +107,7 @@ class Client {
             throw new Error(`Request failed with ${resp.status} ${resp.statusText}`);
         }
 
+        if(resp.status === 204) return {ok: true} as any
         return await resp.json();
     }
 
@@ -167,7 +168,7 @@ class Client {
     }
 
     async getFileContentFromPath(githubRepoSlug: string, filePath: string, branch: string) {
-        const response = await this.fetch(`/contents/${filePath}?ref=${branch}`, githubRepoSlug)
+        const response = await this.fetch(`/contents/${filePath}${branch ? `?ref=${branch}` : "" }`, githubRepoSlug)
         const yamlContent = YAML.load(Buffer.from(response.content, 'base64').toString('utf8')) as any
         return yamlContent
     }
