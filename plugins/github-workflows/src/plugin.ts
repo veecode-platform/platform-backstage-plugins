@@ -35,7 +35,7 @@ export const GithubWorkflowsList = githubWorkflowsPlugin.provide(
     name: 'GithubWorkflowsList',
     component: {
       lazy: () =>
-        import('./components/WorkFlowTable').then(m => m.WorkflowTable),
+        import('./components/GitubWorkflowsList').then(m => m.GithubWorkflowsList),
     },
   })
 )
@@ -45,7 +45,7 @@ export const GithubWorkflowsCard = githubWorkflowsPlugin.provide(
     name: 'GithubWorkflowsCard',
     component: {
       lazy: () =>
-        import('./components/WorkFlowCard').then(m => m.WorkFlowCard),
+        import('./components/GithubWorkflowsCards').then(m => m.GithubWorkflowsCards),
     },
   })
 )
