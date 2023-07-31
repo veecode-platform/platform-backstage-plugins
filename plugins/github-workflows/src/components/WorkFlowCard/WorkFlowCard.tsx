@@ -1,17 +1,21 @@
 import React, { useContext } from 'react';
-import { ErrorBoundary, InfoCard, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
-import { Box, Paper, Typography, makeStyles } from '@material-ui/core';
+import { ErrorBoundary, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
+import { Box, Card, CardContent, CardHeader, Paper, Typography, makeStyles } from '@material-ui/core';
 import { WorkFlowItem } from './WorkFlowItem';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import useAsync from 'react-use/lib/useAsync';
 import { WORKFLOW_ANNOTATION, useEntityAnnotations } from '../../hooks/useEntityAnnotations';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
+import { SelectBranch } from '../SelectBranch';
 
 const useStyles = makeStyles(theme => ({
   title: {
     paddingLeft: '1.5rem',
     fontSize: '1.5rem'
+  },
+    options:{
+    padding: '0 2rem 1rem 0'
   },
   workflowsGroup: {
     width: '95%',
@@ -22,6 +26,7 @@ const useStyles = makeStyles(theme => ({
     padding: '2rem 1rem',
     gap: '1.5rem',
     overflow: 'auto',
+    borderTop: `1px solid ${theme.palette.divider}`,
     '&::-webkit-scrollbar': {
       width: '10px',
       height: '4px'
@@ -59,12 +64,24 @@ export const Cards = ({ items }: CardsProps) => {
     <>
       <Typography className={classes.title}>Workflows</Typography>
     </>
+  );
+
+  const ActionsCard = (
+    <Box className={classes.options}>
+      <SelectBranch/>
+    </Box>
   )
+
 
   return (
     <Paper>
-      <InfoCard title={TitleBar}>
-        <Box className={classes.workflowsGroup}>
+      <Card>
+        <CardHeader
+          title={TitleBar}
+          action={ActionsCard}
+         />
+
+        <CardContent className={classes.workflowsGroup}>
           {items.map(item =>
             <WorkFlowItem
               id={item.workFlowId}
@@ -75,8 +92,8 @@ export const Cards = ({ items }: CardsProps) => {
             />
           )
           }
-        </Box>
-      </InfoCard>
+        </CardContent>
+      </Card>
     </Paper>
   )
 }
