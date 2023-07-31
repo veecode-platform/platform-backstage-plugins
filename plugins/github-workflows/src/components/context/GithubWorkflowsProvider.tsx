@@ -10,7 +10,6 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
 
   const [branch, setBranch] = useState<string | null>(localStorage.getItem('branch-selected') ?? null);
   const [workflowsState, setWorkflowsState] = useState<WorkflowResultsProps[] | null>(null);
-  // const { entity } = useEntity();
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
 
