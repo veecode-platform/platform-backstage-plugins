@@ -10,6 +10,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
 
   const [branch, setBranch] = useState<string | null>(localStorage.getItem('branch-selected') ?? null);
   const [workflowsState, setWorkflowsState] = useState<WorkflowResultsProps[] | null>(null);
+  const [workflowsByAnnotationsState, setWorkflowsByAnnotationsState] = useState<WorkflowResultsProps[] | null>(null);
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
 
@@ -18,6 +19,10 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
     if (!workflowsState) {
       const workflowsStorage = localStorage.getItem('all-workflows');
       if (workflowsStorage) setWorkflowsState(JSON.parse(workflowsStorage));
+    }
+    if (!workflowsByAnnotationsState) {
+      const workflowsStorage = localStorage.getItem('workflows-annotations');
+      if (workflowsStorage) setWorkflowsByAnnotationsState(JSON.parse(workflowsStorage));
     }
   }, []);
 
@@ -70,6 +75,8 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
                 path: w.path
               })
             };
+            setWorkflowsByAnnotationsState(workFlowsResult);
+            localStorage.setItem('workflows-annotations', JSON.stringify(workFlowsResult));
             return workFlowsResult
           })
         })
@@ -120,6 +127,8 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
         setBranchState,
         workflowsState,
         setWorkflowsState,
+        workflowsByAnnotationsState,
+        setWorkflowsByAnnotationsState,
         workflowByAnnotation,
         getWorkflowRunById,
         handleStartWorkflowRun,

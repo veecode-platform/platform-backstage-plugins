@@ -8,6 +8,8 @@ export type GithubWorkflowsContextType = {
   setBranchState: (branch: string) => void,
   workflowsState: WorkflowResultsProps[] | null,
   setWorkflowsState: React.Dispatch<React.SetStateAction<WorkflowResultsProps[] | null>>,
+  workflowsByAnnotationsState: WorkflowResultsProps[] | null,
+  setWorkflowsByAnnotationsState:  React.Dispatch<React.SetStateAction<WorkflowResultsProps[] | null>>,
   workflowByAnnotation: (projectName: string, annotations: string[]) => Promise<WorkflowResultsProps[] | null>,
   getWorkflowRunById: (runId: string, projectSlug: string) =>  Promise<WorkflowRun | null>,
   handleStartWorkflowRun: (workFlowId: number, projectSlug: string, branch: string) => Promise<void>,
