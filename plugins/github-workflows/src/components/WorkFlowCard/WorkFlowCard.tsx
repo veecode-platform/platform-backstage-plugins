@@ -99,7 +99,7 @@ export const Cards = ({ items }: CardsProps) => {
 }
 
 export const WorkFlowCard = () => {
-   
+  
   const { entity } = useEntity();
   const { projectName, workflows } = useEntityAnnotations(entity as Entity)
   const { workflowByAnnotation } = useContext(GithubWorkflowsContext);

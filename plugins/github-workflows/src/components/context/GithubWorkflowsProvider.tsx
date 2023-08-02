@@ -119,6 +119,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
         branch,
         setBranchState,
         workflowsState,
+        setWorkflowsState,
         workflowByAnnotation,
         getWorkflowRunById,
         handleStartWorkflowRun,
