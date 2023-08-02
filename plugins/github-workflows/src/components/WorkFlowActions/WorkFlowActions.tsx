@@ -35,7 +35,6 @@ const useStyles = makeStyles({
 
 export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActionsProps) => {
 
-    const [ dispatch, setDispatch ] = useState<boolean>(false);
     const { entity } = useEntity();  
     const { projectName } = useEntityAnnotations(entity as Entity);
     const [workFlowSelected, setWorkFlowSelected] = useState<WorkflowResultsProps>();
@@ -51,12 +50,6 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
         setWorkFlowSelected(workFlowFilter);
       }
     }, [workflowsState, workflowId]);
-
-    useEffect(()=>{
-      if(dispatch){
-        setTimeout(()=> window.location.reload(),5000)
-      }
-    },[dispatch])
 
     const handleClickActions = async (status:string) => {
        try{
@@ -105,7 +98,6 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
                   }
                   return prevWorkflowsState;
                 });
-                setDispatch(true)
                 return;
               default:
                 break;
