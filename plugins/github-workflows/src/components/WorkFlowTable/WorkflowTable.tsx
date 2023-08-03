@@ -127,7 +127,7 @@ export const WorkflowTable = () => {
         setWorkflowsState(data as WorkflowResultsProps[])
       }
       updateData();
-    },20000)
+    },25000)
   },[workflowsState])
   
   const { loading, error } = useAsync(async (): Promise<void> => {
