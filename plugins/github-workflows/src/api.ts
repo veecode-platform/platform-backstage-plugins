@@ -36,7 +36,7 @@ export interface GithubWorkflowsApi {
     /**
     * list workflows
     * possible to filter by workflow file name
-    * Ex filter => ["application-dashboards.yml", "another.yaml"]
+    * Ex filter => ["application-dashboards.yaml", "another.yaml"]
     */
     listWorkflows(githubRepoSlug: string, filter?: string[]): Promise<Workflow[]>;
     /**
@@ -156,6 +156,7 @@ class Client {
             })*/
         }
         await this.fetch(`/actions/workflows/${workflowId}/dispatches`, githubRepoSlug, headers);
+        await new Promise(r => setTimeout(r, 2000))
         return (await this.listWorkflowRuns(workflowId, githubRepoSlug))[0]
     }
 
