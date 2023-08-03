@@ -14,18 +14,6 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
 
-  // useEffect(() => {
-  //   if (!branch) setBranch(localStorage.getItem('branch-selected'));
-  //   if (!workflowsState) {
-  //     const workflowsStorage = localStorage.getItem('all-workflows');
-  //     if (workflowsStorage) setWorkflowsState(JSON.parse(workflowsStorage));
-  //   }
-  //   if (!workflowsByAnnotationsState) {
-  //     const workflowsStorage = localStorage.getItem('workflows-annotations');
-  //     if (workflowsStorage) setWorkflowsByAnnotationsState(JSON.parse(workflowsStorage));
-  //   }
-  // }, []);
-
   const setBranchState = (branch: string) => {
     setBranch(branch);
   }
@@ -48,8 +36,6 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
           };
         }));
         setWorkflowsState(newWorkflowsState);
-        console.log(newWorkflowsState)
-        localStorage.setItem('all-workflows', JSON.stringify(newWorkflowsState));
         return newWorkflowsState;
       }
       else return null;
@@ -78,7 +64,6 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
               })
             };
             setWorkflowsByAnnotationsState(workFlowsResult);
-            localStorage.setItem('workflows-annotations', JSON.stringify(workFlowsResult));
             return workFlowsResult
           })
         })
