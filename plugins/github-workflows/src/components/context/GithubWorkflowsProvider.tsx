@@ -19,10 +19,8 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
   }
 
   const listAllWorkflows = async (projectName: string) => {
-    console.log(projectName, branch)
     try {
       const workflows = await api.listWorkflowsRefactor(projectName, branch!);
-      console.log(workflows)
       if(workflows){
         const newWorkflowsState = await Promise.all(workflows.map(async (w) => {
           return {
