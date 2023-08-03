@@ -103,17 +103,22 @@ export const WorkFlowCard = () => {
   
   const { entity } = useEntity();
   const { projectName, workflows } = useEntityAnnotations(entity as Entity)
-  const { listAllWorkflows, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
+  const { listAllWorkflows, branch, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
+
+  useEffect(()=>{
+      updateData();
+  },[branch])
 
   useEffect(()=>{
     setTimeout(()=>{
-      const updateData = async ()=> {
-        const data = await listAllWorkflows(projectName);
-        setWorkflowsState(data as WorkflowResultsProps[])
-      }
       updateData();
     },30000)
   },[workflowsState])
+
+  const updateData = async ()=> {
+    const data = await listAllWorkflows(projectName, branch!, workflows as string[]);
+    setWorkflowsState(data as WorkflowResultsProps[])
+  }
 
   if(!workflows){
     return (
@@ -122,7 +127,9 @@ export const WorkFlowCard = () => {
   }
 
   const { loading, error } = useAsync(async (): Promise<void> => {
-    const data = await listAllWorkflows(projectName);
+    console.log(workflows)
+    const data = await listAllWorkflows(projectName, branch!, workflows);
+    console.log(data)
     setWorkflowsState(data as WorkflowResultsProps[])
 }, []);
 
