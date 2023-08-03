@@ -18,9 +18,9 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
     setBranch(branch);
   }
 
-  const listAllWorkflows = async (projectName: string) => {
+  const listAllWorkflows = async (projectName: string, filter: string[] = []) => {
     try {
-      const workflows = await api.listWorkflowsRefactor(projectName, branch!);
+      const workflows = await api.listWorkflowsRefactor(projectName, branch!, filter);
       if(workflows){
         const newWorkflowsState = await Promise.all(workflows.map(async (w) => {
           return {
@@ -43,36 +43,36 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
     }
   }
 
-  const workflowByAnnotation = async (projectName: string, annotations: string[]) => {
-    try {
-      const workflowsList = await listAllWorkflows(projectName);
-      const workFlowsResult: WorkflowResultsProps[] = [];
-      if (workflowsList) {
-        annotations.forEach(workflow => {
-          workflowsList.filter((w: WorkflowResultsProps) => {
-            if (w.path?.includes(workflow)) {
-              workFlowsResult.push({
-                id: w.id,
-                name: w.name,
-                lastRunId: w.lastRunId,
-                status: w.status,
-                conclusion: w.conclusion,
-                source: w.source,
-                path: w.path
-              })
-            };
-            setWorkflowsByAnnotationsState(workFlowsResult);
-            return workFlowsResult
-          })
-        })
-      }
-      return workFlowsResult
-    }
-    catch (e:any) {
-      errorApi.post(e);
-      return null
-     }
-  }
+  // const workflowByAnnotation = async (projectName: string, annotations: string[]) => {
+  //   try {
+  //     const workflowsList = await listAllWorkflows(projectName);
+  //     const workFlowsResult: WorkflowResultsProps[] = [];
+  //     if (workflowsList) {
+  //       annotations.forEach(workflow => {
+  //         workflowsList.filter((w: WorkflowResultsProps) => {
+  //           if (w.path?.includes(workflow)) {
+  //             workFlowsResult.push({
+  //               id: w.id,
+  //               name: w.name,
+  //               lastRunId: w.lastRunId,
+  //               status: w.status,
+  //               conclusion: w.conclusion,
+  //               source: w.source,
+  //               path: w.path
+  //             })
+  //           };
+  //           setWorkflowsByAnnotationsState(workFlowsResult);
+  //           return workFlowsResult
+  //         })
+  //       })
+  //     }
+  //     return workFlowsResult
+  //   }
+  //   catch (e:any) {
+  //     errorApi.post(e);
+  //     return null
+  //    }
+  // }
 
   const getWorkflowRunById = async (runId: string, projectSlug: string) => {
     try {
@@ -114,7 +114,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
         setWorkflowsState,
         workflowsByAnnotationsState,
         setWorkflowsByAnnotationsState,
-        workflowByAnnotation,
+        // workflowByAnnotation,
         getWorkflowRunById,
         handleStartWorkflowRun,
         handleStopWorkflowRun
