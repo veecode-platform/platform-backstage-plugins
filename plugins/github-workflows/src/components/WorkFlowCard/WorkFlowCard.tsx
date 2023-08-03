@@ -107,7 +107,6 @@ export const WorkFlowCard = () => {
 
   useEffect(()=>{
     setTimeout(()=>{
-      // window.location.reload()
       const updateData = async ()=> {
         const data = await listAllWorkflows(projectName);
         setWorkflowsState(data as WorkflowResultsProps[])
@@ -123,31 +122,21 @@ export const WorkFlowCard = () => {
   }
 
   const { loading, error } = useAsync(async (): Promise<void> => {
-
-    const workFlowsResult: WorkflowResultsProps[] = [];
-    if (workflowsState) {
-      workflows.forEach(workflow => {
-        workflowsState.filter((w: WorkflowResultsProps) => {
-          if (w.path?.includes(workflow)) {
-            workFlowsResult.push({
-              id: w.id,
-              name: w.name,
-              lastRunId: w.lastRunId,
-              status: w.status,
-              conclusion: w.conclusion,
-              source: w.source,
-              path: w.path
-            })
-          };
-          return workFlowsResult
-        })
-      })
-    }
-  }, []);
+    const data = await listAllWorkflows(projectName);
+    setWorkflowsState(data as WorkflowResultsProps[])
+}, []);
 
   if (loading) {
     return <Progress />;
-  } else if (error) {
+  } 
+
+  if(!error && !workflowsState) {
+    return (
+      <MissingAnnotationEmptyState annotation={WORKFLOW_ANNOTATION} />
+    )
+  }
+  
+  if (error) {
     return <ResponseErrorPanel error={error} />;
   }
 

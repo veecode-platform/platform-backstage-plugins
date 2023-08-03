@@ -122,7 +122,6 @@ export const WorkflowTable = () => {
 
   useEffect(()=>{
     setTimeout(()=>{
-      // window.location.reload()
       const updateData = async ()=> {
         const data = await listAllWorkflows(projectName);
         setWorkflowsState(data as WorkflowResultsProps[])
