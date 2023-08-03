@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { ErrorBoundary, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
 import { Box, Card, CardContent, CardHeader, Paper, Typography, makeStyles } from '@material-ui/core';
 import { WorkFlowItem } from './WorkFlowItem';
@@ -8,6 +8,7 @@ import { WORKFLOW_ANNOTATION, useEntityAnnotations } from '../../hooks/useEntity
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { SelectBranch } from '../SelectBranch';
+import { WorkflowResultsProps } from '../../utils/types';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -44,16 +45,16 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-type WorkFlowCardProps = {
-  workFlowId: number,
-  lastRunId: number,
-  status: string,
-  conclusion: string,
-  workFlowName: string
-}
+// type WorkFlowCardProps = {
+//   workFlowId: number,
+//   lastRunId: number,
+//   status: string,
+//   conclusion: string,
+//   workFlowName: string
+// }
 
 type CardsProps = {
-  items: WorkFlowCardProps[] | []
+  items: WorkflowResultsProps[] | []
 }
 
 export const Cards = ({ items }: CardsProps) => {
@@ -84,11 +85,11 @@ export const Cards = ({ items }: CardsProps) => {
         <CardContent className={classes.workflowsGroup}>
           {items.map(item =>
             <WorkFlowItem
-              id={item.workFlowId}
-              key={item.workFlowId}
+              id={item.id!}
+              key={item.id}
               status={item.status}
               conclusion={item.conclusion}
-              workflowName={item.workFlowName}
+              workflowName={item.name as string}
             />
           )
           }
@@ -99,10 +100,20 @@ export const Cards = ({ items }: CardsProps) => {
 }
 
 export const WorkFlowCard = () => {
-   
+  
   const { entity } = useEntity();
   const { projectName, workflows } = useEntityAnnotations(entity as Entity)
-  const { workflowByAnnotation } = useContext(GithubWorkflowsContext);
+  const { listAllWorkflows, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
+
+  useEffect(()=>{
+    setTimeout(()=>{
+      const updateData = async ()=> {
+        const data = await listAllWorkflows(projectName);
+        setWorkflowsState(data as WorkflowResultsProps[])
+      }
+      updateData();
+    },30000)
+  },[workflowsState])
 
   if(!workflows){
     return (
@@ -110,33 +121,28 @@ export const WorkFlowCard = () => {
     )
   }
 
-  const { value, loading, error } = useAsync(async (): Promise<WorkFlowCardProps[] | []> => {
-    const workflowsByAnnotationResult = await workflowByAnnotation(projectName, workflows);
-
-    const data = workflowsByAnnotationResult?.map(
-      w => {
-        return {
-          workFlowId: w.id as number,
-          lastRunId: w.lastRunId as number,
-          status: w.status as string,
-          conclusion: w.conclusion as string,
-          workFlowName: w.name as string
-        }
-      }
-    )
-
-    return data || []
-  }, []);
+  const { loading, error } = useAsync(async (): Promise<void> => {
+    const data = await listAllWorkflows(projectName);
+    setWorkflowsState(data as WorkflowResultsProps[])
+}, []);
 
   if (loading) {
     return <Progress />;
-  } else if (error) {
+  } 
+
+  if(!error && !workflowsState) {
+    return (
+      <MissingAnnotationEmptyState annotation={WORKFLOW_ANNOTATION} />
+    )
+  }
+  
+  if (error) {
     return <ResponseErrorPanel error={error} />;
   }
 
   return (
     <ErrorBoundary>
-       <Cards items={value || []} />
+       <Cards items={workflowsState || []} />
     </ErrorBoundary>
     );
 };

@@ -16,19 +16,20 @@ type OptionsProps = {
 
 export const SelectBranch = () => {
   
-
+  const [branches, setBranches] = useState<Branches[]>([]);
+  const [options, setOptions] = useState<OptionsProps[]>([]);
+  const [branchDefault, setBranchDefault ] = useState<string>('');
   const { branch, setBranchState } = useContext(GithubWorkflowsContext);
   const api = useApi(githubWorkflowsApiRef);
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity as Entity);
-  const [branches, setBranches] = useState<Branches[]>([]);
-  const [options, setOptions] = useState<OptionsProps[]>([]);
 
   useEffect(() => {
     const getBranches = async () => {
       const data = await api.listBranchesFromRepo(projectName);
       if (data) {
         setBranches(data as Branches[]);
+        setBranchDefault(data[0].name as string)
       }
     };
     getBranches();
@@ -56,7 +57,7 @@ export const SelectBranch = () => {
       onChange={handleSelectChange}
       placeholder="Select the branch"
       label=""
-      selected={branch!}
+      selected={branch ?? branchDefault}
       items={options}
     />
   );

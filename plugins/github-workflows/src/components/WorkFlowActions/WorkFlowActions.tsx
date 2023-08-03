@@ -38,7 +38,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
     const { entity } = useEntity();  
     const { projectName } = useEntityAnnotations(entity as Entity);
     const [workFlowSelected, setWorkFlowSelected] = useState<WorkflowResultsProps>();
-    const { branch, workflowsState ,handleStartWorkflowRun, handleStopWorkflowRun } = useContext(GithubWorkflowsContext);
+    const { branch, workflowsState, setWorkflowsState ,handleStartWorkflowRun, handleStopWorkflowRun } = useContext(GithubWorkflowsContext);
     const classes = useStyles();
     const errorApi = useApi(errorApiRef);
 
@@ -62,10 +62,42 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
               case StatusWorkflowEnum.canceled:
               case StatusWorkflowEnum.timeOut:
               case StatusWorkflowEnum.default:
-                await handleStartWorkflowRun( workFlowSelected.id as number, projectName,  branch!);
+                 await handleStartWorkflowRun(workFlowSelected.id as number, projectName, branch!);
+                  setWorkflowsState((prevWorkflowsState) => {
+                    if (prevWorkflowsState) {
+                      const updatedWorkflows = prevWorkflowsState.map((workflow) => {
+                        if (workflow.id === workFlowSelected.id) {
+                          return {
+                            ...workflow,
+                            status: StatusWorkflowEnum.inProgress,
+                            conclusion: undefined,
+                          };
+                        }
+                        return workflow;
+                      });
+                      return updatedWorkflows;
+                    }
+                    return prevWorkflowsState;
+                  });
                 return;
               case StatusWorkflowEnum.inProgress:
                 await handleStopWorkflowRun(workFlowSelected.lastRunId as number, projectName);
+                setWorkflowsState((prevWorkflowsState) => {
+                  if (prevWorkflowsState) {
+                    const updatedWorkflows = prevWorkflowsState.map((workflow) => {
+                      if (workflow.id === workFlowSelected.id) {
+                        return {
+                          ...workflow,
+                          status: StatusWorkflowEnum.completed,
+                          conclusion: StatusWorkflowEnum.canceled,
+                        };
+                      }
+                      return workflow;
+                    });
+                    return updatedWorkflows;
+                  }
+                  return prevWorkflowsState;
+                });
                 return;
               default:
                 break;

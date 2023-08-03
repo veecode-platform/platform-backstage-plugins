@@ -155,7 +155,7 @@ class Client {
                 ref: branch
             })*/
         }
-        await this.fetch(`/actions/workflows/${workflowId}/dispatches`, githubRepoSlug, headers)
+        await this.fetch(`/actions/workflows/${workflowId}/dispatches`, githubRepoSlug, headers);
         return (await this.listWorkflowRuns(workflowId, githubRepoSlug))[0]
     }
 

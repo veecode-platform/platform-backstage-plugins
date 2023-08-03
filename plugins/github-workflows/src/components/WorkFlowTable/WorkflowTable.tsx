@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
   Table, 
@@ -118,19 +118,28 @@ export const WorkflowTable = () => {
 
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity as Entity);
+  const { listAllWorkflows, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
 
-  const { listAllWorkflows } = useContext(GithubWorkflowsContext);
+  useEffect(()=>{
+    setTimeout(()=>{
+      const updateData = async ()=> {
+        const data = await listAllWorkflows(projectName);
+        setWorkflowsState(data as WorkflowResultsProps[])
+      }
+      updateData();
+    },30000)
+  },[workflowsState])
   
-  const { value, loading, error } = useAsync(async (): Promise<WorkflowResultsProps[] | []> => {
+  const { loading, error } = useAsync(async (): Promise<void> => {
       const data = await listAllWorkflows(projectName);
-      return data ?? []
+      setWorkflowsState(data as WorkflowResultsProps[])
   }, []);
 
   if (loading) {
     return <Progress />;
   }
 
-  if(!error && !value) {
+  if(!error && !workflowsState) {
     return (
       <EmptyState
       missing="data"
@@ -155,7 +164,7 @@ export const WorkflowTable = () => {
 
   return (
     <ErrorBoundary>
-      <DenseTable items={value || []} />
+      <DenseTable items={workflowsState || []} />
     </ErrorBoundary>
   );
 };

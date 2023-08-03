@@ -31,8 +31,7 @@ export default async function createPlugin(
 
             const userEntityRef = stringifyEntityRef({
               kind: 'User',
-              name: userId,
-              namespace: 'DEFAULT_NAMESPACE',
+              name: 'admin'
             });
 
             return ctx.issueToken({
