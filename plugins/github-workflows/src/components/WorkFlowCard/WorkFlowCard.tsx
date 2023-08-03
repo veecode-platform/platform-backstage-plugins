@@ -112,7 +112,7 @@ export const WorkFlowCard = () => {
         setWorkflowsState(data as WorkflowResultsProps[])
       }
       updateData();
-    },25000)
+    },30000)
   },[workflowsState])
 
   if(!workflows){
