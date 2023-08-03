@@ -3,7 +3,7 @@ import { WorkflowResultsProps, WorkflowRun } from "../../utils/types";
 
 
 export type GithubWorkflowsContextType = {
-  listAllWorkflows: (projectName: string, filter?: string[]) => Promise<WorkflowResultsProps[] | null | void>,
+  listAllWorkflows: (projectName: string, branch: string, filter?: string[]) => Promise<WorkflowResultsProps[] | null | void>,
   branch: string | null,
   setBranchState: (branch: string) => void,
   workflowsState: WorkflowResultsProps[] | null,

@@ -18,9 +18,9 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
     setBranch(branch);
   }
 
-  const listAllWorkflows = async (projectName: string, filter: string[] = []) => {
+  const listAllWorkflows = async (projectName: string, branch: string, filter: string[] = []) => {
     try {
-      const workflows = await api.listWorkflowsRefactor(projectName, branch!, filter);
+      const workflows = await api.listWorkflowsRefactor(projectName, branch, filter);
       if(workflows){
         const newWorkflowsState = await Promise.all(workflows.map(async (w) => {
           return {

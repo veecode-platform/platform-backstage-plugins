@@ -106,22 +106,19 @@ export const WorkFlowCard = () => {
   const { listAllWorkflows, branch, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
 
   useEffect(()=>{
-      const updateData = async ()=> {
-        const data = await listAllWorkflows(projectName, workflows as string[]);
-        setWorkflowsState(data as WorkflowResultsProps[])
-      }
       updateData();
   },[branch])
 
   useEffect(()=>{
     setTimeout(()=>{
-      const updateData = async ()=> {
-        const data = await listAllWorkflows(projectName, workflows as string[]);
-        setWorkflowsState(data as WorkflowResultsProps[])
-      }
       updateData();
-    },20000)
+    },30000)
   },[workflowsState])
+
+  const updateData = async ()=> {
+    const data = await listAllWorkflows(projectName, branch!, workflows as string[]);
+    setWorkflowsState(data as WorkflowResultsProps[])
+  }
 
   if(!workflows){
     return (
@@ -131,7 +128,7 @@ export const WorkFlowCard = () => {
 
   const { loading, error } = useAsync(async (): Promise<void> => {
     console.log(workflows)
-    const data = await listAllWorkflows(projectName, workflows);
+    const data = await listAllWorkflows(projectName, branch!, workflows);
     console.log(data)
     setWorkflowsState(data as WorkflowResultsProps[])
 }, []);

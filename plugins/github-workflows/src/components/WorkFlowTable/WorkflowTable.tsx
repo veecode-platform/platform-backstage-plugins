@@ -118,22 +118,30 @@ export const WorkflowTable = () => {
 
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity as Entity);
-  const { listAllWorkflows, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
+  const { branch, listAllWorkflows, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
 
   useEffect(()=>{
     setTimeout(()=>{
-      const updateData = async ()=> {
-        const data = await listAllWorkflows(projectName);
-        setWorkflowsState(data as WorkflowResultsProps[])
-      }
       updateData();
     },30000)
   },[workflowsState])
+
+  useEffect(()=>{
+    setTimeout(()=>{
+      updateData();
+    },30000)
+  },[branch])
+
+  const updateData = async ()=> {
+    const data = await listAllWorkflows(projectName, branch!);
+    setWorkflowsState(data as WorkflowResultsProps[])
+  }
   
   const { loading, error } = useAsync(async (): Promise<void> => {
-      const data = await listAllWorkflows(projectName);
+      const data = await listAllWorkflows(projectName, branch!);
       setWorkflowsState(data as WorkflowResultsProps[])
   }, []);
+
 
   if (loading) {
     return <Progress />;
