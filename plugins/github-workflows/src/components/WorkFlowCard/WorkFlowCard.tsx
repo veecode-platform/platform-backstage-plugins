@@ -74,11 +74,11 @@ export const Cards = ({ items }: CardsProps) => {
   const classes = useStyles();
   const { entity } = useEntity();
   const { projectName, workflows } = useEntityAnnotations(entity as Entity);
-  const { branch, listAllWorkflows, setWorkflowsState } = useContext(GithubWorkflowsContext);
+  const { listAllWorkflows, setWorkflowsState } = useContext(GithubWorkflowsContext);
 
   const updateData = async ()=> {
     setLoading(true)
-    const data = await listAllWorkflows(projectName, branch!, workflows!);
+    const data = await listAllWorkflows(projectName, workflows!);
     setWorkflowsState(data as WorkflowResultsProps[]);
     setTimeout(()=> setLoading(false), 1500);
   }
@@ -144,7 +144,7 @@ export const WorkFlowCard = () => {
   },[branch])
 
   const updateData = async ()=> {
-    const data = await listAllWorkflows(projectName, branch!, workflows as string[]);
+    const data = await listAllWorkflows(projectName, workflows as string[]);
     setWorkflowsState(data as WorkflowResultsProps[])
   }
 
@@ -155,7 +155,7 @@ export const WorkFlowCard = () => {
   }
 
   const { loading, error } = useAsync(async (): Promise<void> => {
-    const data = await listAllWorkflows(projectName, branch!, workflows);
+    const data = await listAllWorkflows(projectName, workflows);
     setWorkflowsState(data as WorkflowResultsProps[])
 }, []);
 

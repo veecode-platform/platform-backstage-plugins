@@ -38,7 +38,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
     const { entity } = useEntity();  
     const { projectName } = useEntityAnnotations(entity as Entity);
     const [workFlowSelected, setWorkFlowSelected] = useState<WorkflowResultsProps>();
-    const { branch, workflowsState, setWorkflowsState , handleStartWorkflowRun, handleStopWorkflowRun } = useContext(GithubWorkflowsContext);
+    const { workflowsState, setWorkflowsState , handleStartWorkflowRun, handleStopWorkflowRun } = useContext(GithubWorkflowsContext);
     const classes = useStyles();
     const errorApi = useApi(errorApiRef);
 
@@ -79,7 +79,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
                   return prevWorkflowsState;
                 });
 
-                const response = await handleStartWorkflowRun(workFlowSelected.id as number, projectName, branch!);
+                const response = await handleStartWorkflowRun(workFlowSelected.id as number, projectName);
                    if(response){
                      setWorkflowsState((prevWorkflowsState) => {
                        if (prevWorkflowsState) {

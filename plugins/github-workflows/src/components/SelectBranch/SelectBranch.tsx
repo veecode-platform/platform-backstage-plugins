@@ -33,8 +33,11 @@ export const SelectBranch = () => {
       }
     };
     getBranches();
-    console.log(branches, branchDefault)
   }, [api, projectName, setBranches]);
+
+  useEffect(()=>{
+    setBranchState(branchDefault)
+  },[branchDefault])
 
   useEffect(() => {
     if (branches) {
