@@ -156,8 +156,10 @@ class Client {
             })*/
         }
         await this.fetch(`/actions/workflows/${workflowId}/dispatches`, githubRepoSlug, headers);
-        await new Promise(r => setTimeout(r, 2000))
-        return (await this.listWorkflowRuns(workflowId, githubRepoSlug))[0]
+        // await new Promise(r => setTimeout(r, 2000))
+        const response = await this.getLatestWorkflowRun(workflowId, githubRepoSlug)
+        return response
+        // return (await this.listWorkflowRuns(workflowId, githubRepoSlug))[0]
     }
 
     async stopWorkFlowRun(runId: string, githubRepoSlug: string) {
