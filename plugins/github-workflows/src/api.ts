@@ -145,7 +145,7 @@ class Client {
 
     async startWorkflow(workflowId: string, githubRepoSlug: string, branch: string, inputs?: object) {
         const body: {ref:string, inputs?: object} = {
-            ref: branch
+            ref: branch 
         }
         if(inputs) body.inputs = inputs
         const headers: RequestInit = {
@@ -155,7 +155,9 @@ class Client {
                 ref: branch
             })*/
         }
-        await this.fetch(`/actions/workflows/${workflowId}/dispatches`, githubRepoSlug, headers);
+        const response = await this.fetch(`/actions/workflows/${workflowId}/dispatches`, githubRepoSlug, headers);
+
+        console.log(response)
         await new Promise(r => setTimeout(r, 25000));
         return (await this.listWorkflowRuns(workflowId, githubRepoSlug))[0]
     }

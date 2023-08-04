@@ -80,8 +80,6 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
                 });
 
                 const response = await handleStartWorkflowRun(workFlowSelected.id as number, projectName, branch!);
-                console.log(response?.id)
-
                    if(response){
                      setWorkflowsState((prevWorkflowsState) => {
                        if (prevWorkflowsState) {

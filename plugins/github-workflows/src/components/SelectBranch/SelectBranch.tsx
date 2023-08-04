@@ -33,6 +33,7 @@ export const SelectBranch = () => {
       }
     };
     getBranches();
+    console.log(branches, branchDefault)
   }, [api, projectName, setBranches]);
 
   useEffect(() => {
