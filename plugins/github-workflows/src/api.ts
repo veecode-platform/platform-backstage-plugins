@@ -145,7 +145,7 @@ class Client {
 
     async startWorkflow(workflowId: string, githubRepoSlug: string, branch: string, inputs?: object) {
         const body: {ref:string, inputs?: object} = {
-            ref: branch
+            ref: branch 
         }
         if(inputs) body.inputs = inputs
         const headers: RequestInit = {

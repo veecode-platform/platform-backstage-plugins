@@ -73,7 +73,11 @@ const cicdContent = (
   // You can for example enforce that all components of type 'service' should use GitHubActions
   <EntitySwitch>
     <EntitySwitch.Case if={isGithubActionsAvailable}>
-      <EntityGithubActionsContent />
+      {/* <EntityGithubActionsContent /> */}
+
+    {/* <Grid item lg={12} xs={12}> */}
+      <GithubWorkflowsList/>
+    {/* </Grid> */}
     </EntitySwitch.Case>
 
     <EntitySwitch.Case>
@@ -132,11 +136,6 @@ const overviewContent = (
         </Grid>
       </EntitySwitch.Case>
     </EntitySwitch>
-
-    <Grid item lg={12}>
-      <GithubWorkflowsList/>
-    </Grid>
-
     
     <Grid item md={4} xs={12}>
       <EntityLinksCard />

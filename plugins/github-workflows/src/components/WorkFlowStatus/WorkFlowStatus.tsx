@@ -14,9 +14,33 @@ export const WorkFlowStatus = ({ status, conclusion, icon }: WorkFlowStatusProps
 
     switch (status.toLocaleLowerCase()) {
         case StatusWorkflowEnum.queued:
+        case StatusWorkflowEnum.pending:
+        case StatusWorkflowEnum.waiting:
             return (
                 <>
                     <StatusPending /> {!icon && "Queued"}
+                </>
+            );
+        case StatusWorkflowEnum.actionRequired:
+        case StatusWorkflowEnum.neutral:
+        case StatusWorkflowEnum.stale:
+        case StatusWorkflowEnum.requested:
+            return (
+                <>
+                    <StatusWarning /> {!icon && "Please wait"}
+                </>
+            );
+        case StatusWorkflowEnum.failure:
+        case StatusWorkflowEnum.timeOut:
+            return (
+                <>
+                    <StatusError /> {!icon && "Error"}
+                </>
+            );
+        case StatusWorkflowEnum.aborted:
+            return (
+                <>
+                    <StatusAborted /> {!icon && "Aborted"}
                 </>
             );
         case StatusWorkflowEnum.inProgress:
@@ -36,6 +60,9 @@ export const WorkFlowStatus = ({ status, conclusion, icon }: WorkFlowStatusProps
                         </>
                     );
                 case StatusWorkflowEnum.timeOut:
+                case StatusWorkflowEnum.actionRequired:
+                case StatusWorkflowEnum.stale:
+                case StatusWorkflowEnum.neutral:
                     return (
                         <>
                             <StatusWarning /> {!icon && "Timed out"}

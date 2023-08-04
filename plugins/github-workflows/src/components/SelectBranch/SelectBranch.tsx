@@ -35,6 +35,10 @@ export const SelectBranch = () => {
     getBranches();
   }, [api, projectName, setBranches]);
 
+  useEffect(()=>{
+    setBranchState(branchDefault)
+  },[branchDefault])
+
   useEffect(() => {
     if (branches) {
       const newOptions = branches.map((item) => {
@@ -55,7 +59,6 @@ export const SelectBranch = () => {
   return (
     <Select
       onChange={handleSelectChange}
-      placeholder="Select the branch"
       label=""
       selected={branch ?? branchDefault}
       items={options}
