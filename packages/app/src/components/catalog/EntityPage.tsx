@@ -133,7 +133,7 @@ const overviewContent = (
       </EntitySwitch.Case>
     </EntitySwitch>
 
-    <Grid item lg={12}>
+    <Grid item lg={12} xs={12}>
       <GithubWorkflowsList/>
     </Grid>
 

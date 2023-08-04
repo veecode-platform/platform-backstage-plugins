@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
   Table, 
@@ -21,6 +21,7 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import { useEntityAnnotations } from '../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
+import SyncIcon from '@material-ui/icons/Sync';
 
 
 const useStyles = makeStyles(theme => ({
@@ -31,7 +32,7 @@ const useStyles = makeStyles(theme => ({
   options:{
     position: 'absolute',
     top: '0%',
-    right: '2%',
+    right: '5%',
     background: 'transparent',
     borderRadius: '30px',
     fontSize: '1rem',
@@ -58,6 +59,18 @@ type DenseTableProps = {
 
 export const DenseTable = ({ items }: DenseTableProps) => {
   const classes = useStyles();
+
+  const { entity } = useEntity();
+  const { projectName } = useEntityAnnotations(entity as Entity);
+  const { branch, listAllWorkflows, setWorkflowsState } = useContext(GithubWorkflowsContext);
+  const [ loading, setLoading] = useState<boolean>(false);
+
+  const updateData = async ()=> {
+    setLoading(true)
+    const data = await listAllWorkflows(projectName, branch!);
+    setWorkflowsState(data as WorkflowResultsProps[]);
+    setTimeout(()=> setLoading(false), 800)
+  }
 
   const columns: TableColumn[] = [
     { title: 'Name', field: 'name',  width:'1fr', align:'center'},
@@ -110,6 +123,15 @@ export const DenseTable = ({ items }: DenseTableProps) => {
       options={{ search: false, paging: true }}
       columns={columns}
       data={data}
+      isLoading={loading}
+      actions={[
+        {
+          icon: () => <SyncIcon />,
+          tooltip: 'Reload workflow runs',
+          isFreeAction: true,
+          onClick: () => updateData(),
+        },
+      ]}
     />
   );
 };
@@ -120,16 +142,9 @@ export const WorkflowTable = () => {
   const { projectName } = useEntityAnnotations(entity as Entity);
   const { branch, listAllWorkflows, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
 
-  useEffect(()=>{
-    setTimeout(()=>{
-      updateData();
-    },30000)
-  },[workflowsState])
 
   useEffect(()=>{
-    setTimeout(()=>{
       updateData();
-    },30000)
   },[branch])
 
   const updateData = async ()=> {
@@ -138,8 +153,7 @@ export const WorkflowTable = () => {
   }
   
   const { loading, error } = useAsync(async (): Promise<void> => {
-      const data = await listAllWorkflows(projectName, branch!);
-      setWorkflowsState(data as WorkflowResultsProps[])
+    updateData();
   }, []);
 
 

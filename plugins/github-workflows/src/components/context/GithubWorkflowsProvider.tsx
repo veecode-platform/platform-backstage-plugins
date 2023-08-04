@@ -87,11 +87,14 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
 
   const handleStartWorkflowRun = async (workFlowId: number, projectSlug: string, branch: string) => {
     try {
-      await api.startWorkflowRun(workFlowId.toString(), projectSlug, branch);
+      const response = await api.startWorkflowRun(workFlowId.toString(), projectSlug, branch);
+      if(response) return response;
+      return null
     }
     catch (e:any) {
       console.log(e)
       errorApi.post(e);
+      return null
      }
   };
 
