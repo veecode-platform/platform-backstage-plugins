@@ -73,12 +73,12 @@ export const Cards = ({ items }: CardsProps) => {
   const [ loading, setLoading] = useState<boolean>(false);
   const classes = useStyles();
   const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entity as Entity);
+  const { projectName, workflows } = useEntityAnnotations(entity as Entity);
   const { branch, listAllWorkflows, setWorkflowsState } = useContext(GithubWorkflowsContext);
 
   const updateData = async ()=> {
     setLoading(true)
-    const data = await listAllWorkflows(projectName, branch!);
+    const data = await listAllWorkflows(projectName, branch!, workflows!);
     setWorkflowsState(data as WorkflowResultsProps[]);
     setTimeout(()=> setLoading(false), 1500);
   }

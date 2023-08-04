@@ -55,7 +55,6 @@ export const SelectBranch = () => {
   return (
     <Select
       onChange={handleSelectChange}
-      placeholder="Select the branch"
       label=""
       selected={branch ?? branchDefault}
       items={options}

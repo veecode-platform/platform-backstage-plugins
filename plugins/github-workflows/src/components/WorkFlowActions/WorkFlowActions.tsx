@@ -78,8 +78,10 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
                   }
                   return prevWorkflowsState;
                 });
-                 const response = await handleStartWorkflowRun(workFlowSelected.id as number, projectName, branch!);
-                 console.log(response!.id)
+
+                const response = await handleStartWorkflowRun(workFlowSelected.id as number, projectName, branch!);
+                console.log(response?.id)
+
                    if(response){
                      setWorkflowsState((prevWorkflowsState) => {
                        if (prevWorkflowsState) {
@@ -87,8 +89,8 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
                            if (workflow.id === workFlowSelected.id) {
                              return {
                                ...workflow,
-                               status: StatusWorkflowEnum.inProgress,
-                               conclusion: undefined,
+                               status: response.status,
+                               conclusion: response.conclusion,
                                lastRunId: response.id
                              };
                            }
