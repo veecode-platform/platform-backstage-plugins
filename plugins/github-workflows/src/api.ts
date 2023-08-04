@@ -163,7 +163,7 @@ class Client {
     async stopWorkFlowRun(runId: string, githubRepoSlug: string) {
         const inProgress = ["in_progress", "queued", "requested", "waiting", "pending"]
         const runStatus = await this.getWorkflowRunById(runId, githubRepoSlug)
-        if(inProgress.includes(runStatus.status)) throw new Error("Impossible to stop this run, not in progress!")
+        if(!inProgress.includes(runStatus.status)) throw new Error("Impossible to stop this run, not in progress!")
         const headers: RequestInit = {
             method: "POST"
         }
