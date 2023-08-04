@@ -62,12 +62,12 @@ export const DenseTable = ({ items }: DenseTableProps) => {
 
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity as Entity);
-  const { branch, listAllWorkflows, setWorkflowsState } = useContext(GithubWorkflowsContext);
+  const { listAllWorkflows, setWorkflowsState } = useContext(GithubWorkflowsContext);
   const [ loading, setLoading] = useState<boolean>(false);
 
   const updateData = async ()=> {
     setLoading(true)
-    const data = await listAllWorkflows(projectName, branch!);
+    const data = await listAllWorkflows(projectName);
     setWorkflowsState(data as WorkflowResultsProps[]);
     setTimeout(()=> setLoading(false), 800)
   }
@@ -126,7 +126,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
       isLoading={loading}
       actions={[
         {
-          icon: () => <SyncIcon />,
+          icon: () => <SyncIcon/>,
           tooltip: 'Reload workflow runs',
           isFreeAction: true,
           onClick: () => updateData(),
@@ -148,7 +148,7 @@ export const WorkflowTable = () => {
   },[branch])
 
   const updateData = async ()=> {
-    const data = await listAllWorkflows(projectName, branch!);
+    const data = await listAllWorkflows(projectName);
     setWorkflowsState(data as WorkflowResultsProps[])
   }
   
