@@ -159,7 +159,8 @@ class Client {
         await new Promise(r => setTimeout(r, 25000))
         // const response = await this.getLatestWorkflowRun(workflowId, githubRepoSlug)
         // return response
-        return (await this.listWorkflowRuns(workflowId, githubRepoSlug))[0]
+        return await this.getLatestWorkflowRun(workflowId, githubRepoSlug)
+        // return (await this.listWorkflowRuns(workflowId, githubRepoSlug))[0]
     }
 
     async stopWorkFlowRun(runId: string, githubRepoSlug: string) {
