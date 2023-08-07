@@ -1,14 +1,18 @@
 import { Box, Tooltip, Typography, makeStyles } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { WorkFlowStatus } from '../../WorkFlowStatus';
 import { truncateString } from '../../../utils/common';
 import { WorkFlowActions } from '../../WorkFlowActions';
+import { WorkflowDispatchParameters } from '../../../utils/types';
+import AddIcon from '@material-ui/icons/Add';
+import { ModalComponent } from '../../ModalComponent';
 
 type WorkFlowItemProps = {
   id: number,
   workflowName: string,
   conclusion?:string,
   status?: string,
+  parameters?: WorkflowDispatchParameters[] | []
 }
 
 const useStyles = makeStyles(theme =>({
@@ -44,32 +48,63 @@ const useStyles = makeStyles(theme =>({
     }
   }));
 
-export const WorkFlowItem = ({id, status,conclusion, workflowName}:WorkFlowItemProps) => {
+export const WorkFlowItem = ({id, status,conclusion, workflowName, parameters}:WorkFlowItemProps) => {
 
+  const [ showModal, setShowModal ] = useState<boolean>(false);
   const classes = useStyles();
 
+  const handleShowModal = () => {
+    setShowModal(!showModal)
+  }
+
   return (
-    <Box 
-      className={classes.workflow}
-      >
-      <WorkFlowStatus
-        status={status}
-        conclusion={conclusion ? conclusion : ''}
-        icon
-      />
-      <Tooltip title={workflowName} placement="top">
-        <Typography>
-          {truncateString(workflowName,13)}
-        </Typography>
-      </Tooltip>
+    <>
       <Box
-        role="button"
-        className={classes.clickable}>
-        <WorkFlowActions
+        className={classes.workflow}
+      >
+        <WorkFlowStatus
+          status={status}
+          conclusion={conclusion ? conclusion : ''}
+          icon
+        />
+
+        <Tooltip title={workflowName} placement="top">
+          <Typography>
+            {truncateString(workflowName, 13)}
+          </Typography>
+        </Tooltip>
+
+        {(parameters && parameters?.length > 0) && (
+          <Tooltip title={"Add Parameters"} placement="top">
+            <Box
+              role="button"
+              className={classes.clickable}
+              onClick={handleShowModal}
+            >
+              <AddIcon />
+            </Box>
+          </Tooltip>
+        )}
+
+        <Box
+          role="button"
+          className={classes.clickable}>
+          <WorkFlowActions
             status={status}
             conclusion={conclusion}
-            workflowId={id}/>
+            workflowId={id} />
+        </Box>
       </Box>
-    </Box>
+
+      {
+        showModal && (
+          <ModalComponent 
+            open={showModal} 
+            handleModal={handleShowModal}
+            parameters={parameters ? parameters : []}
+            />
+        )
+      }
+    </>
   )
 }

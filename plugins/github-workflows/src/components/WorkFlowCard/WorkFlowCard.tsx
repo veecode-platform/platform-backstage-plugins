@@ -121,6 +121,7 @@ export const Cards = ({ items }: CardsProps) => {
                     status={item.status}
                     conclusion={item.conclusion}
                     workflowName={item.name as string}
+                    parameters={item.parameters}
                   />
                 )
                 }

@@ -50,7 +50,15 @@ export interface WorkflowResultsProps {
     status?: string,
     conclusion?: string,
     source?:  string,
-    path?: string
+    path?: string,
+    parameters?: WorkflowDispatchParameters[] | []
   }
 
-  
+  export interface WorkflowDispatchParameters {
+    name: string
+    description: string
+    required: boolean
+    type: boolean | number | "choice" | string
+    default: string | boolean
+    options?: Array<any>
+}
