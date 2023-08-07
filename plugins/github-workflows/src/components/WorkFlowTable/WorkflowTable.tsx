@@ -12,16 +12,18 @@ import useAsync from 'react-use/lib/useAsync';
 import LanguageIcon from '@material-ui/icons/Language';
 import { WorkFlowStatus } from '../WorkFlowStatus';
 import { WorkFlowActions } from '../WorkFlowActions';
-import { Box, Button, Typography } from '@material-ui/core';
+import { Box, Button, Chip, Tooltip, Typography } from '@material-ui/core';
 import { SelectBranch } from '../SelectBranch';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
-import { WorkflowResultsProps } from '../../utils/types';
+import { WorkflowDispatchParameters, WorkflowResultsProps } from '../../utils/types';
 import { truncateString } from '../../utils/common';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import { useEntityAnnotations } from '../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import SyncIcon from '@material-ui/icons/Sync';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { ModalComponent } from '../ModalComponent';
 
 
 const useStyles = makeStyles(theme => ({
@@ -50,7 +52,14 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     gap: '1rem'
-  }
+  },
+  clickable:{
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '90%'
+  },
 }));
 
 type DenseTableProps = {
@@ -58,12 +67,14 @@ type DenseTableProps = {
 };
 
 export const DenseTable = ({ items }: DenseTableProps) => {
-  const classes = useStyles();
-
+  
   const { entity } = useEntity();
+  const [ showModal, setShowModal ] = useState<boolean>(false);
+  const [parametersState, setParametersState] = useState<WorkflowDispatchParameters[]|null>(null)
+  const [ loading, setLoading] = useState<boolean>(false);
   const { projectName } = useEntityAnnotations(entity as Entity);
   const { listAllWorkflows, setWorkflowsState } = useContext(GithubWorkflowsContext);
-  const [ loading, setLoading] = useState<boolean>(false);
+  const classes = useStyles();
 
   const updateData = async ()=> {
     setLoading(true)
@@ -72,8 +83,13 @@ export const DenseTable = ({ items }: DenseTableProps) => {
     setTimeout(()=> setLoading(false), 800)
   }
 
+  const handleShowModal = () => {
+    setShowModal(!showModal)
+  }
+
   const columns: TableColumn[] = [
     { title: 'Name', field: 'name',  width:'1fr', align:'center'},
+    { title: 'Parameters', field: 'parameters',  width:'1fr', align:'center'},
     { title: 'Status', field: 'status', width:'1fr', align:'center' },
     { title: 'Action', field: 'action', width:'1fr', align:'center' },
     { title: 'Source', field: 'source', width:'1fr', align:'center'},
@@ -82,6 +98,33 @@ export const DenseTable = ({ items }: DenseTableProps) => {
   const data = items.map(item => {
     return {
       name: item.name,
+      parameters:(
+        <>
+        {(item.parameters && item.parameters?.length > 0) ? (
+          <Tooltip title={"Add Parameters"} placement="top">
+            <Box
+              role="button"
+              className={classes.clickable}
+              onClick={()=>{
+                setParametersState(item.parameters ?? [])
+                handleShowModal()
+              }}
+            >
+              <AddCircleIcon />
+            </Box>
+          </Tooltip>
+        ):(
+          <Box
+          className={classes.clickable}
+           >
+            <Chip 
+              variant="outlined"
+              size="small" 
+              label="None" />
+          </Box>
+        )}
+        </>
+      ),
       status: (
         <WorkFlowStatus
           status={item.status}
@@ -104,7 +147,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
               {truncateString(item.source as string, 40)}
             </Link>
          </Box>
-         ),
+         )
     };
   });
 
@@ -118,6 +161,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
   )
 
   return (
+   <>
     <Table
       title={TitleBar}
       options={{ search: false, paging: true }}
@@ -126,13 +170,25 @@ export const DenseTable = ({ items }: DenseTableProps) => {
       isLoading={loading}
       actions={[
         {
-          icon: () => <SyncIcon/>,
+          icon: () => <SyncIcon />,
           tooltip: 'Reload workflow runs',
           isFreeAction: true,
           onClick: () => updateData(),
         },
       ]}
     />
+     <>
+        {
+          showModal && (
+            <ModalComponent 
+              open={showModal} 
+              handleModal={handleShowModal}
+              parameters={parametersState ?? []}
+              />
+          )
+        }
+        </>
+  </>
   );
 };
 
