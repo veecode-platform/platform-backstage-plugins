@@ -92,7 +92,7 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
                     <Select
                       labelId={p.name}
                       id="select-outlined"
-                      value={valueOption}
+                      value={p.default ?? valueOption}
                       onChange={handleChange}
                       label={p.description}
                       required={p.required}
