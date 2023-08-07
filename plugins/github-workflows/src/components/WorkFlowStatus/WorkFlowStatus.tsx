@@ -69,6 +69,7 @@ export const WorkFlowStatus = ({ status, conclusion, icon }: WorkFlowStatusProps
                         </>
                     );
                 case StatusWorkflowEnum.failure:
+                case null:
                     return (
                         <>
                             <StatusError /> {!icon && "Error"}
