@@ -11,7 +11,7 @@ export interface Workflow {
     badgeUrl: string;
 }
 export interface WorkflowResponseFromApi {
-    totalCount: number;
+    total_count: number;
     workflows: Workflow[];
 }
 
@@ -28,7 +28,7 @@ export interface WorkflowRun {
 }
 
 export interface WorkflowRunsResponseFromApi {
-    totalCount: number;
+    total_count: number;
     workflow_runs: WorkflowRun[];
 }
 

@@ -130,6 +130,11 @@ class Client {
         return response.workflow_runs
     }
 
+    async listWorkflowRunsTotalCount(workflowId: string, githubRepoSlug: string){
+        const response = await this.fetch<WorkflowRunsResponseFromApi>(`/actions/workflows/${workflowId}/runs`, githubRepoSlug)
+        return response
+    }
+
     async listBranchesFromRepo(githubRepoSlug: string) {
         return await this.fetch<Branches[]>("/branches", githubRepoSlug)
     }
@@ -151,16 +156,23 @@ class Client {
         const headers: RequestInit = {
             method: "POST",
             body: JSON.stringify(body)
-            /* body: JSON.stringify({
-                ref: branch
-            })*/
         }
+        const totalWorkflowRunsBefore = await this.listWorkflowRunsTotalCount(workflowId, githubRepoSlug)
+        let totalWorkflowRunsAfter = totalWorkflowRunsBefore
+        let loadTime = 3000
+        
         await this.fetch(`/actions/workflows/${workflowId}/dispatches`, githubRepoSlug, headers);
-        await new Promise(r => setTimeout(r, 25000))
-        // const response = await this.getLatestWorkflowRun(workflowId, githubRepoSlug)
-        // return response
-        return await this.getLatestWorkflowRun(workflowId, githubRepoSlug)
-        // return (await this.listWorkflowRuns(workflowId, githubRepoSlug))[0]
+        do{
+            await this.waitTime(loadTime)
+            totalWorkflowRunsAfter = await this.listWorkflowRunsTotalCount(workflowId, githubRepoSlug)
+            loadTime = loadTime * 2 + 1000     
+        }
+        while(totalWorkflowRunsAfter.total_count === totalWorkflowRunsBefore.total_count)
+        return totalWorkflowRunsAfter.workflow_runs[0]
+    }
+
+    async waitTime(time: number){
+        return await new Promise(r => setTimeout(r, time))
     }
 
     async stopWorkFlowRun(runId: string, githubRepoSlug: string) {
