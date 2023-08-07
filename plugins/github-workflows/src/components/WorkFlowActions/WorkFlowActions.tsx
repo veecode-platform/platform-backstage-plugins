@@ -81,6 +81,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
 
                 const response = await handleStartWorkflowRun(workFlowSelected.id as number, projectName);
                    if(response){
+                    console.log(response)
                      setWorkflowsState((prevWorkflowsState) => {
                        if (prevWorkflowsState) {
                          const updatedWorkflows = prevWorkflowsState.map((workflow) => {
