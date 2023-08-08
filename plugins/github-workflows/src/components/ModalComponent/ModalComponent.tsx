@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -8,6 +8,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { WorkflowDispatchParameters } from '../../utils/types';
 import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, makeStyles } from '@material-ui/core';
+import { GithubWorkflowsContext } from '../context';
 
 type ModalComponentProps = {
   open: boolean,
@@ -39,16 +40,30 @@ const useStyles = makeStyles((theme) => ({
 export const ModalComponent = ({open, handleModal, parameters}:ModalComponentProps) => {
 
   const [stateCheckbox, setStateCheckbox ] = useState<boolean>(false);
-  const [valueOption, setValueOption] = useState('');
+  const [valueOption, setValueOption] = useState<string|null>(null);
+  const [ inputWorkflow, setInputWorkflow ] = useState<object>({})
   const classes = useStyles();
+  const { setInputs } = useContext(GithubWorkflowsContext);
+
   
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
     setValueOption(event.target.value as string);
+    if(event){
+      setInputWorkflow({...inputWorkflow, [event.target.name!]: event.target.value})
+    }
   };
 
-  const handleStateCheckbox = () => {
-    setStateCheckbox(!stateCheckbox);
+  const handleStateCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStateCheckbox(event.target.checked);
+    if(stateCheckbox){
+      setInputWorkflow({...inputWorkflow, [event.target.name]: event.target.checked})
+    }
   };
+
+  const handleSetInputs = () => {
+    setInputs(inputWorkflow)
+    handleModal();
+  }
 
   return (
       <Dialog open={open} onClose={handleModal} aria-labelledby="form-dialog-title">
@@ -71,6 +86,7 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
                   label={p.description}
                   type="string"
                   fullWidth
+                  onChange={handleChange}
               />
               )}
               {p.type === "number" && (
@@ -83,7 +99,8 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
                   required={p.required}
                   label={p.description}
                   type="number"
-                  fullWidth    
+                  fullWidth  
+                  onChange={handleChange}  
               />
               )}
               {p.type === "choice" && (
@@ -92,10 +109,11 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
                     <Select
                       labelId={p.name}
                       id="select-outlined"
-                      value={p.default ?? valueOption}
+                      value={p.default ? p.default : valueOption}
                       onChange={handleChange}
                       label={p.description}
                       required={p.required}
+                      name={p.name}
                     >
                       {p.options?.map(o => (
                         <MenuItem value={o} key={o}>
@@ -127,7 +145,7 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
           <Button onClick={handleModal} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleModal} color="primary">
+          <Button onClick={handleSetInputs} color="primary">
             Submit
           </Button>
         </DialogActions>

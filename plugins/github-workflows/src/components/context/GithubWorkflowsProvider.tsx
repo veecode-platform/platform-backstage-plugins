@@ -10,6 +10,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
 
   const [branch, setBranch] = useState<string | null>(null);
   const [workflowsState, setWorkflowsState] = useState<WorkflowResultsProps[] | null>(null);
+  const [ inputsWorkflowsParams, setInputsWorkflowsParams ] = useState<object|null>(null);
   const [workflowsByAnnotationsState, setWorkflowsByAnnotationsState] = useState<WorkflowResultsProps[] | null>(null);
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
@@ -18,11 +19,14 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
     setBranch(branch);
   }
 
+  const setInputs = (inputs: object) => {
+    setInputsWorkflowsParams(inputs);
+  }
+
   const listAllWorkflows = async (projectName: string, filter: string[] = []) => {
     try {
       const workflows = await api.listWorkflowsRefactor(projectName, branch!, filter);
       if(workflows){
-        console.log(workflows)
         const newWorkflowsState = await Promise.all(workflows.map(async (w) => {
           return {
             id: w.workflow.id,
@@ -56,9 +60,9 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
      }
   }
 
-  const handleStartWorkflowRun = async (workFlowId: number, projectSlug: string) => {
+  const handleStartWorkflowRun = async (workFlowId: number, projectSlug: string) => {  // check
     try {
-      const response = await api.startWorkflowRun(workFlowId.toString(), projectSlug, branch!);
+      const response = await api.startWorkflowRun(workFlowId.toString(), projectSlug, branch!, inputsWorkflowsParams ?? {});
       if(response) return response;
       return null
     }
@@ -84,11 +88,11 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
         listAllWorkflows,
         branch,
         setBranchState,
+        setInputs,
         workflowsState,
         setWorkflowsState,
         workflowsByAnnotationsState,
         setWorkflowsByAnnotationsState,
-        // workflowByAnnotation,
         getWorkflowRunById,
         handleStartWorkflowRun,
         handleStopWorkflowRun
