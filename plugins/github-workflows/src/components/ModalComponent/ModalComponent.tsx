@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -45,18 +45,31 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
   const classes = useStyles();
   const { setInputs } = useContext(GithubWorkflowsContext);
 
+  useEffect(() => {
+    const data: any = {};
+    parameters.forEach(p => {
+      data[p.name] = p.default;
+    });
+    setInputWorkflow(data);
+  }, []);
   
-  const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
+  const handleChangeSelect = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
     setValueOption(event.target.value as string);
     if(event){
       setInputWorkflow({...inputWorkflow, [event.target.name!]: event.target.value})
     }
   };
 
+  const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
+    if(event){
+      setInputWorkflow({...inputWorkflow, [event.target.name!]: event.target.value})
+    }
+  };
+
   const handleStateCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if(event.target.value){
     setStateCheckbox(event.target.checked);
-    if(stateCheckbox){
-      setInputWorkflow({...inputWorkflow, [event.target.name]: event.target.checked})
+    setInputWorkflow({ ...inputWorkflow, [event.target.name]: stateCheckbox });
     }
   };
 
@@ -81,7 +94,7 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
                   margin="dense"
                   id={p.name}
                   name={p.name}
-                  defaultValue={p.default}
+                  value={p.default}
                   required={p.required}
                   label={p.description}
                   type="string"
@@ -109,8 +122,8 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
                     <Select
                       labelId={p.name}
                       id="select-outlined"
-                      value={p.default ? p.default : valueOption}
-                      onChange={handleChange}
+                      value={valueOption ?? p.default}
+                      onChange={handleChangeSelect}
                       label={p.description}
                       required={p.required}
                       name={p.name}
@@ -125,15 +138,16 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
               )}
                 {p.type === "boolean" && (
                   <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={stateCheckbox}
-                      onChange={handleStateCheckbox}
-                      name={p.name}
-                      color="primary"
-                      required={p.required}
-                    />
-                  }
+                    control={
+                      <Checkbox
+                        defaultChecked={p.default as boolean}
+                        value={stateCheckbox}
+                        onChange={handleStateCheckbox}
+                        name={p.name}
+                        color="primary"
+                        required={p.required}
+                      />
+                    }
                   label={p.description}
                 />
                 )}

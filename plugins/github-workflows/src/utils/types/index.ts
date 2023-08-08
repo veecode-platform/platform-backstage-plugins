@@ -59,6 +59,6 @@ export interface WorkflowResultsProps {
     description: string
     required: boolean
     type: boolean | number | "choice" | string
-    default: string | boolean
+    default: string | boolean 
     options?: Array<any>
 }
