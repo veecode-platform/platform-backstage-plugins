@@ -60,7 +60,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
      }
   }
 
-  const handleStartWorkflowRun = async (workFlowId: number, projectSlug: string) => {  // check
+  const handleStartWorkflowRun = async (workFlowId: number, projectSlug: string) => { 
     try {
       const response = await api.startWorkflowRun(workFlowId.toString(), projectSlug, branch!, inputsWorkflowsParams ?? {});
       if(response) return response;
