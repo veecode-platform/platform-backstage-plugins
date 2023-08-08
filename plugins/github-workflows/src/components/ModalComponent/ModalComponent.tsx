@@ -9,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { WorkflowDispatchParameters } from '../../utils/types';
 import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, makeStyles } from '@material-ui/core';
 import { GithubWorkflowsContext } from '../context';
+import { validateString } from '../../utils/validators';
 
 type ModalComponentProps = {
   open: boolean,
@@ -41,7 +42,8 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
 
   const [stateCheckbox, setStateCheckbox ] = useState<boolean>(false);
   const [valueOption, setValueOption] = useState<string|null>(null);
-  const [ inputWorkflow, setInputWorkflow ] = useState<object>({})
+  const [ inputWorkflow, setInputWorkflow ] = useState<object>({});
+  const [errorsState, setErrorsState] = useState<Record<string, boolean>>({});
   const classes = useStyles();
   const { setInputs } = useContext(GithubWorkflowsContext);
 
@@ -54,15 +56,24 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
   }, []);
   
   const handleChangeSelect = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
-    setValueOption(event.target.value as string);
-    if(event){
-      setInputWorkflow({...inputWorkflow, [event.target.name!]: event.target.value})
-    }
+   setValueOption(event.target.value as string);
+   if(event){
+     setInputWorkflow({...inputWorkflow, [event.target.name!]: event.target.value})
+   }
   };
 
-  const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
+  const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) => {
+   
+    
+    if(required){
+      if(type === "string" && validateString(event.target.value as string)){
+        return setErrorsState({...errorsState, [event.target.name!] : true });
+      }
+      if(event.target.value === "") return setErrorsState({...errorsState, [event.target.name!] : true });
+   }
     if(event){
-      setInputWorkflow({...inputWorkflow, [event.target.name!]: event.target.value})
+      setInputWorkflow({...inputWorkflow, [event.target.name!]: event.target.value});
+      setErrorsState({...errorsState, [event.target.name!] : false });
     }
   };
 
@@ -72,6 +83,11 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
     setInputWorkflow({ ...inputWorkflow, [event.target.name]: stateCheckbox });
     }
   };
+
+  const touchedField = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>, required: boolean) => {
+    if (required && event.target.value === "") setErrorsState({ ...errorsState, [event.target.name!]: true })
+    return;
+  }
 
   const handleSetInputs = () => {
     setInputs(inputWorkflow)
@@ -94,12 +110,19 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
                   margin="dense"
                   id={p.name}
                   name={p.name}
-                  value={p.default}
-                  required={p.required}
+                  defaultValue={p.default}
+                  required={p.required as boolean}
                   label={p.description}
                   type="string"
                   fullWidth
-                  onChange={handleChange}
+                  onBlur={(event) => touchedField(event, p.required)}
+                  onChange={(event) => handleChange(event, p.required, p.type)}  
+                  error={errorsState[p.name]}
+                    helperText={
+                      errorsState[p.name]
+                        ? 'use at least 3 characters'
+                        : null
+                    }
               />
               )}
               {p.type === "number" && (
@@ -109,11 +132,12 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
                   id={p.name}
                   name={p.name}
                   defaultValue={p.default}
-                  required={p.required}
+                  required={p.required as boolean}
                   label={p.description}
+                  onBlur={(event) => touchedField(event, p.required)}
                   type="number"
                   fullWidth  
-                  onChange={handleChange}  
+                  onChange={(event) => handleChange(event, p.required, p.type)}  
               />
               )}
               {p.type === "choice" && (
@@ -125,8 +149,9 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
                       value={valueOption ?? p.default}
                       onChange={handleChangeSelect}
                       label={p.description}
-                      required={p.required}
+                      required={p.required as boolean}
                       name={p.name}
+                      onBlur={(event) => touchedField(event, p.required)}
                     >
                       {p.options?.map(o => (
                         <MenuItem value={o} key={o}>
@@ -145,7 +170,7 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
                         onChange={handleStateCheckbox}
                         name={p.name}
                         color="primary"
-                        required={p.required}
+                        required={p.required as boolean}
                       />
                     }
                   label={p.description}
@@ -159,7 +184,11 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
           <Button onClick={handleModal} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleSetInputs} color="primary">
+          <Button 
+            disabled={Object.values(errorsState).some((error) => error)}
+            onClick={handleSetInputs}
+            color="primary"
+            >
             Submit
           </Button>
         </DialogActions>
