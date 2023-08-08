@@ -12,7 +12,7 @@ import useAsync from 'react-use/lib/useAsync';
 import LanguageIcon from '@material-ui/icons/Language';
 import { WorkFlowStatus } from '../WorkFlowStatus';
 import { WorkFlowActions } from '../WorkFlowActions';
-import { Box, Button, Chip, Tooltip, Typography } from '@material-ui/core';
+import { Box, Button, Tooltip, Typography } from '@material-ui/core';
 import { SelectBranch } from '../SelectBranch';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import { WorkflowDispatchParameters, WorkflowResultsProps } from '../../utils/types';
@@ -73,7 +73,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
   const [parametersState, setParametersState] = useState<WorkflowDispatchParameters[]|null>(null)
   const [ loading, setLoading] = useState<boolean>(false);
   const { projectName } = useEntityAnnotations(entity as Entity);
-  const { listAllWorkflows, setWorkflowsState } = useContext(GithubWorkflowsContext);
+  const { listAllWorkflows, setWorkflowsState, inputsWorkflowsParams } = useContext(GithubWorkflowsContext);
   const classes = useStyles();
 
   const updateData = async ()=> {
@@ -89,7 +89,6 @@ export const DenseTable = ({ items }: DenseTableProps) => {
 
   const columns: TableColumn[] = [
     { title: 'Name', field: 'name',  width:'1fr', align:'center'},
-    { title: 'Parameters', field: 'parameters',  width:'1fr', align:'center'},
     { title: 'Status', field: 'status', width:'1fr', align:'center' },
     { title: 'Action', field: 'action', width:'1fr', align:'center' },
     { title: 'Source', field: 'source', width:'1fr', align:'center'},
@@ -98,33 +97,6 @@ export const DenseTable = ({ items }: DenseTableProps) => {
   const data = items.map(item => {
     return {
       name: item.name,
-      parameters:(
-        <>
-        {(item.parameters && item.parameters?.length > 0) ? (
-          <Tooltip title={"Add Parameters"} placement="top">
-            <Box
-              role="button"
-              className={classes.clickable}
-              onClick={()=>{
-                setParametersState(item.parameters ?? [])
-                handleShowModal()
-              }}
-            >
-              <AddCircleIcon />
-            </Box>
-          </Tooltip>
-        ):(
-          <Box
-          className={classes.clickable}
-           >
-            <Chip 
-              variant="outlined"
-              size="small" 
-              label="None" />
-          </Box>
-        )}
-        </>
-      ),
       status: (
         <WorkFlowStatus
           status={item.status}
@@ -133,11 +105,28 @@ export const DenseTable = ({ items }: DenseTableProps) => {
         ),
       action: (
         <Box className={classes.action}>
-          <WorkFlowActions
-            status={item.status}
-            conclusion={item.conclusion}
-            workflowId={item.id}
-         />
+          {(item.parameters && item.parameters?.length > 0) ? (
+            <>
+              {!inputsWorkflowsParams ?
+                (<Tooltip title={"Add Parameters"} placement="top">
+                  <AddCircleIcon
+                    onClick={() => {
+                      setParametersState(item.parameters ?? [])
+                      handleShowModal()
+                    }} />
+
+                </Tooltip>) : (
+                  <WorkFlowActions
+                    status={item.status}
+                    conclusion={item.conclusion}
+                    workflowId={item.id} />
+                )}
+            </>
+          ) :
+            <WorkFlowActions
+              status={item.status}
+              conclusion={item.conclusion}
+              workflowId={item.id} />}
         </Box>
       ),
       source: (
