@@ -270,8 +270,8 @@ export class GithubWorkflowsApiClient implements GithubWorkflowsApi {
         return this.client.getLatestWorkflowRun(workflowId, githubRepoSlug)
     }
 
-    async startWorkflowRun(workflowId: string, githubRepoSlug: string, branch: string): Promise<WorkflowRun> {
-        return this.client.startWorkflow(workflowId, githubRepoSlug, branch)
+    async startWorkflowRun(workflowId: string, githubRepoSlug: string, branch: string, inputs?: object): Promise<WorkflowRun> {
+        return this.client.startWorkflow(workflowId, githubRepoSlug, branch, inputs)
     }
 
     async stopWorkflowRun(runId: string, githubRepoSlug: string): Promise<void> {
