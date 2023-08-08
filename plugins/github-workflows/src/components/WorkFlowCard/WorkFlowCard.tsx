@@ -27,9 +27,11 @@ const useStyles = makeStyles(theme => ({
     marginTop: '10%'
   },
   loadingComponent:{
+    width:'100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    padding: '.3rem 0'
   },
   workflowsGroup: {
     width: '95%',
@@ -107,10 +109,10 @@ export const Cards = ({ items }: CardsProps) => {
           action={ActionsCard}
          />
          <CardContent className={classes.workflowsGroup}>
-      { loading ?  
-     (<Box className={classes.loadingComponent}> <CircularProgress />  </Box> ): 
-(                
-               <>
+          {loading ?
+            (<Box className={classes.loadingComponent}> <CircularProgress />  </Box>) :
+            (
+              <>
                 {items.map(item =>
                   <WorkFlowItem
                     id={item.id!}
@@ -122,10 +124,10 @@ export const Cards = ({ items }: CardsProps) => {
                   />
                 )
                 }
-               </>
-             )
-      }
- </CardContent>
+              </>
+            )
+          }
+        </CardContent>
       </Card>
     </Paper>
   )
