@@ -186,8 +186,14 @@ export const WorkflowTable = () => {
 
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity as Entity);
+  const [ loadingState, setLoadingState ] = useState(true);
   const { branch, listAllWorkflows, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
 
+  useEffect(()=>{
+    setTimeout(()=>{
+      setLoadingState(false)
+    },2000)
+  },[])
 
   useEffect(()=>{
       updateData();
@@ -207,9 +213,10 @@ export const WorkflowTable = () => {
     return <Progress />;
   }
 
-  if(!error && !workflowsState) {
+  if(!error  && !workflowsState) {
     return (
-      <EmptyState
+      <>
+      { loadingState ? (<Progress />):(<EmptyState
       missing="data"
       title="No Workflow Data"
       description="This component has GitHub Actions enabled, but no data was found. Have you created any Workflows? Click the button below to create a new Workflow."
@@ -222,7 +229,8 @@ export const WorkflowTable = () => {
           Create new Workflow
         </Button>
       }
-    />
+    />)}
+    </>
     )
   }
   
