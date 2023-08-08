@@ -62,9 +62,7 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
    }
   };
 
-  const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) => {
-   
-    
+  const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) => {    
     if(required){
       if(type === "string" && validateString(event.target.value as string)){
         return setErrorsState({...errorsState, [event.target.name!] : true });
@@ -88,7 +86,7 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
     if (required && event.target.value === "") setErrorsState({ ...errorsState, [event.target.name!]: true })
     return;
   }
-
+  
   const handleSetInputs = () => {
     setInputs(inputWorkflow)
     handleModal();
