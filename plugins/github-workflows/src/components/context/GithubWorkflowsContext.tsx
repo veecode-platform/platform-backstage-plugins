@@ -7,6 +7,7 @@ export type GithubWorkflowsContextType = {
   branch: string | null,
   setBranchState: (branch: string) => void,
   setInputs: (inputs: object) => void,
+  inputsWorkflowsParams: object | null,
   workflowsState: WorkflowResultsProps[] | null,
   setWorkflowsState: React.Dispatch<React.SetStateAction<WorkflowResultsProps[] | null>>,
   workflowsByAnnotationsState: WorkflowResultsProps[] | null,
