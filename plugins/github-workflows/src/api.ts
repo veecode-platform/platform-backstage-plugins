@@ -1,18 +1,9 @@
 import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
-import { Branches, Workflow, WorkflowResponseFromApi, WorkflowRun, WorkflowRunsResponseFromApi } from './utils/types';
+import { Branches, Workflow, WorkflowDispatchParameters, WorkflowResponseFromApi, WorkflowRun, WorkflowRunsResponseFromApi } from './utils/types';
 import YAML from "js-yaml"
 // import { Entity } from '@backstage/catalog-model';
 
 const GITHUB_WORKFLOWS_DEFAULT_PROXY_URL = "/github-workflows"
-
-export interface WorkflowDispatchParameters {
-    name: string
-    description: string
-    required: boolean
-    type: boolean | number | "choice" | string
-    default: string
-    options?: Array<any>
-}
 
 export interface Workflows {
     workflow: {

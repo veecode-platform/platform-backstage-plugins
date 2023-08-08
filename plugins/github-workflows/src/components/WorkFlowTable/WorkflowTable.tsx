@@ -12,16 +12,18 @@ import useAsync from 'react-use/lib/useAsync';
 import LanguageIcon from '@material-ui/icons/Language';
 import { WorkFlowStatus } from '../WorkFlowStatus';
 import { WorkFlowActions } from '../WorkFlowActions';
-import { Box, Button, Typography } from '@material-ui/core';
+import { Box, Button, Tooltip, Typography } from '@material-ui/core';
 import { SelectBranch } from '../SelectBranch';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
-import { WorkflowResultsProps } from '../../utils/types';
+import { WorkflowDispatchParameters, WorkflowResultsProps } from '../../utils/types';
 import { truncateString } from '../../utils/common';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import { useEntityAnnotations } from '../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import SyncIcon from '@material-ui/icons/Sync';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { ModalComponent } from '../ModalComponent';
 
 
 const useStyles = makeStyles(theme => ({
@@ -50,7 +52,14 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     gap: '1rem'
-  }
+  },
+  clickable:{
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '90%'
+  },
 }));
 
 type DenseTableProps = {
@@ -58,18 +67,24 @@ type DenseTableProps = {
 };
 
 export const DenseTable = ({ items }: DenseTableProps) => {
-  const classes = useStyles();
-
+  
   const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entity as Entity);
-  const { listAllWorkflows, setWorkflowsState } = useContext(GithubWorkflowsContext);
+  const [ showModal, setShowModal ] = useState<boolean>(false);
+  const [parametersState, setParametersState] = useState<WorkflowDispatchParameters[]|null>(null)
   const [ loading, setLoading] = useState<boolean>(false);
+  const { projectName } = useEntityAnnotations(entity as Entity);
+  const { listAllWorkflows, setWorkflowsState, inputsWorkflowsParams } = useContext(GithubWorkflowsContext);
+  const classes = useStyles();
 
   const updateData = async ()=> {
     setLoading(true)
     const data = await listAllWorkflows(projectName);
     setWorkflowsState(data as WorkflowResultsProps[]);
     setTimeout(()=> setLoading(false), 800)
+  }
+
+  const handleShowModal = () => {
+    setShowModal(!showModal)
   }
 
   const columns: TableColumn[] = [
@@ -90,11 +105,28 @@ export const DenseTable = ({ items }: DenseTableProps) => {
         ),
       action: (
         <Box className={classes.action}>
-          <WorkFlowActions
-            status={item.status}
-            conclusion={item.conclusion}
-            workflowId={item.id}
-         />
+          {(item.parameters && item.parameters?.length > 0) ? (
+            <>
+              {!inputsWorkflowsParams ?
+                (<Tooltip title={"Add Parameters"} placement="top">
+                  <AddCircleIcon
+                    onClick={() => {
+                      setParametersState(item.parameters ?? [])
+                      handleShowModal()
+                    }} />
+
+                </Tooltip>) : (
+                  <WorkFlowActions
+                    status={item.status}
+                    conclusion={item.conclusion}
+                    workflowId={item.id} />
+                )}
+            </>
+          ) :
+            <WorkFlowActions
+              status={item.status}
+              conclusion={item.conclusion}
+              workflowId={item.id} />}
         </Box>
       ),
       source: (
@@ -104,7 +136,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
               {truncateString(item.source as string, 40)}
             </Link>
          </Box>
-         ),
+         )
     };
   });
 
@@ -118,7 +150,9 @@ export const DenseTable = ({ items }: DenseTableProps) => {
   )
 
   return (
+   <>
     <Table
+      style={{width: '100%', padding: '1rem'}}
       title={TitleBar}
       options={{ search: false, paging: true }}
       columns={columns}
@@ -126,13 +160,25 @@ export const DenseTable = ({ items }: DenseTableProps) => {
       isLoading={loading}
       actions={[
         {
-          icon: () => <SyncIcon/>,
+          icon: () => <SyncIcon />,
           tooltip: 'Reload workflow runs',
           isFreeAction: true,
           onClick: () => updateData(),
         },
       ]}
     />
+     <>
+        {
+          showModal && (
+            <ModalComponent 
+              open={showModal} 
+              handleModal={handleShowModal}
+              parameters={parametersState ?? []}
+              />
+          )
+        }
+        </>
+  </>
   );
 };
 
