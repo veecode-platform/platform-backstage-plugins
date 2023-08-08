@@ -152,6 +152,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
   return (
    <>
     <Table
+      style={{width: '100%', padding: '1rem'}}
       title={TitleBar}
       options={{ search: false, paging: true }}
       columns={columns}

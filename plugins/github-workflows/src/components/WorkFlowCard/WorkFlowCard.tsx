@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ErrorBoundary, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
-import { Box, Button, Card, CardContent, CardHeader, CircularProgress, Paper, Typography, makeStyles } from '@material-ui/core';
+import { Box, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography, makeStyles } from '@material-ui/core';
 import { WorkFlowItem } from './WorkFlowItem';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import useAsync from 'react-use/lib/useAsync';
@@ -9,7 +9,7 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { SelectBranch } from '../SelectBranch';
 import { WorkflowResultsProps } from '../../utils/types';
-import SyncIcon from '@material-ui/icons/Sync';
+import CachedIcon from '@material-ui/icons/Cached';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -24,14 +24,9 @@ const useStyles = makeStyles(theme => ({
     gap: '1rem'
   },
   buttonRefresh:{
-    padding: '1rem',
-    cursor: 'pointer',
-    height: '0',
-    marginTop: '8%'
+    marginTop: '10%'
   },
   loadingComponent:{
-    width: '100%',
-    height: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
@@ -92,12 +87,14 @@ export const Cards = ({ items }: CardsProps) => {
   const ActionsCard = (
     <Box className={classes.options}>
       <SelectBranch/>
-      <Button 
+      <IconButton
+        aria-label="Refresh"
+        title="Refresh data"
+        onClick={() => updateData()}
         className={classes.buttonRefresh}
-        onClick={()=>updateData()}
-        >
-        <SyncIcon />
-      </Button>
+      >
+        <CachedIcon />
+      </IconButton>
     </Box>
   )
 
