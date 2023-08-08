@@ -25,7 +25,7 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
 
   const listAllWorkflows = async (projectName: string, filter: string[] = []) => {
     try {
-      const workflows = await api.listWorkflowsRefactor(projectName, branch!, filter);
+      const workflows = await api.listWorkflows(projectName, branch!, filter);
       if(workflows){
         const newWorkflowsState = await Promise.all(workflows.map(async (w) => {
           return {
@@ -47,17 +47,6 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
       errorApi.post(e);
       return null;
     }
-  }
-
-  const getWorkflowRunById = async (runId: string, projectSlug: string) => {
-    try {
-      const response = api.getWorkflowRunById(runId.toString(), projectSlug);
-      return response
-    }
-    catch (e:any) {
-      errorApi.post(e);
-      return null
-     }
   }
 
   const handleStartWorkflowRun = async (workFlowId: number, projectSlug: string) => { 
@@ -94,7 +83,6 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
         setWorkflowsState,
         workflowsByAnnotationsState,
         setWorkflowsByAnnotationsState,
-        getWorkflowRunById,
         handleStartWorkflowRun,
         handleStopWorkflowRun
       }}>
