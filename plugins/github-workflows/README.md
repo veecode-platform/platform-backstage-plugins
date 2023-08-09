@@ -1,38 +1,32 @@
 # Plugin GithubWorkflows Frontend
-
-
-
+<br>
 O plugin de GithubWorkflows é uma alternativa para disparos manuais de workflows do github por dentro de seu componente backstage.
 
 No plugin temos duas abordagens distintas para agregar o seu componente:
 
 - Os workflows sob demanda, aos quais são setados via annotations no `catalog-info.yaml` de seu projeto.
 - E a listagem completa dos workflows que seu projeto disponibiliza.
-
-
+<br>
 
 ### Primeiros passos:
+<br>
 
 Antes de instalarmos o plugin, temos alguns pré requisitos para que ele funcione de fato:
 
-- Ter um projeto backstage instalado localmente. :white_check_mark:  <a href="https://backstage.io/docs/getting-started/create-an-app"> Crie um backstage app</a>
-
-- Ter configurado o catálogo e a integração com o github. :white_check_mark:  <a href="https://backstage.io/docs/integrations/">Configure a integração</a>
-- Ter configurado a auth com o github. :white_check_mark:  <a href="https://backstage.io/docs/auth/">Configure a autenticação</a>
-- Ter configurado o plugin de github actions default. :white_check_mark: <a href="https://github.com/backstage/backstage/tree/master/plugins/github-actions">Configure o plugin github actions</a>
-
-
+- Ter um projeto backstage instalado localmente.  ✅  <a href="https://backstage.io/docs/getting-started/create-an-app"> Crie um backstage app</a>
+- Ter configurado o catálogo e a integração com o github. ✅  <a href="https://backstage.io/docs/integrations/">Configure a integração</a>
+- Ter configurado a auth com o github.   ✅  <a href="https://backstage.io/docs/auth/">Configure a autenticação</a>
+- Ter configurado o plugin de github actions default.  ✅  <a href="https://github.com/backstage/backstage/tree/master/plugins/github-actions">Configure o plugin github actions</a>
+<br>
 
 ### Instalação
-
-
+<br>
 
 `````bash
 cd packages/app
 yarn add @veecode-platform/github-workflows
 `````
-
-
+<br>
 
 ### Configuração
 
@@ -55,7 +49,7 @@ proxy:
 
 > :information_source: Lembre-se de setar a variável ${GITHUB_TOKEN_SECRET} com o token personal do github
 
-
+<br>
 
 2- Para conseguirmos disparar os workflows diretamente do nosso componente, é importante adicionarmos ao nosso worflow, no github, a step ` workflow_dispatch:`, deste modo:
 
@@ -84,7 +78,7 @@ Mesmo que não seja passado nada para essa chave, ela precisa estar presente no 
 >
 >
 
-
+<br>
 
 3- Precisamos de um annotation principal, que como default todos os componentes backstage já utilizam, trata-se do `github.com/project-slug` onde fica setado o nome do seu projeto.
 
@@ -115,17 +109,14 @@ spec:
   owner: default
 ```
 
-
-
-
-
-
+<br>
+<hr/>
+<br>
 
 ### Workflows List
+<br>
 
-
-
-![image-20230809163205822](/home/tec/snap/typora/82/.config/Typora/typora-user-images/image-20230809163205822.png)
+![image1](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/4615b16a-b7e6-47e8-b109-d2444922f8ba)
 
 
 
@@ -137,17 +128,18 @@ A tabela é separada por nome do workflow, estado, ação e link para o reposit�
 
 Em alguns casos para dispararmos a action, ele pede parâmetros, se assim for configurado em seu workflow, e ao invés do botão da ação, acionamos um modal para que sejam setados os parâmetros solicitados:
 
+<br>
+![image2](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/06390934-c04e-4059-bf01-551a467a294a)
 
-
-![image-20230809163518729](/home/tec/snap/typora/82/.config/Typora/typora-user-images/image-20230809163518729.png)
-
+<br>
 
 
 Ao acionarmos um evento no workflow, o status é atualizado e no final a conclusão também é retornada, através do refresh da tabela.
+<br>
 
-![image-20230809163812183](/home/tec/snap/typora/82/.config/Typora/typora-user-images/image-20230809163812183.png)
+![image3](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/9b92c472-45de-4e64-9618-b96cc8a574c3)
 
-
+<br>
 
 Encorajamos aos usuários em criar uma nova tab em seu catálogo com o nome de **"Workflows"** e mantenham a tab "**CI-CD**" com o componente default do backstage, pois nas sessões posteriores explicaremos a integração entre os dois plugins.
 
@@ -225,7 +217,9 @@ const serviceEntityPage = (
 );
 
 ```
-
+<br>
+<hr/>
+<br>
 
 
 ### Workflow Cards
@@ -263,10 +257,11 @@ spec:
 
 
 A composição do **annotation** funciona assim:
+<br>
 
-<img src="/home/tec/Downloads/Fluxograma Pedido Azul Cinza.png" alt="Fluxograma" style="zoom:50%;" />
+<img src="https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/0158be50-8034-4cd0-a304-7b4233578cc0" style="width: 400px; margin: 2rem 0" />
 
-
+<br>
 
 :information_source: importante dizer que conseguimos adicionar mais de um **workflow path** separados por vírgula, deste modo:
 
@@ -278,10 +273,12 @@ github.com/workflows: filePath.yml,filePath2.yml,filePath3.yml,
 
 A funcionalidade vai ser idêntica ao compontente de listagem de workflows, com a principal diferença sendo que ao invés de listar todos os workflows do repositório, serão listados apenas os workflows passados via annotation.
 
+<br><br>
+
+![image5](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/39ff37fa-6ca6-4a8e-9f23-499353801b53)
 
 
-![image-20230809165638244](/home/tec/snap/typora/82/.config/Typora/typora-user-images/image-20230809165638244.png)
-
+<br><br>
 
 
 Como indicação, utilizamos os cards diretamente no overview do component, desta forma:
@@ -323,11 +320,12 @@ const overviewContent = (
 
 Ele funciona da seguinte forma:
 
+<br>
+
+![image6](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/34593129-68bc-44a0-aee7-b1d8c7d12743)
 
 
-![image-20230809165949084](/home/tec/snap/typora/82/.config/Typora/typora-user-images/image-20230809165949084.png)
-
-
+<br>
 
 Em seu header temos o select das branchs do repositório e um botão de refresh.
 
@@ -335,22 +333,26 @@ Em seu corpo, os workflows que foram adicionados via annotation, e cada card pos
 
 Assim como no Workflow list, existem os casos de workflows que acionam parâmetros antes de liberar suas actions, e o card tem o mesmo comportamento do Workflow list, ele aciona um modal para que sejam setados os inputs:
 
+<br>
+
+![image7](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/4982030a-2db8-4fcb-adbf-65d98b0e2f40)
 
 
-![image-20230809170257005](/home/tec/snap/typora/82/.config/Typora/typora-user-images/image-20230809170257005.png)
+<br>
 
-![image-20230809170313068](/home/tec/snap/typora/82/.config/Typora/typora-user-images/image-20230809170313068.png)
+![image8](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/4051b0d1-a51a-40ae-9924-081d283e3662)
 
 
+<br>
 
 O funcionamento das actions é semelhante também, ao clicar no botão de action, ele atualiza o status de acordo com o resposta do github:
 
+<br>
+
+![image9](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/f9f9e2ad-70ff-468e-b45c-7d5e1f2dc60d)
 
 
-![image-20230809170422212](/home/tec/snap/typora/82/.config/Typora/typora-user-images/image-20230809170422212.png)
-
-
-
+<br>
 
 
 ### Integração com o plugin de github actions
@@ -359,9 +361,10 @@ Para uma experiência maior, destacamos o uso do plugin default do github action
 
 Com o próprio instalado corretamente e disponível na tab **CI-CD**, conseguimos fazer a integração dos disparos das actions com seus logs e todo o histórico deles:
 
+<br>
 
 
-![image-20230809171126606](/home/tec/snap/typora/82/.config/Typora/typora-user-images/image-20230809171126606.png)
+![image10](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/3aec7a92-0fdb-4058-9f04-1b8cdb712966)
 
 
 
