@@ -116,10 +116,11 @@ spec:
 ### Workflows List
 <br>
 
+
 ![image1](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/4615b16a-b7e6-47e8-b109-d2444922f8ba)
 
 
-
+<br>
 O componente lista basicamente todos os workflows que o repositório possue. 
 
 Em seu header, destacamos o select que filtra todas as branchs disponíveis no projeto e o botão de refresh para atualizar o estado dos workflows.
@@ -129,6 +130,7 @@ A tabela é separada por nome do workflow, estado, ação e link para o reposit�
 Em alguns casos para dispararmos a action, ele pede parâmetros, se assim for configurado em seu workflow, e ao invés do botão da ação, acionamos um modal para que sejam setados os parâmetros solicitados:
 
 <br>
+
 ![image2](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/06390934-c04e-4059-bf01-551a467a294a)
 
 <br>
