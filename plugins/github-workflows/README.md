@@ -165,7 +165,7 @@ const serviceEntityPage = (
       {cicdContent}
     </EntityLayout.Route>
     
-+   <EntityLayout.Route path="/ci-cd" title="CI/CD">
++   <EntityLayout.Route path="/workflows" title="CI/CD">
 +       <EntitySwitch>
 +    	<EntitySwitch.Case if={isGithubActionsAvailable}>
 +      		<GithubWorkflowsList/>
