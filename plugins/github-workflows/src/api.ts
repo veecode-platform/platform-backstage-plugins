@@ -184,7 +184,7 @@ class Client {
         return mapedInputs
     }
 
-    async listWorkflowsRefactor(githubRepoSlug: string, branch: string, filter?: string[]){
+    async listWorkflowsResponse(githubRepoSlug: string, branch: string, filter?: string[]){
         const workflows = await this.listWorkflows(githubRepoSlug, filter)
         const response = await Promise.all(workflows.map(async (workflow): Promise<Workflows> => {
             const latestWorkflowRun = await this.getLatestWorkflowRun(workflow.id.toString(), githubRepoSlug)
@@ -221,7 +221,7 @@ export class GithubWorkflowsApiClient implements GithubWorkflowsApi {
     }
     
     async listWorkflows(githubRepoSlug: string, branch: string, filter?: string[]): Promise<Workflows[]> {
-        return this.client.listWorkflowsRefactor(githubRepoSlug, branch, filter)
+        return this.client.listWorkflowsResponse(githubRepoSlug, branch, filter)
     }
 
     async listBranchesFromRepo(githubRepoSlug: string): Promise<Branches[]> {
