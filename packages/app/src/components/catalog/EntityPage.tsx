@@ -73,11 +73,32 @@ const cicdContent = (
   // You can for example enforce that all components of type 'service' should use GitHubActions
   <EntitySwitch>
     <EntitySwitch.Case if={isGithubActionsAvailable}>
-      {/* <EntityGithubActionsContent /> */}
+      <EntityGithubActionsContent />
+    </EntitySwitch.Case>
 
-    {/* <Grid item lg={12} xs={12}> */}
+    <EntitySwitch.Case>
+      <EmptyState
+        title="No CI/CD available for this entity"
+        missing="info"
+        description="You need to add an annotation to your component if you want to enable CI/CD for it. You can read more about annotations in Backstage by clicking the button below."
+        action={
+          <Button
+            variant="contained"
+            color="primary"
+            href="https://backstage.io/docs/features/software-catalog/well-known-annotations"
+          >
+            Read more
+          </Button>
+        }
+      />
+    </EntitySwitch.Case>
+  </EntitySwitch>
+);
+
+const WorkflowsContent = (
+  <EntitySwitch>
+    <EntitySwitch.Case if={isGithubActionsAvailable}>
       <GithubWorkflowsList/>
-    {/* </Grid> */}
     </EntitySwitch.Case>
 
     <EntitySwitch.Case>
@@ -156,6 +177,10 @@ const serviceEntityPage = (
       {cicdContent}
     </EntityLayout.Route>
 
+    <EntityLayout.Route path="/workflows" title="Workflows">
+      {WorkflowsContent}
+    </EntityLayout.Route>
+
     <EntityLayout.Route path="/api" title="API">
       <Grid container spacing={3} alignItems="stretch">
         <Grid item md={6}>
@@ -192,6 +217,10 @@ const websiteEntityPage = (
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/workflows" title="Workflows">
+      {WorkflowsContent}
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/dependencies" title="Dependencies">
