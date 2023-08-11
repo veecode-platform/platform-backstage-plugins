@@ -152,13 +152,13 @@ const overviewContent = (
 
     <EntitySwitch>
       <EntitySwitch.Case if={isGithubWorkflowsAvailable}>
-        <Grid item lg={8} xs={12}>
+        <Grid item lg={6} xs={12}>
             <GithubWorkflowsCard />
         </Grid>
       </EntitySwitch.Case>
     </EntitySwitch>
     
-    <Grid item md={4} xs={12}>
+    <Grid item md={6} xs={12}>
       <EntityLinksCard />
     </Grid>
     {/* <Grid item md={8} xs={12}>
