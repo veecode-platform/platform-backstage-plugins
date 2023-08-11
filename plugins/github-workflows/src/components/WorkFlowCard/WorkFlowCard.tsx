@@ -122,6 +122,7 @@ export const Cards = ({ items }: CardsProps) => {
                     conclusion={item.conclusion}
                     workflowName={item.name as string}
                     parameters={item.parameters}
+                    lastRunId={item.lastRunId?.toString()}
                   />
                 )
                 }

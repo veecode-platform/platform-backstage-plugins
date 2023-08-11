@@ -6,13 +6,15 @@ import { WorkFlowActions } from '../../WorkFlowActions';
 import { WorkflowDispatchParameters } from '../../../utils/types';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../../ModalComponent';
+import { useNavigate } from 'react-router-dom';
 
 type WorkFlowItemProps = {
   id: number,
   workflowName: string,
   conclusion?: string,
   status?: string,
-  parameters?: WorkflowDispatchParameters[] | []
+  parameters?: WorkflowDispatchParameters[] | [],
+  lastRunId?: string
 }
 
 const useStyles = makeStyles(theme => ({
@@ -29,6 +31,9 @@ const useStyles = makeStyles(theme => ({
     color: theme.palette.text.primary,
     minWidth: '235px',
   },
+  name:{
+    cursor: 'pointer'
+  },
   clickable: {
     cursor: 'pointer',
     display: 'flex',
@@ -38,13 +43,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters }: WorkFlowItemProps) => {
+export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters, lastRunId }: WorkFlowItemProps) => {
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const classes = useStyles();
+  const navigate = useNavigate();
 
   const handleShowModal = () => {
     setShowModal(!showModal)
+  }
+
+  const handleCICDLogs = (id:string) => {
+    navigate(`ci-cd/${id}`)
   }
 
   return (
@@ -59,9 +69,12 @@ export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters 
         />
 
         <Tooltip title={workflowName} placement="top">
-          <Typography>
-            {truncateString(workflowName, 13)}
-          </Typography>
+            <Typography 
+              onClick={()=>handleCICDLogs(lastRunId as string)}
+              className={classes.name}
+              >
+              {truncateString(workflowName, 13)}
+            </Typography>
         </Tooltip>
 
         <Box

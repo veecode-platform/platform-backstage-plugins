@@ -24,6 +24,7 @@ import { Entity } from '@backstage/catalog-model';
 import SyncIcon from '@material-ui/icons/Sync';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../ModalComponent';
+import DescriptionIcon from '@material-ui/icons/Description';
 
 
 const useStyles = makeStyles(theme => ({
@@ -90,11 +91,18 @@ export const DenseTable = ({ items }: DenseTableProps) => {
     setShowModal(!showModal)
   }
 
+  const handleCICDLogs = (id: string) => {
+    const baseUrl = window.location.origin;
+    const newUrl = `${baseUrl}/catalog/${entity.metadata.namespace}/component/${entity.metadata.name}/ci-cd/${id}`;
+    window.location.href = newUrl;
+  }
+
   const columns: TableColumn[] = [
     { title: 'Name', field: 'name',  width:'1fr', align:'center'},
     { title: 'Status', field: 'status', width:'1fr', align:'center' },
     { title: 'Action', field: 'action', width:'1fr', align:'center' },
     { title: 'Source', field: 'source', width:'1fr', align:'center'},
+    { title: 'Logs', field: 'logs', width:'auto', align:'center'}
   ];
 
   const data = items.map(item => {
@@ -133,7 +141,13 @@ export const DenseTable = ({ items }: DenseTableProps) => {
               {truncateString(item.source as string, 40)}
             </Link>
          </Box>
-         )
+         ),
+      logs:(
+        <DescriptionIcon 
+          className={classes.clickable}
+          onClick={()=>handleCICDLogs(item.lastRunId!.toString())}
+         />
+      )
     };
   });
 
