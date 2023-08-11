@@ -22,7 +22,7 @@ import { useEntityAnnotations } from '../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import SyncIcon from '@material-ui/icons/Sync';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../ModalComponent';
 
 
@@ -44,8 +44,11 @@ const useStyles = makeStyles(theme => ({
   },
   action: {
     width: '90%',
-    verticalAlign: 'middle',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '.8rem'
   },
   source: {
     display: 'flex',
@@ -58,7 +61,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '90%'
+    width: '90%',
   },
 }));
 
@@ -73,7 +76,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
   const [parametersState, setParametersState] = useState<WorkflowDispatchParameters[]|null>(null)
   const [ loading, setLoading] = useState<boolean>(false);
   const { projectName } = useEntityAnnotations(entity as Entity);
-  const { listAllWorkflows, setWorkflowsState, inputsWorkflowsParams } = useContext(GithubWorkflowsContext);
+  const { listAllWorkflows, setWorkflowsState } = useContext(GithubWorkflowsContext);
   const classes = useStyles();
 
   const updateData = async ()=> {
@@ -105,28 +108,22 @@ export const DenseTable = ({ items }: DenseTableProps) => {
         ),
       action: (
         <Box className={classes.action}>
-          {(item.parameters && item.parameters?.length > 0) ? (
-            <>
-              {!inputsWorkflowsParams ?
-                (<Tooltip title={"Add Parameters"} placement="top">
-                  <AddCircleIcon
+          {(item.parameters && item.parameters?.length > 0) && 
+              <Tooltip title={"Add Parameters"} placement="top">
+                  <SettingsIcon
                     onClick={() => {
                       setParametersState(item.parameters ?? [])
                       handleShowModal()
                     }} />
-
-                </Tooltip>) : (
-                  <WorkFlowActions
-                    status={item.status}
-                    conclusion={item.conclusion}
-                    workflowId={item.id} />
-                )}
-            </>
-          ) :
+                </Tooltip>
+              }
+          
             <WorkFlowActions
               status={item.status}
               conclusion={item.conclusion}
-              workflowId={item.id} />}
+              workflowId={item.id} 
+              parameters={item.parameters ?? []}
+              />
         </Box>
       ),
       source: (

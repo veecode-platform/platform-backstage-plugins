@@ -1,12 +1,11 @@
 import { Box, Tooltip, Typography, makeStyles } from '@material-ui/core';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { WorkFlowStatus } from '../../WorkFlowStatus';
 import { truncateString } from '../../../utils/common';
 import { WorkFlowActions } from '../../WorkFlowActions';
 import { WorkflowDispatchParameters } from '../../../utils/types';
-import AddIcon from '@material-ui/icons/Add';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../../ModalComponent';
-import { GithubWorkflowsContext } from '../../context';
 
 type WorkFlowItemProps = {
   id: number,
@@ -34,7 +33,8 @@ const useStyles = makeStyles(theme => ({
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    gap: '.7rem'
   }
 }));
 
@@ -42,7 +42,6 @@ export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters 
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const classes = useStyles();
-  const { inputsWorkflowsParams } = useContext(GithubWorkflowsContext);
 
   const handleShowModal = () => {
     setShowModal(!showModal)
@@ -69,29 +68,23 @@ export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters 
           role="button"
           className={classes.clickable}>
 
-          {(parameters && parameters?.length > 0) ? (
-            <>
-              {!inputsWorkflowsParams ?
-                (<Tooltip title={"Add Parameters"} placement="top">
+          {(parameters && parameters?.length > 0) && (
+              <Tooltip title={"Add Parameters"} placement="top">
                   <Box
                     role="button"
                     className={classes.clickable}
                     onClick={handleShowModal}
                   >
-                    <AddIcon />
+                    <SettingsIcon />
                   </Box>
-                </Tooltip>) : (
-                  <WorkFlowActions
-                    status={status}
-                    conclusion={conclusion}
-                    workflowId={id} />
-                )}
-            </>
-          ) :
+                </Tooltip>) }
+
             <WorkFlowActions
               status={status}
               conclusion={conclusion}
-              workflowId={id} />}
+              workflowId={id} 
+              parameters={parameters}
+              />
         </Box>
 
       </Box>

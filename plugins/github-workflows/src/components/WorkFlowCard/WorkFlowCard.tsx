@@ -89,9 +89,10 @@ export const Cards = ({ items }: CardsProps) => {
   const ActionsCard = (
     <Box className={classes.options}>
       <SelectBranch/>
+
       <IconButton
         aria-label="Refresh"
-        title="Refresh data"
+        title="Refresh"
         onClick={() => updateData()}
         className={classes.buttonRefresh}
       >

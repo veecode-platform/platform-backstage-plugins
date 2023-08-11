@@ -14,7 +14,8 @@ import { validateString } from '../../utils/validators';
 type ModalComponentProps = {
   open: boolean,
   handleModal: () => void,
-  parameters: WorkflowDispatchParameters[]
+  parameters: WorkflowDispatchParameters[],
+  handleStartWorkflow?: () => Promise<void>
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export const ModalComponent = ({open, handleModal, parameters}:ModalComponentProps) => {
+export const ModalComponent = ({open, handleModal, parameters, handleStartWorkflow }:ModalComponentProps) => {
 
   const [stateCheckbox, setStateCheckbox ] = useState<boolean>(false);
   const [valueOption, setValueOption] = useState<string|null>(null);
@@ -88,8 +89,9 @@ export const ModalComponent = ({open, handleModal, parameters}:ModalComponentPro
   }
   
   const handleSetInputs = () => {
-    setInputs(inputWorkflow)
+    setInputs(inputWorkflow);
     handleModal();
+    if(!!handleStartWorkflow) handleStartWorkflow();
   }
 
   return (

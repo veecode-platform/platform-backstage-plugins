@@ -7,6 +7,7 @@ import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
 import { Branches } from '../../utils/types';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
+import { Tooltip } from '@material-ui/core';
 
 
 type OptionsProps = {
@@ -57,11 +58,13 @@ export const SelectBranch = () => {
   };
 
   return (
-    <Select
-      onChange={handleSelectChange}
-      label=""
-      selected={branch ?? branchDefault}
-      items={options}
-    />
+    <Tooltip title="Select the branch" placement="top">
+      <Select
+        onChange={handleSelectChange}
+        label=""
+        selected={branch ?? branchDefault}
+        items={options}
+      />
+    </Tooltip>
   );
 };

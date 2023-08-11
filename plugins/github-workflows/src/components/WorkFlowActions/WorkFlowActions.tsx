@@ -7,16 +7,18 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { makeStyles, Tooltip } from '@material-ui/core';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
-import { WorkflowResultsProps } from '../../utils/types';
+import { WorkflowDispatchParameters, WorkflowResultsProps } from '../../utils/types';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotations } from '../../hooks';
+import { ModalComponent } from '../ModalComponent';
 
 type WorkFlowActionsProps = {
     workflowId?: number,
     status?: string,
     conclusion?: string
+    parameters?: WorkflowDispatchParameters[] | []
 }
 
 const useStyles = makeStyles({
@@ -33,12 +35,13 @@ const useStyles = makeStyles({
     }
   });
 
-export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActionsProps) => {
+export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:WorkFlowActionsProps) => {
 
     const { entity } = useEntity();  
     const { projectName } = useEntityAnnotations(entity as Entity);
+    const [showModal, setShowModal] = useState<boolean>(false);
     const [workFlowSelected, setWorkFlowSelected] = useState<WorkflowResultsProps>();
-    const { workflowsState, setWorkflowsState , handleStartWorkflowRun, handleStopWorkflowRun } = useContext(GithubWorkflowsContext);
+    const {inputsWorkflowsParams,  workflowsState, setWorkflowsState , handleStartWorkflowRun, handleStopWorkflowRun } = useContext(GithubWorkflowsContext);
     const classes = useStyles();
     const errorApi = useApi(errorApiRef);
 
@@ -51,55 +54,66 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
       }
     }, [workflowsState, workflowId]);
 
+    const handleShowModal = () => {
+      setShowModal(!showModal)
+    }
+
+    const handleStartWorkflow = async () => {
+      setWorkflowsState((prevWorkflowsState) => {
+        if (prevWorkflowsState) {
+          const updatedWorkflows = prevWorkflowsState.map((workflow) => {
+            if (workflow.id === workFlowSelected?.id) {
+              return {
+                ...workflow,
+                status: StatusWorkflowEnum.queued,
+                conclusion: undefined,
+              };
+            }
+            return workflow;
+          });
+          return updatedWorkflows;
+        }
+        return prevWorkflowsState;
+      });
+
+      const response = await handleStartWorkflowRun(workFlowSelected?.id as number, projectName);
+         if(response){
+           setWorkflowsState((prevWorkflowsState) => {
+             if (prevWorkflowsState) {
+               const updatedWorkflows = prevWorkflowsState.map((workflow) => {
+                 if (workflow.id === workFlowSelected?.id) {
+                   return {
+                     ...workflow,
+                     status: response.status,
+                     conclusion: response.conclusion,
+                     lastRunId: response.id
+                   };
+                 }
+                 return workflow;
+               });
+               return updatedWorkflows;
+             }
+             return prevWorkflowsState;
+           });
+         }
+    }
+
     const handleClickActions = async (status:string) => {
        try{
           if(workFlowSelected){
             switch (status) {
               case StatusWorkflowEnum.completed:
+              case StatusWorkflowEnum.success:
               case StatusWorkflowEnum.failure:
               case StatusWorkflowEnum.aborted:
               case StatusWorkflowEnum.skipped:
               case StatusWorkflowEnum.canceled:
               case StatusWorkflowEnum.timeOut:
               case StatusWorkflowEnum.default:
-                setWorkflowsState((prevWorkflowsState) => {
-                  if (prevWorkflowsState) {
-                    const updatedWorkflows = prevWorkflowsState.map((workflow) => {
-                      if (workflow.id === workFlowSelected.id) {
-                        return {
-                          ...workflow,
-                          status: StatusWorkflowEnum.queued,
-                          conclusion: undefined,
-                        };
-                      }
-                      return workflow;
-                    });
-                    return updatedWorkflows;
-                  }
-                  return prevWorkflowsState;
-                });
-
-                const response = await handleStartWorkflowRun(workFlowSelected.id as number, projectName);
-                   if(response){
-                    console.log(response)
-                     setWorkflowsState((prevWorkflowsState) => {
-                       if (prevWorkflowsState) {
-                         const updatedWorkflows = prevWorkflowsState.map((workflow) => {
-                           if (workflow.id === workFlowSelected.id) {
-                             return {
-                               ...workflow,
-                               status: response.status,
-                               conclusion: response.conclusion,
-                               lastRunId: response.id
-                             };
-                           }
-                           return workflow;
-                         });
-                         return updatedWorkflows;
-                       }
-                       return prevWorkflowsState;
-                     });
-                   }
+                if(parameters && parameters.length > 0 && !inputsWorkflowsParams){
+                  return setShowModal(true)
+                }
+                  handleStartWorkflow();
                 return;
               case StatusWorkflowEnum.inProgress:
                 await handleStopWorkflowRun(workFlowSelected.lastRunId as number, projectName);
@@ -130,68 +144,76 @@ export const WorkFlowActions = ({workflowId, status, conclusion}:WorkFlowActions
        }
     }
     
-    switch (status.toLocaleLowerCase()) {
-        case StatusWorkflowEnum.queued:
-            return (
-              <Tooltip title="Please wait" placement="right">
-                <TimerIcon
-                  onClick={()=>handleClickActions(StatusWorkflowEnum.queued)}
-                  />
-              </Tooltip>
-            );
-        case StatusWorkflowEnum.inProgress:
-            return (
-              <Tooltip title="Stop" placement="right">
+    return(
+      <>
+        {status.toLocaleLowerCase() === StatusWorkflowEnum.queued && (
+           <Tooltip title="Please wait" placement="right">
+           <TimerIcon
+             onClick={()=>handleClickActions(StatusWorkflowEnum.queued)}
+             />
+         </Tooltip>
+        )}
+
+        {status.toLocaleLowerCase() === StatusWorkflowEnum.inProgress && (
+          <Tooltip title="Stop" placement="right">
                <RefreshIcon 
                   className={classes.inProgress} 
                   onClick={()=>handleClickActions(StatusWorkflowEnum.inProgress)}
                    />
               </Tooltip>
-            )
-        case StatusWorkflowEnum.completed:
-            switch (conclusion?.toLocaleLowerCase()){
-                case StatusWorkflowEnum.skipped:
-                    return (
-                    <Tooltip title="Try again" placement="right">
-                    <HighlightOffIcon
-                      onClick={()=>handleClickActions(StatusWorkflowEnum.skipped)}
-                     />
-                    </Tooltip>);
-                case StatusWorkflowEnum.canceled:
-                    return (
-                    <Tooltip title="Try again" placement="right">
-                    <HighlightOffIcon
-                      onClick={()=>handleClickActions(StatusWorkflowEnum.canceled)}
-                    />
-                    </Tooltip>);
-                case StatusWorkflowEnum.timeOut:
-                    return  (
-                    <Tooltip title="Re-run" placement="right">
-                      <TimerIcon
-                       onClick={()=>handleClickActions(StatusWorkflowEnum.timeOut)}
-                      />
-                    </Tooltip>
-                    );
-                case StatusWorkflowEnum.failure:
-                    return ( 
-                      <Tooltip title="Re-run" placement="right">
-                        <ReplayIcon
-                         onClick={()=>handleClickActions(StatusWorkflowEnum.failure)}
-                         />
-                      </Tooltip>
-                      );
-                default:
-                return (
-                  <Tooltip title="Re-run" placement="right">
-                    <SyncIcon
-                     onClick={()=>handleClickActions(StatusWorkflowEnum.default)}
-                     /> 
-                  </Tooltip>
-                );              
+        )}
+
+        {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.skipped) && (
+          <Tooltip title="Try again" placement="right">
+            <HighlightOffIcon
+              onClick={() => handleClickActions(StatusWorkflowEnum.skipped)}
+            />
+          </Tooltip>
+        )}
+
+        {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.canceled) && (
+          <Tooltip title="Try again" placement="right">
+          <HighlightOffIcon
+            onClick={()=>handleClickActions(StatusWorkflowEnum.canceled)}
+          />
+          </Tooltip>
+        )}
+
+        {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.timeOut) && (
+          <Tooltip title="Re-run" placement="right">
+            <TimerIcon
+              onClick={() => handleClickActions(StatusWorkflowEnum.timeOut)}
+            />
+          </Tooltip>
+        )}
+
+        {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.failure) && (
+          <Tooltip title="Re-run" placement="right">
+            <ReplayIcon
+              onClick={() => handleClickActions(StatusWorkflowEnum.failure)}
+            />
+          </Tooltip>
+        )}
+
+        {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.success) && (
+          <Tooltip title="Re-run" placement="right">
+            <SyncIcon
+              onClick={() => handleClickActions(StatusWorkflowEnum.success)}
+            />
+          </Tooltip>
+        )}
+
+        {
+          showModal && (
+            <ModalComponent
+              open={showModal}
+              handleModal={handleShowModal}
+              parameters={parameters ? parameters : []}
+              handleStartWorkflow={handleStartWorkflow}
+            />
+          )
         }
-        default: 
-            return (<Tooltip title="Is pending, wait..." placement="right">
-              <TimerIcon/>
-              </Tooltip>);
-    }
+        
+      </>
+    )
 }
