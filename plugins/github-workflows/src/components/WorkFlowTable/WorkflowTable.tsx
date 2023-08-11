@@ -143,10 +143,12 @@ export const DenseTable = ({ items }: DenseTableProps) => {
          </Box>
          ),
       logs:(
-        <DescriptionIcon 
-          className={classes.clickable}
-          onClick={()=>handleCICDLogs(item.lastRunId!.toString())}
-         />
+        <Tooltip title={"View Logs"} placement="top">
+          <DescriptionIcon 
+            className={classes.clickable}
+            onClick={()=>handleCICDLogs(item.lastRunId!.toString())}
+          />
+         </Tooltip>
       )
     };
   });
