@@ -25,6 +25,7 @@ import SyncIcon from '@material-ui/icons/Sync';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../ModalComponent';
 import DescriptionIcon from '@material-ui/icons/Description';
+import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 
 
 const useStyles = makeStyles(theme => ({
@@ -116,7 +117,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
         ),
       action: (
         <Box className={classes.action}>
-          {(item.parameters && item.parameters?.length > 0) && 
+          {(item.parameters && item.parameters?.length > 0 && item.status !== StatusWorkflowEnum.queued) && 
               <Tooltip title={"Add Parameters"} placement="top">
                   <SettingsIcon
                     onClick={() => {

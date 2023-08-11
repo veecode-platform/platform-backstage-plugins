@@ -7,6 +7,7 @@ import { WorkflowDispatchParameters } from '../../../utils/types';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../../ModalComponent';
 import { useNavigate } from 'react-router-dom';
+import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
 
 type WorkFlowItemProps = {
   id: number,
@@ -81,7 +82,7 @@ export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters,
           role="button"
           className={classes.clickable}>
 
-          {(parameters && parameters?.length > 0) && (
+          {(parameters && parameters?.length > 0 && status !== StatusWorkflowEnum.queued) && (
               <Tooltip title={"Add Parameters"} placement="top">
                   <Box
                     role="button"
