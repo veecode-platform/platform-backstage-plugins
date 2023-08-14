@@ -117,7 +117,9 @@ spec:
 <br>
 
 
-![image1](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/4615b16a-b7e6-47e8-b109-d2444922f8ba)
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/6c82c7c7-b7e3-4bde-853f-c161e71dbb9e)
+
+
 
 
 <br>
@@ -337,7 +339,7 @@ Assim como no Workflow list, existem os casos de workflows que acionam parâmetr
 
 <br>
 
-![image7](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/4982030a-2db8-4fcb-adbf-65d98b0e2f40)
+![Captura de tela de 2023-08-14 10-30-03](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/83d16247-3b7a-4939-9736-af9ff6a89ae7)
 
 
 <br>
@@ -360,6 +362,15 @@ O funcionamento das actions é semelhante também, ao clicar no botão de action
 ### Integração com o plugin de github actions
 
 Para uma experiência maior, destacamos o uso do plugin default do github actions que o backstage já disponibiliza, onde nele se lista todos os runs executadas do repositório, e nele também estão presentes todos os logs de cada ação.
+
+No componente Workflows List, a integração ocorre ao clicarmos na coluna de Logs:
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/81419190-f31b-4b03-bf8c-6d8d037ddfa2)
+
+Já no componente Card, a integração ocorre ao clicar sob a label do componente:
+
+![image (1)](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/2e502435-2cfd-44ad-b400-3100a6675544)
+
 
 Com o próprio instalado corretamente e disponível na tab **CI-CD**, conseguimos fazer a integração dos disparos das actions com seus logs e todo o histórico deles:
 
