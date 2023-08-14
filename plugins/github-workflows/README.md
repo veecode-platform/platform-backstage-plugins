@@ -225,7 +225,7 @@ const serviceEntityPage = (
 
 ### Workflow Cards
 
-Para esse componente, precisamos adicionar uma annotation especial, a `github.com/workflows`, deste modo:
+For this component, we need to add a special annotation, `github.com/workflows`, like this:
 
 
 
@@ -257,22 +257,22 @@ spec:
 
 
 
-A composição do **annotation** funciona assim:
+The composition of the **annotation** works like this:
 <br>
 
 <img src="https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/0158be50-8034-4cd0-a304-7b4233578cc0" style="width: 400px; margin: 2rem 0" />
 
 <br>
 
-:information_source: importante dizer que conseguimos adicionar mais de um **workflow path** separados por vírgula, deste modo:
+:information_source:  It's important to note that you can add multiple **workflow paths**, separated by commas, like this:
 
 ```yaml
 github.com/workflows: filePath.yml,filePath2.yml,filePath3.yml,
 ```
 
 
+The functionality is identical to the workflow listing component, with the main difference being that only the workflows passed via annotation are listed, instead of all the workflows in the repository.
 
-A funcionalidade vai ser idêntica ao compontente de listagem de workflows, com a principal diferença sendo que ao invés de listar todos os workflows do repositório, serão listados apenas os workflows passados via annotation.
 
 <br><br>
 
@@ -282,7 +282,7 @@ A funcionalidade vai ser idêntica ao compontente de listagem de workflows, com 
 <br><br>
 
 
-Como indicação, utilizamos os cards diretamente no overview do component, desta forma:
+As an indication, we use the cards directly in the component overview, like this:
 
 `packages/app/src/components/catalog/EntityPage.tsx`
 
@@ -319,7 +319,7 @@ const overviewContent = (
 );
 ```
 
-Ele funciona da seguinte forma:
+It works like this:
 
 <br>
 
@@ -328,11 +328,11 @@ Ele funciona da seguinte forma:
 
 <br>
 
-Em seu header temos o select das branchs do repositório e um botão de refresh.
+In its header we have the select of the repository branches and a refresh button.
 
-Em seu corpo, os workflows que foram adicionados via annotation, e cada card possui seu status, nome do workflow como label e o botão de action.
+In its body, the workflows that were added via annotation, and each card has its status, workflow name as label and the action button.
 
-Assim como no Workflow list, existem os casos de workflows que acionam parâmetros antes de liberar suas actions, e o card tem o mesmo comportamento do Workflow list, ele aciona um modal para que sejam setados os inputs:
+As with the Workflow list, there are cases of workflows that trigger parameters before releasing their actions, and the card has the same behavior as the Workflow list, it triggers a modal so that the inputs are set:
 
 <br>
 
@@ -346,7 +346,7 @@ Assim como no Workflow list, existem os casos de workflows que acionam parâmetr
 
 <br>
 
-O funcionamento das actions é semelhante também, ao clicar no botão de action, ele atualiza o status de acordo com o resposta do github:
+The functioning of the actions is also similar, when you click on the action button, it updates the status according to the github response:
 
 <br>
 
@@ -356,20 +356,20 @@ O funcionamento das actions é semelhante também, ao clicar no botão de action
 <br>
 
 
-### Integração com o plugin de github actions
+### Integration with github actions plugin
 
-Para uma experiência maior, destacamos o uso do plugin default do github actions que o backstage já disponibiliza, onde nele se lista todos os runs executadas do repositório, e nele também estão presentes todos os logs de cada ação.
+For a greater experience, we highlight the use of the default github actions plugin that backstage already provides, where it lists all the runs executed in the repository, and in it are also present all the logs of each action.
 
-No componente Workflows List, a integração ocorre ao clicarmos na coluna de Logs:
+In the Workflows List component, integration occurs by clicking on the Logs column:
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/81419190-f31b-4b03-bf8c-6d8d037ddfa2)
 
-Já no componente Card, a integração ocorre ao clicar sob a label do componente:
+In the Card component, the integration occurs by clicking under the component label:
 
 ![image (1)](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/2e502435-2cfd-44ad-b400-3100a6675544)
 
 
-Com o próprio instalado corretamente e disponível na tab **CI-CD**, conseguimos fazer a integração dos disparos das actions com seus logs e todo o histórico deles:
+With it correctly installed and available in the **CI-CD** tab, we were able to integrate the triggers of the actions with their logs and all their history:
 
 <br>
 
