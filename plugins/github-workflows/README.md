@@ -1,25 +1,25 @@
-# Plugin GithubWorkflows Frontend
+# GithubWorkflows Frontend Plugin
 <br>
-O plugin de GithubWorkflows é uma alternativa para disparos manuais de workflows do github por dentro de seu componente backstage.
+The GithubWorkflows plugin provides an alternative for manually triggering GitHub workflows from within your Backstage component.
 
-No plugin temos duas abordagens distintas para agregar o seu componente:
+The plugin offers two distinct approaches to integrate with your component:
 
-- Os workflows sob demanda, aos quais são setados via annotations no `catalog-info.yaml` de seu projeto.
-- E a listagem completa dos workflows que seu projeto disponibiliza.
-<br>
-
-### Primeiros passos:
+- On-demand workflows, which are configured via annotations in your project's `catalog-info.yaml`.
+- A complete listing of the workflows available in your project.
 <br>
 
-Antes de instalarmos o plugin, temos alguns pré requisitos para que ele funcione de fato:
-
-- Ter um projeto backstage instalado localmente.  ✅  <a href="https://backstage.io/docs/getting-started/create-an-app"> Crie um backstage app</a>
-- Ter configurado o catálogo e a integração com o github. ✅  <a href="https://backstage.io/docs/integrations/">Configure a integração</a>
-- Ter configurado a auth com o github.   ✅  <a href="https://backstage.io/docs/auth/">Configure a autenticação</a>
-- Ter configurado o plugin de github actions default.  ✅  <a href="https://github.com/backstage/backstage/tree/master/plugins/github-actions">Configure o plugin github actions</a>
+### Getting Started:
 <br>
 
-### Instalação
+Before installing the plugin, there are some prerequisites to ensure its functionality:
+
+- Have a locally installed Backstage project, or [Create a Backstage app](https://backstage.io/docs/getting-started/create-an-app) .
+- Set up the catalog and integrate with GitHub, or [Configure integration](https://backstage.io/docs/integrations/) .
+- Configure GitHub authentication, or [Configure authentication](https://backstage.io/docs/auth/) .
+- Configure the default GitHub Actions plugin, or [Configure GitHub Actions plugin](https://github.com/backstage/backstage/tree/master/plugins/github-actions) .
+<br>
+
+### Installation
 <br>
 
 `````bash
@@ -28,13 +28,13 @@ yarn add @veecode-platform/github-workflows
 `````
 <br>
 
-### Configuração
+### Configuration
 
-Dividiremos a configuração em 3 etapas:
+We'll divide the configuration into three steps:
 
-1- Configuração do proxy.
+1- Proxy Configuration.
 
-No arquivo `app-config.yaml`
+In the app-config.yaml file:
 
 ```yaml
 proxy:
@@ -47,11 +47,11 @@ proxy:
       X-GitHub-Api-Version: "2022-11-28"
 ```
 
-> :information_source: Lembre-se de setar a variável ${GITHUB_TOKEN_SECRET} com o token personal do github
+> :information_source: Remember to set the ${GITHUB_TOKEN_SECRET} variable with your GitHub personal token.
 
 <br>
 
-2- Para conseguirmos disparar os workflows diretamente do nosso componente, é importante adicionarmos ao nosso worflow, no github, a step ` workflow_dispatch:`, deste modo:
+2- To trigger workflows directly from our component, it's important to add the ` workflow_dispatch:` step in our GitHub workflow, like this:
 
 ```diff
 # Workflow Example
@@ -66,23 +66,21 @@ on:
  ....
 ```
 
-Mesmo que não seja passado nada para essa chave, ela precisa estar presente no nosso arquivo, para que consigamos disparar os eventos via componente backstage
-
-
+Even if no parameters are passed to this key, it must be present in the file to enable event triggering through the Backstage component.
 
 >
 >
->#####  Parâmetros
+>#####  Parameters
 >
->:information_source: Há possibilidades de setar parâmetros no workflow também e eles são entendidos pelo plugin, de modo que só viabiliza as ações se os mesmos forem enviados antes.
+>:information_source: It's possible to set parameters in the workflow as well, and the plugin understands them. Actions will only be triggered if the required parameters are sent.
 >
 >
 
 <br>
 
-3- Precisamos de um annotation principal, que como default todos os componentes backstage já utilizam, trata-se do `github.com/project-slug` onde fica setado o nome do seu projeto.
+3- We need a primary annotation, commonly used by all Backstage components,`github.com/project-slug`, where the project name is set.
 
-Como pré requisito principal, devemos ter esse annotation declarado no `catalog-info.yaml` do componente que irá receber a funcionalidade.
+As a main prerequisite, this annotation must be declared in the `catalog-info.yaml`of the component that will receive this functionality.
 
 ```diff
 apiVersion: backstage.io/v1alpha1
@@ -123,13 +121,13 @@ spec:
 
 
 <br>
-O componente lista basicamente todos os workflows que o repositório possue. 
 
-Em seu header, destacamos o select que filtra todas as branchs disponíveis no projeto e o botão de refresh para atualizar o estado dos workflows.
+The component essentially lists all the workflows available in the repository.
+In its header, we highlight the select that filters all available branches in the project and the refresh button to update the workflow states.
 
-A tabela é separada por nome do workflow, estado, ação e link para o repositório.
+The table is divided by workflow name, status, action, and link to the repository.
 
-Em alguns casos para dispararmos a action, ele pede parâmetros, se assim for configurado em seu workflow, e ao invés do botão da ação, acionamos um modal para que sejam setados os parâmetros solicitados:
+In some cases, to trigger an action, it may require parameters, as configured in your workflow. Instead of an action button, a modal is displayed to set the requested parameters:
 
 <br>
 
@@ -137,19 +135,18 @@ Em alguns casos para dispararmos a action, ele pede parâmetros, se assim for co
 
 <br>
 
+When an event is triggered in the workflow, the status is updated, and the conclusion is returned after refreshing the table.
 
-Ao acionarmos um evento no workflow, o status é atualizado e no final a conclusão também é retornada, através do refresh da tabela.
 <br>
 
 ![image3](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/9b92c472-45de-4e64-9618-b96cc8a574c3)
 
 <br>
 
-Encorajamos aos usuários em criar uma nova tab em seu catálogo com o nome de **"Workflows"** e mantenham a tab "**CI-CD**" com o componente default do backstage, pois nas sessões posteriores explicaremos a integração entre os dois plugins.
+We encourage users to create a new tab in their catalog named "Workflows" and keep the "CI-CD" tab with the default Backstage component. In the following sections, we'll explain the integration between the two plugins.
 
 
-
-**Exemplo de adição da nova tab em uma serviceEntityPage**
+**Example of adding the new tab to a serviceEntityPage**
 `packages/app/src/components/catalog/EntityPage.tsx`
 
 
