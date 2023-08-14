@@ -13,10 +13,10 @@ The plugin offers two distinct approaches to integrate with your component:
 
 Before installing the plugin, there are some prerequisites to ensure its functionality:
 
-- Have a locally installed Backstage project, or [Create a Backstage app](https://backstage.io/docs/getting-started/create-an-app) .
-- Set up the catalog and integrate with GitHub, or [Configure integration](https://backstage.io/docs/integrations/) .
-- Configure GitHub authentication, or [Configure authentication](https://backstage.io/docs/auth/) .
-- Configure the default GitHub Actions plugin, or [Configure GitHub Actions plugin](https://github.com/backstage/backstage/tree/master/plugins/github-actions) .
+- Have a locally installed Backstage project, :heavy_check_mark: [How to create a Backstage app :page_with_curl:](https://backstage.io/docs/getting-started/create-an-app) .
+- Set up the catalog and integrate with GitHub, :heavy_check_mark: [How to configure the integration :page_with_curl:](https://backstage.io/docs/integrations/) .
+- Configure GitHub authentication, :heavy_check_mark: [How to configure authentication :page_with_curl:](https://backstage.io/docs/auth/) .
+- Configure the default GitHub Actions plugin, :heavy_check_mark: [Documentation of the Github actions plugin :page_with_curl:](https://github.com/backstage/backstage/tree/master/plugins/github-actions) .
 <br>
 
 ### Installation
