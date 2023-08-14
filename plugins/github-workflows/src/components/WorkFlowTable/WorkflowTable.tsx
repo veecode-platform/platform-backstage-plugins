@@ -211,7 +211,8 @@ export const WorkflowTable = () => {
 
   useEffect(()=>{
       updateData();
-  },[branch])
+      console.log(workflowsState)
+  },[branch]);
 
   const updateData = async ()=> {
     const data = await listAllWorkflows(projectName);

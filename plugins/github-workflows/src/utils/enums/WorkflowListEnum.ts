@@ -5,7 +5,7 @@ export enum StatusWorkflowEnum {
     aborted = "aborted",
     inProgress = "in_progress",
     skipped = "skipped",
-    canceled = "canceled",
+    canceled = "cancelled",
     timeOut = "timed_out",
     default = "default",
     actionRequired = "action_required",
