@@ -274,12 +274,12 @@ github.com/workflows: filePath.yml,filePath2.yml,filePath3.yml,
 The functionality is identical to the workflow listing component, with the main difference being that only the workflows passed via annotation are listed, instead of all the workflows in the repository.
 
 
-<br><br>
+<br>
 
 ![image5](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/39ff37fa-6ca6-4a8e-9f23-499353801b53)
 
 
-<br><br>
+<br>
 
 
 As an indication, we use the cards directly in the component overview, like this:
