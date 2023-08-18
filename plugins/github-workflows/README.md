@@ -23,8 +23,7 @@ Before installing the plugin, there are some prerequisites to ensure its functio
 <br>
 
 `````bash
-cd packages/app
-yarn add @veecode-platform/github-workflows
+yarn add --cwd packages/app @veecode-platform/github-workflows
 `````
 <br>
 
