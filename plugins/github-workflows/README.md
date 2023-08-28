@@ -23,7 +23,7 @@ Before installing the plugin, there are some prerequisites to ensure its functio
 <br>
 
 `````bash
-yarn add --cwd packages/app @veecode-platform/github-workflows
+yarn add --cwd packages/app @veecode-platform/backstage-plugin-github-workflows
 `````
 <br>
 
