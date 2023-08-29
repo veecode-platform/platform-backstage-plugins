@@ -58,9 +58,9 @@ proxy:
   '/gitlab-pipelines':
     # target: https://gitlab.com/api/v4
     target: https://gitlab.com/api/v4
-    allowedHeaders: ['Authorization']
+    allowedHeaders: ['PRIVATE-TOKEN']
     headers:
-      Authorization: PRIVATE-TOKEN ${GITLAB_TOKEN_SECRET}
+      PRIVATE-TOKEN: ${GITLAB_TOKEN_SECRET}
       Accept: application/json 
 
   ### Example for how to add a proxy endpoint for the frontend.
