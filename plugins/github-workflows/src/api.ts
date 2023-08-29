@@ -74,7 +74,7 @@ class Client {
 
         const resp = await fetch(`${apiUrl}${input}`, init);
         if (!resp.ok) {
-            throw new Error(`Request failed with ${resp.status} ${resp.statusText}`);
+            throw new Error(`Request failed with ${resp.status} - ${(await resp.json()).message}`);
         }
 
         if(resp.status === 204) return {ok: true} as any
