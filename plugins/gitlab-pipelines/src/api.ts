@@ -54,7 +54,7 @@ export const gitlabPipelinesApiRef = createApiRef<GitlabPipelinesApi>({
 export type Options = {
     discoveryApi: DiscoveryApi;
     /**
-    * Path to use for requests via the proxy, defaults to /github-workflows
+    * Path to use for requests via the proxy, defaults to /gitlab-pipelines
     */
     proxyPath?: string;
 };
@@ -76,32 +76,31 @@ class Client {
         if (!resp.ok) {
             throw new Error(`Request failed with ${resp.status} ${resp.statusText}`);
         }
-
-        if (resp.status === 204) return { ok: true } as any
+        
         return await resp.json();
     }
 
     async apiUrl(gitlabReposlug: string) {
         const baseUrl = await this.discoveryApi.getBaseUrl("proxy")
-        return `${baseUrl}${this.proxyPath}/${gitlabReposlug}`
+        return `${baseUrl}${this.proxyPath}/projects/${encodeURIComponent(gitlabReposlug)}`
     }
 
     async listBranchesFromRepo(gitlabReposlug: string) {
-        return await this.fetch<ListBranchResponse[]>(`/projects/${encodeURIComponent(gitlabReposlug)}/repository/branches`, gitlabReposlug)
+        return await this.fetch<ListBranchResponse[]>(`/repository/branches`, gitlabReposlug)
     }
 
     async listProjectPipelines(gitlabReposlug: string, branch: string) {
-        const response = await this.fetch<PipelineResponse[]>(`/projects/${encodeURIComponent(gitlabReposlug)}/pipelines?ref=${branch}`, gitlabReposlug)
+        const response = await this.fetch<PipelineResponse[]>(`/pipelines?ref=${branch}`, gitlabReposlug)
         return response
     }
 
     async getLatestPipeline(gitlabReposlug: string, branch: string) {
-        const response = await this.fetch<LatestPipelineResponse>(`/projects/${encodeURIComponent(gitlabReposlug)}/pipelines/latest?ref=${branch}`, gitlabReposlug)
+        const response = await this.fetch<LatestPipelineResponse>(`/pipelines/latest?ref=${branch}`, gitlabReposlug)
         return response
     }
 
     async retryPipelineJobs(gitlabReposlug: string, pipelineId: number) {
-        const response = await this.fetch<LatestPipelineResponse>(`/projects/${encodeURIComponent(gitlabReposlug)}/pipelines/${pipelineId}/retry`, gitlabReposlug,
+        const response = await this.fetch<LatestPipelineResponse>(`/pipelines/${pipelineId}/retry`, gitlabReposlug,
             {
                 method: 'POST',
                 headers: {
@@ -112,7 +111,7 @@ class Client {
     }
 
     async cancelPipelineJobs(gitlabReposlug: string, pipelineId: number) {
-        const response = await this.fetch<LatestPipelineResponse>(`/projects/${encodeURIComponent(gitlabReposlug)}/pipelines/${pipelineId}/cancel`, gitlabReposlug,
+        const response = await this.fetch<LatestPipelineResponse>(`/pipelines/${pipelineId}/cancel`, gitlabReposlug,
             {
                 method: 'POST',
                 headers: {
@@ -124,12 +123,12 @@ class Client {
 
 
     async listPipelineJobs(gitlabReposlug: string, branch: string) {
-        const response = await this.fetch<ListJobsResponse[]>(`/projects/${encodeURIComponent(gitlabReposlug)}/pipelines/jobs?ref=${branch}`, gitlabReposlug)
+        const response = await this.fetch<ListJobsResponse[]>(`/pipelines/jobs?ref=${branch}`, gitlabReposlug)
         return response
     }
 
     async getSingleJob(gitlabReposlug: string, jobId: number, branch: string) {
-        const response = await this.fetch<ListJobsResponse>(`/projects/${encodeURIComponent(gitlabReposlug)}/jobs/${jobId}?ref=${branch}`, gitlabReposlug)
+        const response = await this.fetch<ListJobsResponse>(`/jobs/${jobId}?ref=${branch}`, gitlabReposlug)
         return response
     }
 
@@ -137,7 +136,7 @@ class Client {
         const requestBody = {
             job_variables_attributes: params
         };
-        const response = await this.fetch<ListJobsResponse>(`/projects/${encodeURIComponent(gitlabReposlug)}/jobs/${jobId}/play?ref=${branch}`, gitlabReposlug,
+        const response = await this.fetch<ListJobsResponse>(`/jobs/${jobId}/play?ref=${branch}`, gitlabReposlug,
             {
                 method: 'POST',
                 headers: {
@@ -149,7 +148,7 @@ class Client {
     }
 
     async cancelJob(gitlabReposlug: string, jobId: number, branch: string) {
-        const response = await this.fetch<ListJobsResponse>(`/projects/${encodeURIComponent(gitlabReposlug)}/jobs/${jobId}/cancel?ref=${branch}`, gitlabReposlug,
+        const response = await this.fetch<ListJobsResponse>(`/jobs/${jobId}/cancel?ref=${branch}`, gitlabReposlug,
             {
                 method: 'POST',
                 headers: {
@@ -160,7 +159,7 @@ class Client {
     }
 
     async retryJob(gitlabReposlug: string, jobId: number, branch: string) {
-        const response = await this.fetch<ListJobsResponse>(`/projects/${encodeURIComponent(gitlabReposlug)}/jobs/${jobId}/retry?ref=${branch}`, gitlabReposlug,
+        const response = await this.fetch<ListJobsResponse>(`/jobs/${jobId}/retry?ref=${branch}`, gitlabReposlug,
             {
                 method: 'POST',
                 headers: {
