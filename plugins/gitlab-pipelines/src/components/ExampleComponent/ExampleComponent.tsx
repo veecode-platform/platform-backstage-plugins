@@ -16,7 +16,7 @@ import { gitlabPipelinesApiRef } from '../../api';
 export const ExampleComponent = () => {
 
   const api = useApi(gitlabPipelinesApiRef);
-  const projectSlug = 'ValberJunio/teste-lambda'
+  const projectSlug = 'ValberJunior/teste-lambda'
 
   useEffect(() => {
     const getBranches = async () => {
