@@ -1,0 +1,192 @@
+export interface PipelineResponse {
+    id: number | string,
+    iid: number,
+    project_id: number | string,
+    sha: string,
+    ref: string,
+    status: string,
+    source: string,
+    created_at: string | Date,
+    updated_at: string | Date,
+    web_url: string,
+    name?: string |null
+}
+
+export interface LatestPipelineResponse {
+    id: number | string,
+    iid: number | string,
+    before_sha: string,
+    tag: boolean,
+    yaml_errors: string | null,
+    user:{
+        id: number | string,
+        username: string,
+        name: string,
+        state: string,
+        avatar_url: string,
+        web_url: string,
+    },
+    starterd_at: string | Date | null, 
+    finished_at: string | Date | null,
+    committed_at: string | Date | null,
+	duration: string | null,
+	queued_duration: number | null,
+	coverage: null,
+	detailed_status: {
+		icon: string,
+		text: string,
+		label: string,
+		group: string,
+		tooltip: string,
+		has_details: boolean,
+		details_path: string,
+		illustration: string | null,
+		favicon: string
+	},
+}
+
+export interface Pipeline {
+    id: number | string,
+    projectId: number | string,
+    sha: string,
+    ref: string,
+    status: string,
+    source: string,
+    createdAt: string | Date ,
+    updatedAt: string | Date,
+    webUrl: string,
+    name?: string | null
+}
+
+export interface ListBranchResponse {
+		name: string,
+		commit: Commit,
+		merged: boolean,
+		protected: boolean,
+		developers_can_push: boolean,
+		developers_can_merge: boolean,
+		can_push: boolean,
+		default: boolean,
+		web_url: string
+}
+
+export interface Branch {
+    name: string,
+    title: string,
+    message: string,
+    web_url: string,
+    protected: boolean
+}
+
+export interface ListJobsResponse {
+    id: number | string,
+    status: string,
+    stage: string,
+    name: string,
+    ref: string,
+    tag: boolean,
+    coverage: string | null,
+    allow_failure: boolean,
+    created_at: string | Date,
+    started_at: string | Date | null,
+    finished_at: string | Date | null,
+    erased_at: string | Date | null,
+    duration: string | number | null,
+    queued_duration: string | null,
+    user: User,
+    commit: Commit,
+    pipeline: Pipeline,
+    web_url: string,
+    project: {
+        ci_job_token_scope_enabled: boolean
+    },
+    artifacts: Artifacts[] | [],
+    runner: Runner | null,
+    artifacts_expire_at: PipelineResponse | null,
+    tag_list: []
+}
+
+export interface Job {
+    id: number | string,
+    status: string,
+    stage: string,
+    name: string,
+    ref: string,
+    tag: boolean,
+    pipeline: Pipeline,
+    web_url: string,
+    project: {
+        ci_job_token_scope_enable: boolean
+    },
+    artifacts: Artifacts[] | [],
+    runner: Runner | null
+}
+
+export interface JobsVariablesAttributes {
+key: string,
+value: string
+}
+
+export interface Commit {
+        id: string,
+        short_id: string,
+        created_at: string | Date,
+        parent_ids: string[],
+        title: string,
+        message: string,
+        author_name: string,
+        author_email: string,
+        authored_date: string,
+        committer_name: string,
+        committer_email: string,
+        committed_date: string,
+        trailers: {},
+        web_url: string,
+}
+
+
+export interface User {
+    id: number | string,
+    username: string,
+    name: string,
+    state: string,
+    avatar_url: string,
+    web_url: string,
+    created_at: string | Date,
+    bio: string,
+    location: string,
+    public_email: string,
+    skype: string,
+    linkedin: string,
+    twitter: string,
+    discord: string,
+    website_url: string,
+    organization: string,
+    job_title: string,
+    pronouns: string,
+    bot: boolean,
+    work_information: string | null,
+    followers: number,
+    following: number,
+    local_time: string | null
+}
+
+export interface Artifacts {
+    file_type: string,
+    size: number,
+    filename: string,
+    file_format: string | null
+}
+
+export interface Runner {
+    id: number | string,
+    description: string,
+    ip_address: number | string,
+    active: boolean,
+    paused: boolean,
+    is_shared: boolean,
+    runner_type: string,
+    name: string,
+    online: boolean,
+    status: string
+}

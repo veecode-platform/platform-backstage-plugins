@@ -54,6 +54,13 @@ proxy:
       Authorization: Bearer ${GITHUB_TOKEN_SECRET}
       Accept: application/vnd.github+json
       X-GitHub-Api-Version: "2022-11-28"
+  
+  '/gitlab-pipelines':
+    target: https://gitlab.com/api/v4
+    headers:
+      Authorization: PRIVATE-TOKEN ${GITLAB_TOKEN_SECRET}
+      Accept: application/json     #check
+
   ### Example for how to add a proxy endpoint for the frontend.
   ### A typical reason to do this is to handle HTTPS and CORS for internal services.
   # '/test':
