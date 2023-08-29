@@ -81,7 +81,7 @@ class Client {
     }
 
     async apiUrl(gitlabReposlug: string) {
-        const baseUrl = await this.discoveryApi.getBaseUrl("proxy")
+        const baseUrl = await this.discoveryApi.getBaseUrl("proxy");
         return `${baseUrl}${this.proxyPath}/projects/${encodeURIComponent(gitlabReposlug)}`
     }
 

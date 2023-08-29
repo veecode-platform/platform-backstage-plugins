@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Typography, Grid } from '@material-ui/core';
 import {
   InfoCard,
@@ -10,8 +10,25 @@ import {
   SupportButton,
 } from '@backstage/core-components';
 import { ExampleFetchComponent } from '../ExampleFetchComponent';
+import { useApi } from '@backstage/core-plugin-api';
+import { gitlabPipelinesApiRef } from '../../api';
 
-export const ExampleComponent = () => (
+export const ExampleComponent = () => {
+
+  const api = useApi(gitlabPipelinesApiRef);
+  const projectSlug = 'ValberJunio/teste-lambda'
+
+  useEffect(() => {
+    const getBranches = async () => {
+      const data = await api.listBranchesFromRepo(projectSlug);
+      if (data) {
+        console.log(data)
+      }
+    };
+    getBranches();
+  }, []);
+  
+  return (
   <Page themeId="tool">
     <Header title="Welcome to gitlab-pipelines!" subtitle="Optional subtitle">
       <HeaderLabel label="Owner" value="Team X" />
@@ -35,4 +52,4 @@ export const ExampleComponent = () => (
       </Grid>
     </Content>
   </Page>
-);
+);}
