@@ -72,8 +72,7 @@ export interface ListBranchResponse {
 
 export interface Branch {
     name: string,
-    title: string,
-    message: string,
+    default: boolean,
     web_url: string,
     protected: boolean
 }
