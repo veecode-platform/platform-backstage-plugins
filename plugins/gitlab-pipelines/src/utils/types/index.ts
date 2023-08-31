@@ -1,5 +1,5 @@
-export interface PipelineResponse {
-    id: number | string,
+export interface PipelineListResponse {
+    id: number,
     iid: number,
     project_id: number | string,
     sha: string,
@@ -12,9 +12,17 @@ export interface PipelineResponse {
     name?: string |null
 }
 
-export interface LatestPipelineResponse {
-    id: number | string,
-    iid: number | string,
+export interface PipelineResponse {
+    id: number,
+    iid: number,
+    project_id: number | string,
+	sha: string,
+	ref: string,
+	status: string,
+	source: string,
+	created_at: string | Date,
+	updated_at: string | Date,
+	web_url: string,
     before_sha: string,
     tag: boolean,
     yaml_errors: string | null,
@@ -43,10 +51,11 @@ export interface LatestPipelineResponse {
 		illustration: string | null,
 		favicon: string
 	},
+    name: string | null
 }
 
 export interface Pipeline {
-    id: number | string,
+    id: number,
     projectId: number | string,
     sha: string,
     ref: string,
@@ -78,7 +87,7 @@ export interface Branch {
 }
 
 export interface ListJobsResponse {
-    id: number | string,
+    id: number,
     status: string,
     stage: string,
     name: string,
@@ -106,7 +115,7 @@ export interface ListJobsResponse {
 }
 
 export interface Job {
-    id: number | string,
+    id: number,
     status: string,
     stage: string,
     name: string,
@@ -114,9 +123,6 @@ export interface Job {
     tag: boolean,
     pipeline: Pipeline,
     web_url: string,
-    project: {
-        ci_job_token_scope_enable: boolean
-    },
     artifacts: Artifacts[] | [],
     runner: Runner | null
 }
