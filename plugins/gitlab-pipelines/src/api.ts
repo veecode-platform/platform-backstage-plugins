@@ -1,5 +1,5 @@
 import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
-import { JobsVariablesAttributes, LatestPipelineResponse, ListBranchResponse, ListJobsResponse, PipelineResponse } from './utils/types';
+import { JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse } from './utils/types';
 
 const GITLAB_PIPELINES_PROXY_URL = "/gitlab-pipelines";
 
@@ -11,23 +11,31 @@ export interface GitlabPipelinesApi {
     /**
     * list pipelines
     */
-    listProjectPipelines(gitlabReposlug: string, branch: string): Promise<PipelineResponse[]>;
+    listProjectPipelines(gitlabReposlug: string, branch: string): Promise<PipelineListResponse[]>;
     /**
      * Get Lastest pipeline
      */
-    getLatestPipeline(gitlabReposlug: string, branch: string): Promise<LatestPipelineResponse>;
+    getLatestPipeline(gitlabReposlug: string, branch: string): Promise<PipelineResponse>;
+    /**
+     * run a new pipeline
+     */
+    runNewPipeline(gitlabReposlug: string, branch: string): Promise<PipelineResponse>;
+    /**
+     *  run a new pipeline with trigger
+     */
+    runNewPipelineWithTrigger(gitlabReposlug: string, triggerToken: string, branch: string): Promise<PipelineResponse>;
     /**
      *  retry pipeline jobs
      */
-    retryPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<LatestPipelineResponse>;
+    retryPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<PipelineResponse>;
     /**
      *  cancel pipeline jobs
      */
-    cancelPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<LatestPipelineResponse>;
+    cancelPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<PipelineResponse>;
     /**
      * list pipelines jobs
      */
-    listPipelineJobs(gitlabReposlug: string, branch: string): Promise<ListJobsResponse[]>;
+    listPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<ListJobsResponse[]>;
     /**
      * get single job
      * 
@@ -90,17 +98,44 @@ class Client {
     }
 
     async listProjectPipelines(gitlabReposlug: string, branch: string) {
-        const response = await this.fetch<PipelineResponse[]>(`/pipelines?ref=${branch}`, gitlabReposlug)
+        const response = await this.fetch<PipelineListResponse[]>(`/pipelines?ref=${branch}`, gitlabReposlug)
         return response
     }
 
     async getLatestPipeline(gitlabReposlug: string, branch: string) {
-        const response = await this.fetch<LatestPipelineResponse>(`/pipelines/latest?ref=${branch}`, gitlabReposlug)
+        const response = await this.fetch<PipelineResponse>(`/pipelines/latest?ref=${branch}`, gitlabReposlug)
+        return response
+    }
+
+    async runNewPipeline(gitlabReposlug: string, branch: string) {
+        const response = await this.fetch<PipelineResponse>(`/pipeline?ref=${branch}`, gitlabReposlug,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        return response
+    }
+
+    async runNewPipelineWithTrigger(gitlabReposlug: string, triggerToken: string, branch: string) {
+        const requestBody = {
+            token: triggerToken,
+            ref: branch
+        };
+        const response = await this.fetch<PipelineResponse>(`/triggers/pipeline`, gitlabReposlug,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
         return response
     }
 
     async retryPipelineJobs(gitlabReposlug: string, pipelineId: number) {
-        const response = await this.fetch<LatestPipelineResponse>(`/pipelines/${pipelineId}/retry`, gitlabReposlug,
+        const response = await this.fetch<PipelineResponse>(`/pipelines/${pipelineId}/retry`, gitlabReposlug,
             {
                 method: 'POST',
                 headers: {
@@ -111,7 +146,7 @@ class Client {
     }
 
     async cancelPipelineJobs(gitlabReposlug: string, pipelineId: number) {
-        const response = await this.fetch<LatestPipelineResponse>(`/pipelines/${pipelineId}/cancel`, gitlabReposlug,
+        const response = await this.fetch<PipelineResponse>(`/pipelines/${pipelineId}/cancel`, gitlabReposlug,
             {
                 method: 'POST',
                 headers: {
@@ -122,8 +157,8 @@ class Client {
     }
 
 
-    async listPipelineJobs(gitlabReposlug: string, branch: string) {
-        const response = await this.fetch<ListJobsResponse[]>(`/pipelines/jobs?ref=${branch}`, gitlabReposlug)
+    async listPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string) {
+        const response = await this.fetch<ListJobsResponse[]>(`/pipelines/${pipelineId}/jobs?ref=${branch}`, gitlabReposlug)
         return response
     }
 
@@ -182,24 +217,32 @@ export class GitlabPipelinesApiClient implements GitlabPipelinesApi {
         return this.client.listBranchesFromRepo(gitlabReposlug)
     }
 
-    async listProjectPipelines(gitlabReposlug: string, branch: string): Promise<PipelineResponse[]> {
+    async listProjectPipelines(gitlabReposlug: string, branch: string): Promise<PipelineListResponse[]> {
         return this.client.listProjectPipelines(gitlabReposlug, branch)
     }
 
-    async getLatestPipeline(gitlabReposlug: string, branch: string): Promise<LatestPipelineResponse> {
+    async getLatestPipeline(gitlabReposlug: string, branch: string): Promise<PipelineResponse> {
         return this.client.getLatestPipeline(gitlabReposlug, branch)
     }
 
-    async retryPipelineJobs(gitlabReposlug: string, pipelineId: number): Promise<LatestPipelineResponse> {
+    async runNewPipeline(gitlabReposlug: string, branch: string): Promise<PipelineResponse> {
+        return this.client.runNewPipeline(gitlabReposlug,branch)
+    }
+
+    async runNewPipelineWithTrigger(gitlabReposlug: string, triggerToken: string, branch: string): Promise<PipelineResponse> {
+        return this.client.runNewPipelineWithTrigger(gitlabReposlug,triggerToken,branch)
+    }
+
+    async retryPipelineJobs(gitlabReposlug: string, pipelineId: number): Promise<PipelineResponse> {
         return this.retryPipelineJobs(gitlabReposlug, pipelineId);
     }
 
-    async cancelPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<LatestPipelineResponse> {
+    async cancelPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<PipelineResponse> {
         return this.cancelPipelineJobs(gitlabReposlug, pipelineId, branch)
     }
 
-    async listPipelineJobs(gitlabReposlug: string, branch: string): Promise<ListJobsResponse[]> {
-        return this.client.listPipelineJobs(gitlabReposlug, branch)
+    async listPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<ListJobsResponse[]> {
+        return this.listPipelineJobs(gitlabReposlug,pipelineId,branch)
     }
 
     async getSingleJob(gitlabReposlug: string, jobId: number, branch: string): Promise<ListJobsResponse> {
