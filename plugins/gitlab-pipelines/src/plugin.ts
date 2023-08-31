@@ -25,7 +25,7 @@ export const GitlabPipelinesPage = gitlabPipelinesPlugin.provide(
   createRoutableExtension({
     name: 'GitlabPipelinesPage',
     component: () =>
-      import('./components/ExampleComponent').then(m => m.ExampleComponent),
+      import('./components/GitlabPipelinesOverview').then(m => m.GitlabPipelinesOverview),
     mountPoint: rootRouteRef,
   }),
 );
