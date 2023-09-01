@@ -8,15 +8,20 @@ import { Job, JobsVariablesAttributes, ListJobsResponse, Pipeline } from '../../
 
 export const GitlabPipelinesProvider: React.FC = ({ children }) => {
 
-  const [branch, setBranch] = useState<string | null>(null);
+  const [branch, setBranch] = useState<string | null>('master');
   const [pipelineListState, setPipelineListState] = useState<Pipeline[]|null>(null);
   const [ latestPipelineState, setLatestPipelineState ] = useState<Pipeline|null>(null);
   const [jobsListState, setJobsListState] = useState<Job[]|null>(null);
+  const [triggerToken, setTriggerToken] = useState<string>('');
   const api = useApi(gitlabPipelinesApiRef);
   const errorApi = useApi(errorApiRef);
 
   const setBranchState = (branch: string) => {
     setBranch(branch);
+  }
+
+  const setTriggerTokenState = (token: string) => {
+    setTriggerToken(token)
   }
 
   const listAllPipelines = async(ProjectName: string ) => {
@@ -39,6 +44,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         }));
         setPipelineListState(newPipelineListState);
         return newPipelineListState;
+        console.log(newPipelineListState)
       }
       else return null;
     }catch(e:any){
@@ -85,8 +91,9 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
           updatedAt: response.updated_at, 
           webUrl: response.web_url,
           name: response.name 
-        })
-      }
+        });
+        listAllPipelines(projectName);
+      };
     }
     catch(e:any){
       errorApi.post(e);
@@ -108,7 +115,8 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
           updatedAt: response.updated_at, 
           webUrl: response.web_url,
           name: response.name 
-        })
+        });
+        listAllPipelines(projectName);
       }
     }
     catch(e:any){
@@ -131,7 +139,8 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
           updatedAt: response.updated_at, 
           webUrl: response.web_url,
           name: response.name 
-        })
+        });
+        listAllPipelines(projectName);
       }
     }
     catch(e:any){
@@ -154,7 +163,8 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
           updatedAt: response.updated_at, 
           webUrl: response.web_url,
           name: response.name 
-        })
+        });
+        listAllPipelines(projectName);
       }
     }
     catch(e:any){
@@ -305,8 +315,11 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         setBranchState,
         listAllPipelines,
         pipelineListState,
+        setPipelineListState,
         latestPipeline,
         latestPipelineState,
+        triggerToken,
+        setTriggerTokenState,
         runNewPipeline,
         runPipelineWithTrigger,
         retryPipeline,
