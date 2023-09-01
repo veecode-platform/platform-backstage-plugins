@@ -1,11 +1,11 @@
 import React from 'react';
 import { createDevApp } from '@backstage/dev-utils';
-import { githubWorkflowsPlugin, GithubWorkflowsPage } from '../src/plugin';
+import { githubWorkflowsPlugin, GithubWorkflowsCard } from '../src/plugin';
 
 createDevApp()
   .registerPlugin(githubWorkflowsPlugin)
   .addPage({
-    element: <GithubWorkflowsPage />,
+    element: <GithubWorkflowsCard />,
     title: 'Root Page',
     path: '/github-workflows'
   })
