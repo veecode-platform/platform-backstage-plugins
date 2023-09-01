@@ -35,6 +35,7 @@ import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { GithubWorkflowsOverview } from '@veecode-platform/plugin-github-workflows';
 import { providers } from './identityProviders';
+import { GitlabPipelinesPage } from '@internal/plugin-gitlab-pipelines';
 
 const app = createApp({
   apis,
@@ -108,6 +109,7 @@ const routes = (
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/github-workflows" element={<GithubWorkflowsOverview />} />
+    <Route path="/gitlab-pipelines" element={<GitlabPipelinesPage />} />
   </FlatRoutes>
 );
 
