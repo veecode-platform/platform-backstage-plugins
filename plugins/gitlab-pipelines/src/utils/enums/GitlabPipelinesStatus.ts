@@ -7,6 +7,7 @@ export enum GitlabPipelinesStatus {
     skipped = "skipped", 
     manual = "manual", 
     created = "created", 
+    blocked = "blocked",
     scheduled = "scheduled",  
     waitingForResource = "waiting_for_resource", 
     preparing = "preparing", 

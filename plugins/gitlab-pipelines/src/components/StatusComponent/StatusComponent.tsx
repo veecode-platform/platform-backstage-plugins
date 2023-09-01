@@ -37,7 +37,8 @@ export const StatusComponent = ({ status, icon }: PipelineStatusProps) => {
                 </>
             );
         case GitlabPipelinesStatus.canceled:
-        case GitlabPipelinesStatus.skipped:    
+        case GitlabPipelinesStatus.skipped: 
+        case GitlabPipelinesStatus.blocked:   
             return (
                 <>
                     <StatusAborted /> {!icon && "Aborted"}
