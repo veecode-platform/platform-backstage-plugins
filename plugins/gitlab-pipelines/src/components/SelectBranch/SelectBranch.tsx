@@ -4,7 +4,6 @@ import { useApi } from '@backstage/core-plugin-api';
 import { Branch, ListBranchResponse } from '../../utils/types';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
-import { Tooltip } from '@material-ui/core';
 import { gitlabPipelinesApiRef } from '../../api';
 import { GitlabPipelinesContext } from '../context/GitlabPipelinesContext';
 import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
@@ -24,7 +23,7 @@ export const SelectBranch = () => {
   const { branch, setBranchState } = useContext(GitlabPipelinesContext);
   const api = useApi(gitlabPipelinesApiRef);
 //   const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entityMock);
+  const { projectName } = useEntityAnnotations(entityMock as Entity);
 
   useEffect(() => {
     const getBranches = async () => {
@@ -66,13 +65,11 @@ export const SelectBranch = () => {
   };
 
   return (
-      <Tooltip title="Select the branch" placement="top">
         <Select
           onChange={handleSelectChange}
           label=""
           selected={branch ?? branchDefault}
           items={options}
         />
-      </Tooltip>
   );
 };

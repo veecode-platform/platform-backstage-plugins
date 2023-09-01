@@ -2,7 +2,8 @@ import { Content, ContentHeader, Header, HeaderLabel,Page, SupportButton } from 
 import { Grid } from '@material-ui/core'
 import React from 'react'
 import { GitlabPipelinesProvider } from '../context/GitlabPipelinesProvider'
-import { PipelinesTable } from '../PipelinesTable'
+import { PipelinesTable } from '../GitlabPipelinesList/PipelinesTable'
+import { GitlabJobs } from '../GitlabJobs'
 
 export const GitlabPipelinesOverview = () => {
 
@@ -22,7 +23,7 @@ export const GitlabPipelinesOverview = () => {
                 <PipelinesTable/>
               </Grid>
               <Grid item lg={8}>
-                Aqui ficarão os Jobs
+                <GitlabJobs/>
               </Grid>
             </Grid>
           </Content>

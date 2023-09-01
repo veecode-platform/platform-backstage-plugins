@@ -8,7 +8,7 @@ import { Job, JobsVariablesAttributes, ListJobsResponse, Pipeline } from '../../
 
 export const GitlabPipelinesProvider: React.FC = ({ children }) => {
 
-  const [branch, setBranch] = useState<string | null>('master');
+  const [branch, setBranch] = useState<string | null>('');
   const [pipelineListState, setPipelineListState] = useState<Pipeline[]|null>(null);
   const [ latestPipelineState, setLatestPipelineState ] = useState<Pipeline|null>(null);
   const [jobsListState, setJobsListState] = useState<Job[]|null>(null);
@@ -326,6 +326,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         cancelPipeline,
         allJobs,
         jobsListState,
+        setJobsListState,
         getSingleJob,
         runJob,
         cancelJob,

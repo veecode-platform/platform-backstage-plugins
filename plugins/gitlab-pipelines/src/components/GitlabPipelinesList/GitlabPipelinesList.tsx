@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core'
 import React from 'react'
 import { GitlabPipelinesProvider } from '../context/GitlabPipelinesProvider'
-import { PipelinesTable } from '../PipelinesTable'
+import { PipelinesTable } from './PipelinesTable'
 
 export const GithubWorkflowsList = () => {
 
