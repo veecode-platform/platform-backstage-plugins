@@ -182,7 +182,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
       if(response.length > 0){
         const JobsList : Job[] = [];
         response.filter((j:ListJobsResponse)=>{
-          j.status === "manual" && JobsList.push({
+          j.allow_failure && JobsList.push({
             id: j.id as number,
             status: j.status,
             stage: j.stage,

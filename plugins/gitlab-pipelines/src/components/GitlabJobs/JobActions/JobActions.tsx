@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CachedIcon from '@material-ui/icons/Cached';
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import { Box, Button, makeStyles, Tooltip } from '@material-ui/core';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 // import { useEntity } from '@backstage/plugin-catalog-react';
@@ -46,12 +45,17 @@ const useStyles = makeStyles(theme => (({
     padding: '1rem',
     fontSize: '12px',
     borderRadius: '8px',
-    background: '#60a5fa40'
+    background: '#60a5fa40',
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    gap: '.5rem'
   },
   buttonDocs: {
+    alignSelf: 'flex-end',
     background: '#f5f5f5',
     color: '#151515',
-    margin: '1rem .5rem .5rem .5rem',
     fontSize: '10px',
     '&:hover': {
       background: '#f5f5f5'
@@ -134,11 +138,11 @@ export const JobActions = ({ jobId, status }: JobActionsProps) => {
             open={showModal}
             title="Run Gitlab Job"
             subtitle={(<Box className={classes.boxInfo}>
-              ℹ️ In order to get your pipeline running, you need to set a token in the
-              Trigger Pipelines section of your Gitlab. If you haven't already,
-              here's how to do it:
+              ℹ️ To run a Job you need to define this job as manual,
+               according to our documentation and create variables 
+               so that you can execute them correctly.
               <Button
-                href="https://docs.gitlab.com/ee/ci/triggers/index.html"
+                href="https://docs.gitlab.com/ee/ci/variables/index.html#define-a-cicd-variable-in-the-ui"
                 className={classes.buttonDocs}
                 target='_blank'
               >
