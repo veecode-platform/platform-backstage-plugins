@@ -68,7 +68,7 @@ export const JobActions = ({ jobId, status }: JobActionsProps) => {
   // const { entity } = useEntity();  
   const { projectName } = useEntityAnnotations(entityMock as Entity);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const { branch, runJob, jobParams, cancelJob } = useContext(GitlabPipelinesContext);
+  const { runJob, jobParams, cancelJob } = useContext(GitlabPipelinesContext);
   const classes = useStyles();
   const errorApi = useApi(errorApiRef);
 
@@ -96,19 +96,12 @@ export const JobActions = ({ jobId, status }: JobActionsProps) => {
   return (
     <>
       {status.toLocaleLowerCase() === GitlabPipelinesStatus.running && (
-
-        <Box
-          className={classes.button}
-          role="button"
-          onClick={() => handleClickActions(GitlabPipelinesStatus.running)}
-        >
-          <p>Cancel Pipeline</p>
           <Tooltip title="Stop" placement="top">
             <RefreshIcon
+              onClick={() => handleClickActions(GitlabPipelinesStatus.running)}
               className={classes.inProgress}
             />
           </Tooltip>
-        </Box>
       )}
       {(status.toLocaleLowerCase() !== GitlabPipelinesStatus.running && status.toLocaleLowerCase() !== GitlabPipelinesStatus.success) &&
         (

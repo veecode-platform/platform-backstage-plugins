@@ -132,6 +132,12 @@ key: string,
 value: string
 }
 
+export interface JobsParamsProps {
+  jobId: number,
+  key: string,
+  value: string
+}
+
 export interface Commit {
         id: string,
         short_id: string,
