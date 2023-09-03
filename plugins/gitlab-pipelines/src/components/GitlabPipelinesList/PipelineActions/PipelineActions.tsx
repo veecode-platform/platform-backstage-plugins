@@ -44,12 +44,17 @@ const useStyles = makeStyles(theme => (({
     padding: '1rem',
     fontSize: '12px',
     borderRadius: '8px',
-    background: '#60a5fa40'
+    background: '#60a5fa40',
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    gap: '.5rem'
   },
   buttonDocs: {
+    alignSelf: 'flex-end',
     background: '#f5f5f5',
     color: '#151515',
-    margin: '1rem .5rem .5rem .5rem',
     fontSize: '10px',
     '&:hover': {
       background: '#f5f5f5'
