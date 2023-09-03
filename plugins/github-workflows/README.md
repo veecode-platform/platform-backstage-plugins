@@ -1,4 +1,4 @@
-# GithubWorkflows Frontend Plugin
+# Github Workflows Plugin
 <br>
 The GithubWorkflows plugin provides an alternative for manually triggering GitHub workflows from within your Backstage component.
 
