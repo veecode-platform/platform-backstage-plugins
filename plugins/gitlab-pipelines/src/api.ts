@@ -158,7 +158,7 @@ class Client {
 
 
     async listPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string) {
-        const response = await this.fetch<ListJobsResponse[]>(`/pipelines/${pipelineId}/jobs?ref=${branch}`, gitlabReposlug)
+        const response = await this.fetch<ListJobsResponse[]>(`/pipelines/${pipelineId}/jobs?ref=${branch}`, gitlabReposlug);
         return response
     }
 
@@ -242,7 +242,7 @@ export class GitlabPipelinesApiClient implements GitlabPipelinesApi {
     }
 
     async listPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<ListJobsResponse[]> {
-        return this.listPipelineJobs(gitlabReposlug,pipelineId,branch)
+        return this.client.listPipelineJobs(gitlabReposlug, pipelineId, branch);
     }
 
     async getSingleJob(gitlabReposlug: string, jobId: number, branch: string): Promise<ListJobsResponse> {

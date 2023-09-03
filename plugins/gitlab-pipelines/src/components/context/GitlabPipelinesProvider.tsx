@@ -8,11 +8,12 @@ import { Job, JobsVariablesAttributes, ListJobsResponse, Pipeline } from '../../
 
 export const GitlabPipelinesProvider: React.FC = ({ children }) => {
 
-  const [branch, setBranch] = useState<string | null>('');
+  const [branch, setBranch] = useState<string | null>('master');
   const [pipelineListState, setPipelineListState] = useState<Pipeline[]|null>(null);
   const [ latestPipelineState, setLatestPipelineState ] = useState<Pipeline|null>(null);
   const [jobsListState, setJobsListState] = useState<Job[]|null>(null);
   const [triggerToken, setTriggerToken] = useState<string>('');
+  const [jobParams, setJobParams] = useState<JobsVariablesAttributes|null>(null);
   const api = useApi(gitlabPipelinesApiRef);
   const errorApi = useApi(errorApiRef);
 
@@ -26,7 +27,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
 
   const listAllPipelines = async(ProjectName: string ) => {
     try{
-      const pipelines = await api.listProjectPipelines(ProjectName,branch!);
+      const pipelines = await api.listProjectPipelines(ProjectName, branch!);
       if(pipelines.length > 0){
         const newPipelineListState = await Promise.all(pipelines.map(async (p) => {
           return {
@@ -44,7 +45,6 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         }));
         setPipelineListState(newPipelineListState);
         return newPipelineListState;
-        console.log(newPipelineListState)
       }
       else return null;
     }catch(e:any){
@@ -57,7 +57,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
     try{
       const pipeline = await api.getLatestPipeline(projecName, branch!);
       if(pipeline.id){
-        setLatestPipelineState({
+        const pipelineData : Pipeline = {
           id: pipeline.id,
           projectId: pipeline.project_id,
           sha: pipeline.sha,
@@ -68,11 +68,15 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
           updatedAt: pipeline.updated_at, 
           webUrl: pipeline.web_url,
           name: pipeline.name 
-        })
+        };
+        setLatestPipelineState(pipelineData);
+        return pipelineData;
       }
+      else return null;
     }
     catch(e:any){
       errorApi.post(e);
+      return null
     }
   }
 
@@ -172,9 +176,9 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
     }
   }
 
-  const allJobs = async(projectName: string)=>{
+  const allJobs = async(projectName: string, pipelineId: number)=>{
     try{
-      const response = await api.listPipelineJobs(projectName, latestPipelineState?.id as number, branch!);
+      const response = await api.listPipelineJobs(projectName, pipelineId, branch!);
       if(response.length > 0){
         const JobsList : Job[] = [];
         response.filter((j:ListJobsResponse)=>{
@@ -191,7 +195,6 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
             runner: j.runner
           })
         });
-
         setJobsListState(JobsList);
         return JobsList;
       }
@@ -328,6 +331,8 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         jobsListState,
         setJobsListState,
         getSingleJob,
+        jobParams,
+        setJobParams,
         runJob,
         cancelJob,
         retryJob
