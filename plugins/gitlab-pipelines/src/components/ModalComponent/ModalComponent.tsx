@@ -102,7 +102,6 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
         <>
           {modalType === "Pipeline" && (
             <TextField
-              autoFocus
               margin="dense"
               id="triggerToken"
               name="triggerToken"
@@ -125,7 +124,6 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
           {modalType === "Job" && (
             <>
               <TextField
-                autoFocus
                 margin="dense"
                 id="jobVariableKey"
                 name="jobVariableKey"
@@ -145,7 +143,6 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
               />
 
               <TextField
-                autoFocus
                 margin="dense"
                 id="jobVariableValue"
                 name="jobVariableValue"
