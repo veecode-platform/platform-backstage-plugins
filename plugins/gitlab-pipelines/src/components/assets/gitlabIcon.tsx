@@ -11,10 +11,6 @@ const useStyles = makeStyles(({
 const GitlabIcon = () => {
   const classes  = useStyles();
   return (
-    // <svg height="22" viewBox="0 0 32 32" width="25" xmlns="http://www.w3.org/2000/svg" className={classes.icon}>
-    // <path
-    //     d="m31.937 18.115-1.787-5.511-3.552-10.921c-.183-.563-.973-.563-1.156 0l-3.552 10.916h-11.781l-3.552-10.916c-.183-.563-.979-.563-1.156 0l-3.552 10.916-1.792 5.516c-.161.5.021 1.052.443 1.364l15.5 11.261 15.5-11.261c.421-.312.604-.859.437-1.364z" />
-    // </svg>
     <svg height="22" preserveAspectRatio="xMidYMid" viewBox="0 0 256 236" width="25" xmlns="http://www.w3.org/2000/svg" className={classes.icon}>
         <path d="m128.07485 236.074667 47.104-144.9703622h-94.2080005z" fill="#e24329" />
         <path d="m128.07485 236.074423-47.1040005-144.970362h-66.0150857z" fill="#fc6d26" />

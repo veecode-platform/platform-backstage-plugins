@@ -13,6 +13,7 @@ import { Job } from '../../utils/types';
 import { GITLAB_ANNOTATION, useEntityAnnotations } from '../../hooks/useEntityAnnotations';
 import { entityMock } from '../../mocks/component';
 import { JobItem } from './JobItem';
+import GitlabIcon from '../assets/gitlabIcon';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -85,7 +86,10 @@ export const Cards = ({ items }: JobItemProps) => {
 
   const TitleBar = (
     <>
-      <Typography className={classes.title}>Gitlab Jobs</Typography>
+      <Typography className={classes.title}>
+        <GitlabIcon/>
+        Gitlab Jobs
+        </Typography>
     </>
   );
 

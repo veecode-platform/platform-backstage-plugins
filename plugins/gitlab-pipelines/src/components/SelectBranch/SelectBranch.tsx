@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Select, SelectedItems } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
 import { Branch, ListBranchResponse } from '../../utils/types';
-import { useEntity } from '@backstage/plugin-catalog-react';
+// import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { gitlabPipelinesApiRef } from '../../api';
 import { GitlabPipelinesContext } from '../context/GitlabPipelinesContext';
