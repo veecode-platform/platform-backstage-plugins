@@ -145,10 +145,6 @@ export const GitlabJobs = () => {
     updateData()
   }, [branch])
 
-  useEffect(() => {
-    console.log(jobsListState)
-  }, [jobsListState])
-
   const updateData = async () => {
     const pipelineData = await latestPipeline(projectName);
     const data = await allJobs(projectName, pipelineData?.id!);

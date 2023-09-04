@@ -123,7 +123,7 @@ class Client {
             token: triggerToken,
             ref: branch
         };
-        const response = await this.fetch<PipelineResponse>(`/triggers/pipeline`, gitlabReposlug,
+        const response = await this.fetch<PipelineResponse>(`/trigger/pipeline`, gitlabReposlug,
         {
             method: 'POST',
             headers: {
