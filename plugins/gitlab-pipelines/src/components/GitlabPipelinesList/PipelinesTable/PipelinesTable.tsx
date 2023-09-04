@@ -16,9 +16,7 @@ import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import SyncIcon from '@material-ui/icons/Sync';
-import SettingsIcon from '@material-ui/icons/Settings';
 // import { ModalComponent } from '../ModalComponent';
-import DescriptionIcon from '@material-ui/icons/Description';
 import { entityMock } from '../../../mocks/component';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
 import { truncateString } from '../../../utils/commons';
@@ -29,6 +27,7 @@ import { useEntityAnnotations } from '../../../hooks/useEntityAnnotations';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
+import GitlabIcon from '../../assets/gitlabIcon';
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
@@ -142,7 +141,10 @@ export const DenseTable = ({ items }: DenseTableProps) => {
 
   const TitleBar = (
       <>
-        <Typography className={classes.title}>All Pipelines</Typography>
+        <Typography className={classes.title}>
+          <GitlabIcon/>
+          All Pipelines
+        </Typography>
         <Box role="select" className={classes.options}>
             <SelectBranch/>
             <Box className={classes.action}>

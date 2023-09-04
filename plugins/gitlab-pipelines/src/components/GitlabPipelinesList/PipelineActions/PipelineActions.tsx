@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CachedIcon from '@material-ui/icons/Cached';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { Box, Button, makeStyles, Tooltip } from '@material-ui/core';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 // import { useEntity } from '@backstage/plugin-catalog-react';
@@ -76,7 +77,6 @@ export const PipelineActions = ({ status }: PipelineActionsProps) => {
   const handleShowModal = () => setShowModal(!showModal);
 
   const handleStartPipeline = async () => {
-    handleShowModal();
     if (triggerToken) await runPipelineWithTrigger(projectName, triggerToken);
   }
 
@@ -84,7 +84,7 @@ export const PipelineActions = ({ status }: PipelineActionsProps) => {
 
   const handleClickActions = (status: string) => {
     try {
-      if (status !== GitlabPipelinesStatus.running) handleStartPipeline();
+      if (status !== GitlabPipelinesStatus.running) handleShowModal();
       else handleStopPipeline();
     }
     catch (e: any) {
@@ -109,7 +109,23 @@ export const PipelineActions = ({ status }: PipelineActionsProps) => {
           </Tooltip>
         </Box>
       )}
-      {(status.toLocaleLowerCase() !== GitlabPipelinesStatus.running && status.toLocaleLowerCase() !== GitlabPipelinesStatus.success) &&
+
+      {status.toLocaleLowerCase() === GitlabPipelinesStatus.pending && (
+
+      <Box
+        className={classes.button}
+        role="button"
+        aria-disabled={true}
+      >
+        <p>Please await ...</p>
+        <Tooltip title="await... pending" placement="top">
+          <AccessTimeIcon />
+        </Tooltip>
+      </Box>
+      )}
+      {(status.toLocaleLowerCase() !== GitlabPipelinesStatus.running
+        && status.toLocaleLowerCase() !== GitlabPipelinesStatus.pending 
+        && status.toLocaleLowerCase() !== GitlabPipelinesStatus.success) &&
         (
           <Box
             className={classes.button}

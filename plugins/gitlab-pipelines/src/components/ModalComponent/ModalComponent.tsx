@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {
+  Box,
   // Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, 
   makeStyles
 } from '@material-ui/core';
@@ -93,9 +94,9 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
     <Dialog open={open} onClose={handleModal} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">{title}</DialogTitle>
       <DialogContent className={classes.modal}>
-        <DialogContentText>
+        <Box>
           {subtitle}
-        </DialogContentText>
+        </Box>
         <>
           {modalType === "Pipeline" && (
             <TextField

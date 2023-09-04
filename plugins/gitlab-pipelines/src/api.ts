@@ -145,13 +145,10 @@ class Client {
         return response
     }
 
-    async cancelPipelineJobs(gitlabReposlug: string, pipelineId: number) {
-        const response = await this.fetch<PipelineResponse>(`/pipelines/${pipelineId}/cancel`, gitlabReposlug,
+    async cancelPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string) {
+        const response = await this.fetch<PipelineResponse>(`/pipelines/${pipelineId}/cancel?ref=${branch}`, gitlabReposlug,
             {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                method: 'POST'
             })
         return response
     }
@@ -185,10 +182,7 @@ class Client {
     async cancelJob(gitlabReposlug: string, jobId: number, branch: string) {
         const response = await this.fetch<ListJobsResponse>(`/jobs/${jobId}/cancel?ref=${branch}`, gitlabReposlug,
             {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                method: 'POST'
             })
         return response
     }
