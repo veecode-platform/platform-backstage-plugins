@@ -12,6 +12,7 @@ import { entityMock } from '../../../mocks/component';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
 import { ModalComponent } from '../../ModalComponent/ModalComponent';
 import { GitlabPipelinesStatus } from '../../../utils/enums/GitlabPipelinesStatus';
+import { Pipeline } from '../../../utils/types';
 
 type PipelineActionsProps = {
   status?: string
@@ -68,7 +69,7 @@ export const PipelineActions = ({ status }: PipelineActionsProps) => {
   // const { entity } = useEntity();  
   const { projectName } = useEntityAnnotations(entityMock as Entity);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const { triggerToken, runPipelineWithTrigger, cancelPipeline } = useContext(GitlabPipelinesContext);
+  const { triggerToken, runPipelineWithTrigger, cancelPipeline , listAllPipelines, setPipelineListState} = useContext(GitlabPipelinesContext);
   const classes = useStyles();
   const errorApi = useApi(errorApiRef);
 
@@ -76,11 +77,22 @@ export const PipelineActions = ({ status }: PipelineActionsProps) => {
 
   const handleShowModal = () => setShowModal(!showModal);
 
-  const handleStartPipeline = async () => {
-    if (triggerToken) await runPipelineWithTrigger(projectName, triggerToken);
+  const updateData = async () => {
+    const data = await listAllPipelines(projectName);
+    setPipelineListState(data as Pipeline[]);
   }
 
-  const handleStopPipeline = async () => await cancelPipeline(projectName);
+  const handleStartPipeline = async () => {
+    if (triggerToken) {
+      await runPipelineWithTrigger(projectName, triggerToken);
+      await updateData();
+    }
+  }
+
+  const handleStopPipeline = async () => {
+    await cancelPipeline(projectName);
+    await updateData();
+  }
 
   const handleClickActions = (status: string) => {
     try {
