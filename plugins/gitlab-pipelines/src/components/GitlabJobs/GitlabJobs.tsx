@@ -75,7 +75,9 @@ export const Cards = ({ items }: JobItemProps) => {
   const classes = useStyles();
   // const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entityMock as Entity);
-  const { allJobs, setJobsListState, latestPipelineState } = useContext(GitlabPipelinesContext);
+  const { allJobs, setJobsListState, latestPipelineState, jobsListState } = useContext(GitlabPipelinesContext);
+
+  useEffect(()=>{console.log(jobsListState)},[jobsListState])
 
   const updateData = async () => {
     setLoading(true)

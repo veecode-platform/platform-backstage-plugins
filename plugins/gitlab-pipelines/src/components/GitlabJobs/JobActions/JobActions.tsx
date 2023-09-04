@@ -11,6 +11,7 @@ import { entityMock } from '../../../mocks/component';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
 import { ModalComponent } from '../../ModalComponent/ModalComponent';
 import { GitlabPipelinesStatus } from '../../../utils/enums/GitlabPipelinesStatus';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
 
 type JobActionsProps = {
   jobId: number,
@@ -77,7 +78,6 @@ export const JobActions = ({ jobId, status }: JobActionsProps) => {
   const handleShowModal = () => setShowModal(!showModal);
 
   const handleStartJob = async () => {
-    handleShowModal();
     if (jobParams) await runJob(projectName, jobId, [jobParams]);
   }
 
@@ -85,7 +85,7 @@ export const JobActions = ({ jobId, status }: JobActionsProps) => {
 
   const handleClickActions = (status: string) => {
     try {
-      if (status !== GitlabPipelinesStatus.running) handleStartJob();
+      if (status !== GitlabPipelinesStatus.running) handleShowModal();
       else handleStopJob();
     }
     catch (e: any) {
@@ -103,7 +103,17 @@ export const JobActions = ({ jobId, status }: JobActionsProps) => {
             />
           </Tooltip>
       )}
-      {(status.toLocaleLowerCase() !== GitlabPipelinesStatus.running && status.toLocaleLowerCase() !== GitlabPipelinesStatus.success) &&
+      {status.toLocaleLowerCase() === GitlabPipelinesStatus.pending && (
+          <Tooltip title="please wait" placement="top">
+            <AccessTimeIcon />
+          </Tooltip>
+      )}
+      
+      {(status.toLocaleLowerCase() !== GitlabPipelinesStatus.running 
+       && status.toLocaleLowerCase() !== GitlabPipelinesStatus.pending 
+       && status.toLocaleLowerCase() !== GitlabPipelinesStatus.success
+       && status.toLocaleUpperCase() !== GitlabPipelinesStatus.canceled
+       ) &&
         (
 
           <Tooltip title="Run" placement="top">

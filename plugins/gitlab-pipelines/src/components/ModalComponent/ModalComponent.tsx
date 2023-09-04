@@ -68,12 +68,14 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
             key: event.target.value as string,
             value: jobParams?.value ?? ""
           });
+          setErrorsState({ ...errorsState, [event.target.name!]: false });
         }
         if (event.target.name === "jobVariableValue") {
           setJobParams({
             key: jobParams?.key ?? "", 
             value: event.target.value as string
           });
+          setErrorsState({ ...errorsState, [event.target.name!]: false });
         }
       }
     }
