@@ -6507,9 +6507,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@veecode-platform/plugin-github-workflows@workspace:plugins/github-workflows":
+"@veecode-platform/backstage-plugin-github-workflows@workspace:plugins/github-workflows":
   version: 0.0.0-use.local
-  resolution: "@veecode-platform/plugin-github-workflows@workspace:plugins/github-workflows"
+  resolution: "@veecode-platform/backstage-plugin-github-workflows@workspace:plugins/github-workflows"
   dependencies:
     "@backstage/catalog-model": ^1.4.0
     "@backstage/cli": ^0.22.8
