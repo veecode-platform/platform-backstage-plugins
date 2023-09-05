@@ -154,7 +154,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
 
   const cancelPipeline = async(projectName: string)=>{
     try{
-      const response = await api.cancelPipelineJobs(projectName, latestPipelineState?.id as number, branch!);
+      const response = await api.cancelPipelineJobs(projectName, Number(latestPipelineState?.id), branch!);
       if(response.id){
         setLatestPipelineState({
           id: response.id,
@@ -172,6 +172,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
       }
     }
     catch(e:any){
+      console.log("deu erro")
       errorApi.post(e);
     }
   }

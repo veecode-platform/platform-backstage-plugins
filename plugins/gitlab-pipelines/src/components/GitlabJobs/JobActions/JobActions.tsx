@@ -3,7 +3,6 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CachedIcon from '@material-ui/icons/Cached';
 import { Box, Button, makeStyles, Tooltip } from '@material-ui/core';
-import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 // import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotations } from '../../../hooks/useEntityAnnotations';
@@ -72,7 +71,6 @@ export const JobActions = ({ jobId, status }: JobActionsProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const { runJob, jobParams, cancelJob, setJobsListState, allJobs, latestPipelineState } = useContext(GitlabPipelinesContext);
   const classes = useStyles();
-  const errorApi = useApi(errorApiRef);
 
   if (!status) return null;
 
@@ -96,13 +94,8 @@ export const JobActions = ({ jobId, status }: JobActionsProps) => {
   };
 
   const handleClickActions = (status: string) => {
-    try {
-      if (status !== GitlabPipelinesStatus.running) handleShowModal();
-      else handleStopJob();
-    }
-    catch (e: any) {
-      errorApi.post(e)
-    }
+    if (status !== GitlabPipelinesStatus.running) handleShowModal();
+    else handleStopJob();
   }
 
   return (

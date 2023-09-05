@@ -149,7 +149,7 @@ class Client {
         const response = await this.fetch<PipelineResponse>(`/pipelines/${pipelineId}/cancel?ref=${branch}`, gitlabReposlug,
             {
                 method: 'POST'
-            })
+            });
         return response
     }
 

@@ -4,7 +4,6 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import CachedIcon from '@material-ui/icons/Cached';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { Box, Button, makeStyles, Tooltip } from '@material-ui/core';
-import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 // import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotations } from '../../../hooks/useEntityAnnotations';
@@ -71,7 +70,6 @@ export const PipelineActions = ({ status }: PipelineActionsProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const { triggerToken, runPipelineWithTrigger, cancelPipeline , listAllPipelines, setPipelineListState} = useContext(GitlabPipelinesContext);
   const classes = useStyles();
-  const errorApi = useApi(errorApiRef);
 
   if (!status) return null;
 
@@ -95,13 +93,8 @@ export const PipelineActions = ({ status }: PipelineActionsProps) => {
   }
 
   const handleClickActions = (status: string) => {
-    try {
       if (status !== GitlabPipelinesStatus.running) handleShowModal();
       else handleStopPipeline();
-    }
-    catch (e: any) {
-      errorApi.post(e)
-    }
   }
 
   return (
@@ -111,7 +104,7 @@ export const PipelineActions = ({ status }: PipelineActionsProps) => {
         <Box
           className={classes.button}
           role="button"
-          onClick={() => handleClickActions(GitlabPipelinesStatus.running)}
+          onClick={() => handleClickActions(status)}
         >
           <p>Cancel Pipeline</p>
           <Tooltip title="Stop" placement="top">
