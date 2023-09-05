@@ -8,7 +8,7 @@ jobs:
   build:
     env:
       CI: 'true'
-    runs-on: [self-hosted, Linux, ARM64]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       
