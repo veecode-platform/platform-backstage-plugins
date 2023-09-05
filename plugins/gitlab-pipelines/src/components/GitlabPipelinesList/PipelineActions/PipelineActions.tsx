@@ -6,7 +6,7 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { Box, Button, makeStyles, Tooltip } from '@material-ui/core';
 // import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
-import { useEntityAnnotations } from '../../../hooks/useEntityAnnotations';
+import { useEntityAnnotations } from '../../../hooks';
 import { entityMock } from '../../../mocks/component';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
 import { ModalComponent } from '../../ModalComponent/ModalComponent';
