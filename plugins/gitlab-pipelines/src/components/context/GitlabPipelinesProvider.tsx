@@ -172,7 +172,6 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
       }
     }
     catch(e:any){
-      console.log("deu erro")
       errorApi.post(e);
     }
   }

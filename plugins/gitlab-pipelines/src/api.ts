@@ -228,11 +228,11 @@ export class GitlabPipelinesApiClient implements GitlabPipelinesApi {
     }
 
     async retryPipelineJobs(gitlabReposlug: string, pipelineId: number): Promise<PipelineResponse> {
-        return this.retryPipelineJobs(gitlabReposlug, pipelineId);
+        return this.client.retryPipelineJobs(gitlabReposlug, pipelineId);
     }
 
     async cancelPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<PipelineResponse> {
-        return this.cancelPipelineJobs(gitlabReposlug, pipelineId, branch)
+        return this.client.cancelPipelineJobs(gitlabReposlug, pipelineId, branch)
     }
 
     async listPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<ListJobsResponse[]> {
