@@ -3,6 +3,8 @@ name: Publish Devportal plugins
 on:
   push:
     branches: ['master']
+    paths:
+      - 'plugins/**'
 
 jobs:
   build:
