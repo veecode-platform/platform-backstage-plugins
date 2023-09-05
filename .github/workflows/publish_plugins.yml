@@ -6,20 +6,16 @@ on:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        os: [[self-hosted, Linux, ARM64]]
-        node-version: [18.x]
     env:
       CI: 'true'
-    runs-on: ${{ matrix.os }}
+    runs-on: [self-hosted, Linux, ARM64]
     steps:
       - uses: actions/checkout@v3
       
-      - name: use node.js ${{ matrix.node-version }}
+      - name: use node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18.x
           registry-url: https://registry.npmjs.org/
           token: ${{secrets.NPM_TOKEN}}
 
