@@ -22,7 +22,7 @@ export const GitlabPipelinesOverview = () => {
               <Grid item>
                 <PipelinesTable/>
               </Grid>
-              <Grid item lg={8}>
+              <Grid item lg={10}>
                 <GitlabJobs/>
               </Grid>
             </Grid>
