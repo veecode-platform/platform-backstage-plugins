@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 18.x
           registry-url: https://registry.npmjs.org/
-          token: ${{secrets.NPM_TOKEN}}
+          token: ${{ secrets.NPM_TOKEN }}
 
       - name: yarn install
         run: yarn install
@@ -35,7 +35,7 @@ jobs:
       - name: Authenticate with npm
         run: |
           echo -e "\nnpmRegistryServer: \"https://registry.npmjs.org\"" >> .yarnrc.yml
-          echo "npmAuthToken: \"secretAuthTokenValue\"" >> .yarnrc.yml
+          echo "npmAuthToken: \"${{ secrets.NPM_TOKEN }}\"" >> .yarnrc.yml
 
       - name: publish plugins on npm
         run: yarn workspaces foreach npm publish --access public
