@@ -151,7 +151,7 @@ We encourage users to create a new tab in their catalog named "Workflows" and ke
 
 
 ```diff
-+ import { GithubWorkflowsList } from '@veecode-platform/plugin-github-workflows'
++ import { GithubWorkflowsList } from '@veecode-platform/backstage-plugin-github-workflows'
 
 const serviceEntityPage = (
   <EntityLayout>
@@ -286,7 +286,7 @@ As an indication, we use the cards directly in the component overview, like this
 `packages/app/src/components/catalog/EntityPage.tsx`
 
 ```diff
-+ import { isGithubWorkflowsAvailable, GithubWorkflowsCard } from '@veecode-platform/plugin-github-workflows'
++ import { isGithubWorkflowsAvailable, GithubWorkflowsCard } from '@veecode-platform/backstage-plugin-github-workflows'
 
 ....
 
