@@ -4,10 +4,10 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import CachedIcon from '@material-ui/icons/Cached';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { Box, Button, makeStyles, Tooltip } from '@material-ui/core';
-// import { useEntity } from '@backstage/plugin-catalog-react';
+import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotations } from '../../../hooks';
-import { entityMock } from '../../../mocks/component';
+// import { entityMock } from '../../../mocks/component';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
 import { ModalComponent } from '../../ModalComponent/ModalComponent';
 import { GitlabPipelinesStatus } from '../../../utils/enums/GitlabPipelinesStatus';
@@ -65,8 +65,8 @@ const useStyles = makeStyles(theme => (({
 
 export const PipelineActions = ({ status }: PipelineActionsProps) => {
 
-  // const { entity } = useEntity();  
-  const { projectName } = useEntityAnnotations(entityMock as Entity);
+  const { entity } = useEntity();  
+  const { projectName } = useEntityAnnotations(entity as Entity);
   const [showModal, setShowModal] = useState<boolean>(false);
   const { triggerToken, runPipelineWithTrigger, cancelPipeline , listAllPipelines, setPipelineListState} = useContext(GitlabPipelinesContext);
   const classes = useStyles();

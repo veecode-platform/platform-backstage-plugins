@@ -4,14 +4,14 @@ import { EmptyState, ErrorBoundary, MissingAnnotationEmptyState,
   } from '@backstage/core-components';
 import { Box, Button, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography, makeStyles } from '@material-ui/core';
 import useAsync from 'react-use/lib/useAsync';
-// import { useEntity } from '@backstage/plugin-catalog-react';
+import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { SelectBranch } from '../SelectBranch';
 import CachedIcon from '@material-ui/icons/Cached';
 import { GitlabPipelinesContext } from '../context/GitlabPipelinesContext';
 import { Job } from '../../utils/types';
 import { GITLAB_ANNOTATION, isGitlabAvailable, useEntityAnnotations } from '../../hooks';
-import { entityMock } from '../../mocks/component';
+// import { entityMock } from '../../mocks/component';
 import { JobItem } from './JobItem';
 import GitlabIcon from '../assets/gitlabIcon';
 
@@ -73,8 +73,8 @@ export const Cards = ({ items }: JobItemProps) => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const classes = useStyles();
-  // const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entityMock as Entity);
+  const { entity } = useEntity();
+  const { projectName } = useEntityAnnotations(entity as Entity);
   const { allJobs, setJobsListState, latestPipelineState } = useContext(GitlabPipelinesContext);
 
   const updateData = async () => {
@@ -141,8 +141,8 @@ export const Cards = ({ items }: JobItemProps) => {
 
 export const GitlabJobs = () => {
 
-  // const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entityMock as Entity)
+  const { entity } = useEntity();
+  const { projectName } = useEntityAnnotations(entity as Entity)
   const { branch, allJobs, latestPipeline, setJobsListState, jobsListState } = useContext(GitlabPipelinesContext);
 
   useEffect(() => {
@@ -188,7 +188,7 @@ export const GitlabJobs = () => {
     return <ResponseErrorPanel error={error} />;
   }
 
-  if (!isGitlabAvailable(entityMock)) {
+  if (!isGitlabAvailable(entity as Entity)) {
     return (
       <MissingAnnotationEmptyState annotation={GITLAB_ANNOTATION} />
     )

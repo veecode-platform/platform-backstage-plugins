@@ -58,6 +58,8 @@ import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 
 // test
 import { isGithubWorkflowsAvailable, GithubWorkflowsCard, GithubWorkflowsList } from '@veecode-platform/plugin-github-workflows'
+import { isGitlabAvailable } from '@internal/plugin-gitlab-pipelines/src/hooks';
+import { GitlabJobs, GitlabPipelineList } from '@internal/plugin-gitlab-pipelines';
 
 
 const techdocsContent = (
@@ -74,6 +76,10 @@ const cicdContent = (
   <EntitySwitch>
     <EntitySwitch.Case if={isGithubActionsAvailable}>
       <EntityGithubActionsContent />
+    </EntitySwitch.Case>
+
+    <EntitySwitch.Case if={isGitlabAvailable}>
+      <GitlabPipelineList/>
     </EntitySwitch.Case>
 
     <EntitySwitch.Case>
@@ -157,6 +163,15 @@ const overviewContent = (
         </Grid>
       </EntitySwitch.Case>
     </EntitySwitch>
+
+    <EntitySwitch>
+      <EntitySwitch.Case if={isGitlabAvailable}>
+        <Grid item lg={6} xs={12}>
+            <GitlabJobs />
+        </Grid>
+      </EntitySwitch.Case>
+    </EntitySwitch>
+    
     
     <Grid item md={6} xs={12}>
       <EntityLinksCard />

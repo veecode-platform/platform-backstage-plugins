@@ -14,21 +14,20 @@ import LanguageIcon from '@material-ui/icons/Language';
 import { Box, Button, Typography } from '@material-ui/core';
 import { SelectBranch } from '../../SelectBranch';
 import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
-// import { useEntity } from '@backstage/plugin-catalog-react';
+import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import SyncIcon from '@material-ui/icons/Sync';
-import { entityMock } from '../../../mocks/component';
+// import { entityMock } from '../../../mocks/component';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
 import { truncateString } from '../../../utils/commons';
 import { StatusComponent } from '../../StatusComponent';
 import { Pipeline } from '../../../utils/types';
 import { PipelineActions } from '../PipelineActions';
-import { GITLAB_ANNOTATION, useEntityAnnotations } from '../../../hooks';
+import { GITLAB_ANNOTATION, useEntityAnnotations, isGitlabAvailable } from '../../../hooks';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
 import GitlabIcon from '../../assets/gitlabIcon';
-import { isGitlabAvailable } from '../../../hooks';
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
@@ -86,10 +85,9 @@ type DenseTableProps = {
 
 export const DenseTable = ({ items }: DenseTableProps) => {
   
-  // const { entity } = useEntity();
-  // const [ showModal, setShowModal ] = useState<boolean>(false);
+  const { entity } = useEntity();
   const [ loading, setLoading] = useState<boolean>(false);
-  const { projectName } = useEntityAnnotations(entityMock);
+  const { projectName } = useEntityAnnotations(entity as Entity);
   const { listAllPipelines, setPipelineListState } = useContext(GitlabPipelinesContext);
   const classes = useStyles();
 
@@ -99,10 +97,6 @@ export const DenseTable = ({ items }: DenseTableProps) => {
     setPipelineListState(data as Pipeline[]);
     setTimeout(()=> setLoading(false), 800)
   }
-
-  // const handleShowModal = () => {
-  //   setShowModal(!showModal)
-  // }
 
   const columns: TableColumn[] = [
     { title: 'Pipeline ID', field: 'pipelineID',  width:'1fr', align:'center'},
@@ -181,9 +175,8 @@ export const DenseTable = ({ items }: DenseTableProps) => {
 
 export const PipelinesTable = () => {
 
-//   const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entityMock as Entity);
-  // const projectName = 'ValberJunior/teste-lambda';
+  const { entity } = useEntity();
+  const { projectName } = useEntityAnnotations(entity as Entity);
   const [ loadingState, setLoadingState ] = useState(true);
   const { branch, listAllPipelines, pipelineListState} = useContext(GitlabPipelinesContext);
 
@@ -231,7 +224,7 @@ export const PipelinesTable = () => {
     )
   }
 
-  if (!isGitlabAvailable(entityMock)) {
+  if (!isGitlabAvailable(entity as Entity)) {
     return (
       <MissingAnnotationEmptyState annotation={GITLAB_ANNOTATION} />
     )
