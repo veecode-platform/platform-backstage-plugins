@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ErrorBoundary, MissingAnnotationEmptyState,
-  //  Progress, ResponseErrorPanel 
+import { EmptyState, ErrorBoundary, MissingAnnotationEmptyState,
+   Progress, ResponseErrorPanel 
   } from '@backstage/core-components';
-import { Box, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography, makeStyles } from '@material-ui/core';
-// import useAsync from 'react-use/lib/useAsync';
+import { Box, Button, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography, makeStyles } from '@material-ui/core';
+import useAsync from 'react-use/lib/useAsync';
 // import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { SelectBranch } from '../SelectBranch';
@@ -75,9 +75,7 @@ export const Cards = ({ items }: JobItemProps) => {
   const classes = useStyles();
   // const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entityMock as Entity);
-  const { allJobs, setJobsListState, latestPipelineState, jobsListState } = useContext(GitlabPipelinesContext);
-
-  useEffect(()=>{console.log(jobsListState)},[jobsListState])
+  const { allJobs, setJobsListState, latestPipelineState } = useContext(GitlabPipelinesContext);
 
   const updateData = async () => {
     setLoading(true)
@@ -157,30 +155,44 @@ export const GitlabJobs = () => {
     setJobsListState(data as Job[])
   }
 
-  if (!jobsListState) {
+  const { loading, error } = useAsync(async (): Promise<void> => {
+    updateData();
+  }, []);
+
+  if (loading) {
+    return <Progress />;
+  }
+
+  if(!error && !jobsListState) {
+    return (
+      <>
+      { loading ? (<Progress />):(<EmptyState
+      missing="data"
+      title="No Pipeline Data"
+      description="This component has Gittab.ci enabled, but no data was found. Have you created any Pipeline? Click the button below to create a new pipeline in CI-CD Tab."
+      action={
+        <Button
+          variant="contained"
+          color="primary"
+          href={`https://gitlab.com/${projectName}`}
+        >
+          Visit your repository
+        </Button>
+      }
+    />)}
+    </>
+    )
+  }
+
+  if (error) {
+    return <ResponseErrorPanel error={error} />;
+  }
+
+  if (!GITLAB_ANNOTATION) {
     return (
       <MissingAnnotationEmptyState annotation={GITLAB_ANNOTATION} />
     )
   }
-
-  //   const { loading, error } = useAsync(async (): Promise<void> => {
-  //     const data = await listAllWorkflows(projectName, workflows);
-  //     setWorkflowsState(data as WorkflowResultsProps[])
-  // }, []);
-
-  // if (loading) {
-  //   return <Progress />;
-  // }
-
-  // if(!error && !workflowsState) {
-  //   return (
-  //     <MissingAnnotationEmptyState annotation={WORKFLOW_ANNOTATION} />
-  //   )
-  // }
-
-  // if (error) {
-  //   return <ResponseErrorPanel error={error} />;
-  // }
 
   return (
     <ErrorBoundary>

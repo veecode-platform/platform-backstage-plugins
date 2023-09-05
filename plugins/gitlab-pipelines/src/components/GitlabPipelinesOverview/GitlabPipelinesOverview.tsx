@@ -19,9 +19,7 @@ export const GitlabPipelinesOverview = () => {
               <SupportButton>A description of your plugin goes here.</SupportButton>
             </ContentHeader>
             <Grid container spacing={3} direction="column">
-              <Grid item>
                 <PipelinesTable/>
-              </Grid>
               <Grid item lg={10}>
                 <GitlabJobs/>
               </Grid>
