@@ -38,7 +38,7 @@ jobs:
           echo "npmAuthToken: \"${{ secrets.NPM_TOKEN }}\"" >> .yarnrc.yml
 
       - name: publish plugins on npm
-        run: yarn workspaces foreach npm publish --access public
+        run: yarn workspaces foreach npm publish
 
       - uses: EndBug/add-and-commit@v9
         with:
