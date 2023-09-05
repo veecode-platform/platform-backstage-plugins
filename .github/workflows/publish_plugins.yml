@@ -36,13 +36,7 @@ jobs:
         # run: yarn workspaces foreach npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: | 
-          yarn workspaces foreach -p --topological 'workspaceDir => {
-            if (workspaceDir !== process.cwd()) {
-              // Assuming you use npm as the package manager. If using something else, adjust accordingly.
-              return execa("npm", ["publish"], { cwd: workspaceDir });
-            }
-          }'
+        run: npm publish --workspaces=true
 
       - uses: EndBug/add-and-commit@v9
         with:
