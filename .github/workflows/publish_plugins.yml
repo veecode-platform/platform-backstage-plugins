@@ -2,40 +2,45 @@ name: Publish Devportal plugins
 
 on:
   push:
-    branches: ["master"]
+    branches: ['master']
 
 jobs:
   build:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node-version: [18.x]
     env:
       CI: 'true'
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: use node.js ${{ matrix.node-version }}
+      
+      - name: use node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18.x
           registry-url: https://registry.npmjs.org/
-          token: ${{secrets.NPM_TOKEN}}
+          token: ${{ secrets.NPM_TOKEN }}
+
       - name: yarn install
         run: yarn install
+
       - name: yarn tsc
         continue-on-error: true
         run: yarn tsc
-      - name: build workspace plugins 
+
+      - name: build workspace plugins
         run: yarn backstage-cli repo build #yarn workspaces foreach run backstage-cli package build
+
       - name: bump plugins version
         run: yarn workspaces foreach -v version patch
+      
       - name: publish plugins on npm
-        run: npm publish --workspaces=true
+        # run: yarn workspaces foreach npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --workspaces=true
+
       - uses: EndBug/add-and-commit@v9
         with:
+          add: 'plugins'
           message: update plugins version
           committer_name: veecode_actions
           committer_email: actions@vee.codes
