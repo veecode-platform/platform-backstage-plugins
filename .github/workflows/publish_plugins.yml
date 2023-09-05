@@ -33,7 +33,7 @@ jobs:
         run: yarn workspaces foreach -v version patch
       
       - name: Authenticate with npm
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
 
       - name: publish plugins on npm
         run: yarn workspaces foreach npm publish --access public
