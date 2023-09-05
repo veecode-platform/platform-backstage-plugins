@@ -37,7 +37,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: | 
-          yarn workspaces foreach -p --topological -q 'workspaceDir => {
+          yarn workspaces foreach -p --topological 'workspaceDir => {
             if (workspaceDir !== process.cwd()) {
               // Assuming you use npm as the package manager. If using something else, adjust accordingly.
               return execa("npm", ["publish"], { cwd: workspaceDir });
