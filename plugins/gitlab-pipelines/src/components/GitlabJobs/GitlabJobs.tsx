@@ -10,7 +10,7 @@ import { SelectBranch } from '../SelectBranch';
 import CachedIcon from '@material-ui/icons/Cached';
 import { GitlabPipelinesContext } from '../context/GitlabPipelinesContext';
 import { Job } from '../../utils/types';
-import { GITLAB_ANNOTATION, useEntityAnnotations } from '../../hooks/useEntityAnnotations';
+import { GITLAB_ANNOTATION, isGitlabAvailable, useEntityAnnotations } from '../../hooks';
 import { entityMock } from '../../mocks/component';
 import { JobItem } from './JobItem';
 import GitlabIcon from '../assets/gitlabIcon';
@@ -188,7 +188,7 @@ export const GitlabJobs = () => {
     return <ResponseErrorPanel error={error} />;
   }
 
-  if (!GITLAB_ANNOTATION) {
+  if (!isGitlabAvailable(entityMock)) {
     return (
       <MissingAnnotationEmptyState annotation={GITLAB_ANNOTATION} />
     )

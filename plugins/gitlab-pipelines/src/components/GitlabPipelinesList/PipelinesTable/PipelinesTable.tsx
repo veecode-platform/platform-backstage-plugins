@@ -6,7 +6,8 @@ import {
   Progress,
   ResponseErrorPanel,
   Link,
-  EmptyState
+  EmptyState,
+  MissingAnnotationEmptyState
  } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 import LanguageIcon from '@material-ui/icons/Language';
@@ -23,11 +24,12 @@ import { truncateString } from '../../../utils/commons';
 import { StatusComponent } from '../../StatusComponent';
 import { Pipeline } from '../../../utils/types';
 import { PipelineActions } from '../PipelineActions';
-import { useEntityAnnotations } from '../../../hooks/useEntityAnnotations';
+import { GITLAB_ANNOTATION, useEntityAnnotations } from '../../../hooks/useEntityAnnotations';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
 import GitlabIcon from '../../assets/gitlabIcon';
+import { isGitlabAvailable } from '../../../hooks';
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
@@ -227,6 +229,12 @@ export const PipelinesTable = () => {
       }
     />)}
     </>
+    )
+  }
+
+  if (!isGitlabAvailable(entityMock)) {
+    return (
+      <MissingAnnotationEmptyState annotation={GITLAB_ANNOTATION} />
     )
   }
   

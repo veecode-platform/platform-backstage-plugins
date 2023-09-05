@@ -1,1 +1,1 @@
-export { gitlabPipelinesPlugin, GitlabPipelinesPage } from './plugin';
+export * from './plugin';

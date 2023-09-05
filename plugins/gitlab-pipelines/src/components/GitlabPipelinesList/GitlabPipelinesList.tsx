@@ -3,7 +3,7 @@ import React from 'react'
 import { GitlabPipelinesProvider } from '../context/GitlabPipelinesProvider'
 import { PipelinesTable } from './PipelinesTable'
 
-export const GithubWorkflowsList = () => {
+export const GitlabPipelinesList = () => {
 
     return (
         <GitlabPipelinesProvider>
