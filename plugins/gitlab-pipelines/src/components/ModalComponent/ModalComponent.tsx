@@ -4,7 +4,6 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {
   Box,
@@ -68,12 +67,14 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
             key: event.target.value as string,
             value: jobParams?.value ?? ""
           });
+          setErrorsState({ ...errorsState, [event.target.name!]: false });
         }
         if (event.target.name === "jobVariableValue") {
           setJobParams({
             key: jobParams?.key ?? "", 
             value: event.target.value as string
           });
+          setErrorsState({ ...errorsState, [event.target.name!]: false });
         }
       }
     }
@@ -100,7 +101,6 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
         <>
           {modalType === "Pipeline" && (
             <TextField
-              autoFocus
               margin="dense"
               id="triggerToken"
               name="triggerToken"
@@ -123,7 +123,6 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
           {modalType === "Job" && (
             <>
               <TextField
-                autoFocus
                 margin="dense"
                 id="jobVariableKey"
                 name="jobVariableKey"
@@ -143,7 +142,6 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
               />
 
               <TextField
-                autoFocus
                 margin="dense"
                 id="jobVariableValue"
                 name="jobVariableValue"

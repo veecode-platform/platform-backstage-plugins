@@ -11,6 +11,8 @@ import { entityMock } from '../../../mocks/component';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
 import { ModalComponent } from '../../ModalComponent/ModalComponent';
 import { GitlabPipelinesStatus } from '../../../utils/enums/GitlabPipelinesStatus';
+import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import { Job } from '../../../utils/types';
 
 type JobActionsProps = {
   jobId: number,
@@ -68,7 +70,7 @@ export const JobActions = ({ jobId, status }: JobActionsProps) => {
   // const { entity } = useEntity();  
   const { projectName } = useEntityAnnotations(entityMock as Entity);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const { runJob, jobParams, cancelJob } = useContext(GitlabPipelinesContext);
+  const { runJob, jobParams, cancelJob, setJobsListState, allJobs, latestPipelineState } = useContext(GitlabPipelinesContext);
   const classes = useStyles();
   const errorApi = useApi(errorApiRef);
 
@@ -76,16 +78,26 @@ export const JobActions = ({ jobId, status }: JobActionsProps) => {
 
   const handleShowModal = () => setShowModal(!showModal);
 
-  const handleStartJob = async () => {
-    handleShowModal();
-    if (jobParams) await runJob(projectName, jobId, [jobParams]);
+  const updateData = async () => {
+    const data = await allJobs(projectName, latestPipelineState?.id!);
+    setJobsListState(data as Job[]);
   }
 
-  const handleStopJob = async () => await cancelJob(projectName,jobId);
+  const handleStartJob = async () => {
+    if (jobParams) {
+      await runJob(projectName, jobId, [jobParams]);
+      await updateData();
+    }
+  }
+
+  const handleStopJob = async () => {
+    await cancelJob(projectName,jobId);
+    await updateData();
+  };
 
   const handleClickActions = (status: string) => {
     try {
-      if (status !== GitlabPipelinesStatus.running) handleStartJob();
+      if (status !== GitlabPipelinesStatus.running) handleShowModal();
       else handleStopJob();
     }
     catch (e: any) {
@@ -103,7 +115,17 @@ export const JobActions = ({ jobId, status }: JobActionsProps) => {
             />
           </Tooltip>
       )}
-      {(status.toLocaleLowerCase() !== GitlabPipelinesStatus.running && status.toLocaleLowerCase() !== GitlabPipelinesStatus.success) &&
+      {status.toLocaleLowerCase() === GitlabPipelinesStatus.pending && (
+          <Tooltip title="please wait" placement="top">
+            <AccessTimeIcon />
+          </Tooltip>
+      )}
+      
+      {(status.toLocaleLowerCase() !== GitlabPipelinesStatus.running 
+       && status.toLocaleLowerCase() !== GitlabPipelinesStatus.pending 
+       && status.toLocaleLowerCase() !== GitlabPipelinesStatus.success
+       && status.toLocaleUpperCase() !== GitlabPipelinesStatus.canceled
+       ) &&
         (
 
           <Tooltip title="Run" placement="top">

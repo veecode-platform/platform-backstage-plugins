@@ -10,10 +10,10 @@ import {
  } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 import LanguageIcon from '@material-ui/icons/Language';
-import { Box, Button, Tooltip, Typography } from '@material-ui/core';
+import { Box, Button, Typography } from '@material-ui/core';
 import { SelectBranch } from '../../SelectBranch';
 import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
-import { useEntity } from '@backstage/plugin-catalog-react';
+// import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import SyncIcon from '@material-ui/icons/Sync';
 // import { ModalComponent } from '../ModalComponent';
