@@ -33,7 +33,7 @@ jobs:
         run: yarn workspaces foreach -v version patch
 
       - name: publish plugins on npm
-        run: yarn workspaces foreach npm publish --access public
+        run: yarn workspaces foreach npm publish --access public --otp ${{ secrets.NPM_TOKEN }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
