@@ -142,8 +142,15 @@ export const Cards = ({ items }: JobItemProps) => {
 export const AllJobsComponent = () => {
 
   const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entity as Entity)
+  const { projectName } = useEntityAnnotations(entity as Entity);
+  const [ loadingState, setLoadingState ] = useState(true);
   const { branch, allJobs, latestPipeline, setJobsListState, jobsListState } = useContext(GitlabPipelinesContext);
+
+  useEffect(()=>{
+    setTimeout(()=>{
+      setLoadingState(false)
+    },2000);
+  },[])
 
   useEffect(() => {
     updateData()
@@ -166,7 +173,7 @@ export const AllJobsComponent = () => {
   if(!error && !jobsListState) {
     return (
       <>
-      { loading ? (<Progress />):(<EmptyState
+      { loadingState ? (<Progress />):(<EmptyState
       missing="data"
       title="No Pipeline Data"
       description="This component has Gittab.ci enabled, but no data was found. Have you created any Pipeline? Click the button below to create a new pipeline in CI-CD Tab."
