@@ -234,7 +234,6 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
   }
 
   const runJob = async (projectName: string, jobId: number, params: JobsVariablesAttributes[]) => {
-    console.log(projectName, jobId, params)
     try{
       const response = await api.runJob(projectName, jobId, params, branch!);
       if(response.id){
