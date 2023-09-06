@@ -26,7 +26,6 @@ No arquivo `app-config.yaml`:
 proxy:
 
   '/gitlab-pipelines':
-    # target: https://gitlab.com/api/v4
     target: https://gitlab.com/api/v4
     allowedHeaders: ['PRIVATE-TOKEN']
     headers:
