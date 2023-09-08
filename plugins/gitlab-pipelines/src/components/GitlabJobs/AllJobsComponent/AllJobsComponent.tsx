@@ -142,15 +142,16 @@ export const Cards = ({ items }: JobItemProps) => {
 export const AllJobsComponent = () => {
 
   const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entity as Entity);
+  const { projectName, jobsAnnotations } = useEntityAnnotations(entity as Entity);
   const [ loadingState, setLoadingState ] = useState(true);
-  const { branch, allJobs, latestPipeline, setJobsListState, jobsListState } = useContext(GitlabPipelinesContext);
+  const { branch, JobsFiltered, latestPipeline, setJobsListState, jobsListState } = useContext(GitlabPipelinesContext);
 
   useEffect(()=>{
     setTimeout(()=>{
       setLoadingState(false)
+      console.log(jobsAnnotations)
     },2000);
-  },[])
+  },[]);
 
   useEffect(() => {
     updateData()
@@ -158,7 +159,7 @@ export const AllJobsComponent = () => {
 
   const updateData = async () => {
     const pipelineData = await latestPipeline(projectName);
-    const data = await allJobs(projectName, pipelineData?.id!);
+    const data = await JobsFiltered(projectName, pipelineData?.id!);
     setJobsListState(data as Job[])
   }
 

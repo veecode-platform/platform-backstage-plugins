@@ -206,6 +206,36 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
     }
   }
 
+  const JobsFiltered = async(projectName: string, pipelineId: number)=>{
+    try{
+      const response = await api.listPipelineJobs(projectName, pipelineId, branch!);
+      if(response.length > 0){
+        const JobsList : Job[] = [];
+        response.map((j:ListJobsResponse)=>{
+          JobsList.push({
+            id: j.id as number,
+            status: j.status,
+            stage: j.stage,
+            name: j.name,
+            ref: j.ref,
+            tag: j.tag,
+            pipeline: j.pipeline,
+            web_url: j.web_url,
+            artifacts: j.artifacts,
+            runner: j.runner
+          })
+        });
+        setJobsListState(JobsList);
+        return JobsList;
+      }
+      else return null
+    }
+    catch(e:any){
+      errorApi.post(e);
+      return null;
+    }
+  }
+
   const getSingleJob = async(projectName: string, jobId: number) => {
     try{
       const response = await api.getSingleJob(projectName, jobId, branch!);
@@ -328,6 +358,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         retryPipeline,
         cancelPipeline,
         allJobs,
+        JobsFiltered,
         jobsListState,
         setJobsListState,
         getSingleJob,

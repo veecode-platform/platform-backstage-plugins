@@ -24,7 +24,8 @@
   },
   "workspaces": {
     "packages": [
-      "plugins/github-workflows"
+      "packages/*",
+      "plugins/*"
     ]
   },
   "devDependencies": {

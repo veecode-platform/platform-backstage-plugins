@@ -17,6 +17,7 @@ export type GitlabPipelinesContextType = {
   retryPipeline: (projectName: string) => Promise<void>,
   cancelPipeline: (projectName: string) => Promise<void>,
   allJobs:  (projectName: string, pipelineId: number) => Promise<Job[] | null>,
+  JobsFiltered: (projectName: string, pipelineId: number) => Promise<Job[] | null>,
   jobsListState: Job[] | null,
   setJobsListState: React.Dispatch<React.SetStateAction<Job[] | null>>,
   getSingleJob: (projectName: string, jobId: number) => Promise<Job | null>,
