@@ -1,9 +1,5 @@
 import { Entity } from '@backstage/catalog-model';
-
-export interface JobAnnotationProps {
-  label: string,
-  var: string
-}
+import { JobAnnotationProps } from '../utils/types';
 
 export const GITLAB_ANNOTATION = 'gitlab.com/project-slug';
 export const GITLAB_JOBS_ANNOTATION = 'gitlab.com/jobs';

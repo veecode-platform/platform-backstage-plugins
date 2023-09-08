@@ -1,5 +1,5 @@
 import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
-import { JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse } from './utils/types';
+import { JobAnnotationProps, JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse } from './utils/types';
 
 const GITLAB_PIPELINES_PROXY_URL = "/gitlab-pipelines";
 
@@ -19,7 +19,7 @@ export interface GitlabPipelinesApi {
     /**
      * run a new pipeline
      */
-    runNewPipeline(gitlabReposlug: string, branch: string): Promise<PipelineResponse>;
+    runNewPipeline(gitlabReposlug: string, branch: string, variables: JobAnnotationProps[]): Promise<PipelineResponse>
     /**
      *  run a new pipeline with trigger
      */
@@ -107,13 +107,18 @@ class Client {
         return response
     }
 
-    async runNewPipeline(gitlabReposlug: string, branch: string) {
+    async runNewPipeline(gitlabReposlug: string, branch: string, variables: JobAnnotationProps[]) {
+        const requestBody = {
+            ref: branch,
+            variables: variables
+        };
         const response = await this.fetch<PipelineResponse>(`/pipeline?ref=${branch}`, gitlabReposlug,
         {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(requestBody)
         })
         return response
     }
@@ -219,8 +224,8 @@ export class GitlabPipelinesApiClient implements GitlabPipelinesApi {
         return this.client.getLatestPipeline(gitlabReposlug, branch)
     }
 
-    async runNewPipeline(gitlabReposlug: string, branch: string): Promise<PipelineResponse> {
-        return this.client.runNewPipeline(gitlabReposlug,branch)
+    async runNewPipeline(gitlabReposlug: string, branch: string, variables: JobAnnotationProps[]): Promise<PipelineResponse> {
+        return this.client.runNewPipeline(gitlabReposlug,branch,variables);
     }
 
     async runNewPipelineWithTrigger(gitlabReposlug: string, triggerToken: string, branch: string): Promise<PipelineResponse> {

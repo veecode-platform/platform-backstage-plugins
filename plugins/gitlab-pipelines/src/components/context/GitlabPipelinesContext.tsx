@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Job, JobsVariablesAttributes, Pipeline } from "../../utils/types";
+import { Job, JobAnnotationProps, JobsVariablesAttributes, Pipeline } from "../../utils/types";
 
 
 export type GitlabPipelinesContextType = {
@@ -12,12 +12,11 @@ export type GitlabPipelinesContextType = {
   latestPipelineState: Pipeline | null,
   triggerToken: string,
   setTriggerTokenState: (token: string) => void,
-  runNewPipeline: (projectName: string) => Promise<void>,
+  runNewPipeline: (projectName: string, variables: JobAnnotationProps[]) => Promise<void>,
   runPipelineWithTrigger: (projectName: string, triggerToken: string) => Promise<void>,
   retryPipeline: (projectName: string) => Promise<void>,
   cancelPipeline: (projectName: string) => Promise<void>,
   allJobs:  (projectName: string, pipelineId: number) => Promise<Job[] | null>,
-  JobsFiltered: (projectName: string, pipelineId: number) => Promise<Job[] | null>,
   jobsListState: Job[] | null,
   setJobsListState: React.Dispatch<React.SetStateAction<Job[] | null>>,
   getSingleJob: (projectName: string, jobId: number) => Promise<Job | null>,

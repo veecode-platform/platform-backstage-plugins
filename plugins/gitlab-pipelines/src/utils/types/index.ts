@@ -201,3 +201,8 @@ export interface Runner {
     online: boolean,
     status: string
 }
+
+export interface JobAnnotationProps {
+    label: string,
+    var: string
+  }

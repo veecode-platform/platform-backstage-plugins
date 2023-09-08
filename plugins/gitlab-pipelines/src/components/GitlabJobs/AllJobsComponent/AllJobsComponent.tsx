@@ -144,7 +144,7 @@ export const AllJobsComponent = () => {
   const { entity } = useEntity();
   const { projectName, jobsAnnotations } = useEntityAnnotations(entity as Entity);
   const [ loadingState, setLoadingState ] = useState(true);
-  const { branch, JobsFiltered, latestPipeline, setJobsListState, jobsListState } = useContext(GitlabPipelinesContext);
+  const { branch, allJobs, latestPipeline, setJobsListState, jobsListState } = useContext(GitlabPipelinesContext);
 
   useEffect(()=>{
     setTimeout(()=>{
@@ -158,8 +158,11 @@ export const AllJobsComponent = () => {
   }, [branch])
 
   const updateData = async () => {
+    console.log(projectName)
     const pipelineData = await latestPipeline(projectName);
-    const data = await JobsFiltered(projectName, pipelineData?.id!);
+    console.log(pipelineData)
+    const data = await allJobs(projectName, pipelineData?.id!);
+    console.log(data)
     setJobsListState(data as Job[])
   }
 

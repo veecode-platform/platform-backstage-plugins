@@ -3,12 +3,12 @@ import { useState } from "react";
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { gitlabPipelinesApiRef } from '../../api';
 import { GitlabPipelinesContext } from './GitlabPipelinesContext';
-import { Job, JobsVariablesAttributes, ListJobsResponse, Pipeline } from '../../utils/types';
+import { Job, JobAnnotationProps, JobsVariablesAttributes, ListJobsResponse, Pipeline } from '../../utils/types';
 
 
 export const GitlabPipelinesProvider: React.FC = ({ children }) => {
 
-  const [branch, setBranch] = useState<string>('');
+  const [branch, setBranch] = useState<string>('main');
   const [pipelineListState, setPipelineListState] = useState<Pipeline[]|null>(null);
   const [ latestPipelineState, setLatestPipelineState ] = useState<Pipeline|null>(null);
   const [jobsListState, setJobsListState] = useState<Job[]|null>(null);
@@ -56,6 +56,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
   const latestPipeline = async(projecName: string )=>{
     try{
       const pipeline = await api.getLatestPipeline(projecName, branch!);
+      console.log(pipeline)
       if(pipeline.id){
         const pipelineData : Pipeline = {
           id: pipeline.id,
@@ -76,13 +77,14 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
     }
     catch(e:any){
       errorApi.post(e);
+      console.log('errp')
       return null
     }
   }
 
-  const runNewPipeline = async(projectName: string) => {
+  const runNewPipeline = async(projectName: string, variables: JobAnnotationProps[]) => {
     try{
-      const response = await api.runNewPipeline(projectName, branch!);
+      const response = await api.runNewPipeline(projectName, branch!, variables);
       if(response.status === "created"){
         setLatestPipelineState({
           id: response.id,
@@ -183,36 +185,6 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         const JobsList : Job[] = [];
         response.filter((j:ListJobsResponse)=>{
           j.allow_failure && JobsList.push({
-            id: j.id as number,
-            status: j.status,
-            stage: j.stage,
-            name: j.name,
-            ref: j.ref,
-            tag: j.tag,
-            pipeline: j.pipeline,
-            web_url: j.web_url,
-            artifacts: j.artifacts,
-            runner: j.runner
-          })
-        });
-        setJobsListState(JobsList);
-        return JobsList;
-      }
-      else return null
-    }
-    catch(e:any){
-      errorApi.post(e);
-      return null;
-    }
-  }
-
-  const JobsFiltered = async(projectName: string, pipelineId: number)=>{
-    try{
-      const response = await api.listPipelineJobs(projectName, pipelineId, branch!);
-      if(response.length > 0){
-        const JobsList : Job[] = [];
-        response.map((j:ListJobsResponse)=>{
-          JobsList.push({
             id: j.id as number,
             status: j.status,
             stage: j.stage,
@@ -358,7 +330,6 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         retryPipeline,
         cancelPipeline,
         allJobs,
-        JobsFiltered,
         jobsListState,
         setJobsListState,
         getSingleJob,
