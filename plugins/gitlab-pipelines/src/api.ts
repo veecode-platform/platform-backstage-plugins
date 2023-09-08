@@ -1,5 +1,5 @@
 import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
-import { JobAnnotationProps, JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse } from './utils/types';
+import { JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse, VariablesParams } from './utils/types';
 
 const GITLAB_PIPELINES_PROXY_URL = "/gitlab-pipelines";
 
@@ -19,7 +19,7 @@ export interface GitlabPipelinesApi {
     /**
      * run a new pipeline
      */
-    runNewPipeline(gitlabReposlug: string, branch: string, variables: JobAnnotationProps[]): Promise<PipelineResponse>
+    runNewPipeline(gitlabReposlug: string, branch: string, variables: VariablesParams[]): Promise<PipelineResponse>
     /**
      *  run a new pipeline with trigger
      */
@@ -107,7 +107,7 @@ class Client {
         return response
     }
 
-    async runNewPipeline(gitlabReposlug: string, branch: string, variables: JobAnnotationProps[]) {
+    async runNewPipeline(gitlabReposlug: string, branch: string, variables: VariablesParams[]) {
         const requestBody = {
             ref: branch,
             variables: variables
@@ -224,7 +224,7 @@ export class GitlabPipelinesApiClient implements GitlabPipelinesApi {
         return this.client.getLatestPipeline(gitlabReposlug, branch)
     }
 
-    async runNewPipeline(gitlabReposlug: string, branch: string, variables: JobAnnotationProps[]): Promise<PipelineResponse> {
+    async runNewPipeline(gitlabReposlug: string, branch: string, variables: VariablesParams[]): Promise<PipelineResponse> {
         return this.client.runNewPipeline(gitlabReposlug,branch,variables);
     }
 

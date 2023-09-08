@@ -9,8 +9,8 @@ import { Entity } from '@backstage/catalog-model';
 import { SelectBranch } from '../../SelectBranch';
 import CachedIcon from '@material-ui/icons/Cached';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
-import { Job } from '../../../utils/types';
-import { GITLAB_ANNOTATION, isGitlabAvailable, useEntityAnnotations } from '../../../hooks';
+import { Job, JobAnnotationProps } from '../../../utils/types';
+import { GITLAB_ANNOTATION, GITLAB_JOBS_ANNOTATION, isGitlabAvailable, useEntityAnnotations } from '../../../hooks';
 // import { entityMock } from '../../../mocks/component';
 import { JobItem } from '../JobItem';
 import GitlabIcon from '../../assets/gitlabIcon';
@@ -66,7 +66,7 @@ const useStyles = makeStyles(theme => ({
 
 
 type JobItemProps = {
-  items: Job[] | []
+  items: JobAnnotationProps[] | []
 }
 
 export const Cards = ({ items }: JobItemProps) => {
@@ -74,14 +74,11 @@ export const Cards = ({ items }: JobItemProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const classes = useStyles();
   const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entity as Entity);
-  const { allJobs, setJobsListState, latestPipelineState } = useContext(GitlabPipelinesContext);
+  const { jobsAnnotations } = useEntityAnnotations(entity as Entity);
+  const { branch, setJobsByAnnotation, jobsByAnnotation } = useContext(GitlabPipelinesContext);
 
-  const updateData = async () => {
-    setLoading(true)
-    const data = await allJobs(projectName, latestPipelineState?.id!);
-    setJobsListState(data as Job[]);
-    setTimeout(() => setLoading(false), 1500);
+  const updateData = () => {
+    setJobsByAnnotation(jobsAnnotations)
   }
 
   const TitleBar = (
@@ -123,10 +120,10 @@ export const Cards = ({ items }: JobItemProps) => {
               <>
                 {items.map(item =>
                   <JobItem
-                    id={item.id!}
+                    id={item.id}
                     key={item.id}
-                    status={item.status}
-                    name={item.name}
+                    name={item.label}
+                    variable={item.var}
                   />
                 )
                 }
@@ -142,28 +139,15 @@ export const Cards = ({ items }: JobItemProps) => {
 export const AllJobsComponent = () => {
 
   const { entity } = useEntity();
-  const { projectName, jobsAnnotations } = useEntityAnnotations(entity as Entity);
-  const [ loadingState, setLoadingState ] = useState(true);
-  const { branch, allJobs, latestPipeline, setJobsListState, jobsListState } = useContext(GitlabPipelinesContext);
-
-  useEffect(()=>{
-    setTimeout(()=>{
-      setLoadingState(false)
-      console.log(jobsAnnotations)
-    },2000);
-  },[]);
+  const { jobsAnnotations } = useEntityAnnotations(entity as Entity);
+  const { branch, setJobsByAnnotation, jobsByAnnotation } = useContext(GitlabPipelinesContext);
 
   useEffect(() => {
     updateData()
   }, [branch])
 
-  const updateData = async () => {
-    console.log(projectName)
-    const pipelineData = await latestPipeline(projectName);
-    console.log(pipelineData)
-    const data = await allJobs(projectName, pipelineData?.id!);
-    console.log(data)
-    setJobsListState(data as Job[])
+  const updateData = () => {
+    setJobsByAnnotation(jobsAnnotations)
   }
 
   const { loading, error } = useAsync(async (): Promise<void> => {
@@ -174,40 +158,19 @@ export const AllJobsComponent = () => {
     return <Progress />;
   }
 
-  if(!error && !jobsListState) {
-    return (
-      <>
-      { loadingState ? (<Progress />):(<EmptyState
-      missing="data"
-      title="No Pipeline Data"
-      description="This component has Gittab.ci enabled, but no data was found. Have you created any Pipeline? Click the button below to create a new pipeline in CI-CD Tab."
-      action={
-        <Button
-          variant="contained"
-          color="primary"
-          href={`https://gitlab.com/${projectName}`}
-        >
-          Visit your repository
-        </Button>
-      }
-    />)}
-    </>
-    )
-  }
-
   if (error) {
     return <ResponseErrorPanel error={error} />;
   }
 
-  if (!isGitlabAvailable(entity as Entity)) {
+  if (!jobsAnnotations) {
     return (
-      <MissingAnnotationEmptyState annotation={GITLAB_ANNOTATION} />
+      <MissingAnnotationEmptyState annotation={GITLAB_JOBS_ANNOTATION} />
     )
   }
 
   return (
       <ErrorBoundary>
-        <Cards items={jobsListState || []} />
+        <Cards items={jobsByAnnotation || []} />
       </ErrorBoundary>
   );
 };

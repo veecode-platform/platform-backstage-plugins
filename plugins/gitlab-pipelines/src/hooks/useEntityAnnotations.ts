@@ -10,11 +10,18 @@ export const useEntityAnnotations = (entity: Entity) => {
   const JobsList =
     entity?.metadata.annotations?.[GITLAB_JOBS_ANNOTATION] ?? '';  
 
+    if (!JobsList) {
+      return {
+        projectName,
+        jobsAnnotations: null,
+      };
+    }
+
   const jobsAnnotationList = JobsList.includes(',') ? JobsList.split(',') : [JobsList];
 
   const jobsAnnotations: JobAnnotationProps[] = jobsAnnotationList.map(item => {
     const [label, varValue] = item.split(':');
-    return { label, var: varValue };
+    return { id: label, label, var: varValue };
   });
   
   return {

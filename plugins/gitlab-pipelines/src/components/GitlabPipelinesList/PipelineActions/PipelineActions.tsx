@@ -43,13 +43,12 @@ const useStyles = makeStyles(theme => (({
   },
   boxInfo: {
     padding: '1rem',
-    fontSize: '12px',
+    fontSize: '1rem',
     borderRadius: '8px',
     background: '#60a5fa40',
     display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     gap: '.5rem'
   },
   buttonDocs: {
@@ -68,7 +67,7 @@ export const PipelineActions = ({ status }: PipelineActionsProps) => {
   const { entity } = useEntity();  
   const { projectName } = useEntityAnnotations(entity as Entity);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const { triggerToken, runPipelineWithTrigger, cancelPipeline , listAllPipelines, setPipelineListState} = useContext(GitlabPipelinesContext);
+  const { variablesParams, runNewPipeline, cancelPipeline , listAllPipelines, setPipelineListState} = useContext(GitlabPipelinesContext);
   const classes = useStyles();
 
   if (!status) return null;
@@ -81,8 +80,8 @@ export const PipelineActions = ({ status }: PipelineActionsProps) => {
   }
 
   const handleStartPipeline = async () => {
-    if (triggerToken) {
-      await runPipelineWithTrigger(projectName, triggerToken);
+    if (variablesParams) {
+      await runNewPipeline(projectName, variablesParams);
       await updateData();
     }
   }
@@ -165,11 +164,9 @@ export const PipelineActions = ({ status }: PipelineActionsProps) => {
             open={showModal}
             title="Run Gitlab Pipeline"
             subtitle={(<Box className={classes.boxInfo}>
-              ℹ️ In order to get your pipeline running, you need to set a token in the
-              Trigger Pipelines section of your Gitlab. If you haven't already,
-              here's how to do it:
+              ℹ️ Insert the variables according to the Jobs you want to run.
               <Button
-                href="https://docs.gitlab.com/ee/ci/triggers/index.html"
+                href="https://docs.gitlab.com/ee/ci/variables/index.html"
                 className={classes.buttonDocs}
                 target='_blank'
               >

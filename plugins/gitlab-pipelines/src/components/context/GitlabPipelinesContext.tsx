@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Job, JobAnnotationProps, JobsVariablesAttributes, Pipeline } from "../../utils/types";
+import { Job, JobAnnotationProps, JobsVariablesAttributes, Pipeline, VariablesParams } from "../../utils/types";
 
 
 export type GitlabPipelinesContextType = {
@@ -12,12 +12,16 @@ export type GitlabPipelinesContextType = {
   latestPipelineState: Pipeline | null,
   triggerToken: string,
   setTriggerTokenState: (token: string) => void,
-  runNewPipeline: (projectName: string, variables: JobAnnotationProps[]) => Promise<void>,
+  variablesParams: VariablesParams[] | null,
+  setVariablesParams: React.Dispatch<React.SetStateAction<VariablesParams[] | null>>,
+  runNewPipeline: (projectName: string, variables: VariablesParams[]) => Promise<void>,
   runPipelineWithTrigger: (projectName: string, triggerToken: string) => Promise<void>,
   retryPipeline: (projectName: string) => Promise<void>,
   cancelPipeline: (projectName: string) => Promise<void>,
   allJobs:  (projectName: string, pipelineId: number) => Promise<Job[] | null>,
   jobsListState: Job[] | null,
+  jobsByAnnotation: JobAnnotationProps[] | null,
+  setJobsByAnnotation: React.Dispatch<React.SetStateAction<JobAnnotationProps[] | null>>,
   setJobsListState: React.Dispatch<React.SetStateAction<Job[] | null>>,
   getSingleJob: (projectName: string, jobId: number) => Promise<Job | null>,
   runJob: (projectName: string, jobId: number, params: JobsVariablesAttributes[]) => Promise<Job | null>,

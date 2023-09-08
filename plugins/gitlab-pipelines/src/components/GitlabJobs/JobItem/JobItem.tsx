@@ -3,11 +3,12 @@ import React from 'react';
 import { StatusComponent } from '../../StatusComponent';
 import { truncateString } from '../../../utils/commons';
 import { JobActions } from '../JobActions';
+import { GitlabPipelinesStatus } from '../../../utils/enums/GitlabPipelinesStatus';
 
 type JobProps = {
-  id: number,
+  id: string,
   name: string,
-  status?: string
+  variable: string
 }
 
 const useStyles = makeStyles(theme => ({
@@ -36,7 +37,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const JobItem = ({ id, name, status}: JobProps) => {
+export const JobItem = ({ id, name}: JobProps) => {
 
   const classes = useStyles();
 
@@ -45,7 +46,7 @@ export const JobItem = ({ id, name, status}: JobProps) => {
       className={classes.workflow}
     >
       <StatusComponent
-        status={status}
+        status={GitlabPipelinesStatus.failed}
         icon
       />
 
@@ -61,8 +62,8 @@ export const JobItem = ({ id, name, status}: JobProps) => {
         role="button"
         className={classes.clickable}>
         <JobActions
-          jobId={id}
-          status={status}
+          jobId={4848484}
+          status={GitlabPipelinesStatus.failed}
         />
       </Box>
 

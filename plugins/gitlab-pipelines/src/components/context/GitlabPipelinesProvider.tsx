@@ -3,16 +3,18 @@ import { useState } from "react";
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { gitlabPipelinesApiRef } from '../../api';
 import { GitlabPipelinesContext } from './GitlabPipelinesContext';
-import { Job, JobAnnotationProps, JobsVariablesAttributes, ListJobsResponse, Pipeline } from '../../utils/types';
+import { Job, JobAnnotationProps, JobsVariablesAttributes, ListJobsResponse, Pipeline, VariablesParams } from '../../utils/types';
 
 
 export const GitlabPipelinesProvider: React.FC = ({ children }) => {
 
-  const [branch, setBranch] = useState<string>('main');
+  const [branch, setBranch] = useState<string>('');
   const [pipelineListState, setPipelineListState] = useState<Pipeline[]|null>(null);
   const [ latestPipelineState, setLatestPipelineState ] = useState<Pipeline|null>(null);
   const [jobsListState, setJobsListState] = useState<Job[]|null>(null);
+  const [jobsByAnnotation, setJobsByAnnotation] = useState<JobAnnotationProps[]|null>(null);
   const [triggerToken, setTriggerToken] = useState<string>('');
+  const [variablesParams, setVariablesParams] = useState<VariablesParams[]|null>(null);
   const [jobParams, setJobParams] = useState<JobsVariablesAttributes|null>(null);
   const api = useApi(gitlabPipelinesApiRef);
   const errorApi = useApi(errorApiRef);
@@ -56,7 +58,6 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
   const latestPipeline = async(projecName: string )=>{
     try{
       const pipeline = await api.getLatestPipeline(projecName, branch!);
-      console.log(pipeline)
       if(pipeline.id){
         const pipelineData : Pipeline = {
           id: pipeline.id,
@@ -77,12 +78,11 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
     }
     catch(e:any){
       errorApi.post(e);
-      console.log('errp')
       return null
     }
   }
 
-  const runNewPipeline = async(projectName: string, variables: JobAnnotationProps[]) => {
+  const runNewPipeline = async(projectName: string, variables: VariablesParams[]) => {
     try{
       const response = await api.runNewPipeline(projectName, branch!, variables);
       if(response.status === "created"){
@@ -325,12 +325,16 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         latestPipelineState,
         triggerToken,
         setTriggerTokenState,
+        variablesParams,
+        setVariablesParams,
         runNewPipeline,
         runPipelineWithTrigger,
         retryPipeline,
         cancelPipeline,
         allJobs,
         jobsListState,
+        jobsByAnnotation,
+        setJobsByAnnotation,
         setJobsListState,
         getSingleJob,
         jobParams,

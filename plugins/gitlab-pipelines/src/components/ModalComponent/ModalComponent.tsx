@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { GitlabPipelinesContext } from '../context/GitlabPipelinesContext';
 import { validateString } from '../../utils/validators';
+import TextFieldComponent from './TextFieldComponent/TextFieldComponent';
 
 type ModalComponentProps = {
   open: boolean,
@@ -22,8 +23,9 @@ type ModalComponentProps = {
   handleStartAction: () => Promise<void>
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme) => ({ 
   modal: {
+    width: '100%',
     padding: '4rem',
     borderTop: `1px solid ${theme.palette.divider}`,
     display: 'flex',
@@ -32,11 +34,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     gap: '1rem'
   },
-  formControl: {
-    width: '100%'
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
+  InputField:{
+    width:'100%'
   },
   footer: {
     padding: '0 1.5rem 1.8rem 0'
@@ -47,7 +46,7 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
 
   const [errorsState, setErrorsState] = useState<Record<string, boolean>>({});
   const classes = useStyles();
-  const { triggerToken, setTriggerTokenState, jobParams, setJobParams } = useContext(GitlabPipelinesContext);
+  const {jobParams, setJobParams, setVariablesParams } = useContext(GitlabPipelinesContext);
 
   const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) => {
     if (required) {
@@ -57,10 +56,6 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
       if (event.target.value === "") return setErrorsState({ ...errorsState, [event.target.name!]: true });
     }
     if (event) {
-      if (modalType === "Pipeline") {
-        setTriggerTokenState(event.target.value as string);
-        setErrorsState({ ...errorsState, [event.target.name!]: false });
-      }
       if(modalType === "Job"){
         if (event.target.name === "jobVariableKey") {
           setJobParams({
@@ -80,7 +75,6 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
     }
   };
 
-
   const touchedField = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>, required: boolean) => {
     if (required && event.target.value === "") setErrorsState({ ...errorsState, [event.target.name!]: true })
     return;
@@ -92,7 +86,7 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
   }
 
   return (
-    <Dialog open={open} onClose={handleModal} aria-labelledby="form-dialog-title">
+    <Dialog open={open} onClose={handleModal} aria-labelledby="form-dialog-title" maxWidth="lg" fullWidth>
       <DialogTitle id="form-dialog-title">{title}</DialogTitle>
       <DialogContent className={classes.modal}>
         <Box>
@@ -100,24 +94,13 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
         </Box>
         <>
           {modalType === "Pipeline" && (
-            <TextField
-              margin="dense"
-              id="triggerToken"
-              name="triggerToken"
-              defaultValue={triggerToken ?? ''}
-              required
-              label="Insert the trigger pipeline token"
-              type="string"
-              fullWidth
-              onBlur={(event) => touchedField(event, true)}
-              onChange={(event) => handleChange(event, true, 'string')}
-              error={errorsState['triggerToken']}
-              helperText={
-                errorsState['triggerToken']
-                  ? 'use at least 3 characters'
-                  : null
-              }
-            />
+            <Box className={classes.InputField}>
+              <TextFieldComponent
+               setVariables={setVariablesParams}
+               setError={setErrorsState}
+               errors={errorsState}
+              />
+            </Box>
           )}
 
           {modalType === "Job" && (

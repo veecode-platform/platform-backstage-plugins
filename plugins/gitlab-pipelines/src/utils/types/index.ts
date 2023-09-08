@@ -203,6 +203,12 @@ export interface Runner {
 }
 
 export interface JobAnnotationProps {
+    id: string,
     label: string,
     var: string
   }
+
+export interface VariablesParams {
+    key: string,
+    value: string
+}
