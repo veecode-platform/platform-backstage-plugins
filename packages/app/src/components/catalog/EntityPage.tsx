@@ -192,7 +192,13 @@ const serviceEntityPage = (
       {cicdContent}
     </EntityLayout.Route>
 
-    <EntityLayout.Route path="/workflows" title="Workflows">
+    <EntityLayout.Route
+      if={(entity) => {
+        const show = entity.metadata.annotations?.hasOwnProperty('github.com/project-slug')
+        if (show !== undefined) return show
+        return false
+      }}
+      path="/workflows" title="Workflows">
       {WorkflowsContent}
     </EntityLayout.Route>
 
@@ -234,7 +240,13 @@ const websiteEntityPage = (
       {cicdContent}
     </EntityLayout.Route>
 
-    <EntityLayout.Route path="/workflows" title="Workflows">
+    <EntityLayout.Route
+      if={(entity) => {
+        const show = entity.metadata.annotations?.hasOwnProperty('github.com/project-slug')
+        if (show !== undefined) return show
+        return false
+      }}
+      path="/workflows" title="Workflows">
       {WorkflowsContent}
     </EntityLayout.Route>
 

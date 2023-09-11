@@ -62,21 +62,18 @@ const useStyles = makeStyles(theme => ({
 
 
 type CardsProps = {
-  items: WorkflowResultsProps[] | []
+  items: WorkflowResultsProps[] | [],
+  updateData: () => Promise<void>
 }
 
-export const Cards = ({ items }: CardsProps) => {
+export const Cards = ({ items, updateData }: CardsProps) => {
 
   const [ loading, setLoading] = useState<boolean>(false);
   const classes = useStyles();
-  const { entity } = useEntity();
-  const { projectName, workflows } = useEntityAnnotations(entity as Entity);
-  const { listAllWorkflows, setWorkflowsState } = useContext(GithubWorkflowsContext);
 
-  const updateData = async ()=> {
+  const refresh = async ()=> {
     setLoading(true)
-    const data = await listAllWorkflows(projectName, workflows!);
-    setWorkflowsState(data as WorkflowResultsProps[]);
+    await updateData()
     setTimeout(()=> setLoading(false), 1500);
   }
 
@@ -93,7 +90,7 @@ export const Cards = ({ items }: CardsProps) => {
       <IconButton
         aria-label="Refresh"
         title="Refresh"
-        onClick={() => updateData()}
+        onClick={() => refresh()}
         className={classes.buttonRefresh}
       >
         <CachedIcon />
@@ -177,7 +174,7 @@ export const WorkFlowCard = () => {
 
   return (
     <ErrorBoundary>
-       <Cards items={workflowsState || []} />
+       <Cards items={workflowsState || []} updateData={updateData} />
     </ErrorBoundary>
     );
 };

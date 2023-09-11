@@ -68,23 +68,21 @@ const useStyles = makeStyles(theme => ({
 }));
 
 type DenseTableProps = {
-  items: WorkflowResultsProps[] | [];
+  items: WorkflowResultsProps[] | [],
+  updateData: () => Promise<void>
 };
 
-export const DenseTable = ({ items }: DenseTableProps) => {
+export const DenseTable = ({ items, updateData}: DenseTableProps) => {
   
   const { entity } = useEntity();
   const [ showModal, setShowModal ] = useState<boolean>(false);
   const [parametersState, setParametersState] = useState<WorkflowDispatchParameters[]|null>(null)
   const [ loading, setLoading] = useState<boolean>(false);
-  const { projectName } = useEntityAnnotations(entity as Entity);
-  const { listAllWorkflows, setWorkflowsState } = useContext(GithubWorkflowsContext);
   const classes = useStyles();
 
-  const updateData = async ()=> {
+  const refresh = async ()=> {
     setLoading(true)
-    const data = await listAllWorkflows(projectName);
-    setWorkflowsState(data as WorkflowResultsProps[]);
+    await updateData();
     setTimeout(()=> setLoading(false), 800)
   }
 
@@ -177,7 +175,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
           icon: () => <SyncIcon />,
           tooltip: 'Reload workflow runs',
           isFreeAction: true,
-          onClick: () => updateData(),
+          onClick: () => refresh(),
         },
       ]}
     />
@@ -211,7 +209,6 @@ export const WorkflowTable = () => {
 
   useEffect(()=>{
       updateData();
-      console.log(workflowsState)
   },[branch]);
 
   const updateData = async ()=> {
@@ -255,7 +252,10 @@ export const WorkflowTable = () => {
 
   return (
     <ErrorBoundary>
-      <DenseTable items={workflowsState || []} />
+      <DenseTable 
+      items={workflowsState || []} 
+      updateData={updateData}
+      />
     </ErrorBoundary>
   );
 };
