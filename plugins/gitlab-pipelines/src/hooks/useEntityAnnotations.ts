@@ -1,5 +1,6 @@
 import { Entity } from '@backstage/catalog-model';
 import { JobAnnotationProps } from '../utils/types';
+import { GitlabPipelinesStatus } from '../utils/enums/GitlabPipelinesStatus';
 
 export const GITLAB_ANNOTATION = 'gitlab.com/project-slug';
 export const GITLAB_JOBS_ANNOTATION = 'gitlab.com/jobs';
@@ -21,7 +22,7 @@ export const useEntityAnnotations = (entity: Entity) => {
 
   const jobsAnnotations: JobAnnotationProps[] = jobsAnnotationList.map(item => {
     const [label, varValue] = item.split(':');
-    return { id: label, label, var: varValue };
+    return { id: label, label, var: varValue, status: GitlabPipelinesStatus.success };
   });
   
   return {

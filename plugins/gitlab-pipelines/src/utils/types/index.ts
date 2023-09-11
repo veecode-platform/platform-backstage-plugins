@@ -1,3 +1,5 @@
+import { GitlabPipelinesStatus } from "../enums/GitlabPipelinesStatus"
+
 export interface PipelineListResponse {
     id: number,
     iid: number,
@@ -205,9 +207,9 @@ export interface Runner {
 export interface JobAnnotationProps {
     id: string,
     label: string,
-    var: string
+    var: string,
+    status: GitlabPipelinesStatus
   }
-
 export interface VariablesParams {
     key: string,
     value: string

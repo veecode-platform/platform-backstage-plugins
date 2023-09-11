@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { EmptyState, ErrorBoundary, MissingAnnotationEmptyState,
+import { ErrorBoundary, MissingAnnotationEmptyState,
    Progress, ResponseErrorPanel 
   } from '@backstage/core-components';
-import { Box, Button, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography, makeStyles } from '@material-ui/core';
+import { Box, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography, makeStyles } from '@material-ui/core';
 import useAsync from 'react-use/lib/useAsync';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { SelectBranch } from '../../SelectBranch';
 import CachedIcon from '@material-ui/icons/Cached';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
-import { Job, JobAnnotationProps } from '../../../utils/types';
-import { GITLAB_ANNOTATION, GITLAB_JOBS_ANNOTATION, isGitlabAvailable, useEntityAnnotations } from '../../../hooks';
+import { JobAnnotationProps } from '../../../utils/types';
+import { GITLAB_JOBS_ANNOTATION, useEntityAnnotations } from '../../../hooks';
 // import { entityMock } from '../../../mocks/component';
 import { JobItem } from '../JobItem';
 import GitlabIcon from '../../assets/gitlabIcon';
@@ -66,19 +66,21 @@ const useStyles = makeStyles(theme => ({
 
 
 type JobItemProps = {
-  items: JobAnnotationProps[] | []
+  items: JobAnnotationProps[] | [],
+  updateData: ()=> void
 }
 
-export const Cards = ({ items }: JobItemProps) => {
+export const Cards = ({ items, updateData }: JobItemProps) => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const classes = useStyles();
-  const { entity } = useEntity();
-  const { jobsAnnotations } = useEntityAnnotations(entity as Entity);
-  const { branch, setJobsByAnnotation, jobsByAnnotation } = useContext(GitlabPipelinesContext);
 
-  const updateData = () => {
-    setJobsByAnnotation(jobsAnnotations)
+  const refresh = () => {
+    setLoading(true);
+    setTimeout(() => {
+      updateData()
+      setLoading(false);
+    }, 1500);
   }
 
   const TitleBar = (
@@ -97,7 +99,7 @@ export const Cards = ({ items }: JobItemProps) => {
       <IconButton
         aria-label="Refresh"
         title="Refresh"
-        onClick={() => updateData()}
+        onClick={() => refresh()}
         className={classes.buttonRefresh}
       >
         <CachedIcon />
@@ -124,6 +126,7 @@ export const Cards = ({ items }: JobItemProps) => {
                     key={item.id}
                     name={item.label}
                     variable={item.var}
+                    status={item.status}
                   />
                 )
                 }
@@ -144,10 +147,11 @@ export const AllJobsComponent = () => {
 
   useEffect(() => {
     updateData()
-  }, [branch])
+  }, [branch]);
 
   const updateData = () => {
-    setJobsByAnnotation(jobsAnnotations)
+    if(jobsByAnnotation) setJobsByAnnotation(jobsByAnnotation);
+    else setJobsByAnnotation(jobsAnnotations);
   }
 
   const { loading, error } = useAsync(async (): Promise<void> => {
@@ -170,7 +174,7 @@ export const AllJobsComponent = () => {
 
   return (
       <ErrorBoundary>
-        <Cards items={jobsByAnnotation || []} />
+        <Cards items={jobsByAnnotation || []} updateData={updateData}/>
       </ErrorBoundary>
   );
 };

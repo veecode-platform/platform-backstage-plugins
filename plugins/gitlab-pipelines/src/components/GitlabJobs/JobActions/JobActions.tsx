@@ -1,21 +1,20 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CachedIcon from '@material-ui/icons/Cached';
-import { Box, Button, makeStyles, Tooltip } from '@material-ui/core';
+import { makeStyles, Tooltip } from '@material-ui/core';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotations } from '../../../hooks';
 // import { entityMock } from '../../../mocks/component';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
-import { ModalComponent } from '../../ModalComponent/ModalComponent';
 import { GitlabPipelinesStatus } from '../../../utils/enums/GitlabPipelinesStatus';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import { Job } from '../../../utils/types';
 
 type JobActionsProps = {
-  jobId: number,
-  status?: string
+  id: string,
+  variable: string,
+  status: string
 }
 
 const useStyles = makeStyles(theme => (({
@@ -64,37 +63,68 @@ const useStyles = makeStyles(theme => (({
   }
 })));
 
-export const JobActions = ({ jobId, status }: JobActionsProps) => {
+export const JobActions = ({ id, variable, status }: JobActionsProps) => {
 
   const { entity } = useEntity();  
   const { projectName } = useEntityAnnotations(entity as Entity);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const { runJob, jobParams, cancelJob, setJobsListState, allJobs, latestPipelineState } = useContext(GitlabPipelinesContext);
+  const { runNewPipeline, cancelPipeline, jobsByAnnotation, setJobsByAnnotation } = useContext(GitlabPipelinesContext);
   const classes = useStyles();
 
   if (!status) return null;
 
-  const handleShowModal = () => setShowModal(!showModal);
-
   const updateData = async () => {
-    const data = await allJobs(projectName, latestPipelineState?.id!);
-    setJobsListState(data as Job[]);
+      setTimeout(()=>{
+        const updatedJobs = jobsByAnnotation!.map(job => {
+          if (job.id === id) {
+            return {
+              ...job,
+              status: GitlabPipelinesStatus.success,
+            };
+          }
+          return job;
+        });
+        setJobsByAnnotation(updatedJobs);
+      },15000)
   }
 
   const handleStartJob = async () => {
-    if (jobParams) {
-      await runJob(projectName, jobId, [jobParams]);
-      await updateData();
+    if (variable) {
+      const variableParam = {
+        key: variable,
+        value: 'true'
+      }
+      runNewPipeline(projectName, [variableParam]);
+      const updatedJobs = jobsByAnnotation!.map(job => {
+        if (job.id === id) {
+          return {
+            ...job,
+            status: GitlabPipelinesStatus.running,
+          };
+        }
+        return job;
+      });
+      setJobsByAnnotation(updatedJobs);
+      await updateData()
     }
   }
 
   const handleStopJob = async () => {
-    await cancelJob(projectName,jobId);
-    await updateData();
+    await cancelPipeline(projectName);
+    const updatedJobs = jobsByAnnotation!.map(job => {
+      if (job.id === id) {
+        return {
+          ...job,
+          status: GitlabPipelinesStatus.canceled,
+        };
+      }
+      return job;
+    });
+    setJobsByAnnotation(updatedJobs); 
+    // await updateData();
   };
 
   const handleClickActions = (status: string) => {
-    if (status !== GitlabPipelinesStatus.running) handleShowModal();
+    if (status !== GitlabPipelinesStatus.running) handleStartJob();
     else handleStopJob();
   }
 
@@ -137,30 +167,6 @@ export const JobActions = ({ jobId, status }: JobActionsProps) => {
             />
           </Tooltip>
 
-        )
-      }
-
-      {
-        showModal && (
-          <ModalComponent
-            open={showModal}
-            title="Run Gitlab Job"
-            subtitle={(<Box className={classes.boxInfo}>
-              ℹ️ To run a Job you need to define this job as manual,
-               according to our documentation and create variables 
-               so that you can execute them correctly.
-              <Button
-                href="https://docs.gitlab.com/ee/ci/variables/index.html#define-a-cicd-variable-in-the-ui"
-                className={classes.buttonDocs}
-                target='_blank'
-              >
-                Gitlab Docs
-              </Button>
-            </Box>)}
-            modalType="Job"
-            handleModal={handleShowModal}
-            handleStartAction={handleStartJob}
-          />
         )
       }
 

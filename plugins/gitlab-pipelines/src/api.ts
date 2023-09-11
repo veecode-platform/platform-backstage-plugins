@@ -13,6 +13,10 @@ export interface GitlabPipelinesApi {
     */
     listProjectPipelines(gitlabReposlug: string, branch: string): Promise<PipelineListResponse[]>;
     /**
+     * Get a Single Pipeline
+     */
+    getSinglePipeline(gitlabReposlug: string, pipelineId: number, branch: string): Promise<PipelineListResponse>;
+    /**
      * Get Lastest pipeline
      */
     getLatestPipeline(gitlabReposlug: string, branch: string): Promise<PipelineResponse>;
@@ -99,6 +103,11 @@ class Client {
 
     async listProjectPipelines(gitlabReposlug: string, branch: string) {
         const response = await this.fetch<PipelineListResponse[]>(`/pipelines?ref=${branch}`, gitlabReposlug)
+        return response
+    }
+
+    async getSinglePipeline(gitlabReposlug: string, pipelineId:number, branch: string) {
+        const response = await this.fetch<PipelineListResponse>(`/pipelines/${pipelineId}?ref=${branch}`, gitlabReposlug)
         return response
     }
 
@@ -218,6 +227,10 @@ export class GitlabPipelinesApiClient implements GitlabPipelinesApi {
 
     async listProjectPipelines(gitlabReposlug: string, branch: string): Promise<PipelineListResponse[]> {
         return this.client.listProjectPipelines(gitlabReposlug, branch)
+    }
+
+    async getSinglePipeline(gitlabReposlug: string, pipelineId: number, branch: string): Promise<PipelineListResponse> {
+        return this.client.getSinglePipeline(gitlabReposlug, pipelineId,branch);
     }
 
     async getLatestPipeline(gitlabReposlug: string, branch: string): Promise<PipelineResponse> {

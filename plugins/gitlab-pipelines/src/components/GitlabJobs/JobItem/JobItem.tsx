@@ -8,11 +8,12 @@ import { GitlabPipelinesStatus } from '../../../utils/enums/GitlabPipelinesStatu
 type JobProps = {
   id: string,
   name: string,
-  variable: string
+  variable: string,
+  status: GitlabPipelinesStatus
 }
 
 const useStyles = makeStyles(theme => ({
-  workflow: {
+  job: {
     padding: '.8rem 3rem',
     background: 'transparent',
     border: `1px solid ${theme.palette.border}`,
@@ -37,16 +38,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const JobItem = ({ id, name}: JobProps) => {
+export const JobItem = ({ id, name, variable, status}: JobProps) => {
 
   const classes = useStyles();
 
   return (
     <Box
-      className={classes.workflow}
+      className={classes.job}
     >
       <StatusComponent
-        status={GitlabPipelinesStatus.failed}
+        status={status}
         icon
       />
 
@@ -62,8 +63,9 @@ export const JobItem = ({ id, name}: JobProps) => {
         role="button"
         className={classes.clickable}>
         <JobActions
-          jobId={4848484}
-          status={GitlabPipelinesStatus.failed}
+          id={id}
+          variable={variable}
+          status={status}
         />
       </Box>
 

@@ -323,6 +323,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         setPipelineListState,
         latestPipeline,
         latestPipelineState,
+        setLatestPipelineState,
         triggerToken,
         setTriggerTokenState,
         variablesParams,

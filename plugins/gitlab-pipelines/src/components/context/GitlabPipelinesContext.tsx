@@ -10,6 +10,7 @@ export type GitlabPipelinesContextType = {
   setPipelineListState: React.Dispatch<React.SetStateAction<Pipeline[] | null>>,
   latestPipeline: (projecName: string) => Promise<Pipeline | null>,
   latestPipelineState: Pipeline | null,
+  setLatestPipelineState: React.Dispatch<React.SetStateAction<Pipeline | null>>,
   triggerToken: string,
   setTriggerTokenState: (token: string) => void,
   variablesParams: VariablesParams[] | null,
