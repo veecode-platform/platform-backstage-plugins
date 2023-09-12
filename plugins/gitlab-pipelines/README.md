@@ -16,8 +16,10 @@ Pré-requisitos:
 ```bash
 yarn add --cwd packages/app @veecode-platform/backstage-plugin-gitlab-pipelines
 ```
+<br>
 
-Configuração
+**Configuração**
+
 As etapas a seguir devem ser seguidas para garantir o funcionamento do plugin de forma correta.
 
 1- Configuração de proxy
@@ -34,10 +36,12 @@ proxy:
 ```
 > ℹ️ Remember to set the ${GITLAB_TOKEN_SECRET} variable with your Gitlab personal token.
 
+<br>
+
 2- Configurando seu GitlabCi
 
 Para acionarmos a pipeline, seja completamente ou por jobs individuais, optamos por sempre instanciarmos uma nova pipeline para que tudo esteja sempre na última versão de build, ao invés de adicionarmos jobs manuais que invocariam estados de pipelines já rodados.
-Deste modo precisamos ficarmos atentos a como configurar nosso `.gitlab_ci.yml`;
+Deste modo precisamos ficar atentos a como configurar nosso `.gitlab_ci.yml`;
 
 Veja esse exemplo:
 
@@ -157,6 +161,7 @@ Com essas alterações já estaremos aptos para usar o componente **Pipelines Li
 <h3>Gitlab Jobs</h3>
 
 Já o Gitlab Jobs é um componente em que filtramos os jobs que separamos, como no exemplo anterior, aos quais tem comportamentos específicos e não fazem parte do fluxo padrão da pipeline.
+
 Para que eles sejam adicionados ao nosso componente backstage, necessitamos de uma annotation em especial, a `gitlab.com/jobs`.
 Seguimos uma sintaxe diferente para setarmos o valor dessa annotation, veja:
 
