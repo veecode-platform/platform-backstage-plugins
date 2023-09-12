@@ -121,8 +121,10 @@ spec:
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/25bfdbe4-a93c-4b6e-a642-4219842ec4bf)
 
-O componente lista os últimos 20 pipelines que foram executados no projeto. Em seu cabeçalho conseguimos definir a branch, conseguimos rodar uma nova pipeline e também atualizar a tabela com o botão refresh.
+O componente lista os últimos pipelines que foram executados no projeto. Em seu cabeçalho conseguimos definir a branch, conseguimos rodar uma nova pipeline e também atualizar a tabela com o botão refresh.
+
 A tabela é dividida por "Pipeline ID", onde se encontram os ids das respectivas pipelines, seguido de seu status, url da interface do Gitlab e o tempo decorrido de sua execução.
+
 Ao clicarmos no botão de "rodar pipeline", acionaremos um modal onde inserimos a variável dos jobs que setamos anteriormente. Como por exemplo, definiremos que todos os "DEFAULT_JOBS" rodem:
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/7a53861a-f4e3-4664-81e9-39cb603c4ec1)
