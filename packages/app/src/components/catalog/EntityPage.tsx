@@ -57,9 +57,9 @@ import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 
 // test
-import { isGithubWorkflowsAvailable, GithubWorkflowsCard, GithubWorkflowsList } from '@veecode-platform/plugin-github-workflows'
-import { isGitlabAvailable } from '@internal/plugin-gitlab-pipelines/src/hooks';
-import { GitlabJobs, GitlabPipelineList } from '@internal/plugin-gitlab-pipelines';
+import { isGithubWorkflowsAvailable, GithubWorkflowsCard, GithubWorkflowsList } from '@veecode-platform/backstage-plugin-github-workflows'
+import { isGitlabAvailable } from '@veecode-platform/backstage-plugin-gitlab-pipelines/src/hooks';
+import { GitlabJobs, GitlabPipelineList } from '@veecode-platform/backstage-plugin-gitlab-pipelines';
 
 
 const techdocsContent = (
