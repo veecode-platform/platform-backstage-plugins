@@ -5,6 +5,7 @@ on:
     branches: ['master']
     paths:
       - 'plugins/**'
+      - '.github/workflows/publish_plugins.yml'
 
 jobs:
   build:
