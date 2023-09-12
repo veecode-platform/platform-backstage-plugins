@@ -220,7 +220,7 @@ const overviewContent = (
 
 ...
 ```
-E então, teremos listados todos os jobs adicionados no annotation de nosso componente, onde o Label do botão será o título do componente, e a variável ficará responsável por acionar a ação de cada botão por debaixo dos panos:
+E então, teremos listados todos os jobs adicionados no annotation de nosso componente, onde o Label do botão será o título do componente button, e a variável ficará responsável por acionar a ação de cada botão por debaixo dos panos:
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/cfcee1e1-3f72-4f8d-9cf3-2208f0cd4d9d)
 
