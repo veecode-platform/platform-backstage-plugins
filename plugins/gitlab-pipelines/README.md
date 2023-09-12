@@ -92,10 +92,11 @@ stop-job:       # Exemplo de job para um comportamento específico*
 
 No exemplo acima podemos destacar dois tipos de jobs, os que são default e fazem parte do ciclo do CI-CD, e os que são jobs que tem comportamentos específicos para uma tarefa.
 Para os Jobs default, criaremos uma variável padrão e em todos jobs desse tipo, adicionaremos a condição dessa variável ser "true" para que executem todos eles.
+
 Já para os Jobs específicos, definiremos variáveis para cada um, de acordo com a sua necessidade, não se esquecendo de adicionar a condição dessa variável ser true para que o job seja executado.
 
 
-3- Para garantir que os componentes do plugin sejam renderizados, precisamos revisar se no `catalog-info.yaml` do componente backstage, tenha a seguinte annotation: "gitlab.com/project-slug":
+3- Para garantir que os componentes do plugin sejam renderizados, precisamos revisar se no `catalog-info.yaml` do componente backstage, tenha a seguinte annotation: `gitlab.com/project-slug`:
 
 ```diff
 apiVersion: backstage.io/v1alpha1
