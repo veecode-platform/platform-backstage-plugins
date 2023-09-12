@@ -22,9 +22,6 @@ jobs:
           registry-url: https://registry.npmjs.org/
           token: ${{ secrets.NPM_TOKEN }}
 
-      - name: Prepare workspaces.packages
-        run: jq '.workspaces.packages = ["plugins/*"]' package.json > tmp.json && mv tmp.json package.json
-
       - name: yarn install
         run: yarn install
 
@@ -38,6 +35,9 @@ jobs:
       - name: bump plugins version
         run: yarn workspaces foreach -v version patch
       
+      - name: Prepare workspaces.packages
+        run: jq '.workspaces.packages = ["plugins/*"]' package.json > tmp.json && mv tmp.json package.json
+
       - name: publish plugins on npm
         # run: yarn workspaces foreach npm publish --access public
         env:
