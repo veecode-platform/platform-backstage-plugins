@@ -151,7 +151,35 @@ We encourage users to create a new tab in their catalog named "Workflows" and ke
 
 
 ```diff
-+ import { GithubWorkflowsList } from '@veecode-platform/backstage-plugin-github-workflows'
++ import { GithubWorkflowsList, isGithubAvailable } from '@veecode-platform/backstage-plugin-github-workflows'
+...
+
++ const WorkflowsContent = (
++  <EntitySwitch>
++    <EntitySwitch.Case if={isGithubActionsAvailable}>
++      <GithubWorkflowsList/>
++    </EntitySwitch.Case>
++
++    <EntitySwitch.Case>
++      <EmptyState
++        title="No CI/CD available for this entity"
++        missing="info"
++        description="You need to add an annotation to your component if you want to enable CI/CD for it. You can read more +        about annotations in Backstage by clicking the button below."
++        action={
++          <Button
++            variant="contained"
++            color="primary"
++            href="https://backstage.io/docs/features/software-catalog/well-known-annotations"
++          >
++            Read more
++          </Button>
++        }
++      />
++    </EntitySwitch.Case>
++  </EntitySwitch>
++ );
+
+...
 
 const serviceEntityPage = (
   <EntityLayout>
@@ -163,30 +191,11 @@ const serviceEntityPage = (
       {cicdContent}
     </EntityLayout.Route>
     
-+   <EntityLayout.Route path="/workflows" title="Workflows">
-+       <EntitySwitch>
-+    	<EntitySwitch.Case if={isGithubActionsAvailable}>
-+      		<GithubWorkflowsList/>
-+    	</EntitySwitch.Case>
-+    	<EntitySwitch.Case>
-+      	<EmptyState
-+        title="No CI/CD available for this entity"
-+        missing="info"
-+        description="You need to add an annotation to your component if you want to enable CI/CD for it. You can read more about 
-+        annotations in Backstage by clicking the button below."
-+        action={
-+          <Button
-+            variant="contained"
-+            color="primary"
-+            href="https://backstage.io/docs/features/software-catalog/well-known-annotations"
-+          >
-+            Read more
-+          </Button>
-+        }
-+      />
-+    		</EntitySwitch.Case>
-+  		</EntitySwitch>
-+    </EntityLayout.Route>
++  <EntityLayout.Route
++    if={isGithubAvailable}
++    path="/workflows" title="Workflows">
++    {WorkflowsContent}
++  </EntityLayout.Route>
 
     <EntityLayout.Route path="/api" title="API">
       <Grid container spacing={3} alignItems="stretch">
@@ -215,6 +224,41 @@ const serviceEntityPage = (
     </EntityLayout.Route>
   </EntityLayout>
 );
+
+const websiteEntityPage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      {overviewContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/ci-cd" title="CI/CD">
+      {cicdContent}
+    </EntityLayout.Route>
+
++    <EntityLayout.Route
++      if={isGithubAvailable}
++      path="/workflows" title="Workflows">
++      {WorkflowsContent}
++    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/dependencies" title="Dependencies">
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item md={6}>
+          <EntityDependsOnComponentsCard variant="gridItem" />
+        </Grid>
+        <Grid item md={6}>
+          <EntityDependsOnResourcesCard variant="gridItem" />
+        </Grid>
+      </Grid>
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/docs" title="Docs">
+      {techdocsContent}
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+
+...
 
 ```
 <br>
