@@ -40,7 +40,7 @@ proxy:
 
 2- Configurando seu GitlabCi
 
-Para acionarmos a pipeline, seja completamente ou por jobs individuais, optamos por sempre instanciarmos uma nova pipeline para que tudo esteja sempre na última versão de build, ao invés de adicionarmos jobs manuais que invocariam estados de pipelines já rodados.
+Para acionarmos a pipeline, seja completamente ou por jobs individuais, optamos por instanciarmos uma nova pipeline para que tudo esteja sempre na última versão de build, ao invés de adicionarmos jobs manuais que invocariam estados de pipelines já rodados.
 Deste modo precisamos ficar atentos a como configurar nosso `.gitlab_ci.yml`;
 
 Veja esse exemplo:
