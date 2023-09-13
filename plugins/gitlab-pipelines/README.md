@@ -181,7 +181,7 @@ metadata:
   annotations:
     gitlab.com/project-slug: repo/test
     backstage.io/techdocs-ref: dir:.
-+    gitlab.com/jobs: 'Deploy:NORMAL_JOB,Start:START_JOB,Stop:STOP_JOB'
++    gitlab.com/jobs: 'Deploy:DEFAULT_JOB,Start:START_JOB,Stop:STOP_JOB'
 
 spec:
   type: service
