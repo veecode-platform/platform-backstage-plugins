@@ -1,27 +1,32 @@
 # Gitlab-pipelines Plugin
 
-O Plugin Gitlab-pipelines integra o GitlabCi com seu componente backstage.
-Ele oferece duas abordagens:
-- Executar / Cancelar uma nova pipeline, listando o estado das últimas pipelines do seu projeto.
-- Oferece uma lista de jobs manuais a serem executados sob demanda do usuário.
+The Gitlab-pipelines plugin integrates GitlabCi with its backstage component.
+It offers two approaches:
+- Execute / Cancel a new pipeline, listing the status of the latest pipelines in your project.
+- It offers a list of pipeline executions related to variables, which helps you run individual jobs or groups of jobs.
 
-Começando:
 
-Pré-requisitos:
-  - Ter um projeto Backstage instalado localmente, <a href="https://backstage.io/docs/getting-started/create-an-app/" target="_blank">✔️ Como criar um aplicativo Backstage 📃 </a>.
-  - Configure o catálogo e integre com Gitlab, <a href="https://backstage.io/docs/integrations/gitlab/locations" target="_blank">✔️ Como configurar a integração 📃</a> .
+<br>
 
-**Instalação**
+## 🚀 Getting started: 
+
+Prerequisites:
+  - Have a Backstage project locally installed, <a href="https://backstage.io/docs/getting-started/create-an-app/" target="_blank">✔️ How to create a Backstage app 📃 </a>.
+  - Set up the catalog and integrate with Gitlab, <a href="https://backstage.io/docs/integrations/gitlab/locations" target="_blank">✔️ How to set up integration 📃</a> .
+
+##  💻 Installing
 
 ```bash
 yarn add --cwd packages/app @veecode-platform/backstage-plugin-gitlab-pipelines
 ```
+<br>
 
-Configuração
-As etapas a seguir devem ser seguidas para garantir o funcionamento do plugin de forma correta.
+## ⚙️ Settings
 
-1- Configuração de proxy
-No arquivo `app-config.yaml`:
+The following steps must be followed to ensure that the plugin works correctly.
+
+1- Proxy setup
+In the `app-config.yaml` file:
 ```yaml
 proxy:
 
@@ -32,3 +37,234 @@ proxy:
       PRIVATE-TOKEN: ${GITLAB_TOKEN_SECRET}
       Accept: application/json 
 ```
+> ℹ️ Remember to set the ${GITLAB_TOKEN_SECRET} variable with your Gitlab personal token.
+
+<br>
+
+2- Setting up your GitlabCi
+
+To trigger the pipeline, either completely or by individual jobs, we have chosen to instantiate a new pipeline so that everything is always in the latest build version, rather than adding manual jobs that would invoke states from pipelines that have already been run.
+We therefore need to pay attention to how we configure our `.gitlab_ci.yml`;
+
+See this example:
+
+```yaml
+# List of stages for jobs, and their order of execution
+stages:         
+  - build
+  - deploy
+  - start
+  - stop
+
+variables:
+  DEFAULT_JOB: 'false'
+  START_JOB: 'false'
+  STOP_JOB: 'false'
+
+build-job:       # Example of standard job for my application
+  stage: build
+  script:
+    - echo "Compiling the code..."
+    - echo "Compile complete."
+  rules:
+    - if: $DEFAULT_JOB == "true"
+
+deploy-job:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  environment: production
+  script:
+    - echo "Deploying application..."
+    - echo "Application successfully deployed."
+  rules:
+    - if: $DEFAULT_JOB == "true"
+
+start-job:           # Job example for a specific behavior*
+  stage: start
+  script:
+    - echo "start job..."
+  rules:
+    - if: $START_JOB == "true"
+ 
+stop-job:       # Job example for a specific behavior*
+  stage: stop
+  script:
+    - echo "stop job..."
+  rules:
+    - if: $STOP_JOB == "true"
+```
+<br>
+In the example above, we can highlight two types of jobs: those that are default and are part of the CI-CD cycle, and those that are jobs that have specific behaviors for a task.
+
+For default jobs, we'll create a standard variable and in all jobs of this type, we'll add the condition that this variable is "true" so that they all run.
+
+For specific jobs, we will define variables for each one, according to their needs, not forgetting to add the condition that this variable is true so that the job is executed.
+<br><br>
+
+3- To ensure that the plugin components are rendered, we need to check that the `catalog-info.yaml` of the backstage component has the following annotation: `gitlab.com/project-slug`:
+
+```diff
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "Test"
+  description: "gitlab test"
+  annotations:
++    gitlab.com/project-slug: repo/test
+    backstage.io/techdocs-ref: dir:.
+
+spec:
+  type: service
+  lifecycle: experimental
+  owner: admin
+```
+
+<hr>
+<br>
+
+<h3>Pipelines List</h3>
+<br>
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/25bfdbe4-a93c-4b6e-a642-4219842ec4bf)
+
+<br>
+The component lists the last pipelines that were executed in the project. In its header we can define the branch, run a new pipeline and also update the table with the refresh button.
+
+The table is divided by "Pipeline ID", which contains the ids of the respective pipelines, followed by their status, the url of the Gitlab interface and the elapsed time of their execution.
+
+When we click on the "run pipeline" button, we'll trigger a modal where we'll insert the jobs variable we set previously. For example, we'll set all the "DEFAULT_JOBS" to run:
+<br><br>
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/7a53861a-f4e3-4664-81e9-39cb603c4ec1)
+
+<br>
+Then the jobs in which the variable has been set will be executed in chronological order.
+<br><br>
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/c0af4532-c7ae-4433-ae02-83c55ef82504)
+
+<br>
+As you can see:
+<br><br>
+ 
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/7dffe0fc-2ace-4bca-bf00-e4f5b3909a5d)
+
+<br>
+To add it to our component, let's edit the `EntityPage` in the path: `packages/app/src/components/catalog/EntityPage.tsx`:
+<br><br>
+
+```diff
+...
++ import { GitlabPipelineList, isGitlabAvailable } from '@veecode-platform/backstage-plugin-gitlab-pipelines';
+
+...
+
+const cicdContent = (
+  <EntitySwitch>
++    <EntitySwitch.Case if={isGitlabAvailable}>
++      <GitlabPipelineList/>
++    </EntitySwitch.Case>
+  </EntitySwitch>
+);
+
+...
+```
+<br>
+With these changes we are now able to use the **Pipelines List** component.
+
+<br>
+<hr>
+<br>
+
+<h3>Gitlab Jobs</h3>
+
+Gitlab Jobs, on the other hand, is a component in which we filter out the jobs we've separated, as in the previous example, which have specific behaviors and aren't part of the standard pipeline flow.
+
+In order for them to be added to our backstage component, we need a special annotation, `gitlab.com/jobs`.
+We follow a different syntax to set the value of this annotation, see:
+<br>
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/43cbf376-e2d6-4c5a-b009-664910c6fc0a)
+
+<br>
+That way:
+<br><br>
+
+```diff
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "Test"
+  description: "gitlab test"
+  annotations:
+    gitlab.com/project-slug: repo/test
+    backstage.io/techdocs-ref: dir:.
++    gitlab.com/jobs: 'Deploy:DEFAULT_JOB,Start:START_JOB,Stop:STOP_JOB'
+
+spec:
+  type: service
+  lifecycle: experimental
+  owner: admin
+```
+
+<br>
+To add it to our backstage component, we need to go back to `packages/app/src/components/catalog/EntityPage.tsx` and add the following code:
+<br><br>
+
+```diff
+...
+ import {
+  GitlabPipelineList,
+  isGitlabAvailable,
++ isGitlabJobsAvailable,
++ GitlabJobs
+  } from '@veecode-platform/backstage-plugin-gitlab-pipelines';
+
+...
+
+const overviewContent = (
+  <Grid container spacing={3} alignItems="stretch">
+    {entityWarningContent}
+    <Grid item md={6}>
+      <EntityAboutCard variant="gridItem" />
+    </Grid>
+    <Grid item md={6} xs={12}>
+      <EntityCatalogGraphCard variant="gridItem" height={400} />
+    </Grid>
+
++    <EntitySwitch>
++      <EntitySwitch.Case if={isGitlabJobsAvailable}>
++        <Grid item lg={8} xs={12}>
++           <GitlabJobs />
++       </Grid>
++      </EntitySwitch.Case>
++    </EntitySwitch>
+    
+    
+    <Grid item md={4} xs={12}>
+      <EntityLinksCard />
+    </Grid>
+  </Grid>
+);
+
+...
+```
+
+<br>
+We will then have listed all the jobs added to our component's annotation, where the button's Label will be the title of the button component, and the variable will be responsible for triggering the action of each button under the hood:
+<br><br>
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/cfcee1e1-3f72-4f8d-9cf3-2208f0cd4d9d)
+
+<br>
+No need to enter the variable again, just click on run the desired job;
+<br><br>
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/0d6a9243-5b23-4209-a808-cd3efc70d6c4)
+
+<br>
+And in your gitlab only the job will run in a new pipeline execution:
+<br><br>
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/f44615b2-c0dd-4b0e-83e3-7f791193d552)
+
+
