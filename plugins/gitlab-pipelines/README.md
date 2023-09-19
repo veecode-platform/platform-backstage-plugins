@@ -4,8 +4,6 @@ The Gitlab-pipelines plugin integrates GitlabCi with its backstage component.
 It offers two approaches:
 - Execute / Cancel a new pipeline, listing the status of the latest pipelines in your project.
 - It offers a list of pipeline executions related to variables, which helps you run individual jobs or groups of jobs.
-
-
 <br>
 
 ## 🚀 Getting started: 
@@ -37,7 +35,7 @@ In the `app-config.yaml` file:
 ```yaml
 proxy:
 
-  '/gitlab-pipelines':
+  '/gitlab/api':
     target: https://gitlab.com/api/v4
     allowedHeaders: ['PRIVATE-TOKEN']
     headers:

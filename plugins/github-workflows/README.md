@@ -42,7 +42,7 @@ In the app-config.yaml file:
 
 ```yaml
 proxy:
-  '/github-workflows':
+  '/github/api':
     target: https://api.github.com/repos
     allowedHeaders: ['Authorization', 'X-GitHub-Api-Version']
     headers: 

@@ -50,8 +50,7 @@ integrations:
      token: ${GITLAB_TOKEN_SECRET}
 
 proxy:
-
-  '/github-workflows':
+  '/github/api':
     target: https://api.github.com/repos
     allowedHeaders: ['Authorization', 'X-GitHub-Api-Version']
     headers: 
@@ -59,7 +58,7 @@ proxy:
       Accept: application/vnd.github+json
       X-GitHub-Api-Version: "2022-11-28"
   
-  '/gitlab-pipelines':
+  '/gitlab/api':
     target: https://gitlab.com/api/v4
     allowedHeaders: ['PRIVATE-TOKEN']
     headers:
