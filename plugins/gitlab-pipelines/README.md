@@ -4,8 +4,6 @@ The Gitlab-pipelines plugin integrates GitlabCi with its backstage component.
 It offers two approaches:
 - Execute / Cancel a new pipeline, listing the status of the latest pipelines in your project.
 - It offers a list of pipeline executions related to variables, which helps you run individual jobs or groups of jobs.
-
-
 <br>
 
 ## 🚀 Getting started: 
@@ -15,10 +13,17 @@ Prerequisites:
   - Set up the catalog and integrate with Gitlab, <a href="https://backstage.io/docs/integrations/gitlab/locations" target="_blank">✔️ How to set up integration 📃</a> .
 
 ##  💻 Installing
+<br/>
 
+If you are using yarn 3.x:
+```bash
+yarn workspace app add @veecode-platform/backstage-plugin-gitlab-pipelines
+```
+If you are using other versions:
 ```bash
 yarn add --cwd packages/app @veecode-platform/backstage-plugin-gitlab-pipelines
 ```
+
 <br>
 
 ## ⚙️ Settings
@@ -30,7 +35,7 @@ In the `app-config.yaml` file:
 ```yaml
 proxy:
 
-  '/gitlab-pipelines':
+  '/gitlab/api':
     target: https://gitlab.com/api/v4
     allowedHeaders: ['PRIVATE-TOKEN']
     headers:

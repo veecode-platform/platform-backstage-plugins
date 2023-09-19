@@ -2,7 +2,7 @@ import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
 import { Branches, WorkflowDispatchParameters, WorkflowResponseFromApi, WorkflowRun, WorkflowRunsResponseFromApi } from './utils/types';
 import YAML from "js-yaml"
 
-const GITHUB_WORKFLOWS_DEFAULT_PROXY_URL = "/github-workflows"
+const GITHUB_WORKFLOWS_DEFAULT_PROXY_URL = "/github/api"
 
 export interface Workflows {
     workflow: {
@@ -50,7 +50,7 @@ export const githubWorkflowsApiRef = createApiRef<GithubWorkflowsApi>({
 export type Options = {
     discoveryApi: DiscoveryApi;
     /**
-    * Path to use for requests via the proxy, defaults to /github-workflows
+    * Path to use for requests via the proxy, defaults to /github/api
     */
     proxyPath?: string;
 };

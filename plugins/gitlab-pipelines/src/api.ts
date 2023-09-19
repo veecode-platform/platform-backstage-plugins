@@ -1,7 +1,7 @@
 import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
 import { JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse, VariablesParams } from './utils/types';
 
-const GITLAB_PIPELINES_PROXY_URL = "/gitlab-pipelines";
+const GITLAB_PIPELINES_PROXY_URL = "/gitlab/api";
 
 export interface GitlabPipelinesApi {
     /**
@@ -66,7 +66,7 @@ export const gitlabPipelinesApiRef = createApiRef<GitlabPipelinesApi>({
 export type Options = {
     discoveryApi: DiscoveryApi;
     /**
-    * Path to use for requests via the proxy, defaults to /gitlab-pipelines
+    * Path to use for requests via the proxy, defaults to /gitlab/api
     */
     proxyPath?: string;
 };
