@@ -15,10 +15,17 @@ Prerequisites:
   - Set up the catalog and integrate with Gitlab, <a href="https://backstage.io/docs/integrations/gitlab/locations" target="_blank">✔️ How to set up integration 📃</a> .
 
 ##  💻 Installing
+<br/>
 
+If you are using yarn 3.x:
+```bash
+yarn workspace app add @veecode-platform/backstage-plugin-gitlab-pipelines
+```
+If you are using other versions:
 ```bash
 yarn add --cwd packages/app @veecode-platform/backstage-plugin-gitlab-pipelines
 ```
+
 <br>
 
 ## ⚙️ Settings

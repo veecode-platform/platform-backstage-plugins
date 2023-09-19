@@ -20,11 +20,16 @@ Before installing the plugin, there are some prerequisites to ensure its functio
 <br>
 
 ### Installation
-<br>
 
-`````bash
+If you are using yarn 3.x:
+```bash
+yarn workspace app add @veecode-platform/backstage-plugin-github-workflows
+```
+
+If you are using other versions:
+```bash
 yarn add --cwd packages/app @veecode-platform/backstage-plugin-github-workflows
-`````
+```
 <br>
 
 ### Configuration
