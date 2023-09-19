@@ -56,10 +56,8 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 
-// test
-import { isGithubWorkflowsAvailable, GithubWorkflowsCard, GithubWorkflowsList } from '@veecode-platform/backstage-plugin-github-workflows'
-import { isGitlabAvailable } from '@veecode-platform/backstage-plugin-gitlab-pipelines/src/hooks';
-import { GitlabJobs, GitlabPipelineList } from '@veecode-platform/backstage-plugin-gitlab-pipelines';
+import { isGithubWorkflowsAvailable, GithubWorkflowsCard, GithubWorkflowsList, isGithubAvailable } from '@veecode-platform/backstage-plugin-github-workflows'
+import { GitlabJobs, GitlabPipelineList, isGitlabAvailable, isGitlabJobsAvailable } from '@veecode-platform/backstage-plugin-gitlab-pipelines';
 
 
 const techdocsContent = (
@@ -165,7 +163,7 @@ const overviewContent = (
     </EntitySwitch>
 
     <EntitySwitch>
-      <EntitySwitch.Case if={isGitlabAvailable}>
+      <EntitySwitch.Case if={isGitlabJobsAvailable}>
         <Grid item lg={8} xs={12}>
             <GitlabJobs />
         </Grid>
@@ -193,11 +191,7 @@ const serviceEntityPage = (
     </EntityLayout.Route>
 
     <EntityLayout.Route
-      if={(entity) => {
-        const show = entity.metadata.annotations?.hasOwnProperty('github.com/project-slug')
-        if (show !== undefined) return show
-        return false
-      }}
+      if={isGithubAvailable}
       path="/workflows" title="Workflows">
       {WorkflowsContent}
     </EntityLayout.Route>
@@ -241,11 +235,7 @@ const websiteEntityPage = (
     </EntityLayout.Route>
 
     <EntityLayout.Route
-      if={(entity) => {
-        const show = entity.metadata.annotations?.hasOwnProperty('github.com/project-slug')
-        if (show !== undefined) return show
-        return false
-      }}
+      if={isGithubAvailable}
       path="/workflows" title="Workflows">
       {WorkflowsContent}
     </EntityLayout.Route>

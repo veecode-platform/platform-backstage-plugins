@@ -1,29 +1,32 @@
 # Gitlab-pipelines Plugin
 
-O Plugin Gitlab-pipelines integra o GitlabCi com seu componente backstage.
-Ele oferece duas abordagens:
-- Executar / Cancelar uma nova pipeline, listando o estado das últimas pipelines do seu projeto.
-- Oferece uma lista com execuções de pipelines relacionadas com variáveis, o que auxilia na execução de jobs individuais ou em grupos.
+The Gitlab-pipelines plugin integrates GitlabCi with its backstage component.
+It offers two approaches:
+- Execute / Cancel a new pipeline, listing the status of the latest pipelines in your project.
+- It offers a list of pipeline executions related to variables, which helps you run individual jobs or groups of jobs.
 
-Começando:
 
-Pré-requisitos:
-  - Ter um projeto Backstage instalado localmente, <a href="https://backstage.io/docs/getting-started/create-an-app/" target="_blank">✔️ Como criar um aplicativo Backstage 📃 </a>.
-  - Configure o catálogo e integre com Gitlab, <a href="https://backstage.io/docs/integrations/gitlab/locations" target="_blank">✔️ Como configurar a integração 📃</a> .
+<br>
 
-**Instalação**
+## 🚀 Getting started: 
+
+Prerequisites:
+  - Have a Backstage project locally installed, <a href="https://backstage.io/docs/getting-started/create-an-app/" target="_blank">✔️ How to create a Backstage app 📃 </a>.
+  - Set up the catalog and integrate with Gitlab, <a href="https://backstage.io/docs/integrations/gitlab/locations" target="_blank">✔️ How to set up integration 📃</a> .
+
+##  💻 Installing
 
 ```bash
 yarn add --cwd packages/app @veecode-platform/backstage-plugin-gitlab-pipelines
 ```
 <br>
 
-**Configuração**
+## ⚙️ Settings
 
-As etapas a seguir devem ser seguidas para garantir o funcionamento do plugin de forma correta.
+The following steps must be followed to ensure that the plugin works correctly.
 
-1- Configuração de proxy
-No arquivo `app-config.yaml`:
+1- Proxy setup
+In the `app-config.yaml` file:
 ```yaml
 proxy:
 
@@ -38,12 +41,12 @@ proxy:
 
 <br>
 
-2- Configurando seu GitlabCi
+2- Setting up your GitlabCi
 
-Para acionarmos a pipeline, seja completamente ou por jobs individuais, optamos por instanciarmos uma nova pipeline para que tudo esteja sempre na última versão de build, ao invés de adicionarmos jobs manuais que invocariam estados de pipelines já rodados.
-Deste modo precisamos ficar atentos a como configurar nosso `.gitlab_ci.yml`;
+To trigger the pipeline, either completely or by individual jobs, we have chosen to instantiate a new pipeline so that everything is always in the latest build version, rather than adding manual jobs that would invoke states from pipelines that have already been run.
+We therefore need to pay attention to how we configure our `.gitlab_ci.yml`;
 
-Veja esse exemplo:
+See this example:
 
 ```yaml
 # List of stages for jobs, and their order of execution
@@ -58,7 +61,7 @@ variables:
   START_JOB: 'false'
   STOP_JOB: 'false'
 
-build-job:       # Exemplo de job padrão para minha aplicação
+build-job:       # Example of standard job for my application
   stage: build
   script:
     - echo "Compiling the code..."
@@ -75,28 +78,29 @@ deploy-job:      # This job runs in the deploy stage.
   rules:
     - if: $DEFAULT_JOB == "true"
 
-start-job:           # Exemplo de job para um comportamento específico*
+start-job:           # Job example for a specific behavior*
   stage: start
   script:
     - echo "start job..."
   rules:
     - if: $START_JOB == "true"
  
-stop-job:       # Exemplo de job para um comportamento específico*
+stop-job:       # Job example for a specific behavior*
   stage: stop
   script:
     - echo "stop job..."
   rules:
     - if: $STOP_JOB == "true"
 ```
+<br>
+In the example above, we can highlight two types of jobs: those that are default and are part of the CI-CD cycle, and those that are jobs that have specific behaviors for a task.
 
-No exemplo acima podemos destacar dois tipos de jobs, os que são default e fazem parte do ciclo do CI-CD, e os que são jobs que tem comportamentos específicos para uma tarefa.
-Para os Jobs default, criaremos uma variável padrão e em todos jobs desse tipo, adicionaremos a condição dessa variável ser "true" para que executem todos eles.
+For default jobs, we'll create a standard variable and in all jobs of this type, we'll add the condition that this variable is "true" so that they all run.
 
-Já para os Jobs específicos, definiremos variáveis para cada um, de acordo com a sua necessidade, não se esquecendo de adicionar a condição dessa variável ser true para que o job seja executado.
+For specific jobs, we will define variables for each one, according to their needs, not forgetting to add the condition that this variable is true so that the job is executed.
+<br><br>
 
-
-3- Para garantir que os componentes do plugin sejam renderizados, precisamos revisar se no `catalog-info.yaml` do componente backstage, tenha a seguinte annotation: `gitlab.com/project-slug`:
+3- To ensure that the plugin components are rendered, we need to check that the `catalog-info.yaml` of the backstage component has the following annotation: `gitlab.com/project-slug`:
 
 ```diff
 apiVersion: backstage.io/v1alpha1
@@ -118,26 +122,35 @@ spec:
 <br>
 
 <h3>Pipelines List</h3>
+<br>
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/25bfdbe4-a93c-4b6e-a642-4219842ec4bf)
 
-O componente lista os últimos pipelines que foram executados no projeto. Em seu cabeçalho conseguimos definir a branch, conseguimos rodar uma nova pipeline e também atualizar a tabela com o botão refresh.
+<br>
+The component lists the last pipelines that were executed in the project. In its header we can define the branch, run a new pipeline and also update the table with the refresh button.
 
-A tabela é dividida por "Pipeline ID", onde se encontram os ids das respectivas pipelines, seguido de seu status, url da interface do Gitlab e o tempo decorrido de sua execução.
+The table is divided by "Pipeline ID", which contains the ids of the respective pipelines, followed by their status, the url of the Gitlab interface and the elapsed time of their execution.
 
-Ao clicarmos no botão de "rodar pipeline", acionaremos um modal onde inserimos a variável dos jobs que setamos anteriormente. Como por exemplo, definiremos que todos os "DEFAULT_JOBS" rodem:
+When we click on the "run pipeline" button, we'll trigger a modal where we'll insert the jobs variable we set previously. For example, we'll set all the "DEFAULT_JOBS" to run:
+<br><br>
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/7a53861a-f4e3-4664-81e9-39cb603c4ec1)
 
-Logo os jobs em que a variável foi setada, serão executados seguindo sua ordem cronológica.
+<br>
+Then the jobs in which the variable has been set will be executed in chronological order.
+<br><br>
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/c0af4532-c7ae-4433-ae02-83c55ef82504)
 
-Como podemos ver:
-
+<br>
+As you can see:
+<br><br>
+ 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/7dffe0fc-2ace-4bca-bf00-e4f5b3909a5d)
 
-Para adicionarmos a nosso componente, vamos seguir editar a `EntityPage` que fica no caminho: `packages/app/src/components/catalog/EntityPage.tsx`:
+<br>
+To add it to our component, let's edit the `EntityPage` in the path: `packages/app/src/components/catalog/EntityPage.tsx`:
+<br><br>
 
 ```diff
 ...
@@ -155,7 +168,8 @@ const cicdContent = (
 
 ...
 ```
-Com essas alterações já estaremos aptos para usar o componente **Pipelines List**.
+<br>
+With these changes we are now able to use the **Pipelines List** component.
 
 <br>
 <hr>
@@ -163,14 +177,17 @@ Com essas alterações já estaremos aptos para usar o componente **Pipelines Li
 
 <h3>Gitlab Jobs</h3>
 
-Já o Gitlab Jobs é um componente em que filtramos os jobs que separamos, como no exemplo anterior, aos quais tem comportamentos específicos e não fazem parte do fluxo padrão da pipeline.
+Gitlab Jobs, on the other hand, is a component in which we filter out the jobs we've separated, as in the previous example, which have specific behaviors and aren't part of the standard pipeline flow.
 
-Para que eles sejam adicionados ao nosso componente backstage, necessitamos de uma annotation em especial, a `gitlab.com/jobs`.
-Seguimos uma sintaxe diferente para setarmos o valor dessa annotation, veja:
+In order for them to be added to our backstage component, we need a special annotation, `gitlab.com/jobs`.
+We follow a different syntax to set the value of this annotation, see:
+<br>
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/43cbf376-e2d6-4c5a-b009-664910c6fc0a)
 
-Dessa forma:
+<br>
+That way:
+<br><br>
 
 ```diff
 apiVersion: backstage.io/v1alpha1
@@ -188,7 +205,10 @@ spec:
   lifecycle: experimental
   owner: admin
 ```
-Para adicionarmos em nosso componente backstage, precisamos voltar ao `packages/app/src/components/catalog/EntityPage.tsx` e adicionarmos o seguinte código:
+
+<br>
+To add it to our backstage component, we need to go back to `packages/app/src/components/catalog/EntityPage.tsx` and add the following code:
+<br><br>
 
 ```diff
 ...
@@ -228,17 +248,23 @@ const overviewContent = (
 
 ...
 ```
-E então, teremos listados todos os jobs adicionados no annotation de nosso componente, onde o Label do botão será o título do componente button, e a variável ficará responsável por acionar a ação de cada botão por debaixo dos panos:
+
+<br>
+We will then have listed all the jobs added to our component's annotation, where the button's Label will be the title of the button component, and the variable will be responsible for triggering the action of each button under the hood:
+<br><br>
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/cfcee1e1-3f72-4f8d-9cf3-2208f0cd4d9d)
 
-Sem a necessidade de informar a variável novamente, só bastará clicar em rodar o job desejado;
+<br>
+No need to enter the variable again, just click on run the desired job;
+<br><br>
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/0d6a9243-5b23-4209-a808-cd3efc70d6c4)
 
-E em seu gitlab apenas o job rodará em uma nova execução de pipeline:
+<br>
+And in your gitlab only the job will run in a new pipeline execution:
+<br><br>
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/f44615b2-c0dd-4b0e-83e3-7f791193d552)
-
 
 
