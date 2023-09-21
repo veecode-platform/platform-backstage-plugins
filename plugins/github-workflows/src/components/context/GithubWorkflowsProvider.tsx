@@ -42,10 +42,11 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
         setWorkflowsState(newWorkflowsState);
         return newWorkflowsState;
       }
-      else return null;
+      else return [];
     } catch(e:any){
+      console.error(e);
       errorApi.post(e);
-      return null;
+      return [];
     }
   }
 
