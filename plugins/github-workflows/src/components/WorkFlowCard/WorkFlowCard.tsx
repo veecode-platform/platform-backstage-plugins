@@ -144,7 +144,6 @@ export const WorkFlowCard = () => {
 
   const updateData = async ()=> {
     const data = await listAllWorkflows(projectName, workflows as string[]);
-    console.log(data)
     setWorkflowsState(data as WorkflowResultsProps[])
   }
 

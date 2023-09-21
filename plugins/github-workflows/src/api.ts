@@ -89,7 +89,6 @@ class Client {
 
     async listWorkflows(githubRepoSlug: string, filter?: string[]) {
         const response = await this.fetch<WorkflowResponseFromApi>("/actions/workflows", githubRepoSlug);
-        console.log(response.workflows,"NA API")
         if (!filter || filter.length === 0) return response.workflows
         const filteredWorkflows = response.workflows.filter(
             workflow => filter.includes(regexFileName(workflow.path))
