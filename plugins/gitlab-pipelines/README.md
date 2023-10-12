@@ -9,8 +9,8 @@ It offers two approaches:
 ## 🚀 Getting started: 
 
 Prerequisites:
-  - Have a Backstage project locally installed, <a href="https://backstage.io/docs/getting-started/create-an-app/" target="_blank">✔️ How to create a Backstage app 📃 </a>.
-  - Set up the catalog and integrate with Gitlab, <a href="https://backstage.io/docs/integrations/gitlab/locations" target="_blank">✔️ How to set up integration 📃</a> .
+  - Have a Backstage project locally installed, [✔️ How to create a Backstage app 📃](https://backstage.io/docs/getting-started/create-an-app/) .
+  - Set up the catalog and integrate with Gitlab, [✔️ How to set up integration 📃](https://backstage.io/docs/integrations/gitlab/locations) .
 
 ##  💻 Installing
 <br/>
