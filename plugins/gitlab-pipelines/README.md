@@ -97,13 +97,15 @@ stop-job:       # Job example for a specific behavior*
   rules:
     - if: $STOP_JOB == "true"
 ```
-<br>
+
+
 In the example above, we can highlight two types of jobs: those that are default and are part of the CI-CD cycle, and those that are jobs that have specific behaviors for a task.
 
 For default jobs, we'll create a standard variable and in all jobs of this type, we'll add the condition that this variable is "true" so that they all run.
 
 For specific jobs, we will define variables for each one, according to their needs, not forgetting to add the condition that this variable is true so that the job is executed.
 <br><br>
+
 
 3- To ensure that the plugin components are rendered, we need to check that the `catalog-info.yaml` of the backstage component has the following annotation: `gitlab.com/project-slug`:
 
@@ -123,15 +125,17 @@ spec:
   owner: admin
 ```
 
-<hr>
-<br>
 
-<h3>Pipelines List</h3>
-<br>
+
+
+### Pipelines List
+
+
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/25bfdbe4-a93c-4b6e-a642-4219842ec4bf)
 
-<br>
+
+
 The component lists the last pipelines that were executed in the project. In its header we can define the branch, run a new pipeline and also update the table with the refresh button.
 
 The table is divided by "Pipeline ID", which contains the ids of the respective pipelines, followed by their status, the url of the Gitlab interface and the elapsed time of their execution.
@@ -141,21 +145,31 @@ When we click on the "run pipeline" button, we'll trigger a modal where we'll in
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/7a53861a-f4e3-4664-81e9-39cb603c4ec1)
 
-<br>
+
+
+
 Then the jobs in which the variable has been set will be executed in chronological order.
-<br><br>
+
+
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/c0af4532-c7ae-4433-ae02-83c55ef82504)
 
-<br>
+
+
+
 As you can see:
-<br><br>
+
+
+
  
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/7dffe0fc-2ace-4bca-bf00-e4f5b3909a5d)
 
-<br>
+
+
+
 To add it to our component, let's edit the `EntityPage` in the path: `packages/app/src/components/catalog/EntityPage.tsx`:
-<br><br>
+
+
 
 ```diff
 ...
@@ -173,12 +187,16 @@ const cicdContent = (
 
 ...
 ```
-<br>
+
+
 With these changes we are now able to use the **Pipelines List** component.
 
-<br>
-<hr>
-<br>
+
+
+
+* * *
+
+
 
 <h3>Gitlab Jobs</h3>
 
@@ -186,13 +204,15 @@ Gitlab Jobs, on the other hand, is a component in which we filter out the jobs w
 
 In order for them to be added to our backstage component, we need a special annotation, `gitlab.com/jobs`.
 We follow a different syntax to set the value of this annotation, see:
-<br>
+
+  
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/43cbf376-e2d6-4c5a-b009-664910c6fc0a)
 
-<br>
+
+ 
 That way:
-<br><br>
+
 
 ```diff
 apiVersion: backstage.io/v1alpha1
@@ -211,9 +231,10 @@ spec:
   owner: admin
 ```
 
-<br>
+
 To add it to our backstage component, we need to go back to `packages/app/src/components/catalog/EntityPage.tsx` and add the following code:
-<br><br>
+
+
 
 ```diff
 ...
@@ -254,21 +275,29 @@ const overviewContent = (
 ...
 ```
 
-<br>
+
+
+
 We will then have listed all the jobs added to our component's annotation, where the button's Label will be the title of the button component, and the variable will be responsible for triggering the action of each button under the hood:
-<br><br>
+
+
+
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/cfcee1e1-3f72-4f8d-9cf3-2208f0cd4d9d)
 
-<br>
+
+
 No need to enter the variable again, just click on run the desired job;
-<br><br>
+
+
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/0d6a9243-5b23-4209-a808-cd3efc70d6c4)
 
-<br>
+
+
 And in your gitlab only the job will run in a new pipeline execution:
-<br><br>
+
+
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/f44615b2-c0dd-4b0e-83e3-7f791193d552)
 
