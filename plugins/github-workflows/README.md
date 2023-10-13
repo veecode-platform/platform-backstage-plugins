@@ -327,9 +327,7 @@ spec:
 The composition of the **annotation** works like this:
 
 
-
-
-![print](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/0158be50-8034-4cd0-a304-7b4233578cc0)
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/290fc11a-020f-449d-bdf7-a0829c452666)
 
 
 
