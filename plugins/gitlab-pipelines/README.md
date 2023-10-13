@@ -207,7 +207,8 @@ We follow a different syntax to set the value of this annotation, see:
 
   
 
-![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/43cbf376-e2d6-4c5a-b009-664910c6fc0a)
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/83e93a07-4dbb-451c-9a49-ef8808ece3ad)
+
 
 
  
