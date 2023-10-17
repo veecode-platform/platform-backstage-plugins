@@ -10,11 +10,11 @@ The plugin offers two distinct approaches to integrate with your component:
 
 # Our community
 
->  <img src="/home/tec/Downloads/icons8-discord-48.png">**Join Us**
+> 💬  **Join Us**
 >
 > Join our community to resolve questions about our **Plugins**. We look forward to welcoming you! <br>
 >
->  <a href="https://github.com/orgs/veecode-platform/discussions" style="text-decoration: none; background: teal; color: white; padding: .5rem; border-radius: 8px; cursor: pointer"> 💬  Go to Comunity </a>
+>  <a href="https://github.com/orgs/veecode-platform/discussions" style="text-decoration: none; background: teal; color: white; padding: .5rem; border-radius: 8px; cursor: pointer">   Go to Comunity  🚀  </a>
 
 ### Getting Started:
 <br>
