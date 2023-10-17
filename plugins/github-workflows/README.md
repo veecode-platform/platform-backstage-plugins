@@ -51,6 +51,7 @@ We'll divide the configuration into three steps:
 1.1 - Using github auth provider:
 
 > :information_source: Make sure you have an github auth provider in your devportal.
+<br>
 > :information_source: See how https://backstage.io/docs/auth/github/provider
 
 ```yaml
