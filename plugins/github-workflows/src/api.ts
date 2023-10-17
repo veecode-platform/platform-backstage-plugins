@@ -1,4 +1,5 @@
 import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
+import { ScmAuthApi } from '@backstage/integration-react';
 import { Branches, WorkflowDispatchParameters, WorkflowResponseFromApi, WorkflowRun, WorkflowRunsResponseFromApi } from './utils/types';
 import YAML from "js-yaml"
 
@@ -49,6 +50,7 @@ export const githubWorkflowsApiRef = createApiRef<GithubWorkflowsApi>({
 
 export type Options = {
     discoveryApi: DiscoveryApi;
+    scmAuthApi: ScmAuthApi;
     /**
     * Path to use for requests via the proxy, defaults to /github/api
     */
@@ -63,16 +65,31 @@ const regexFileName = (input: string) => {
 class Client {
     private readonly discoveryApi: DiscoveryApi;
     private readonly proxyPath: string;
+    private readonly scmAuthApi: ScmAuthApi;
 
     constructor(opts: Options) {
         this.discoveryApi = opts.discoveryApi;
+        this.scmAuthApi = opts.scmAuthApi;
         this.proxyPath = opts.proxyPath ?? GITHUB_WORKFLOWS_DEFAULT_PROXY_URL
     }
 
     public async fetch<T = any>(input: string, githubRepoSlug: string, init?: RequestInit): Promise<T> {
+        const { token } = await this.scmAuthApi.getCredentials({
+            url: `https://github.com/`,
+            additionalScope: {
+              customScopes: {
+                github: ['repo'],
+              },
+            },
+          });
         const apiUrl = await this.apiUrl(githubRepoSlug);
 
-        const resp = await fetch(`${apiUrl}${input}`, init);
+        const resp = await fetch(`${apiUrl}${input}`, {
+            ...init,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         if (!resp.ok) {
             throw new Error(`Request failed with ${resp.status} - ${(await resp.json()).message}`);
         }

@@ -8,6 +8,14 @@ The plugin offers two distinct approaches to integrate with your component:
 - A complete listing of the workflows available in your project.
 <br>
 
+# Our community
+
+>  <img src="/home/tec/Downloads/icons8-discord-48.png">**Join Us**
+>
+> Join our community to resolve questions about our **Plugins**. We look forward to welcoming you! <br>
+>
+>  <a href="https://github.com/orgs/veecode-platform/discussions" style="text-decoration: none; background: teal; color: white; padding: .5rem; border-radius: 8px; cursor: pointer"> 💬  Go to Comunity </a>
+
 ### Getting Started:
 <br>
 
@@ -37,6 +45,33 @@ yarn add --cwd packages/app @veecode-platform/backstage-plugin-github-workflows
 We'll divide the configuration into three steps:
 
 1- Proxy Configuration.
+
+1.1 - Using github auth provider:
+
+> :information_source: Make sure you have an github auth provider in your devportal.
+> :information_source: See how https://backstage.io/docs/auth/github/provider
+
+```yaml
+auth:
+  environment: development
+  providers: 
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+```
+
+```yaml
+proxy:
+  '/github/api':
+    target: https://api.github.com/repos
+    allowedHeaders: ['Authorization', 'X-GitHub-Api-Version']
+    headers: 
+      Accept: application/vnd.github+json
+      X-GitHub-Api-Version: "2022-11-28"
+```
+
+1.2 - Using github personal access token directly
 
 In the app-config.yaml file:
 
