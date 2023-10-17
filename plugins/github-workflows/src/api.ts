@@ -2,6 +2,7 @@ import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
 import { ScmAuthApi } from '@backstage/integration-react';
 import { Branches, WorkflowDispatchParameters, WorkflowResponseFromApi, WorkflowRun, WorkflowRunsResponseFromApi } from './utils/types';
 import YAML from "js-yaml"
+import { StatusWorkflowEnum } from './utils/enums/WorkflowListEnum';
 
 const GITHUB_WORKFLOWS_DEFAULT_PROXY_URL = "/github/api"
 
@@ -16,9 +17,9 @@ export interface Workflows {
         updatedAt: string
     },
     latestRun: {
-        id: number
-        status: string
-        conclusion: string
+        id?: number
+        status?: string
+        conclusion?: string
     },
     parameters: WorkflowDispatchParameters[]
 }
@@ -104,7 +105,7 @@ class Client {
     }
 
     async listWorkflows(githubRepoSlug: string, filter?: string[]) {
-        const response = await this.fetch<WorkflowResponseFromApi>("/actions/workflows", githubRepoSlug)
+        const response = await this.fetch<WorkflowResponseFromApi>("/actions/workflows", githubRepoSlug);
         if (!filter || filter.length === 0) return response.workflows
         const filteredWorkflows = response.workflows.filter(
             workflow => filter.includes(regexFileName(workflow.path))
@@ -202,10 +203,19 @@ class Client {
     }
 
     async listWorkflowsResponse(githubRepoSlug: string, branch: string, filter?: string[]){
-        const workflows = await this.listWorkflows(githubRepoSlug, filter)
+        const workflows = await this.listWorkflows(githubRepoSlug, filter);
         const response = await Promise.all(workflows.map(async (workflow): Promise<Workflows> => {
-            const latestWorkflowRun = await this.getLatestWorkflowRun(workflow.id.toString(), githubRepoSlug)
-            const dispatchParameters = await this.listWorkflowsDispatchParameters(githubRepoSlug, workflow.path, branch)
+            const latestWorkflowRun = await this.getLatestWorkflowRun(workflow.id.toString(), githubRepoSlug);
+            const dispatchParameters = await this.listWorkflowsDispatchParameters(githubRepoSlug, workflow.path, branch);
+            const latestWorkflowRunData = latestWorkflowRun ? {
+                id: latestWorkflowRun.id,
+                status: latestWorkflowRun.status,
+                conclusion: latestWorkflowRun.conclusion
+
+            } : {
+                status: StatusWorkflowEnum.completed,
+                conclusion: StatusWorkflowEnum.failure
+            };
             return {
                 workflow: {
                     id: workflow.id,
@@ -216,12 +226,7 @@ class Client {
                     createdAt: workflow.createdAt,
                     updatedAt: workflow.updatedAt
                 },
-                latestRun: {
-                    id: latestWorkflowRun.id,
-                    status: latestWorkflowRun.status,
-                    conclusion: latestWorkflowRun.conclusion
-
-                },
+                latestRun: latestWorkflowRunData,
                 parameters: dispatchParameters
             }
         }))

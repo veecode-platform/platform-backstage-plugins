@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ErrorBoundary, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
-import { Box, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography, makeStyles } from '@material-ui/core';
+import { EmptyState, ErrorBoundary, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
+import { Box, Button, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography, makeStyles } from '@material-ui/core';
 import { WorkFlowItem } from './WorkFlowItem';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import useAsync from 'react-use/lib/useAsync';
@@ -164,7 +164,20 @@ export const WorkFlowCard = () => {
 
   if(!error && !workflowsState) {
     return (
-      <MissingAnnotationEmptyState annotation={WORKFLOW_ANNOTATION} />
+      <EmptyState
+      missing="data"
+      title="No Workflow Data"
+      description="This component has GitHub Actions enabled, but no data was found. Have you created any Workflows? Click the button below to create a new Workflow."
+      action={
+        <Button
+          variant="contained"
+          color="primary"
+          href={`https://github.com/${projectName}/actions/new`}
+        >
+          Create new Workflow
+        </Button>
+      }
+    />
     )
   }
   
