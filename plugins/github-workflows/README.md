@@ -8,7 +8,7 @@ The plugin offers two distinct approaches to integrate with your component:
 - A complete listing of the workflows available in your project.
 <br>
 
-# Our community
+### Our community
 
 > 💬  **Join Us**
 >
