@@ -15,7 +15,9 @@ It offers two approaches:
 >
 >    [Go to Community  🚀](https://github.com/orgs/veecode-platform/discussions)
 
-<br>
+<br><br>
+
+
 
 
 ## 🚀 Getting started: 
