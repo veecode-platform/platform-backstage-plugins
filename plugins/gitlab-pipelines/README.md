@@ -6,6 +6,18 @@ It offers two approaches:
 - It offers a list of pipeline executions related to variables, which helps you run individual jobs or groups of jobs.
 <br>
 
+
+### Our community
+
+> 💬  **Join Us**
+>
+> Join our community to resolve questions about our **Plugins**. We look forward to welcoming you! <br>
+>
+>    [Go to Community  🚀](https://github.com/orgs/veecode-platform/discussions)
+
+<br>
+
+
 ## 🚀 Getting started: 
 
 Prerequisites:
