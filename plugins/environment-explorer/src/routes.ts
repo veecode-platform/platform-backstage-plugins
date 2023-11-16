@@ -1,13 +1,13 @@
 
 import { createExternalRouteRef, createRouteRef } from '@backstage/core-plugin-api';
 
-// export const rootRouteRef = createRouteRef({
-//   id: 'environment-explorer',
-// });
-
 export const rootRouteRef = createRouteRef({
-  id: 'catalog',
+  id: 'environment-explorer',
 });
+
+// export const rootRouteRef = createRouteRef({
+//   id: 'catalog',
+// });
 
 export const createComponentRouteRef = createExternalRouteRef({
   id: 'create-component',
