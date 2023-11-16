@@ -5686,7 +5686,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@veecode-platform/plugin-environment-explorer@^0.1.0, @veecode-platform/plugin-environment-explorer@workspace:plugins/environment-explorer":
+"@veecode-platform/plugin-environment-explorer@workspace:plugins/environment-explorer":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/plugin-environment-explorer@workspace:plugins/environment-explorer"
   dependencies:
@@ -11617,7 +11617,6 @@ __metadata:
     "@backstage/plugin-user-settings": ^0.7.8
     "@backstage/test-utils": ^1.4.2
     "@backstage/theme": ^0.4.1
-    "@veecode-platform/plugin-environment-explorer": ^0.1.0
     "@material-ui/core": ^4.12.2
     "@material-ui/icons": ^4.9.1
     "@testing-library/dom": ^8.0.0
