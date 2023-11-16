@@ -23,7 +23,7 @@ export const EnvironmentOverview = environmentExplorerPlugin.provide(
 
 export const EnvironmentExplorerPage = environmentExplorerPlugin.provide(
   createComponentExtension({
-    name: 'GithubWorkflowsList',
+    name: 'EnvironmentExplorerPage',
     component: {
       lazy: () =>
         import('./components/EnvironmentExplorerPage').then(m => m.EnvironmentExplorerPage),

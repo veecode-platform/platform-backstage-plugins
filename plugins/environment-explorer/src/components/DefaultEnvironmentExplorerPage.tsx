@@ -40,7 +40,7 @@ import {
   
   const defaultColumns: TableColumn<CatalogTableRow>[] = [
     CatalogTable.columns.createTitleColumn({ hidden: true }),
-    CatalogTable.columns.createNameColumn({ defaultKind: 'Cluster' }),
+    CatalogTable.columns.createNameColumn({ defaultKind: 'Environment' }),
     // CatalogTable.columns.createSystemColumn(),
     CatalogTable.columns.createOwnerColumn(),
     CatalogTable.columns.createSpecTypeColumn(),
