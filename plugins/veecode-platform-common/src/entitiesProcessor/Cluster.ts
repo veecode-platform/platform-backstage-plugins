@@ -27,10 +27,7 @@ import {
     processingResult,
   } from '@backstage/plugin-catalog-node';
   import { LocationSpec } from '@backstage/plugin-catalog-common';
-  import {
-    ClusterEntityV1alpha1,
-    ClusterEntityV1alpha1Validator,
-  } from '@internal/plugin-veecode-platform-common'
+import { ClusterEntityV1alpha1, ClusterEntityV1alpha1Validator } from '../kinds';
   
   /**
    * Adds support for scaffolder specific entity kinds to the catalog.

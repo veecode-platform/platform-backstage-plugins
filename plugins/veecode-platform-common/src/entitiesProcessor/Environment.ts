@@ -27,10 +27,8 @@ import {
     processingResult,
   } from '@backstage/plugin-catalog-node';
   import { LocationSpec } from '@backstage/plugin-catalog-common';
-  import {
-    EnvironmentEntityV1alpha1,
-    EnvironmentEntityV1alpha1Validator,
-  } from '@internal/plugin-veecode-platform-common'
+import { EnvironmentEntityV1alpha1, EnvironmentEntityV1alpha1Validator } from '../kinds';
+
   
   /**
    * Adds support for scaffolder specific entity kinds to the catalog.
