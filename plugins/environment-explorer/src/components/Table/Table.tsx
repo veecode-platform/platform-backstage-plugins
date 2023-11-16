@@ -68,7 +68,7 @@ import {
     const toRef = (entity: Entity) =>
       entity.metadata.title ||
       humanizeEntityRef(entity, {
-        defaultKind: 'Component',
+        defaultKind: 'Environment',
       });
   
     return toRef(a).localeCompare(toRef(b));
@@ -206,7 +206,7 @@ import {
         entity,
         resolved: {
           name: humanizeEntityRef(entity, {
-            defaultKind: 'Component',
+            defaultKind: 'Environment',
           }),
           ownedByRelationsTitle: ownedByRelations
             .map(r => humanizeEntityRef(r, { defaultKind: 'group' }))

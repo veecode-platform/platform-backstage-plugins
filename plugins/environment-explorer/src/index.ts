@@ -1,1 +1,1 @@
-export { environmentExplorerPlugin, EnvironmentExplorerPage } from './plugin';
+export { environmentExplorerPlugin, EnvironmentExplorerPage, EnvironmentOverview } from './plugin';
