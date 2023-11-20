@@ -58,6 +58,8 @@ import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 
 import { isGithubWorkflowsAvailable, GithubWorkflowsCard, GithubWorkflowsList, isGithubAvailable } from '@veecode-platform/backstage-plugin-github-workflows'
 import { GitlabJobs, GitlabPipelineList, isGitlabAvailable, isGitlabJobsAvailable } from '@veecode-platform/backstage-plugin-gitlab-pipelines';
+import { EntityKubernetesContent } from '@backstage/plugin-kubernetes';
+import { ClusterOverviewPage } from '@veecode-platform/backstage-plugin-k8s-cluster-overview';
 
 
 const techdocsContent = (
@@ -188,6 +190,14 @@ const serviceEntityPage = (
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/cluster-overview" title="cluster overview">
+    <ClusterOverviewPage/>
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/kubernetes" title="Kubernetes">
+      <EntityKubernetesContent refreshIntervalMs={30000} />
     </EntityLayout.Route>
 
     <EntityLayout.Route

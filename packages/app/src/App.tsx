@@ -34,6 +34,7 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { providers } from './identityProviders';
+import { ClusterExplorerPage } from '@veecode-platform/backstage-plugin-k8s-cluster-overview';
 
 const app = createApp({
   apis,
@@ -89,6 +90,7 @@ const routes = (
     </Route>
     <Route path="/create" element={<ScaffolderPage />} />
     <Route path="/api-docs" element={<ApiExplorerPage />} />
+    <Route path="/cluster-explorer" element={<ClusterExplorerPage />} />
     <Route
       path="/tech-radar"
       element={<TechRadarPage width={1500} height={800} />}

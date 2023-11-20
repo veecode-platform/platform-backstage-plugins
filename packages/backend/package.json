@@ -25,6 +25,7 @@
     "@backstage/plugin-auth-node": "^0.2.19",
     "@backstage/plugin-catalog-backend": "^1.12.4",
     "@backstage/plugin-catalog-backend-module-github": "^0.3.7",
+    "@backstage/plugin-kubernetes-backend": "^0.13.0",
     "@backstage/plugin-permission-backend": "^0.5.25",
     "@backstage/plugin-permission-common": "^0.7.7",
     "@backstage/plugin-permission-node": "^0.7.13",

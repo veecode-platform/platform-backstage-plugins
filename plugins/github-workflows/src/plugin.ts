@@ -1,5 +1,5 @@
 import { createApiFactory, createPlugin, discoveryApiRef, createComponentExtension } from '@backstage/core-plugin-api';
-import { ScmAuthApi, scmAuthApiRef } from '@backstage/integration-react';
+import { scmAuthApiRef } from '@backstage/integration-react';
 import { rootRouteRef } from './routes';
 import { githubWorkflowsApiRef, GithubWorkflowsApiClient } from './api';
 
