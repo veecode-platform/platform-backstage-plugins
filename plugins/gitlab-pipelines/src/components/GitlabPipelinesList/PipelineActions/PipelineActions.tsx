@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => (({
   button: {
     padding: '0 1.2rem',
     background: theme.palette.info.main,
+    minHeight: '46px',
     borderRadius: '5px',
     fontSize: '.85rem',
     display: 'flex',
