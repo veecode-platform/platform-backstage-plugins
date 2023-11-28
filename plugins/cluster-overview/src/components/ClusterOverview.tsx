@@ -2,9 +2,8 @@ import React, { useState } from 'react'
 import { useApi } from '@backstage/core-plugin-api';
 import { kubernetesApiRef } from '@backstage/plugin-kubernetes';
 import useAsync from 'react-use/lib/useAsync';
-import { Progress } from '@backstage/core-components';
-//import { Entity } from '@backstage/catalog-model';
-import { useEntity } from '@backstage/plugin-catalog-react';
+import { Progress, ErrorPage } from '@backstage/core-components';
+import { useEntity, MissingAnnotationEmptyState } from '@backstage/plugin-catalog-react';
 import { Grid, Drawer, IconButton } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
@@ -21,7 +20,6 @@ import {
     StatusWarning,
     StatusRunning,
 } from '@backstage/core-components';
-
 
 const useDrawerStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -86,30 +84,30 @@ const convertMemoryValues = (value: string) => {
         case "k"://k
             return parseInt(splited[0])
         case "m":
-            return parseInt(splited[0])/1024// k*1024
+            return parseInt(splited[0]) / 1024// k*1024
         case "g":
-            return parseInt(splited[0])/1024**2// k*1024*2
+            return parseInt(splited[0]) / 1024 ** 2// k*1024*2
         case "t":
-            return parseInt(splited[0])/1024**3// k*1024*3
+            return parseInt(splited[0]) / 1024 ** 3// k*1024*3
         case "p":
-            return parseInt(splited[0])/1024**4// k*1024*4
+            return parseInt(splited[0]) / 1024 ** 4// k*1024*4
         default:
             return parseInt(splited[0])
     }
 }
 
-const showMemoryDisplayValueInGi = (valueInKi:number) => {
-    return `${(valueInKi/1024**2).toFixed(2)} Gi`
+const showMemoryDisplayValueInGi = (valueInKi: number) => {
+    return `${(valueInKi / 1024 ** 2).toFixed(2)} Gi`
 }
 
 const convertCpuValues = (value: string) => {
     const splited = value.split(/(?=[a-zA-z])|(?<=[a-zA-z])/g)
 
-    if(splited.length == 1) return parseInt(value)
-    
+    if (splited.length == 1) return parseInt(value)
+
     switch (splited[1].toLowerCase()) {
         case "m":
-            return parseInt(splited[0])/1000
+            return parseInt(splited[0]) / 1000
 
         default:
             return parseInt(splited[0])
@@ -122,10 +120,6 @@ export const ClusterOverview = () => {
     const [isOpen, toggleDrawer] = useState(false);
     const classes = useDrawerStyles();
     const [nodeInfo, setNodeInfo] = useState<Partial<ClusterNodes>>()
-
-    //const CLUSTER_NAME = 'devportal-kubernetes';
-
-    const CLUSTER_NAME = entity.metadata?.annotations?.["veecode/cluster-name"] || ""
 
     const InfoButton = ({ info }: { info: Partial<ClusterNodes> }) => {
         return (<IconButton
@@ -141,12 +135,15 @@ export const ClusterOverview = () => {
         </IconButton>)
     }
 
+    const CLUSTER_NAME = entity.metadata?.name || entity.metadata?.annotations?.["veecode/cluster-name"]
+    if (!CLUSTER_NAME) return <MissingAnnotationEmptyState annotation={["veecode/cluster-name", "metadata.name"]} />
 
     const { loading, error, value } = useAsync(async (): Promise<{
         namespaces: ClusterNamespace[],
         nodes: ClusterNodes[],
         capacity: ClusterCapacity,
-        info: CLusterInformation
+        info: CLusterInformation,
+        ingressClasses: any[]
     }> => {
 
         const namespaces: any = await (await kubernetesApi.proxy({
@@ -157,6 +154,18 @@ export const ClusterOverview = () => {
         const nodes: any = await (await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
             path: '/api/v1/nodes',
+
+        })).json();
+
+        const ingressClasses: any = await (await kubernetesApi.proxy({// ingress class, name, version, ip
+            clusterName: CLUSTER_NAME,
+            path: '/apis/networking.k8s.io/v1/ingressclasses',
+
+        })).json();
+
+        const ingresses: any = await (await kubernetesApi.proxy({// ingress class, name, version, ip
+            clusterName: CLUSTER_NAME,
+            path: '/apis/networking.k8s.io/v1/ingresses',
 
         })).json();
 
@@ -213,11 +222,33 @@ export const ClusterOverview = () => {
             status: <StatusOK>Ok</StatusOK>
         }
 
+        const mapedIngressClasses = ingressClasses.items.map((ic: { metadata: { name: any; labels: any; creationTimestamp: any; }; }) => {
+            const filteredIngresses = ingresses.items.filter((ingress: { spec: { ingressClassName: any; }; }) => ingress.spec.ingressClassName === ic.metadata.name)
+
+            const ipList: any[] = []
+
+            filteredIngresses.forEach((i: { status: { loadBalancer: { ingress: any[]; }; }; }) => {
+                i.status.loadBalancer?.ingress?.forEach(x => {
+                    ipList.push(x.ip)
+                })
+            });
+
+
+            return {
+                name: ic.metadata.name,
+                version: ic.metadata.labels["app.kubernetes.io/version"],
+                createdAt: ic.metadata.creationTimestamp,
+                ip: ipList.filter((value, index, self) => self.indexOf(value) === index).join(",")
+
+            }
+        })
+
         const response = {
             namespaces: namespacesList,
             nodes: nodesList,
             capacity: capacity,
-            info: info
+            info: info,
+            ingressClasses: mapedIngressClasses
         }
         //console.log("response pre: ", namespaces, nodes)
         //console.log("response pos: ", response)
@@ -230,101 +261,111 @@ export const ClusterOverview = () => {
         return <Progress />;
     }
     if (error) {
-        return <div>{error}</div>;
+        return <ErrorPage status={error.name} statusMessage={error.message} />;
     }
-    const { namespaces, nodes, capacity, info } = value as {
-        namespaces: ClusterNamespace[],
-        nodes: ClusterNodes[],
-        capacity: ClusterCapacity,
-        info: CLusterInformation
+    if (value) {
+        const { namespaces, nodes, capacity, info, ingressClasses } = value
+
+        return (
+            <Content>
+                <ContentHeader title="Overview">
+                    <SupportButton>Your cluster's information.</SupportButton>
+                </ContentHeader>
+                <Grid container spacing={3} direction="row">
+
+                    <Drawer
+                        classes={{
+                            paper: classes.paper,
+                        }}
+                        anchor="right"
+                        open={isOpen}
+                        onClose={() => toggleDrawer(false)}
+                    >
+                        <Grid container>
+                            <Grid item md={12}>
+                                <IconButton
+                                    key="dismiss"
+                                    title="Close the drawer"
+                                    onClick={() => toggleDrawer(false)}
+                                    color="inherit"
+                                >
+                                    <CloseIcon />
+                                </IconButton>
+                            </Grid>
+
+                            <Grid item md={12}>
+                                <InfoCard title="Information">
+                                    <StructuredMetadataTable metadata={nodeInfo as ClusterNodes} />
+                                </InfoCard>
+                            </Grid>
+
+                        </Grid>
+                    </Drawer>
+
+                    <Grid item md={3} sm={12} >{/* left-side div: cluster info + capacity*/}
+                        <Grid container spacing={3}>
+                            <Grid item md={12}>
+                                <InfoCard title="Cluster information">
+                                    <StructuredMetadataTable metadata={info} />
+                                </InfoCard>
+                            </Grid>
+                            <Grid item md={12}>
+                                <InfoCard title="Capacity">
+                                    <StructuredMetadataTable metadata={capacity} />
+                                </InfoCard>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+                    <Grid item md={9}> {/* right-side div: node table + namespaces*/}
+                        <Grid container spacing={3}>
+                            <Grid item md={12}>
+                                <Table
+                                    title={"Nodes"}
+                                    columns={[
+                                        { title: 'Name', field: 'name' },
+                                        { title: 'Os', field: 'os' },
+                                        { title: 'Arch', field: 'arch' },
+                                        { title: "Info", field: "info" },
+                                        { title: 'Creation', field: 'createdAt' },
+
+                                    ]}
+                                    data={nodes}
+                                    options={{ search: true, paging: true }} />
+                            </Grid>
+                            <Grid item md={12}>
+                                <Table
+                                    title={"Ingress classes"}
+                                    columns={[
+                                        { title: 'Name', field: 'name' },
+                                        { title: 'Ip', field: 'ip' },
+                                        { title: 'Version', field: 'version' },
+                                        { title: 'Creation', field: 'createdAt' },
+                                    ]}
+                                    data={ingressClasses}
+                                    options={{ search: true, paging: true }} />
+                            </Grid>
+                            <Grid item md={12}>
+                                <InfoCard title="Namespaces">
+                                    <Grid container spacing={2}>
+                                        {namespaces.map((namespace, index) => {
+                                            return (
+                                                <Grid item md={3} key={index}>
+                                                    <InfoCard>
+                                                        <StructuredMetadataTable metadata={namespace} />
+                                                    </InfoCard>
+                                                </Grid>
+                                            )
+                                        })}
+                                    </Grid>
+                                </InfoCard>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+                </Grid>
+            </Content>
+        )
     }
-
-    return (
-        <Content>
-            <ContentHeader title="Overview">
-                <SupportButton>Your cluster's information.</SupportButton>
-            </ContentHeader>
-            <Grid container spacing={3} direction="row">
-
-                <Drawer
-                    classes={{
-                        paper: classes.paper,
-                    }}
-                    anchor="right"
-                    open={isOpen}
-                    onClose={() => toggleDrawer(false)}
-                >
-                    <Grid container>
-                        <Grid item md={12}>
-                            <IconButton
-                                key="dismiss"
-                                title="Close the drawer"
-                                onClick={() => toggleDrawer(false)}
-                                color="inherit"
-                            >
-                                <CloseIcon />
-                            </IconButton>
-                        </Grid>
-
-                        <Grid item md={12}>
-                            <InfoCard title="Information">
-                                <StructuredMetadataTable metadata={nodeInfo as ClusterNodes} />
-                            </InfoCard>
-                        </Grid>
-
-                    </Grid>
-                </Drawer>
-
-                <Grid item md={3} >{/* left-side div: cluster info + capacity*/}
-                    <Grid container spacing={3}>
-                        <Grid item md={12}>
-                            <InfoCard title="Cluster information">
-                                <StructuredMetadataTable metadata={info} />
-                            </InfoCard>
-                        </Grid>
-                        <Grid item md={12}>
-                            <InfoCard title="Capacity">
-                                <StructuredMetadataTable metadata={capacity} />
-                            </InfoCard>
-                        </Grid>
-                    </Grid>
-                </Grid>
-
-                <Grid item md={9}> {/* right-side div: node table + namespaces*/}
-                    <Grid container spacing={3}>
-                        <Grid item md={12}>
-                            <Table
-                                title={"Nodes"}
-                                columns={[
-                                    { title: 'Name', field: 'name' },
-                                    { title: 'Os', field: 'os' },
-                                    { title: 'Arch', field: 'arch' },
-                                    { title: "Info", field: "info" },
-                                    { title: 'Creation', field: 'createdAt' },
-
-                                ]}
-                                data={nodes}
-                                options={{ search: true, paging: true }} />
-                        </Grid>
-                        <Grid item md={12}>
-                            <InfoCard title="Namespaces">
-                                <Grid container spacing={2}>
-                                    {namespaces.map(namespace => {
-                                        return (
-                                            <Grid item md={3}>
-                                                <InfoCard>
-                                                    <StructuredMetadataTable metadata={namespace} />
-                                                </InfoCard>
-                                            </Grid>
-                                        )
-                                    })}
-                                </Grid>
-                            </InfoCard>
-                        </Grid>
-                    </Grid>
-                </Grid>
-
-            </Grid>
-        </Content>
-    )
+    return <></>
 }

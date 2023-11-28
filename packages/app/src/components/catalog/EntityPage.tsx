@@ -79,7 +79,7 @@ const cicdContent = (
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isGitlabAvailable}>
-      <GitlabPipelineList/>
+      <GitlabPipelineList />
     </EntitySwitch.Case>
 
     <EntitySwitch.Case>
@@ -104,7 +104,7 @@ const cicdContent = (
 const WorkflowsContent = (
   <EntitySwitch>
     <EntitySwitch.Case if={isGithubActionsAvailable}>
-      <GithubWorkflowsList/>
+      <GithubWorkflowsList />
     </EntitySwitch.Case>
 
     <EntitySwitch.Case>
@@ -159,7 +159,7 @@ const overviewContent = (
     <EntitySwitch>
       <EntitySwitch.Case if={isGithubWorkflowsAvailable}>
         <Grid item lg={6} xs={12}>
-            <GithubWorkflowsCard />
+          <GithubWorkflowsCard />
         </Grid>
       </EntitySwitch.Case>
     </EntitySwitch>
@@ -167,12 +167,12 @@ const overviewContent = (
     <EntitySwitch>
       <EntitySwitch.Case if={isGitlabJobsAvailable}>
         <Grid item lg={8} xs={12}>
-            <GitlabJobs />
+          <GitlabJobs />
         </Grid>
       </EntitySwitch.Case>
     </EntitySwitch>
-    
-    
+
+
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
     </Grid>
@@ -193,7 +193,7 @@ const serviceEntityPage = (
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/cluster-overview" title="cluster overview">
-    <ClusterOverviewPage/>
+      <ClusterOverviewPage/>
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/kubernetes" title="Kubernetes">

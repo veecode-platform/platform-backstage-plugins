@@ -3560,6 +3560,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@backstage/plugin-catalog-graph@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@backstage/plugin-catalog-graph@npm:0.3.1"
+  dependencies:
+    "@backstage/catalog-client": ^1.4.6
+    "@backstage/catalog-model": ^1.4.3
+    "@backstage/core-components": ^0.13.8
+    "@backstage/core-plugin-api": ^1.8.0
+    "@backstage/plugin-catalog-react": ^1.9.1
+    "@backstage/theme": ^0.4.4
+    "@backstage/types": ^1.1.1
+    "@material-ui/core": ^4.12.2
+    "@material-ui/icons": ^4.9.1
+    "@material-ui/lab": 4.0.0-alpha.61
+    "@types/react": ^16.13.1 || ^17.0.0
+    classnames: ^2.3.1
+    lodash: ^4.17.15
+    p-limit: ^3.1.0
+    qs: ^6.9.4
+    react-use: ^17.2.4
+  peerDependencies:
+    react: ^16.13.1 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
+    react-router-dom: 6.0.0-beta.0 || ^6.3.0
+  checksum: 49b217d7e442f8af3cf46dddb20ae6407099f21eaf2aa7f113eaf14805937fc8e6a586f961e072d883e04393730b49a9959daa591679b8d8ae3c9822848d96cf
+  languageName: node
+  linkType: hard
+
 "@backstage/plugin-catalog-import@npm:^0.9.13":
   version: 0.9.13
   resolution: "@backstage/plugin-catalog-import@npm:0.9.13"
@@ -11277,6 +11305,7 @@ __metadata:
     "@backstage/core-components": ^0.13.4
     "@backstage/core-plugin-api": ^1.5.3
     "@backstage/dev-utils": ^1.0.20
+    "@backstage/plugin-catalog-graph": ^0.3.1
     "@backstage/plugin-catalog-react": ^1.8.5
     "@backstage/plugin-kubernetes": ^0.11.0
     "@backstage/test-utils": ^1.4.2
