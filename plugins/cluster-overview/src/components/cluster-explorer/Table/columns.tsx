@@ -53,7 +53,7 @@ export const columnFactories = Object.freeze({
       render: ({ entity }) => (
         <EntityRefLink
           entityRef={entity}
-          defaultKind={options?.defaultKind || 'Component'}
+          defaultKind={options?.defaultKind || 'Cluster'}
           title={entity.metadata?.title}
         />
       ),
