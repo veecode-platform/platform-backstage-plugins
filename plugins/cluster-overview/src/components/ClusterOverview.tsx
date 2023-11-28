@@ -11,8 +11,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import {
     InfoCard,
     Content,
-    ContentHeader,
-    SupportButton,
+    //ContentHeader,
+    //SupportButton,
     StructuredMetadataTable,
     Table,
     StatusOK,
@@ -268,9 +268,6 @@ export const ClusterOverview = () => {
 
         return (
             <Content>
-                <ContentHeader title="Overview">
-                    <SupportButton>Your cluster's information.</SupportButton>
-                </ContentHeader>
                 <Grid container spacing={3} direction="row">
 
                     <Drawer
