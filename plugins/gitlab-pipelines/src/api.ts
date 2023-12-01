@@ -99,7 +99,7 @@ class Client {
         const resp = await fetch(`${apiUrl}${input}`, {
             ...init,
             headers: {
-                Authorization: `Bearer ${token}`
+                'PRIVATE-TOKEN': `${token}`
             }
         });
         if (!resp.ok) {
