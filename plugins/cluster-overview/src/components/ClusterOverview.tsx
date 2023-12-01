@@ -135,7 +135,7 @@ export const ClusterOverview = () => {
         </IconButton>)
     }
 
-    const CLUSTER_NAME = entity.metadata?.name || entity.metadata?.annotations?.["veecode/cluster-name"]
+    const CLUSTER_NAME = entity.metadata?.annotations?.["veecode/cluster-name"] || entity.metadata?.name 
     if (!CLUSTER_NAME) return <MissingAnnotationEmptyState annotation={["veecode/cluster-name", "metadata.name"]} />
 
     const { loading, error, value } = useAsync(async (): Promise<{
