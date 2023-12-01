@@ -99,9 +99,12 @@ class Client {
         const resp = await fetch(`${apiUrl}${input}`, {
             ...init,
             headers: {
-                'PRIVATE-TOKEN': `${token}`
+                'Private-Token': token
             }
         });
+
+        console.log("TEST >>>> ", init, token)
+        
         if (!resp.ok) {
             throw new Error(`Request failed with ${resp.status} - ${(await resp.json()).message}`);
         }
