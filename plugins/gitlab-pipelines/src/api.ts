@@ -1,5 +1,6 @@
 import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
 import { JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse, VariablesParams } from './utils/types';
+import { ScmAuthApi } from '@backstage/integration-react';
 
 const GITLAB_PIPELINES_PROXY_URL = "/gitlab/api";
 
@@ -65,6 +66,7 @@ export const gitlabPipelinesApiRef = createApiRef<GitlabPipelinesApi>({
 
 export type Options = {
     discoveryApi: DiscoveryApi;
+    scmAuthApi: ScmAuthApi;
     /**
     * Path to use for requests via the proxy, defaults to /gitlab/api
     */
@@ -75,18 +77,33 @@ export type Options = {
 class Client {
     private readonly discoveryApi: DiscoveryApi;
     private readonly proxyPath: string;
+    private readonly scmAuthApi: ScmAuthApi;
 
     constructor(opts: Options) {
         this.discoveryApi = opts.discoveryApi;
+        this.scmAuthApi = opts.scmAuthApi;
         this.proxyPath = opts.proxyPath ?? GITLAB_PIPELINES_PROXY_URL
     }
 
     public async fetch<T = any>(input: string, gitlabReposlug: string, init?: RequestInit): Promise<T> {
+        const { token } = await this.scmAuthApi.getCredentials({
+            url: `https://gitlab.com`,
+          //  additionalScope:{
+          //      customScopes:{
+          //          gitlab:['projects']
+          //      }
+          //  }
+        })
         const apiUrl = await this.apiUrl(gitlabReposlug);
 
-        const resp = await fetch(`${apiUrl}${input}`, init);
+        const resp = await fetch(`${apiUrl}${input}`, {
+            ...init,
+            headers: {
+                'PRIVATE-TOKEN': `${token}`
+            }
+        });
         if (!resp.ok) {
-            throw new Error(`Request failed with ${resp.status} ${resp.statusText}`);
+            throw new Error(`Request failed with ${resp.status} - ${(await resp.json()).message}`);
         }
         
         return await resp.json();
