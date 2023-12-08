@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Select, SelectedItems } from '@backstage/core-components';
-import { useApi } from '@backstage/core-plugin-api';
+import { useApi, errorApiRef, } from '@backstage/core-plugin-api';
 import { githubWorkflowsApiRef } from '../../api';
 import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
@@ -22,15 +22,21 @@ export const SelectBranch = () => {
   const [branchDefault, setBranchDefault ] = useState<string>('');
   const { branch, setBranchState } = useContext(GithubWorkflowsContext);
   const api = useApi(githubWorkflowsApiRef);
+  const errorApi = useApi(errorApiRef);
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity as Entity);
 
   useEffect(() => {
     const getBranches = async () => {
-      const data = await api.listBranchesFromRepo(projectName);
-      if (data) {
-        setBranches(data as Branches[]);
-        setBranchDefault(data[0].name as string)
+      try{
+        const data = await api.listBranchesFromRepo(projectName);
+        if (data) {
+          setBranches(data as Branches[]);
+          setBranchDefault(data[0].name as string)
+        }
+      }
+      catch(e:any){
+        errorApi.post(e);
       }
     };
     getBranches();

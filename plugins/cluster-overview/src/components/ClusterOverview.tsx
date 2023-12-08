@@ -158,6 +158,7 @@ export const ClusterOverview = () => {
 
     const { loading, error, value } = useAsync(async (): Promise<ClusterResponse> => {
 
+        //catch errors before parsing to json
         const namespaces: any = await (await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
             path: '/api/v1/namespaces',
@@ -169,22 +170,31 @@ export const ClusterOverview = () => {
 
         })).json();
 
-        const ingressClasses: any = await (await kubernetesApi.proxy({// ingress class, name, version, ip
+        const ingressClasses: any = await (await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
             path: '/apis/networking.k8s.io/v1/ingressclasses',
 
         })).json();
 
-        const ingresses: any = await (await kubernetesApi.proxy({// ingress class, name, version, ip
+        const ingresses: any = await (await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
             path: '/apis/networking.k8s.io/v1/ingresses',
 
         })).json();
 
-        const clusterStatus: Response = await kubernetesApi.proxy({// ingress class, name, version, ip
+        const clusterStatus: Response = await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
             path: '/api/v1',
         })
+
+        const services: any = await (await kubernetesApi.proxy({
+            clusterName: CLUSTER_NAME,
+            path: '/api/v1/services',
+
+        })).json();
+
+        //console.log("service: ", services)
+        console.log("services: ", services.items.filter((service)=> service.spec.type === "LoadBalancer"))
 
 
         const namespacesList: ClusterNamespace[] = namespaces.items.map((namespace: NamespacesResponse) => {

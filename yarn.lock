@@ -13520,6 +13520,7 @@ __metadata:
     "@types/luxon": ^2.0.4
     app: "link:../app"
     better-sqlite3: ^8.0.0
+    cookie-parser: ^1.4.6
     dockerode: ^3.3.1
     express: ^4.17.1
     express-promise-router: ^4.1.0
@@ -15184,7 +15185,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookie-parser@npm:^1.4.5":
+"cookie-parser@npm:^1.4.5, cookie-parser@npm:^1.4.6":
   version: 1.4.6
   resolution: "cookie-parser@npm:1.4.6"
   dependencies:

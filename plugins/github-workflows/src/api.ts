@@ -1,4 +1,4 @@
-import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
+import { createApiRef, DiscoveryApi, IdentityApi } from '@backstage/core-plugin-api';
 import { ScmAuthApi } from '@backstage/integration-react';
 import { Branches, WorkflowDispatchParameters, WorkflowResponseFromApi, WorkflowRun, WorkflowRunsResponseFromApi } from './utils/types';
 import YAML from "js-yaml"
@@ -52,6 +52,7 @@ export const githubWorkflowsApiRef = createApiRef<GithubWorkflowsApi>({
 export type Options = {
     discoveryApi: DiscoveryApi;
     scmAuthApi: ScmAuthApi;
+    identityAPi: IdentityApi;
     /**
     * Path to use for requests via the proxy, defaults to /github/api
     */
@@ -67,10 +68,12 @@ class Client {
     private readonly discoveryApi: DiscoveryApi;
     private readonly proxyPath: string;
     private readonly scmAuthApi: ScmAuthApi;
+    private readonly identityApi: IdentityApi;
 
     constructor(opts: Options) {
         this.discoveryApi = opts.discoveryApi;
         this.scmAuthApi = opts.scmAuthApi;
+        this.identityApi = opts.identityAPi;
         this.proxyPath = opts.proxyPath ?? GITHUB_WORKFLOWS_DEFAULT_PROXY_URL
     }
 
@@ -82,13 +85,18 @@ class Client {
                 github: ['repo'],
               },
             },
-          });
+          }).catch((_error) => {
+            throw new Error("Impossible list github workflows - failed authentication")
+        } );
+
         const apiUrl = await this.apiUrl(githubRepoSlug);
+        const identityToken = await this.identityApi.getCredentials()
 
         const resp = await fetch(`${apiUrl}${input}`, {
             ...init,
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
+                "X-authorization-identity": `${identityToken.token}`              
             }
         });
         if (!resp.ok) {

@@ -7,7 +7,7 @@ import {
   notFoundHandler,
   CacheManager,
   DatabaseManager,
-  SingleHostDiscovery,
+  HostDiscovery,
   UrlReaders,
   ServerTokenManager,
 } from '@backstage/backend-common';
@@ -25,11 +25,13 @@ import { ServerPermissionClient } from '@backstage/plugin-permission-node';
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
 import permission from './plugins/permission';
 import kubernetes from './plugins/kubernetes';
+import { createAuthMiddleware } from './authMiddleware';
+import cookieParser from 'cookie-parser';
 
 function makeCreateEnv(config: Config) {
   const root = getRootLogger();
   const reader = UrlReaders.default({ logger: root, config });
-  const discovery = SingleHostDiscovery.fromConfig(config);
+  const discovery = HostDiscovery.fromConfig(config);
   const cacheManager = CacheManager.fromConfig(config);
   const databaseManager = DatabaseManager.fromConfig(config, { logger: root });
   const tokenManager = ServerTokenManager.fromConfig(config, { logger: root });
@@ -82,18 +84,25 @@ async function main() {
   const permissionEnv = useHotMemoize(module, () => createEnv('permission'));
   const kubernetesEnv = useHotMemoize(module, () => createEnv('kubernetes'));
 
+  const authMiddleware = await createAuthMiddleware(config, appEnv);
+
   const apiRouter = Router();
-  apiRouter.use('/catalog', await catalog(catalogEnv));
-  apiRouter.use('/scaffolder', await scaffolder(scaffolderEnv));
+  apiRouter.use(cookieParser());
   apiRouter.use('/auth', await auth(authEnv));
-  apiRouter.use('/techdocs', await techdocs(techdocsEnv));
-  apiRouter.use('/proxy', await proxy(proxyEnv));
-  apiRouter.use('/search', await search(searchEnv));
-  apiRouter.use('/permission', await permission(permissionEnv));
-  apiRouter.use('/kubernetes', await kubernetes(kubernetesEnv));
+  apiRouter.use('/cookie', authMiddleware, (_req, res) => {
+    res.status(200).send(`Coming right up`);
+  });
+
+  apiRouter.use('/catalog', authMiddleware, await catalog(catalogEnv));
+  apiRouter.use('/scaffolder', authMiddleware, await scaffolder(scaffolderEnv));
+  apiRouter.use('/techdocs', authMiddleware, await techdocs(techdocsEnv));
+  apiRouter.use('/proxy', authMiddleware, await proxy(proxyEnv));
+  apiRouter.use('/search', authMiddleware, await search(searchEnv));
+  apiRouter.use('/permission', authMiddleware, await permission(permissionEnv));
+  apiRouter.use('/kubernetes', authMiddleware, await kubernetes(kubernetesEnv));
 
   // Add backends ABOVE this line; this 404 handler is the catch-all fallback
-  apiRouter.use(notFoundHandler());
+  apiRouter.use(authMiddleware, notFoundHandler());
 
   const service = createServiceBuilder(module)
     .loadConfig(config)
