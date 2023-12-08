@@ -187,14 +187,14 @@ export const ClusterOverview = () => {
             path: '/api/v1',
         })
 
-        const services: any = await (await kubernetesApi.proxy({
+        /*const services: any = await (await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
             path: '/api/v1/services',
 
-        })).json();
+        })).json();*/
 
         //console.log("service: ", services)
-        console.log("services: ", services.items.filter((service)=> service.spec.type === "LoadBalancer"))
+        //console.log("services: ", services.items.filter((service)=> service.spec.type === "LoadBalancer"))
 
 
         const namespacesList: ClusterNamespace[] = namespaces.items.map((namespace: NamespacesResponse) => {
