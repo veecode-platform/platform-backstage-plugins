@@ -1,4 +1,4 @@
-import { ConfigApi, createApiRef, DiscoveryApi, errorApiRef } from '@backstage/core-plugin-api';
+import { createApiRef, DiscoveryApi, IdentityApi } from '@backstage/core-plugin-api';
 import { JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse, VariablesParams } from './utils/types';
 import { ScmAuthApi } from '@backstage/integration-react';
 
@@ -67,7 +67,7 @@ export const gitlabPipelinesApiRef = createApiRef<GitlabPipelinesApi>({
 export type Options = {
     discoveryApi: DiscoveryApi;
     scmAuthApi: ScmAuthApi;
-    configApi: ConfigApi
+    identityApi: IdentityApi;
     /**
     * Path to use for requests via the proxy, defaults to /gitlab/api
     */
@@ -79,36 +79,37 @@ class Client {
     private readonly discoveryApi: DiscoveryApi;
     private readonly proxyPath: string;
     private readonly scmAuthApi: ScmAuthApi;
-    private readonly configApi: ConfigApi;
+    private readonly identityApi: IdentityApi;
 
     constructor(opts: Options) {
         this.discoveryApi = opts.discoveryApi;
         this.scmAuthApi = opts.scmAuthApi;
+        this.identityApi = opts.identityApi;
         this.proxyPath = opts.proxyPath ?? GITLAB_PIPELINES_PROXY_URL
-        this.configApi = opts.configApi
     }
 
     public async fetch<T = any>(input: string, gitlabReposlug: string, init?: RequestInit): Promise<T> {
         const { token } = await this.scmAuthApi.getCredentials({
-            url: `https://gitlab.com`,
-            additionalScope:{
-                customScopes:{
-                    gitlab:['read_user', 'read_api', 'read_repository']
-                }
-            }
+           url: `https://gitlab.com`,
+           additionalScope:{
+               customScopes:{
+                   gitlab: ['read_user', 'read_api', 'read_repository']
+               }
+           }
         })
         const apiUrl = await this.apiUrl(gitlabReposlug);
+        const identityToken = await this.identityApi.getCredentials()
 
-        const resp = await fetch(`${apiUrl}${input}`, {
-            ...init,
-            headers: {
-                'PRIVATE-TOKEN': token
-            }
-        });
-        
+       const resp = await fetch(`${apiUrl}${input}`, {
+           ...init,
+           headers: {
+              Authorization: `Bearer ${token}`,
+              "X-authorization-identity": `${identityToken.token}`
+           }
+       });
+
         if (!resp.ok) {
-            
-            throw new Error(`Request failed with ${resp.status} - ${(await resp.json()).message}`);
+            throw new Error(`Request failed - ${(await resp.json()).message}`);
         }
         
         return await resp.json();
