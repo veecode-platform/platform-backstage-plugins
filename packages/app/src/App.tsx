@@ -36,16 +36,28 @@ import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/
 import { providers } from './identityProviders';
 import { ClusterExplorerPage } from '@veecode-platform/backstage-plugin-k8s-cluster-overview';
 
+import type { IdentityApi } from '@backstage/core-plugin-api';
+import { discoveryApiRef, useApi } from '@backstage/core-plugin-api';
+import { setTokenCookie } from './cookieAuth';
+
 const app = createApp({
   apis,
   components: {
     SignInPage: props => {
+      const discoveryApi = useApi(discoveryApiRef);
       return (
         <SignInPage
           {...props}
           providers={['guest',...providers]}
           title="Select a sign-in method"
           align="center"
+          onSignInSuccess={async (identityApi: IdentityApi) => {
+            setTokenCookie(
+              await discoveryApi.getBaseUrl('cookie'),
+              identityApi,
+            );
+            props.onSignInSuccess(identityApi);
+          }}
         />
       );
     },

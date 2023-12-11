@@ -1,5 +1,5 @@
 import {
-    githubAuthApiRef
+    githubAuthApiRef, gitlabAuthApiRef
   } from '@backstage/core-plugin-api';
 
   
@@ -9,6 +9,13 @@ import {
       title: 'GitHub',
       message: 'Sign in using GitHub',
       apiRef: githubAuthApiRef,
+    },
+    {
+      id: 'gitlab-auth-provider',
+      title: 'Gitlab',
+      message: 'Sign in using Gitlab',
+      apiRef: gitlabAuthApiRef,
+      enableExperimentalRedirectFlow: true
     }
   ];
   

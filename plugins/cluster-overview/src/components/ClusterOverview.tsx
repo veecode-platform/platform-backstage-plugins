@@ -8,17 +8,20 @@ import { Grid, Drawer, IconButton } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
+import OpenInNewIcon from "@material-ui/icons/OpenInNew"
+
 import {
     InfoCard,
     Content,
+    Link,
     //ContentHeader,
     //SupportButton,
     StructuredMetadataTable,
     Table,
     StatusOK,
-    //StatusError,
+    StatusError,
     StatusWarning,
-    StatusRunning,
+    //StatusRunning,
 } from '@backstage/core-components';
 
 const useDrawerStyles = makeStyles((theme: Theme) =>
@@ -60,9 +63,22 @@ export type ClusterCapacity = {
     pods: number
 }
 
-export type CLusterInformation = {
+export type ClusterInformation = {
     name: string
-    status: React.JSX.Element
+    status: React.JSX.Element,
+    namespaces: any,
+}
+
+export type ClusterLinks = {
+    admin?: React.JSX.Element
+}
+
+export type ClusterResponse = {
+    nodes: ClusterNodes[],
+    capacity: ClusterCapacity,
+    info: ClusterInformation,
+    ingressClasses: any[],
+    links?: ClusterLinks
 }
 
 type NodeResponse = { metadata: { [x: string]: any; name: any; creationTimestamp: any; uid: any; region: any; }; status: { capacity: { cpu: any; memory: any; pods: any; }; addresses: { address: any; }[]; nodeInfo: { kubeletVersion: any; kernelVersion: any; osImage: any; }; }; }
@@ -71,9 +87,11 @@ type NamespacesResponse = { metadata: { name: string; }; status: { phase: string
 const switchStatuses = (status: string) => {
     switch (status) {
         case "Active":
-            return <StatusRunning>{status}</StatusRunning>
+            return <StatusOK />
+        case "Terminating":
+            return <StatusError />
         default:
-            return <StatusWarning>{status}</StatusWarning>
+            return <StatusWarning />
     }
 }
 
@@ -135,17 +153,12 @@ export const ClusterOverview = () => {
         </IconButton>)
     }
 
-    const CLUSTER_NAME = entity.metadata?.annotations?.["veecode/cluster-name"] || entity.metadata?.name 
+    const CLUSTER_NAME = entity.metadata?.annotations?.["veecode/cluster-name"] || entity.metadata?.name
     if (!CLUSTER_NAME) return <MissingAnnotationEmptyState annotation={["veecode/cluster-name", "metadata.name"]} />
 
-    const { loading, error, value } = useAsync(async (): Promise<{
-        namespaces: ClusterNamespace[],
-        nodes: ClusterNodes[],
-        capacity: ClusterCapacity,
-        info: CLusterInformation,
-        ingressClasses: any[]
-    }> => {
+    const { loading, error, value } = useAsync(async (): Promise<ClusterResponse> => {
 
+        //catch errors before parsing to json
         const namespaces: any = await (await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
             path: '/api/v1/namespaces',
@@ -157,24 +170,35 @@ export const ClusterOverview = () => {
 
         })).json();
 
-        const ingressClasses: any = await (await kubernetesApi.proxy({// ingress class, name, version, ip
+        const ingressClasses: any = await (await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
             path: '/apis/networking.k8s.io/v1/ingressclasses',
 
         })).json();
 
-        const ingresses: any = await (await kubernetesApi.proxy({// ingress class, name, version, ip
+        const ingresses: any = await (await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
             path: '/apis/networking.k8s.io/v1/ingresses',
 
         })).json();
 
+        const clusterStatus: Response = await kubernetesApi.proxy({
+            clusterName: CLUSTER_NAME,
+            path: '/api/v1',
+        })
+
+        /*const services: any = await (await kubernetesApi.proxy({
+            clusterName: CLUSTER_NAME,
+            path: '/api/v1/services',
+
+        })).json();*/
+
+        //console.log("service: ", services)
+        //console.log("services: ", services.items.filter((service)=> service.spec.type === "LoadBalancer"))
+
 
         const namespacesList: ClusterNamespace[] = namespaces.items.map((namespace: NamespacesResponse) => {
-            return {
-                status: switchStatuses(namespace.status.phase as string),
-                name: namespace.metadata.name as string
-            }
+            return <div>{switchStatuses(namespace.status.phase as string)}{namespace.metadata.name}</div>
         })
 
         const nodesList: ClusterNodes[] = nodes.items.map((node: NodeResponse) => {
@@ -217,9 +241,10 @@ export const ClusterOverview = () => {
 
         capacity.memory = showMemoryDisplayValueInGi(memory)
 
-        const info = {
+        const info: ClusterInformation = {
+            status: clusterStatus.status === 200 ? <StatusOK>{clusterStatus.statusText}</StatusOK> : <StatusError>{clusterStatus.statusText}</StatusError>,
             name: CLUSTER_NAME,
-            status: <StatusOK>Ok</StatusOK>
+            namespaces: namespacesList
         }
 
         const mapedIngressClasses = ingressClasses.items.map((ic: { metadata: { name: any; labels: any; creationTimestamp: any; }; }) => {
@@ -243,15 +268,26 @@ export const ClusterOverview = () => {
             }
         })
 
-        const response = {
-            namespaces: namespacesList,
+        const response: ClusterResponse = {
             nodes: nodesList,
             capacity: capacity,
             info: info,
-            ingressClasses: mapedIngressClasses
+            ingressClasses: mapedIngressClasses,
         }
-        //console.log("response pre: ", namespaces, nodes)
-        //console.log("response pos: ", response)
+        const hasAdminUrl = entity.metadata?.annotations?.["eks/region"]
+
+        if (hasAdminUrl) {
+            const clusterlinks: ClusterLinks = {
+                admin:
+                    <Link to={`https://${hasAdminUrl}.console.aws.amazon.com/eks/home?region=${hasAdminUrl}#/clusters/${CLUSTER_NAME}`}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent:"center", gap: "2px"}}>
+                            Cluster Manager Console
+                            <OpenInNewIcon />
+                        </div>
+                    </Link>
+            }
+            response.links = clusterlinks
+        }
 
         return response
 
@@ -264,12 +300,11 @@ export const ClusterOverview = () => {
         return <ErrorPage status={error.name} statusMessage={error.message} />;
     }
     if (value) {
-        const { namespaces, nodes, capacity, info, ingressClasses } = value
+        const { nodes, capacity, info, ingressClasses, links } = value
 
         return (
             <Content>
-                <Grid container spacing={3} direction="row">
-
+                <Grid container spacing={2} direction="row">
                     <Drawer
                         classes={{
                             paper: classes.paper,
@@ -300,22 +335,32 @@ export const ClusterOverview = () => {
                     </Drawer>
 
                     <Grid item md={3} sm={12} >{/* left-side div: cluster info + capacity*/}
-                        <Grid container spacing={3}>
-                            <Grid item md={12}>
+                        <Grid container spacing={2}>
+                            <Grid item md={12} sm={12}>
                                 <InfoCard title="Cluster information">
                                     <StructuredMetadataTable metadata={info} />
                                 </InfoCard>
                             </Grid>
+                            {
+                                links ?
+                                    <Grid item md={12}>
+                                        <InfoCard title="Links">
+                                            <div>{links.admin}</div>
+                                        </InfoCard>
+                                    </Grid>
+                                    : null
+                            }
                             <Grid item md={12}>
                                 <InfoCard title="Capacity">
                                     <StructuredMetadataTable metadata={capacity} />
                                 </InfoCard>
                             </Grid>
+
                         </Grid>
                     </Grid>
 
-                    <Grid item md={9}> {/* right-side div: node table + namespaces*/}
-                        <Grid container spacing={3}>
+                    <Grid item md={9} sm={12}> {/* right-side div: node table + ingress classes*/}
+                        <Grid container spacing={2}>
                             <Grid item md={12}>
                                 <Table
                                     title={"Nodes"}
@@ -324,8 +369,7 @@ export const ClusterOverview = () => {
                                         { title: 'Os', field: 'os' },
                                         { title: 'Arch', field: 'arch' },
                                         { title: "Info", field: "info" },
-                                        { title: 'Creation', field: 'createdAt' },
-
+                                        { title: 'Creation', field: 'createdAt' }
                                     ]}
                                     data={nodes}
                                     options={{ search: true, paging: true }} />
@@ -337,29 +381,13 @@ export const ClusterOverview = () => {
                                         { title: 'Name', field: 'name' },
                                         { title: 'Ip', field: 'ip' },
                                         { title: 'Version', field: 'version' },
-                                        { title: 'Creation', field: 'createdAt' },
+                                        { title: 'Creation', field: 'createdAt' }
                                     ]}
                                     data={ingressClasses}
                                     options={{ search: true, paging: true }} />
                             </Grid>
-                            <Grid item md={12}>
-                                <InfoCard title="Namespaces">
-                                    <Grid container spacing={2}>
-                                        {namespaces.map((namespace, index) => {
-                                            return (
-                                                <Grid item md={3} key={index}>
-                                                    <InfoCard>
-                                                        <StructuredMetadataTable metadata={namespace} />
-                                                    </InfoCard>
-                                                </Grid>
-                                            )
-                                        })}
-                                    </Grid>
-                                </InfoCard>
-                            </Grid>
                         </Grid>
                     </Grid>
-
                 </Grid>
             </Content>
         )

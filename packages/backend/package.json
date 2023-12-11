@@ -37,6 +37,7 @@
     "@backstage/plugin-techdocs-backend": "^1.9.0",
     "app": "link:../app",
     "better-sqlite3": "^8.0.0",
+    "cookie-parser": "^1.4.6",
     "dockerode": "^3.3.1",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
