@@ -49,7 +49,7 @@ The following steps must be followed to ensure that the plugin works correctly.
 
 1.1 - **Using gitlab auth provider**:
 
-> ℹ️ Make sure you have an github auth provider in your devportal. ℹ️ See how [Add Gitlab Auth Provider 📃](https://backstage.io/docs/auth/gitlab/provider)
+> ℹ️ Make sure you have an github auth provider in your devportal. See how [Add Gitlab Auth Provider 📃](https://backstage.io/docs/auth/gitlab/provider)
 
 As we saw in the link above, the backstage allows you to add authentication by creating an app and adding some information. However, we need to add a few more details:
 
@@ -146,23 +146,6 @@ proxy:
     headers:
       Accept: application/json 
 ```
-
-
-<br>
-
-1.2 - **Using gitlab personal access token directly**
-
-```yaml
-proxy:
-  '/gitlab/api':
-    target: https://gitlab.com/api/v4
-    allowedHeaders: ['PRIVATE-TOKEN']
-    headers:
-      PRIVATE-TOKEN: ${GITLAB_TOKEN_SECRET}
-      Accept: application/json 
-```
-
-> ℹ️ Remember to set the `${GITLAB_TOKEN_SECRET}` variable with your Gitlab personal token.
 
 
 <br>
