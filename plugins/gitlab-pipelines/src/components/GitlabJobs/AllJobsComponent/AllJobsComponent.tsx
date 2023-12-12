@@ -74,6 +74,7 @@ export const Cards = ({ items, updateData }: JobItemProps) => {
 
   const [loading, setLoading] = useState<boolean>(false);
   const classes = useStyles();
+  const { branch } = useContext(GitlabPipelinesContext);
 
   const refresh = () => {
     setLoading(true);
@@ -82,6 +83,7 @@ export const Cards = ({ items, updateData }: JobItemProps) => {
       setLoading(false);
     }, 1500);
   }
+
 
   const TitleBar = (
     <>
@@ -118,19 +120,20 @@ export const Cards = ({ items, updateData }: JobItemProps) => {
         <CardContent className={classes.workflowsGroup}>
           {loading ?
             (<Box className={classes.loadingComponent}> <CircularProgress />  </Box>) :
-            (
-              <>
-                {items.map(item =>
-                  <JobItem
-                    id={item.id}
-                    key={item.id}
-                    name={item.label}
-                    variable={item.var}
-                    status={item.status}
-                  />
-                )
-                }
-              </>
+            ( 
+                <>
+                  { branch === "" ? (<Box className={classes.loadingComponent}><CircularProgress/></Box>):
+                      items.map(item =>
+                        <JobItem
+                          id={item.id}
+                          key={item.id}
+                          name={item.label}
+                          variable={item.var}
+                          status={item.status}
+                        />
+                      )
+                  }
+                </>
             )
           }
         </CardContent>
