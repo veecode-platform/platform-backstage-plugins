@@ -12054,7 +12054,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@veecode-platform/backstage-plugin-github-workflows@^0.1.0, @veecode-platform/backstage-plugin-github-workflows@workspace:plugins/github-workflows":
+"@veecode-platform/backstage-plugin-github-workflows@npm:^0.1.0":
+  version: 0.1.39
+  resolution: "@veecode-platform/backstage-plugin-github-workflows@npm:0.1.39"
+  dependencies:
+    "@backstage/catalog-model": ^1.4.3
+    "@backstage/core-components": ^0.13.8
+    "@backstage/core-plugin-api": ^1.8.0
+    "@backstage/integration-react": ^1.1.21
+    "@backstage/theme": ^0.4.4
+    "@material-ui/core": ^4.12.2
+    "@material-ui/icons": ^4.9.1
+    "@material-ui/lab": 4.0.0-alpha.61
+    js-yaml: ^4.1.0
+    react-use: ^17.2.4
+  peerDependencies:
+    react: ^16.13.1 || ^17.0.0
+  checksum: 28296457c42d86bb6fd5297be76bd6162a6b448213db57ee3e789663339d05075bee39f9cd442bfebec78daa5d05d22be8a375287ac5cac8ba63f56213ee54d3
+  languageName: node
+  linkType: hard
+
+"@veecode-platform/backstage-plugin-github-workflows@workspace:plugins/github-workflows":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-github-workflows@workspace:plugins/github-workflows"
   dependencies:
@@ -12082,7 +12102,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-gitlab-pipelines@^0.1.0, @veecode-platform/backstage-plugin-gitlab-pipelines@workspace:plugins/gitlab-pipelines":
+"@veecode-platform/backstage-plugin-gitlab-pipelines@npm:^0.1.0":
+  version: 0.1.36
+  resolution: "@veecode-platform/backstage-plugin-gitlab-pipelines@npm:0.1.36"
+  dependencies:
+    "@backstage/core-components": ^0.13.8
+    "@backstage/core-plugin-api": ^1.8.0
+    "@backstage/theme": ^0.4.4
+    "@material-ui/core": ^4.12.2
+    "@material-ui/icons": ^4.9.1
+    "@material-ui/lab": 4.0.0-alpha.61
+    dayjs: ^1.11.9
+    react-use: ^17.2.4
+  peerDependencies:
+    react: ^16.13.1 || ^17.0.0
+  checksum: 4ee48f7eb672f7f0577609c43e34c03a39c4d8f27ea39285d750d01a0077e48f68ff5dca890d533e3506530baca9ba7fd3326a31c930256caa50f2d54dee67ce
+  languageName: node
+  linkType: hard
+
+"@veecode-platform/backstage-plugin-gitlab-pipelines@workspace:plugins/gitlab-pipelines":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-gitlab-pipelines@workspace:plugins/gitlab-pipelines"
   dependencies:
