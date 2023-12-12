@@ -56,8 +56,7 @@ We'll divide the configuration into three steps:
 
 1.1 - Using github auth provider:
 
-> :information_source: Make sure you have an github auth provider in your devportal. <br>
-> :information_source: See how https://backstage.io/docs/auth/github/provider
+> :information_source: Make sure you have an github auth provider in your devportal. See how [Add Github Auth Provider 📃](https://backstage.io/docs/auth/github/provider)
 
 ```yaml
 auth:
@@ -78,24 +77,6 @@ proxy:
       Accept: application/vnd.github+json
       X-GitHub-Api-Version: "2022-11-28"
 ```
-
-1.2 - Using github personal access token directly
-
-In the app-config.yaml file:
-
-```yaml
-proxy:
-  '/github/api':
-    target: https://api.github.com/repos
-    allowedHeaders: ['Authorization', 'X-GitHub-Api-Version']
-    headers: 
-      Authorization: Bearer ${GITHUB_TOKEN_SECRET}
-      Accept: application/vnd.github+json
-      X-GitHub-Api-Version: "2022-11-28"
-```
-
-> :information_source: Remember to set the ${GITHUB_TOKEN_SECRET} variable with your GitHub personal token.
-
 
 
 
