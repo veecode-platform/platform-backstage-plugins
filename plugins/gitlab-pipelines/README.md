@@ -18,14 +18,13 @@ It offers two approaches:
 <br><br>
 
 
-
-
 ## 🚀 Getting started: 
 
 Prerequisites:
   - Have a Backstage project locally installed, [✔️ How to create a Backstage app 📃](https://backstage.io/docs/getting-started/create-an-app/) .
   - Set up the catalog and integrate with Gitlab, [✔️ How to set up integration 📃](https://backstage.io/docs/integrations/gitlab/locations) .
-
+  - Configure Gitlab authentication ✔️.
+  
 ##  💻 Installing
 <br/>
 
@@ -44,11 +43,117 @@ yarn add --cwd packages/app @veecode-platform/backstage-plugin-gitlab-pipelines
 
 The following steps must be followed to ensure that the plugin works correctly.
 
-1- Proxy setup
+<br>
+
+1- **Proxy setup**
+
+1.1 - **Using gitlab auth provider**:
+
+> ℹ️ Make sure you have an github auth provider in your devportal. ℹ️ See how [Add Gitlab Auth Provider 📃](https://backstage.io/docs/auth/gitlab/provider)
+
+As we saw in the link above, the backstage allows you to add authentication by creating an app and adding some information. However, we need to add a few more details:
+
+In the `packages > app > src > identiyProviders.ts` file.
+
+```diff
+import {
++   gitlabAuthApiRef
+  } from '@backstage/core-plugin-api';
+
+  
+  export const providers = [
++    {
++      id: 'gitlab-auth-provider',
++      title: 'Gitlab',
++      message: 'Sign in using Gitlab',
++      apiRef: gitlabAuthApiRef,
++      enableExperimentalRedirectFlow: true
++    }
+  ];
+  ```
+
+In the `packages > backend > src > plugins > auth.ts` file.
+
+```diff
+...
+
+export default async function createPlugin(
+  env: PluginEnvironment,
+): Promise<Router> {
+  return await createRouter({
+    logger: env.logger,
+    config: env.config,
+    database: env.database,
+    discovery: env.discovery,
+    tokenManager: env.tokenManager,
+    providerFactories: {
+      ...defaultAuthProviderFactories,
+     
++      gitlab: providers.gitlab.create({
++        signIn: {
++          async resolver({ result: { fullProfile } },
++          ctx) {
++            const userId = fullProfile.id;
++            const userName = fullProfile.displayName
++            if (!userId) {
++              throw new Error(
++                `Gitlab user profile does not contain
++                  a userId`,
++              );
++            }
++
++            const userEntityRef = stringifyEntityRef({
++              kind: 'User',
++              name: userName,
++            });
++            
++            return ctx.issueToken({
++              claims: {
++                sub: userEntityRef,
++                ent: [userEntityRef],
++              },
++            });
++            
++          },
++        },
++      }),
+    },
+  });
+}
+
+```
+
 In the `app-config.yaml` file:
+
+```yaml
+auth:
+  environment: development
+  providers:
+    clientId: ${AUTH_GITLAB_CLIENT_ID}
+    clientSecret: ${AUTH_GITLAB_CLIENT_SECRET}
+    audience: ${AUTH_GITLAB_AUDIENCE} #or https://gitlab.com
+    # uncomment if using a custom redirect URI
+    #callbackUrl: http://localhost:7007/api/auth/gitlab/handler/frame
+```
+
+> ℹ️ Remember to set the `${AUTH_GITLAB_CLIENT_ID}` variable with your Gitlab App Client Id and `${AUTH_GITLAB_CLIENT_SECRET}` with the Gitlab App Client Secret value. The `${AUTH_GITLAB_AUDIENCE}` would normally be the url of the deployed gitlab, defaulting to `https://gitlab.com`.
+
 ```yaml
 proxy:
+  '/gitlab/api':
+    target: https://gitlab.com/api/v4
+    allowedHeaders: ['Authorization']
+    headers:
+      Accept: application/json 
+```
 
+
+<br>
+
+1.2 - **Using gitlab personal access token directly**
+
+```yaml
+proxy:
   '/gitlab/api':
     target: https://gitlab.com/api/v4
     allowedHeaders: ['PRIVATE-TOKEN']
@@ -56,9 +161,13 @@ proxy:
       PRIVATE-TOKEN: ${GITLAB_TOKEN_SECRET}
       Accept: application/json 
 ```
-> ℹ️ Remember to set the ${GITLAB_TOKEN_SECRET} variable with your Gitlab personal token.
+
+> ℹ️ Remember to set the `${GITLAB_TOKEN_SECRET}` variable with your Gitlab personal token.
+
 
 <br>
+
+
 
 2- Setting up your GitlabCi
 
