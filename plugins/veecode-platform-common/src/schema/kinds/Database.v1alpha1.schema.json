@@ -32,7 +32,7 @@
         "required": ["spec"],
         "properties": {
           "apiVersion": {
-            "enum": ["backstage.io/v1alpha1", "backstage.io/v1beta1"]
+            "enum": ["veecode.backstage.io/v1alpha1", "backstage.io/v1alpha1", "backstage.io/v1beta1"]
           },
           "kind": {
             "enum": ["Database"]
