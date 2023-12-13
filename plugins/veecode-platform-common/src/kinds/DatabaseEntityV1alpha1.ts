@@ -28,7 +28,7 @@ import { ajvCompiledJsonSchemaValidator } from './util';
  * @public
  */
 export interface DatabaseEntityV1alpha1 extends Entity {
-  apiVersion: 'backstage.io/v1alpha1' | 'backstage.io/v1beta1';
+  apiVersion: 'veecode.backstage.io/v1alpha1' | 'backstage.io/v1alpha1' | 'backstage.io/v1beta1';
   kind: 'Database';
   spec: {
     type: string;

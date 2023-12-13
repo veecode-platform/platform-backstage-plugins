@@ -4,7 +4,7 @@
     "description": "A Component describes a software component. It is typically intimately linked to the source code that constitutes the component, and should be what a developer may regard a \"unit of software\", usually with a distinct deployable or linkable artifact.",
     "examples": [
       {
-        "apiVersion": "backstage.io/v1alpha1",
+        "apiVersion": "veecode.backstage.io/v1alpha1",
         "kind": "Database",
         "metadata": {
           "name": "LoremService",

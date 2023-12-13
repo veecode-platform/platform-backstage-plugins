@@ -59,7 +59,7 @@ import { DatabaseEntityV1alpha1, DatabaseEntityV1alpha1Validator } from '../kind
       const selfRef = getCompoundEntityRef(entity);
   
       if (
-        entity.apiVersion === 'backstage.io/v1alpha1' &&
+        (entity.apiVersion === 'backstage.io/v1alpha1' || entity.apiVersion === 'veecode.backstage.io/v1alpha1') &&
         entity.kind === 'Database'
       ) {
         const database = entity as DatabaseEntityV1alpha1;
