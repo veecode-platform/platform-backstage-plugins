@@ -15,11 +15,11 @@
  */
 
 import type { Entity } from '@backstage/catalog-model';
-import schema from '../schema/kinds/Environment.v1alpha1.schema.json';
+import schema from '../schema/kinds/Database.v1alpha1.schema.json';
 import { ajvCompiledJsonSchemaValidator } from './util';
 
 /**
- * Backstage catalog Environment kind Entity. Represents a single, individual piece of software.
+ * Backstage catalog Database kind Entity. Represents a single, individual piece of software.
  *
  * @remarks
  *
@@ -27,9 +27,9 @@ import { ajvCompiledJsonSchemaValidator } from './util';
  *
  * @public
  */
-export interface EnvironmentEntityV1alpha1 extends Entity {
+export interface DatabaseEntityV1alpha1 extends Entity {
   apiVersion: 'veecode.backstage.io/v1alpha1' | 'backstage.io/v1alpha1' | 'backstage.io/v1beta1';
-  kind: 'Environment';
+  kind: 'Database';
   spec: {
     type: string;
     lifecycle: string;
@@ -43,9 +43,9 @@ export interface EnvironmentEntityV1alpha1 extends Entity {
 }
 
 /**
- * {@link KindValidator} for {@link EnvironmentEntityV1alpha1}.
+ * {@link KindValidator} for {@link DatabaseEntityV1alpha1}.
  *
  * @public
  */
-export const EnvironmentEntityV1alpha1Validator =
+export const DatabaseEntityV1alpha1Validator =
   ajvCompiledJsonSchemaValidator(schema);

@@ -23,7 +23,6 @@ import {
     TableProps,
   } from '@backstage/core-components';
   import { configApiRef, useApi } from '@backstage/core-plugin-api';
-//   import { CatalogTable, CatalogTableRow } from '@backstage/plugin-catalog';
   import { CatalogTable, CatalogTableRow } from './Table';
   import {
     EntityKindPicker,
@@ -40,56 +39,53 @@ import {
   
   const defaultColumns: TableColumn<CatalogTableRow>[] = [
     CatalogTable.columns.createTitleColumn({ hidden: true }),
-    CatalogTable.columns.createNameColumn({ defaultKind: 'Cluster' }),
-    // CatalogTable.columns.createSystemColumn(),
+    CatalogTable.columns.createNameColumn({ defaultKind: 'Database' }),
     CatalogTable.columns.createOwnerColumn(),
     CatalogTable.columns.createSpecTypeColumn(),
     CatalogTable.columns.createSpecLifecycleColumn(),
-    // CatalogTable.columns.createMetadataDescriptionColumn(),
-    // CatalogTable.columns.createTagsColumn(),
   ];
   
   /**
-   * DefaultClusterExplorerPageProps
+   * DefaultDatabaseExplorerPageProps
    * @public
    */
-  export type DefaultClusterExplorerPageProps = {
+  export type DefaultDatabaseExplorerPageProps = {
     initiallySelectedFilter?: UserListFilterKind;
     columns?: TableColumn<CatalogTableRow>[];
     actions?: TableProps<CatalogTableRow>['actions'];
   };
   
   /**
-   * DefaultClusterExplorerPage
+   * DefaultDatabaseExplorerPage
    * @public
    */
-  export const DefaultClusterExplorerPage = (props: DefaultClusterExplorerPageProps) => {
+  export const DefaultDatabaseExplorerPage = (props: DefaultDatabaseExplorerPageProps) => {
     const { initiallySelectedFilter = 'all', columns, actions } = props;
   
     const configApi = useApi(configApiRef);
     const generatedSubtitle = `${
       configApi.getOptionalString('organization.name') ?? 'Devportal'
-    } Cluster Explorer`;
+    } Database Explorer`;
     const registerComponentLink = "/catalog-import"
   
     return (
       <PageWithHeader
         themeId="tool"
-        title="Clusters"
+        title="Databases"
         subtitle={generatedSubtitle}
-        pageTitleOverride="Clusters"
+        pageTitleOverride="Databases"
       >
         <Content>
           <ContentHeader title="">
             <CreateButton
-              title="Register Existing Cluster"
+              title="Register Existing Database"
               to={registerComponentLink}
             />
           </ContentHeader>
           <EntityListProvider>
             <CatalogFilterLayout>
               <CatalogFilterLayout.Filters>
-                <EntityKindPicker initialFilter="cluster" hidden />
+                <EntityKindPicker initialFilter="database" hidden />
                 <EntityTypePicker />
                 <UserListPicker initialFilter={initiallySelectedFilter} />
                 <EntityOwnerPicker />

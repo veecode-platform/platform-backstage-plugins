@@ -27,20 +27,19 @@ import {
     processingResult,
   } from '@backstage/plugin-catalog-node';
   import { LocationSpec } from '@backstage/plugin-catalog-common';
-import { EnvironmentEntityV1alpha1, EnvironmentEntityV1alpha1Validator } from '../kinds';
-
+import { DatabaseEntityV1alpha1, DatabaseEntityV1alpha1Validator } from '../kinds';
   
   /**
    * Adds support for scaffolder specific entity kinds to the catalog.
    *
    * @public
    */
-  export class EnvironmentEntitiesProcessor implements CatalogProcessor {
+  export class DatabaseEntitiesProcessor implements CatalogProcessor {
     getProcessorName(): string {
-      return 'EnvironmentEntitiesProcessor';
+      return 'DatabaseEntitiesProcessor';
     }
   
-    private readonly validators = [EnvironmentEntityV1alpha1Validator];
+    private readonly validators = [DatabaseEntityV1alpha1Validator];
   
     async validateEntityKind(entity: Entity): Promise<boolean> {
       for (const validator of this.validators) {
@@ -61,11 +60,11 @@ import { EnvironmentEntityV1alpha1, EnvironmentEntityV1alpha1Validator } from '.
   
       if (
         (entity.apiVersion === 'backstage.io/v1alpha1' || entity.apiVersion === 'veecode.backstage.io/v1alpha1') &&
-        entity.kind === 'Environment'
+        entity.kind === 'Database'
       ) {
-        const environment = entity as EnvironmentEntityV1alpha1;
+        const database = entity as DatabaseEntityV1alpha1;
   
-        const target = environment.spec.owner;
+        const target = database.spec.owner;
         if (target) {
           const targetRef = parseEntityRef(target, {
             defaultKind: 'Group',
