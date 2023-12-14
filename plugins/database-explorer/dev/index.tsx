@@ -1,12 +1,12 @@
 import React from 'react';
 import { createDevApp } from '@backstage/dev-utils';
-import { environmentExplorerPlugin, EnvironmentExplorerPage } from '../src/plugin';
+import { databaseExplorerPlugin, DatabaseExplorerPage } from '../src/plugin';
 
 createDevApp()
-  .registerPlugin(environmentExplorerPlugin)
+  .registerPlugin(databaseExplorerPlugin)
   .addPage({
-    element: <EnvironmentExplorerPage />,
+    element: <DatabaseExplorerPage />,
     title: 'Root Page',
-    path: '/environment-explorer'
+    path: '/database-explorer'
   })
   .render();
