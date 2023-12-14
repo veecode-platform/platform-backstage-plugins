@@ -158,17 +158,21 @@ export const ClusterOverview = () => {
 
     const { loading, error, value } = useAsync(async (): Promise<ClusterResponse> => {
 
-        //catch errors before parsing to json
         const namespaces: any = await (await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
             path: '/api/v1/namespaces',
 
         })).json();
+
+        if (!namespaces.items) throw new Error(namespaces.message);
+
         const nodes: any = await (await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
             path: '/api/v1/nodes',
 
         })).json();
+
+        if (!nodes.items) throw new Error(nodes.message);
 
         const ingressClasses: any = await (await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
@@ -176,32 +180,26 @@ export const ClusterOverview = () => {
 
         })).json();
 
-        const ingresses: any = await (await kubernetesApi.proxy({
-            clusterName: CLUSTER_NAME,
-            path: '/apis/networking.k8s.io/v1/ingresses',
-
-        })).json();
+        if (!ingressClasses.items) throw new Error(ingressClasses.message);
 
         const clusterStatus: Response = await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
             path: '/api/v1',
         })
 
-        /*const services: any = await (await kubernetesApi.proxy({
+        const services: any = await (await kubernetesApi.proxy({
             clusterName: CLUSTER_NAME,
             path: '/api/v1/services',
 
-        })).json();*/
+        })).json();
 
-        //console.log("service: ", services)
-        //console.log("services: ", services.items.filter((service)=> service.spec.type === "LoadBalancer"))
+        if (!services.items) throw new Error(services.message);
 
-
-        const namespacesList: ClusterNamespace[] = namespaces.items.map((namespace: NamespacesResponse) => {
+        const namespacesList: ClusterNamespace[] = namespaces.items?.map((namespace: NamespacesResponse) => {
             return <div>{switchStatuses(namespace.status.phase as string)}{namespace.metadata.name}</div>
         })
 
-        const nodesList: ClusterNodes[] = nodes.items.map((node: NodeResponse) => {
+        const nodesList: ClusterNodes[] = nodes.items?.map((node: NodeResponse) => {
             const fullInfo = {
                 name: node.metadata.name,
                 createdAt: node.metadata.creationTimestamp,
@@ -215,7 +213,7 @@ export const ClusterOverview = () => {
                     pods: node.status.capacity.pods,
                 },
                 internalIp: node.status.addresses[0].address,
-                externalIp: node.status.addresses[2].address,
+                externalIp: node.status.addresses[1].address,
                 kubeletVersion: node.status.nodeInfo.kubeletVersion,
                 kernelVersion: node.status.nodeInfo.kernelVersion,
                 osImage: node.status.nodeInfo.osImage,
@@ -238,7 +236,6 @@ export const ClusterOverview = () => {
             memory += convertMemoryValues(node.capacity.memory)
             capacity.pods += parseInt(node.capacity.pods)
         })
-
         capacity.memory = showMemoryDisplayValueInGi(memory)
 
         const info: ClusterInformation = {
@@ -247,24 +244,15 @@ export const ClusterOverview = () => {
             namespaces: namespacesList
         }
 
-        const mapedIngressClasses = ingressClasses.items.map((ic: { metadata: { name: any; labels: any; creationTimestamp: any; }; }) => {
-            const filteredIngresses = ingresses.items.filter((ingress: { spec: { ingressClassName: any; }; }) => ingress.spec.ingressClassName === ic.metadata.name)
-
-            const ipList: any[] = []
-
-            filteredIngresses.forEach((i: { status: { loadBalancer: { ingress: any[]; }; }; }) => {
-                i.status.loadBalancer?.ingress?.forEach(x => {
-                    ipList.push(x.ip)
-                })
-            });
-
-
+        const servicesLoadBalancerList = services.items?.filter((service: { spec: { type: string; }; }) => service.spec.type === "LoadBalancer")
+        const mapedIngressClasses = servicesLoadBalancerList.map((serviceLoadBalancer: { metadata: { labels: { [x: string]: any; }; }; status: { loadBalancer: { ingress: any[]; }; }; }) => {
+            const filteredIngressClass = ingressClasses.items?.find((ingressClass: { metadata: { labels: { [x: string]: any; }; }; }) => ingressClass.metadata.labels["app.kubernetes.io/instance"] === serviceLoadBalancer.metadata.labels["app.kubernetes.io/instance"])
+            const ipList = serviceLoadBalancer.status?.loadBalancer?.ingress?.length > 0 ? serviceLoadBalancer.status?.loadBalancer?.ingress.map((ingress: { hostname: any; ip: any; }) => ingress.hostname ? ingress.hostname : ingress.ip).join(",") : "Pending"
             return {
-                name: ic.metadata.name,
-                version: ic.metadata.labels["app.kubernetes.io/version"],
-                createdAt: ic.metadata.creationTimestamp,
-                ip: ipList.filter((value, index, self) => self.indexOf(value) === index).join(",")
-
+                name: filteredIngressClass.metadata.name,
+                version: filteredIngressClass.metadata.labels["app.kubernetes.io/version"],
+                createdAt: filteredIngressClass.metadata.creationTimestamp,
+                ip: ipList
             }
         })
 
@@ -280,7 +268,7 @@ export const ClusterOverview = () => {
             const clusterlinks: ClusterLinks = {
                 admin:
                     <Link to={`https://${hasAdminUrl}.console.aws.amazon.com/eks/home?region=${hasAdminUrl}#/clusters/${CLUSTER_NAME}`}>
-                        <div style={{ display: "flex", alignItems: "center", justifyContent:"center", gap: "2px"}}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "2px" }}>
                             Cluster Manager Console
                             <OpenInNewIcon />
                         </div>
