@@ -12175,9 +12175,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/plugin-database-explorer@workspace:plugins/database-explorer2":
+"@veecode-platform/plugin-database-explorer@workspace:plugins/database-explorer":
   version: 0.0.0-use.local
-  resolution: "@veecode-platform/plugin-database-explorer@workspace:plugins/database-explorer2"
+  resolution: "@veecode-platform/plugin-database-explorer@workspace:plugins/database-explorer"
   dependencies:
     "@backstage/cli": ^0.24.0
     "@backstage/core-app-api": ^1.11.1
