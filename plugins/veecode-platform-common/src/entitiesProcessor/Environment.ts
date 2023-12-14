@@ -60,7 +60,7 @@ import { EnvironmentEntityV1alpha1, EnvironmentEntityV1alpha1Validator } from '.
       const selfRef = getCompoundEntityRef(entity);
   
       if (
-        entity.apiVersion === 'backstage.io/v1alpha1' &&
+        (entity.apiVersion === 'backstage.io/v1alpha1' || entity.apiVersion === 'veecode.backstage.io/v1alpha1') &&
         entity.kind === 'Environment'
       ) {
         const environment = entity as EnvironmentEntityV1alpha1;

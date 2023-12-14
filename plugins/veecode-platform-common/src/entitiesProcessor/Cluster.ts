@@ -59,7 +59,7 @@ import { ClusterEntityV1alpha1, ClusterEntityV1alpha1Validator } from '../kinds'
       const selfRef = getCompoundEntityRef(entity);
   
       if (
-        entity.apiVersion === 'backstage.io/v1alpha1' &&
+        (entity.apiVersion === 'backstage.io/v1alpha1' || entity.apiVersion === 'veecode.backstage.io/v1alpha1') &&
         entity.kind === 'Cluster'
       ) {
         const cluster = entity as ClusterEntityV1alpha1;
