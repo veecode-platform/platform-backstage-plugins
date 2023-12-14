@@ -70,11 +70,11 @@ import {
     const generatedSubtitle = `${
       configApi.getOptionalString('organization.name') ?? 'Devportal'
     } Environment Explorer`;
-    const registerComponentLink = "/create"
+    const registerComponentLink = "/catalog-import"
   
     return (
       <PageWithHeader
-        themeId="home"
+        themeId="tool"
         title="Environments"
         subtitle={generatedSubtitle}
         pageTitleOverride="Environments"
