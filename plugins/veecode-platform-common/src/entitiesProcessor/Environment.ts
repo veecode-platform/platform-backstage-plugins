@@ -22,8 +22,8 @@ import {
     RELATION_OWNER_OF,
     RELATION_PART_OF,
     RELATION_HAS_PART,
-    RELATION_DEPENDS_ON,
-    RELATION_DEPENDENCY_OF
+    //RELATION_DEPENDS_ON,
+    //RELATION_DEPENDENCY_OF
   } from '@backstage/catalog-model';
   import {
     CatalogProcessor,
@@ -70,6 +70,8 @@ import { EnvironmentEntityV1alpha1, EnvironmentEntityV1alpha1Validator } from '.
         const environment = entity as EnvironmentEntityV1alpha1;
   
         const target = environment.spec.owner;
+        const system = environment.spec.system;
+
         if (target) {
           const targetRef = parseEntityRef(target, {
             defaultKind: 'Group',
@@ -97,6 +99,12 @@ import { EnvironmentEntityV1alpha1, EnvironmentEntityV1alpha1Validator } from '.
               target: selfRef,
             }),
           );
+        }
+        if(system){
+          const targetRef = parseEntityRef(target, {
+            defaultKind: selfRef.kind,
+            defaultNamespace: selfRef.namespace,
+          });
           emit(
             processingResult.relation({
               source: selfRef,
@@ -116,28 +124,6 @@ import { EnvironmentEntityV1alpha1, EnvironmentEntityV1alpha1Validator } from '.
                 name: targetRef.name,
               },
               type: RELATION_HAS_PART,
-              target: selfRef,
-            }),
-          );
-          emit(
-            processingResult.relation({
-              source: selfRef,
-              type: RELATION_DEPENDENCY_OF,
-              target: {
-                kind: targetRef.kind,
-                namespace: targetRef.namespace,
-                name: targetRef.name,
-              },
-            }),
-          );
-          emit(
-            processingResult.relation({
-              source: {
-                kind: targetRef.kind,
-                namespace: targetRef.namespace,
-                name: targetRef.name,
-              },
-              type: RELATION_DEPENDS_ON,
               target: selfRef,
             }),
           );
