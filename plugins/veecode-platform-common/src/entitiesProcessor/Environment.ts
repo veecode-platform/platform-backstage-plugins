@@ -20,6 +20,10 @@ import {
     parseEntityRef,
     RELATION_OWNED_BY,
     RELATION_OWNER_OF,
+    RELATION_PART_OF,
+    RELATION_HAS_PART,
+    RELATION_DEPENDS_ON,
+    RELATION_DEPENDENCY_OF
   } from '@backstage/catalog-model';
   import {
     CatalogProcessor,
@@ -90,6 +94,50 @@ import { EnvironmentEntityV1alpha1, EnvironmentEntityV1alpha1Validator } from '.
                 name: targetRef.name,
               },
               type: RELATION_OWNER_OF,
+              target: selfRef,
+            }),
+          );
+          emit(
+            processingResult.relation({
+              source: selfRef,
+              type: RELATION_PART_OF,
+              target: {
+                kind: targetRef.kind,
+                namespace: targetRef.namespace,
+                name: targetRef.name,
+              },
+            }),
+          );
+          emit(
+            processingResult.relation({
+              source: {
+                kind: targetRef.kind,
+                namespace: targetRef.namespace,
+                name: targetRef.name,
+              },
+              type: RELATION_HAS_PART,
+              target: selfRef,
+            }),
+          );
+          emit(
+            processingResult.relation({
+              source: selfRef,
+              type: RELATION_DEPENDENCY_OF,
+              target: {
+                kind: targetRef.kind,
+                namespace: targetRef.namespace,
+                name: targetRef.name,
+              },
+            }),
+          );
+          emit(
+            processingResult.relation({
+              source: {
+                kind: targetRef.kind,
+                namespace: targetRef.namespace,
+                name: targetRef.name,
+              },
+              type: RELATION_DEPENDS_ON,
               target: selfRef,
             }),
           );
