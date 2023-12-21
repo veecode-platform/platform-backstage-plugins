@@ -3,6 +3,7 @@ import { CatalogBuilder } from '@backstage/plugin-catalog-backend';
 import { Router } from 'express';
 import { PluginEnvironment } from '../types';
 import { ScaffolderEntitiesProcessor } from '@backstage/plugin-scaffolder-backend';
+import { ClusterEntitiesProcessor, EnvironmentEntitiesProcessor } from "@veecode-platform/plugin-veecode-platform-common";
 
 
 export default async function createPlugin(
@@ -21,6 +22,9 @@ export default async function createPlugin(
   );
 
   builder.addProcessor(new ScaffolderEntitiesProcessor());
+  builder.addProcessor( new EnvironmentEntitiesProcessor());
+  builder.addProcessor( new ClusterEntitiesProcessor());
+
 
   const { processingEngine, router } = await builder.build();
   await processingEngine.start();

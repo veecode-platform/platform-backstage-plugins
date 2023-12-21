@@ -64,6 +64,11 @@
                 "description": "An entity reference to the system that the component belongs to.",
                 "minLength": 1
               },
+              "environment": {
+                "type": "string",
+                "description": "@veecode - The environment that this cluster belongs to.",
+                "minLength": 1
+              },
               "subcomponentOf": {
                 "type": "string",
                 "description": "An entity reference to another component of which the component is a part.",

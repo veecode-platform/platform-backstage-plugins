@@ -49,6 +49,8 @@ import {
   RELATION_DEPENDENCY_OF,
   RELATION_DEPENDS_ON,
   RELATION_HAS_PART,
+  RELATION_OWNED_BY,
+  RELATION_OWNER_OF,
   RELATION_PART_OF,
   RELATION_PROVIDES_API,
 } from '@backstage/catalog-model';
@@ -60,6 +62,7 @@ import { isGithubWorkflowsAvailable, GithubWorkflowsCard, GithubWorkflowsList, i
 import { GitlabJobs, GitlabPipelineList, isGitlabAvailable, isGitlabJobsAvailable } from '@veecode-platform/backstage-plugin-gitlab-pipelines';
 import { EntityKubernetesContent } from '@backstage/plugin-kubernetes';
 import { ClusterOverviewPage } from '@veecode-platform/backstage-plugin-k8s-cluster-overview';
+import { RELATION_ENVIRONMENT_OF, RELATION_FROM_ENVIRONMENT } from '@veecode-platform/plugin-veecode-platform-common';
 
 
 const techdocsContent = (
@@ -436,6 +439,89 @@ const domainPage = (
   </EntityLayout>
 );
 
+const clusterPage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      <ClusterOverviewPage />
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path='/about' title='About'>
+      <Grid container spacing={3} alignItems="stretch">
+        <Grid item md={3}>
+          <EntityAboutCard variant="gridItem" />
+        </Grid>
+        <Grid item md={9} xs={12}>
+          <EntityCatalogGraphCard
+            variant="gridItem"
+            direction={Direction.LEFT_RIGHT}
+            title="System Diagram"
+            height={300}
+            relations={[
+              RELATION_PART_OF,
+              RELATION_HAS_PART,
+              RELATION_ENVIRONMENT_OF,
+              RELATION_FROM_ENVIRONMENT,
+              RELATION_OWNER_OF,
+              RELATION_OWNED_BY,
+            ]}
+            relationPairs={[
+              [RELATION_OWNER_OF, RELATION_OWNED_BY],
+              [RELATION_CONSUMES_API, RELATION_API_CONSUMED_BY],
+              [RELATION_API_PROVIDED_BY, RELATION_PROVIDES_API],
+              [RELATION_HAS_PART, RELATION_PART_OF],
+              [RELATION_ENVIRONMENT_OF, RELATION_FROM_ENVIRONMENT]
+            ]}
+            unidirectional={false}
+          />
+        </Grid>
+        <Grid item md={5}>
+          <EntityHasComponentsCard variant="gridItem" />
+        </Grid>
+
+        {/* Github */}
+        <EntitySwitch>
+          <EntitySwitch.Case if={isGithubWorkflowsAvailable}>
+            <Grid item lg={8} xs={12}>
+              <GithubWorkflowsCard />
+            </Grid>
+          </EntitySwitch.Case>
+        </EntitySwitch>
+        {/* Gitlab */}
+        <EntitySwitch>
+          <EntitySwitch.Case if={isGitlabJobsAvailable}>
+            <Grid item lg={8} xs={12}>
+              <GitlabJobs />
+            </Grid>
+          </EntitySwitch.Case>
+        </EntitySwitch>
+        <Grid item md={4} xs={12}>
+          <EntityLinksCard />
+        </Grid>
+      </Grid>
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/ci-cd" title="CI/CD">
+      {cicdContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route
+      if={isGithubAvailable}
+      path="/workflows" title="Workflows">
+      {WorkflowsContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route
+      if={(entity) => {
+        const show = entity.metadata.annotations?.hasOwnProperty('backstage.io/techdocs-ref')
+        if (show !== undefined) return show
+        return false
+      }}
+      path="/docs" title="Docs" >
+      {techdocsContent}
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+
 export const entityPage = (
   <EntitySwitch>
     <EntitySwitch.Case if={isKind('component')} children={componentPage} />
@@ -444,6 +530,7 @@ export const entityPage = (
     <EntitySwitch.Case if={isKind('user')} children={userPage} />
     <EntitySwitch.Case if={isKind('system')} children={systemPage} />
     <EntitySwitch.Case if={isKind('domain')} children={domainPage} />
+    <EntitySwitch.Case if={isKind('cluster')} children={clusterPage} />
 
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
   </EntitySwitch>

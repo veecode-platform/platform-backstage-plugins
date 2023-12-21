@@ -34,11 +34,12 @@ export interface ClusterEntityV1alpha1 extends Entity {
     type: string;
     lifecycle: string;
     owner: string;
-    subcomponentOf?: string;
-    providesApis?: string[];
-    consumesApis?: string[];
-    dependsOn?: string[];
-    system?: string;
+    environment: string;
+    //subcomponentOf?: string;
+    //providesApis?: string[];
+    //consumesApis?: string[];
+    //dependsOn?: string[];
+    //system?: string;
   };
 }
 
