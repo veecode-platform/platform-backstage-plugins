@@ -196,17 +196,17 @@ export const ClusterOverview = () => {
         if (!services.items) throw new Error(services.message);
 
         const namespacesList: ClusterNamespace[] = namespaces.items?.map((namespace: NamespacesResponse) => {
-            return <div>{switchStatuses(namespace.status.phase as string)}{namespace.metadata.name}</div>
+            return <div>{switchStatuses(namespace.status.phase as string)}{namespace.metadata?.name}</div>
         })
 
         const nodesList: ClusterNodes[] = nodes.items?.map((node: NodeResponse) => {
             const fullInfo = {
-                name: node.metadata.name,
-                createdAt: node.metadata.creationTimestamp,
-                id: node.metadata.uid,
-                os: node.metadata.labels["kubernetes.io/os"],
-                arch: node.metadata.labels["kubernetes.io/arch"],
-                region: node.metadata.labels.region,
+                name: node.metadata?.name,
+                createdAt: node.metadata?.creationTimestamp,
+                id: node.metadata?.uid,
+                os: node.metadata?.labels["kubernetes.io/os"],
+                arch: node.metadata?.labels["kubernetes.io/arch"],
+                region: node.metadata?.labels.region,
                 capacity: {
                     cpu: node.status.capacity.cpu,
                     memory: node.status.capacity.memory,
@@ -246,12 +246,12 @@ export const ClusterOverview = () => {
 
         const servicesLoadBalancerList = services.items?.filter((service: { spec: { type: string; }; }) => service.spec.type === "LoadBalancer")
         const mapedIngressClasses = servicesLoadBalancerList.map((serviceLoadBalancer: { metadata: { labels: { [x: string]: any; }; }; status: { loadBalancer: { ingress: any[]; }; }; }) => {
-            const filteredIngressClass = ingressClasses.items?.find((ingressClass: { metadata: { labels: { [x: string]: any; }; }; }) => ingressClass.metadata.labels["app.kubernetes.io/instance"] === serviceLoadBalancer.metadata.labels["app.kubernetes.io/instance"])
+            const filteredIngressClass = ingressClasses.items?.find((ingressClass: { metadata: { labels: { [x: string]: any; }; }; }) => ingressClass.metadata?.labels["app.kubernetes.io/instance"] === serviceLoadBalancer.metadata?.labels["app.kubernetes.io/instance"])
             const ipList = serviceLoadBalancer.status?.loadBalancer?.ingress?.length > 0 ? serviceLoadBalancer.status?.loadBalancer?.ingress.map((ingress: { hostname: any; ip: any; }) => ingress.hostname ? ingress.hostname : ingress.ip).join(",") : "Pending"
             return {
-                name: filteredIngressClass.metadata.name,
-                version: filteredIngressClass.metadata.labels["app.kubernetes.io/version"],
-                createdAt: filteredIngressClass.metadata.creationTimestamp,
+                name: filteredIngressClass.metadata?.name,
+                version: filteredIngressClass.metadata?.labels["app.kubernetes.io/version"],
+                createdAt: filteredIngressClass.metadata?.creationTimestamp,
                 ip: ipList
             }
         })
@@ -285,6 +285,7 @@ export const ClusterOverview = () => {
         return <Progress />;
     }
     if (error) {
+        console.log("Error: ", error)
         return <ErrorPage status={error.name} statusMessage={error.message} />;
     }
     if (value) {
