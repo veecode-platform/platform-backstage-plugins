@@ -7,7 +7,7 @@ Veecode Platform Backstage Plugins
 </div>
 <br><br>
 
-<h2>Bem vindo ao repositório de plugins da Veecode Platform. 👋 </h2>
+<h2>Welcome to the Veecode Platform plugin repository. 👋 </h2>
 
 <br>
 <h3>Join our community to resolve questions about our Plugins. We look forward to welcoming you! 💬</h3>
