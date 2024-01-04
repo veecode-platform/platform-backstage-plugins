@@ -93,7 +93,7 @@ class Client {
            url: `https://gitlab.com`,
            additionalScope:{
                customScopes:{
-                   gitlab: ['read_user', 'read_api', 'read_repository']
+                   gitlab: ['read_user', 'api', 'read_api', 'read_repository']
                }
            }
         })
