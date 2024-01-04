@@ -245,13 +245,20 @@ export const ClusterOverview = () => {
         }
 
         const servicesLoadBalancerList = services.items?.filter((service: { spec: { type: string; }; }) => service.spec.type === "LoadBalancer")
-        const mapedIngressClasses = servicesLoadBalancerList.map((serviceLoadBalancer: { metadata: { labels: { [x: string]: any; }; }; status: { loadBalancer: { ingress: any[]; }; }; }) => {
-            const filteredIngressClass = ingressClasses.items?.find((ingressClass: { metadata: { labels: { [x: string]: any; }; }; }) => ingressClass.metadata?.labels["app.kubernetes.io/instance"] === serviceLoadBalancer.metadata?.labels["app.kubernetes.io/instance"])
+
+        const mapedIngressClasses = servicesLoadBalancerList.map(
+            (serviceLoadBalancer: { metadata: { labels: { [x: string]: any; }; }; status: { loadBalancer: { ingress: any[]; }; }; }) => {
+
+            const filteredIngressClass = ingressClasses.items?.find(
+                (ingressClass: { metadata?: { labels: { [x: string]: any; }; }; }) =>
+                    ingressClass.metadata?.labels["app.kubernetes.io/instance"] === serviceLoadBalancer.metadata?.labels["app.kubernetes.io/instance"]
+            )
+            if(!filteredIngressClass) return null
             const ipList = serviceLoadBalancer.status?.loadBalancer?.ingress?.length > 0 ? serviceLoadBalancer.status?.loadBalancer?.ingress.map((ingress: { hostname: any; ip: any; }) => ingress.hostname ? ingress.hostname : ingress.ip).join(",") : "Pending"
             return {
-                name: filteredIngressClass.metadata?.name,
-                version: filteredIngressClass.metadata?.labels["app.kubernetes.io/version"],
-                createdAt: filteredIngressClass.metadata?.creationTimestamp,
+                name: filteredIngressClass.metadata.name,
+                version: filteredIngressClass.metadata.labels["app.kubernetes.io/version"],
+                createdAt: filteredIngressClass.metadata.creationTimestamp,
                 ip: ipList
             }
         })
@@ -260,7 +267,7 @@ export const ClusterOverview = () => {
             nodes: nodesList,
             capacity: capacity,
             info: info,
-            ingressClasses: mapedIngressClasses,
+            ingressClasses: mapedIngressClasses.filter((item: null | any) => item !== null),
         }
         const hasAdminUrl = entity.metadata?.annotations?.["eks/region"]
 
