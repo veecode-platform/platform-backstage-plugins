@@ -144,9 +144,10 @@ auth:
 proxy:
   '/gitlab/api':
     target: https://gitlab.com/api/v4
-    allowedHeaders: ['Authorization']
+    allowedHeaders: ['Authorization', 'Content-Type']
     headers:
       Accept: application/json 
+      Content-Type: application/json
 ```
 
 
