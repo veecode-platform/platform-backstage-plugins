@@ -129,11 +129,13 @@ In the `app-config.yaml` file:
 auth:
   environment: development
   providers:
-    clientId: ${AUTH_GITLAB_CLIENT_ID}
-    clientSecret: ${AUTH_GITLAB_CLIENT_SECRET}
-    audience: ${AUTH_GITLAB_AUDIENCE} #or https://gitlab.com
-    # uncomment if using a custom redirect URI
-    #callbackUrl: http://localhost:7007/api/auth/gitlab/handler/frame
+    gitlab:
+    development:
+      clientId: ${AUTH_GITLAB_CLIENT_ID}
+      clientSecret: ${AUTH_GITLAB_CLIENT_SECRET}
+      audience: ${AUTH_GITLAB_AUDIENCE} #or https://gitlab.com optional
+      # uncomment if using a custom redirect URI
+      #callbackUrl: http://localhost:7007/api/auth/gitlab/handler/frame
 ```
 
 > ℹ️ Remember to set the `${AUTH_GITLAB_CLIENT_ID}` variable with your Gitlab App Client Id and `${AUTH_GITLAB_CLIENT_SECRET}` with the Gitlab App Client Secret value. The `${AUTH_GITLAB_AUDIENCE}` would normally be the url of the deployed gitlab, defaulting to `https://gitlab.com`.
