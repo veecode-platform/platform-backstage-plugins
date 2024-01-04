@@ -13,7 +13,7 @@ The environment plugin has two approaches:
 
 ⚠️ It is important to note that the `Environment` is a **Kind** customized by the **VeeCode Platform** and therefore requires the installation of the `veecode-platform-common` plugin in order to work.
 
-To install the `veecode-platform-common` plugin click here.
+To install the `veecode-platform-common` plugin click [here](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-platform-common).
 
 Okay, bearing in mind that you already have a properly configured environment, let's start our installation.
 
