@@ -35,6 +35,7 @@
     "@backstage/plugin-search-backend-module-pg": "^0.5.16",
     "@backstage/plugin-search-backend-node": "^1.2.11",
     "@backstage/plugin-techdocs-backend": "^1.9.0",
+    "@veecode-platform/plugin-veecode-platform-common": "^0.1.0",
     "app": "link:../app",
     "better-sqlite3": "^8.0.0",
     "cookie-parser": "^1.4.6",

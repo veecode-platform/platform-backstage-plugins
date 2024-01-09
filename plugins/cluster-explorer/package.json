@@ -1,5 +1,5 @@
 {
-  "name": "@veecode-platform/backstage-plugin-k8s-cluster-overview",
+  "name": "@veecode-platform/backstage-plugin-cluster-explorer",
   "version": "0.1.36",
   "main": "src/index.ts",
   "types": "src/index.ts",

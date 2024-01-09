@@ -3,7 +3,7 @@ import { createPlugin, createComponentExtension, createRoutableExtension } from 
 import { rootRouteRef } from './routes';
 
 export const ClusterOverviewPlugin = createPlugin({
-  id: 'cluster-overview',
+  id: 'cluster-explorer',
   routes: {
     root: rootRouteRef,
   },
@@ -14,7 +14,7 @@ export const ClusterOverviewPage = ClusterOverviewPlugin.provide(
     name: 'ClusterOverviewPage',
     component: {
       lazy: () =>
-        import('./components/ClusterOverview').then(m => m.ClusterOverview),
+        import('./components/OverviewPage').then(m => m.ClusterOverview),
     },
   })
 );
@@ -23,7 +23,7 @@ export const ClusterExplorerPage = ClusterOverviewPlugin.provide(
   createRoutableExtension({
     name: 'ClusterExplorerPage',
     component: () =>
-      import('./components/cluster-explorer').then(m => m.ClusterExplorerPage),
+      import('./components/ClusterExplorerPage').then(m => m.ClusterExplorerPage),
     mountPoint: rootRouteRef,
   }),
 )

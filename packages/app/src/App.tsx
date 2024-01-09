@@ -34,7 +34,7 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { providers } from './identityProviders';
-import { ClusterExplorerPage } from '@veecode-platform/backstage-plugin-k8s-cluster-overview';
+import { ClusterExplorerPage } from '@veecode-platform/backstage-plugin-cluster-explorer';
 
 import type { IdentityApi } from '@backstage/core-plugin-api';
 import { discoveryApiRef, useApi } from '@backstage/core-plugin-api';
