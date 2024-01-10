@@ -7,7 +7,6 @@ import {
   Content,
   ContentHeader
 } from '@backstage/core-components';
-import { Styles } from '../styles/Styles';
 
 interface Props {
   title: string,
@@ -19,20 +18,15 @@ interface Props {
 }
 // TO DO >> Makestyles for button
 
-export const PageDefault = ({ title, subtitle, refresh, add, labelButton, children }: Props) => {
-  
-  const classes = Styles();
-
-  return (
-
-  <Page themeId="tool">
+export const PageDefault = ({ title, subtitle, refresh, add, labelButton, children }: Props) => (
+<Page themeId="tool">
     <Header title={title} subtitle={subtitle}> </Header>
     <Content>
       <ContentHeader title=''>
         <Grid item xs={12} >
           <Grid container justifyContent='center' alignItems='center'>
-            {refresh && <Button component={RouterLink} to={refresh} className={classes.button} variant='contained' size='large'>Refresh</Button>}
-            <Button component={RouterLink} to={add} className={classes.button} variant='contained' size='large'>{labelButton}</Button>
+            {refresh && <Button component={RouterLink} to={refresh} variant='contained' size='large'>Refresh</Button>}
+            <Button component={RouterLink} to={add} variant='contained' size='large'>{labelButton}</Button>
           </Grid>
         </Grid>
       </ContentHeader>
@@ -43,5 +37,4 @@ export const PageDefault = ({ title, subtitle, refresh, add, labelButton, childr
       </Grid>
     </Content>
   </Page>
-)
-};
+);
