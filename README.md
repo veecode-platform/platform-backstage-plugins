@@ -31,7 +31,7 @@ Veecode Platform Backstage Plugins
 | **Veecode Platform Common** |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-platform-common) |
 | **Environment Explorer**    |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/environment-explorer) |
 | **Database Explorer**       |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/database-explorer) |
-| **Cluster Overview**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/cluster-overview) |
+| **Cluster Explorer**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/cluster-explorer) |
 
 
 ---
