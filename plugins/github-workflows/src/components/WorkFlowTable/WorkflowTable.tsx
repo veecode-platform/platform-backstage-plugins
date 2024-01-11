@@ -92,7 +92,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
 
   const handleCICDLogs = (id: string) => {
     const baseUrl = window.location.origin;
-    const newUrl = `${baseUrl}/catalog/${entity.metadata.namespace}/component/${entity.metadata.name}/ci-cd/${id}`;
+    const newUrl = `${baseUrl}/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}/ci-cd/${id}`;
     window.location.href = newUrl;
   }
 
