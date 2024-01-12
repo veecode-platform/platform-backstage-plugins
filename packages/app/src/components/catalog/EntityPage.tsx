@@ -62,6 +62,7 @@ import { isGithubWorkflowsAvailable, GithubWorkflowsCard, GithubWorkflowsList, i
 import { GitlabJobs, GitlabPipelineList, isGitlabAvailable, isGitlabJobsAvailable } from '@veecode-platform/backstage-plugin-gitlab-pipelines';
 import { EntityKubernetesContent } from '@backstage/plugin-kubernetes';
 import { ClusterOverviewPage } from '@veecode-platform/backstage-plugin-cluster-explorer';
+import { DatabaseOverview } from '@veecode-platform/plugin-database-explorer';
 import { RELATION_ENVIRONMENT_OF, RELATION_FROM_ENVIRONMENT } from '@veecode-platform/plugin-veecode-platform-common';
 
 
@@ -522,6 +523,51 @@ const clusterPage = (
   </EntityLayout>
 );
 
+const databasePage = (
+  <EntityLayout>
+    <EntityLayout.Route path="/" title="Overview">
+      <Grid container spacing={1} alignItems="stretch">
+        <Grid item lg={6} md={12} xs={12}>
+          <DatabaseOverview />
+        </Grid>
+        <Grid item lg={6} md={12} xs={12} >
+          <EntityCatalogGraphCard variant='flex' height={300} />
+        </Grid>
+        <Grid item lg={8} md={12} xs={12}>
+          {/* Github */}
+          <EntitySwitch>
+            <EntitySwitch.Case if={isGithubWorkflowsAvailable}>
+              <Grid item lg={12} xs={12}>
+                <GithubWorkflowsCard />
+              </Grid>
+            </EntitySwitch.Case>
+          </EntitySwitch>
+          {/* Gitlab */}
+          <EntitySwitch>
+            <EntitySwitch.Case if={isGitlabJobsAvailable}>
+              <Grid item lg={12} xs={12}>
+                <GitlabJobs />
+              </Grid>
+            </EntitySwitch.Case>
+          </EntitySwitch>
+        </Grid>
+      </Grid>
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/ci-cd" title="CI/CD">
+      {cicdContent}
+    </EntityLayout.Route>
+    <EntityLayout.Route
+      if={(entity) => {
+        if(isGithubAvailable(entity)) return true;
+        return false
+      }}
+      path="/workflows" title="Workflows">
+      {WorkflowsContent}
+    </EntityLayout.Route>
+  </EntityLayout>
+)
+
+
 export const entityPage = (
   <EntitySwitch>
     <EntitySwitch.Case if={isKind('component')} children={componentPage} />
@@ -531,6 +577,7 @@ export const entityPage = (
     <EntitySwitch.Case if={isKind('system')} children={systemPage} />
     <EntitySwitch.Case if={isKind('domain')} children={domainPage} />
     <EntitySwitch.Case if={isKind('cluster')} children={clusterPage} />
+    <EntitySwitch.Case if={isKind('database')} children={databasePage} />
 
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
   </EntitySwitch>
