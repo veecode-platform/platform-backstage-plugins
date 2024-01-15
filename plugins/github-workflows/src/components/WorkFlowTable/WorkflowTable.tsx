@@ -109,7 +109,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
       name: item.name,
       status: (
         <WorkFlowStatus
-          status={item.status}
+          status={item.lastRunId !== undefined ? item.status : StatusWorkflowEnum.default}
           conclusion={item.conclusion}
          />
         ),

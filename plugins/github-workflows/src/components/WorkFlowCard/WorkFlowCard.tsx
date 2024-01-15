@@ -10,6 +10,7 @@ import { Entity } from '@backstage/catalog-model';
 import { SelectBranch } from '../SelectBranch';
 import { WorkflowResultsProps } from '../../utils/types';
 import CachedIcon from '@material-ui/icons/Cached';
+import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -121,7 +122,7 @@ export const Cards = ({ items, updateData }: CardsProps) => {
                       <WorkFlowItem
                         id={item.id!}
                         key={item.id}
-                        status={item.status}
+                        status={item.lastRunId !== undefined ? item.status : StatusWorkflowEnum.default}
                         conclusion={item.conclusion}
                         workflowName={item.name as string}
                         parameters={item.parameters}
