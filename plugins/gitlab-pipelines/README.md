@@ -126,6 +126,14 @@ export default async function createPlugin(
 In the `app-config.yaml` file:
 
 ```yaml
+# add gitlab integration
+integrations:
+  gitlab:
+    - host: gitlab.com #or gitlab.company.com (depending on your gitlab instance)
+      token: ${GITLAB_TOKEN}
+      apiBaseUrl: https://gitlab.company.com/api/v4 #Only if the gitlab instance is self-hosted
+...
+# add gitlab auth
 auth:
   environment: development
   providers:
@@ -133,9 +141,8 @@ auth:
       development:
         clientId: ${AUTH_GITLAB_CLIENT_ID}
         clientSecret: ${AUTH_GITLAB_CLIENT_SECRET}
-        audience: ${AUTH_GITLAB_AUDIENCE} #or https://gitlab.com optional
-        # uncomment if using a custom redirect URI
-        #callbackUrl: http://localhost:7007/api/auth/gitlab/handler/frame
+        audience: ${AUTH_GITLAB_AUDIENCE} #or https://gitlab.company.com (depending on your gitlab instance)
+        #callbackUrl: http://localhost:7007/api/auth/gitlab/handler/frame #optional
 ```
 
 > ℹ️ Remember to set the `${AUTH_GITLAB_CLIENT_ID}` variable with your Gitlab App Client Id and `${AUTH_GITLAB_CLIENT_SECRET}` with the Gitlab App Client Secret value. The `${AUTH_GITLAB_AUDIENCE}` would normally be the url of the deployed gitlab, defaulting to `https://gitlab.com`.
@@ -144,13 +151,14 @@ auth:
 proxy:
   endpoints:
     '/gitlab/api':
-      target: https://gitlab.com/api/v4
+      target: https://gitlab.com/api/v4  #or https://gitlab.company.com/api/v4 (in the case of gitlab self-hosted, according to the version of your instance)
       allowedHeaders: ['Authorization', 'Content-Type']
       headers:
         Accept: application/json 
         Content-Type: application/json
 ```
 
+> ℹ️ If your gitlab is **self-hosted**, the information must be according to your instance, also respecting the version of the Api used and in the `integration key` the `apiBaseUrl` property is **mandatory**, as well as the `target` of the `proxy` call must contain it.
 
 <br>
 
