@@ -4,6 +4,7 @@ import { GithubWorkflowsContext } from './GithubWorkflowsContext';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { githubWorkflowsApiRef } from '../../api';
 import { WorkflowResultsProps } from '../../utils/types';
+import { sortWorflowsByName } from '../../utils/common';
 
 
 export const GithubWorkflowsProvider: React.FC = ({ children }) => {
@@ -39,8 +40,9 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
             parameters: w.parameters
           };
         }));
-        setWorkflowsState(newWorkflowsState);
-        return newWorkflowsState;
+        const ordelyWorkflows = sortWorflowsByName(newWorkflowsState)
+        setWorkflowsState(ordelyWorkflows);
+        return ordelyWorkflows;
       }
       else return [];
     } catch(e:any){
