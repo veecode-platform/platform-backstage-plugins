@@ -76,7 +76,7 @@ export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters,
               onClick={()=>handleCICDLogs(lastRunId as string)}
               className={classes.name}
               >
-              {truncateString(workflowName, 13)}
+              {truncateString(workflowName, 12)}
             </Typography>
         </Tooltip>
 
