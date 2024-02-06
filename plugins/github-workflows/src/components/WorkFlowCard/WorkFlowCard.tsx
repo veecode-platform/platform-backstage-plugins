@@ -10,6 +10,7 @@ import { Entity } from '@backstage/catalog-model';
 import { SelectBranch } from '../SelectBranch';
 import { WorkflowResultsProps } from '../../utils/types';
 import CachedIcon from '@material-ui/icons/Cached';
+import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -57,6 +58,10 @@ const useStyles = makeStyles(theme => ({
       height: '2px'
     }
   },
+  info: {
+    width: '100%',
+    textAlign: 'center'
+  }
 
 }));
 
@@ -111,17 +116,20 @@ export const Cards = ({ items, updateData }: CardsProps) => {
             (<Box className={classes.loadingComponent}> <CircularProgress />  </Box>) :
             (
               <>
-                {items.map(item =>
-                  <WorkFlowItem
-                    id={item.id!}
-                    key={item.id}
-                    status={item.status}
-                    conclusion={item.conclusion}
-                    workflowName={item.name as string}
-                    parameters={item.parameters}
-                    lastRunId={item.lastRunId?.toString()}
-                  />
-                )
+                {
+                  items.length === 0 ? <div className={classes.info}>No records to display</div> : (
+                    items.map(item =>
+                      <WorkFlowItem
+                        id={item.id!}
+                        key={item.id}
+                        status={item.lastRunId !== undefined ? item.status : StatusWorkflowEnum.default}
+                        conclusion={item.conclusion}
+                        workflowName={item.name as string}
+                        parameters={item.parameters}
+                        lastRunId={item.lastRunId?.toString()}
+                      />
+                    )
+                  )
                 }
               </>
             )

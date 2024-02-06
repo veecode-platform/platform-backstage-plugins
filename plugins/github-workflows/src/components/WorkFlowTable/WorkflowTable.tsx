@@ -92,7 +92,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
 
   const handleCICDLogs = (id: string) => {
     const baseUrl = window.location.origin;
-    const newUrl = `${baseUrl}/catalog/${entity.metadata.namespace}/component/${entity.metadata.name}/ci-cd/${id}`;
+    const newUrl = `${baseUrl}/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}/ci-cd/${id}`;
     window.location.href = newUrl;
   }
 
@@ -109,7 +109,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
       name: item.name,
       status: (
         <WorkFlowStatus
-          status={item.status}
+          status={item.lastRunId !== undefined ? item.status : StatusWorkflowEnum.default}
           conclusion={item.conclusion}
          />
         ),
@@ -126,7 +126,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
               }
           
             <WorkFlowActions
-              status={item.status}
+              status={item.lastRunId !== undefined ? item.status : StatusWorkflowEnum.default}
               conclusion={item.conclusion}
               workflowId={item.id} 
               parameters={item.parameters ?? []}

@@ -219,6 +219,14 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
           </Tooltip>
         )}
 
+      {(status.toLocaleLowerCase() === StatusWorkflowEnum.default) && (
+          <Tooltip title="Run Workflow" placement="right">
+            <ReplayIcon
+              onClick={() => handleClickActions(StatusWorkflowEnum.success)}
+            />
+          </Tooltip>
+        )}
+
         {
           showModal && (
             <ModalComponent

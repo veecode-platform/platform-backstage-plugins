@@ -34,11 +34,13 @@ import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
 import { providers } from './identityProviders';
-import { ClusterExplorerPage } from '@veecode-platform/backstage-plugin-k8s-cluster-overview';
+import { ClusterExplorerPage } from '@veecode-platform/backstage-plugin-cluster-explorer';
 
 import type { IdentityApi } from '@backstage/core-plugin-api';
 import { discoveryApiRef, useApi } from '@backstage/core-plugin-api';
 import { setTokenCookie } from './cookieAuth';
+
+import { ApplicationPage } from '@veecode-platform/plugin-application';
 
 const app = createApp({
   apis,
@@ -119,6 +121,7 @@ const routes = (
       {searchPage}
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
+    <Route path="/applications" element={<ApplicationPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
   </FlatRoutes>
 );

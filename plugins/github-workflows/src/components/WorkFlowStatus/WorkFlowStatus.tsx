@@ -85,7 +85,7 @@ export const WorkFlowStatus = ({ status, conclusion, icon }: WorkFlowStatusProps
         default:
             return (
                 <>
-                    <StatusPending /> {!icon && "Pending"}
+                    <StatusAborted /> {!icon && "Run Workflow"}
                 </>
             )
     }

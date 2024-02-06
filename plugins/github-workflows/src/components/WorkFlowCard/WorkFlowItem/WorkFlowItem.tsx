@@ -6,8 +6,8 @@ import { WorkFlowActions } from '../../WorkFlowActions';
 import { WorkflowDispatchParameters } from '../../../utils/types';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../../ModalComponent';
-import { useNavigate } from 'react-router-dom';
 import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
+import { useEntity } from '@backstage/plugin-catalog-react';
 
 type WorkFlowItemProps = {
   id: number,
@@ -48,14 +48,16 @@ export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters,
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const classes = useStyles();
-  const navigate = useNavigate();
+  const { entity } = useEntity();
 
   const handleShowModal = () => {
     setShowModal(!showModal)
   }
 
   const handleCICDLogs = (id:string) => {
-    navigate(`ci-cd/${id}`)
+    const baseUrl = window.location.origin;
+    const newUrl = `${baseUrl}/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}/ci-cd/${id}`;
+    window.location.href = newUrl;
   }
 
   return (
@@ -74,7 +76,7 @@ export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters,
               onClick={()=>handleCICDLogs(lastRunId as string)}
               className={classes.name}
               >
-              {truncateString(workflowName, 13)}
+              {truncateString(workflowName, 12)}
             </Typography>
         </Tooltip>
 
