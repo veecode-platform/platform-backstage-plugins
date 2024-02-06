@@ -300,7 +300,7 @@ export const ClusterOverview = () => {
 
         return (
             <Content>
-                <Grid container spacing={2} direction="row">
+                <Grid container spacing={4} direction="row">
                     <Drawer
                         classes={{
                             paper: classes.paper,
@@ -332,7 +332,7 @@ export const ClusterOverview = () => {
 
                     <Grid item md={3} sm={12} >{/* left-side div: cluster info + capacity*/}
                         <Grid container spacing={2}>
-                            <Grid item md={12} sm={12}>
+                            <Grid item md={12} sm={12} style={{maxHeight: "600px", overflow: "auto"}}>
                                 <InfoCard title="Cluster information">
                                     <StructuredMetadataTable metadata={info} />
                                 </InfoCard>
