@@ -83,7 +83,7 @@ const app = createApp({
     });
   },
 });
-
+ 
 const routes = (
   <FlatRoutes>
     <Route path="/" element={<Navigate to="catalog" />} />
