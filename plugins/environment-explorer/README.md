@@ -177,7 +177,7 @@ catalog:
             minutes: ${GITHUB_CATALOG_PROVIDER_TIMEOUT}
 ```
 
-Or we can register it manually:
+Registering components manually:
 
 ![image3](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/70b1854f-d14a-47e0-a8f8-24a4967ff006)
 
@@ -212,6 +212,7 @@ spec:
 The file can have any name, as long as it follows this structure.
 Below the **metadata** key, we have the **environment** key and in this example we have some properties, but they are not mandatory, you can add the properties you think are necessary, we have developed the overview of this kind dynamically, so that it serves the information according to the properties that this key has.
 
+> The `metadata.name` key cannot contain spaces, separate words using "-", "_" or using camelCase.
 
 <hr>
 
