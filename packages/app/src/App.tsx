@@ -40,7 +40,7 @@ import type { IdentityApi } from '@backstage/core-plugin-api';
 import { discoveryApiRef, useApi } from '@backstage/core-plugin-api';
 import { setTokenCookie } from './cookieAuth';
 
-import { ApplicationPage } from '@veecode-platform/plugin-application';
+// import { ApplicationPage } from '@veecode-platform/plugin-application';
 // import { VaultExplorerPage } from '@veecode-platform/plugin-vault-explorer';
 
 const app = createApp({
@@ -122,7 +122,7 @@ const routes = (
       {searchPage}
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
-    <Route path="/applications" element={<ApplicationPage />} />
+    {/* <Route path="/applications" element={<ApplicationPage />} /> */}
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     {/* <Route path="/vault-explorer" element={<VaultExplorerPage />} /> */}
   </FlatRoutes>
