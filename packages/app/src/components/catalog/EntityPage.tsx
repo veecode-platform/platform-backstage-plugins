@@ -64,7 +64,7 @@ import { EntityKubernetesContent } from '@backstage/plugin-kubernetes';
 import { ClusterOverviewPage } from '@veecode-platform/backstage-plugin-cluster-explorer';
 import { DatabaseOverview } from '@veecode-platform/plugin-database-explorer';
 import { RELATION_ENVIRONMENT_OF, RELATION_FROM_ENVIRONMENT } from '@veecode-platform/plugin-veecode-platform-common';
-import { VaultOverview } from '@veecode-platform/plugin-vault-explorer';
+// import { VaultOverview } from '@veecode-platform/plugin-vault-explorer';
 
 
 const techdocsContent = (
@@ -568,20 +568,20 @@ const databasePage = (
   </EntityLayout>
 );
 
-const vaultPage = (
-  <EntityLayout>
-    <EntityLayout.Route path="/" title="Overview">
-      <Grid container spacing={1} alignItems="stretch">
-        <Grid item lg={6} md={12} xs={12}>
-          <VaultOverview />
-        </Grid>
-        <Grid item lg={6} md={12} xs={12} >
-          <EntityCatalogGraphCard variant='flex' height={300} />
-        </Grid>
-      </Grid>
-    </EntityLayout.Route>
-  </EntityLayout>
-)
+// const vaultPage = (
+//   <EntityLayout>
+//     <EntityLayout.Route path="/" title="Overview">
+//       <Grid container spacing={1} alignItems="stretch">
+//         <Grid item lg={6} md={12} xs={12}>
+//           <VaultOverview />
+//         </Grid>
+//         <Grid item lg={6} md={12} xs={12} >
+//           <EntityCatalogGraphCard variant='flex' height={300} />
+//         </Grid>
+//       </Grid>
+//     </EntityLayout.Route>
+//   </EntityLayout>
+// )
 
 export const entityPage = (
   <EntitySwitch>
@@ -593,7 +593,7 @@ export const entityPage = (
     <EntitySwitch.Case if={isKind('domain')} children={domainPage} />
     <EntitySwitch.Case if={isKind('cluster')} children={clusterPage} />
     <EntitySwitch.Case if={isKind('database')} children={databasePage} />
-    <EntitySwitch.Case if={isKind('vault')} children={vaultPage} />
+    {/* <EntitySwitch.Case if={isKind('vault')} children={vaultPage} /> */}
 
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
   </EntitySwitch>
