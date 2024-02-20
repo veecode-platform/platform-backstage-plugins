@@ -47,7 +47,7 @@ yarn add react-icons
 ```diff
 
 ...
-+ import { CiVault } from "react-icons/ci";
++ import { PiVaultFill } from "react-icons/pi";
 
 ...
 
@@ -64,7 +64,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
         <SidebarItem icon={ExtensionIcon} to="cluster-explorer" text="Cluster" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
-+        <SidebarItem icon={CiVault} to="vault-explorer" text="Vault" />
++        <SidebarItem icon={PiVaultFill} to="vault-explorer" text="Vault" />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
         <SidebarDivider />
         <SidebarScrollWrapper>
@@ -91,7 +91,7 @@ Or you can create a "Resources" menu and add "Vault" as a submenu:
 ...
 
 + import BusinessIcon from '@material-ui/icons/Business';
-+ import { CiVault } from "react-icons/ci";
++ import { PiVaultFill } from "react-icons/pi";
 
 ...
 
@@ -114,7 +114,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
 +              <SidebarSubmenuItem
 +                title="Vault"
 +                to="vault-explorer"
-+                icon={CiVault}
++                icon={PiVaultFill}
 +              />
 +
 +            </SidebarSubmenu>
@@ -145,12 +145,13 @@ By clicking on the icon in the side menu:
 
 - Vault Listing:
 
-![Database](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/cacb7485-03b3-4709-bd12-75fbbb9f6bf8)
+![foto1](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/438b1f6a-2c0e-44f9-b2c7-8db364060a6f)
 
 
 - Vault Overview:
 
-![image2](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/29e31bf6-56cc-4cb1-ac1d-832cf051f471)
+![Foto2](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/0a902383-167f-4dac-9cc3-db64a9e38f37)
+
 
 It's worth noting that each Vault is a yaml file belonging to the application catalog.
 In other words, you need to configure the catalog discovery in your `App-config.yaml`:
@@ -179,7 +180,8 @@ catalog:
 
 Or we can register it manually:
 
-![image3](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/24983be9-692c-4869-8857-d6b0c1478648)
+![Captura de tela de 2024-02-20 17-30-56](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/da940c7c-6a5a-4477-a6bf-d2dd4f45ae6e)
+
 
 Playing the url of where the yaml of the Vault is:
 
