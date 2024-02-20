@@ -566,7 +566,7 @@ const databasePage = (
       {WorkflowsContent}
     </EntityLayout.Route>
   </EntityLayout>
-)
+);
 
 const vaultPage = (
   <EntityLayout>
