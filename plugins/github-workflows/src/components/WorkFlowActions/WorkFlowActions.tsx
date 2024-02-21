@@ -45,14 +45,14 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
     const classes = useStyles();
     const errorApi = useApi(errorApiRef);
 
-    if(!status) return null;
-
     useEffect(() => {
       if (workflowsState) {
         const workFlowFilter = workflowsState.find((w: WorkflowResultsProps) => w.id === workflowId);
         setWorkFlowSelected(workFlowFilter);
       }
     }, [workflowsState, workflowId]);
+
+    if(!status) return null;
 
     const handleShowModal = () => {
       setShowModal(!showModal)
@@ -98,10 +98,10 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
          }
     }
 
-    const handleClickActions = async (status:string) => {
+    const handleClickActions = async (statusParams:string) : Promise<void> =>  {
        try{
           if(workFlowSelected){
-            switch (status) {
+            switch (statusParams) {
               case StatusWorkflowEnum.completed:
               case StatusWorkflowEnum.success:
               case StatusWorkflowEnum.failure:
@@ -113,8 +113,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
                 if(parameters && parameters.length > 0 && !inputsWorkflowsParams){
                   return setShowModal(true)
                 }
-                else handleStartWorkflow();
-                return;
+                return handleStartWorkflow();;
               case StatusWorkflowEnum.inProgress:
                 await handleStopWorkflowRun(workFlowSelected.lastRunId as number, projectName);
                 setWorkflowsState((prevWorkflowsState) => {
@@ -133,7 +132,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
                   }
                   return prevWorkflowsState;
                 });
-                return;
+                return Promise.resolve();;
               default:
                 break;
             }
@@ -142,6 +141,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
        catch (e:any) {
         errorApi.post(e)
        }
+       return Promise.resolve();
     }
     
     return(

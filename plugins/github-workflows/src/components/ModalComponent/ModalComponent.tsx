@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -63,17 +64,22 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
    }
   };
 
-  const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) => {    
+  const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) : void => {    
     if(required){
       if(type === "string" && validateString(event.target.value as string)){
-        return setErrorsState({...errorsState, [event.target.name!] : true });
+        setErrorsState({...errorsState, [event.target.name!] : true });
+        return;
       }
-      if(event.target.value === "") return setErrorsState({...errorsState, [event.target.name!] : true });
+      if(event.target.value === ""){
+         setErrorsState({...errorsState, [event.target.name!] : true });
+         return;
+        }
    }
     if(event){
       setInputWorkflow({...inputWorkflow, [event.target.name!]: event.target.value});
       setErrorsState({...errorsState, [event.target.name!] : false });
     }
+    return;
   };
 
   const handleStateCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,14 +105,13 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
         <DialogTitle id="form-dialog-title">Workflows Parameters</DialogTitle>
         <DialogContent className={classes.modal}>
           <DialogContentText>
-          Fill in the fields according to the values ​​set in the project workflow.
+           Fill in the fields according to the values set in the project workflow.
           </DialogContentText>
           {
             parameters.map(p => (
               <div key={p.name }>
               {p.type === "string" && (
                 <TextField
-                  autoFocus
                   margin="dense"
                   id={p.name}
                   name={p.name}
@@ -127,7 +132,6 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
               )}
               {p.type === "number" && (
                 <TextField
-                  autoFocus
                   margin="dense"
                   id={p.name}
                   name={p.name}
