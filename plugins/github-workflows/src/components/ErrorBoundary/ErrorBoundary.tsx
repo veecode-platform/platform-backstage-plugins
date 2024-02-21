@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Alert from '@material-ui/lab/Alert';
-import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha';
+import { useTranslationRef } from '@backstage/core-plugin-api/alpha';
 import { githubWorkflowsTranslationRef } from '../../translation';
 
 

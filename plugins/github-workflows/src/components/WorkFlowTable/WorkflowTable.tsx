@@ -29,7 +29,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 // experimental
 import { githubWorkflowsTranslationRef } from '../../translation';
-import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha';
+import { useTranslationRef } from '@backstage/core-plugin-api/alpha';
 
 
 const useStyles = makeStyles(theme => ({

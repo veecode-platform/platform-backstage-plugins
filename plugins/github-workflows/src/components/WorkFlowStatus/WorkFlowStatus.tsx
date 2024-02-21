@@ -1,7 +1,7 @@
 import React from 'react'
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum'
 import { StatusAborted, StatusError, StatusOK, StatusPending, StatusRunning, StatusWarning } from '@backstage/core-components'
-import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha'
+import { useTranslationRef } from '@backstage/core-plugin-api/alpha'
 import { githubWorkflowsTranslationRef } from '../../translation'
 
 type WorkFlowStatusProps = {

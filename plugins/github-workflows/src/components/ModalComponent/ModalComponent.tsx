@@ -11,7 +11,7 @@ import { WorkflowDispatchParameters } from '../../utils/types';
 import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, makeStyles } from '@material-ui/core';
 import { GithubWorkflowsContext } from '../context';
 import { validateString } from '../../utils/validators';
-import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha';
+import { useTranslationRef } from '@backstage/core-plugin-api/alpha';
 import { githubWorkflowsTranslationRef } from '../../translation';
 
 type ModalComponentProps = {

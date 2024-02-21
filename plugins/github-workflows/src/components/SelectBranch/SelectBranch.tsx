@@ -9,7 +9,7 @@ import { Branches } from '../../utils/types';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { Tooltip } from '@material-ui/core';
-import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha';
+import { useTranslationRef } from '@backstage/core-plugin-api/alpha';
 import { githubWorkflowsTranslationRef } from '../../translation';
 
 

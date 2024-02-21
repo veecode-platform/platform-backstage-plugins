@@ -4,7 +4,7 @@ import React from 'react'
 import { WorkflowTable } from '../WorkFlowTable'
 import { GithubWorkflowsProvider } from '../context/GithubWorkflowsProvider'
 import { WorkFlowCard } from '../WorkFlowCard';
-import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha'
+import { useTranslationRef } from '@backstage/core-plugin-api/alpha'
 import { githubWorkflowsTranslationRef } from '../../translation'
 
 export const GithubWorkflowsOverview = () => {

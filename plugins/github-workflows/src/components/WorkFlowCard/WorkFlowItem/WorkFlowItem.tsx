@@ -8,7 +8,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../../ModalComponent';
 import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
 import { useEntity } from '@backstage/plugin-catalog-react';
-import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha';
+import { useTranslationRef } from '@backstage/core-plugin-api/alpha';
 import { githubWorkflowsTranslationRef } from '../../../translation';
 
 type WorkFlowItemProps = {

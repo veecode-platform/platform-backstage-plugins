@@ -12,7 +12,7 @@ import { SelectBranch } from '../SelectBranch';
 import { WorkflowResultsProps } from '../../utils/types';
 import CachedIcon from '@material-ui/icons/Cached';
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
-import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha';
+import { useTranslationRef } from '@backstage/core-plugin-api/alpha';
 import { githubWorkflowsTranslationRef } from '../../translation';
 
 const useStyles = makeStyles(theme => ({
