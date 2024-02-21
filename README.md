@@ -39,5 +39,5 @@ Veecode Platform Backstage Plugins
 
 
 <footer>
-  <p align="center">Veecode Platform 2023 &#169; All Rights Reserved</p>
+  <p align="center">Veecode Platform 2024 &#169; All Rights Reserved</p>
 </footer>
