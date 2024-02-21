@@ -71,7 +71,7 @@ import {
     return (
       <PageWithHeader
         themeId="tool"
-        title="Password Vault"
+        title="Vault"
         subtitle={generatedSubtitle}
         pageTitleOverride="Vault"
       >
