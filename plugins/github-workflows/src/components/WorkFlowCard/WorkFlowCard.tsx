@@ -12,6 +12,8 @@ import { SelectBranch } from '../SelectBranch';
 import { WorkflowResultsProps } from '../../utils/types';
 import CachedIcon from '@material-ui/icons/Cached';
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
+import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha';
+import { githubWorkflowsTranslationRef } from '../../translation';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -76,6 +78,7 @@ export const Cards = ({ items, updateData }: CardsProps) => {
 
   const [ loading, setLoading] = useState<boolean>(false);
   const classes = useStyles();
+  const { t } = useTranslationRef(githubWorkflowsTranslationRef);
 
   const refresh = async ()=> {
     setLoading(true)
@@ -85,7 +88,7 @@ export const Cards = ({ items, updateData }: CardsProps) => {
 
   const TitleBar = (
     <>
-      <Typography className={classes.title}>Workflows</Typography>
+      <Typography className={classes.title}>{t('workflowCard.title')}</Typography>
     </>
   );
 
@@ -95,7 +98,7 @@ export const Cards = ({ items, updateData }: CardsProps) => {
 
       <IconButton
         aria-label="Refresh"
-        title="Refresh"
+        title={t('workflowCard.refreshButtonTooltip')}
         onClick={() => refresh()}
         className={classes.buttonRefresh}
       >
@@ -118,7 +121,7 @@ export const Cards = ({ items, updateData }: CardsProps) => {
             (
               <>
                 {
-                  items.length === 0 ? <div className={classes.info}>No records to display</div> : (
+                  items.length === 0 ? <div className={classes.info}>{t('workflowCard.noRecords')}</div> : (
                     items.map(item =>
                       (<WorkFlowItem
                         id={item.id!}
@@ -146,7 +149,7 @@ export const WorkFlowCard = () => {
   const { entity } = useEntity();
   const { projectName, workflows } = useEntityAnnotations(entity as Entity)
   const { listAllWorkflows, branch, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
-
+  const { t } = useTranslationRef(githubWorkflowsTranslationRef);
 
   const updateData = async ()=> {
     const data = await listAllWorkflows(projectName, workflows as string[]);
@@ -180,15 +183,15 @@ if(!workflows){
     return (
       <EmptyState
       missing="data"
-      title="No Workflow Data"
-      description="This component has GitHub Actions enabled, but no data was found. Have you created any Workflows? Click the button below to create a new Workflow."
+      title={t('emptyState.title')}
+      description={t('emptyState.description')}
       action={
         <Button
           variant="contained"
           color="primary"
           href={`https://github.com/${projectName}/actions/new`}
         >
-          Create new Workflow
+          {t('emptyState.createWorkflowButton')}
         </Button>
       }
     />

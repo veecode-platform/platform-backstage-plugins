@@ -27,6 +27,9 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../ModalComponent';
 import DescriptionIcon from '@material-ui/icons/Description';
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
+// experimental
+import { githubWorkflowsTranslationRef } from '../../translation';
+import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha';
 
 
 const useStyles = makeStyles(theme => ({
@@ -80,6 +83,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
   const [parametersState, setParametersState] = useState<WorkflowDispatchParameters[]|null>(null)
   const [ loading, setLoading] = useState<boolean>(false);
   const classes = useStyles();
+  const { t } = useTranslationRef(githubWorkflowsTranslationRef);
 
   const refresh = async ()=> {
     setLoading(true)
@@ -98,11 +102,11 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
   }
 
   const columns: TableColumn[] = [
-    { title: 'Name', field: 'name',  width:'1fr', align:'center'},
-    { title: 'Status', field: 'status', width:'1fr', align:'center' },
-    { title: 'Action', field: 'action', width:'1fr', align:'center' },
-    { title: 'Source', field: 'source', width:'1fr', align:'center'},
-    { title: 'Logs', field: 'logs', width:'auto', align:'center'}
+    { title: t('worflowList.table.column1'), field: 'name',  width:'1fr', align:'center'},
+    { title: t('worflowList.table.column2'), field: 'status', width:'1fr', align:'center' },
+    { title: t('worflowList.table.column3'), field: 'action', width:'1fr', align:'center' },
+    { title: t('worflowList.table.column4'), field: 'source', width:'1fr', align:'center'},
+    { title: t('worflowList.table.column5'), field: 'logs', width:'auto', align:'center'}
   ];
 
   const data = items.map(item => {
@@ -117,7 +121,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
       action: (
         <Box className={classes.action}>
           {(item.parameters && item.parameters?.length > 0 && item.status !== StatusWorkflowEnum.queued) && 
-              <Tooltip title="Add Parameters" placement="top">
+              <Tooltip title={t('worflowList.buttonAddParameters')} placement="top">
                   <SettingsIcon
                     onClick={() => {
                       setParametersState(item.parameters ?? [])
@@ -137,13 +141,13 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
       source: (
         <Box className={classes.source}>
             <LanguageIcon/> 
-            <Link to={item.source ?? ''} title='Visite workflow' target="_blank">
+            <Link to={item.source ?? ''} title={t('worflowList.sourceTooltip')} target="_blank">
               {truncateString(item.source as string, 40)}
             </Link>
          </Box>
          ),
       logs:(
-        <Tooltip title="View Logs" placement="top">
+        <Tooltip title={t('worflowList.logsTooltip')} placement="top">
           <DescriptionIcon 
             className={classes.clickable}
             onClick={()=>handleCICDLogs(item.lastRunId!.toString())}
@@ -155,7 +159,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
 
   const TitleBar = (
       <>
-        <Typography className={classes.title}>All Workflows</Typography>
+        <Typography className={classes.title}>{t('worflowList.title')}</Typography>
         <Box role="combobox" className={classes.options}>
             <SelectBranch/>
         </Box>
@@ -174,7 +178,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
       actions={[
         {
           icon: () => <SyncIcon />,
-          tooltip: 'Reload workflow runs',
+          tooltip: t('workflowCard.refreshButtonTooltip'),
           isFreeAction: true,
           onClick: () => refresh(),
         },
@@ -201,6 +205,7 @@ export const WorkflowTable = () => {
   const { projectName } = useEntityAnnotations(entity as Entity);
   const [ loadingState, setLoadingState ] = useState(true);
   const { branch, listAllWorkflows, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
+  const { t } = useTranslationRef(githubWorkflowsTranslationRef);
 
   const updateData = async ()=> {
     if(projectName){
@@ -234,15 +239,15 @@ export const WorkflowTable = () => {
       <>
       { loadingState ? (<Progress />):(<EmptyState
       missing="data"
-      title="No Workflow Data"
-      description="This component has GitHub Actions enabled, but no data was found. Have you created any Workflows? Click the button below to create a new Workflow."
+      title={t('emptyState.title')}
+      description={t('emptyState.description')}
       action={
         <Button
           variant="contained"
           color="primary"
           href={`https://github.com/${projectName}/actions/new`}
         >
-          Create new Workflow
+         { t('emptyState.createWorkflowButton')}
         </Button>
       }
     />)}

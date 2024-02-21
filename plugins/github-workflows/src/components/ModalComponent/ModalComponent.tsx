@@ -11,6 +11,8 @@ import { WorkflowDispatchParameters } from '../../utils/types';
 import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, makeStyles } from '@material-ui/core';
 import { GithubWorkflowsContext } from '../context';
 import { validateString } from '../../utils/validators';
+import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha';
+import { githubWorkflowsTranslationRef } from '../../translation';
 
 type ModalComponentProps = {
   open: boolean,
@@ -48,6 +50,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
   const [errorsState, setErrorsState] = useState<Record<string, boolean>>({});
   const classes = useStyles();
   const { setInputs } = useContext(GithubWorkflowsContext);
+  const { t } = useTranslationRef(githubWorkflowsTranslationRef);
 
   useEffect(() => {
     const data: any = {};
@@ -102,10 +105,10 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
 
   return (
       <Dialog open={open} onClose={handleModal} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Workflows Parameters</DialogTitle>
+        <DialogTitle id="form-dialog-title">{t('modalComponent.dialog.title')}</DialogTitle>
         <DialogContent className={classes.modal}>
           <DialogContentText>
-           Fill in the fields according to the values set in the project workflow.
+           {t('modalComponent.dialog.content')}
           </DialogContentText>
           {
             parameters.map(p => (
@@ -125,7 +128,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                   error={errorsState[p.name]}
                     helperText={
                       errorsState[p.name]
-                        ? 'use at least 3 characters'
+                        ? t('modalComponent.errors.name')
                         : null
                     }
               />
@@ -186,14 +189,14 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
         </DialogContent>
         <DialogActions className={classes.footer}>
           <Button onClick={handleModal} color="primary">
-            Cancel
+            {t('modalComponent.buttons.cancel')}
           </Button>
           <Button 
             disabled={Object.values(errorsState).some((error) => error)}
             onClick={handleSetInputs}
             color="primary"
             >
-            Submit
+            {t('modalComponent.buttons.submit')}
           </Button>
         </DialogActions>
       </Dialog>

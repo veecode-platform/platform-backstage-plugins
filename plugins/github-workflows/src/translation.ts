@@ -20,11 +20,17 @@ import { createTranslationRef } from '@backstage/core-plugin-api/alpha';
 export const githubWorkflowsTranslationRef = createTranslationRef({
   id: 'githubWorkflows',
   messages: {
+    overview:{
+        title: 'Welcome to github-workflows!',
+        subtitle: 'Platform Plugin',
+        supportButton: 'A description of your plugin goes here.'
+    },
     worflowList: {
       title: 'All Workflows',
       refreshButtonTooltip: 'Reload Workflows Runs',
       sourceTooltip: 'Visite wokflow',
       logsTooltip:'View Logs',
+      buttonAddParameters:'Add Parameters',
       table:{
         column1: 'NAME',
         column2: 'STATUS',
@@ -34,13 +40,16 @@ export const githubWorkflowsTranslationRef = createTranslationRef({
       },
     },
     workflowCard:{
+      title:'Workflows',
       refreshButtonTooltip: 'Refresh',
       buttonAddParameters: 'Add Parameters',
       noRecords: 'No records to display'
     },
     modalComponent:{
-      dialogTitle: 'Workflows Parameters',
-      dialogContent: 'Fill in the fields according to the values set in the project workflow.',
+      dialog:{
+        title: 'Workflows Parameters',
+        content: 'Fill in the fields according to the values set in the project workflow.',
+      },
       buttons:{
         cancel: 'Cancel',
         submit: 'Submit'
@@ -54,18 +63,25 @@ export const githubWorkflowsTranslationRef = createTranslationRef({
     },
     emptyState:{
       title: 'No Workflow Data',
-      description: 'This component has GitHub Actions enabled, but no data was found. Have you created any Workflows? Click the button below to create a new Workflow.'
+      description: 'This component has GitHub Actions enabled, but no data was found. Have you created any Workflows? Click the button below to create a new Workflow.',
+      createWorkflowButton: 'Create new Workflow'
+    },
+    errorBoundary:{
+      alert: 'Something went wrong. Please make sure that you installed:'
     },
     actions:{
-      wait: 'Please wait',
-      stop: 'Stop',
-      tryAgain: 'Try Again',
-      reRun: 'Re-run',
-      runWorkflow: 'Run Workflow'
+      tooltip:{
+        wait: 'Please wait',
+        stop: 'Stop',
+        tryAgain: 'Try Again',
+        reRun: 'Re-run',
+        runWorkflow: 'Run Workflow'
+      }
     },
     status:{
       error: 'Error',
       wait: 'Please wait',
+      stop: 'Stop',
       aborted: 'Aborted',
       success: 'Success',
       inProgress: 'In progress',

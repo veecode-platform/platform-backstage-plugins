@@ -1,42 +1,49 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import Alert from '@material-ui/lab/Alert';
+import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha';
+import { githubWorkflowsTranslationRef } from '../../translation';
 
-interface Props {}
-interface MyProps {}
 
-interface MyState {
-  hasError: boolean;
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
 }
 
-export default class ErrorBoundary extends Component<MyProps, MyState> {
-  static getDerivedStateFromError() {
-    // Update state so the next render will show the fallback UI.
-    return { hasError: true };
+const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
+  const [hasError, setHasError] = useState(false);
+  const { t } = useTranslationRef(githubWorkflowsTranslationRef); 
+
+  useEffect(() => {
+    const unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
+      // eslint-disable-next-line no-console
+      console.error('Unhandled Promise Rejection:', event.reason);
+      setHasError(true);
+    };
+
+    window.addEventListener('unhandledrejection', unhandledRejectionHandler);
+
+    return () => {
+      window.removeEventListener('unhandledrejection', unhandledRejectionHandler);
+    };
+  }, []);
+
+  if (hasError) {
+    return (
+      <Alert severity="error">
+        {t('errorBoundary.alert')}
+        <strong>
+          <a
+            href="https://github.com/veecode-platform/platform-backstage-plugins/plugins/github-workflows"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            @veecode/github-workflows
+          </a>
+        </strong>
+      </Alert>
+    );
   }
 
-  constructor(props: Props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-  render() {
-    if (this.state.hasError) {
-      // You can render any custom fallback UI
-      return (
-        <Alert severity="error">
-          Something went wrong. Please make sure that you installed:
-          <strong>
-            <a
-              href="https://github.com/veecode-platform/platform-backstage-plugins/plugins/github-workflows"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              @veecode/github-workflows
-            </a>
-          </strong>
-        </Alert>
-      );
-    }
+  return <>{children}</>;
+};
 
-    return this.props.children;
-  }
-}
+export default ErrorBoundary;

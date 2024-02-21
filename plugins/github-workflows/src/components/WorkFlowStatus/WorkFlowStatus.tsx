@@ -1,6 +1,8 @@
 import React from 'react'
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum'
 import { StatusAborted, StatusError, StatusOK, StatusPending, StatusRunning, StatusWarning } from '@backstage/core-components'
+import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha'
+import { githubWorkflowsTranslationRef } from '../../translation'
 
 type WorkFlowStatusProps = {
     status?: string,
@@ -9,6 +11,8 @@ type WorkFlowStatusProps = {
 }
 
 export const WorkFlowStatus = ({ status, conclusion, icon }: WorkFlowStatusProps) => {
+    
+    const { t } = useTranslationRef(githubWorkflowsTranslationRef);
 
     if (!status) return null;
 
@@ -18,7 +22,7 @@ export const WorkFlowStatus = ({ status, conclusion, icon }: WorkFlowStatusProps
         case StatusWorkflowEnum.waiting:
             return (
                 <>
-                    <StatusPending /> {!icon && "Queued"}
+                    <StatusPending /> {!icon && t('status.pending')}
                 </>
             );
         case StatusWorkflowEnum.actionRequired:
@@ -27,26 +31,26 @@ export const WorkFlowStatus = ({ status, conclusion, icon }: WorkFlowStatusProps
         case StatusWorkflowEnum.requested:
             return (
                 <>
-                    <StatusWarning /> {!icon && "Please wait"}
+                    <StatusWarning /> {!icon && t('status.wait')}
                 </>
             );
         case StatusWorkflowEnum.failure:
         case StatusWorkflowEnum.timeOut:
             return (
                 <>
-                    <StatusError /> {!icon && "Error"}
+                    <StatusError /> {!icon && t('status.error')}
                 </>
             );
         case StatusWorkflowEnum.aborted:
             return (
                 <>
-                    <StatusAborted /> {!icon && "Aborted"}
+                    <StatusAborted /> {!icon && t('status.aborted')}
                 </>
             );
         case StatusWorkflowEnum.inProgress:
             return (
                 <>
-                    <StatusRunning /> {!icon && "In progress"}
+                    <StatusRunning /> {!icon && t('status.inProgress')}
                 </>
             );
         case StatusWorkflowEnum.completed:
@@ -56,7 +60,7 @@ export const WorkFlowStatus = ({ status, conclusion, icon }: WorkFlowStatusProps
                 case StatusWorkflowEnum.aborted:
                     return (
                         <>
-                            <StatusAborted /> {!icon && "Aborted"}
+                            <StatusAborted /> {!icon && t('status.aborted')}
                         </>
                     );
                 case StatusWorkflowEnum.timeOut:
@@ -65,27 +69,27 @@ export const WorkFlowStatus = ({ status, conclusion, icon }: WorkFlowStatusProps
                 case StatusWorkflowEnum.neutral:
                     return (
                         <>
-                            <StatusWarning /> {!icon && "Timed out"}
+                            <StatusWarning /> {!icon && t('status.timeout')}
                         </>
                     );
                 case StatusWorkflowEnum.failure:
                 case null:
                     return (
                         <>
-                            <StatusError /> {!icon && "Error"}
+                            <StatusError /> {!icon && t('status.error')}
                         </>
                     );
                 default:
                     return (
                         <>
-                            <StatusOK /> {!icon && "Completed"}
+                            <StatusOK /> {!icon && t('status.completed')}
                         </>
                     );
             }
         default:
             return (
                 <>
-                    <StatusAborted /> {!icon && "Run Workflow"}
+                    <StatusAborted /> {!icon && t('status.runWorkflow')}
                 </>
             )
     }

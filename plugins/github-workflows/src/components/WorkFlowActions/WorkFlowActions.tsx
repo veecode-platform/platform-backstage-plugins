@@ -13,6 +13,8 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotations } from '../../hooks';
 import { ModalComponent } from '../ModalComponent';
+import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha';
+import { githubWorkflowsTranslationRef } from '../../translation';
 
 type WorkFlowActionsProps = {
     workflowId?: number,
@@ -44,6 +46,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
     const {inputsWorkflowsParams,  workflowsState, setWorkflowsState , handleStartWorkflowRun, handleStopWorkflowRun } = useContext(GithubWorkflowsContext);
     const classes = useStyles();
     const errorApi = useApi(errorApiRef);
+    const {t} = useTranslationRef(githubWorkflowsTranslationRef);
 
     useEffect(() => {
       if (workflowsState) {
@@ -147,7 +150,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
     return(
       <>
         {status.toLocaleLowerCase() === StatusWorkflowEnum.queued && (
-           <Tooltip title="Please wait" placement="right">
+           <Tooltip title={t('actions.tooltip.wait')} placement="right">
            <TimerIcon
              onClick={()=>handleClickActions(StatusWorkflowEnum.queued)}
              />
@@ -155,7 +158,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
         )}
 
         {status.toLocaleLowerCase() === StatusWorkflowEnum.inProgress && (
-          <Tooltip title="Stop" placement="right">
+          <Tooltip title={t('actions.tooltip.stop')} placement="right">
                <RefreshIcon 
                   className={classes.inProgress} 
                   onClick={()=>handleClickActions(StatusWorkflowEnum.inProgress)}
@@ -164,7 +167,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
         )}
 
         {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.skipped) && (
-          <Tooltip title="Try again" placement="right">
+          <Tooltip title={t('actions.tooltip.tryAgain')} placement="right">
             <HighlightOffIcon
               onClick={() => handleClickActions(StatusWorkflowEnum.skipped)}
             />
@@ -172,7 +175,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
         )}
 
         {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.canceled) && (
-          <Tooltip title="Try again" placement="right">
+          <Tooltip title={t('actions.tooltip.tryAgain')} placement="right">
           <HighlightOffIcon
             onClick={()=>handleClickActions(StatusWorkflowEnum.canceled)}
           />
@@ -180,7 +183,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
         )}
 
         {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.timeOut) && (
-          <Tooltip title="Re-run" placement="right">
+          <Tooltip title={t('actions.tooltip.reRun')} placement="right">
             <TimerIcon
               onClick={() => handleClickActions(StatusWorkflowEnum.timeOut)}
             />
@@ -188,7 +191,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
         )}
 
 {       (status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.aborted) && (
-          <Tooltip title="Re-run" placement="right">
+          <Tooltip title={t('actions.tooltip.reRun')} placement="right">
             <TimerIcon
               onClick={() => handleClickActions(StatusWorkflowEnum.timeOut)}
             />
@@ -196,7 +199,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
         )}
 
         {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.failure) && (
-          <Tooltip title="Re-run" placement="right">
+          <Tooltip title={t('actions.tooltip.reRun')} placement="right">
             <ReplayIcon
               onClick={() => handleClickActions(StatusWorkflowEnum.failure)}
             />
@@ -204,7 +207,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
         )}
 
         {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.success) && (
-          <Tooltip title="Re-run" placement="right">
+          <Tooltip title={t('actions.tooltip.reRun')} placement="right">
             <SyncIcon
               onClick={() => handleClickActions(StatusWorkflowEnum.success)}
             />
@@ -212,7 +215,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
         )}
 
       {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.completed) && (
-          <Tooltip title="Re-run" placement="right">
+          <Tooltip title={t('actions.tooltip.reRun')} placement="right">
             <SyncIcon
               onClick={() => handleClickActions(StatusWorkflowEnum.success)}
             />
@@ -220,7 +223,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
         )}
 
       {(status.toLocaleLowerCase() === StatusWorkflowEnum.default) && (
-          <Tooltip title="Run Workflow" placement="right">
+          <Tooltip title={t('actions.tooltip.runWorkflow')} placement="right">
             <ReplayIcon
               onClick={() => handleClickActions(StatusWorkflowEnum.success)}
             />

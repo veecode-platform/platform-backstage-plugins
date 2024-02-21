@@ -9,6 +9,8 @@ import { Branches } from '../../utils/types';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { Tooltip } from '@material-ui/core';
+import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha';
+import { githubWorkflowsTranslationRef } from '../../translation';
 
 
 type OptionsProps = {
@@ -26,6 +28,7 @@ export const SelectBranch = () => {
   const errorApi = useApi(errorApiRef);
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity as Entity);
+  const { t } = useTranslationRef(githubWorkflowsTranslationRef);
 
   useEffect(() => {
     const getBranches = async () => {
@@ -65,7 +68,7 @@ export const SelectBranch = () => {
   };
 
   return (
-    <Tooltip title="Select the branch" placement="top">
+    <Tooltip title={t('selectBranchComponent.selectTooltip')} placement="top">
       <Select
         onChange={handleSelectChange}
         label=""

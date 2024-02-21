@@ -8,6 +8,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../../ModalComponent';
 import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
 import { useEntity } from '@backstage/plugin-catalog-react';
+import { useTranslationRef } from '@backstage/core-plugin-api/dist/alpha';
+import { githubWorkflowsTranslationRef } from '../../../translation';
 
 type WorkFlowItemProps = {
   id: number,
@@ -49,6 +51,7 @@ export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters,
   const [showModal, setShowModal] = useState<boolean>(false);
   const classes = useStyles();
   const { entity } = useEntity();
+  const { t } = useTranslationRef(githubWorkflowsTranslationRef)
 
   const handleShowModal = () => {
     setShowModal(!showModal)
@@ -85,7 +88,7 @@ export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters,
           className={classes.clickable}>
 
           {(parameters && parameters?.length > 0 && status !== StatusWorkflowEnum.queued) && (
-              <Tooltip title="Add Parameters" placement="top">
+              <Tooltip title={t('workflowCard.buttonAddParameters')} placement="top">
                   <Box
                     role="button"
                     className={classes.clickable}
