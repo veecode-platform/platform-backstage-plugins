@@ -1,0 +1,74 @@
+{
+  "messages": {
+    "overview": {
+      "title": "Bem-vindo ao github-workflows!",
+      "subtitle": "Plugin da Plataforma",
+      "supportButton": "Uma descrição do seu plugin vai aqui."
+    },
+    "worflowList": {
+      "title": "Todos os Workflows",
+      "refreshButtonTooltip": "Recarregar Execuções de Workflows",
+      "sourceTooltip": "Visitar workflow",
+      "logsTooltip": "Ver Logs",
+      "buttonAddParameters": "Adicionar Parâmetros",
+      "table": {
+        "column1": "NOME",
+        "column2": "STATUS",
+        "column3": "AÇÃO",
+        "column4": "FONTE",
+        "column5": "LOGS"
+      }
+    },
+    "workflowCard": {
+      "title": "Workflows",
+      "refreshButtonTooltip": "Atualizar",
+      "buttonAddParameters": "Adicionar Parâmetros",
+      "noRecords": "Nenhum registro para exibir"
+    },
+    "modalComponent": {
+      "dialog": {
+        "title": "Parâmetros do Workflow",
+        "content": "Preencha os campos de acordo com os valores definidos no workflow do projeto."
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "submit": "Enviar"
+      },
+      "errors": {
+        "name": "use pelo menos 3 caracteres"
+      }
+    },
+    "selectBranchComponent": {
+      "selectTooltip": "Selecione o branch"
+    },
+    "emptyState": {
+      "title": "Sem Dados de Workflow",
+      "description": "Este componente tem as GitHub Actions habilitadas, mas nenhum dado foi encontrado. Você criou algum Workflow? Clique no botão abaixo para criar um novo Workflow.",
+      "createWorkflowButton": "Criar novo Workflow"
+    },
+    "errorBoundary": {
+      "alert": "Algo deu errado. Certifique-se de que você instalou:"
+    },
+    "actions": {
+      "tooltip": {
+        "wait": "Por favor, aguarde",
+        "stop": "Parar",
+        "tryAgain": "Tentar Novamente",
+        "reRun": "Re-executar",
+        "runWorkflow": "Executar Workflow"
+      }
+    },
+    "status": {
+      "error": "Erro",
+      "wait": "Por favor, aguarde",
+      "stop": "Parar",
+      "aborted": "Abortado",
+      "success": "Sucesso",
+      "inProgress": "Em andamento",
+      "pending": "Aguardando",
+      "timeout": "Tempo limite",
+      "completed": "Concluído",
+      "runWorkflow": "Executar Workflow"
+    }
+  }
+}
