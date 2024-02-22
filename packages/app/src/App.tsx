@@ -39,12 +39,23 @@ import { ClusterExplorerPage } from '@veecode-platform/backstage-plugin-cluster-
 import type { IdentityApi } from '@backstage/core-plugin-api';
 import { discoveryApiRef, useApi } from '@backstage/core-plugin-api';
 import { setTokenCookie } from './cookieAuth';
-
-// import { ApplicationPage } from '@veecode-platform/plugin-application';
-// import { VaultExplorerPage } from '@veecode-platform/plugin-vault-explorer';
+import { createTranslationMessages } from '@backstage/core-plugin-api/dist/alpha';
+import { githubWorkflowsTranslationRef } from '@veecode-platform/backstage-plugin-github-workflows';
 
 const app = createApp({
   apis,
+  __experimentalTranslations: {
+    availableLanguages: ['en','pt'],
+    resources: [
+      createTranslationMessages({
+        ref: githubWorkflowsTranslationRef,
+        messages: {
+          en: ()=> import('./translations/github-workflows-plugin/EN'),
+          pt: () => import('./translations/github-workflows-plugin/PT')
+        }
+      })
+    ]
+  },
   components: {
     SignInPage: props => {
       const discoveryApi = useApi(discoveryApiRef);
@@ -122,9 +133,7 @@ const routes = (
       {searchPage}
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
-    {/* <Route path="/applications" element={<ApplicationPage />} /> */}
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
-    {/* <Route path="/vault-explorer" element={<VaultExplorerPage />} /> */}
   </FlatRoutes>
 );
 
