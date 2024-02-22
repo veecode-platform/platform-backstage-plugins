@@ -39,22 +39,14 @@ import { ClusterExplorerPage } from '@veecode-platform/backstage-plugin-cluster-
 import type { IdentityApi } from '@backstage/core-plugin-api';
 import { discoveryApiRef, useApi } from '@backstage/core-plugin-api';
 import { setTokenCookie } from './cookieAuth';
-import { createTranslationMessages } from '@backstage/core-plugin-api/dist/alpha';
-import { githubWorkflowsTranslationRef } from '@veecode-platform/backstage-plugin-github-workflows';
+import { githubWorkflowsMessages } from './translations/github-workflows';
 
 const app = createApp({
   apis,
   __experimentalTranslations: {
+    defaultLanguage: 'en',
     availableLanguages: ['en','pt'],
-    resources: [
-      createTranslationMessages({
-        ref: githubWorkflowsTranslationRef,
-        messages: {
-          en: ()=> import('./translations/github-workflows-plugin/EN'),
-          pt: () => import('./translations/github-workflows-plugin/PT')
-        }
-      })
-    ]
+    resources: [githubWorkflowsMessages]
   },
   components: {
     SignInPage: props => {
