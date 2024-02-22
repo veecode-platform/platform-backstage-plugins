@@ -1,5 +1,5 @@
 {
-  "name": "@veecode-platform/backstage-plugin-github-workflows",
+  "name": "@internal/backstage-plugin-github-workflows",
   "version": "0.2.40",
   "main": "src/index.ts",
   "types": "src/index.ts",

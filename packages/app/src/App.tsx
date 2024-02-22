@@ -45,7 +45,7 @@ const app = createApp({
   apis,
   __experimentalTranslations: {
     defaultLanguage: 'en',
-    availableLanguages: ['en','pt'],
+    availableLanguages: ['en','es','pt'],
     resources: [githubWorkflowsMessages]
   },
   components: {

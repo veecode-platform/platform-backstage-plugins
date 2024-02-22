@@ -1,18 +1,18 @@
 import { createTranslationResource } from '@backstage/core-plugin-api/alpha';
-import { githubWorkflowsTranslationRef } from '@veecode-platform/backstage-plugin-github-workflows';
+import { githubWorkflowsTranslationRef } from '@internal/backstage-plugin-github-workflows';
 
 export const githubWorkflowsMessages = createTranslationResource({
   ref: githubWorkflowsTranslationRef,
   translations: {
-    en: () =>
+    en: () => 
       Promise.resolve({
-        default: {
+        default:{
           'overview.title': 'Welcome to github-workflows!',
-          'overview.subtitle': 'Platform Plugin',
+          'overview.subtitle': 'Welcome to github-workflows!',
           'overview.supportButton': 'A description of your plugin goes here.',
           'worflowList.title': 'All Workflows',
-          'worflowList.refreshButtonTooltip': 'Reload Workflows Runs',
-          'worflowList.sourceTooltip': 'Visite wokflow',
+          'worflowList.refreshButtonTooltip': 'Reload Workflow Runs',
+          'worflowList.sourceTooltip': 'Visit workflow',
           'worflowList.logsTooltip': 'View Logs',
           'worflowList.buttonAddParameters': 'Add Parameters',
           'worflowList.table.column1': 'NAME',
@@ -24,19 +24,16 @@ export const githubWorkflowsMessages = createTranslationResource({
           'workflowCard.refreshButtonTooltip': 'Refresh',
           'workflowCard.buttonAddParameters': 'Add Parameters',
           'workflowCard.noRecords': 'No records to display',
-          'modalComponent.dialog.title': 'Workflows Parameters',
-          'modalComponent.dialog.content':
-            'Fill in the fields according to the values set in the project workflow.',
+          'modalComponent.dialog.title': 'Workflow Parameters',
+          'modalComponent.dialog.content': 'Fill in the fields according to the values set in the project workflow.',
           'modalComponent.buttons.cancel': 'Cancel',
           'modalComponent.buttons.submit': 'Submit',
-          'modalComponent.errors.name': 'use at least 3 caracters',
+          'modalComponent.errors.name': 'use at least 3 characters',
           'selectBranchComponent.selectTooltip': 'Select the branch',
           'emptyState.title': 'No Workflow Data',
-          'emptyState.description':
-            'This component has GitHub Actions enabled, but no data was found. Have you created any Workflows? Click the button below to create a new Workflow.',
+          'emptyState.description': 'This component has GitHub Actions enabled, but no data was found. Have you created any Workflows? Click the button below to create a new Workflow.',
           'emptyState.createWorkflowButton': 'Create new Workflow',
-          'errorBoundary.alert':
-            'Something went wrong. Please make sure that you installed:',
+          'errorBoundary.alert': 'Something went wrong. Please make sure that you installed:',
           'actions.tooltip.wait': 'Please Wait',
           'actions.tooltip.stop': 'Stop',
           'actions.tooltip.tryAgain': 'Try Again',
@@ -52,6 +49,55 @@ export const githubWorkflowsMessages = createTranslationResource({
           'status.timeout': 'Time out',
           'status.completed': 'Completed',
           'status.runWorkflow': 'Run Workflow',
+
+        }
+      })
+    ,
+    es: () =>
+      Promise.resolve({
+        default: {
+            'overview.title': '¡Bienvenido a github-workflows!',
+            'overview.subtitle': '¡Bienvenido a github-workflows!',
+            'overview.supportButton': 'Una descripción de tu complemento va aquí.',
+            'worflowList.title': 'Todos los Flujos de Trabajo',
+            'worflowList.refreshButtonTooltip': 'Recargar Ejecuciones de Flujos de Trabajo',
+            'worflowList.sourceTooltip': 'Visitar flujo de trabajo',
+            'worflowList.logsTooltip': 'Ver Registros',
+            'worflowList.buttonAddParameters': 'Agregar Parámetros',
+            'worflowList.table.column1': 'NOMBRE',
+            'worflowList.table.column2': 'ESTADO',
+            'worflowList.table.column3': 'ACCIÓN',
+            'worflowList.table.column4': 'FUENTE',
+            'worflowList.table.column5': 'REGISTROS',
+            'workflowCard.title': 'Flujos de Trabajo',
+            'workflowCard.refreshButtonTooltip': 'Actualizar',
+            'workflowCard.buttonAddParameters': 'Agregar Parámetros',
+            'workflowCard.noRecords': 'No hay registros para mostrar',
+            'modalComponent.dialog.title': 'Parámetros de los Flujos de Trabajo',
+            'modalComponent.dialog.content': 'Complete los campos de acuerdo con los valores establecidos en el flujo de trabajo del proyecto.',
+            'modalComponent.buttons.cancel': 'Cancelar',
+            'modalComponent.buttons.submit': 'Enviar',
+            'modalComponent.errors.name': 'utilice al menos 3 caracteres',
+            'selectBranchComponent.selectTooltip': 'Seleccionar la rama',
+            'emptyState.title': 'Sin Datos de Flujos de Trabajo',
+            'emptyState.description': 'Este componente tiene habilitado GitHub Actions, pero no se encontraron datos. ¿Ha creado algún flujo de trabajo? Haga clic en el botón a continuación para crear uno nuevo.',
+            'emptyState.createWorkflowButton': 'Crear nuevo Flujo de Trabajo',
+            'errorBoundary.alert': 'Algo salió mal. Asegúrese de haber instalado:',
+            'actions.tooltip.wait': 'Espere por favor',
+            'actions.tooltip.stop': 'Detener',
+            'actions.tooltip.tryAgain': 'Intentar de Nuevo',
+            'actions.tooltip.reRun': 'Volver a Ejecutar',
+            'actions.tooltip.runWorkflow': 'Ejecutar Flujo de Trabajo',
+            'status.error': 'Error',
+            'status.wait': 'Espere por favor',
+            'status.stop': 'Detenido',
+            'status.aborted': 'Abortado',
+            'status.success': 'Éxito',
+            'status.inProgress': 'En Progreso',
+            'status.pending': 'En cola',
+            'status.timeout': 'Tiempo Excedido',
+            'status.completed': 'Completado',
+            'status.runWorkflow': 'Ejecutar Flujo de Trabajo',
         },
       }),
     pt: () =>
