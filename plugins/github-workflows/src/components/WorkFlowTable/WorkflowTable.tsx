@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { 
@@ -26,13 +27,20 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../ModalComponent';
 import DescriptionIcon from '@material-ui/icons/Description';
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
+import GithubIcon from '../assets/githubIcon.png';
 
 
 const useStyles = makeStyles(theme => ({
   title:{
     paddingLeft: '2rem',
-    fontSize: '1.5rem'
+    fontSize: '1.5rem',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '.5rem'
   },
+  icon: {
+    width: '40px',
+    },
   options:{
     position: 'absolute',
     top: '0%',
@@ -116,7 +124,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
       action: (
         <Box className={classes.action}>
           {(item.parameters && item.parameters?.length > 0 && item.status !== StatusWorkflowEnum.queued) && 
-              <Tooltip title={"Add Parameters"} placement="top">
+              <Tooltip title="Add Parameters" placement="top">
                   <SettingsIcon
                     onClick={() => {
                       setParametersState(item.parameters ?? [])
@@ -142,7 +150,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
          </Box>
          ),
       logs:(
-        <Tooltip title={"View Logs"} placement="top">
+        <Tooltip title="View Logs" placement="top">
           <DescriptionIcon 
             className={classes.clickable}
             onClick={()=>handleCICDLogs(item.lastRunId!.toString())}
@@ -154,8 +162,11 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
 
   const TitleBar = (
       <>
-        <Typography className={classes.title}>All Workflows</Typography>
-        <Box role="select" className={classes.options}>
+        <Typography className={classes.title}>
+          <img src={GithubIcon} alt="" className={classes.icon}/>
+          All Workflows
+        </Typography>
+        <Box role="combobox" className={classes.options}>
             <SelectBranch/>
         </Box>
       </>
@@ -201,6 +212,11 @@ export const WorkflowTable = () => {
   const [ loadingState, setLoadingState ] = useState(true);
   const { branch, listAllWorkflows, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
 
+  const updateData = async ()=> {
+    const data = await listAllWorkflows(projectName);
+    setWorkflowsState(data as WorkflowResultsProps[])
+  }
+
   useEffect(()=>{
     setTimeout(()=>{
       setLoadingState(false)
@@ -211,10 +227,6 @@ export const WorkflowTable = () => {
       updateData();
   },[branch]);
 
-  const updateData = async ()=> {
-    const data = await listAllWorkflows(projectName);
-    setWorkflowsState(data as WorkflowResultsProps[])
-  }
   
   const { loading, error } = useAsync(async (): Promise<void> => {
     updateData();

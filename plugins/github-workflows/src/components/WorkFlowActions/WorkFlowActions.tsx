@@ -13,6 +13,7 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotations } from '../../hooks';
 import { ModalComponent } from '../ModalComponent';
+import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 
 type WorkFlowActionsProps = {
     workflowId?: number,
@@ -25,12 +26,30 @@ const useStyles = makeStyles({
     inProgress:{
       animation: '$spin 2s linear infinite'
     },
+    waitResponse:{
+      animation: '$pulse 2s linear infinite',
+      color: '#FEF050',
+      cursor: 'wait'
+    },
+    buttonWait:{
+      background: 'transparent',
+      border: 'none',
+      outline: 'none'
+    },
     '@keyframes spin':{
       '0%':{
         transform: 'rotate(0deg)'
       },
       '100%': {
         transform: 'rotate(360deg)'
+      }
+    },
+    '@keyframes pulse': {
+      '50%': {
+        transform: 'scale(1.1)',
+      },
+      '100%': {
+        transform: 'scale(1.3)',
       }
     }
   });
@@ -45,8 +64,6 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
     const classes = useStyles();
     const errorApi = useApi(errorApiRef);
 
-    if(!status) return null;
-
     useEffect(() => {
       if (workflowsState) {
         const workFlowFilter = workflowsState.find((w: WorkflowResultsProps) => w.id === workflowId);
@@ -54,11 +71,14 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
       }
     }, [workflowsState, workflowId]);
 
+    if(!status) return null;
+
     const handleShowModal = () => {
       setShowModal(!showModal)
     }
 
     const handleStartWorkflow = async () => {
+      if(status === StatusWorkflowEnum.pending || status === StatusWorkflowEnum.queued ) return;
       setWorkflowsState((prevWorkflowsState) => {
         if (prevWorkflowsState) {
           const updatedWorkflows = prevWorkflowsState.map((workflow) => {
@@ -98,10 +118,10 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
          }
     }
 
-    const handleClickActions = async (status:string) => {
+    const handleClickActions = async (statusParams:string) : Promise<void> => {
        try{
           if(workFlowSelected){
-            switch (status) {
+            switch (statusParams) {
               case StatusWorkflowEnum.completed:
               case StatusWorkflowEnum.success:
               case StatusWorkflowEnum.failure:
@@ -113,8 +133,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
                 if(parameters && parameters.length > 0 && !inputsWorkflowsParams){
                   return setShowModal(true)
                 }
-                else handleStartWorkflow();
-                return;
+                return handleStartWorkflow();
               case StatusWorkflowEnum.inProgress:
                 await handleStopWorkflowRun(workFlowSelected.lastRunId as number, projectName);
                 setWorkflowsState((prevWorkflowsState) => {
@@ -133,7 +152,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
                   }
                   return prevWorkflowsState;
                 });
-                return;
+                return  Promise.resolve();
               default:
                 break;
             }
@@ -142,15 +161,19 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
        catch (e:any) {
         errorApi.post(e)
        }
+       return Promise.resolve();
     }
     
     return(
       <>
         {status.toLocaleLowerCase() === StatusWorkflowEnum.queued && (
            <Tooltip title="Please wait" placement="right">
-           <TimerIcon
-             onClick={()=>handleClickActions(StatusWorkflowEnum.queued)}
-             />
+            <button className={classes.buttonWait} disabled>
+              <RadioButtonCheckedIcon
+              className={classes.waitResponse}
+              onClick={()=>handleClickActions(StatusWorkflowEnum.queued)}
+              />
+            </button>
          </Tooltip>
         )}
 
