@@ -49,7 +49,7 @@ The following steps must be followed to ensure that the plugin works correctly.
 
 1.1 - **Using gitlab auth provider**:
 
-> ℹ️ Make sure you have an github auth provider in your devportal. See how [Add Gitlab Auth Provider 📃](https://backstage.io/docs/auth/gitlab/provider)
+> ℹ️ Make sure you have an gitlab auth provider in your devportal. See how [Add Gitlab Auth Provider 📃](https://backstage.io/docs/auth/gitlab/provider)
 
 As we saw in the link above, the backstage allows you to add authentication by creating an app and adding some information. However, we need to add a few more details:
 
