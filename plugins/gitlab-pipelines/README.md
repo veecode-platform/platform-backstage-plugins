@@ -45,9 +45,8 @@ The following steps must be followed to ensure that the plugin works correctly.
 
 <br>
 
-1- **Proxy setup**
 
-1.1 - **Using gitlab auth provider**:
+1- **Using gitlab auth provider**:
 
 > ℹ️ Make sure you have an github auth provider in your devportal. See how [Add Gitlab Auth Provider 📃](https://backstage.io/docs/auth/gitlab/provider)
 
@@ -125,6 +124,7 @@ export default async function createPlugin(
 
 In the `app-config.yaml` file:
 
+
 ```yaml
 # add gitlab integration
 integrations:
@@ -146,6 +146,10 @@ auth:
 ```
 
 > ℹ️ Remember to set the `${AUTH_GITLAB_CLIENT_ID}` variable with your Gitlab App Client Id and `${AUTH_GITLAB_CLIENT_SECRET}` with the Gitlab App Client Secret value. The `${AUTH_GITLAB_AUDIENCE}` would normally be the url of the deployed gitlab, defaulting to `https://gitlab.com`.
+
+2- **Proxy Settings**:
+
+Still in `app-config.yaml`...
 
 ```yaml
 proxy:
