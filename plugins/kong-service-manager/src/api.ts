@@ -43,6 +43,26 @@ export interface CreatePlugin{
     protocols: string[],
     enabled: boolean
 }
+export interface ServiceInfoResponse {
+    tags: string[];
+    ca_certificates: string[];
+    updated_at: number;
+    read_timeout: number;
+    host: string;
+    id: string;
+    retries: number;
+    write_timeout: number;
+    connect_timeout: number;
+    name: string;
+    path: string;
+    tls_verify: boolean;
+    port: number;
+    tls_verify_depth: any;
+    created_at: number;
+    enabled: boolean;
+    client_certificate: any;
+    protocol: string;
+}
 
 function getPluginFieldType(type:string){
     switch (type) {
@@ -76,6 +96,8 @@ export interface KongServiceManagerApi {
     removeServicePlugin(serviceIdOrName:string, pluginId: string, proxyPath?: string): Promise<any>;
 
     getRoutesFromService(serviceIdOrName:string, proxyPath?: string): Promise<RoutesResponse[]>;
+
+    getServiceInfo(serviceIdOrName:string, proxyPath?: string): Promise<ServiceInfoResponse>;
 
 
 }
@@ -212,7 +234,7 @@ class Client {
         return response.message
     }
 
-    async getRoutesFromService(serviceIdOrName: string, proxyPath?: string){
+    async getRoutesFromService(serviceIdOrName: string, proxyPath?: string): Promise<RoutesResponse[]>{
         const response = await this.fetch(`/services/${serviceIdOrName}/routes`, proxyPath)
 
         const mapedRoutesResponse:RoutesResponse[] = response.data.map((route: { name: any; protocols: any; methods: any; tags: any; hosts: any; paths: any; }) => {
@@ -227,6 +249,11 @@ class Client {
         })
 
         return mapedRoutesResponse
+    }
+
+    async getServiceInfo(serviceIdOrName: string, proxyPath?: string): Promise<ServiceInfoResponse>{
+        const response = await this.fetch(`/services/${serviceIdOrName}`, proxyPath)
+        return response
     }
 
 }
@@ -265,5 +292,9 @@ export class KongServiceManagerApiClient implements KongServiceManagerApi {
     
     async getRoutesFromService(serviceIdOrName: string, proxyPath?: string | undefined): Promise<RoutesResponse[]> {
         return this.client.getRoutesFromService(serviceIdOrName, proxyPath)
-}
+    }
+    
+    async getServiceInfo(serviceIdOrName: string, proxyPath?: string | undefined): Promise<ServiceInfoResponse> {
+        return this.client.getServiceInfo(serviceIdOrName, proxyPath)
+    }
 }
