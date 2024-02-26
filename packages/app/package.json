@@ -47,6 +47,7 @@
     "@material-ui/icons": "^4.9.1",
     "@veecode-platform/backstage-plugin-cluster-explorer": "^0.1.0",
     "@veecode-platform/backstage-plugin-gitlab-pipelines": "^0.1.0",
+    "@veecode-platform/plugin-kong-service-manager": "^0.1.0",
     "history": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

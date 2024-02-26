@@ -41,6 +41,7 @@ import { discoveryApiRef, useApi } from '@backstage/core-plugin-api';
 import { setTokenCookie } from './cookieAuth';
 
 import { ApplicationPage } from '@veecode-platform/plugin-application';
+import { KongServiceManagerPage } from '@veecode-platform/plugin-kong-service-manager';
 
 const app = createApp({
   apis,
@@ -123,6 +124,7 @@ const routes = (
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/applications" element={<ApplicationPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
+    <Route path="/kong-service-manager" element={<KongServiceManagerPage />} />
   </FlatRoutes>
 );
 

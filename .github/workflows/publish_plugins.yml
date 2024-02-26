@@ -25,7 +25,7 @@ jobs:
       - name: yarn install
         run: yarn install
 
-      - name: lerna isntall
+      - name: lerna install
         run: yarn lerna init 
 
       - name: yarn tsc

@@ -50,20 +50,33 @@ integrations:
      token: ${GITLAB_TOKEN_SECRET}
 
 proxy:
-  '/github/api':
-    target: https://api.github.com/repos
-    allowedHeaders: ['Authorization', 'X-GitHub-Api-Version']
-    headers: 
-      #Authorization: Bearer ${GITHUB_TOKEN_SECRET}
-      Accept: application/vnd.github+json
-      X-GitHub-Api-Version: "2022-11-28"
-  
-  '/gitlab/api':
-    target: https://gitlab.com/api/v4
-    allowedHeaders: ['PRIVATE-TOKEN']
-    headers:
-      PRIVATE-TOKEN: ${GITLAB_TOKEN_SECRET}
-      Accept: application/json 
+  endpoints:
+    '/github/api':
+      target: https://api.github.com/repos
+      allowedHeaders: ['Authorization', 'X-GitHub-Api-Version']
+      headers: 
+        #Authorization: Bearer ${GITHUB_TOKEN_SECRET}
+        Accept: application/vnd.github+json
+        X-GitHub-Api-Version: "2022-11-28"
+    
+    '/gitlab/api':
+      target: https://gitlab.com/api/v4
+      allowedHeaders: ['PRIVATE-TOKEN']
+      headers:
+        PRIVATE-TOKEN: ${GITLAB_TOKEN_SECRET}
+        Accept: application/json
+      
+    '/kong-manager/api':
+      target: https://api.manager.apr.vee.codes/default
+      allowedHeaders: ['Authorization']
+      headers: 
+        Accept: application/json
+
+    '/kong-other-manager/api': #should be used as a annotation
+      target: https://api.manager.apr.vee.codes/default
+      allowedHeaders: ['Authorization']
+      headers: 
+        Accept: application/json
 
   ### Example for how to add a proxy endpoint for the frontend.
   ### A typical reason to do this is to handle HTTPS and CORS for internal services.

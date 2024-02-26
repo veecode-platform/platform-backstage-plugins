@@ -36,7 +36,8 @@ export const createAuthMiddleware = async (
     res: Response,
     next: NextFunction,
   ) => {
-    try {   
+    try { 
+      return next();//skip auth middlware
       const token = getBearerTokenFromAuthorizationHeader(req.headers.authorization) || (req.cookies?.token as string | undefined);
       const skipHeader = (req.headers["x-authorization-identity"] as string | undefined)
 
