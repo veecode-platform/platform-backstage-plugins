@@ -54,9 +54,9 @@ export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters,
     setShowModal(!showModal)
   }
 
-  const handleCICDLogs = (id:string) => {
+  const handleCICDLogs = (paramsId:string) => {
     const baseUrl = window.location.origin;
-    const newUrl = `${baseUrl}/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}/ci-cd/${id}`;
+    const newUrl = `${baseUrl}/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}/ci-cd/${paramsId}`;
     window.location.href = newUrl;
   }
 
@@ -85,7 +85,7 @@ export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters,
           className={classes.clickable}>
 
           {(parameters && parameters?.length > 0 && status !== StatusWorkflowEnum.queued) && (
-              <Tooltip title={"Add Parameters"} placement="top">
+              <Tooltip title="Add Parameters" placement="top">
                   <Box
                     role="button"
                     className={classes.clickable}

@@ -32,11 +32,12 @@ Veecode Platform Backstage Plugins
 | **Environment Explorer**    |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/environment-explorer) |
 | **Database Explorer**       |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/database-explorer) |
 | **Cluster Explorer**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/cluster-explorer) |
+| **Vault Explorer**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/vault-explorer) |
 
 
 ---
 
 
 <footer>
-  <p align="center">Veecode Platform 2023 &#169; All Rights Reserved</p>
+  <p align="center">Veecode Platform 2024 &#169; All Rights Reserved</p>
 </footer>

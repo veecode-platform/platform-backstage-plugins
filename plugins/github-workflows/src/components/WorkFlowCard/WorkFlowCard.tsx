@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import { EmptyState, ErrorBoundary, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
 import { Box, Button, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography, makeStyles } from '@material-ui/core';
@@ -119,7 +120,7 @@ export const Cards = ({ items, updateData }: CardsProps) => {
                 {
                   items.length === 0 ? <div className={classes.info}>No records to display</div> : (
                     items.map(item =>
-                      <WorkFlowItem
+                      (<WorkFlowItem
                         id={item.id!}
                         key={item.id}
                         status={item.lastRunId !== undefined ? item.status : StatusWorkflowEnum.default}
@@ -127,7 +128,7 @@ export const Cards = ({ items, updateData }: CardsProps) => {
                         workflowName={item.name as string}
                         parameters={item.parameters}
                         lastRunId={item.lastRunId?.toString()}
-                      />
+                      />)
                     )
                   )
                 }
@@ -146,25 +147,27 @@ export const WorkFlowCard = () => {
   const { projectName, workflows } = useEntityAnnotations(entity as Entity)
   const { listAllWorkflows, branch, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
 
-  useEffect(()=>{
-      updateData();
-  },[branch])
-
   const updateData = async ()=> {
     const data = await listAllWorkflows(projectName, workflows as string[]);
     setWorkflowsState(data as WorkflowResultsProps[])
   }
+
+  useEffect(()=>{
+      updateData();
+  },[branch])
+
+  const { loading, error } = useAsync(async (): Promise<void> => {
+    if(workflows){
+      const data = await listAllWorkflows(projectName, workflows);
+      setWorkflowsState(data as WorkflowResultsProps[])
+    }
+}, []);
 
   if(!workflows){
     return (
       <MissingAnnotationEmptyState annotation={WORKFLOW_ANNOTATION} />
     )
   }
-
-  const { loading, error } = useAsync(async (): Promise<void> => {
-    const data = await listAllWorkflows(projectName, workflows);
-    setWorkflowsState(data as WorkflowResultsProps[])
-}, []);
 
   if (loading) {
     return <Progress />;

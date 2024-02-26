@@ -1,42 +1,35 @@
-# Environment Explorer Plugin
+# Vault Explorer Plugin
+
+The Vault plugin has two approaches:
+
+- A list of the **Password Vaults** available in your catalog
+
+- The **Password Vault overview** with all its data and relationships within the catalog.
 
 
-
-The environment plugin has two approaches:
-
-- A list of the environments available in your catalog
-
-- The environment overview with all its data and its relationships within the catalog.
-
-
-  
-
-⚠️ It is important to note that the `Environment` is a **Kind** customized by the **VeeCode Platform** and therefore requires the installation of the `veecode-platform-common` plugin in order to work.
+⚠️ It is important to note that the `Vault` is a **Kind** customized by the **VeeCode Platform** and therefore it requires the installation of the `veecode-platform-common` plugin in order to work.
 
 To install the `veecode-platform-common` plugin click [here](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-platform-common).
 
-Okay, bearing in mind that you already have a properly configured environment, let's start our installation.
+Okay, given that you already have a properly configured environment, let's start our installation.
 
-
-
-## Get started 🚀
+## Get Started
 
 ```bash
 cd packages/app
-yarn add @veecode-platform/plugin-environment-explorer
+yarn add @veecode-platform/plugin-vault-explorer
 ```
-
 Now, in the file `packages > app > src > App.tsx`:
 
 ```diff
 ...
-+ import { EnvironmentExplorerPage } from '@veecode-platform/plugin-environment-explorer';
++ import { VaultExplorerPage } from '@veecode-platform/plugin-vault-explorer';
 
 ...
 
 const routes = (
 <FlatRoutes>
-+ <Route path="/environments-explorer" element={<EnvironmentExplorerPage />}/>
++ <Route path="/vault-explorer" element={<VaultExplorerPage/>}/>
 </FlatRoutes>
 )
 ...
@@ -44,9 +37,17 @@ const routes = (
 To add a menu to your sidebar, just follow these steps:
 `packages > app > src > components > Root > Root.tsx `
 
+In the example, we've added an external icon, using the lib `react-icons`.
+
+```bash
+cd packages/app
+yarn add react-icons
+```
+
 ```diff
+
 ...
-+ import LanguageIcon from '@material-ui/icons/Language';
++ import { PiVaultFill } from "react-icons/pi";
 
 ...
 
@@ -63,7 +64,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
         <SidebarItem icon={ExtensionIcon} to="cluster-explorer" text="Cluster" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
-+        <SidebarItem icon={LanguageIcon} to="environments-explorer"/>
++        <SidebarItem icon={PiVaultFill} to="vault-explorer" text="Vault" />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
         <SidebarDivider />
         <SidebarScrollWrapper>
@@ -84,13 +85,13 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
   </SidebarPage>
 );
 ```
-Or you can create a "Resources" menu and add "Environment" as a submenu:
+Or you can create a "Resources" menu and add "Vault" as a submenu:
 
 ```diff
 ...
 
 + import BusinessIcon from '@material-ui/icons/Business';
-+ import LanguageIcon from '@material-ui/icons/Language';
++ import { PiVaultFill } from "react-icons/pi";
 
 ...
 
@@ -111,9 +112,9 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
 +            <SidebarSubmenu title="">
 +              <SidebarDivider />
 +              <SidebarSubmenuItem
-+                title="Environments"
-+                to="environments-explorer"
-+                icon={LanguageIcon}
++                title="Vault"
++                to="vault-explorer"
++                icon={PiVaultFill}
 +              />
 +
 +            </SidebarSubmenu>
@@ -138,29 +139,29 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
   </SidebarPage>
 );
 ```
-
 And that's the view:
 
 By clicking on the icon in the side menu:
 
-- Environments List:
+- Vault Listing:
 
-![image1](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/757663d8-d99a-4678-84bb-93ac334f459e)
-
-- Overview do Environment:
-
-![image2](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/43e70a26-d844-4777-b9d2-aa4d50fcdc3e)
+![foto1](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/438b1f6a-2c0e-44f9-b2c7-8db364060a6f)
 
 
-It's worth noting that each environment is a yaml file belonging to the application catalog.
+- Vault Overview:
+
+![Foto2](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/0a902383-167f-4dac-9cc3-db64a9e38f37)
+
+
+It's worth noting that each Vault is a yaml file belonging to the application catalog.
 In other words, you need to configure the catalog discovery in your `App-config.yaml`:
 
-1- First of all, we need to allow the new **Kind** in `app-config.yaml`:
+1- First of all, we need to allow the new **Kind** in the `app-config.yaml`:
 
 ```yaml
 catalog:
   rules:
-    - allow: [Component, API, Location, Cluster, Template, Environment]
+    - allow: [Component, API, Location, Cluster, Template, Vault]
   providers: 
     github:
       providerId: # the provider ID can be any camelCase string
@@ -179,34 +180,26 @@ catalog:
 
 Registering components manually:
 
-![image3](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/70b1854f-d14a-47e0-a8f8-24a4967ff006)
+![Captura de tela de 2024-02-20 17-30-56](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/da940c7c-6a5a-4477-a6bf-d2dd4f45ae6e)
 
-Throwing the url of where the environment's yaml is:
 
-![Captura de tela de 2024-01-04 11-45-57](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/4faf5c59-74aa-40b2-a5b5-b4c8fdaa46c7)
+Playing the url of where the yaml of the Vault is:
 
+![Captura de tela de 2024-01-04 11-45-57](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/5388e3ad-bb66-4497-8141-e749af90c455)
 
 This file should have the following structure:
 
 ```yaml
 apiVersion: veecode.backstage.io/v1alpha1 #or backstage.io/v1alpha1
-kind: Environment
+kind: Vault
 metadata:
-  name: "name_environment"
+  name: "Password_vault"
   environment:
-    domain: xxxxx
-    hostedZoneId: xxxxx
-    vpc_id: xxxx
-    vpc_name:: xxxxx
-    certManagerEmail: xxxxx
-    certManagerIssuerType: xxxxx
-  annotations:
-    github.com/project-slug: xxxxxxx
-    backstage.io/techdocs-ref: dir:.
+    path: "/generals"
 spec:
   type: service
   lifecycle: development
-  owner: "group:default/infra"
+  owner: "group:default/devsecops"
 ```
 
 The file can have any name, as long as it follows this structure.
@@ -216,36 +209,30 @@ Below the **metadata** key, we have the **environment** key and in this example 
 
 <hr>
 
+## How to reuse the resources of the Vault entity
 
-
-
-
-
-## How to use Enviroment
-
-In the context we envisioned for the project, the environment is used to reuse information that will be useful when creating new entities for our catalog.
+In the context we envisioned for the project, the Vault is used to reuse information that will be useful when creating new entities for our catalog.
 
 We have developed customizable components to provide the scaffolder with the possibility of parsing information from the **environment** key of our **Kind**.
 
 This is our **ResourcePicker**, which is exclusive to our **core**;
 
-With it we can approach the reuse of this information in the creation of entities via template.
+With it we can approach the reuse of this information when creating entities via a template.
 
 Example:
 
 ```yaml
-    - title: Enviroment Settings
+    - title: Password Vault Settings
       properties:
         reuseResource:
-          title: Select the enviromnet from our catalog
+          title: Select the Password Vault from our catalog
           type: string
           ui:field: ResourcePicker
           ui:options:
             catalogFilter:
-              kind: [Environment]
+              kind: [Vault]
 ```
-
-In this case, we will list all our entities in the catalog that have the **Environment** kind, and under the hood we will scan the `metadata.enviromnet` key of the chosen entity, and thus parse the information as **values** to serve the **skeleton** of our template, using the **parseJSON** function, also present in our core.
+In this case, we will list all our entities in the catalog that have the **Vault** kind, and under the hood we will scan the `metadata.enviromnet` key of the chosen entity, and thus parse the information as **values** to serve the **skeleton** of our template, using the **parseJSON** function, also present in our core.
 
 example:
 
@@ -258,15 +245,9 @@ example:
       input:
         url: ./skeleton      
         values:
-          vpc: ${{ parameters.reuseResource | parseJSON | pick('vpc_id') }}
-          domain: ${{ parameters.reuseResource | parseJSON | pick('domain') }}
+          dns: ${{ parameters.reuseResource | parseJSON | pick('path') }}
 
 ...
 ```
 
-The use of 'pick' helps to select the property you want to use, from the return of the **parseJSON function**, remember to validate that the selected entity has this property, otherwise the values will be empty.
-
-
-
-
-
+The use of 'pick' helps to select the property you want to use, from the return of the parseJSON function, remember to validate that the selected entity has this property, otherwise the values will be empty.

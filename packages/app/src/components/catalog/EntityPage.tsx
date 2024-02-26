@@ -565,8 +565,7 @@ const databasePage = (
       {WorkflowsContent}
     </EntityLayout.Route>
   </EntityLayout>
-)
-
+);
 
 export const entityPage = (
   <EntitySwitch>
@@ -578,6 +577,7 @@ export const entityPage = (
     <EntitySwitch.Case if={isKind('domain')} children={domainPage} />
     <EntitySwitch.Case if={isKind('cluster')} children={clusterPage} />
     <EntitySwitch.Case if={isKind('database')} children={databasePage} />
+    {/* <EntitySwitch.Case if={isKind('vault')} children={vaultPage} /> */}
 
     <EntitySwitch.Case>{defaultEntityPage}</EntitySwitch.Case>
   </EntitySwitch>

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import { Select, SelectedItems } from '@backstage/core-components';
 import { useApi, errorApiRef, } from '@backstage/core-plugin-api';
