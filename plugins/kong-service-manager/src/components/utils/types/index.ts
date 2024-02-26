@@ -35,3 +35,24 @@ export interface CreatePlugin{
     protocols: string[],
     enabled: boolean
 }
+
+export interface ServiceInfoResponse {
+    tags: string[];
+    ca_certificates: string[];
+    updated_at: number;
+    read_timeout: number;
+    host: string;
+    id: string;
+    retries: number;
+    write_timeout: number;
+    connect_timeout: number;
+    name: string;
+    path: string;
+    tls_verify: boolean;
+    port: number;
+    tls_verify_depth: any;
+    created_at: number;
+    enabled: boolean;
+    client_certificate: any;
+    protocol: string;
+}
