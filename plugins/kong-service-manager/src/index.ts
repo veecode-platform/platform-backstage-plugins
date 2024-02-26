@@ -1,1 +1,2 @@
-export { kongServiceManagerPlugin, KongServiceManagerPage } from './plugin';
+export * from './plugin';
+export * from './hooks'

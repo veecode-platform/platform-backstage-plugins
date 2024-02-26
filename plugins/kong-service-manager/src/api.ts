@@ -1,48 +1,11 @@
 import { createApiRef, DiscoveryApi, IdentityApi } from '@backstage/core-plugin-api';
+import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields } from './components/utils/types';
 
 export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
     id: 'plugin.kongservicemanager',
 });
 
 const KONG_SERVICE_MANAGER_DEFAULT_PROXY_URL = "/kong-manager/api";
-
-interface SchemaFields {
-    [key: string]: any;
-}
-
-export interface PluginFieldsResponse {
-    name: string,
-    type: string
-    required: boolean,
-    defaultValue: string | number | boolean ,
-    selectOptions: any
-}
-
-export interface AssociatedPluginsResponse {
-    name: string,
-    id: string,
-    tags: string[],
-    enabled: boolean,
-    createdAt: number,
-    config: any
-}
-
-export interface RoutesResponse{
-    name: string, 
-    protocols: string[],
-    methods: string[],
-    tags: string[],
-    hosts: string[],
-    paths: string[] 
-}
-
-export interface CreatePlugin{
-    config: any,
-    tags: string[],
-    name: string, 
-    protocols: string[],
-    enabled: boolean
-}
 
 function getPluginFieldType(type:string){
     switch (type) {

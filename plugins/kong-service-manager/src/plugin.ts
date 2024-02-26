@@ -1,4 +1,4 @@
-import { createApiFactory, createPlugin, discoveryApiRef, createComponentExtension, identityApiRef, createRoutableExtension } from '@backstage/core-plugin-api';
+import { createApiFactory, createPlugin, discoveryApiRef, identityApiRef, createRoutableExtension } from '@backstage/core-plugin-api';
 import { rootRouteRef } from './routes';
 import { kongServiceManagerApiRef, KongServiceManagerApiClient } from './api';
 
@@ -25,7 +25,7 @@ export const KongServiceManagerPage = kongServiceManagerPlugin.provide(
   createRoutableExtension({
     name: 'KongServiceManagerPage',
     component: () =>
-      import('./components/ExampleComponent').then(m => m.ExampleComponent),
+      import('./components/OverviewPage').then(m => m.KongServiceManagerOverview),
     mountPoint: rootRouteRef,
   }),
 );

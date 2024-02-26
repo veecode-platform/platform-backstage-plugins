@@ -3134,7 +3134,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/catalog-model@npm:^1.4.3, @backstage/catalog-model@npm:^1.4.4":
+"@backstage/catalog-model@npm:^1.4.3, @backstage/catalog-model@npm:^1.4.4, @backstage/catalog-model@npm:latest":
   version: 1.4.4
   resolution: "@backstage/catalog-model@npm:1.4.4"
   dependencies:
@@ -14329,6 +14329,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@veecode-platform/plugin-kong-service-manager@workspace:plugins/kong-service-manager"
   dependencies:
+    "@backstage/catalog-model": latest
     "@backstage/cli": ^0.24.0
     "@backstage/core-app-api": ^1.11.1
     "@backstage/core-components": ^0.13.8
