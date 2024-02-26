@@ -1,5 +1,5 @@
 import { createApiRef, DiscoveryApi, IdentityApi } from '@backstage/core-plugin-api';
-import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields } from './components/utils/types';
+import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse } from './components/utils/types';
 
 export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
     id: 'plugin.kongservicemanager',
@@ -39,6 +39,8 @@ export interface KongServiceManagerApi {
     removeServicePlugin(serviceIdOrName:string, pluginId: string, proxyPath?: string): Promise<any>;
 
     getRoutesFromService(serviceIdOrName:string, proxyPath?: string): Promise<RoutesResponse[]>;
+
+    getServiceInfo(serviceIdOrName:string, proxyPath?: string): Promise<ServiceInfoResponse>;
 
 
 }
@@ -175,7 +177,7 @@ class Client {
         return response.message
     }
 
-    async getRoutesFromService(serviceIdOrName: string, proxyPath?: string){
+    async getRoutesFromService(serviceIdOrName: string, proxyPath?: string): Promise<RoutesResponse[]>{
         const response = await this.fetch(`/services/${serviceIdOrName}/routes`, proxyPath)
 
         const mapedRoutesResponse:RoutesResponse[] = response.data.map((route: { name: any; protocols: any; methods: any; tags: any; hosts: any; paths: any; }) => {
@@ -190,6 +192,11 @@ class Client {
         })
 
         return mapedRoutesResponse
+    }
+
+    async getServiceInfo(serviceIdOrName: string, proxyPath?: string): Promise<ServiceInfoResponse>{
+        const response = await this.fetch(`/services/${serviceIdOrName}`, proxyPath)
+        return response
     }
 
 }
@@ -228,5 +235,9 @@ export class KongServiceManagerApiClient implements KongServiceManagerApi {
     
     async getRoutesFromService(serviceIdOrName: string, proxyPath?: string | undefined): Promise<RoutesResponse[]> {
         return this.client.getRoutesFromService(serviceIdOrName, proxyPath)
-}
+    }
+    
+    async getServiceInfo(serviceIdOrName: string, proxyPath?: string | undefined): Promise<ServiceInfoResponse> {
+        return this.client.getServiceInfo(serviceIdOrName, proxyPath)
+    }
 }
