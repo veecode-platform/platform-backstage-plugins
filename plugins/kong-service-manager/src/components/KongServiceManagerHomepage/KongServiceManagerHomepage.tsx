@@ -22,10 +22,10 @@ export const KongServiceManagerHomepage = () => {
     <KongServiceManagerProvider>
       <Container maxWidth="xl">
         <Grid container spacing={4}>
-          <Grid item lg={3}>
+          <Grid item lg={2}>
             <MenuOptions />
           </Grid>
-          <Grid item lg={9} className={classes.divider}>
+          <Grid item lg={10} className={classes.divider}>
             <Routes>
               <Route path="" element={<AboutPage />} />
               <Route path="all-routes" element={<RoutesList />} />

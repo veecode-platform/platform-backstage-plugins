@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import { useState } from "react";
 import { kongServiceManagerApiRef } from "../../api";
 import { KongServiceManagerContext } from "./KongServiceManagerContext";
-import { ServiceInfoResponse } from "../../utils/types";
+import { RoutesResponse, ServiceInfoResponse } from "../../utils/types";
 
 interface KongServiceManagerProviderProps {
     children : ReactNode
@@ -12,6 +12,7 @@ interface KongServiceManagerProviderProps {
 export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProps> = ({children}) => {
 
   const [allPluginsEnabled, setAllPluginsEnabled] = useState<string[]|null>(null);
+  const [allRoutes, setAllRoutes] = useState<RoutesResponse[]|null>(null);
   const [serviceDetails, setServiceDetails] = useState<ServiceInfoResponse|null>(null);
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
@@ -45,13 +46,29 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
+  const getRoutesList = async (serviceIdOrName: string, proxyPath: string) => {
+    try{ 
+      const routes = await api.getRoutesFromService(serviceIdOrName as string, proxyPath as string);
+      if(routes) {
+        setAllRoutes(routes);
+        return routes
+      }
+      return null
+    } catch(e:any){
+      errorApi.post(e);
+      return null
+    }
+  }
+
   return(
     <KongServiceManagerContext.Provider
         value={{
             allPluginsEnabled,
             listAllPluginsEnabled,
             getServiceDetails,
-            serviceDetails
+            serviceDetails,
+            allRoutes,
+            getRoutesList
         }}
      >
         {children}

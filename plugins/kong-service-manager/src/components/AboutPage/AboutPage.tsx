@@ -1,12 +1,12 @@
 /* eslint-disable @backstage/no-undeclared-imports */
-import { Box, Button, Chip, List, ListItem, ListItemText, makeStyles } from '@material-ui/core';
+import { Box, Chip, List, ListItem, ListItemText, makeStyles } from '@material-ui/core';
 import React, { useContext } from 'react';
-import { BoxComponent } from '../shared';
+import { BoxComponent, EmptyStateComponent } from '../shared';
 import { KongServiceManagerContext } from '../context';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from '../../hooks';
 import useAsync from 'react-use/lib/useAsync';
-import { CopyTextButton, EmptyState, Progress } from '@backstage/core-components';
+import { CopyTextButton, Progress } from '@backstage/core-components';
 import { LabelField } from './Fields'
 
 
@@ -50,31 +50,10 @@ export const AboutPage = () => {
     getDetails();
   }, []);
 
-  if (loading) {
-    return <Progress />;
-  }
+  if (loading) return <Progress />;
 
-  if(error) {
-    return (
-      <>
-        <EmptyState
-          missing="data"
-          title="No Kong Data"
-          description="This component has Kong Plugin enabled, but no data was found..."
-          action={
-            <Button
-              variant="contained"
-              color="primary"
-              href="/"
-            >
-              Back to Home
-            </Button>
-          }
-        />
-    </>
-    )
-  }
-
+  if(error) return <EmptyStateComponent/>;
+  
  return (
    <BoxComponent title="Configuration">
      <List className={listComponent}>

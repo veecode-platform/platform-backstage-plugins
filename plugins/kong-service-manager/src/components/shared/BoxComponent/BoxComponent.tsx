@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 
 interface BoxComponentProps {
     title: string,
-    children: ReactNode
+    children: ReactNode | React.JSX.Element
 }
 
 const useStyles = makeStyles(theme=>({
@@ -31,9 +31,9 @@ export const BoxComponent = ({title,children}:BoxComponentProps) => {
     <Toolbar>
       <Typography variant="h6" className={titlebar}>{title}</Typography>
     </Toolbar>
-    <Box>
+
       {children}
-    </Box>
+ 
   </Box>
   )
 }
