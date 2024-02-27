@@ -6,7 +6,7 @@ import { KongServiceManagerContext } from '../context';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from '../../hooks';
 import useAsync from 'react-use/lib/useAsync';
-import { EmptyState, Progress } from '@backstage/core-components';
+import { CopyTextButton, EmptyState, Progress } from '@backstage/core-components';
 import { LabelField } from './Fields'
 
 
@@ -86,6 +86,10 @@ export const AboutPage = () => {
              <LabelField title="ID"/>
             <ListItemText className={itemValue}>
               {serviceDetails.id}
+              <CopyTextButton 
+               text={serviceDetails.id}
+               tooltipText="Copy ID"
+               tooltipDelay={3000}/>
             </ListItemText>
             </Box>
           </ListItem>
@@ -103,7 +107,7 @@ export const AboutPage = () => {
             <Box className={listItem}>
              <LabelField title="Enabled"/>
             <ListItemText className={itemValue}>
-              {serviceDetails.enabled}
+              {serviceDetails.enabled.toString()}
             </ListItemText>
             </Box>
           </ListItem>
