@@ -1,36 +1,24 @@
-import { Box, List, ListItem, ListItemText, Toolbar, Typography, makeStyles } from '@material-ui/core';
+import { List, ListItem, ListItemText, makeStyles } from '@material-ui/core';
 import React from 'react';
+import { BoxComponent } from '../shared';
 
 const useStyles = makeStyles(theme=>({
-  container:{
-    background: theme.palette.background.paper,
-    backdropFilter: 'blur(13.5px)',
-    '-webkit-backdrop-filter': 'blur(13.5px)',
-    border: `1px solid ${theme.palette.divider}`,
-    borderRadius: '10px'
-  },
-  title: {
-    flexGrow: 1,
-    color: theme.palette.text.primary
-  },
+  listComponent:{
+    background: theme.palette.background.default
+  }
 }));
 
 export const AboutPage = () => {
 
-  const {container, title} = useStyles();
+  const { listComponent } = useStyles();
 
-  return (
-    <Box className={container}>
-      <Toolbar>
-        <Typography variant="h6" className={title}>Configuration</Typography>
-      </Toolbar>
-      <Box>
-        <List>
-          <ListItem>
-            <ListItemText>teste</ListItemText>
-          </ListItem>
-        </List>
-      </Box>
-    </Box>
+ return (
+    <BoxComponent title="Configuration">
+      <List className={listComponent}>
+        <ListItem>
+          <ListItemText>teste</ListItemText>
+        </ListItem>
+      </List>
+    </BoxComponent>
   )
 }

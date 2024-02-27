@@ -1,7 +1,11 @@
 import React from 'react'
+import { BoxComponent } from '../shared'
+import { Box } from '@material-ui/core'
 
 export const RoutesList = () => {
   return (
-    <div> All Routes Page </div>
-  )
+    <BoxComponent title="All Routes">
+      <Box>All Routes List</Box>
+    </BoxComponent>
+  );
 }

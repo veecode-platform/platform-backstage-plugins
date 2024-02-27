@@ -21,7 +21,7 @@ const MenuOptionsItems = [
 const useStyles = makeStyles(theme => ({
    listComponent: {
     height: '100%',
-    minHeight: '70vh'
+    minHeight: '70vh',
    },
    link:{
     color: theme.palette.text.primary,

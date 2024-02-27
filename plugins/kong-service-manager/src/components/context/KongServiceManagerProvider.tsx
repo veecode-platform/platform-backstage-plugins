@@ -3,6 +3,7 @@ import React, { ReactNode } from "react";
 import { useState } from "react";
 import { kongServiceManagerApiRef } from "../../api";
 import { KongServiceManagerContext } from "./KongServiceManagerContext";
+import { ServiceInfoResponse } from "../../utils/types";
 
 interface KongServiceManagerProviderProps {
     children : ReactNode
@@ -11,6 +12,7 @@ interface KongServiceManagerProviderProps {
 export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProps> = ({children}) => {
 
   const [allPluginsEnabled, setAllPluginsEnabled] = useState<string[]|null>(null);
+  const [serviceDetails, setServiceDetails] = useState<ServiceInfoResponse|null>(null);
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
 
@@ -28,11 +30,26 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
+  const getServiceDetails = async (serviceIdOrName: string, proxyPath?: string) =>{
+    try{
+      const details = await api.getServiceInfo(serviceIdOrName, proxyPath ? proxyPath : '');
+      if(details) {
+       return setServiceDetails(details)
+      }
+      return null
+    } catch(e:any){
+      errorApi.post(e);
+      return null
+    }
+  }
+
   return(
     <KongServiceManagerContext.Provider
         value={{
             allPluginsEnabled,
-            listAllPluginsEnabled
+            listAllPluginsEnabled,
+            getServiceDetails,
+            serviceDetails
         }}
      >
         {children}
