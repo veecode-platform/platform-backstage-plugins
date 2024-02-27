@@ -23,6 +23,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
+    "@backstage/catalog-model": "latest",
     "@backstage/core-components": "^0.13.8",
     "@backstage/core-plugin-api": "^1.8.0",
     "@backstage/theme": "^0.4.4",
