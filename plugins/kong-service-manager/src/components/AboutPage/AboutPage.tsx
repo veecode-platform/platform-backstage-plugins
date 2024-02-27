@@ -29,9 +29,6 @@ const useStyles = makeStyles(theme=>({
     display: 'flex',
     'align-items': 'center',
     'justify-content': 'flex-start',
-    // alignItems: 'center',
-    // justifyContent: 'flex-start',
-    // gap: '8rem',
   },
   itemValue: {
     width: '70%',
