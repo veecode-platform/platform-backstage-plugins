@@ -3,6 +3,9 @@ import { Container, Grid, makeStyles } from '@material-ui/core';
 import React from 'react';
 import { MenuOptions } from './MenuOptions';
 import { Route, Routes} from 'react-router';
+import { AboutPage } from '../AboutPage';
+import { RoutesList } from '../RoutesList';
+import { PluginsList } from '../PluginsList';
 
 const useStyles = makeStyles(theme=>({
   divider: {
@@ -22,9 +25,9 @@ export const KongServiceManagerHomepage = () => {
         </Grid>
         <Grid item lg={10} className={classes.divider}>
           <Routes>
-            <Route path="" element={<h1>About</h1>} />   
-            <Route path="all-routes" element={<h1>All Routes</h1>} /> 
-            <Route path="all-plugins" element={<h1>All Plugins</h1>} />
+            <Route path="" element={<AboutPage/>} />   
+            <Route path="all-routes" element={<RoutesList/>} /> 
+            <Route path="all-plugins" element={<PluginsList/>} />
           </Routes>
         </Grid>
       </Grid>
