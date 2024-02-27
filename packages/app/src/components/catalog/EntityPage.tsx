@@ -1,3 +1,4 @@
+/* eslint-disable @backstage/no-undeclared-imports */
 import React from 'react';
 import { Button, Grid } from '@material-ui/core';
 import {
@@ -64,7 +65,8 @@ import { EntityKubernetesContent } from '@backstage/plugin-kubernetes';
 import { ClusterOverviewPage } from '@veecode-platform/backstage-plugin-cluster-explorer';
 import { DatabaseOverview } from '@veecode-platform/plugin-database-explorer';
 import { RELATION_ENVIRONMENT_OF, RELATION_FROM_ENVIRONMENT } from '@veecode-platform/plugin-veecode-platform-common';
-
+// kong
+import { KongServiceManagerPage, isKongServiceManagerAvailable } from '@veecode-platform/plugin-kong-service-manager';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -210,6 +212,12 @@ const serviceEntityPage = (
       {WorkflowsContent}
     </EntityLayout.Route>
 
+    <EntityLayout.Route
+      if={isKongServiceManagerAvailable}
+      path="/kong-service-manager" title="Kong">
+      <KongServiceManagerPage/>
+    </EntityLayout.Route>
+
     <EntityLayout.Route path="/api" title="API">
       <Grid container spacing={3} alignItems="stretch">
         <Grid item md={6}>
@@ -252,6 +260,12 @@ const websiteEntityPage = (
       if={isGithubAvailable}
       path="/workflows" title="Workflows">
       {WorkflowsContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route
+      if={isKongServiceManagerAvailable}
+      path="/kong-service-manager" title="Kong">
+      <KongServiceManagerPage/>
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/dependencies" title="Dependencies">
