@@ -5,7 +5,7 @@
     "plugins/*/src",
     "plugins/*/dev",
     "plugins/*/migrations"
-  ],
+, "plugins/kong-service-manager/src/utils"  ],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "outDir": "dist-types",

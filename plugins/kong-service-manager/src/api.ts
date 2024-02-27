@@ -1,5 +1,5 @@
 import { createApiRef, DiscoveryApi, IdentityApi } from '@backstage/core-plugin-api';
-import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse } from './components/utils/types';
+import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse } from './utils/types';
 
 export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
     id: 'plugin.kongservicemanager',
