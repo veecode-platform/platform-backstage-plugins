@@ -19,7 +19,7 @@ export const KongServiceManagerHomepage = () => {
 
   return (
     <Container maxWidth="xl">
-      <Grid container spacing={2}>
+      <Grid container spacing={4}>
         <Grid item lg={2}>
           <MenuOptions/>
         </Grid>

@@ -24,16 +24,16 @@ const useStyles = makeStyles(theme => ({
     minHeight: '70vh'
    },
    link:{
-    color: theme.palette.navigation.color,
+    color: theme.palette.text.primary,
     textDecoration: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
    },
    activeLink:{
-    borderRight: `3px solid ${theme.palette.tabbar.indicator}`,
+    borderRight: `3px solid ${theme.palette.link}`,
     borderRadius: '3px',
-    color: theme.palette.tabbar.indicator
+    color: theme.palette.link
    },
    listItem: {
     cursor: 'pointer',
