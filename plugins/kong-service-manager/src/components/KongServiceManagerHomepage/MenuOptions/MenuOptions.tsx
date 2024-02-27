@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
    listItem: {
     cursor: 'pointer',
     height: '64px',
-    fontWeight: 'bold',
+    fontWeight: 700,
     borderRadius: '8px',
     '&:hover':{
         background: theme.palette.background.paper,
