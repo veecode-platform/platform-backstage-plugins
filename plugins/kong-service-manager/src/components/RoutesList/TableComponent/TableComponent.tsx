@@ -43,12 +43,24 @@ export const TableComponent = ({data}:{data: RoutesResponse[] | null}) => {
                   <TableCell component="th" scope="row">
                     {r.name}
                   </TableCell>
-                  <TableCell align="center">{r.protocols}</TableCell>
-                  <TableCell align="center">{r.methods ?? " - "}</TableCell>
-                  <TableCell align="center">{r.hosts}</TableCell>
-                  <TableCell align="center">{r.paths}</TableCell>
-                  <TableCell align="center" className={tags}>{r.tags.map((t:string) => (
-                    <Chip label={t}/>
+                  <TableCell align="center">{ r.protocols ? r.protocols.map(protocol=>(
+                    <p key={protocol}>{protocol}</p>
+                  )) : " - "}
+                  </TableCell>
+                  <TableCell align="center">
+                    {r.methods ? r.methods.map(method => (<p key={method}>{method}</p>)) 
+                    : " - "}
+                  </TableCell>
+                  <TableCell align="center">
+                    {r.hosts ? r.hosts.map(host => (<p key={host}>{host}</p>)) 
+                    : " - "}
+                  </TableCell>
+                  <TableCell align="center">
+                    {r.paths ? r.paths.map(path => (<p key={path}>{path}</p>)) 
+                    : " - "}
+                  </TableCell>
+                  <TableCell align="center" className={tags}>{r.tags.map(tag => (
+                    <Chip label={tag} key={tag} />
                   ))}</TableCell>
                 </TableRow>
               ))
