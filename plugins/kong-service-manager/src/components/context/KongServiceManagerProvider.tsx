@@ -16,11 +16,12 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
 
-  const listAllPluginsEnabled = async ()=>{
+  const listAllPluginsEnabled = async (proxyPath:string)=>{
     try{
-        const plugins = await api.getEnabledPlugins();
+        const plugins = await api.getEnabledPlugins(proxyPath);
         if (plugins !== null && plugins !== undefined){
-            return setAllPluginsEnabled(plugins)
+            setAllPluginsEnabled(plugins);
+            return plugins;
         }
         return []
     }
@@ -30,11 +31,12 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  const getServiceDetails = async (serviceIdOrName: string, proxyPath?: string) =>{
-    try{
-      const details = await api.getServiceInfo(serviceIdOrName, proxyPath ? proxyPath : '');
+  const getServiceDetails = async (serviceIdOrName: string, proxyPath: string) =>{
+    try{ 
+      const details = await api.getServiceInfo(serviceIdOrName as string, proxyPath as string);
       if(details) {
-       return setServiceDetails(details)
+        setServiceDetails(details);
+        return details
       }
       return null
     } catch(e:any){
