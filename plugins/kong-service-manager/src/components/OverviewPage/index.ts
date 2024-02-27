@@ -1,1 +1,0 @@
-export { KongServiceManagerOverview } from './KongServiceManagerOverview'
