@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import { useState } from "react";
 import { kongServiceManagerApiRef } from "../../api";
 import { KongServiceManagerContext } from "./KongServiceManagerContext";
-import { RoutesResponse, ServiceInfoResponse } from "../../utils/types";
+import { AssociatedPluginsResponse, RoutesResponse, ServiceInfoResponse } from "../../utils/types";
 
 interface KongServiceManagerProviderProps {
     children : ReactNode
@@ -11,19 +11,33 @@ interface KongServiceManagerProviderProps {
 
 export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProps> = ({children}) => {
 
-  const [allPluginsEnabled, setAllPluginsEnabled] = useState<string[]|null>(null);
+  const [allEnabledPlugins, setAllEnabledPlugins] = useState<string[]|null>(null);
+  const [allAssociatedPlugins, setAllAssociatedPlugins] = useState<AssociatedPluginsResponse[]|null>(null);
   const [allRoutes, setAllRoutes] = useState<RoutesResponse[]|null>(null);
   const [serviceDetails, setServiceDetails] = useState<ServiceInfoResponse|null>(null);
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
 
-  const listAllPluginsEnabled = async (proxyPath:string)=>{
+  const listAllEnabledPlugins = async (proxyPath:string)=>{
     try{
         const plugins = await api.getEnabledPlugins(proxyPath);
         if (plugins !== null && plugins !== undefined){
-            setAllPluginsEnabled(plugins);
-            // eslint-disable-next-line no-console
-            console.log(plugins)
+            setAllEnabledPlugins(plugins);
+            return plugins;
+        }
+        return []
+    }
+    catch(e:any){
+        errorApi.post(e);
+        return []
+    }
+  }
+
+  const listAssociatedPlugins = async (serviceIdOrName:string,proxyPath:string)=>{
+    try{
+        const plugins = await api.getServiceAssociatedPlugins(serviceIdOrName,proxyPath);
+        if (plugins !== null && plugins !== undefined){
+          setAllAssociatedPlugins(plugins);
             return plugins;
         }
         return []
@@ -62,19 +76,21 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  return(
+  return (
     <KongServiceManagerContext.Provider
-        value={{
-            allPluginsEnabled,
-            listAllPluginsEnabled,
-            getServiceDetails,
-            serviceDetails,
-            allRoutes,
-            getRoutesList
-        }}
-     >
-        {children}
+      value={{
+        listAllEnabledPlugins,
+        allEnabledPlugins,
+        getServiceDetails,
+        serviceDetails,
+        getRoutesList,
+        allRoutes,
+        listAssociatedPlugins,
+        allAssociatedPlugins,
+      }}
+    >
+      {children}
     </KongServiceManagerContext.Provider>
-  )
+  );
 
 }
