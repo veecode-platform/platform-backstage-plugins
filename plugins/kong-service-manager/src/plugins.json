@@ -367,6 +367,177 @@
                 } 
             ]
 
+        },
+        {
+            "category": "Analitics & Monitoring",
+            "plugins": [
+                {
+                    "name": "AppDynamics",
+                    "description": "Integrate Kong with the AppDynamics APM Platform",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/analytics-monitoring/kong-inc_app-dynamics.png"
+                },
+                {
+                    "name": "Datadog",
+                    "description": "Visualize metrics on Datadog",
+                    "tags": ["OSS"],
+                    "image": "assets/analytics-monitoring/kong-inc_datadog.png"
+                },
+                {
+                    "name": "OpenTelemetry",
+                    "description": "Propagate spans and report space to a backend server through OTLP protocol",
+                    "tags": ["OSS"],
+                    "image": "assets/analytics-monitoring/kong-inc_opentelemetry.png"
+                },
+                {
+                    "name": "Prometheus",
+                    "description": "Expose metrics related to Kong and proxied upstream services in Prometheus exposition format",
+                    "tags": [""],
+                    "image": "assets/analytics-monitoring/kong-inc_prometheus.png"
+                },
+                {
+                    "name": "StatsD",
+                    "description": "Send metrics to StatsD",
+                    "tags": [""],
+                    "image": "assets/analytics-monitoring/kong-inc_statsd.png"
+                },
+                {
+                    "name": "StatsD Advanced",
+                    "description": "(Deprecated) Send metrics to StatsD with more flexible options",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/analytics-monitoring/kong-inc_statsd-advanced.png"
+                },
+                {
+                    "name": "Zipkin",
+                    "description": "Propagate Zipkin spans and report space to a Zipkin server",
+                    "tags": ["OSS"],
+                    "image": "assets/analytics-monitoring/kong-inc_zipkin.png"
+                }
+            ]          
+        },
+        {
+            "category": "Transformations",
+            "plugins": [
+                {
+                    "name": "Correlation ID",
+                    "description": "Correlate requests and responses using a unique ID",
+                    "tags": ["OSS"],
+                    "image": "assets/transformations/kong-inc_correlation-id.png"
+                },
+                {
+                    "name": "DeGraphQL",
+                    "description": "Transform a GraphQL upstream into a REST API",
+                    "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
+                    "image": "assets/transformations/kong-inc_degraphql.png"
+                },
+                {
+                    "name": "Exit Transformer",
+                    "description": "Customize Kong exit responses sent downstream",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/transformations/kong-inc_exit-transformer.png"
+                },
+                {
+                    "name": "Kafka Upstream",
+                    "description": "Transform requests into Kafka messages in a Kafka topic",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/transformations/kong-inc_kafka-upstream.png"
+                },
+                {
+                    "name": "Request Transformer",
+                    "description": "Use regular expressions, variables, and templates to transform requests",
+                    "tags": ["OSS"],
+                    "image": "assets/transformations/kong-inc_request-transformer.png"
+                },
+                {
+                    "name": "Request Transformer Advanced",
+                    "description": "Use powerful regular expressions, variables, and templates to transform API requests",
+                    "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
+                    "image": "assets/transformations/kong-inc_request-transformer-advanced.png"
+                },
+                {
+                    "name": "Response Transformer",
+                    "description": "Modify the upstream response before returning it to the client",
+                    "tags": ["OSS"],
+                    "image": "assets/transformations/kong-inc_response-transformer.png"
+                },
+                {
+                    "name": "Response Transformer Advanced",
+                    "description": "Modify the upstream response before returning it to the client, with greater customization capabilities",
+                    "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
+                    "image": "assets/transformations/kong-inc_response-tranformer-advanced.png"
+                },
+                {
+                    "name": "Route Transformer Advanced",
+                    "description": "Transform routing by changing the upstream server, port, or path",
+                    "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
+                    "image": "assets/transformations/kong-inc_route-transformer-advanced.png"
+                },
+                {
+                    "name": "gRPC-Web",
+                    "description": "Allow browser clients to call gRPC services",
+                    "tags": ["OSS"],
+                    "image": "assets/transformations/kong-inc_grpc-web.png"
+                },
+                {
+                    "name": "gRPC-gateway",
+                    "description": "Access gRPC services through HTTP REST",
+                    "tags": ["OSS"],
+                    "image": "assets/transformations/kong-inc_grpc-gateway.png"
+                },
+                {
+                    "name": "jq",
+                    "description": "Transform JSON objects included in API requests or responses using jq programs",
+                    "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
+                    "image": "assets/transformations/kong-inc_jq.png"
+                }    
+            ]
+        },
+        {
+            "category": "Logging",
+            "plugins": [
+                {
+                    "name": "File Log",
+                    "description": "Append request and response data to a log file",
+                    "tags": ["OSS"],
+                    "image": "assets/logging/kong-inc_file-log.png"
+                },
+                {
+                    "name": "HTTP Log",
+                    "description": "Send request and response logs to an HTTP server",
+                    "tags": ["OSS"],
+                    "image": "assets/logging/kong-inc_http-log.png"
+                },   
+                {
+                    "name": "Kafka Log",
+                    "description": "Publish logs to a Kafka topic",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/logging/kong-inc_kafka-log.png"
+                },   
+                {
+                    "name": "Loggly",
+                    "description": "Send request and response logs to Loggly",
+                    "tags": ["OSS"],
+                    "image": "assets/logging/kong-inc_loggly.png"
+                },   
+                {
+                    "name": "Syslog",
+                    "description": "Send request and response logs to Syslog",
+                    "tags": ["OSS"],
+                    "image": "assets/logging/kong-inc_syslog.png"
+                },   
+                {
+                    "name": "TCP Log",
+                    "description": "Send request and response logs to a TCP server",
+                    "tags": ["OSS"],
+                    "image": "assets/logging/kong-inc_tcp-log.png"
+                },   
+                {
+                    "name": "UDP Log",
+                    "description": "Send request and response logs to a UDP server",
+                    "tags": ["OSS"],
+                    "image": "assets/logging/kong-inc_udp-log.png"
+                }
+            ]
         }
     ]
 }
