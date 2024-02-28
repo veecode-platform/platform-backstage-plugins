@@ -1,75 +1,146 @@
-import { Chip, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, makeStyles } from '@material-ui/core';
-import * as React from 'react';
+import Chip from '@material-ui/core/Chip';
+import Typography from '@material-ui/core/Typography';
+import React from 'react';
+import {
+  Table,
+  TableColumn} from '@backstage/core-components';
 import { RoutesResponse } from '../../../utils/types';
 
+interface TableComponentProps {
+  dataProps: RoutesResponse[] | []
+}  
 
-const useStyles = makeStyles(theme=>({
-  header:{
-    background: theme.palette.action.selected,
-    color: theme.palette.text.primary
-  },
-  tags:{
-    display:"flex",
-    flexWrap: "wrap",
-    maxWidth: '400px'
-  }
-}))
+interface TableData {
+  name: string,
+  protocols: string[],
+  methods: string[],
+  hosts: string[],
+  paths: string[],
+  tags: string[]
+}
 
-export const TableComponent = ({data}:{data: RoutesResponse[] | null}) => {
+export const TableComponent = ({dataProps}:TableComponentProps) => {
 
-  const { header, tags } = useStyles();
+  const generateData = (rowData: RoutesResponse[] | [] | null) => {
+    const data: Array<TableData> = [];
+    if(rowData){
+      rowData.map(r => {
+        data.push({
+          name: r.name,
+          protocols: r.protocols,
+          methods: r.methods,
+          hosts: r.hosts,
+          paths: r.paths,
+          tags: r.tags
+        });
+      })   
+    }
+    return data;
+  };
+  
+  const columns: TableColumn[] = [
+    {
+      title: 'Name',
+      field: 'name',
+      highlight: true,
+      type: 'string',
+      align: 'center',
+      width: '300px'
+    },
+    {
+      title: 'Protocols',
+      highlight: true,
+      render: (row: Partial<TableData>) => (
+        <>
+          {
+            row.protocols ?
+            row.protocols.map(protocol => (
+              <Typography variant="body2" key={protocol}>{protocol}</Typography>
+            ))
+            : ' - '
+          }
+        </>
+      ),
+      align: 'center',
+      width: 'auto'
+    },
+    {
+      title: 'Methods',
+      highlight: true,
+      render: (row: Partial<TableData>) => (
+        <>
+          {
+            row.methods ?
+            row.methods.map(method => (
+              <Typography variant="body2" key={method}>{method}</Typography>
+            ))
+            : ' - '
+          }
+        </>
+      ),
+      align: 'center',
+      width: 'auto'
+    },
+    {
+      title: 'Hosts',
+      highlight: true,
+      render: (row: Partial<TableData>) => (
+        <>
+          { 
+            row.hosts ?
+            row.hosts.map(host => (
+              <Typography variant="body2" key={host}>{host}</Typography>
+            ))
+            : ' - '
+          }
+        </>
+      ),
+      align: 'center',
+      width: 'auto'
+    },
+    {
+      title: 'Paths',
+      highlight: true,
+      render: (row: Partial<TableData>) => (
+        <>
+          {
+            row.paths ?
+            row.paths.map(path => (
+              <Typography variant="body2" key={path}>{path}</Typography>
+            ))
+            : ' - '
+          }
+        </>
+      ),
+      align: 'center',
+      width: 'auto'
+    },
+    {
+      title: 'Tags',
+      highlight: true,
+      render: (row: Partial<TableData>) => (
+        <>
+          {
+            row.tags ?
+            row.tags.map(tag => (
+              <Chip key={tag} label={tag}/>
+            ))
+            : ' - '
+          }
+        </>
+      ),
+      align: 'center',
+      width: 'auto'
+    },
+  ];
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell className={header}>Name</TableCell>
-            <TableCell className={header} align="center">Protocols</TableCell>
-            <TableCell className={header} align="center">Methods</TableCell>
-            <TableCell className={header} align="center">Hosts</TableCell>
-            <TableCell className={header} align="center">Paths</TableCell>
-            <TableCell className={header} align="center">Tags</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          { data ? (
-            <>
-            {
-              data.map((r:RoutesResponse) => (
-                <TableRow
-                  key={r.name}
-                >
-                  <TableCell component="th" scope="row">
-                    {r.name}
-                  </TableCell>
-                  <TableCell align="center">{ r.protocols ? r.protocols.map(protocol=>(
-                    <p key={protocol}>{protocol}</p>
-                  )) : " - "}
-                  </TableCell>
-                  <TableCell align="center">
-                    {r.methods ? r.methods.map(method => (<p key={method}>{method}</p>)) 
-                    : " - "}
-                  </TableCell>
-                  <TableCell align="center">
-                    {r.hosts ? r.hosts.map(host => (<p key={host}>{host}</p>)) 
-                    : " - "}
-                  </TableCell>
-                  <TableCell align="center">
-                    {r.paths ? r.paths.map(path => (<p key={path}>{path}</p>)) 
-                    : " - "}
-                  </TableCell>
-                  <TableCell align="center" className={tags}>{r.tags.map(tag => (
-                    <Chip label={tag} key={tag} />
-                  ))}</TableCell>
-                </TableRow>
-              ))
-            }
-          </>
-          ) : (<TableRow><TableCell colSpan={5}> No data to display...</TableCell></TableRow>)}
-
-        </TableBody>
-      </Table>
-    </TableContainer>
+      <Table
+        options={{ paging: true, padding: 'dense',minBodyHeight:'55vh',paginationType:'stepped', paginationPosition:'bottom' }}
+        data={generateData(dataProps)}
+        columns={columns}
+        title=""
+        style={{marginTop: '-2rem', width: '100%', height:'100%'}}
+      />
   );
-}
+};

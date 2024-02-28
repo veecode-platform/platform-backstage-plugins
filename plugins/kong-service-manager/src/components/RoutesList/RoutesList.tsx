@@ -2,12 +2,12 @@
 import React, { useContext } from 'react'
 import { BoxComponent, EmptyStateComponent } from '../shared'
 import { Box, makeStyles } from '@material-ui/core';
-import { TableComponent } from './TableComponent';
 import { KongServiceManagerContext } from '../context';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from '../../hooks';
 import useAsync from 'react-use/lib/useAsync';
 import { Progress } from '@backstage/core-components';
+import { TableComponent } from './TableComponent';
 
 const useStyles = makeStyles(theme=>({
   content:{
@@ -40,7 +40,7 @@ export const RoutesList = () => {
   return (
     <BoxComponent title="All Routes">
       <Box className={content}>
-        <TableComponent data={allRoutes} />
+        <TableComponent dataProps={allRoutes!}/>
       </Box>
     </BoxComponent>
   );
