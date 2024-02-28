@@ -1,0 +1,158 @@
+{
+    "categories": [
+        {
+            "category": "AI",
+            "plugins": [
+                {
+                    "name": "AI Proxy",
+                    "description": "Call supported Large Language Model vendors and models through Kong Gateway, using mediated data formats and authentication",
+                    "tags": ["OSS"],
+                    "image": "assets/ai/kong-inc_ai-proxy.png"
+                },
+                {
+                    "name": "AI Prompt Decorator",
+                    "description": "Prepend or append an array of llm/v1/chat messages to a user's chat history",
+                    "tags": ["OSS"],
+                    "image": "assets/ai/kong-inc_ai-prompt-decorator.png"
+                },
+                {
+                    "name": "AI Prompt Guard",
+                    "description": "Check llm/v1/chat or llm/v1/completions requests against a list of allowed or denied expressions",
+                    "tags": ["OSS"],
+                    "image": "assets/ai/kong-inc_ai-prompt-guard.png"
+                },
+                {
+                    "name": "AI Prompt Template",
+                    "description": "Provide fill-in-the-blank AI prompts to users",
+                    "tags": ["OSS"],
+                    "image": "assets/ai/kong-inc_ai-prompt-template.png"
+                },
+                {
+                    "name": "AI Request Transformer",
+                    "description": "Use an LLM service to inspect and transform the client's request body prior to proxying the request to the upstream server",
+                    "tags": ["OSS"],
+                    "image": "assets/ai/kong-inc_ai-request-transformer.png"
+                },
+                {
+                    "name": "AI Response Transformer",
+                    "description": "Use an LLM service to examine the upstream HTTP(S) prior to forwarding it to the client",
+                    "tags": ["OSS"],
+                    "image": "assets/ai/kong-inc_ai-response-transformer.png"
+                }
+            ]
+        },
+        {
+            "category": "Authentication",
+            "plugins": [
+                {
+                    "name": "Basic Authentication",
+                    "description": "Add Basic Authentication to your services",
+                    "tags": ["OSS"],
+                    "image": "assets/auth/kong-inc_basic-auth.png"
+                },
+                {
+                    "name": "HMAC Auth",
+                    "description": "Add HMAC Authentication to your services",
+                    "tags": ["OSS"],
+                    "image": "assets/auth/kong-inc_hmac-auth.png"
+                },
+                {
+                    "name": "JWE Decrypt",
+                    "description": "Decrypt a JWE token in a request",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/auth/kong-inc_jwe-decrypt.png"
+                },
+                {
+                    "name": "JWT",
+                    "description": "Verify and authenticate JSON Web Tokens",
+                    "tags": ["OSS"],
+                    "image": "assets/auth/kong-inc_jwt.png"
+                },
+                {
+                    "name": "Key Auth",
+                    "description": "Add key authentication to your Services",
+                    "tags": ["OSS"],
+                    "image": "assets/auth/kong-inc_key-auth.png"
+                },
+                {
+                    "name": "Key Authentication - Encrypted",
+                    "description": "Add key authentication to your services",
+                    "tags": ["ENTERPRISE"],
+                    "image": "assets/auth/kong-inc_key-auth-enc.png"
+                },
+                {
+                    "name": "Kong JWT Signer",
+                    "description": "Verify and sign one or two tokens in a request",
+                    "tags": ["ENTERPRISE"],
+                    "image": "assets/auth/kong-inc_jwt-signer.png"
+                },
+                {
+                    "name": "LDAP Authentication",
+                    "description": "Integrate Kong with an LDAP server",
+                    "tags": ["OSS"],
+                    "image": "assets/auth/kong-inc_ldap-auth.png"
+                },
+                {
+                    "name": "LDAP Authentication Advanced",
+                    "description": "Secure Kong with username and password protection, use LDAP search and service directory mapping",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/auth/kong-inc_ldap-auth-advanced.png"
+                },
+                {
+                    "name": "Mutual TLS Authentication",
+                    "description": "Secure routes and services with client certificate and mutual TLS authentication",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/auth/kong-inc_mtls-auth.png"
+                },
+                {
+                    "name": "OAuth 2.0 Authentication",
+                    "description": "Add OAuth 2.0 authentication to your service",
+                    "tags": ["OSS"],
+                    "image": "assets/auth/kong-inc_oauth2.png"
+                },
+                {
+                    "name": "OAuth 2.0 Introspection",
+                    "description": "Integrate Kong with a third-party OAuth 2.0 Authorization Server",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/auth/kong-inc_oauth2-introspection.png"
+                },
+                {
+                    "name": "OpenID Connect",
+                    "description": "Integrate Kong with a third-party OpenID Connect provider",
+                    "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
+                    "image": "assets/auth/kong-inc_openid-connect.png"
+                },
+                {
+                    "name": "Portal Application Registration",
+                    "description": "Allow portal developers to register applications against services",
+                    "tags": ["ENTERPRISE"],
+                    "image": "assets/auth/kong-inc_application-registration.png"
+                },
+                {
+                    "name": "SAML",
+                    "description": "Provides SAML v2.0 authentication and authorization between a service provider (Kong) and an identity provider (IdP)",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/auth/kong-inc_saml.png"
+                },
+                {
+                    "name": "Session",
+                    "description": "Support sessions for Kong authentication plugins.",
+                    "tags": ["OSS"],
+                    "image": "assets/auth/kong-inc_session.png"
+                },
+                {
+                    "name": "Vault Authentication",
+                    "description": "Add Vault authentication to your services",
+                    "tags": ["ENTERPRISE"],
+                    "image": "assets/auth/kong-inc_vault-auth.png"
+                },
+                {
+                    "name": "Okta",
+                    "description": "Integrate Okta's API Access Management (OAuth as a Service) with Kong API Gateway",
+                    "tags": ["ENTERPRISE", "TECH PARTNER"],
+                    "image": "assets/auth/okta_okta.png"
+                }
+            ]
+        }
+    ]
+}
