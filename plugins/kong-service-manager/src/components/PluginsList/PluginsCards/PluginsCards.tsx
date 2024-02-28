@@ -8,8 +8,11 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 // import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
-import { LinkButton, ItemCardGrid,ItemCardHeader, Content } from '@backstage/core-components';
+import { ItemCardGrid, Content } from '@backstage/core-components';
 import { AssociatedPluginsResponse } from '../../../utils/types';
+import { Button, CardHeader, IconButton } from '@material-ui/core';
+import ImageDefault  from '../../../assets/default.png'
+import Edit from '@material-ui/icons/Edit';
 
 interface PluginsCardsProps {
   allEnabledPlugins: string[] | null | [],
@@ -17,15 +20,43 @@ interface PluginsCardsProps {
   filterByAssociated?: boolean
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles( theme => ({
   content:{
     minHeight: '60vh'
+   },
+   card: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: theme.spacing(4),
+    borderRadius: '8px',
+    border: `1px solid ${theme.palette.action.focus}`,
+   },
+   cardTitle:{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: theme.palette.primary.main
+   },
+   cardEdit:{
+    marginLeft: theme.spacing(3)
+   },
+   cardIcon:{
+    width: '70px',
+    height: '70px',
+    objectFit: 'cover',
+    borderRadius: '5px'
+   },
+   button:{
+    border: `1px solid ${theme.palette.primary.main}`,
+    width: '380px',
+    padding: theme.spacing(1)
    }
-});
+}));
 
 export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAssociated}:PluginsCardsProps) => {
 
-  const { content } = useStyles();
+  const { content, card, cardTitle, cardEdit, cardIcon, button } = useStyles();
   const [ associatedPluginsName, setAssociatedPluginsName] = useState<string[]|[]>([]);
   const getAssociatedPuginsName = ( pluginsParams : AssociatedPluginsResponse[] ) => {
       const newData : string[] = []
@@ -43,35 +74,61 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
     <Content className={content}>
       <ItemCardGrid>
         <>
-          {!filterByAssociated ? (
-            allEnabledPlugins?.map(t => (
-              <Card key={t}>
-                <CardMedia>
-                  <ItemCardHeader title={t} subtitle="" />
-                </CardMedia>
-                <CardContent>{t}</CardContent>
-                <CardActions>
-                  <LinkButton color="primary" to="/catalog">
-                    Go There!
-                  </LinkButton>
-                </CardActions>
-              </Card>
-            ))
-          ) : (
-            associatedPluginsName?.map(t => (
-              <Card key={t}>
-                <CardMedia>
-                  <ItemCardHeader title={t} subtitle="" />
-                </CardMedia>
-                <CardContent>{t}</CardContent>
-                <CardActions>
-                  <LinkButton color="primary" to="/catalog">
-                    Go There!
-                  </LinkButton>
-                </CardActions>
-              </Card>
-            ))
-          )}
+          {!filterByAssociated
+            ? allEnabledPlugins?.map(t => (
+                <Card key={t} className={card}>
+                  <CardHeader
+                    action={
+                      filterByAssociated ? (
+                        <IconButton aria-label="settings">
+                          {' '}
+                          <Edit />{' '}
+                        </IconButton>
+                      ) : (
+                        <></>
+                      )
+                    }
+                    title={t}
+                    className={cardTitle}
+                  />
+                  <CardMedia>
+                    <img src={ImageDefault} alt="" className={cardIcon} />
+                  </CardMedia>
+                  <CardContent>{t}</CardContent>
+                  <CardActions>
+                    <Button color="primary" className={button}>
+                      Enable
+                    </Button>
+                  </CardActions>
+                </Card>
+              ))
+            : associatedPluginsName?.map(t => (
+                <Card key={t} className={card}>
+                  <CardHeader
+                    action={
+                      filterByAssociated ? (
+                        <IconButton aria-label="settings" className={cardEdit}>
+                          {' '}
+                          <Edit />{' '}
+                        </IconButton>
+                      ) : (
+                        <></>
+                      )
+                    }
+                    title={t}
+                    className={cardTitle}
+                  />
+                  <CardMedia>
+                    <img src={ImageDefault} alt="" className={cardIcon} />
+                  </CardMedia>
+                  <CardContent>{t}</CardContent>
+                  <CardActions>
+                    <Button color="primary" className={button}>
+                      Enable
+                    </Button>
+                  </CardActions>
+                </Card>
+              ))}
         </>
       </ItemCardGrid>
     </Content>
