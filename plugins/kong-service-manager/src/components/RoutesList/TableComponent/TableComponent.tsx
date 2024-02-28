@@ -136,7 +136,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
 
   return (
       <Table
-        options={{ paging: true, padding: 'dense' }}
+        options={{ paging: true, padding: 'dense',minBodyHeight:'55vh',paginationType:'stepped', paginationPosition:'bottom' }}
         data={generateData(dataProps)}
         columns={columns}
         title=""
