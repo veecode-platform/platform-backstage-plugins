@@ -43,9 +43,11 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
   const { content } = useStyles();
   const [ associatedPluginsName, setAssociatedPluginsName] = useState<string[]|[]>([]);
   const getAssociatedPuginsName = ( pluginsParams : AssociatedPluginsResponse[] ) => {
+      const newData : string[] = []
       pluginsParams.map(p => {
-        setAssociatedPluginsName([...associatedPluginsName, p.name as string])
+        newData.push(p.name)
       })
+      setAssociatedPluginsName(newData)
   };
 
   useEffect(()=>{
