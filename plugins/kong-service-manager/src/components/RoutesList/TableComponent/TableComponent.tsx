@@ -45,7 +45,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
       highlight: true,
       type: 'string',
       align: 'center',
-      width: '300px'
+      width: '1fr'
     },
     {
       title: 'Protocols',
@@ -62,7 +62,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
         </>
       ),
       align: 'center',
-      width: 'auto'
+      width: '1fr'
     },
     {
       title: 'Methods',
@@ -79,7 +79,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
         </>
       ),
       align: 'center',
-      width: 'auto'
+      width: '1fr'
     },
     {
       title: 'Hosts',
@@ -96,7 +96,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
         </>
       ),
       align: 'center',
-      width: 'auto'
+      width: '1fr'
     },
     {
       title: 'Paths',
@@ -113,7 +113,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
         </>
       ),
       align: 'center',
-      width: 'auto'
+      width: '1fr'
     },
     {
       title: 'Tags',
@@ -130,7 +130,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
         </>
       ),
       align: 'center',
-      width: 'auto'
+      width: '1fr'
     },
   ];
 
