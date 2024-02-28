@@ -13,11 +13,21 @@ import { AssociatedPluginsResponse } from '../../../utils/types';
 import { Button, CardHeader, IconButton } from '@material-ui/core';
 import ImageDefault  from '../../../assets/default.png'
 import Edit from '@material-ui/icons/Edit';
+import PluginsInfoData from '../../../data/plugins.json';
 
 interface PluginsCardsProps {
   allEnabledPlugins: string[] | null | [],
   allAssociatedPlugins: AssociatedPluginsResponse[] | null | [],
   filterByAssociated?: boolean
+}
+
+interface PluginCard {
+  name: string,
+  associated?: boolean,
+  image: string,
+  tags: string[],
+  description: string,
+  category: string
 }
 
 const useStyles = makeStyles( theme => ({
@@ -58,6 +68,8 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
 
   const { content, card, cardTitle, cardEdit, cardIcon, button } = useStyles();
   const [ associatedPluginsName, setAssociatedPluginsName] = useState<string[]|[]>([]);
+  const [cards, setCards] = useState<PluginCard[]|[]> ([]);
+
   const getAssociatedPuginsName = ( pluginsParams : AssociatedPluginsResponse[] ) => {
       const newData : string[] = []
       pluginsParams.map(p => {
@@ -70,13 +82,37 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
     if(allAssociatedPlugins) getAssociatedPuginsName(allAssociatedPlugins)
   },[allAssociatedPlugins])
 
+  useEffect(()=>{
+    if(allEnabledPlugins && allEnabledPlugins.length >= 1){
+      const newCards : PluginCard[] = [];
+      allEnabledPlugins.map(pluginName => {
+        const plugin = pluginName;
+        PluginsInfoData.filter(i =>{
+          if(i.name === plugin){
+            newCards.push({
+              name: i.name,
+              associated: false,
+              image: i.image,
+              tags: i.tags,
+              description: i.description,
+              category: i.category
+            })
+          }
+        })
+      })
+      // eslint-disable-next-line no-console
+      console.log(newCards)
+      setCards(newCards)
+    }
+  },[allEnabledPlugins])
+
   return (
     <Content className={content}>
       <ItemCardGrid>
         <>
           {!filterByAssociated
-            ? allEnabledPlugins?.map(t => (
-                <Card key={t} className={card}>
+            ? cards?.map(c => (
+                <Card key={c.name} className={card}>
                   <CardHeader
                     action={
                       filterByAssociated ? (
@@ -88,13 +124,13 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
                         <></>
                       )
                     }
-                    title={t}
+                    title={c.name}
                     className={cardTitle}
                   />
                   <CardMedia>
-                    <img src={ImageDefault} alt="" className={cardIcon} />
+                    <img src={c.image ?? ImageDefault} alt="" className={cardIcon} />
                   </CardMedia>
-                  <CardContent>{t}</CardContent>
+                  <CardContent>{c.description}</CardContent>
                   <CardActions>
                     <Button color="primary" className={button}>
                       Enable
