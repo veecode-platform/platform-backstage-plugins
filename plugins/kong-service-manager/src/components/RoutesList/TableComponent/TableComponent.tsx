@@ -66,7 +66,7 @@ export const TableComponent = ({data}:{data: RoutesResponse[] | null}) => {
               ))
             }
           </>
-          ) : (<TableRow><TableCell colSpan={5}> No data to display...</TableCell></TableRow>)}
+          ) : (<TableRow><TableCell colSpan={6}> No data to display...</TableCell></TableRow>)}
 
         </TableBody>
       </Table>
