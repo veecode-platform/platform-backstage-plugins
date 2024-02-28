@@ -22,6 +22,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         const plugins = await api.getEnabledPlugins(proxyPath);
         if (plugins !== null && plugins !== undefined){
             setAllPluginsEnabled(plugins);
+            // eslint-disable-next-line no-console
+            console.log(plugins)
             return plugins;
         }
         return []
