@@ -153,6 +153,220 @@
                     "image": "assets/auth/okta_okta.png"
                 }
             ]
+        },
+        {
+            "category": "Security",
+            "plugins": [
+                {
+                    "name": "ACME",
+                    "description": "Let's Encrypt and ACMEv2 integration with Kong Gateway",
+                    "tags": ["OSS"],
+                    "image": "assets/security/kong-inc_acme.png"
+                },
+                {
+                    "name": "Bot Detection",
+                    "description": "Detect and block bots or custom clients",
+                    "tags": ["OSS"],
+                    "image": "assets/security/kong-inc_bot-detection.png"
+                },
+                {
+                    "name": "CORS",
+                    "description": "Allow developers to make requests from the browser",
+                    "tags": ["OSS"],
+                    "image": "assets/security/kong-inc_cors.png"
+                },
+                {
+                    "name": "IP Restriction",
+                    "description": "Allow or deny IPs that can make requests to your services",
+                    "tags": ["OSS"],
+                    "image": "assets/security/kong-inc_ip-restriction.png"
+                },
+                {
+                    "name": "OPA",
+                    "description": "Authorize requests against Open Policy Agent",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/security/kong-inc_opa.png"
+                },
+                {
+                    "name": "TLS Handshake Modifier",
+                    "description": "Requests a client to present its client certificate",
+                    "tags": ["ENTERPRISE"],
+                    "image": "assets/security/kong-inc_tls-handshake-modifier.png"
+                },
+                {
+                    "name": "TLS Metadata Headers",
+                    "description": "Proxies TLS client certificate metadata to upstream services via HTTP headers",
+                    "tags": ["ENTERPRISE"],
+                    "image": "assets/security/kong-inc_tls-metadata-headers.png"
+                },
+                {
+                    "name": "Imperva API Security",
+                    "description": "Integrate Kong Gateway with Imperva API Security to discover, monitor, and protect APIs",
+                    "tags": ["ENTERPRISE", "TECH PARTNER"],
+                    "image": "assets/security/imperva_imp-appsec-connector.png"
+                }
+            ]
+        },
+        {
+            "category": "TRAFFIC CONTROL",
+            "plugins": [
+                {
+                    "name": "ACL",
+                    "description": "Control which consumers can access services",
+                    "tags": ["OSS"],
+                    "image": "assets/traffic-control/kong-inc_acl.png"
+                },
+                {
+                    "name": "Canary Release",
+                    "description": "Slowly roll out software changes to a subset of users",
+                    "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_canary.png"
+                },
+                {
+                    "name": "Forward Proxy Advanced",
+                    "description": "Allows Kong to connect to intermediary transparent HTTP proxies",
+                    "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_forward-proxy.png"
+                },
+                {
+                    "name": "GraphQL Proxy Caching Advanced",
+                    "description": "Cache and serve commonly requested responses in Kong",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_graphql-proxy-cache.png"
+                },
+                {
+                    "name": "GraphQL Rate Limiting Advanced",
+                    "description": "Provide rate limiting for GraphQL queries",
+                    "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_graphql_rate-limiting-advanced.png"
+                },
+                {
+                    "name": "Mocking",
+                    "description": "Provide mock endpoints to test your APIs against your services",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_mocking.png"
+                },
+                {
+                    "name": "OAS Validation",
+                    "description": "Validate HTTP requests and responses based on an OpenAPI 3.0 or Swagger API Specification",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_oas-validation.png"
+                },
+                {
+                    "name": "Proxy Cache",
+                    "description": "Cache and serve commonly requested responses in Kong",
+                    "tags": ["OSS"],
+                    "image": "assets/traffic-control/kong-inc_proxy-cache.png"
+                },
+                {
+                    "name": "Proxy Caching Advanced",
+                    "description": "Cache and serve commonly requested responses in Kong",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_proxy-cache-advanced.png"
+                },
+                {
+                    "name": "Rate Limiting",
+                    "description": "Rate limit how many HTTP requests can be made in a period of time",
+                    "tags": ["OSS"],
+                    "image": "assets/traffic-control/kong-inc_rate-limiting.png"
+                },
+                {
+                    "name": "Rate Limiting Advanced",
+                    "description": "Upgrades Kong Rate Limiting with more flexibility and higher performance",
+                    "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_rate-limiting-advanced.png"
+                },
+                {
+                    "name": "Request Size Limiting",
+                    "description": "Block requests with bodies greater than a specified size",
+                    "tags": ["OSS"],
+                    "image": "assets/traffic-control/kong-inc_request-size-limiting.png"
+                },
+                {
+                    "name": "Request Termination",
+                    "description": "Terminates all requests with a specific response",
+                    "tags": ["OSS"],
+                    "image": "assets/traffic-control/kong-inc_request-termination.png"
+                },
+                {
+                    "name": "Request Validator",
+                    "description": "Validates requests before they reach the upstream service",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_request-validator.png"
+                },
+                {
+                    "name": "Response Rate Limiting",
+                    "description": "Rate limit based on a custom response header value",
+                    "tags": ["OSS"],
+                    "image": "assets/traffic-control/kong-inc_response-ratelimiting.png"
+                },
+                {
+                    "name": "Route By Header",
+                    "description": "Route request based on request headers",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_route-by-header.png"
+                },
+                {
+                    "name": "Upstream Timeout",
+                    "description": "Set timeouts on routes and override service-level timeouts",
+                    "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_upstream-timeout.png"
+                },
+                {
+                    "name": "WebSocket Size Limit",
+                    "description": "Block incoming WebSocket messages greater than a specified size",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_websocket-size-limit.png"
+                },
+                {
+                    "name": "WebSocket Validator",
+                    "description": "Validate WebSocket messages before they are proxied",
+                    "tags": ["KONNECT PAID", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_websocket-validator.png"
+                },
+                {
+                    "name": "XML Threat Protection",
+                    "description": "Apply structural and size checks on XML payloads",
+                    "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
+                    "image": "assets/traffic-control/kong-inc_xml-threat-protection.png"
+                }
+            ]
+        },
+        {
+            "category": "Serverless",
+            "plugins": [
+                {
+                    "name": "AWS Lambda",
+                    "description": "Invoke and manage AWS Lambda functions from Kong",
+                    "tags": ["OSS"],
+                    "image": "assets/serverless/kong-inc_aws-lambda.png"
+                },
+                {
+                    "name": "Apache OpenWhisk",
+                    "description": "Invoke and manage OpenWhisk actions from Kong",
+                    "tags": ["OSS"],
+                    "image": "assets/serverless/kong-inc_openwhisk.png"
+                },  
+                {
+                    "name": "Azure Functions",
+                    "description": "Invoke and manage Azure functions from Kong",
+                    "tags": ["OSS"],
+                    "image": "assets/serverless/kong-inc_azure-functions.png"
+                },  
+                {
+                    "name": "Kong Functions (Post-Plugin)",
+                    "description": "Add and manage custom Lua functions to run after other plugins",
+                    "tags": ["OSS"],
+                    "image": "assets/serverless/kong-inc_post-function.png"
+                },  
+                {
+                    "name": "Kong Functions (Pre-Plugins)",
+                    "description": "Add and manage custom Lua functions to run before other plugins",
+                    "tags": ["OSS"],
+                    "image": "assets/serverless/kong-inc_pre-function.png"
+                } 
+            ]
+
         }
     ]
 }
