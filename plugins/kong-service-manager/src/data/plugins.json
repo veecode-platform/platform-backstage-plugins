@@ -292,7 +292,7 @@
     "slug": "graphql-rate-limiting-advanced",
     "description": "Provide rate limiting for GraphQL queries",
     "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
-    "image": "https://raw.githubusercontent.com/veecode-platform/platform-backstage-plugins/develop/plugins/kong-service-manager/src/assets/traffic-control/kong-inc_graphql_rate-limiting-advanced.png",
+    "image": "https://raw.githubusercontent.com/veecode-platform/platform-backstage-plugins/develop/plugins/kong-service-manager/src/assets/traffic-control/kong-inc_graphql-rate-limiting-advanced.png",
     "category": "TRAFFIC CONTROL"
   },
   {
