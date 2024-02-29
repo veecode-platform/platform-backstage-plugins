@@ -1,85 +1,72 @@
+/* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @backstage/no-undeclared-imports */
 
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-
 import React, { useEffect, useState } from 'react';
-import { ItemCardGrid, Content } from '@backstage/core-components';
+import { Content } from '@backstage/core-components';
 import { AssociatedPluginsResponse } from '../../../utils/types';
-import { Button, CardHeader, IconButton, Typography } from '@material-ui/core';
-import ImageDefault  from '../../../assets/default.png'
-import Edit from '@material-ui/icons/Edit';
 import PluginsInfoData from '../../../data/plugins.json';
+import { KongPluginsCategoriesEnum } from '../../../utils/enums/KongPluginCategories';
+import { AllPlugins } from './AllPlugins';
+import { useStyles } from './styles';
+import { AssociatedPlugins } from './AssociatedPlugins';
 
-interface PluginsCardsProps {
+export interface PluginsCardsProps {
   allEnabledPlugins: string[] | null | [],
   allAssociatedPlugins: AssociatedPluginsResponse[] | null | [],
   filterByAssociated?: boolean
 }
 
-interface PluginCard {
+export interface PluginCard {
   name: string,
   slug: string,
   associated?: boolean,
   image: string,
   tags: string[],
   description: string,
-  category: string
 }
 
-const useStyles = makeStyles( theme => ({
-  content:{
-    minHeight: '60vh'
-   },
-   card: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: theme.spacing(4),
-    borderRadius: '8px',
-    border: `1px solid ${theme.palette.action.focus}`,
-   },
-   cardHeader:{
-    width:'100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: theme.palette.primary.main,
-   },
-   cardTitle:{
-    color: theme.palette.primary.main,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-   },
-   description:{
-    textAlign: 'center', 
-   },
-   cardEdit:{
-    
-   },
-   cardIcon:{
-    width: '60px',
-    height: '60px',
-    objectFit: 'cover',
-    borderRadius: '5px'
-   },
-   button:{
-    border: `1px solid ${theme.palette.primary.main}`,
-    width: '380px',
-    padding: theme.spacing(1)
-   }
-}));
+export interface PluginsPerCategoryType  {
+  ai: { 
+    plugins: PluginCard[] | [] 
+  };
+  auth: { 
+    plugins: PluginCard[] | [] 
+  };
+  security: { 
+    plugins: PluginCard[] | [] 
+  };
+  trafficControl: { 
+    plugins: PluginCard[] | [] 
+  };
+  serverless: { 
+    plugins: PluginCard[] | [] 
+  };
+  analitics: {
+    plugins: PluginCard[] | [];
+  };
+  transformations: {
+    plugins: PluginCard[] | [];
+  };
+  logging: {
+    plugins: PluginCard[] | [];
+  };
+};
 
 export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAssociated}:PluginsCardsProps) => {
 
-  const { content, card, cardHeader, cardTitle, description, cardEdit, cardIcon, button } = useStyles();
+  const { content } = useStyles();
   const [ associatedPluginsName, setAssociatedPluginsName] = useState<string[]|[]>([]);
-  const [cards, setCards] = useState<PluginCard[]|[]> ([]);
+  const [pluginsPerCategory, setPluginsPerCategory] = useState<PluginsPerCategoryType>({
+    ai: { plugins: [] },
+    auth: { plugins: [] },
+    security: { plugins: [] },
+    trafficControl: { plugins: [] },
+    serverless: { plugins: [] },
+    analitics: { plugins: [] },
+    transformations: { plugins: [] },
+    logging: { plugins: [] },
+  });  
 
   const getAssociatedPuginsName = ( pluginsParams : AssociatedPluginsResponse[] ) => {
       const newData : string[] = []
@@ -89,102 +76,89 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
       setAssociatedPluginsName(newData)
   };
 
-  useEffect(()=>{
-    if(allAssociatedPlugins) getAssociatedPuginsName(allAssociatedPlugins)
-  },[allAssociatedPlugins])
+  const updatePluginsState = (pluginsData: string[]) => {
+    const updatePlugins: PluginsPerCategoryType = { 
+      ai: { plugins: [] },
+      auth: { plugins: [] },
+      security: { plugins: [] },
+      trafficControl: { plugins: [] },
+      serverless: { plugins: [] },
+      analitics: { plugins: [] },
+      transformations: { plugins: [] },
+      logging: { plugins: [] },
+    };
+
+    pluginsData.forEach(pluginName => {
+      PluginsInfoData.categories.forEach(c => {
+        const foundPlugin = c.plugins.find(i => i.slug === pluginName);
+        const isAssociated = (associatedPluginsName && associatedPluginsName.length >= 1) && associatedPluginsName.find( i => i === pluginName);
+
+        if (foundPlugin) {
+          const newPlugin = {
+            name: foundPlugin.name,
+            slug: foundPlugin.slug,
+            associated: isAssociated ? true : false,
+            image: foundPlugin.image,
+            tags: foundPlugin.tags,
+            description: foundPlugin.description,
+          };
+
+          switch (c.category) {
+            case KongPluginsCategoriesEnum.ai:
+              (updatePlugins.ai.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.analitics:
+              (updatePlugins.analitics.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.auth:
+              (updatePlugins.auth.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.logging:
+              (updatePlugins.logging.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.security:
+              (updatePlugins.security.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.serverless:
+              (updatePlugins.serverless.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.trafficControl:
+              (updatePlugins.trafficControl.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.transformations:
+              (updatePlugins.transformations.plugins as PluginCard[]).push(newPlugin);
+              return;
+            default:
+              return;
+          }
+        }
+      });
+    });
+  
+    setPluginsPerCategory(prev => ({ ...prev, ...updatePlugins }));
+  };
+  
 
   useEffect(()=>{
-    if(allEnabledPlugins && allEnabledPlugins.length >= 1){
-      const newCards : PluginCard[] = [];
-      allEnabledPlugins.forEach(pluginName => {
-        const plugin = pluginName;
-        PluginsInfoData.filter(i =>{
-          if(i.slug === plugin){
-            newCards.push({
-              name: i.name,
-              slug: i.slug,
-              associated: false,
-              image: i.image,
-              tags: i.tags,
-              description: i.description,
-              category: i.category
-            })
-          }
-        })
-      })
-      setCards(newCards)
+    if(allAssociatedPlugins){
+      getAssociatedPuginsName(allAssociatedPlugins);
     }
-  },[allEnabledPlugins])
+  },[allAssociatedPlugins]);
+
+  useEffect(() => {
+    if (allEnabledPlugins && allEnabledPlugins.length >= 1) {
+      updatePluginsState(allEnabledPlugins)
+    }
+  }, [allEnabledPlugins]);
 
   return (
     <Content className={content}>
-      <ItemCardGrid>
         <>
           {!filterByAssociated
-            ? cards?.map(c => (
-                <Card key={c.name} className={card}>
-                  <CardHeader
-                   className={cardHeader}
-                    action={
-                      filterByAssociated ? (
-                        <IconButton aria-label="settings">
-                          {' '}
-                          <Edit />{' '}
-                        </IconButton>
-                      ) : (
-                        <></>
-                      )
-                    }
-                    title={
-                    <Typography variant="h6" className={cardTitle}>
-                      {c.name}
-                    </Typography>
-                    }
-                  />
-                  <CardMedia>
-                    <img src={`${c.image}`} alt="" className={cardIcon} />
-                  </CardMedia>
-                  <CardContent className={description}>{c.description}</CardContent>
-                  <CardActions>
-                    <Button color="primary" className={button}>
-                      Enable
-                    </Button>
-                  </CardActions>
-                </Card>
-              ))
-            : associatedPluginsName?.map(t => (
-                <Card key={t} className={card}>
-                  <CardHeader
-                   className={cardHeader}
-                    action={
-                      filterByAssociated ? (
-                        <IconButton aria-label="settings" className={cardEdit}>
-                          {' '}
-                          <Edit />{' '}
-                        </IconButton>
-                      ) : (
-                        <></>
-                      )
-                    }
-                    title={
-                      <Typography variant="h6" className={cardTitle}>
-                        {t}
-                      </Typography>
-                    }
-                  />
-                  <CardMedia>
-                    <img src={ImageDefault} alt="" className={cardIcon} />
-                  </CardMedia>
-                  <CardContent>{t}</CardContent>
-                  <CardActions>
-                    <Button color="primary" className={button}>
-                      Enable
-                    </Button>
-                  </CardActions>
-                </Card>
-              ))}
+            ? <AllPlugins plugins={pluginsPerCategory}/>
+            : <AssociatedPlugins plugins={pluginsPerCategory}/>
+          }
         </>
-      </ItemCardGrid>
     </Content>
   );
 };
