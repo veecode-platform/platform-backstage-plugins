@@ -63,8 +63,8 @@ const useStyles = makeStyles( theme => ({
     
    },
    cardIcon:{
-    width: '70px',
-    height: '70px',
+    width: '60px',
+    height: '60px',
     objectFit: 'cover',
     borderRadius: '5px'
    },

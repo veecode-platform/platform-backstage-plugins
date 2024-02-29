@@ -572,7 +572,7 @@
     "slug": "response-transformer-advanced",
     "description": "Modify the upstream response before returning it to the client, with greater customization capabilities",
     "tags": ["KONNECT PREMIUM", "ENTERPRISE"],
-    "image": "https://raw.githubusercontent.com/veecode-platform/platform-backstage-plugins/develop/plugins/kong-service-manager/src/assets/transformations/kong-inc_response-tranformer-advanced.png",
+    "image": "https://raw.githubusercontent.com/veecode-platform/platform-backstage-plugins/develop/plugins/kong-service-manager/src/assets/transformations/kong-inc_response-transformer-advanced.png",
     "category": "Transformations"
   },
   {
