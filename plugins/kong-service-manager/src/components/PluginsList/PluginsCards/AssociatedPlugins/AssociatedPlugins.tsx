@@ -1,5 +1,5 @@
 import React from 'react';
-import { PluginsPerCategoryType } from '../PluginsCards';
+import { PluginCard, PluginsPerCategoryType } from '../PluginsCards';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from '@material-ui/core';
 import { ItemCardGrid } from '@backstage/core-components';
 import { useStyles } from '../styles';
@@ -10,17 +10,37 @@ interface associatedPluginsProps {
   plugins: PluginsPerCategoryType;
 }
 
+const getPlugins = (data:PluginCard[]|[]) => {
+  if(data.length >=1){
+    const pluginsAvaliable : PluginCard[] = [];
+    data.forEach(i => {
+      if(i.associated) pluginsAvaliable.push(i)
+    });
+  return pluginsAvaliable;
+  }
+  return []
+}
+
 export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => { 
 
   const { card, cardHeader, cardTitle, description, cardIcon, button } = useStyles();
 
+  const aiPlugins = getPlugins(plugins.ai.plugins);
+  const analiticsPlugins = getPlugins(plugins.analitics.plugins);
+  const authPlugins = getPlugins(plugins.auth.plugins);
+  const loggingPlugins = getPlugins(plugins.logging.plugins);
+  const securityPlugins = getPlugins(plugins.security.plugins);
+  const serverlessPlugins = getPlugins(plugins.serverless.plugins);
+  const trafficControlPlugins = getPlugins(plugins.trafficControl.plugins);
+  const transformationsPlugins = (plugins.transformations.plugins);
+
   return (
     <>
-      {plugins.ai.plugins.length >= 1 && (
+      {(aiPlugins.some(c => c.associated) && aiPlugins.length >= 1) && (
         <Box>
           <Typography variant="h6">AI</Typography>
           <ItemCardGrid>
-            {plugins.ai.plugins.map(c => (
+            {aiPlugins.map(c => (
               <Card key={c.name} className={card}>
                 <CardHeader
                   className={cardHeader}
@@ -52,11 +72,11 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           </ItemCardGrid>
         </Box>
       )}
-      {plugins.analitics.plugins.length >= 1 && (
+      {(analiticsPlugins.some(c => c.associated) && analiticsPlugins.length >= 1) && (
         <Box>
           <Typography variant="h6">Analitics</Typography>
           <ItemCardGrid>
-            {plugins.analitics.plugins.map(c => (
+            {analiticsPlugins.map(c => (
               <Card key={c.name} className={card}>
                 <CardHeader
                   className={cardHeader}
@@ -88,11 +108,11 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           </ItemCardGrid>
         </Box>
       )}
-      {plugins.auth.plugins.length >= 1 && (
+      {(authPlugins.some(c => c.associated) && authPlugins.length >= 1) && (
         <Box>
           <Typography variant="h6">Authentication</Typography>
           <ItemCardGrid>
-            {plugins.auth.plugins.map(c => (
+            {authPlugins.map(c => (
               <Card key={c.name} className={card}>
                 <CardHeader
                   className={cardHeader}
@@ -124,11 +144,11 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           </ItemCardGrid>
         </Box>
       )}
-      {plugins.logging.plugins.length >= 1 && (
+      {(loggingPlugins.some(c => c.associated) && loggingPlugins.length >= 1) && (
         <Box>
           <Typography variant="h6">Logging</Typography>
           <ItemCardGrid>
-            {plugins.logging.plugins.map(c => (
+            {loggingPlugins.map(c => (
               <Card key={c.name} className={card}>
                 <CardHeader
                   className={cardHeader}
@@ -160,11 +180,11 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           </ItemCardGrid>
         </Box>
       )}
-      {plugins.security.plugins.length >= 1 && (
+      {(securityPlugins.some(c => c.associated) && securityPlugins.length >= 1) && (
         <Box>
           <Typography variant="h6">Security</Typography>
           <ItemCardGrid>
-            {plugins.security.plugins.map(c => (
+            {securityPlugins.map(c => (
               <Card key={c.name} className={card}>
                 <CardHeader
                   className={cardHeader}
@@ -196,11 +216,11 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           </ItemCardGrid>
         </Box>
       )}
-      {plugins.serverless.plugins.length >= 1 && (
+      {(serverlessPlugins.some(c => c.associated) && serverlessPlugins.length >= 1) && (
         <Box>
           <Typography variant="h6">Serverless</Typography>
           <ItemCardGrid>
-            {plugins.serverless.plugins.map(c => (
+            {serverlessPlugins.map(c => (
               <Card key={c.name} className={card}>
                 <CardHeader
                   className={cardHeader}
@@ -232,11 +252,11 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           </ItemCardGrid>
         </Box>
       )}
-      {plugins.trafficControl.plugins.length >= 1 && (
+      {(trafficControlPlugins.some(c => c.associated) && trafficControlPlugins.length >= 1) && (
         <Box>
           <Typography variant="h6">Traffic Control</Typography>
           <ItemCardGrid>
-            {plugins.trafficControl.plugins.map(c => (
+            {trafficControlPlugins.map(c => (
               <Card key={c.name} className={card}>
                 <CardHeader
                   className={cardHeader}
@@ -268,11 +288,11 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           </ItemCardGrid>
         </Box>
       )}
-      {plugins.transformations.plugins.length >= 1 && (
+      { (transformationsPlugins.some(c => c.associated)  && transformationsPlugins.length >= 1 )&& (
         <Box>
           <Typography variant="h6">Transformations</Typography>
           <ItemCardGrid>
-            {plugins.transformations.plugins.map(c => (
+            {transformationsPlugins.map(c => (
               <Card key={c.name} className={card}>
                 <CardHeader
                   className={cardHeader}
