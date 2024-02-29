@@ -23,6 +23,7 @@ interface PluginsCardsProps {
 
 interface PluginCard {
   name: string,
+  slug: string,
   associated?: boolean,
   image: string,
   tags: string[],
@@ -43,10 +44,14 @@ const useStyles = makeStyles( theme => ({
     border: `1px solid ${theme.palette.action.focus}`,
    },
    cardTitle:{
+    textAlign: 'center', 
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     color: theme.palette.primary.main
+   },
+   description:{
+    textAlign: 'center', 
    },
    cardEdit:{
     marginLeft: theme.spacing(3)
@@ -66,7 +71,7 @@ const useStyles = makeStyles( theme => ({
 
 export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAssociated}:PluginsCardsProps) => {
 
-  const { content, card, cardTitle, cardEdit, cardIcon, button } = useStyles();
+  const { content, card, cardTitle, description, cardEdit, cardIcon, button } = useStyles();
   const [ associatedPluginsName, setAssociatedPluginsName] = useState<string[]|[]>([]);
   const [cards, setCards] = useState<PluginCard[]|[]> ([]);
 
@@ -85,12 +90,13 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
   useEffect(()=>{
     if(allEnabledPlugins && allEnabledPlugins.length >= 1){
       const newCards : PluginCard[] = [];
-      allEnabledPlugins.map(pluginName => {
+      allEnabledPlugins.forEach(pluginName => {
         const plugin = pluginName;
         PluginsInfoData.filter(i =>{
-          if(i.name === plugin){
+          if(i.slug === plugin){
             newCards.push({
               name: i.name,
+              slug: i.slug,
               associated: false,
               image: i.image,
               tags: i.tags,
@@ -100,8 +106,6 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
           }
         })
       })
-      // eslint-disable-next-line no-console
-      console.log(newCards)
       setCards(newCards)
     }
   },[allEnabledPlugins])
@@ -128,9 +132,9 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
                     className={cardTitle}
                   />
                   <CardMedia>
-                    <img src={c.image ?? ImageDefault} alt="" className={cardIcon} />
+                    <img src={`${c.image}`} alt="" className={cardIcon} />
                   </CardMedia>
-                  <CardContent>{c.description}</CardContent>
+                  <CardContent className={description}>{c.description}</CardContent>
                   <CardActions>
                     <Button color="primary" className={button}>
                       Enable
