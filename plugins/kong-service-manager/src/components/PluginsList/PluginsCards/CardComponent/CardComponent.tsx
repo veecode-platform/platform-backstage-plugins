@@ -39,7 +39,7 @@ export const CardComponent = ({data}:CardComponentProps) => {
       </CardMedia>
       <CardContent className={description}>{data.description}</CardContent>
       <CardActions>
-        <Button color="primary" className={button}>
+        <Button color="primary" variant={data.associated ? 'contained': 'outlined'} className={button}>
           Enable
         </Button>
       </CardActions>
