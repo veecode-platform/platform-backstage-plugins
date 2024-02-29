@@ -1,9 +1,9 @@
 import React from 'react';
 import { PluginCard, PluginsPerCategoryType } from '../PluginsCards';
-import { Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { ItemCardGrid } from '@backstage/core-components';
 import { useStyles } from '../styles';
-import Edit from '@material-ui/icons/Edit';
+import { CardComponent } from '../CardComponent';
 
 
 interface associatedPluginsProps {
@@ -23,7 +23,7 @@ const getPlugins = (data:PluginCard[]|[]) => {
 
 export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => { 
 
-  const { card, cardHeader, cardTitle, description, cardIcon, button } = useStyles();
+  const { } = useStyles();
 
   const aiPlugins = getPlugins(plugins.ai.plugins);
   const analiticsPlugins = getPlugins(plugins.analitics.plugins);
@@ -41,69 +41,17 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           <Typography variant="h6">AI</Typography>
           <ItemCardGrid>
             {aiPlugins.map(c => (
-              <Card key={c.name} className={card}>
-                <CardHeader
-                  className={cardHeader}
-                  action={
-                    <IconButton aria-label="settings">
-                      {' '}
-                      <Edit />{' '}
-                    </IconButton>
-                  }
-                  title={
-                    <Typography variant="h6" className={cardTitle}>
-                      {c.name}
-                    </Typography>
-                  }
-                />
-                <CardMedia>
-                  <img src={`${c.image}`} alt="" className={cardIcon} />
-                </CardMedia>
-                <CardContent className={description}>
-                  {c.description}
-                </CardContent>
-                <CardActions>
-                  <Button color="primary" className={button}>
-                    Enable
-                  </Button>
-                </CardActions>
-              </Card>
+             <CardComponent data={c}/>
             ))}
           </ItemCardGrid>
         </Box>
       )}
       {(analiticsPlugins.some(c => c.associated) && analiticsPlugins.length >= 1) && (
         <Box>
-          <Typography variant="h6">Analitics</Typography>
+          <Typography variant="h6">Analitics & Monitoring</Typography>
           <ItemCardGrid>
             {analiticsPlugins.map(c => (
-              <Card key={c.name} className={card}>
-                <CardHeader
-                  className={cardHeader}
-                  action={
-                    <IconButton aria-label="settings">
-                      {' '}
-                      <Edit />{' '}
-                    </IconButton>
-                  }
-                  title={
-                    <Typography variant="h6" className={cardTitle}>
-                      {c.name}
-                    </Typography>
-                  }
-                />
-                <CardMedia>
-                  <img src={`${c.image}`} alt="" className={cardIcon} />
-                </CardMedia>
-                <CardContent className={description}>
-                  {c.description}
-                </CardContent>
-                <CardActions>
-                  <Button color="primary" className={button}>
-                    Enable
-                  </Button>
-                </CardActions>
-              </Card>
+              <CardComponent data={c}/>
             ))}
           </ItemCardGrid>
         </Box>
@@ -113,33 +61,7 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           <Typography variant="h6">Authentication</Typography>
           <ItemCardGrid>
             {authPlugins.map(c => (
-              <Card key={c.name} className={card}>
-                <CardHeader
-                  className={cardHeader}
-                  action={
-                    <IconButton aria-label="settings">
-                      {' '}
-                      <Edit />{' '}
-                    </IconButton>
-                  }
-                  title={
-                    <Typography variant="h6" className={cardTitle}>
-                      {c.name}
-                    </Typography>
-                  }
-                />
-                <CardMedia>
-                  <img src={`${c.image}`} alt="" className={cardIcon} />
-                </CardMedia>
-                <CardContent className={description}>
-                  {c.description}
-                </CardContent>
-                <CardActions>
-                  <Button color="primary" className={button}>
-                    Enable
-                  </Button>
-                </CardActions>
-              </Card>
+              <CardComponent data={c}/>
             ))}
           </ItemCardGrid>
         </Box>
@@ -149,33 +71,7 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           <Typography variant="h6">Logging</Typography>
           <ItemCardGrid>
             {loggingPlugins.map(c => (
-              <Card key={c.name} className={card}>
-                <CardHeader
-                  className={cardHeader}
-                  action={
-                    <IconButton aria-label="settings">
-                      {' '}
-                      <Edit />{' '}
-                    </IconButton>
-                  }
-                  title={
-                    <Typography variant="h6" className={cardTitle}>
-                      {c.name}
-                    </Typography>
-                  }
-                />
-                <CardMedia>
-                  <img src={`${c.image}`} alt="" className={cardIcon} />
-                </CardMedia>
-                <CardContent className={description}>
-                  {c.description}
-                </CardContent>
-                <CardActions>
-                  <Button color="primary" className={button}>
-                    Enable
-                  </Button>
-                </CardActions>
-              </Card>
+              <CardComponent data={c}/>
             ))}
           </ItemCardGrid>
         </Box>
@@ -185,33 +81,7 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           <Typography variant="h6">Security</Typography>
           <ItemCardGrid>
             {securityPlugins.map(c => (
-              <Card key={c.name} className={card}>
-                <CardHeader
-                  className={cardHeader}
-                  action={
-                    <IconButton aria-label="settings">
-                      {' '}
-                      <Edit />{' '}
-                    </IconButton>
-                  }
-                  title={
-                    <Typography variant="h6" className={cardTitle}>
-                      {c.name}
-                    </Typography>
-                  }
-                />
-                <CardMedia>
-                  <img src={`${c.image}`} alt="" className={cardIcon} />
-                </CardMedia>
-                <CardContent className={description}>
-                  {c.description}
-                </CardContent>
-                <CardActions>
-                  <Button color="primary" className={button}>
-                    Enable
-                  </Button>
-                </CardActions>
-              </Card>
+              <CardComponent data={c}/>
             ))}
           </ItemCardGrid>
         </Box>
@@ -221,33 +91,7 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           <Typography variant="h6">Serverless</Typography>
           <ItemCardGrid>
             {serverlessPlugins.map(c => (
-              <Card key={c.name} className={card}>
-                <CardHeader
-                  className={cardHeader}
-                  action={
-                    <IconButton aria-label="settings">
-                      {' '}
-                      <Edit />{' '}
-                    </IconButton>
-                  }
-                  title={
-                    <Typography variant="h6" className={cardTitle}>
-                      {c.name}
-                    </Typography>
-                  }
-                />
-                <CardMedia>
-                  <img src={`${c.image}`} alt="" className={cardIcon} />
-                </CardMedia>
-                <CardContent className={description}>
-                  {c.description}
-                </CardContent>
-                <CardActions>
-                  <Button color="primary" className={button}>
-                    Enable
-                  </Button>
-                </CardActions>
-              </Card>
+             <CardComponent data={c}/>
             ))}
           </ItemCardGrid>
         </Box>
@@ -257,33 +101,7 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           <Typography variant="h6">Traffic Control</Typography>
           <ItemCardGrid>
             {trafficControlPlugins.map(c => (
-              <Card key={c.name} className={card}>
-                <CardHeader
-                  className={cardHeader}
-                  action={
-                    <IconButton aria-label="settings">
-                      {' '}
-                      <Edit />{' '}
-                    </IconButton>
-                  }
-                  title={
-                    <Typography variant="h6" className={cardTitle}>
-                      {c.name}
-                    </Typography>
-                  }
-                />
-                <CardMedia>
-                  <img src={`${c.image}`} alt="" className={cardIcon} />
-                </CardMedia>
-                <CardContent className={description}>
-                  {c.description}
-                </CardContent>
-                <CardActions>
-                  <Button color="primary" className={button}>
-                    Enable
-                  </Button>
-                </CardActions>
-              </Card>
+             <CardComponent data={c}/>
             ))}
           </ItemCardGrid>
         </Box>
@@ -293,33 +111,7 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
           <Typography variant="h6">Transformations</Typography>
           <ItemCardGrid>
             {transformationsPlugins.map(c => (
-              <Card key={c.name} className={card}>
-                <CardHeader
-                  className={cardHeader}
-                  action={
-                    <IconButton aria-label="settings">
-                      {' '}
-                      <Edit />{' '}
-                    </IconButton>
-                  }
-                  title={
-                    <Typography variant="h6" className={cardTitle}>
-                      {c.name}
-                    </Typography>
-                  }
-                />
-                <CardMedia>
-                  <img src={`${c.image}`} alt="" className={cardIcon} />
-                </CardMedia>
-                <CardContent className={description}>
-                  {c.description}
-                </CardContent>
-                <CardActions>
-                  <Button color="primary" className={button}>
-                    Enable
-                  </Button>
-                </CardActions>
-              </Card>
+              <CardComponent data={c}/>
             ))}
           </ItemCardGrid>
         </Box>
