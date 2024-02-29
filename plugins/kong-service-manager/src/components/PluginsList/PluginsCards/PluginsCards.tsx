@@ -10,7 +10,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import React, { useEffect, useState } from 'react';
 import { ItemCardGrid, Content } from '@backstage/core-components';
 import { AssociatedPluginsResponse } from '../../../utils/types';
-import { Button, CardHeader, IconButton } from '@material-ui/core';
+import { Button, CardHeader, IconButton, Typography } from '@material-ui/core';
 import ImageDefault  from '../../../assets/default.png'
 import Edit from '@material-ui/icons/Edit';
 import PluginsInfoData from '../../../data/plugins.json';
@@ -43,18 +43,24 @@ const useStyles = makeStyles( theme => ({
     borderRadius: '8px',
     border: `1px solid ${theme.palette.action.focus}`,
    },
-   cardTitle:{
-    textAlign: 'center', 
+   cardHeader:{
+    width:'100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
+   },
+   cardTitle:{
+    color: theme.palette.primary.main,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
    },
    description:{
     textAlign: 'center', 
    },
    cardEdit:{
-    marginLeft: theme.spacing(3)
+    
    },
    cardIcon:{
     width: '70px',
@@ -71,7 +77,7 @@ const useStyles = makeStyles( theme => ({
 
 export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAssociated}:PluginsCardsProps) => {
 
-  const { content, card, cardTitle, description, cardEdit, cardIcon, button } = useStyles();
+  const { content, card, cardHeader, cardTitle, description, cardEdit, cardIcon, button } = useStyles();
   const [ associatedPluginsName, setAssociatedPluginsName] = useState<string[]|[]>([]);
   const [cards, setCards] = useState<PluginCard[]|[]> ([]);
 
@@ -118,6 +124,7 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
             ? cards?.map(c => (
                 <Card key={c.name} className={card}>
                   <CardHeader
+                   className={cardHeader}
                     action={
                       filterByAssociated ? (
                         <IconButton aria-label="settings">
@@ -128,8 +135,11 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
                         <></>
                       )
                     }
-                    title={c.name}
-                    className={cardTitle}
+                    title={
+                    <Typography variant="h6" className={cardTitle}>
+                      {c.name}
+                    </Typography>
+                    }
                   />
                   <CardMedia>
                     <img src={`${c.image}`} alt="" className={cardIcon} />
@@ -145,6 +155,7 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
             : associatedPluginsName?.map(t => (
                 <Card key={t} className={card}>
                   <CardHeader
+                   className={cardHeader}
                     action={
                       filterByAssociated ? (
                         <IconButton aria-label="settings" className={cardEdit}>
@@ -155,8 +166,11 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
                         <></>
                       )
                     }
-                    title={t}
-                    className={cardTitle}
+                    title={
+                      <Typography variant="h6" className={cardTitle}>
+                        {t}
+                      </Typography>
+                    }
                   />
                   <CardMedia>
                     <img src={ImageDefault} alt="" className={cardIcon} />
