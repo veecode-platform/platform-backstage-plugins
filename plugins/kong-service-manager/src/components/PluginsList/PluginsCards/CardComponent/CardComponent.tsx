@@ -17,10 +17,16 @@ export const CardComponent = ({data}:CardComponentProps) => {
       <CardHeader
         className={cardHeader}
         action={
-          <IconButton aria-label="settings">
-            {' '}
-            <Edit />{' '}
-          </IconButton>
+          <>
+            {data.associated ? (
+              <IconButton aria-label="settings">
+                {' '}
+                <Edit />{' '}
+              </IconButton>
+            ) : (
+              <></>
+            )}
+          </>
         }
         title={
           <Typography variant="h6" className={cardTitle}>

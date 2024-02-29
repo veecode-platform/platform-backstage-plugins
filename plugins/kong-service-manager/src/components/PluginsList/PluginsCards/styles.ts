@@ -4,6 +4,10 @@ export const useStyles = makeStyles( theme => ({
     content:{
       minHeight: '60vh'
      },
+     categoryLabel:{
+        marginTop: theme.spacing(3),
+        marginBottom: theme.spacing(3),
+     },
      card: {
       display: 'flex',
       justifyContent: 'center',

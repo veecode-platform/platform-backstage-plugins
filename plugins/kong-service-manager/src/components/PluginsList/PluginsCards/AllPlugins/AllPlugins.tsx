@@ -1,9 +1,6 @@
 import React from 'react';
 import { PluginsPerCategoryType } from '../PluginsCards';
-import {Box,Typography,} from '@material-ui/core';
-import { ItemCardGrid } from '@backstage/core-components';
-import { useStyles } from '../styles';
-import { CardComponent } from '../CardComponent';
+import { CategoryComponent } from '../CategoryComponent';
 
 interface AllPluginsProps {
   plugins: PluginsPerCategoryType;
@@ -11,90 +8,16 @@ interface AllPluginsProps {
 
 export const AllPlugins = ({ plugins }: AllPluginsProps) => { 
 
-  const { } = useStyles();
-
   return (
     <>
-      {plugins.ai.plugins.length >= 1 && (
-        <Box>
-          <Typography variant="h6">AI</Typography>
-          <ItemCardGrid>
-            {plugins.ai.plugins.map(c => (
-              <CardComponent data={c}/>
-            ))}
-          </ItemCardGrid>
-        </Box>
-      )}
-      {plugins.analitics.plugins.length >= 1 && (
-        <Box>
-          <Typography variant="h6">Analitics & Monitoring</Typography>
-          <ItemCardGrid>
-            {plugins.analitics.plugins.map(c => (
-              <CardComponent data={c}/>
-            ))}
-          </ItemCardGrid>
-        </Box>
-      )}
-      {plugins.auth.plugins.length >= 1 && (
-        <Box>
-          <Typography variant="h6">Authentication</Typography>
-          <ItemCardGrid>
-            {plugins.auth.plugins.map(c => (
-             <CardComponent data={c}/>
-            ))}
-          </ItemCardGrid>
-        </Box>
-      )}
-      {plugins.logging.plugins.length >= 1 && (
-        <Box>
-          <Typography variant="h6">Logging</Typography>
-          <ItemCardGrid>
-            {plugins.logging.plugins.map(c => (
-              <CardComponent data={c}/>
-            ))}
-          </ItemCardGrid>
-        </Box>
-      )}
-      {plugins.security.plugins.length >= 1 && (
-        <Box>
-          <Typography variant="h6">Security</Typography>
-          <ItemCardGrid>
-            {plugins.security.plugins.map(c => (
-              <CardComponent data={c}/>
-            ))}
-          </ItemCardGrid>
-        </Box>
-      )}
-      {plugins.serverless.plugins.length >= 1 && (
-        <Box>
-          <Typography variant="h6">Serverless</Typography>
-          <ItemCardGrid>
-            {plugins.serverless.plugins.map(c => (
-             <CardComponent data={c}/>
-            ))}
-          </ItemCardGrid>
-        </Box>
-      )}
-      {plugins.trafficControl.plugins.length >= 1 && (
-        <Box>
-          <Typography variant="h6">Traffic Control</Typography>
-          <ItemCardGrid>
-            {plugins.trafficControl.plugins.map(c => (
-             <CardComponent data={c}/>
-            ))}
-          </ItemCardGrid>
-        </Box>
-      )}
-      {plugins.transformations.plugins.length >= 1 && (
-        <Box>
-          <Typography variant="h6">Transformations</Typography>
-          <ItemCardGrid>
-            {plugins.transformations.plugins.map(c => (
-            <CardComponent data={c}/>
-            ))}
-          </ItemCardGrid>
-        </Box>
-      )}
+      {plugins.ai.plugins.length >= 1 && ( <CategoryComponent label="AI" plugins={plugins.ai.plugins}/>)}
+      {plugins.analitics.plugins.length >= 1 && (<CategoryComponent label="Analitics & Monitoring" plugins={plugins.analitics.plugins}/>)}
+      {plugins.auth.plugins.length >= 1 && (<CategoryComponent label="Authentication" plugins={plugins.auth.plugins}/>)}
+      {plugins.logging.plugins.length >= 1 && (<CategoryComponent label="Logging" plugins={plugins.logging.plugins}/>)}
+      {plugins.security.plugins.length >= 1 && (<CategoryComponent label="Security" plugins={plugins.security.plugins}/>)}
+      {plugins.serverless.plugins.length >= 1 && (<CategoryComponent label="Serverless" plugins={plugins.serverless.plugins}/>)}
+      {plugins.trafficControl.plugins.length >= 1 && (<CategoryComponent label="Traffic Control" plugins={plugins.trafficControl.plugins}/>)}
+      {plugins.transformations.plugins.length >= 1 && (<CategoryComponent label="Transformations" plugins={plugins.transformations.plugins}/>)}
     </>
   );
 };
