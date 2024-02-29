@@ -6,7 +6,7 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-// import Typography from '@material-ui/core/Typography';
+
 import React, { useEffect, useState } from 'react';
 import { ItemCardGrid, Content } from '@backstage/core-components';
 import { AssociatedPluginsResponse } from '../../../utils/types';
