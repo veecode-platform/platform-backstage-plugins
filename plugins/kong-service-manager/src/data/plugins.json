@@ -284,7 +284,7 @@
     "slug": "graphql-proxy-cache-advanced",
     "description": "Cache and serve commonly requested responses in Kong",
     "tags": ["KONNECT PAID", "ENTERPRISE"],
-    "image": "https://raw.githubusercontent.com/veecode-platform/platform-backstage-plugins/develop/plugins/kong-service-manager/src/assets/traffic-control/kong-inc_graphql-proxy-cache.png",
+    "image": "https://raw.githubusercontent.com/veecode-platform/platform-backstage-plugins/develop/plugins/kong-service-manager/src/assets/traffic-control/kong-inc_graphql-proxy-cache-advanced.png",
     "category": "TRAFFIC CONTROL"
   },
   {
