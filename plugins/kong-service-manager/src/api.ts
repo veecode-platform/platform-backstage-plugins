@@ -109,7 +109,7 @@ class Client {
         return fieldsMap.get("config")
     }
 
-    async getPluginsFields(pluginName: string, proxyPath?: string):Promise<PluginFieldsResponse[]>{
+    async getPluginFields(pluginName: string, proxyPath?: string):Promise<PluginFieldsResponse[]>{
         const config = await this.getPluginSchema(pluginName, proxyPath)
         if(!config) throw new Error("Impossible to find plugin config")
 
@@ -214,7 +214,7 @@ export class KongServiceManagerApiClient implements KongServiceManagerApi {
     }
 
     async getPluginFields(pluginName: string, proxyPath?: string | undefined): Promise<PluginFieldsResponse[]> {
-        return this.client.getPluginsFields(pluginName, proxyPath)
+        return this.client.getPluginFields(pluginName, proxyPath)
     }
 
     async getServiceAssociatedPlugins(serviceIdOrName: string, proxyPath?: string | undefined): Promise<AssociatedPluginsResponse[]> {
