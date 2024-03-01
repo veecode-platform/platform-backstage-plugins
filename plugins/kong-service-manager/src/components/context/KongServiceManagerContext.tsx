@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, ServiceInfoResponse } from "../../utils/types";
+import { AssociatedPluginsResponse, CreatePlugin, PluginCard, PluginFieldsResponse, RoutesResponse, ServiceInfoResponse } from "../../utils/types";
 
 
 export type KongServiceManagerContextType = {
@@ -14,8 +14,10 @@ export type KongServiceManagerContextType = {
     getPluginFields: (pluginName: string, proxyPath: string) => Promise<PluginFieldsResponse[] | null>;
     enablePlugin: (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => Promise<any>;
     disablePlugin: (serviceIdOrName: string, pluginId: string, proxyPath: string) => Promise<any>;
-    handleToggleModal: () => void;
-    openModal: boolean;
+    handleToggleDrawer: () => void;
+    openDrawer: boolean;
+    setPluginState: (data: PluginCard) => void;
+    selectedPlugin: PluginCard | null;
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!)

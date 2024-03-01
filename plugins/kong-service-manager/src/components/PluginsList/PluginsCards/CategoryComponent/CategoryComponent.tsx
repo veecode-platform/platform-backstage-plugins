@@ -2,19 +2,15 @@ import { ItemCardGrid } from '@backstage/core-components'
 import { Box, Typography } from '@material-ui/core'
 import React from 'react'
 import { useStyles } from '../styles';
-import { PluginCard } from '../PluginsCards';
 import { CardComponent } from '../CardComponent';
-import { CreatePlugin, PluginFieldsResponse } from '../../../../utils/types';
+import { PluginCard } from '../../../../utils/types';
 
 interface CategoryComponentProps {
     label: string,
-    plugins: PluginCard[]|[],
-    pluginFields: (pluginName: string, proxyPath: string) => Promise<PluginFieldsResponse[] | null>,
-    enablePlugin?: (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => Promise<void>,
-    disablePlugin: (serviceIdOrName: string, pluginId: string, proxyPath: string) => Promise<void>
+    plugins: PluginCard[]|[]
 }
 
-export const CategoryComponent = ({label, plugins, pluginFields,enablePlugin,disablePlugin}:CategoryComponentProps) => {
+export const CategoryComponent = ({label, plugins}:CategoryComponentProps) => {
 
   const {categoryLabel} = useStyles();
 
@@ -27,18 +23,9 @@ export const CategoryComponent = ({label, plugins, pluginFields,enablePlugin,dis
         {plugins.map(item => (
           <div key={item.slug}>
             {item.associated ? (
-              <CardComponent
-                data={item}
-                pluginFields={pluginFields}
-                disablePlugin={disablePlugin}
-              />
+              <CardComponent data={item} />
             ) : (
-              <CardComponent
-                data={item}
-                pluginFields={pluginFields}
-                enablePlugin={enablePlugin}
-                disablePlugin={disablePlugin}
-              />
+              <CardComponent data={item} />
             )}
           </div>
         ))}

@@ -3,7 +3,7 @@ import React, { ReactNode } from "react";
 import { useState } from "react";
 import { kongServiceManagerApiRef } from "../../api";
 import { KongServiceManagerContext } from "./KongServiceManagerContext";
-import { AssociatedPluginsResponse, CreatePlugin, RoutesResponse, ServiceInfoResponse } from "../../utils/types";
+import { AssociatedPluginsResponse, CreatePlugin, PluginCard, RoutesResponse, ServiceInfoResponse } from "../../utils/types";
 
 interface KongServiceManagerProviderProps {
     children : ReactNode
@@ -15,14 +15,17 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   const [allAssociatedPlugins, setAllAssociatedPlugins] = useState<AssociatedPluginsResponse[]|null>(null);
   const [allRoutes, setAllRoutes] = useState<RoutesResponse[]|null>(null);
   const [serviceDetails, setServiceDetails] = useState<ServiceInfoResponse|null>(null);
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const [selectedPlugin, setSelectedPlugin] = useState<PluginCard|null>(null);
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
   const alertApi = useApi(alertApiRef);
 
-  const handleToggleModal = () => {
-    setOpenModal(!openModal);
+  const handleToggleDrawer = () => {
+    setOpenDrawer(!openDrawer);
   }
+
+  const setPluginState = (data: PluginCard ) => setSelectedPlugin(data);
 
   const listAllEnabledPlugins = async (proxyPath:string)=>{
     try{
@@ -143,8 +146,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         getPluginFields,
         enablePlugin,
         disablePlugin,
-        handleToggleModal,
-        openModal
+        handleToggleDrawer,
+        openDrawer,
+        setPluginState,
+        selectedPlugin
       }}
     >
       {children}

@@ -1,24 +1,35 @@
+/* eslint-disable @backstage/no-undeclared-imports */
 import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from '@material-ui/core'
 import React, { useContext }  from 'react'
-import { PluginCard } from '../PluginsCards'
 import Edit from '@material-ui/icons/Edit'
 import { useStyles } from '../styles'
-import { CreatePlugin, PluginFieldsResponse } from '../../../../utils/types'
 import { KongServiceManagerContext } from '../../../context'
+import { PluginCard } from '../../../../utils/types'
+import { useEntity } from '@backstage/plugin-catalog-react';
+import { useEntityAnnotation } from '../../../../hooks'
 
 interface CardComponentProps {
-    data: PluginCard,
-    pluginFields: (pluginName: string, proxyPath: string) => Promise<PluginFieldsResponse[] | null>,
-    enablePlugin?: (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => Promise<void>,
-    disablePlugin: (serviceIdOrName: string, pluginId: string, proxyPath: string) => Promise<void>
+    data: PluginCard
 }
 
-export const CardComponent = ({data, pluginFields,enablePlugin,disablePlugin}:CardComponentProps) => {
+export const CardComponent = ({data}:CardComponentProps) => {
 
   const {card, cardHeader, cardTitle, cardIcon,description, button} = useStyles();
-  const { handleToggleModal } = useContext(KongServiceManagerContext);
-  // começar as tratativas para abrir o modal
+  const { entity } = useEntity();
+  const { serviceName, kongInstance } = useEntityAnnotation(entity);
+  const { handleToggleDrawer, setPluginState, disablePlugin } = useContext(KongServiceManagerContext);
 
+  const handleActionClick = async () => {
+    if(data){
+      if(data.associated){
+        await disablePlugin(serviceName as string, data.slug, kongInstance as string);
+        return;
+      } 
+      setPluginState(data);
+      handleToggleDrawer();
+      return;
+    }
+  }
 
   return (
     <Card key={data.name} className={card}>
@@ -52,7 +63,7 @@ export const CardComponent = ({data, pluginFields,enablePlugin,disablePlugin}:Ca
               color="primary"
               variant="contained"
               className={button}
-              onClick={handleToggleModal}
+              onClick={handleActionClick}
             >
               Disable
             </Button>
@@ -61,7 +72,7 @@ export const CardComponent = ({data, pluginFields,enablePlugin,disablePlugin}:Ca
               color="primary"
               variant="outlined"
               className={button}
-              onClick={handleToggleModal}
+              onClick={handleActionClick}
             >
               Enable
             </Button>

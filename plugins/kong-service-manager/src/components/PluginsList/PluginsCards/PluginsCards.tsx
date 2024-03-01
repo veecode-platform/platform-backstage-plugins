@@ -2,29 +2,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @backstage/no-undeclared-imports */
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Content } from '@backstage/core-components';
-import { AssociatedPluginsResponse, CreatePlugin } from '../../../utils/types';
+import { AssociatedPluginsResponse, PluginCard } from '../../../utils/types';
 import PluginsInfoData from '../../../data/plugins.json';
 import { KongPluginsCategoriesEnum } from '../../../utils/enums/KongPluginCategories';
 import { AllPlugins } from './AllPlugins';
 import { useStyles } from './styles';
 import { AssociatedPlugins } from './AssociatedPlugins';
-import { KongServiceManagerContext } from '../../context';
+import { DrawerComponent } from '../DrawerComponent';
 
 export interface PluginsCardsProps {
   allEnabledPlugins: string[] | null | [],
   allAssociatedPlugins: AssociatedPluginsResponse[] | null | [],
   filterByAssociated?: boolean
-}
-
-export interface PluginCard {
-  name: string,
-  slug: string,
-  associated?: boolean,
-  image: string,
-  tags: string[],
-  description: string,
 }
 
 export interface PluginsPerCategoryType  {
@@ -56,7 +47,6 @@ export interface PluginsPerCategoryType  {
 
 export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAssociated}:PluginsCardsProps) => {
 
-  const { enablePlugin, disablePlugin, getPluginFields } = useContext(KongServiceManagerContext);
   const { content } = useStyles();
   const [ associatedPluginsName, setAssociatedPluginsName] = useState<string[]|[]>([]);
   const [pluginsPerCategory, setPluginsPerCategory] = useState<PluginsPerCategoryType>({
@@ -140,20 +130,6 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
     setPluginsPerCategory(prev => ({ ...prev, ...updatePlugins }));
   };
 
-  const handleEnablePlugin = async (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => {
-     await enablePlugin(serviceIdOrName,config,proxyPath);
-  };
-
-  const handleDisablePlugin = async (serviceIdOrName: string,pluginId: string,proxyPath: string) => {
-    await disablePlugin(serviceIdOrName,pluginId,proxyPath);
-  };
-
-  const handlePluginFields = async (pluginName: string, proxyPath: string) => {
-    const fields = await getPluginFields(pluginName,proxyPath);
-    return fields;
-  }
-  
-
   useEffect(()=>{
     if(allAssociatedPlugins){
       getAssociatedPuginsName(allAssociatedPlugins);
@@ -168,18 +144,12 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
 
   return (
     <Content className={content}>
+      <DrawerComponent/>
       <>
         {!filterByAssociated ? (
-          <AllPlugins plugins={pluginsPerCategory} 
-            pluginFields={handlePluginFields}
-            enablePlugin={handleEnablePlugin}
-            disablePlugin={handleDisablePlugin}
-            />
+          <AllPlugins plugins={pluginsPerCategory}/>
         ) : (
-          <AssociatedPlugins plugins={pluginsPerCategory} 
-           pluginFields={handlePluginFields}
-           disablePlugin={handleDisablePlugin}
-           />
+          <AssociatedPlugins plugins={pluginsPerCategory}/>
         )}
       </>
     </Content>
