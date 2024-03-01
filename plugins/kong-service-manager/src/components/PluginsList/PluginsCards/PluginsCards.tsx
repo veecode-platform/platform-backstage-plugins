@@ -91,9 +91,9 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
     pluginsData.forEach(pluginName => {
       PluginsInfoData.categories.forEach(c => {
         const foundPlugin = c.plugins.find(i => i.slug === pluginName);
-        const isAssociated = (associatedPluginsName && associatedPluginsName.length >= 1) && associatedPluginsName.find( i => i === pluginName);
 
         if (foundPlugin) {
+          const isAssociated = (associatedPluginsName && associatedPluginsName.length >= 1) && associatedPluginsName.find( i => i === pluginName);
           const newPlugin = {
             name: foundPlugin.name,
             slug: foundPlugin.slug,
