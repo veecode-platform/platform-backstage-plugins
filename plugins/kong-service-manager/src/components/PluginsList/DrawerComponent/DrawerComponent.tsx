@@ -54,7 +54,8 @@ const useStyles = makeStyles(theme => ({
     },
     checkbox:{
       width: '100%',
-      margin: '.5rem'
+      margin: '.4rem',
+      fontSize: '1rem'
     },
     secondaryAction: {
       marginLeft: theme.spacing(2.5),
@@ -134,7 +135,7 @@ export const DrawerComponent = () => {
                         case 'number':
                             return (<TextField id={field.name} required={field.required} key={field.name} label={field.name} variant="outlined" className={input} defaultValue={field.defaultValue ?? ''}/>)
                         case 'boolean':
-                          return (<FormControlLabel value="end" key={field.name} labelPlacement="end" label={field.name} control={<Checkbox color="primary" required={field.required} />} className={checkbox}/>)
+                          return (<FormControlLabel value="end" key={field.name} labelPlacement="end" label={field.name} control={<Checkbox color="primary" required={field.required} defaultChecked={field.defaultValue}/>} className={checkbox}/>)
                         default:
                           return <></>;
                       }
