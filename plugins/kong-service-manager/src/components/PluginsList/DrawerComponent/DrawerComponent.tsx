@@ -39,12 +39,12 @@ export const DrawerComponent = () => {
   const { serviceName, kongInstance } = useEntityAnnotation(entity);
   const { handleToggleDrawer, openDrawer, enablePlugin, disablePlugin, getPluginFields ,selectedPlugin} = useContext(KongServiceManagerContext);
 
-  const handleEnablePlugin = async ( serviceIdOrName: string, config: CreatePlugin, proxyPath: string ) => {
-    await enablePlugin(serviceIdOrName, config, proxyPath);
+  const handleEnablePlugin = async ( config: CreatePlugin ) => {  // to do
+    await enablePlugin(serviceName as string, config, kongInstance as string);
   };
 
-  const handleDisablePlugin = async ( serviceIdOrName: string, pluginId: string, proxyPath: string ) => {
-    await disablePlugin(serviceIdOrName, pluginId, proxyPath);
+  const handleDisablePlugin = async ( ) => {
+    if(selectedPlugin) await disablePlugin(serviceName as string, selectedPlugin.slug as string, kongInstance as string);
   };
 
   const handlePluginFields = async (pluginName: string, proxyPath: string) => {
@@ -82,20 +82,32 @@ export const DrawerComponent = () => {
         </div>
         <div className={content} />
         <div>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleToggleDrawer}
-          >
-            Primary Action
-          </Button>
+          <>
+            { (selectedPlugin && selectedPlugin.associated) ? (
+                        <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleDisablePlugin}
+                      >
+                        Disable Plugin
+                      </Button>
+            ):(
+              <Button
+              variant="contained"
+              color="primary"
+              onClick={()=> handleEnablePlugin}
+            >
+              Enable Plugin
+            </Button>
+            )}
+          </>
           <Button
             className={secondaryAction}
             variant="outlined"
             color="primary"
             onClick={handleToggleDrawer}
           >
-            Secondary Action
+            Cancel
           </Button>
         </div>
       </Drawer>
