@@ -37,6 +37,8 @@ export const PluginsList = () => {
     await listAssociatedPlugins(serviceName as string,kongInstance as string);
   };
 
+  const associatePluginToService = () =>{}
+
   const { loading, error } = useAsync(async (): Promise<void> => {
     getPluginsEnabled();
     getAssociatedPlugins();
