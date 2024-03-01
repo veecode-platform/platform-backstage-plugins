@@ -89,7 +89,7 @@ export const DrawerComponent = () => {
                         color="primary"
                         onClick={() => handleDisablePlugin}
                       >
-                        Disable Plugin
+                        Remove Plugin
                       </Button>
             ):(
               <Button
@@ -97,7 +97,7 @@ export const DrawerComponent = () => {
               color="primary"
               onClick={()=> handleEnablePlugin}
             >
-              Enable Plugin
+              Install Plugin
             </Button>
             )}
           </>
