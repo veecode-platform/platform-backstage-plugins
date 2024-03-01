@@ -10,11 +10,12 @@ export const useStyles = makeStyles( theme => ({
      },
      card: {
       display: 'flex',
-      justifyContent: 'center',
+      justifyContent: 'space-between',
       alignItems: 'center',
       gap: theme.spacing(4),
       borderRadius: '8px',
       border: `1px solid ${theme.palette.action.focus}`,
+      minHeight: '100%'
      },
      cardHeader:{
       width:'100%',

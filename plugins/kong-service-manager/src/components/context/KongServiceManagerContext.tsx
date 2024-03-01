@@ -13,7 +13,9 @@ export type KongServiceManagerContextType = {
     allAssociatedPlugins: AssociatedPluginsResponse[] | null;
     getPluginFields: (pluginName: string, proxyPath: string) => Promise<PluginFieldsResponse[] | null>;
     enablePlugin: (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => Promise<any>;
-    disablePlugin: (serviceIdOrName: string, pluginId: string, proxyPath: string) => Promise<any>
+    disablePlugin: (serviceIdOrName: string, pluginId: string, proxyPath: string) => Promise<any>;
+    handleToggleModal: () => void;
+    openModal: boolean;
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!)

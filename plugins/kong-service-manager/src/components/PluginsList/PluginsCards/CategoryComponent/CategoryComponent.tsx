@@ -25,24 +25,22 @@ export const CategoryComponent = ({label, plugins, pluginFields,enablePlugin,dis
       </Typography>
       <ItemCardGrid>
         {plugins.map(item => (
-          <>
+          <div key={item.slug}>
             {item.associated ? (
               <CardComponent
                 data={item}
-                key={item.slug}
                 pluginFields={pluginFields}
                 disablePlugin={disablePlugin}
               />
             ) : (
               <CardComponent
                 data={item}
-                key={item.slug}
                 pluginFields={pluginFields}
                 enablePlugin={enablePlugin}
                 disablePlugin={disablePlugin}
               />
             )}
-          </>
+          </div>
         ))}
       </ItemCardGrid>
     </Box>

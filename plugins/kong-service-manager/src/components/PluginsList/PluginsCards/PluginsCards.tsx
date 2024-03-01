@@ -158,13 +158,13 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
     if(allAssociatedPlugins){
       getAssociatedPuginsName(allAssociatedPlugins);
     }
-  },[allAssociatedPlugins,handleEnablePlugin,handleDisablePlugin]);
+  },[allAssociatedPlugins]);
 
   useEffect(() => {
     if (allEnabledPlugins && allEnabledPlugins.length >= 1) {
       updatePluginsState(allEnabledPlugins)
     }
-  }, [allEnabledPlugins,handleEnablePlugin,handleDisablePlugin]);
+  }, [allEnabledPlugins]);
 
   return (
     <Content className={content}>

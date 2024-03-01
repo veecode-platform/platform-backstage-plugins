@@ -7,6 +7,7 @@ import { AboutPage } from '../AboutPage';
 import { RoutesList } from '../RoutesList';
 import { PluginsList } from '../PluginsList';
 import { KongServiceManagerProvider } from '../context';
+import { ModalComponent } from '../ModalComponent';
 
 const useStyles = makeStyles(theme=>({
   divider: {
@@ -21,6 +22,7 @@ export const KongServiceManagerHomepage = () => {
   return (
     <KongServiceManagerProvider>
       <Container maxWidth="xl">
+        <ModalComponent/>
         <Grid container spacing={4}>
           <Grid item lg={2} className={classes.divider}>
             <MenuOptions />

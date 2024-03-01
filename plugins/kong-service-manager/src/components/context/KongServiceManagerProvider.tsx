@@ -15,9 +15,14 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   const [allAssociatedPlugins, setAllAssociatedPlugins] = useState<AssociatedPluginsResponse[]|null>(null);
   const [allRoutes, setAllRoutes] = useState<RoutesResponse[]|null>(null);
   const [serviceDetails, setServiceDetails] = useState<ServiceInfoResponse|null>(null);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
   const alertApi = useApi(alertApiRef);
+
+  const handleToggleModal = () => {
+    setOpenModal(!openModal);
+  }
 
   const listAllEnabledPlugins = async (proxyPath:string)=>{
     try{
@@ -137,7 +142,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         allAssociatedPlugins,
         getPluginFields,
         enablePlugin,
-        disablePlugin
+        disablePlugin,
+        handleToggleModal,
+        openModal
       }}
     >
       {children}
