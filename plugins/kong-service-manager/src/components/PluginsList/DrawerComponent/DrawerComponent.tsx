@@ -1,11 +1,12 @@
 /* eslint-disable @backstage/no-undeclared-imports */
-import React, { useContext, useEffect } from 'react';
-import { Button, Drawer, IconButton, Typography, makeStyles } from '@material-ui/core';
+import React, { useContext, useEffect, useState } from 'react';
+import { Box, Button, Drawer, IconButton, Typography, makeStyles } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
 import { KongServiceManagerContext } from '../../context';
 import { CreatePlugin } from '../../../utils/types';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from '../../../hooks';
+import { EmptyStateComponent } from '../../shared';
 
 
 const useStyles = makeStyles(theme => ({
@@ -19,12 +20,24 @@ const useStyles = makeStyles(theme => ({
       flexDirection: 'row',
       justifyContent: 'space-between',
     },
+    titleBar:{
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: '2rem'
+    },
+    pluginIcon:{
+      width: '50px',
+      borderRadius: '3px'
+    },
     icon: {
-      fontSize: 20,
+      fontSize: 20
     },
     content: {
-      height: '80%',
-      backgroundColor: '#EEEEEE',
+      height: '85%',
+      backgroundColor: theme.palette.background.default,
+      overflow: 'auto',
+      padding: theme.spacing(2),
     },
     secondaryAction: {
       marginLeft: theme.spacing(2.5),
@@ -34,10 +47,11 @@ const useStyles = makeStyles(theme => ({
 
 export const DrawerComponent = () => {
 
-  const {paper, header, icon, content, secondaryAction} = useStyles();
+  const {paper, header,titleBar,pluginIcon, icon, content, secondaryAction} = useStyles();
   const { entity } = useEntity();
   const { serviceName, kongInstance } = useEntityAnnotation(entity);
   const { handleToggleDrawer, openDrawer, enablePlugin, disablePlugin, getPluginFields ,selectedPlugin} = useContext(KongServiceManagerContext);
+  const [fieldsComponents, setFieldsComponents ] = useState<any[]|[]>([])
 
   const handleEnablePlugin = async ( config: CreatePlugin ) => {  // to do
     await enablePlugin(serviceName as string, config, kongInstance as string);
@@ -49,9 +63,7 @@ export const DrawerComponent = () => {
 
   const handlePluginFields = async (pluginName: string, proxyPath: string) => {
     const fields = await getPluginFields(pluginName, proxyPath);
-    // eslint-disable-next-line no-console
-    console.log(fields)
-    return fields;
+    if(fields) setFieldsComponents(fields!);
   };
 
   useEffect(()=>{
@@ -61,55 +73,62 @@ export const DrawerComponent = () => {
     
 
   return (
-      <Drawer
-        classes={{
-          paper: paper,
-        }}
-        anchor="right"
-        open={openDrawer}
-        onClose={handleToggleDrawer}
-      >
-        <div className={header}>
-          <Typography variant="h5">{selectedPlugin?.name}</Typography>
-          <IconButton
-            key="dismiss"
-            title="Close the drawer"
-            onClick={handleToggleDrawer}
-            color="inherit"
-          >
-            <Close className={icon} />
-          </IconButton>
+    <Drawer
+      classes={{
+        paper: paper,
+      }}
+      anchor="right"
+      open={openDrawer}
+      onClose={handleToggleDrawer}
+    >
+      <div className={header}>
+        <div className={titleBar}>
+          <img src={selectedPlugin?.image} alt={selectedPlugin?.description} className={pluginIcon}/>
+          <Typography variant="h5">
+            {selectedPlugin?.name} Plugin
+          </Typography>
         </div>
-        <div className={content} />
-        <div>
-          <>
-            { (selectedPlugin && selectedPlugin.associated) ? (
-                        <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => handleDisablePlugin}
-                      >
-                        Remove Plugin
-                      </Button>
-            ):(
-              <Button
+        <IconButton
+          key="dismiss"
+          title="Close the drawer"
+          onClick={handleToggleDrawer}
+          color="inherit"
+        >
+          <Close className={icon} />
+        </IconButton>
+      </div>
+      <Box className={content}>
+        {fieldsComponents.length >=1 ? <h1>Hello world</h1>:<EmptyStateComponent/>}
+      </Box>
+      <div>
+        <>
+          {selectedPlugin && selectedPlugin.associated ? (
+            <Button
               variant="contained"
               color="primary"
-              onClick={()=> handleEnablePlugin}
+              onClick={() => handleDisablePlugin}
+            >
+              Remove Plugin
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleEnablePlugin}
             >
               Install Plugin
             </Button>
-            )}
-          </>
-          <Button
-            className={secondaryAction}
-            variant="outlined"
-            color="primary"
-            onClick={handleToggleDrawer}
-          >
-            Cancel
-          </Button>
-        </div>
-      </Drawer>
+          )}
+        </>
+        <Button
+          className={secondaryAction}
+          variant="outlined"
+          color="primary"
+          onClick={handleToggleDrawer}
+        >
+          Cancel
+        </Button>
+      </div>
+    </Drawer>
   );
 };
