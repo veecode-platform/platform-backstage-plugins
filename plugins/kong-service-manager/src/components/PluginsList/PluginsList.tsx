@@ -21,7 +21,6 @@ const useStyles = makeStyles(theme=>({
    }
 }));
 
-
 export const PluginsList = () => {
 
   const { listAllEnabledPlugins, allEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins} = useContext(KongServiceManagerContext);
@@ -37,8 +36,6 @@ export const PluginsList = () => {
     await listAssociatedPlugins(serviceName as string,kongInstance as string);
   };
 
-  const associatePluginToService = () =>{}
-
   const { loading, error } = useAsync(async (): Promise<void> => {
     getPluginsEnabled();
     getAssociatedPlugins();
@@ -49,21 +46,28 @@ export const PluginsList = () => {
   if(error) return <EmptyStateComponent/>;
 
   return (
-    <BoxComponent title="Kong Plugins">
-      <Box className={wrapper}>
-        <TabbedCard title="">
-          <CardTab label="All Plugins">
-            <PluginsCards allEnabledPlugins={allEnabledPlugins} allAssociatedPlugins={allAssociatedPlugins}/>
-          </CardTab>
-          <CardTab label="Associated Plugins">
-            { (allAssociatedPlugins && allAssociatedPlugins.length >= 1) ? (
-              <PluginsCards allEnabledPlugins={allEnabledPlugins} allAssociatedPlugins={allAssociatedPlugins} filterByAssociated/>
-            ) :
-              (<div className={emptyContent}> No data to display ...</div>)
-            }
-          </CardTab>
-        </TabbedCard>
-      </Box>
-    </BoxComponent>
+      <BoxComponent title="Kong Plugins">
+        <Box className={wrapper}>
+          <TabbedCard title="">
+            <CardTab label="All Plugins">
+              <PluginsCards
+                allEnabledPlugins={allEnabledPlugins}
+                allAssociatedPlugins={allAssociatedPlugins}
+              />
+            </CardTab>
+            <CardTab label="Associated Plugins">
+              {allAssociatedPlugins && allAssociatedPlugins.length >= 1 ? (
+                <PluginsCards
+                  allEnabledPlugins={allEnabledPlugins}
+                  allAssociatedPlugins={allAssociatedPlugins}
+                  filterByAssociated
+                />
+              ) : (
+                <div className={emptyContent}> No data to display ...</div>
+              )}
+            </CardTab>
+          </TabbedCard>
+        </Box>
+      </BoxComponent>
   );
 }

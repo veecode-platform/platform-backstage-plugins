@@ -2,14 +2,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @backstage/no-undeclared-imports */
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Content } from '@backstage/core-components';
-import { AssociatedPluginsResponse } from '../../../utils/types';
+import { AssociatedPluginsResponse, CreatePlugin } from '../../../utils/types';
 import PluginsInfoData from '../../../data/plugins.json';
 import { KongPluginsCategoriesEnum } from '../../../utils/enums/KongPluginCategories';
 import { AllPlugins } from './AllPlugins';
 import { useStyles } from './styles';
 import { AssociatedPlugins } from './AssociatedPlugins';
+import { KongServiceManagerContext } from '../../context';
 
 export interface PluginsCardsProps {
   allEnabledPlugins: string[] | null | [],
@@ -55,6 +56,7 @@ export interface PluginsPerCategoryType  {
 
 export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAssociated}:PluginsCardsProps) => {
 
+  const { enablePlugin, disablePlugin, getPluginFields } = useContext(KongServiceManagerContext);
   const { content } = useStyles();
   const [ associatedPluginsName, setAssociatedPluginsName] = useState<string[]|[]>([]);
   const [pluginsPerCategory, setPluginsPerCategory] = useState<PluginsPerCategoryType>({
@@ -66,7 +68,7 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
     analitics: { plugins: [] },
     transformations: { plugins: [] },
     logging: { plugins: [] },
-  });  
+  }); 
 
   const getAssociatedPuginsName = ( pluginsParams : AssociatedPluginsResponse[] ) => {
       const newData : string[] = []
@@ -137,28 +139,49 @@ export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAss
   
     setPluginsPerCategory(prev => ({ ...prev, ...updatePlugins }));
   };
+
+  const handleEnablePlugin = async (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => {
+     await enablePlugin(serviceIdOrName,config,proxyPath);
+  };
+
+  const handleDisablePlugin = async (serviceIdOrName: string,pluginId: string,proxyPath: string) => {
+    await disablePlugin(serviceIdOrName,pluginId,proxyPath);
+  };
+
+  const handlePluginFields = async (pluginName: string, proxyPath: string) => {
+    const fields = await getPluginFields(pluginName,proxyPath);
+    return fields;
+  }
   
 
   useEffect(()=>{
     if(allAssociatedPlugins){
       getAssociatedPuginsName(allAssociatedPlugins);
     }
-  },[allAssociatedPlugins]);
+  },[allAssociatedPlugins,handleEnablePlugin,handleDisablePlugin]);
 
   useEffect(() => {
     if (allEnabledPlugins && allEnabledPlugins.length >= 1) {
       updatePluginsState(allEnabledPlugins)
     }
-  }, [allEnabledPlugins]);
+  }, [allEnabledPlugins,handleEnablePlugin,handleDisablePlugin]);
 
   return (
     <Content className={content}>
-        <>
-          {!filterByAssociated
-            ? <AllPlugins plugins={pluginsPerCategory}/>
-            : <AssociatedPlugins plugins={pluginsPerCategory}/>
-          }
-        </>
+      <>
+        {!filterByAssociated ? (
+          <AllPlugins plugins={pluginsPerCategory} 
+            pluginFields={handlePluginFields}
+            enablePlugin={handleEnablePlugin}
+            disablePlugin={handleDisablePlugin}
+            />
+        ) : (
+          <AssociatedPlugins plugins={pluginsPerCategory} 
+           pluginFields={handlePluginFields}
+           disablePlugin={handleDisablePlugin}
+           />
+        )}
+      </>
     </Content>
   );
 };

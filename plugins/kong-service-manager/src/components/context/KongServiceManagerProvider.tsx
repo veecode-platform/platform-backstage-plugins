@@ -1,9 +1,9 @@
-import { errorApiRef, useApi } from "@backstage/core-plugin-api";
+import { alertApiRef, errorApiRef, useApi } from "@backstage/core-plugin-api";
 import React, { ReactNode } from "react";
 import { useState } from "react";
 import { kongServiceManagerApiRef } from "../../api";
 import { KongServiceManagerContext } from "./KongServiceManagerContext";
-import { AssociatedPluginsResponse, RoutesResponse, ServiceInfoResponse } from "../../utils/types";
+import { AssociatedPluginsResponse, CreatePlugin, RoutesResponse, ServiceInfoResponse } from "../../utils/types";
 
 interface KongServiceManagerProviderProps {
     children : ReactNode
@@ -17,6 +17,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   const [serviceDetails, setServiceDetails] = useState<ServiceInfoResponse|null>(null);
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
+  const alertApi = useApi(alertApiRef);
 
   const listAllEnabledPlugins = async (proxyPath:string)=>{
     try{
@@ -50,7 +51,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   const getServiceDetails = async (serviceIdOrName: string, proxyPath: string) =>{
     try{ 
-      const details = await api.getServiceInfo(serviceIdOrName as string, proxyPath as string);
+      const details = await api.getServiceInfo(serviceIdOrName, proxyPath);
       if(details) {
         setServiceDetails(details);
         return details
@@ -64,10 +65,57 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   const getRoutesList = async (serviceIdOrName: string, proxyPath: string) => {
     try{ 
-      const routes = await api.getRoutesFromService(serviceIdOrName as string, proxyPath as string);
+      const routes = await api.getRoutesFromService(serviceIdOrName, proxyPath);
       if(routes) {
         setAllRoutes(routes);
         return routes
+      }
+      return null
+    } catch(e:any){
+      errorApi.post(e);
+      return null
+    }
+  }
+
+  const getPluginFields = async (pluginName: string, proxyPath: string) => {
+    try{ 
+      const fields = await api.getPluginFields(pluginName, proxyPath);
+      if(fields) {
+        return fields
+      }
+      return null
+    } catch(e:any){
+      errorApi.post(e);
+      return null
+    }
+  }
+
+  const enablePlugin = async (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => {
+    try{ 
+      const response = await api.createServicePlugin(serviceIdOrName, config,proxyPath);
+      if(response) {
+        return alertApi.post({
+          message: 'Plugin successfully enabled!',
+          severity: 'success',
+          display: 'transient',
+      });
+      }
+      return null
+    } catch(e:any){
+      errorApi.post(e);
+      return null
+    }
+  }
+
+  const disablePlugin = async (serviceIdOrName: string, pluginId: string, proxyPath: string) => {
+    try{ 
+      const response = await api.removeServicePlugin(serviceIdOrName, pluginId,proxyPath);
+      if(response) {
+        return alertApi.post({
+          message: 'Plugin successfully disabled',
+          severity: 'success',
+          display: 'transient',
+      });
       }
       return null
     } catch(e:any){
@@ -87,6 +135,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         allRoutes,
         listAssociatedPlugins,
         allAssociatedPlugins,
+        getPluginFields,
+        enablePlugin,
+        disablePlugin
       }}
     >
       {children}

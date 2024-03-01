@@ -1,10 +1,13 @@
 import React from 'react';
 import { PluginCard, PluginsPerCategoryType } from '../PluginsCards';
 import { CategoryComponent } from '../CategoryComponent';
+import { PluginFieldsResponse } from '../../../../utils/types';
 
 
 interface associatedPluginsProps {
-  plugins: PluginsPerCategoryType;
+  plugins: PluginsPerCategoryType,
+  pluginFields: (pluginName: string, proxyPath: string) => Promise<PluginFieldsResponse[] | null>,
+  disablePlugin: (serviceIdOrName: string, pluginId: string, proxyPath: string) => Promise<void>
 }
 
 const getPlugins = (data:PluginCard[]|[]) => {
@@ -18,7 +21,7 @@ const getPlugins = (data:PluginCard[]|[]) => {
   return []
 }
 
-export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => { 
+export const AssociatedPlugins = ({ plugins, pluginFields, disablePlugin }: associatedPluginsProps) => { 
 
   const aiPlugins = getPlugins(plugins.ai.plugins);
   const analiticsPlugins = getPlugins(plugins.analitics.plugins);
@@ -31,14 +34,62 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
 
   return (
     <>
-      {aiPlugins.length >= 1 && ( <CategoryComponent label="AI"  plugins={aiPlugins}/>)}
-      {analiticsPlugins.length >= 1 && ( <CategoryComponent label="Analitics & Monitoring"  plugins={analiticsPlugins}/>)}
-      {authPlugins.length >= 1 && ( <CategoryComponent label="Authentication"  plugins={authPlugins}/>)}
-      {loggingPlugins.length >= 1 && ( <CategoryComponent label="Logging"  plugins={loggingPlugins}/>)}
-      {securityPlugins.length >= 1 && ( <CategoryComponent label="Security"  plugins={securityPlugins}/>)}
-      {serverlessPlugins.length >= 1 && (<CategoryComponent label="Serverless"  plugins={serverlessPlugins}/>)}
-      {trafficControlPlugins.length >= 1 && (<CategoryComponent label="Traffic Control"  plugins={trafficControlPlugins}/>)}
-      {transformationsPlugins.length >= 1 && ( <CategoryComponent label="Transformations"  plugins={transformationsPlugins}/>)}
+      {aiPlugins.length >= 1 && ( 
+        <CategoryComponent 
+         label="AI"  
+         plugins={aiPlugins}
+         pluginFields={pluginFields} 
+         disablePlugin={disablePlugin} />
+      )}
+      {analiticsPlugins.length >= 1 && ( 
+        <CategoryComponent 
+         label="Analitics & Monitoring"  
+         plugins={analiticsPlugins}
+         pluginFields={pluginFields} 
+         disablePlugin={disablePlugin}/>
+      )}
+      {authPlugins.length >= 1 && ( 
+        <CategoryComponent 
+         label="Authentication"  
+         plugins={authPlugins}
+         pluginFields={pluginFields} 
+         disablePlugin={disablePlugin}/>
+      )}
+      {loggingPlugins.length >= 1 && ( 
+        <CategoryComponent 
+         label="Logging"  
+         plugins={loggingPlugins}
+         pluginFields={pluginFields} 
+         disablePlugin={disablePlugin}/>
+      )}
+      {securityPlugins.length >= 1 && ( 
+        <CategoryComponent 
+         label="Security"  
+         plugins={securityPlugins}
+         pluginFields={pluginFields} 
+         disablePlugin={disablePlugin}/>
+      )}
+      {serverlessPlugins.length >= 1 && (
+        <CategoryComponent 
+         label="Serverless"  
+         plugins={serverlessPlugins}
+         pluginFields={pluginFields} 
+         disablePlugin={disablePlugin}/>
+      )}
+      {trafficControlPlugins.length >= 1 && (
+        <CategoryComponent 
+         label="Traffic Control"  
+         plugins={trafficControlPlugins}
+         pluginFields={pluginFields} 
+         disablePlugin={disablePlugin}/>
+      )}
+      {transformationsPlugins.length >= 1 && ( 
+        <CategoryComponent 
+         label="Transformations"  
+         plugins={transformationsPlugins}
+         pluginFields={pluginFields} 
+         disablePlugin={disablePlugin}/>
+      )}
     </>
   );
 };

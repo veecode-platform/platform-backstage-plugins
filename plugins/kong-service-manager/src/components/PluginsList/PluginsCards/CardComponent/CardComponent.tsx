@@ -3,9 +3,13 @@ import React from 'react'
 import { PluginCard } from '../PluginsCards'
 import Edit from '@material-ui/icons/Edit'
 import { useStyles } from '../styles'
+import { CreatePlugin, PluginFieldsResponse } from '../../../../utils/types'
 
 interface CardComponentProps {
-    data: PluginCard
+    data: PluginCard,
+    pluginFields: (pluginName: string, proxyPath: string) => Promise<PluginFieldsResponse[] | null>,
+    enablePlugin?: (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => Promise<void>,
+    disablePlugin: (serviceIdOrName: string, pluginId: string, proxyPath: string) => Promise<void>
 }
 
 export const CardComponent = ({data}:CardComponentProps) => {
