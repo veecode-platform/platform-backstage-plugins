@@ -1,6 +1,5 @@
 import React from 'react';
 import { PluginCard, PluginsPerCategoryType } from '../PluginsCards';
-import { useStyles } from '../styles';
 import { CategoryComponent } from '../CategoryComponent';
 
 
@@ -20,8 +19,6 @@ const getPlugins = (data:PluginCard[]|[]) => {
 }
 
 export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => { 
-
-  const { } = useStyles();
 
   const aiPlugins = getPlugins(plugins.ai.plugins);
   const analiticsPlugins = getPlugins(plugins.analitics.plugins);
