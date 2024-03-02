@@ -31,6 +31,11 @@ export const CardComponent = ({data}:CardComponentProps) => {
     }
   }
 
+  const EditAction = () => {
+    setPluginState(data);
+    handleToggleDrawer();
+  }
+
   return (
     <Card key={data.name} className={card}>
       <CardHeader
@@ -39,7 +44,7 @@ export const CardComponent = ({data}:CardComponentProps) => {
           <>
             {data.associated ? (
               <IconButton aria-label="settings" title="Edit Plugin">
-                <Edit />
+                <Edit onClick={EditAction} />
               </IconButton>
             ) : (
               <></>
