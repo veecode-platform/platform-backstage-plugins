@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @backstage/no-undeclared-imports */
 import React, { useContext, useEffect, useState } from 'react';
-import { Box, Button, Checkbox, Drawer, FormControl, FormControlLabel, IconButton, TextField, Typography, makeStyles } from '@material-ui/core';
+import { Box, Button, Checkbox, Drawer, FormControl, FormControlLabel, IconButton, TextField, Typography } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
 import { KongServiceManagerContext } from '../../context';
 import { CreatePlugin } from '../../../utils/types';
@@ -9,58 +9,9 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from '../../../hooks';
 import { EmptyStateComponent } from '../../shared';
 import { Progress } from '@backstage/core-components';
+import { SubFields } from './FieldsCustom';
+import { useStyles } from './styles';
 
-
-const useStyles = makeStyles(theme => ({
-    paper: {
-      width: '50%',
-      justifyContent: 'space-between',
-      padding: theme.spacing(2.5),
-    },
-    header: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    titleBar:{
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: '2rem'
-    },
-    pluginIcon:{
-      width: '50px',
-      borderRadius: '3px'
-    },
-    icon: {
-      fontSize: 20
-    },
-    content: {
-      height: '85%',
-      backgroundColor: theme.palette.background.paper,
-      overflow: 'auto',
-      padding: theme.spacing(2),
-    },
-    form:{
-      display: 'flex',
-      width: '100%',
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexDirection: 'column'
-    },
-    input:{
-      width: '100%',
-      margin: '.5rem 0'
-    },
-    checkbox:{
-      width: '100%',
-      margin: '.4rem',
-      fontSize: '1rem'
-    },
-    secondaryAction: {
-      marginLeft: theme.spacing(2.5),
-    },
-  }));
 
 
 export const DrawerComponent = () => {
@@ -84,7 +35,7 @@ export const DrawerComponent = () => {
     const fields = await getPluginFields(pluginName, proxyPath);
     // eslint-disable-next-line no-console
     console.log(fields)
-    if(fields) setFieldsComponents(fields!);
+    if(fields) setFieldsComponents(fields);
   };
 
   useEffect(()=>{
@@ -131,6 +82,7 @@ export const DrawerComponent = () => {
                     {fieldsComponents.map(field => {
                       switch (field.type) {
                         case 'string':
+                          if(Array.isArray(field.defaultValue)) return <SubFields fields={field.defaultValue}/>
                           return (<TextField id={field.name} required={field.required} key={field.name} label={field.name} variant="outlined" className={input} defaultValue={field.defaultValue ?? ''}/>)
                         case 'number':
                             return (<TextField id={field.name} required={field.required} key={field.name} label={field.name} variant="outlined" className={input} defaultValue={field.defaultValue ?? ''}/>)
