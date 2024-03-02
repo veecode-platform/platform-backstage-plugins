@@ -19,17 +19,19 @@ export const DrawerComponent = () => {
   const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction} = useStyles();
   const { entity } = useEntity();
   const { serviceName, kongInstance } = useEntityAnnotation(entity);
-  const { handleToggleDrawer, openDrawer, enablePlugin, disablePlugin, getPluginFields ,selectedPlugin} = useContext(KongServiceManagerContext);
+  const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPlugin} = useContext(KongServiceManagerContext);
   const [fieldsComponents, setFieldsComponents ] = useState<any[]|[]>([]);
   const [ isLoading, setLoading] = useState<boolean>(false);
 
   const handleEnablePlugin = async ( config: CreatePlugin ) => {  // to do
     await enablePlugin(serviceName as string, config, kongInstance as string);
+    handleToggleDrawer();
   };
 
-  const handleDisablePlugin = async ( ) => {
-    if(selectedPlugin) await disablePlugin(serviceName as string, selectedPlugin.slug as string, kongInstance as string);
-  };
+  const handleEditAction = async (config: CreatePlugin) => { // to do
+    await editPlugin(serviceName as string, config, kongInstance as string);
+    handleToggleDrawer();
+  }
 
   const handlePluginFields = async (pluginName: string, proxyPath: string) => {
     const fields = await getPluginFields(pluginName, proxyPath);
@@ -109,9 +111,9 @@ export const DrawerComponent = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => handleDisablePlugin}
+              onClick={() => handleEditAction}
             >
-              Remove Plugin
+              Save Changes
             </Button>
           ) : (
             <Button

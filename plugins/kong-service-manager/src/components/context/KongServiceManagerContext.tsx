@@ -18,6 +18,7 @@ export type KongServiceManagerContextType = {
     openDrawer: boolean;
     setPluginState: (data: PluginCard) => void;
     selectedPlugin: PluginCard | null;
+    editPlugin: (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => Promise<void | null>
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!)

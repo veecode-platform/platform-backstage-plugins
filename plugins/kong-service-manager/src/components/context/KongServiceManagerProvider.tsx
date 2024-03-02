@@ -115,6 +115,23 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
+  const editPlugin = async (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => {
+    try{ 
+      const response = await api.editServicePlugin(serviceIdOrName, config,proxyPath);
+      if(response) {
+        return alertApi.post({
+          message: 'Plugin successfully enabled!',
+          severity: 'success',
+          display: 'transient',
+      });
+      }
+      return null
+    } catch(e:any){
+      errorApi.post(e);
+      return null
+    }
+  }
+
   const disablePlugin = async (serviceIdOrName: string, pluginId: string, proxyPath: string) => {
     try{ 
       const response = await api.removeServicePlugin(serviceIdOrName, pluginId,proxyPath);
@@ -149,7 +166,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         handleToggleDrawer,
         openDrawer,
         setPluginState,
-        selectedPlugin
+        selectedPlugin,
+        editPlugin
       }}
     >
       {children}
