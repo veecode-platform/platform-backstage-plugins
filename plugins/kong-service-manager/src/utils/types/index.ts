@@ -7,7 +7,9 @@ export interface PluginFieldsResponse {
     type: string
     required: boolean,
     defaultValue: string | number | boolean ,
-    selectOptions: any
+    arrayType: string | number | boolean | any | undefined,
+    arrayOptions: string[] | number[] | boolean[] | any[] | undefined,
+    isMultipleArray: boolean
 }
 
 export interface AssociatedPluginsResponse {

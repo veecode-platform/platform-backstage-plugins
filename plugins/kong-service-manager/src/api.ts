@@ -19,6 +19,11 @@ function getPluginFieldType(type:string){
         case "boolean":
             return "boolean"
 
+        case "array":
+            return "array"
+
+        case "record": 
+            return "record"
         default:
             return "string"
     }
@@ -120,7 +125,9 @@ class Client {
                 type: getPluginFieldType(field[pluginFieldName].type),
                 required: field[pluginFieldName].required || false,
                 defaultValue: field[pluginFieldName].default,
-                selectOptions: field[pluginFieldName].one_of
+                arrayType: field[pluginFieldName].elements?.type,
+                isMultipleArray: field[pluginFieldName].elements.one_of ? true : false,
+                arrayOptions: field[pluginFieldName].elements?.one_of,
             }
         } )
 
