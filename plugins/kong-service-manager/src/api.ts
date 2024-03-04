@@ -129,9 +129,11 @@ class Client {
                 isMultipleArray: field[pluginFieldName].elements?.one_of ? true : false,
                 arrayOptions: field[pluginFieldName].elements?.one_of,
             }
-            if(pluginR.arrayType === "record"){
+            /*if(pluginR.arrayType === "record"){
                 const mapedRecordFields = field[pluginFieldName].elements?.fields.map((record:any) => {
+                    console.log("record: ", record)
                     const recordName = Object.keys(record)[0]
+                    //console.log("name:", recordName)
                    return {
                     name: recordName,
                     type: record.field[pluginFieldName].elements?.fields[recordName].type,
@@ -140,9 +142,12 @@ class Client {
                    } 
                 })        
                 pluginR.recordFields = mapedRecordFields
-            }
-        } )
+            }*/
+            console.log("maped: ", pluginR)
+            return pluginR
 
+        } )
+        console.log("response: ", mapedFields)
         return mapedFields
     }
 
