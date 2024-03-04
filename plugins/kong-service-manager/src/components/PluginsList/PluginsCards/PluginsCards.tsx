@@ -1,68 +1,157 @@
+/* eslint-disable no-console */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @backstage/no-undeclared-imports */
-/*
- * Copyright 2020 The Backstage Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
-// import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
-import React, { useEffect } from 'react';
-import { LinkButton, ItemCardGrid,ItemCardHeader, Content } from '@backstage/core-components';
+import React, { useEffect, useState } from 'react';
+import { Content } from '@backstage/core-components';
+import { AssociatedPluginsResponse, PluginCard } from '../../../utils/types';
+import PluginsInfoData from '../../../data/plugins.json';
+import { KongPluginsCategoriesEnum } from '../../../utils/enums/KongPluginCategories';
+import { AllPlugins } from './AllPlugins';
+import { useStyles } from './styles';
+import { AssociatedPlugins } from './AssociatedPlugins';
+import { DrawerComponent } from '../DrawerComponent';
 
-export default {
-  title: 'Layout/Item Cards',
-};
-
-interface PluginsCardsProps {
-  allPluginsEnabled: string[] | null | []
+export interface PluginsCardsProps {
+  allEnabledPlugins: string[] | null | [],
+  allAssociatedPlugins: AssociatedPluginsResponse[] | null | [],
+  filterByAssociated?: boolean
 }
 
-// const useStyles = makeStyles({
-//   grid: {
-//     gridTemplateColumns: 'repeat(auto-fill, 12em)',
-//   },
-//   header: {
-//     color: 'black',
-//     backgroundImage: 'linear-gradient(to bottom right, red, yellow)',
-//   },
-// });
+export interface PluginsPerCategoryType  {
+  ai: { 
+    plugins: PluginCard[] | [] 
+  };
+  auth: { 
+    plugins: PluginCard[] | [] 
+  };
+  security: { 
+    plugins: PluginCard[] | [] 
+  };
+  trafficControl: { 
+    plugins: PluginCard[] | [] 
+  };
+  serverless: { 
+    plugins: PluginCard[] | [] 
+  };
+  analitics: {
+    plugins: PluginCard[] | [];
+  };
+  transformations: {
+    plugins: PluginCard[] | [];
+  };
+  logging: {
+    plugins: PluginCard[] | [];
+  };
+};
 
-export const PluginsCards = ({allPluginsEnabled}:PluginsCardsProps) => {
+export const PluginsCards = ({allEnabledPlugins,allAssociatedPlugins,filterByAssociated}:PluginsCardsProps) => {
+
+  const { content } = useStyles();
+  const [ associatedPluginsName, setAssociatedPluginsName] = useState<string[]|[]>([]);
+  const [pluginsPerCategory, setPluginsPerCategory] = useState<PluginsPerCategoryType>({
+    ai: { plugins: [] },
+    auth: { plugins: [] },
+    security: { plugins: [] },
+    trafficControl: { plugins: [] },
+    serverless: { plugins: [] },
+    analitics: { plugins: [] },
+    transformations: { plugins: [] },
+    logging: { plugins: [] },
+  }); 
+
+  const getAssociatedPuginsName = ( pluginsParams : AssociatedPluginsResponse[] ) => {
+      const newData : string[] = []
+      pluginsParams.map(p => {
+        newData.push(p.name)
+      })
+      setAssociatedPluginsName(newData)
+  };
+
+  const updatePluginsState = (pluginsData: string[]) => {
+    const updatePlugins: PluginsPerCategoryType = { 
+      ai: { plugins: [] },
+      auth: { plugins: [] },
+      security: { plugins: [] },
+      trafficControl: { plugins: [] },
+      serverless: { plugins: [] },
+      analitics: { plugins: [] },
+      transformations: { plugins: [] },
+      logging: { plugins: [] },
+    };
+
+    pluginsData.forEach(pluginName => {
+      PluginsInfoData.categories.forEach(c => {
+        const foundPlugin = c.plugins.find(i => i.slug === pluginName);
+
+        if (foundPlugin) {
+          const isAssociated = (associatedPluginsName && associatedPluginsName.length >= 1) && associatedPluginsName.find( i => i === pluginName);
+          const newPlugin = {
+            name: foundPlugin.name,
+            slug: foundPlugin.slug,
+            associated: isAssociated ? true : false,
+            image: foundPlugin.image,
+            tags: foundPlugin.tags,
+            description: foundPlugin.description,
+          };
+
+          switch (c.category) {
+            case KongPluginsCategoriesEnum.ai:
+              (updatePlugins.ai.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.analitics:
+              (updatePlugins.analitics.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.auth:
+              (updatePlugins.auth.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.logging:
+              (updatePlugins.logging.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.security:
+              (updatePlugins.security.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.serverless:
+              (updatePlugins.serverless.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.trafficControl:
+              (updatePlugins.trafficControl.plugins as PluginCard[]).push(newPlugin);
+              return;
+            case KongPluginsCategoriesEnum.transformations:
+              (updatePlugins.transformations.plugins as PluginCard[]).push(newPlugin);
+              return;
+            default:
+              return;
+          }
+        }
+      });
+    });
+  
+    setPluginsPerCategory(prev => ({ ...prev, ...updatePlugins }));
+  };
+
+  useEffect(()=>{
+    if(allAssociatedPlugins){
+      getAssociatedPuginsName(allAssociatedPlugins);
+    }
+  },[allAssociatedPlugins]);
+
+  useEffect(() => {
+    if (allEnabledPlugins && allEnabledPlugins.length >= 1) {
+      updatePluginsState(allEnabledPlugins)
+    }
+  }, [allEnabledPlugins]);
 
   return (
-  <Content>
-    <ItemCardGrid>
-      {allPluginsEnabled?.map( t => (
-        <Card key={t}>
-          <CardMedia>
-            <ItemCardHeader title={t} subtitle="" />
-          </CardMedia>
-          <CardContent>
-            {t}
-          </CardContent>
-          <CardActions>
-            <LinkButton color="primary" to="/catalog">
-              Go There!
-            </LinkButton>
-          </CardActions>
-        </Card>
-      ))}
-    </ItemCardGrid>
-  </Content>
-);
+    <Content className={content}>
+      <DrawerComponent/>
+      <>
+        {!filterByAssociated ? (
+          <AllPlugins plugins={pluginsPerCategory}/>
+        ) : (
+          <AssociatedPlugins plugins={pluginsPerCategory}/>
+        )}
+      </>
+    </Content>
+  );
 };

@@ -31,17 +31,27 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
    },
    activeLink:{
-    borderRight: `3px solid ${theme.palette.link}`,
-    borderRadius: '3px',
-    color: theme.palette.link
+    borderRadius: '8px',
+    color: theme.palette.text.primary,
+    background: theme.palette.background.paper,
+    '&:before': {
+      content: '""',
+      width: '3px',
+      height: '30px',
+      backgroundColor: theme.palette.link,
+      borderRadius: '3px',
+      position: 'absolute',
+      left: 0,
+    },
    },
    listItem: {
     cursor: 'pointer',
     height: '64px',
     fontWeight: 700,
     borderRadius: '8px',
+    paddingLeft: theme.spacing(4),
     '&:hover':{
-        background: theme.palette.background.paper,
+        background: '#CDCDCD90',
     },
    }
 }));

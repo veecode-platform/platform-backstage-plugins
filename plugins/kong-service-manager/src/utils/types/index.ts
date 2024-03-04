@@ -58,3 +58,14 @@ export interface ServiceInfoResponse {
     client_certificate: any;
     protocol: string;
 }
+  
+  export interface PluginCard {
+    name: string,
+    slug: string,
+    associated?: boolean,
+    image: string,
+    tags: string[],
+    description: string,
+  }
+  
+  

@@ -10,7 +10,7 @@ import { KongServiceManagerProvider } from '../context';
 
 const useStyles = makeStyles(theme=>({
   divider: {
-    borderLeft: `1px solid ${theme.palette.divider}`
+    borderRight: `1px solid ${theme.palette.divider}`
   }
 }))
 
@@ -22,10 +22,10 @@ export const KongServiceManagerHomepage = () => {
     <KongServiceManagerProvider>
       <Container maxWidth="xl">
         <Grid container spacing={4}>
-          <Grid item lg={2}>
+          <Grid item lg={2} className={classes.divider}>
             <MenuOptions />
           </Grid>
-          <Grid item lg={10} className={classes.divider}>
+          <Grid item lg={10}>
             <Routes>
               <Route path="" element={<AboutPage />} />
               <Route path="all-routes" element={<RoutesList />} />
