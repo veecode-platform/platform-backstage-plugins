@@ -126,7 +126,7 @@ class Client {
                 required: field[pluginFieldName].required || false,
                 defaultValue: field[pluginFieldName].default,
                 arrayType: field[pluginFieldName].elements?.type,
-                isMultipleArray: field[pluginFieldName].elements.one_of ? true : false,
+                isMultipleArray: field[pluginFieldName].elements?.one_of ? true : false,
                 arrayOptions: field[pluginFieldName].elements?.one_of,
             }
         } )
