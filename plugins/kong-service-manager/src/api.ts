@@ -120,7 +120,7 @@ class Client {
 
         const mapedFields:PluginFieldsResponse[] = config.fields.map((field:any) => {
             const pluginFieldName = Object.keys(field)[0]
-            return {
+            const pluginR:PluginFieldsResponse =  {
                 name: pluginFieldName,
                 type: getPluginFieldType(field[pluginFieldName].type),
                 required: field[pluginFieldName].required || false,
@@ -128,6 +128,18 @@ class Client {
                 arrayType: field[pluginFieldName].elements?.type,
                 isMultipleArray: field[pluginFieldName].elements?.one_of ? true : false,
                 arrayOptions: field[pluginFieldName].elements?.one_of,
+            }
+            if(pluginR.arrayType === "record"){
+                const mapedRecordFields = field[pluginFieldName].elements?.fields.map((record:any) => {
+                    const recordName = Object.keys(record)[0]
+                   return {
+                    name: recordName,
+                    type: record.field[pluginFieldName].elements?.fields[recordName].type,
+                    required: record.field[pluginFieldName].elements?.fields[recordName].required,
+                    arrayOptions: record.field[pluginFieldName].elements?.fields[recordName].one_of
+                   } 
+                })        
+                pluginR.recordFields = mapedRecordFields
             }
         } )
 

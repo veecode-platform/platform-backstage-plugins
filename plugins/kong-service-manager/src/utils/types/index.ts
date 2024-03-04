@@ -9,7 +9,8 @@ export interface PluginFieldsResponse {
     defaultValue: string | number | boolean ,
     arrayType: string | number | boolean | any | undefined,
     arrayOptions: string[] | number[] | boolean[] | any[] | undefined,
-    isMultipleArray: boolean
+    isMultipleArray: boolean,
+    recordFields?: any
 }
 
 export interface AssociatedPluginsResponse {
