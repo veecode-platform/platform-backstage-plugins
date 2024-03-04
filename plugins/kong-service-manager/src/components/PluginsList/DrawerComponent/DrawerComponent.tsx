@@ -84,7 +84,7 @@ export const DrawerComponent = () => {
                     {fieldsComponents.map(field => {
                       switch (field.type) {
                         case 'string':
-                          if(Array.isArray(field.defaultValue)) return <SubFields fields={field.defaultValue}/>
+                          if(field.selectOptions !== undefined) return <SubFields fields={field.selectOptions}/>
                           return (<TextField id={field.name} required={field.required} key={field.name} label={field.name} variant="outlined" className={input} defaultValue={field.defaultValue ?? ''}/>)
                         case 'number':
                             return (<TextField id={field.name} required={field.required} key={field.name} label={field.name} variant="outlined" className={input} defaultValue={field.defaultValue ?? ''}/>)
