@@ -68,7 +68,7 @@ export const SkeletonComponent = () => {
     {/* LAST UPDATE */}
     <ListItem className={listItemWrapper}>
       <Box className={listItem}>
-       <LabelField title="Last Update"/>
+       <LabelField title="Last updated"/>
         <Skeleton animation="pulse" className={normal} />
       </Box>
     </ListItem>
