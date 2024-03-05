@@ -193,7 +193,10 @@ class Client {
     }
 
     async removeServicePlugin(serviceIdOrName: string, pluginId: string, proxyPath?: string): Promise<any> {
-        const response = await this.fetch(`/services/${serviceIdOrName}/plugins/${pluginId}`, proxyPath)
+        const headers: RequestInit = {
+            method: "DELETE",
+        }
+        const response = await this.fetch(`/services/${serviceIdOrName}/plugins/${pluginId}`, proxyPath, headers)
         return response.message
     }
 
