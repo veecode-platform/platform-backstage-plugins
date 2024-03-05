@@ -22,10 +22,13 @@ export const DrawerComponent = () => {
   const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPlugin} = useContext(KongServiceManagerContext);
   const [fieldsComponents, setFieldsComponents ] = useState<any[]|[]>([]);
   const [ isLoading, setLoading] = useState<boolean>(false);
+  const [configState, setConfigState ] = useState<any|null>(null)
 
-  const handleEnablePlugin = async ( config: CreatePlugin ) => {  // to do
-    await enablePlugin(serviceName as string, config, kongInstance as string);
-    handleToggleDrawer();
+  const handleEnablePlugin = async () => {  // to do
+    if(configState){    
+      await enablePlugin(serviceName as string, configState, kongInstance as string);
+      handleToggleDrawer();
+    }
   };
 
   const handleEditAction = async (config: CreatePlugin) => { // to do
@@ -35,8 +38,8 @@ export const DrawerComponent = () => {
 
   const handlePluginFields = async (pluginName: string, proxyPath: string) => {
     const fields = await getPluginFields(pluginName, proxyPath);
-    // eslint-disable-next-line no-console
-    console.log(fields)
+    // // eslint-disable-next-line no-console
+    // console.log(fields)
     if(fields) setFieldsComponents(fields);
   };
 
@@ -79,14 +82,14 @@ export const DrawerComponent = () => {
             <>
             {
               fieldsComponents.length >=1 ? (  
-                <FormControl component="form" noValidate autoComplete="off" className={form}>
+                <FormControl component="form" noValidate autoComplete="off" className={form} >
                   <>
                     {fieldsComponents.map(field => {
                       switch (field.type) {
                         case 'string':
-                          return <TextField id={field.name} required={field.required} key={field.name} label={`config.${field.name}`} variant="outlined" className={input} defaultValue={field.defaultValue ?? ''}/>;
+                          return <TextField id={field.name} type={field.type} required={field.required} key={field.name} label={`config.${field.name}`} variant="outlined" className={input} defaultValue={field.defaultValue ?? ''}/>;
                         case 'number':
-                            return <TextField id={field.name} required={field.required} key={field.name} label={`config.${field.name}`} variant="outlined" className={input} defaultValue={field.defaultValue ?? ''}/>;
+                            return <TextField id={field.name} type={field.type} required={field.required} key={field.name} label={`config.${field.name}`} variant="outlined" className={input} defaultValue={field.defaultValue ?? ''} />;
                         case 'boolean':
                           return <FormControlLabel value="end" key={field.name} labelPlacement="end" label={`config.${field.name}`} control={<Checkbox color="primary" required={field.required} defaultChecked={field.defaultValue}/>} className={checkbox}/>;
                         case 'array':
@@ -98,6 +101,8 @@ export const DrawerComponent = () => {
                       }
                     })}
                   </>
+
+                  
                 </FormControl>
             
                 )

@@ -47,7 +47,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         const plugins = await api.getServiceAssociatedPlugins(serviceIdOrName,proxyPath);
         if (plugins !== null && plugins !== undefined){
           setAllAssociatedPlugins(plugins);
-            return plugins;
+          return plugins;
         }
         return []
     }
