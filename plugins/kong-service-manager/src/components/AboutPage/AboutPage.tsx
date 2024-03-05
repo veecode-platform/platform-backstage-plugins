@@ -7,7 +7,8 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from '../../hooks';
 import useAsync from 'react-use/lib/useAsync';
 import { CopyTextButton, Progress } from '@backstage/core-components';
-import { LabelField } from './Fields'
+import { LabelField } from './Fields';
+import dayjs from 'dayjs';
 
 
 const useStyles = makeStyles(theme=>({
@@ -97,7 +98,7 @@ export const AboutPage = () => {
                   <Box className={listItem}>
                    <LabelField title="Enabled"/>
                   <ListItemText className={itemValue}>
-                    {serviceDetails.enabled.toString()}
+                    {serviceDetails.enabled ? '✅ Enabled' : '❌ Disabled'}
                   </ListItemText>
                   </Box>
                 </ListItem>
@@ -105,8 +106,8 @@ export const AboutPage = () => {
                 <ListItem className={listItemWrapper}>
                   <Box className={listItem}>
                    <LabelField title="Last updated"/>
-                  <ListItemText className={itemValue}>
-                    {serviceDetails.updated_at}
+                  <ListItemText className={itemValue} title={dayjs.unix(serviceDetails.updated_at).format('MM/DD/YYYY')}>            
+                      {`Updated ${dayjs().diff(dayjs.unix(serviceDetails.updated_at), 'day')} days ago`}
                   </ListItemText>
                   </Box>
                 </ListItem>
@@ -114,8 +115,8 @@ export const AboutPage = () => {
                 <ListItem className={listItemWrapper}>
                   <Box className={listItem}>
                    <LabelField title="Created"/>
-                  <ListItemText className={itemValue}>
-                    {serviceDetails.created_at}
+                  <ListItemText className={itemValue} title={`Created ${dayjs().diff(dayjs.unix(serviceDetails.created_at), 'day')} days ago`}>
+                    {dayjs.unix(serviceDetails.created_at).format('MM/DD/YYYY')}
                   </ListItemText>
                   </Box>
                 </ListItem>
