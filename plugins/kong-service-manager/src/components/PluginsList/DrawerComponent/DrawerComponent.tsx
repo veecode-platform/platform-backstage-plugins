@@ -9,9 +9,8 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from '../../../hooks';
 import { EmptyStateComponent } from '../../shared';
 import { Progress } from '@backstage/core-components';
-// import { SubFields } from './FieldsCustom';
 import { useStyles } from './styles';
-import { IncrementalFields } from './FieldsCustom';
+import { IncrementalFields, RecordFields } from './FieldsCustom';
 
 
 
@@ -92,7 +91,7 @@ export const DrawerComponent = () => {
                           return <FormControlLabel value="end" key={field.name} labelPlacement="end" label={field.name} control={<Checkbox color="primary" required={field.required} defaultChecked={field.defaultValue}/>} className={checkbox}/>;
                         case 'array':
                           if(field.arrayType === 'string') return <IncrementalFields key={field.name} name={field.name} required={field.required} items={field.defaultValues ?? []}/>;
-                          return <h2>Type Record</h2>;
+                          return <RecordFields name={field.name} required={field.required}/>;
                         default:
                           return <></>;
                       }
