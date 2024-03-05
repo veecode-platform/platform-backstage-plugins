@@ -61,14 +61,14 @@ export const SkeletonComponent = () => {
     {/* ENABLED */}
     <ListItem className={listItemWrapper}>
       <Box className={listItem}>
-       <LabelField title="Enable"/>
+       <LabelField title="Enabled"/>
         <Skeleton animation="pulse" className={normal} />
       </Box>
     </ListItem>
     {/* LAST UPDATE */}
     <ListItem className={listItemWrapper}>
       <Box className={listItem}>
-       <LabelField title="last Update"/>
+       <LabelField title="Last Update"/>
         <Skeleton animation="pulse" className={normal} />
       </Box>
     </ListItem>
