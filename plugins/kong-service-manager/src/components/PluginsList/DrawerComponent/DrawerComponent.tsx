@@ -91,7 +91,8 @@ export const DrawerComponent = () => {
                           return <FormControlLabel value="end" key={field.name} labelPlacement="end" label={`config.${field.name}`} control={<Checkbox color="primary" required={field.required} defaultChecked={field.defaultValue}/>} className={checkbox}/>;
                         case 'array':
                           if(field.arrayType === 'string') return <IncrementalFields key={field.name} name={field.name} required={field.required} items={field.defaultValues ?? []}/>;
-                          return <RecordFields name={field.name} required={field.required}/>;
+                          if(field.arrayType === 'record') return <RecordFields name={field.name} required={field.required} defaultValues={field.defaultValue} recordFields={field.recordFields}/>;
+                          return <></>;
                         default:
                           return <></>;
                       }

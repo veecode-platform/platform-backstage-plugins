@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
 import { useStyles } from './styles';
-import { Box, IconButton, TextField } from '@material-ui/core';
+import { Box, FormLabel, IconButton, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 
 interface RecordFieldsProps {
     name: string,
     required: boolean,
-    defaultValues?: any[]|[],
-    recordFields?: any[]|[]
+    defaultValues: any[]|[],
+    recordFields: any[]|[]
   }
   
   export const RecordFields = ({name, required, defaultValues,recordFields}:RecordFieldsProps) => {
-    const { box, field, input,emptyField } = useStyles();
+    const { box, field, input,label } = useStyles();
     const [inputFields, setInputFields] = useState<string[]>(['']);
   
     const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
@@ -28,18 +28,13 @@ interface RecordFieldsProps {
       values.splice(index, 1);
       setInputFields(values);
     };
+
+    // eslint-disable-next-line no-console
+    console.log(recordFields)
   
     return (
       <Box className={box}>
-        {inputFields.length === 0 ? (
-          <Box className={emptyField}>
-             <p>Add {name}</p>
-             <IconButton onClick={() => handleAddFields()}>
-                  <AddIcon />
-              </IconButton>
-          </Box>
-        ) : (
-          <>
+        <FormLabel className={label}>config.{name}</FormLabel>
             {inputFields.map((inputField, index) => (
               <div key={index} className={field}>
                 <TextField
@@ -62,8 +57,7 @@ interface RecordFieldsProps {
                 </IconButton>
               </div>
             ))}
-          </>
-        )}
+
       </Box>
     );
   };
