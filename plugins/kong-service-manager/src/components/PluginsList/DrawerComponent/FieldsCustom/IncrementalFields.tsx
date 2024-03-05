@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useStyles } from './styles';
-import { Box, IconButton, TextField } from '@material-ui/core';
+import { Box, Button, FormLabel, IconButton, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 interface IncrementalFieldsProps {
     name: string,
@@ -11,7 +11,7 @@ interface IncrementalFieldsProps {
   }
   
   export const IncrementalFields = ({name, required, items}:IncrementalFieldsProps) => {
-    const { box, field, input,emptyField } = useStyles();
+    const { box, field, input,label, addField } = useStyles();
     const [inputFields, setInputFields] = useState<string[]>(items.length > 0 ? items : ['']);
   
     const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
@@ -30,15 +30,8 @@ interface IncrementalFieldsProps {
   
     return (
       <Box className={box}>
-        {inputFields.length === 0 ? (
-          <Box className={emptyField}>
-             <p>Add {name}</p>
-             <IconButton onClick={() => handleAddFields()}>
-                  <AddIcon />
-              </IconButton>
-          </Box>
-        ) : (
-          <>
+        <FormLabel className={label}>config.{name}</FormLabel>
+
             {inputFields.map((inputField, index) => (
               <div key={index} className={field}>
                 <TextField
@@ -53,16 +46,17 @@ interface IncrementalFieldsProps {
                 />
                 {inputFields.length > 1 && (
                   <IconButton onClick={() => handleRemoveFields(index)}>
-                    <RemoveIcon />
+                    <DeleteIcon />
                   </IconButton>
                 )}
-                <IconButton onClick={() => handleAddFields()}>
-                  <AddIcon />
-                </IconButton>
               </div>
             ))}
-          </>
-        )}
+  
+
+        <Button className={addField} onClick={() => handleAddFields()}>
+          <AddIcon />
+          Add
+        </Button>
       </Box>
     );
   };

@@ -9,10 +9,14 @@ export const useStyles = makeStyles(theme => ({
       margin: theme.spacing(2),
       width: '100%',
     },
+    label:{
+      color: theme.palette.text.primary
+    },
     field: {
       display: 'flex',
       justifyContent: 'space-between',
       minWidth: '100%',
+      marginTop: '1rem',
       marginBottom: '1rem',
     },
     emptyField:{
@@ -20,7 +24,14 @@ export const useStyles = makeStyles(theme => ({
       display: 'flex',
       justifyContent: 'space-between'
     },
+    addField:{
+      width: 'auto',
+      color: theme.palette.link,
+      padding: '.5rem 1rem',
+      border: `1px solid ${theme.palette.link}`,
+      marginBottom: '1rem'
+    },
     input: {
-      minWidth: '90%',
+      minWidth: '95%',
     },
   }));
