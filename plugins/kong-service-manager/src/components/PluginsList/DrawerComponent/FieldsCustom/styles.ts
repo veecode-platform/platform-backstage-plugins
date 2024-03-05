@@ -8,6 +8,11 @@ export const useStyles = makeStyles(theme => ({
     box: {
       margin: theme.spacing(2),
       width: '100%',
+      display: 'flex',
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      gap:'1rem'
     },
     label:{
       color: theme.palette.text.primary
@@ -16,8 +21,6 @@ export const useStyles = makeStyles(theme => ({
       display: 'flex',
       justifyContent: 'space-between',
       minWidth: '100%',
-      marginTop: '1rem',
-      marginBottom: '1rem',
     },
     emptyField:{
       width: '100%',

@@ -12,7 +12,7 @@ interface IncrementalFieldsProps {
   
   export const IncrementalFields = ({name, required, items}:IncrementalFieldsProps) => {
     const { box, field, input,label, addField } = useStyles();
-    const [inputFields, setInputFields] = useState<string[]>(items.length > 0 ? items : ['']);
+    const [inputFields, setInputFields] = useState<string[]>(items);
   
     const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
       const values = [...inputFields];
@@ -44,7 +44,7 @@ interface IncrementalFieldsProps {
                   required={required}
                   key={index}
                 />
-                {inputFields.length > 1 && (
+                {inputFields.length >= 1 && (
                   <IconButton onClick={() => handleRemoveFields(index)}>
                     <DeleteIcon />
                   </IconButton>
