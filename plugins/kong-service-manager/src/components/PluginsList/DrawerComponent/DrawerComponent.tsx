@@ -9,8 +9,9 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from '../../../hooks';
 import { EmptyStateComponent } from '../../shared';
 import { Progress } from '@backstage/core-components';
-import { SubFields } from './FieldsCustom';
+// import { SubFields } from './FieldsCustom';
 import { useStyles } from './styles';
+import { IncrementalFields } from './FieldsCustom';
 
 
 
@@ -45,7 +46,7 @@ export const DrawerComponent = () => {
    setLoading(true);
    setTimeout(()=>{
     setLoading(false)
-   },1500)
+   },1000)
   },[selectedPlugin])
     
   return (
@@ -84,12 +85,14 @@ export const DrawerComponent = () => {
                     {fieldsComponents.map(field => {
                       switch (field.type) {
                         case 'string':
-                          if(field.selectOptions !== undefined) return <SubFields fields={field.selectOptions}/>
-                          return (<TextField id={field.name} required={field.required} key={field.name} label={field.name} variant="outlined" className={input} defaultValue={field.defaultValue ?? ''}/>)
+                          return <TextField id={field.name} required={field.required} key={field.name} label={field.name} variant="outlined" className={input} defaultValue={field.defaultValue ?? ''}/>;
                         case 'number':
-                            return (<TextField id={field.name} required={field.required} key={field.name} label={field.name} variant="outlined" className={input} defaultValue={field.defaultValue ?? ''}/>)
+                            return <TextField id={field.name} required={field.required} key={field.name} label={field.name} variant="outlined" className={input} defaultValue={field.defaultValue ?? ''}/>;
                         case 'boolean':
-                          return (<FormControlLabel value="end" key={field.name} labelPlacement="end" label={field.name} control={<Checkbox color="primary" required={field.required} defaultChecked={field.defaultValue}/>} className={checkbox}/>)
+                          return <FormControlLabel value="end" key={field.name} labelPlacement="end" label={field.name} control={<Checkbox color="primary" required={field.required} defaultChecked={field.defaultValue}/>} className={checkbox}/>;
+                        case 'array':
+                          if(field.arrayType === 'string') return <IncrementalFields/>;
+                          return <h2>Type Record</h2>;
                         default:
                           return <></>;
                       }
