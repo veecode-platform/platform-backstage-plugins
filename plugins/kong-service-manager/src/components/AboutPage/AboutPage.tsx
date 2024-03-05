@@ -6,12 +6,13 @@ import { KongServiceManagerContext } from '../context';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from '../../hooks';
 import useAsync from 'react-use/lib/useAsync';
-import { CopyTextButton, Progress } from '@backstage/core-components';
+import { CopyTextButton } from '@backstage/core-components';
 import { LabelField } from './Fields';
 import dayjs from 'dayjs';
+import { SkeletonComponent } from './SkeletonComponent';
 
 
-const useStyles = makeStyles(theme=>({
+export const useStyles = makeStyles(theme=>({
   listComponent:{
     background: theme.palette.background.default,
     height: '100%',
@@ -33,17 +34,12 @@ const useStyles = makeStyles(theme=>({
   },
   itemValue: {
     width: '70%',
-  },
-  loadingComponent:{
-    marginTop:'5rem',
-    width: '90%',
-    margin: 'auto'
   }
 }));
 
 export const AboutPage = () => {
 
-  const { listComponent, listItemWrapper, listItem, itemValue, loadingComponent } = useStyles();
+  const { listComponent, listItemWrapper, listItem, itemValue } = useStyles();
   const { getServiceDetails, serviceDetails } = useContext(KongServiceManagerContext);
   const { entity } = useEntity();
   const { serviceName, kongInstance } = useEntityAnnotation(entity);
@@ -65,7 +61,7 @@ export const AboutPage = () => {
    <BoxComponent title="Configuration">
      <List className={listComponent}>
        {
-        isLoading ? <Progress className={loadingComponent} /> :
+        isLoading ? <SkeletonComponent /> :
         (
         <>
           {
@@ -75,7 +71,7 @@ export const AboutPage = () => {
                 <ListItem className={listItemWrapper}>
                   <Box className={listItem}>
                    <LabelField title="ID"/>
-                  <ListItemText className={itemValue}>
+                    <ListItemText className={itemValue}>
                     {serviceDetails.id}
                     <CopyTextButton 
                      text={serviceDetails.id}
