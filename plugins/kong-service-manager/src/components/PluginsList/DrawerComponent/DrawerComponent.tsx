@@ -91,7 +91,7 @@ export const DrawerComponent = () => {
                         case 'boolean':
                           return <FormControlLabel value="end" key={field.name} labelPlacement="end" label={field.name} control={<Checkbox color="primary" required={field.required} defaultChecked={field.defaultValue}/>} className={checkbox}/>;
                         case 'array':
-                          if(field.arrayType === 'string') return <IncrementalFields/>;
+                          if(field.arrayType === 'string') return <IncrementalFields key={field.name} name={field.name} required={field.required} items={field.defaultValues ?? []}/>;
                           return <h2>Type Record</h2>;
                         default:
                           return <></>;

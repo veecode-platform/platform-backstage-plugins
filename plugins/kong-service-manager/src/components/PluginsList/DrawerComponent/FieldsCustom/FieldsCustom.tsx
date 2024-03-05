@@ -19,6 +19,11 @@ const useStyles = makeStyles(theme => ({
     minWidth: '100%',
     marginBottom: '1rem',
   },
+  emptyField:{
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
   input: {
     minWidth: '90%',
   },
@@ -58,10 +63,15 @@ export const SubFields = (fields:any) => {
     )
   }
 
+interface IncrementalFieldsProps {
+  name: string,
+  required: boolean,
+  items: string[]|[],
+}
 
-export const IncrementalFields = () => {
-  const { box, field, input } = useStyles();
-  const [inputFields, setInputFields] = useState<string[]>(['teste']);
+export const IncrementalFields = ({name, required, items}:IncrementalFieldsProps) => {
+  const { box, field, input,emptyField } = useStyles();
+  const [inputFields, setInputFields] = useState<string[]>(items.length > 0 ? items : ['']);
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
     const values = [...inputFields];
@@ -79,26 +89,39 @@ export const IncrementalFields = () => {
 
   return (
     <Box className={box}>
-      {inputFields.map((inputField, index) => (
-        <div key={index} className={field}>
-          <TextField
-            name="key"
-            label="Input variable key"
-            variant="outlined"
-            value={inputField}
-            onChange={(event) => handleChangeInput(event, index)} // Adicionando o índice como argumento
-            className={input}
-          />
-          {inputFields.length > 1 && (
-            <IconButton onClick={() => handleRemoveFields(index)}>
-              <RemoveIcon />
+      {inputFields.length === 0 ? (
+        <Box className={emptyField}>
+           <p>Add {name}</p>
+           <IconButton onClick={() => handleAddFields()}>
+                <AddIcon />
             </IconButton>
-          )}
-          <IconButton onClick={() => handleAddFields()}>
-            <AddIcon />
-          </IconButton>
-        </div>
-      ))}
+        </Box>
+      ) : (
+        <>
+          {inputFields.map((inputField, index) => (
+            <div key={index} className={field}>
+              <TextField
+                name={name}
+                label={name}
+                variant="outlined"
+                value={inputField}
+                onChange={event => handleChangeInput(event, index)}
+                className={input}
+                required={required}
+                key={index}
+              />
+              {inputFields.length > 1 && (
+                <IconButton onClick={() => handleRemoveFields(index)}>
+                  <RemoveIcon />
+                </IconButton>
+              )}
+              <IconButton onClick={() => handleAddFields()}>
+                <AddIcon />
+              </IconButton>
+            </div>
+          ))}
+        </>
+      )}
     </Box>
   );
 };
