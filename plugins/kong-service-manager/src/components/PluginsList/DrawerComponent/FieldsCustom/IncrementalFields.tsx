@@ -54,7 +54,7 @@ interface IncrementalFieldsProps {
   
 
         <Button className={addField} onClick={() => handleAddFields()}>
-          <AddIcon />
+          <AddIcon />{" "}
           Add
         </Button>
       </Box>
