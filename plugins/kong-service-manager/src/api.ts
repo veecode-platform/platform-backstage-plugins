@@ -7,7 +7,7 @@ export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
 
 const KONG_SERVICE_MANAGER_DEFAULT_PROXY_URL = "/kong-manager/api";
 
-function getPluginFieldType(type:string){
+function getPluginFieldType(type: string) {
     switch (type) {
         case "string":
             return "string"
@@ -15,14 +15,14 @@ function getPluginFieldType(type:string){
         case "number":
         case "integer":
             return "number"
-            
+
         case "boolean":
             return "boolean"
 
         case "array":
             return "array"
 
-        case "record": 
+        case "record":
             return "record"
         default:
             return "string"
@@ -35,17 +35,17 @@ export interface KongServiceManagerApi {
 
     getPluginFields(pluginName: string, proxyPath?: string): Promise<PluginFieldsResponse[]>;
 
-    getServiceAssociatedPlugins(serviceIdOrName:string, proxyPath?: string): Promise<AssociatedPluginsResponse[]>;
+    getServiceAssociatedPlugins(serviceIdOrName: string, proxyPath?: string): Promise<AssociatedPluginsResponse[]>;
 
-    createServicePlugin(serviceIdOrName:string, config: CreatePlugin, proxyPath?: string): Promise<any>;
+    createServicePlugin(serviceIdOrName: string, config: CreatePlugin, proxyPath?: string): Promise<any>;
 
-    editServicePlugin(serviceIdOrName:string, config:CreatePlugin, proxyPath?: string): Promise<any>;
+    editServicePlugin(serviceIdOrName: string, config: CreatePlugin, proxyPath?: string): Promise<any>;
 
-    removeServicePlugin(serviceIdOrName:string, pluginId: string, proxyPath?: string): Promise<any>;
+    removeServicePlugin(serviceIdOrName: string, pluginId: string, proxyPath?: string): Promise<any>;
 
-    getRoutesFromService(serviceIdOrName:string, proxyPath?: string): Promise<RoutesResponse[]>;
+    getRoutesFromService(serviceIdOrName: string, proxyPath?: string): Promise<RoutesResponse[]>;
 
-    getServiceInfo(serviceIdOrName:string, proxyPath?: string): Promise<ServiceInfoResponse>;
+    getServiceInfo(serviceIdOrName: string, proxyPath?: string): Promise<ServiceInfoResponse>;
 
 
 }
@@ -78,7 +78,7 @@ class Client {
         const resp = await fetch(`${apiUrl}${input}`, {
             ...init,
             headers: {
-                "X-authorization-identity": `${identityToken.token}`              
+                "X-authorization-identity": `${identityToken.token}`
             }
         });
 
@@ -86,7 +86,7 @@ class Client {
             throw new Error(`Request failed with ${resp.status} - ${resp.statusText}`);
         }
 
-        if(resp.status === 204) return {message: "deleted"} as any
+        if (resp.status === 204) return { message: "deleted" } as any
         return await resp.json();
     }
 
@@ -95,13 +95,13 @@ class Client {
         return `${baseUrl}${proxyPath || this.proxyPath}`
     }
 
-    async getEnabledPlugins(proxyPath?: string): Promise<string[]>{
+    async getEnabledPlugins(proxyPath?: string): Promise<string[]> {
         const response = await this.fetch("/plugins/enabled", proxyPath)
         return response.enabled_plugins
     }
 
-    async getPluginSchema(pluginName: string, proxyPath?: string): Promise<any>{
-        
+    async getPluginSchema(pluginName: string, proxyPath?: string): Promise<any> {
+
         const response = await this.fetch(`/schemas/plugins/${pluginName}`, proxyPath)
 
         const fieldsMap: Map<string, SchemaFields> = response.fields.reduce((map: { set: (arg0: string, arg1: any) => void; }, fieldObj: { [x: string]: any; }) => {
@@ -114,13 +114,13 @@ class Client {
         return fieldsMap.get("config")
     }
 
-    async getPluginFields(pluginName: string, proxyPath?: string):Promise<PluginFieldsResponse[]>{
+    async getPluginFields(pluginName: string, proxyPath?: string): Promise<PluginFieldsResponse[]> {
         const config = await this.getPluginSchema(pluginName, proxyPath)
-        if(!config) throw new Error("Impossible to find plugin config")
+        if (!config) throw new Error("Impossible to find plugin config")
 
-        const mapedFields:PluginFieldsResponse[] = config.fields.map((field:any) => {
+        const mapedFields: PluginFieldsResponse[] = config.fields.map((field: any) => {
             const pluginFieldName = Object.keys(field)[0]
-            const pluginR:PluginFieldsResponse =  {
+            const pluginR: PluginFieldsResponse = {
                 name: pluginFieldName,
                 type: getPluginFieldType(field[pluginFieldName].type),
                 required: field[pluginFieldName].required || false,
@@ -129,31 +129,27 @@ class Client {
                 isMultipleArray: field[pluginFieldName].elements?.one_of ? true : false,
                 arrayOptions: field[pluginFieldName].elements?.one_of,
             }
-            /*if(pluginR.arrayType === "record"){
-                const mapedRecordFields = field[pluginFieldName].elements?.fields.map((record:any) => {
-                    console.log("record: ", record)
+            if (pluginR.arrayType === "record") {
+                const mapedRecordFields = field[pluginFieldName].elements?.fields.map((record: any) => {
                     const recordName = Object.keys(record)[0]
-                    //console.log("name:", recordName)
-                   return {
-                    name: recordName,
-                    type: record.field[pluginFieldName].elements?.fields[recordName].type,
-                    required: record.field[pluginFieldName].elements?.fields[recordName].required,
-                    arrayOptions: record.field[pluginFieldName].elements?.fields[recordName].one_of
-                   } 
-                })        
+                    return {
+                        name: recordName,
+                        type: record[recordName].type,
+                        required: record[recordName].required,
+                        arrayOptions: record[recordName].one_of
+                    }
+                })
                 pluginR.recordFields = mapedRecordFields
-            }*/
-            console.log("maped: ", pluginR)
+            }
             return pluginR
 
-        } )
-        console.log("response: ", mapedFields)
+        })
         return mapedFields
     }
 
-    async getServiceAssociatedPlugins(serviceIdOrName: string, proxyPath?: string): Promise<AssociatedPluginsResponse[]>{
+    async getServiceAssociatedPlugins(serviceIdOrName: string, proxyPath?: string): Promise<AssociatedPluginsResponse[]> {
         const response = await this.fetch(`/services/${serviceIdOrName}/plugins`, proxyPath)
-        const mapedPluginsData:AssociatedPluginsResponse[] = response.data.map((data: { name: any; id: any; tags: any; enabled: any; created_at: any; config: any; }) => {
+        const mapedPluginsData: AssociatedPluginsResponse[] = response.data.map((data: { name: any; id: any; tags: any; enabled: any; created_at: any; config: any; }) => {
             return {
                 name: data.name,
                 id: data.id,
@@ -167,7 +163,7 @@ class Client {
 
     }
 
-    async createServicePlugin(serviceIdOrName: string, config: CreatePlugin, proxyPath?: string): Promise<any>{
+    async createServicePlugin(serviceIdOrName: string, config: CreatePlugin, proxyPath?: string): Promise<any> {
         const body = {
             ...config,
             service: null,
@@ -181,7 +177,7 @@ class Client {
         return response
     }
 
-    async editServicePlugin(serviceIdOrName: string, config: CreatePlugin, proxyPath?: string): Promise<any>{
+    async editServicePlugin(serviceIdOrName: string, config: CreatePlugin, proxyPath?: string): Promise<any> {
         const body = {
             ...config,
             service: null,
@@ -196,17 +192,17 @@ class Client {
 
     }
 
-    async removeServicePlugin(serviceIdOrName: string, pluginId: string, proxyPath?: string): Promise<any>{
+    async removeServicePlugin(serviceIdOrName: string, pluginId: string, proxyPath?: string): Promise<any> {
         const response = await this.fetch(`/services/${serviceIdOrName}/plugins/${pluginId}`, proxyPath)
         return response.message
     }
 
-    async getRoutesFromService(serviceIdOrName: string, proxyPath?: string): Promise<RoutesResponse[]>{
+    async getRoutesFromService(serviceIdOrName: string, proxyPath?: string): Promise<RoutesResponse[]> {
         const response = await this.fetch(`/services/${serviceIdOrName}/routes`, proxyPath)
 
-        const mapedRoutesResponse:RoutesResponse[] = response.data.map((route: { name: any; protocols: any; methods: any; tags: any; hosts: any; paths: any; }) => {
+        const mapedRoutesResponse: RoutesResponse[] = response.data.map((route: { name: any; protocols: any; methods: any; tags: any; hosts: any; paths: any; }) => {
             return {
-                name: route.name, 
+                name: route.name,
                 protocols: route.protocols,
                 methods: route.methods,
                 tags: route.tags,
@@ -218,7 +214,7 @@ class Client {
         return mapedRoutesResponse
     }
 
-    async getServiceInfo(serviceIdOrName: string, proxyPath?: string): Promise<ServiceInfoResponse>{
+    async getServiceInfo(serviceIdOrName: string, proxyPath?: string): Promise<ServiceInfoResponse> {
         const response = await this.fetch(`/services/${serviceIdOrName}`, proxyPath)
         return response
     }
@@ -250,17 +246,17 @@ export class KongServiceManagerApiClient implements KongServiceManagerApi {
     }
 
     async editServicePlugin(serviceIdOrName: string, config: CreatePlugin, proxyPath?: string | undefined): Promise<any> {
-       return this.client.editServicePlugin(serviceIdOrName, config, proxyPath) 
+        return this.client.editServicePlugin(serviceIdOrName, config, proxyPath)
     }
 
     async removeServicePlugin(serviceIdOrName: string, pluginId: string, proxyPath?: string | undefined): Promise<any> {
         return this.client.removeServicePlugin(serviceIdOrName, pluginId, proxyPath)
     }
-    
+
     async getRoutesFromService(serviceIdOrName: string, proxyPath?: string | undefined): Promise<RoutesResponse[]> {
         return this.client.getRoutesFromService(serviceIdOrName, proxyPath)
     }
-    
+
     async getServiceInfo(serviceIdOrName: string, proxyPath?: string | undefined): Promise<ServiceInfoResponse> {
         return this.client.getServiceInfo(serviceIdOrName, proxyPath)
     }
