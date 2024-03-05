@@ -5,7 +5,7 @@ import {
   Table,
   TableColumn} from '@backstage/core-components';
 import { RoutesResponse } from '../../../utils/types';
-import { Box, Zoom, makeStyles } from '@material-ui/core';
+import { Box, Fade, makeStyles } from '@material-ui/core';
 import { HtmlTooltip } from '../../shared';
 import MoreIcon from '@material-ui/icons/More';
 
@@ -136,7 +136,8 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
         <HtmlTooltip
           arrow
           placement="bottom"
-          TransitionComponent={Zoom}
+          TransitionComponent={Fade}
+          TransitionProps={{ timeout: 600 }}
           title={
               <Box className={tooltipContent}>
                 {row.tags ? row.tags.map(tag => (
