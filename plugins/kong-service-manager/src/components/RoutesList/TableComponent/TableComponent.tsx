@@ -5,6 +5,9 @@ import {
   Table,
   TableColumn} from '@backstage/core-components';
 import { RoutesResponse } from '../../../utils/types';
+import { Box, Zoom, makeStyles } from '@material-ui/core';
+import { HtmlTooltip } from '../../shared';
+import MoreIcon from '@material-ui/icons/More';
 
 interface TableComponentProps {
   dataProps: RoutesResponse[] | []
@@ -19,7 +22,18 @@ interface TableData {
   tags: string[]
 }
 
+const useStyle = makeStyles({
+  tooltipContent:{
+    width: '100%'
+  },
+  tags: {
+    cursor: 'pointer',
+  }
+})
+
 export const TableComponent = ({dataProps}:TableComponentProps) => {
+
+  const {tooltipContent, tags} = useStyle();
 
   const generateData = (rowData: RoutesResponse[] | [] | null) => {
     const data: Array<TableData> = [];
@@ -45,92 +59,99 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
       highlight: true,
       type: 'string',
       align: 'center',
-      width: '1fr'
+      width: '1fr',
     },
     {
       title: 'Protocols',
       highlight: true,
       render: (row: Partial<TableData>) => (
         <>
-          {
-            row.protocols ?
-            row.protocols.map(protocol => (
-              <Typography variant="body2" key={protocol}>{protocol}</Typography>
-            ))
-            : ' - '
-          }
+          {row.protocols
+            ? row.protocols.map(protocol => (
+                <Typography variant="body2" key={protocol}>
+                  {protocol}
+                </Typography>
+              ))
+            : ' - '}
         </>
       ),
       align: 'center',
-      width: '1fr'
+      width: '1fr',
     },
     {
       title: 'Methods',
       highlight: true,
       render: (row: Partial<TableData>) => (
         <>
-          {
-            row.methods ?
-            row.methods.map(method => (
-              <Typography variant="body2" key={method}>{method}</Typography>
-            ))
-            : ' - '
-          }
+          {row.methods
+            ? row.methods.map(method => (
+                <Typography variant="body2" key={method}>
+                  {method}
+                </Typography>
+              ))
+            : ' - '}
         </>
       ),
       align: 'center',
-      width: '1fr'
+      width: '1fr',
     },
     {
       title: 'Hosts',
       highlight: true,
       render: (row: Partial<TableData>) => (
         <>
-          { 
-            row.hosts ?
-            row.hosts.map(host => (
-              <Typography variant="body2" key={host}>{host}</Typography>
-            ))
-            : ' - '
-          }
+          {row.hosts
+            ? row.hosts.map(host => (
+                <Typography variant="body2" key={host}>
+                  {host}
+                </Typography>
+              ))
+            : ' - '}
         </>
       ),
       align: 'center',
-      width: '1fr'
+      width: '1fr',
     },
     {
       title: 'Paths',
       highlight: true,
       render: (row: Partial<TableData>) => (
         <>
-          {
-            row.paths ?
-            row.paths.map(path => (
-              <Typography variant="body2" key={path}>{path}</Typography>
-            ))
-            : ' - '
-          }
+          {row.paths
+            ? row.paths.map(path => (
+                <Typography variant="body2" key={path}>
+                  {path}
+                </Typography>
+              ))
+            : ' - '}
         </>
       ),
       align: 'center',
-      width: '1fr'
+      width: '1fr',
     },
     {
       title: 'Tags',
       highlight: true,
       render: (row: Partial<TableData>) => (
-        <>
-          {
-            row.tags ?
-            row.tags.map(tag => (
-              <Chip key={tag} label={tag}/>
-            ))
-            : ' - '
+        <HtmlTooltip
+          arrow
+          placement="bottom"
+          TransitionComponent={Zoom}
+          title={
+              <Box className={tooltipContent}>
+                {row.tags ? row.tags.map(tag => (
+                  <Chip key={tag} label={tag} />
+                )): 'No tags'}
+              </Box>
           }
-        </>
+        >
+          <div className={tags}>
+          <MoreIcon/> 
+          </div>
+        </HtmlTooltip>
       ),
       align: 'center',
-      width: '1fr'
+      width: '1fr',
     },
   ];
 
