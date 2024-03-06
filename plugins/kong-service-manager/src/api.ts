@@ -171,7 +171,10 @@ class Client {
         }
         const headers: RequestInit = {
             method: "POST",
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
+            headers: {
+                "content-type": "application/json"
+            }
         }
         const response = await this.fetch(`/services/${serviceIdOrName}/plugins`, proxyPath, headers)
         return response
@@ -185,7 +188,10 @@ class Client {
         }
         const headers: RequestInit = {
             method: "PATCH",
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
+            headers: {
+                "content-type": "application/json"
+            }
         }
         const response = await this.fetch(`/services/${serviceIdOrName}/plugins`, proxyPath, headers)
         return response
