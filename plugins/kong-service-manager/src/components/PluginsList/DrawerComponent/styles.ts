@@ -50,4 +50,8 @@ export const useStyles = makeStyles(theme => ({
     secondaryAction: {
       marginLeft: theme.spacing(2.5),
     },
+    spinner:{
+      color: theme.palette.text.primary,
+      marginLeft: '.5rem'
+    }
   }));

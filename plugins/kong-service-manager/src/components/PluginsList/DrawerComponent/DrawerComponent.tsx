@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @backstage/no-undeclared-imports */
 import React, { useContext, useEffect, useState } from 'react';
-import { Box, Button, Checkbox, Drawer, FormControl, FormControlLabel, IconButton, TextField, Typography } from '@material-ui/core';
+import { Box, Button, Checkbox, CircularProgress, Drawer, FormControl, FormControlLabel, IconButton, TextField, Typography } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
 import { KongServiceManagerContext } from '../../context';
 import { CreatePlugin } from '../../../utils/types';
@@ -15,13 +15,14 @@ import { IncrementalFields, RecordFields } from './FieldsCustom';
 
 export const DrawerComponent = () => {
 
-  const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction} = useStyles();
+  const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction, spinner} = useStyles();
   const { entity } = useEntity();
   const { serviceName, kongInstance } = useEntityAnnotation(entity);
   const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPlugin, allAssociatedPlugins} = useContext(KongServiceManagerContext);
   const [fieldsComponents, setFieldsComponents ] = useState<any[]|[]>([]);
   const [ isLoading, setLoading] = useState<boolean>(false);
-  const [configState, setConfigState ] = useState<any|{}>({})
+  const [configState, setConfigState ] = useState<any|null>(null);
+  const [processingData, setProcessingData] = useState<boolean>(false);
 
 
   const handleChangeInput = (key: string, value: string | boolean | string[] | number) => {
@@ -39,16 +40,16 @@ export const DrawerComponent = () => {
 
   const handleEnablePlugin = async () => {
     if (selectedPlugin && allAssociatedPlugins && configState) {
+      setProcessingData(true);
       const config = {
         config: configState,
         tags: [],
         name: selectedPlugin.slug, 
         protocols: [],
         enabled: true
-      }
-      const response = await enablePlugin(serviceName as string,config,kongInstance as string);
-      if(response) setConfigState({});
-      handleToggleDrawer();
+      } 
+      await enablePlugin(serviceName as string,config,kongInstance as string);
+      setProcessingData(false)  
     }
   };
 
@@ -62,7 +63,7 @@ export const DrawerComponent = () => {
     if(fields) {
       let updatedConfigState = { ...configState };
       // eslint-disable-next-line no-console
-      console.log(fields)
+      // console.log(fields)
       fields.forEach((f) => {
         if (f.defaultValue !== undefined) {
           updatedConfigState = {
@@ -86,10 +87,16 @@ export const DrawerComponent = () => {
    },1000)
   },[selectedPlugin]);
 
-  // useEffect(()=>{
-  //   // eslint-disable-next-line no-console
-  //   console.log(configState)
-  // },[configState])
+  useEffect(()=>{
+    setConfigState({})
+  },[]);
+
+  useEffect(()=>{
+    if(!processingData) {
+      setConfigState(null)
+      handleToggleDrawer();
+    }
+  },[processingData])
     
   return (
     <Drawer
@@ -145,7 +152,12 @@ export const DrawerComponent = () => {
                             variant="outlined"
                             className={input}
                             defaultValue={field.defaultValue}
-                            onChange={(event) => handleChangeInput(field.name, event?.target.value as string)}
+                            onChange={event =>
+                              handleChangeInput(
+                                field.name,
+                                event?.target.value as string,
+                              )
+                            }
                           />
                         );
                       case 'number':
@@ -160,7 +172,12 @@ export const DrawerComponent = () => {
                             variant="outlined"
                             className={input}
                             defaultValue={field.defaultValue}
-                            onChange={(event) => handleChangeInput(field.name, Number(event?.target.value))}
+                            onChange={event =>
+                              handleChangeInput(
+                                field.name,
+                                Number(event?.target.value),
+                              )
+                            }
                           />
                         );
                       case 'boolean':
@@ -175,7 +192,12 @@ export const DrawerComponent = () => {
                                 required={field.required}
                                 name={field.name}
                                 defaultChecked={field.defaultValue}
-                                onChange={(e) => handleChangeInput(field.name, e.target.checked as boolean)}
+                                onChange={e =>
+                                  handleChangeInput(
+                                    field.name,
+                                    e.target.checked as boolean,
+                                  )
+                                }
                               />
                             }
                             className={checkbox}
@@ -188,7 +210,11 @@ export const DrawerComponent = () => {
                               key={field.name}
                               name={field.name}
                               required={field.required}
-                              items={field.defaultValue ? field.defaultValue : field.defaultValues}
+                              items={
+                                field.defaultValue
+                                  ? field.defaultValue
+                                  : field.defaultValues
+                              }
                               setConfig={setConfigState}
                             />
                           );
@@ -221,16 +247,32 @@ export const DrawerComponent = () => {
               variant="contained"
               color="primary"
               onClick={() => handleEditAction}
+              disabled={processingData}
             >
-              Save Changes
+              {processingData ? (
+                <>
+                  Saving...
+                  <CircularProgress className={spinner} size={20} />
+                </>
+              ) : (
+                <>Save Changes</>
+              )}
             </Button>
           ) : (
             <Button
               variant="contained"
               color="primary"
               onClick={handleEnablePlugin}
+              disabled={processingData}
             >
-              Install Plugin
+              {processingData ? (
+                <>
+                  Installing...
+                  <CircularProgress className={spinner} size={20} />
+                </>
+              ) : (
+                <>Install Plugin</>
+              )}
             </Button>
           )}
         </>

@@ -1,6 +1,6 @@
 /* eslint-disable @backstage/no-undeclared-imports */
-import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from '@material-ui/core'
-import React, { useContext }  from 'react'
+import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, IconButton, Typography } from '@material-ui/core'
+import React, { useContext, useState }  from 'react'
 import Edit from '@material-ui/icons/Edit'
 import { useStyles } from '../styles'
 import { KongServiceManagerContext } from '../../../context'
@@ -14,10 +14,11 @@ interface CardComponentProps {
 
 export const CardComponent = ({data}:CardComponentProps) => {
 
-  const {card, cardHeader, cardTitle, cardIcon,description, button} = useStyles();
+  const {card, cardHeader, cardTitle, cardIcon,description, button,spinner} = useStyles();
   const { entity } = useEntity();
   const { serviceName, kongInstance } = useEntityAnnotation(entity);
   const { handleToggleDrawer, setPluginState, disablePlugin, allAssociatedPlugins } = useContext(KongServiceManagerContext);
+  const [processingData, setProcessingData] = useState<boolean>(false);
 
   const handlePluginEnable = async () => {
     if(data){
@@ -29,6 +30,7 @@ export const CardComponent = ({data}:CardComponentProps) => {
 
   const handlePluginRemove = async () =>{
      if(allAssociatedPlugins){
+      setProcessingData(true)
         let id = ""
         allAssociatedPlugins.forEach(p => {
           if(p.name === data.slug){
@@ -36,6 +38,7 @@ export const CardComponent = ({data}:CardComponentProps) => {
           }
         });
         await disablePlugin(serviceName as string, id, kongInstance as string);
+        setProcessingData(false)
         }
      }
 
@@ -78,8 +81,16 @@ export const CardComponent = ({data}:CardComponentProps) => {
               variant="contained"
               className={button}
               onClick={handlePluginRemove}
+              disabled={processingData}
             >
-              Disable
+              {processingData ? (
+                <>
+                  Disabling...
+                  <CircularProgress className={spinner} size={20} />
+                </>
+              ) : (
+                <>Disable</>
+              )}
             </Button>
           ) : (
             <Button

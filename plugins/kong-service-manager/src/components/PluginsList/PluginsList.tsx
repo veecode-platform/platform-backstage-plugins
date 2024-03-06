@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @backstage/no-undeclared-imports */
 import React, { useContext, useEffect } from 'react'
 import { BoxComponent, EmptyStateComponent } from '../shared'
@@ -39,13 +40,10 @@ export const PluginsList = () => {
   const { loading, error } = useAsync(async (): Promise<void> => {
     getPluginsEnabled();
     getAssociatedPlugins();
-    // eslint-disable-next-line no-console
-    console.log("foi")
   }, []);
 
   useEffect(()=>{
     getPluginsEnabled();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[allAssociatedPlugins])
 
   if (loading) return <Progress />;

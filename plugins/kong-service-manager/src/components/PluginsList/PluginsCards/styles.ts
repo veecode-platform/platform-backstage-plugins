@@ -46,5 +46,9 @@ export const useStyles = makeStyles( theme => ({
       border: `1px solid ${theme.palette.primary.main}`,
       width: '380px',
       padding: theme.spacing(1)
-     }
+     },
+     spinner:{
+      color: theme.palette.text.primary,
+      marginLeft: '.5rem'
+    }
   }));
