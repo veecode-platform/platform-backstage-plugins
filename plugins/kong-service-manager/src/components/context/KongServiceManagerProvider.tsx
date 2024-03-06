@@ -182,15 +182,14 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     try{ 
       const response = await api.createServicePlugin(serviceIdOrName, config,proxyPath);
       if(response) {
-        await listAssociatedPlugins(serviceIdOrName,proxyPath);
-         alertApi.post({
+         await listAssociatedPlugins(serviceIdOrName,proxyPath);
+         return alertApi.post({
           message: 'Plugin successfully enabled!',
           severity: 'success',
           display: 'transient',
       });
-      return true
       }
-      return false
+      return null
     } catch(e:any){
       errorApi.post(e);
       return null

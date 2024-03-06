@@ -11,7 +11,7 @@ export type KongServiceManagerContextType = {
     listAssociatedPlugins: (serviceIdOrName: string, proxyPath: string) => Promise<AssociatedPluginsResponse[]|null>;
     allAssociatedPlugins: AssociatedPluginsResponse[] | null;
     getPluginFields: (pluginName: string, proxyPath: string) => Promise<PluginFieldsResponse[] | null>;
-    enablePlugin: (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => Promise<boolean | null>;
+    enablePlugin: (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => Promise<void | null>;
     disablePlugin: (serviceIdOrName: string, pluginId: string, proxyPath: string) => Promise<any>;
     handleToggleDrawer: () => void;
     openDrawer: boolean;
