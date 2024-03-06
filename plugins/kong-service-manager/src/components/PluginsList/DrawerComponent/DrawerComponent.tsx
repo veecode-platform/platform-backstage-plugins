@@ -61,7 +61,7 @@ export const DrawerComponent = () => {
     if(fields) {
       let updatedConfigState = { ...configState };
       // eslint-disable-next-line no-console
-      // console.log(fields)
+      console.log(fields)
       fields.forEach((f) => {
         if (f.defaultValue !== undefined) {
           updatedConfigState = {
@@ -83,7 +83,12 @@ export const DrawerComponent = () => {
    setTimeout(()=>{
     setLoading(false)
    },1000)
-  },[selectedPlugin])
+  },[selectedPlugin]);
+
+  // useEffect(()=>{
+  //   // eslint-disable-next-line no-console
+  //   console.log(configState)
+  // },[configState])
     
   return (
     <Drawer
@@ -182,7 +187,8 @@ export const DrawerComponent = () => {
                               key={field.name}
                               name={field.name}
                               required={field.required}
-                              items={field.defaultValues}
+                              items={field.defaultValue ? field.defaultValue : field.defaultValues}
+                              setConfig={setConfigState}
                             />
                           );
                         if (field.arrayType === 'record')

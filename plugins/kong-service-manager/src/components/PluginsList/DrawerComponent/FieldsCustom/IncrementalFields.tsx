@@ -8,16 +8,27 @@ interface IncrementalFieldsProps {
     name: string,
     required: boolean,
     items: string[]|[],
+    setConfig: React.Dispatch<any>
   }
   
-  export const IncrementalFields = ({name, required, items}:IncrementalFieldsProps) => {
+  export const IncrementalFields = ({name, required, items, setConfig}:IncrementalFieldsProps) => {
+  
     const { box, field, input,label, addField } = useStyles();
     const [inputFields, setInputFields] = useState<string[]>(items);
   
     const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
+      if(event.target.value !== ""){
       const values = [...inputFields];
       values[index] = event.target.value;
+      setConfig((prevConfigState : any) => {
+        const updatedConfigState = {
+          ...prevConfigState,
+          [event.target.name]: values,
+        };
+        return updatedConfigState;
+      });
       setInputFields(values);
+    }
     };
   
     const handleAddFields = () => setInputFields([...inputFields, '']);
@@ -27,7 +38,7 @@ interface IncrementalFieldsProps {
       values.splice(index, 1);
       setInputFields(values);
     };
-  
+
     return (
       <Box className={box}>
         <FormLabel className={label}>config.{name}</FormLabel>
