@@ -19,19 +19,15 @@ export const CardComponent = ({data}:CardComponentProps) => {
   const { serviceName, kongInstance } = useEntityAnnotation(entity);
   const { handleToggleDrawer, setPluginState, disablePlugin, allAssociatedPlugins } = useContext(KongServiceManagerContext);
 
-  const handleActionClick = async () => {
+  const handlePluginEnable = async () => {
     if(data){
-      if(data.associated){
-        await disablePlugin(serviceName as string, data.slug, kongInstance as string);
-        return;
-      } 
       setPluginState(data);
       handleToggleDrawer();
       return;
     }
   }
 
-  const handleActionDelete = async () =>{
+  const handlePluginRemove = async () =>{
      if(allAssociatedPlugins){
         let id = ""
         allAssociatedPlugins.forEach(p => {
@@ -81,7 +77,7 @@ export const CardComponent = ({data}:CardComponentProps) => {
               color="primary"
               variant="contained"
               className={button}
-              onClick={handleActionDelete}
+              onClick={handlePluginRemove}
             >
               Disable
             </Button>
@@ -90,7 +86,7 @@ export const CardComponent = ({data}:CardComponentProps) => {
               color="primary"
               variant="outlined"
               className={button}
-              onClick={handleActionClick}
+              onClick={handlePluginEnable}
             >
               Enable
             </Button>
