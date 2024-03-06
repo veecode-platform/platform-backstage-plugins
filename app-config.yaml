@@ -71,12 +71,14 @@ proxy:
       allowedHeaders: ['Authorization']
       headers: 
         Accept: application/json
+        content-type: application/json
 
     '/kong-other-manager/api': #should be used as a annotation
       target: https://api.manager.apr.vee.codes/default
       allowedHeaders: ['Authorization']
       headers: 
         Accept: application/json
+        content-type: application/json
 
   ### Example for how to add a proxy endpoint for the frontend.
   ### A typical reason to do this is to handle HTTPS and CORS for internal services.
