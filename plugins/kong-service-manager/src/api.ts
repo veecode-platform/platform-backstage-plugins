@@ -164,7 +164,6 @@ class Client {
     }
 
     async createServicePlugin(serviceIdOrName: string, config: CreatePlugin, proxyPath?: string): Promise<any> {
-        console.log("debug body: ", config, typeof config)
         const body = {
             ...config,
             tags: ["devportal", "plugin-kong-service-manager"],
