@@ -50,6 +50,7 @@ export const DrawerComponent = () => {
       } 
       await enablePlugin(serviceName as string,config,kongInstance as string);
       setProcessingData(false)  
+      handleToggleDrawer();
     }
   };
 
@@ -94,7 +95,6 @@ export const DrawerComponent = () => {
   useEffect(()=>{
     if(!processingData) {
       setConfigState(null)
-      handleToggleDrawer();
     }
   },[processingData])
     
