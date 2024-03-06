@@ -4,50 +4,50 @@ import { KongServiceManagerContext } from '../../../context';
 
 export const AllPlugins = () => {
 
-  const { pluginsPerCategory : plugins} = useContext(KongServiceManagerContext)
+  const { pluginsPerCategory } = useContext(KongServiceManagerContext)
 
   return (
     <>
-      {plugins.ai.plugins.length >= 1 && (
-        <CategoryComponent label="AI" plugins={plugins.ai.plugins} />
+      {pluginsPerCategory.ai.plugins.length >= 1 && (
+        <CategoryComponent label="AI" plugins={pluginsPerCategory.ai.plugins} />
       )}
-      {plugins.analitics.plugins.length >= 1 && (
+      {pluginsPerCategory.analitics.plugins.length >= 1 && (
         <CategoryComponent
           label="Analitics & Monitoring"
-          plugins={plugins.analitics.plugins}
+          plugins={pluginsPerCategory.analitics.plugins}
         />
       )}
-      {plugins.auth.plugins.length >= 1 && (
+      {pluginsPerCategory.auth.plugins.length >= 1 && (
         <CategoryComponent
           label="Authentication"
-          plugins={plugins.auth.plugins}
+          plugins={pluginsPerCategory.auth.plugins}
         />
       )}
-      {plugins.logging.plugins.length >= 1 && (
-        <CategoryComponent label="Logging" plugins={plugins.logging.plugins} />
+      {pluginsPerCategory.logging.plugins.length >= 1 && (
+        <CategoryComponent label="Logging" plugins={pluginsPerCategory.logging.plugins} />
       )}
-      {plugins.security.plugins.length >= 1 && (
+      {pluginsPerCategory.security.plugins.length >= 1 && (
         <CategoryComponent
           label="Security"
-          plugins={plugins.security.plugins}
+          plugins={pluginsPerCategory.security.plugins}
         />
       )}
-      {plugins.serverless.plugins.length >= 1 && (
+      {pluginsPerCategory.serverless.plugins.length >= 1 && (
         <CategoryComponent
           label="Serverless"
-          plugins={plugins.serverless.plugins}
+          plugins={pluginsPerCategory.serverless.plugins}
         />
       )}
-      {plugins.trafficControl.plugins.length >= 1 && (
+      {pluginsPerCategory.trafficControl.plugins.length >= 1 && (
         <CategoryComponent
           label="Traffic Control"
-          plugins={plugins.trafficControl.plugins}
+          plugins={pluginsPerCategory.trafficControl.plugins}
         />
       )}
-      {plugins.transformations.plugins.length >= 1 && (
+      {pluginsPerCategory.transformations.plugins.length >= 1 && (
         <CategoryComponent
           label="Transformations"
-          plugins={plugins.transformations.plugins}
+          plugins={pluginsPerCategory.transformations.plugins}
         />
       )}
     </>

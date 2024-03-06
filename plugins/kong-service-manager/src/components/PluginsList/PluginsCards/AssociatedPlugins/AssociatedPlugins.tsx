@@ -1,10 +1,7 @@
-/* eslint-disable @backstage/no-undeclared-imports */
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { CategoryComponent } from '../CategoryComponent';
 import { PluginCard } from '../../../../utils/types';
 import { KongServiceManagerContext } from '../../../context';
-import { useEntityAnnotation } from '../../../../hooks';
-import { useEntity } from '@backstage/plugin-catalog-react';
 
 const getPlugins = (data:PluginCard[]|[]) => {
   if(data.length >=1){
@@ -19,24 +16,16 @@ const getPlugins = (data:PluginCard[]|[]) => {
 
 export const AssociatedPlugins = () => { 
 
-  // const { entity } = useEntity();
-  // const { kongInstance } = useEntityAnnotation(entity)
-  // const {listAllEnabledPlugins} = useContext(KongServiceManagerContext)
-  const { pluginsPerCategory : plugins} = useContext(KongServiceManagerContext)
+  const { pluginsPerCategory } = useContext(KongServiceManagerContext)
 
-  const aiPlugins = getPlugins(plugins.ai.plugins);
-  const analiticsPlugins = getPlugins(plugins.analitics.plugins);
-  const authPlugins = getPlugins(plugins.auth.plugins);
-  const loggingPlugins = getPlugins(plugins.logging.plugins);
-  const securityPlugins = getPlugins(plugins.security.plugins);
-  const serverlessPlugins = getPlugins(plugins.serverless.plugins);
-  const trafficControlPlugins = getPlugins(plugins.trafficControl.plugins);
-  const transformationsPlugins = getPlugins(plugins.transformations.plugins);
-
-  // useEffect(()=>{
-  //   listAllEnabledPlugins(kongInstance as string)
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // },[])
+  const aiPlugins = getPlugins(pluginsPerCategory.ai.plugins);
+  const analiticsPlugins = getPlugins(pluginsPerCategory.analitics.plugins);
+  const authPlugins = getPlugins(pluginsPerCategory.auth.plugins);
+  const loggingPlugins = getPlugins(pluginsPerCategory.logging.plugins);
+  const securityPlugins = getPlugins(pluginsPerCategory.security.plugins);
+  const serverlessPlugins = getPlugins(pluginsPerCategory.serverless.plugins);
+  const trafficControlPlugins = getPlugins(pluginsPerCategory.trafficControl.plugins);
+  const transformationsPlugins = getPlugins(pluginsPerCategory.transformations.plugins);
 
   return (
     <>

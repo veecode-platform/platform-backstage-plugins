@@ -182,7 +182,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     try{ 
       const response = await api.createServicePlugin(serviceIdOrName, config,proxyPath);
       if(response) {
-        await listAssociatedPlugins(serviceIdOrName,proxyPath)
+        await listAssociatedPlugins(serviceIdOrName,proxyPath);
          alertApi.post({
           message: 'Plugin successfully enabled!',
           severity: 'success',
@@ -219,7 +219,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
       const response = await api.removeServicePlugin(serviceIdOrName, pluginId,proxyPath);
       if(response && allAssociatedPlugins) {
           const newAssociatedPluginsData = allAssociatedPlugins.filter(p => p.id !== pluginId && p);
-            setAllAssociatedPlugins(newAssociatedPluginsData)
+            setAllAssociatedPlugins(newAssociatedPluginsData);
+            await listAllEnabledPlugins(proxyPath);
             return alertApi.post({
               message: 'Plugin successfully disabled',
               severity: 'success',
