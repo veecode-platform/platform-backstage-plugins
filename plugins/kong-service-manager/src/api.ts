@@ -78,7 +78,7 @@ class Client {
         const resp = await fetch(`${apiUrl}${input}`, {
             ...init,
             headers: {
-                "X-authorization-identity": `${identityToken.token}`
+                "X-kong-authorization-identity": `${identityToken.token}`
             }
         });
 

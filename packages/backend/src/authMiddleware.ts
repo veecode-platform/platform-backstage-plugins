@@ -37,9 +37,10 @@ export const createAuthMiddleware = async (
     next: NextFunction,
   ) => {
     try { 
-      return next();//skip auth middlware
       const token = getBearerTokenFromAuthorizationHeader(req.headers.authorization) || (req.cookies?.token as string | undefined);
       const skipHeader = (req.headers["x-authorization-identity"] as string | undefined)
+      const skipKongHeader = (req.headers["x-kong-authorization-identity"] as string | undefined)
+      if(skipKongHeader) return next()
 
       if (!token) {
         res.status(401).send('Unauthorized');
