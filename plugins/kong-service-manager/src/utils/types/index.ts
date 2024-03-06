@@ -33,10 +33,10 @@ export interface RoutesResponse{
 
 export interface CreatePlugin{
     config: any,
-    tags: string[],
+    //tags: string[],
     name: string, 
-    protocols: string[],
-    enabled: boolean
+    //protocols: string[],
+    //enabled: boolean
 }
 
 export interface ServiceInfoResponse {
