@@ -1,5 +1,5 @@
 /* eslint-disable @backstage/no-undeclared-imports */
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { BoxComponent, EmptyStateComponent } from '../shared'
 import { Box, makeStyles } from '@material-ui/core'
 import { PluginsCards } from './PluginsCards';
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme=>({
 
 export const PluginsList = () => {
 
-  const { listAllEnabledPlugins, allEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins} = useContext(KongServiceManagerContext);
+  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins} = useContext(KongServiceManagerContext);
   const { entity } = useEntity();
   const { serviceName,kongInstance } = useEntityAnnotation(entity);
   const { wrapper, emptyContent } = useStyles();
@@ -39,7 +39,14 @@ export const PluginsList = () => {
   const { loading, error } = useAsync(async (): Promise<void> => {
     getPluginsEnabled();
     getAssociatedPlugins();
+    // eslint-disable-next-line no-console
+    console.log("foi")
   }, []);
+
+  useEffect(()=>{
+    getPluginsEnabled();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[allAssociatedPlugins])
 
   if (loading) return <Progress />;
 
@@ -50,18 +57,11 @@ export const PluginsList = () => {
         <Box className={wrapper}>
           <TabbedCard title="">
             <CardTab label="All Plugins">
-              <PluginsCards
-                allEnabledPlugins={allEnabledPlugins}
-                allAssociatedPlugins={allAssociatedPlugins}
-              />
+              <PluginsCards/>
             </CardTab>
             <CardTab label="Associated Plugins">
               {allAssociatedPlugins && allAssociatedPlugins.length >= 1 ? (
-                <PluginsCards
-                  allEnabledPlugins={allEnabledPlugins}
-                  allAssociatedPlugins={allAssociatedPlugins}
-                  filterByAssociated
-                />
+                <PluginsCards filterByAssociated />
               ) : (
                 <div className={emptyContent}> No data to display ...</div>
               )}

@@ -1,12 +1,11 @@
-import React from 'react';
-import { PluginsPerCategoryType } from '../PluginsCards';
+import React, { useContext } from 'react';
 import { CategoryComponent } from '../CategoryComponent';
+import { KongServiceManagerContext } from '../../../context';
 
-interface AllPluginsProps {
-  plugins: PluginsPerCategoryType;
-}
+export const AllPlugins = () => {
 
-export const AllPlugins = ({ plugins }: AllPluginsProps) => {
+  const { pluginsPerCategory : plugins} = useContext(KongServiceManagerContext)
+
   return (
     <>
       {plugins.ai.plugins.length >= 1 && (

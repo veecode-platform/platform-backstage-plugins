@@ -46,7 +46,8 @@ export const DrawerComponent = () => {
         protocols: [],
         enabled: true
       }
-      await enablePlugin(serviceName as string,config,kongInstance as string);
+      const response = await enablePlugin(serviceName as string,config,kongInstance as string);
+      if(response) setConfigState({});
       handleToggleDrawer();
     }
   };

@@ -33,10 +33,7 @@ export interface RoutesResponse{
 
 export interface CreatePlugin{
     config: any,
-    //tags: string[],
     name: string, 
-    //protocols: string[],
-    //enabled: boolean
 }
 
 export interface ServiceInfoResponse {
@@ -69,4 +66,30 @@ export interface ServiceInfoResponse {
     description: string,
   }
   
+  export interface PluginsPerCategoryType  {
+    ai: { 
+      plugins: PluginCard[] | [] 
+    };
+    auth: { 
+      plugins: PluginCard[] | [] 
+    };
+    security: { 
+      plugins: PluginCard[] | [] 
+    };
+    trafficControl: { 
+      plugins: PluginCard[] | [] 
+    };
+    serverless: { 
+      plugins: PluginCard[] | [] 
+    };
+    analitics: {
+      plugins: PluginCard[] | [];
+    };
+    transformations: {
+      plugins: PluginCard[] | [];
+    };
+    logging: {
+      plugins: PluginCard[] | [];
+    };
+  };
   

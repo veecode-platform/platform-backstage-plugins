@@ -1,11 +1,10 @@
-import React from 'react';
-import { PluginsPerCategoryType } from '../PluginsCards';
+/* eslint-disable @backstage/no-undeclared-imports */
+import React, { useContext, useEffect } from 'react';
 import { CategoryComponent } from '../CategoryComponent';
 import { PluginCard } from '../../../../utils/types';
-
-interface associatedPluginsProps {
-  plugins: PluginsPerCategoryType,
-}
+import { KongServiceManagerContext } from '../../../context';
+import { useEntityAnnotation } from '../../../../hooks';
+import { useEntity } from '@backstage/plugin-catalog-react';
 
 const getPlugins = (data:PluginCard[]|[]) => {
   if(data.length >=1){
@@ -18,7 +17,12 @@ const getPlugins = (data:PluginCard[]|[]) => {
   return []
 }
 
-export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => { 
+export const AssociatedPlugins = () => { 
+
+  // const { entity } = useEntity();
+  // const { kongInstance } = useEntityAnnotation(entity)
+  // const {listAllEnabledPlugins} = useContext(KongServiceManagerContext)
+  const { pluginsPerCategory : plugins} = useContext(KongServiceManagerContext)
 
   const aiPlugins = getPlugins(plugins.ai.plugins);
   const analiticsPlugins = getPlugins(plugins.analitics.plugins);
@@ -28,6 +32,11 @@ export const AssociatedPlugins = ({ plugins }: associatedPluginsProps) => {
   const serverlessPlugins = getPlugins(plugins.serverless.plugins);
   const trafficControlPlugins = getPlugins(plugins.trafficControl.plugins);
   const transformationsPlugins = getPlugins(plugins.transformations.plugins);
+
+  // useEffect(()=>{
+  //   listAllEnabledPlugins(kongInstance as string)
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // },[])
 
   return (
     <>
