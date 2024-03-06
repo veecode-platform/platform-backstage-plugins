@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useState } from "react";
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { gitlabPipelinesApiRef } from '../../api';
 import { GitlabPipelinesContext } from './GitlabPipelinesContext';
 import { Job, JobAnnotationProps, JobsVariablesAttributes, ListJobsResponse, Pipeline, VariablesParams } from '../../utils/types';
 
+interface GitlabPipelinesProviderProps {
+  children: ReactNode;
+}
 
-export const GitlabPipelinesProvider: React.FC = ({ children }) => {
+
+export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = ({ children }) => {
 
   const [branch, setBranch] = useState<string>('');
   const [pipelineListState, setPipelineListState] = useState<Pipeline[]|null>(null);
@@ -19,8 +23,8 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
   const api = useApi(gitlabPipelinesApiRef);
   const errorApi = useApi(errorApiRef);
 
-  const setBranchState = (branch: string) => {
-    setBranch(branch);
+  const setBranchState = (branchName: string) => {
+    setBranch(branchName);
   }
 
   const setTriggerTokenState = (token: string) => {
@@ -48,7 +52,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         setPipelineListState(newPipelineListState);
         return newPipelineListState;
       }
-      else return null;
+      return null;
     }catch(e:any){
       errorApi.post(e);
       return null;
@@ -74,7 +78,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         setLatestPipelineState(pipelineData);
         return pipelineData;
       }
-      else return null;
+      return null;
     }
     catch(e:any){
       errorApi.post(e);
@@ -106,9 +110,9 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
     }
   }
 
-  const runPipelineWithTrigger = async(projectName: string, triggerToken: string)=>{
+  const runPipelineWithTrigger = async(projectName: string, triggerTokenValue: string)=>{
     try{
-      const response = await api.runNewPipelineWithTrigger(projectName, triggerToken, branch!);
+      const response = await api.runNewPipelineWithTrigger(projectName, triggerTokenValue, branch!);
       if(response.status === "created"){
         setLatestPipelineState({
           id: response.id,
@@ -184,23 +188,25 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
       if(response.length > 0){
         const JobsList : Job[] = [];
         response.filter((j:ListJobsResponse)=>{
-          j.allow_failure && JobsList.push({
-            id: j.id as number,
-            status: j.status,
-            stage: j.stage,
-            name: j.name,
-            ref: j.ref,
-            tag: j.tag,
-            pipeline: j.pipeline,
-            web_url: j.web_url,
-            artifacts: j.artifacts,
-            runner: j.runner
-          })
+          if (j.allow_failure) {
+            JobsList.push({
+              id: j.id as number,
+              status: j.status,
+              stage: j.stage,
+              name: j.name,
+              ref: j.ref,
+              tag: j.tag,
+              pipeline: j.pipeline,
+              web_url: j.web_url,
+              artifacts: j.artifacts,
+              runner: j.runner,
+            });
+          }
         });
         setJobsListState(JobsList);
         return JobsList;
       }
-      else return null
+      return null
     }
     catch(e:any){
       errorApi.post(e);
@@ -227,7 +233,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
 
         return job
       }
-      else return null;
+      return null;
     }
     catch(e:any){
       errorApi.post(e);
@@ -253,7 +259,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         };
         return job
       }
-      else return null;
+      return null;
     }
     catch(e:any){
       errorApi.post(e);
@@ -279,7 +285,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         };
         return job
       }
-      else return null;
+      return null;
     }
     catch(e:any){
       errorApi.post(e);
@@ -305,7 +311,7 @@ export const GitlabPipelinesProvider: React.FC = ({ children }) => {
         };
         return job
       }
-      else return null;
+      return null;
     }
     catch(e:any){
       errorApi.post(e);

@@ -19,11 +19,14 @@ interface NewMetric {
    custom_identifier: string
 }
   
-  export const RecordFields = ({name, required, defaultValues,recordFields}:RecordFieldsProps) => {
+  export const RecordFields = ({name, defaultValues,recordFields}:RecordFieldsProps) => {
     const { box, newField,labelAndField, input,label,addField,defaultField } = useStyles();
     const [inputFields, setInputFields] = useState<NewMetric[]>([]);
  
-    const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
+    const handleChangeInput = (
+      // event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, 
+      // index: number
+      ) => {
       const values = [...inputFields];
       // values = event.target.value;
       setInputFields(values);
@@ -79,7 +82,8 @@ interface NewMetric {
                           label={r.name}
                           variant="outlined"
                           value={r.name}
-                          onChange={event => handleChangeInput(event, index)}
+                          // onChange={event => handleChangeInput(event, index)}
+                          onChange={handleChangeInput}
                           className={input}
                           required={r.required}
                           type={r.type}
