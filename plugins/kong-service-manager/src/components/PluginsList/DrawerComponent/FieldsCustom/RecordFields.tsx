@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useStyles } from './styles';
-import { Accordion, Box, Button, FormControl, FormLabel, IconButton, InputLabel, Select, TextField } from '@material-ui/core';
+import { Accordion, Box, Button, FormControl, FormLabel, IconButton, Select, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { SelectComponent } from './SelectComponent';
@@ -127,12 +127,12 @@ interface recordFieldsProps {
                 <AccordionDetails className={accordionContent}>
                   {item.name && (
                     <FormControl className={combobox}>
-                      <InputLabel
+                      <FormLabel
                         id={`select-label-${item.name}`}
                         className={labelSelect}
                       >
                         Name
-                      </InputLabel>
+                      </FormLabel>
                       <Select
                         variant="outlined"
                         className={select}
@@ -157,12 +157,12 @@ interface recordFieldsProps {
 
                   {item.stat_type && (
                     <FormControl className={combobox}>
-                      <InputLabel
+                      <FormLabel
                         id={`select-label-${item.name}`}
                         className={labelSelect}
                       >
                         Stat Type
-                      </InputLabel>
+                      </FormLabel>
                       <Select
                         variant="outlined"
                         className={select}
@@ -201,12 +201,12 @@ interface recordFieldsProps {
 
                   {item.consumer_identifier && (
                     <FormControl className={combobox}>
-                      <InputLabel
+                      <FormLabel
                         id={`select-label-${item.name}`}
                         className={labelSelect}
                       >
                        Consumer Identifier
-                      </InputLabel>
+                      </FormLabel>
                       <Select
                         variant="outlined"
                         className={select}
@@ -236,6 +236,7 @@ interface recordFieldsProps {
                         name="Tags"
                         items={item.tags}
                         setConfig={setConfig}
+                        noLabel
                     />
                     </div>
                   )}

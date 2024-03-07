@@ -94,9 +94,10 @@ export const useStyles = makeStyles(theme => ({
       width: '100%',
     },
     labelSelect:{
-      padding: '.2rem 1rem',
+      padding: '.5rem 0',
     },
     tags:{
       width: '98%',
+      marginTop: '-.5rem'
     }
   }));

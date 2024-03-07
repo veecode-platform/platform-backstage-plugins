@@ -5,13 +5,14 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 interface IncrementalFieldsProps {
+    noLabel?:boolean,
     name: string,
     required: boolean,
     items: string[]|[],
     setConfig: React.Dispatch<any>
   }
   
-  export const IncrementalFields = ({name, required, items, setConfig}:IncrementalFieldsProps) => {
+  export const IncrementalFields = ({noLabel, name, required, items, setConfig}:IncrementalFieldsProps) => {
   
     const { box, field, input,label, addField } = useStyles();
     const [inputFields, setInputFields] = useState<string[]>(items);
@@ -41,7 +42,7 @@ interface IncrementalFieldsProps {
 
     return (
       <Box className={box}>
-        <FormLabel className={label}>config.{name}</FormLabel>
+        {!noLabel && <FormLabel className={label}>config.{name}</FormLabel>}
 
             {inputFields.map((inputField, index) => (
               <div key={index} className={field}>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Select from '@material-ui/core/Select';
-import { FormControl, InputLabel } from '@material-ui/core';
+import { FormControl, FormLabel } from '@material-ui/core';
 import { useStyles } from '../styles';
 
 interface SelectComponentProps {
@@ -25,9 +25,9 @@ export const SelectComponent = ({label, items, defaultValue}:SelectComponentProp
 
   return (
     <FormControl className={combobox}>
-      <InputLabel id={`select-label-${label}`} className={labelSelect}>
+      <FormLabel id={`select-label-${label}`} className={labelSelect}>
         {label}
-      </InputLabel>
+      </FormLabel>
       <Select
         variant="outlined"
         className={select}
