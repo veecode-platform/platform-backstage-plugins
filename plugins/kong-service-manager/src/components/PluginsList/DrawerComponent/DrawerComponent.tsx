@@ -40,6 +40,8 @@ export const DrawerComponent = () => {
 
   const handleEnablePlugin = async () => {
     if (selectedPlugin && allAssociatedPlugins && configState) {
+      // eslint-disable-next-line no-console
+      console.log(configState)
       setProcessingData(true);
       const config = {
         config: configState,

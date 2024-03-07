@@ -249,6 +249,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         allRoutes,
         listAssociatedPlugins,
         allAssociatedPlugins,
+        associatedPluginsName,
         getPluginFields,
         enablePlugin,
         disablePlugin,
