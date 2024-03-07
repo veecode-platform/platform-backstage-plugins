@@ -40,7 +40,7 @@ export const RoutesList = () => {
   return (
     <BoxComponent title="All Routes">
       <Box className={content}>
-        <TableComponent dataProps={allRoutes!}/>
+        {allRoutes && <TableComponent dataProps={allRoutes}/>}
       </Box>
     </BoxComponent>
   );

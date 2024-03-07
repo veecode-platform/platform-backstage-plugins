@@ -5,6 +5,14 @@ export const useStyles = makeStyles(theme => ({
       margin: theme.spacing(1),
       width: '100%',
     },
+    heading: {
+      width: '100%',
+      fontSize: '1.2rem',
+      padding: theme.spacing(1),
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
     box: {
       margin: theme.spacing(2),
       width: '100%',
@@ -25,7 +33,7 @@ export const useStyles = makeStyles(theme => ({
     newField:{
       width: '100%',
       display: 'flex',
-      justifyContent: 'justify-content',
+      justifyContent: 'center',
       alignItems: 'center',
       gap: '1rem',
       padding: '1rem',
@@ -52,7 +60,6 @@ export const useStyles = makeStyles(theme => ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      background: theme.palette.divider
     },
     addField:{
       width: 'auto',
@@ -63,5 +70,22 @@ export const useStyles = makeStyles(theme => ({
     },
     input: {
       minWidth: '95%',
+    },
+    accordion:{
+      width: '100%'
+    },
+    accordionSummary:{
+      background: theme.palette.divider,
+    },
+    accordionContent:{
+      width: '100%',
+      display: 'flex',
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      background: theme.palette.background.default
+    },
+    accordionItem:{
+      width: '100%',
     },
   }));

@@ -64,7 +64,7 @@ export const DrawerComponent = () => {
     if(fields) {
       let updatedConfigState = { ...configState };
       // eslint-disable-next-line no-console
-      // console.log(fields)
+      console.log(fields)
       fields.forEach((f) => {
         if (f.defaultValue !== undefined) {
           updatedConfigState = {
@@ -137,7 +137,6 @@ export const DrawerComponent = () => {
                 autoComplete="off"
                 className={form}
               >
-                <>
                   {fieldsComponents.map(field => {
                     switch (field.type) {
                       case 'string':
@@ -225,6 +224,7 @@ export const DrawerComponent = () => {
                               required={field.required}
                               defaultValues={field.defaultValue}
                               recordFields={field.recordFields}
+                              setConfig={setConfigState}
                             />
                           );
                         return <></>;
@@ -232,11 +232,8 @@ export const DrawerComponent = () => {
                         return <></>;
                     }
                   })}
-                </>
               </FormControl>
-            ) : (
-              <EmptyStateComponent />
-            )}
+            ) : <EmptyStateComponent /> }
           </>
         )}
       </Box>

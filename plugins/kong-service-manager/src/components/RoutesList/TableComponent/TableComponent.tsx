@@ -14,6 +14,7 @@ interface TableComponentProps {
 }  
 
 interface TableData {
+  id: string,
   name: string,
   protocols: string[],
   methods: string[],
@@ -40,6 +41,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
     if(rowData){
       rowData.map(r => {
         data.push({
+          id: r.name,
           name: r.name,
           protocols: r.protocols,
           methods: r.methods,
@@ -54,6 +56,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
   
   const columns: TableColumn[] = [
     {
+      id: 'name',
       title: 'Name',
       field: 'name',
       highlight: true,
@@ -62,6 +65,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
       width: '1fr',
     },
     {
+      id: 'protocols',
       title: 'Protocols',
       highlight: true,
       render: (row: Partial<TableData>) => (
@@ -79,6 +83,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
       width: '1fr',
     },
     {
+      id: 'methods',
       title: 'Methods',
       highlight: true,
       render: (row: Partial<TableData>) => (
@@ -96,6 +101,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
       width: '1fr',
     },
     {
+      id: 'hosts',
       title: 'Hosts',
       highlight: true,
       render: (row: Partial<TableData>) => (
@@ -113,6 +119,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
       width: '1fr',
     },
     {
+      id: 'paths',
       title: 'Paths',
       highlight: true,
       render: (row: Partial<TableData>) => (
@@ -130,6 +137,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
       width: '1fr',
     },
     {
+      id: 'tags',
       title: 'Tags',
       highlight: true,
       render: (row: Partial<TableData>) => (

@@ -5,7 +5,8 @@ import { InputLabel } from '@material-ui/core';
 
 interface SelectComponentProps {
     label: string,
-    items: string[]
+    items: string[],
+    defaultValue?: string
 }
 
 const useStyles = makeStyles({
@@ -17,7 +18,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const SelectComponent = ({label, items}:SelectComponentProps) => {
+export const SelectComponent = ({label, items, defaultValue}:SelectComponentProps) => {
   const { combobox, select } = useStyles();
   const [state, setState] = useState<{ name: string | number; value: string }>({name:'name', value:'New Metric'});
 
@@ -38,13 +39,14 @@ export const SelectComponent = ({label, items}:SelectComponentProps) => {
       variant="outlined"
       className={select}
       native
-      value={state.value}
+      value={defaultValue ?? state.value}
       onChange={handleChange}
       inputProps={{
         name: name,
         id: 'filled-age-native-simple',
       }}
       labelId={`select-label-${label}`} 
+      defaultValue={defaultValue}
     >
       {items.map(i => (
         <option key={i} value={i}>
