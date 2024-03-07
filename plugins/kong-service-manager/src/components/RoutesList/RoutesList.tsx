@@ -8,6 +8,7 @@ import { useEntityAnnotation } from '../../hooks';
 import useAsync from 'react-use/lib/useAsync';
 import { Progress } from '@backstage/core-components';
 import { TableComponent } from './TableComponent';
+import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
 
 const useStyles = makeStyles(theme=>({
   content:{
@@ -38,10 +39,12 @@ export const RoutesList = () => {
   if(error) return <EmptyStateComponent/>;
 
   return (
-    <BoxComponent title="All Routes">
-      <Box className={content}>
-        {allRoutes && <TableComponent dataProps={allRoutes}/>}
-      </Box>
-    </BoxComponent>
+    <ErrorBoundary>
+      <BoxComponent title="All Routes">
+        <Box className={content}>
+          {allRoutes ? <TableComponent dataProps={allRoutes} /> : <Progress/>}
+        </Box>
+      </BoxComponent>
+    </ErrorBoundary>
   );
 }

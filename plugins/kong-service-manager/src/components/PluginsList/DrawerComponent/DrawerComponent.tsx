@@ -97,7 +97,7 @@ export const DrawerComponent = () => {
       setConfigState(null)
     }
   },[processingData])
-    
+
   return (
     <Drawer
       classes={{
@@ -225,6 +225,7 @@ export const DrawerComponent = () => {
                               defaultValues={field.defaultValue}
                               recordFields={field.recordFields}
                               setConfig={setConfigState}
+                              key={field.name}
                             />
                           );
                         return <></>;

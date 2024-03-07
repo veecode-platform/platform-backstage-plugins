@@ -9,6 +9,7 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from '../../hooks';
 import useAsync from 'react-use/lib/useAsync';
 import { CardTab, Progress, TabbedCard } from '@backstage/core-components';
+import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
 
 const useStyles = makeStyles(theme=>({
    wrapper:{
@@ -44,18 +45,19 @@ export const PluginsList = () => {
 
   useEffect(()=>{
     getPluginsEnabled();
-  },[allAssociatedPlugins])
+  },[allAssociatedPlugins]);
 
   if (loading) return <Progress />;
 
   if(error) return <EmptyStateComponent/>;
 
   return (
+    <ErrorBoundary>
       <BoxComponent title="Kong Plugins">
         <Box className={wrapper}>
           <TabbedCard title="">
             <CardTab label="All Plugins">
-              <PluginsCards/>
+              <PluginsCards />
             </CardTab>
             <CardTab label="Associated Plugins">
               {allAssociatedPlugins && allAssociatedPlugins.length >= 1 ? (
@@ -67,5 +69,6 @@ export const PluginsList = () => {
           </TabbedCard>
         </Box>
       </BoxComponent>
+    </ErrorBoundary>
   );
 }

@@ -201,6 +201,7 @@ interface recordFieldsProps {
                     label={r.name}
                     variant="outlined"
                     value={r.name}
+                    key={r.name}
                     // onChange={event => handleChangeInput(event, index)}
                     onChange={handleChangeInput}
                     className={input}

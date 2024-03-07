@@ -19,11 +19,13 @@ export const PluginsCards = ({filterByAssociated}:PluginsCardsProps) => {
   const { content } = useStyles();
   const { entity } = useEntity();
   const { kongInstance } = useEntityAnnotation(entity)
-  const {listAllEnabledPlugins,disablePlugin, enablePlugin,pluginsPerCategory} = useContext(KongServiceManagerContext)
+  const {listAllEnabledPlugins
+    // ,disablePlugin, enablePlugin,pluginsPerCategory
+  } = useContext(KongServiceManagerContext)
 
   useEffect(()=>{
-    listAllEnabledPlugins(kongInstance as string)
-  },[disablePlugin,enablePlugin,pluginsPerCategory])
+     listAllEnabledPlugins(kongInstance as string)
+   },[])
 
   return (
     <Content className={content}>
