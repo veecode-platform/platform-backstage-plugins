@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { useState } from "react";
 import { GithubWorkflowsContext } from './GithubWorkflowsContext';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
@@ -6,8 +6,12 @@ import { githubWorkflowsApiRef } from '../../api';
 import { WorkflowResultsProps } from '../../utils/types';
 import { sortWorflowsByName } from '../../utils/common';
 
+interface GithubWorkflowsProviderProps {
+  children: ReactNode;
+}
 
-export const GithubWorkflowsProvider: React.FC = ({ children }) => {
+
+export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = ({ children }) => {
 
   const [branch, setBranch] = useState<string | null>(null);
   const [workflowsState, setWorkflowsState] = useState<WorkflowResultsProps[] | null>(null);
@@ -16,8 +20,8 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
 
-  const setBranchState = (branch: string) => {
-    setBranch(branch);
+  const setBranchState = (branchState: string) => {
+    setBranch(branchState);
   }
 
   const setInputs = (inputs: object) => {
@@ -44,9 +48,8 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
         setWorkflowsState(ordelyWorkflows);
         return ordelyWorkflows;
       }
-      else return [];
+      return [];
     } catch(e:any){
-      console.error(e);
       errorApi.post(e);
       return [];
     }
@@ -59,7 +62,6 @@ export const GithubWorkflowsProvider: React.FC = ({ children }) => {
       return null
     }
     catch (e:any) {
-      console.log(e)
       errorApi.post(e);
       return null
      }

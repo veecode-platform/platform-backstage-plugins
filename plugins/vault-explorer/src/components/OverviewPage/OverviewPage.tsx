@@ -1,3 +1,5 @@
+/* eslint-disable @backstage/no-undeclared-imports */
+/* eslint-disable no-restricted-imports */
 import React, { useCallback } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { EntityRefLinks, catalogApiRef, getEntityRelations, getEntitySourceLocation, useEntity } from '@backstage/plugin-catalog-react';
@@ -136,7 +138,7 @@ export const OverviewPage = () => {
                             <Label title="Type"/>
                         </TableCell>
                         <TableCell>
-                            <Value content={entity.spec?.type}/>
+                            <Value content={entity.spec?.type as string}/>
                         </TableCell>
                     </TableRow>
                     {/* Owner */}
@@ -158,7 +160,7 @@ export const OverviewPage = () => {
                             <Label title="Lifecycle"/>
                         </TableCell>
                         <TableCell>
-                            <Value content={entity.spec?.lifecycle}/>
+                            <Value content={entity.spec?.lifecycle as string}/>
                         </TableCell>
                     </TableRow>
 

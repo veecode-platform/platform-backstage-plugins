@@ -34,7 +34,7 @@ export const KongServicesListComponent = ({
 
     <Autocomplete
       id="search-kong-services"
-      placeholder='Services'
+      // placeholder='Services'
       options={options}
       disabled={disabled}
       getOptionLabel={(option) => option.name}
