@@ -80,12 +80,23 @@ export const useStyles = makeStyles(theme => ({
     accordionContent:{
       width: '100%',
       display: 'flex',
-      alignItems: 'flex-start',
+      alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'column',
-      background: theme.palette.background.default
+      background: theme.palette.background.default,
+      gap: '.8rem',
+      padding: '1rem .7rem'
     },
-    accordionItem:{
+    combobox:{
+        width: '95%',
+      },
+    select: {
       width: '100%',
     },
+    labelSelect:{
+      padding: '.2rem 1rem',
+    },
+    tags:{
+      width: '98%',
+    }
   }));

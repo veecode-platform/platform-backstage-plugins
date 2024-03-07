@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useStyles } from './styles';
-import { Accordion, Box, Button, FormLabel, IconButton, TextField } from '@material-ui/core';
+import { Accordion, Box, Button, FormControl, FormLabel, IconButton, InputLabel, Select, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { SelectComponent } from './SelectComponent';
@@ -34,7 +34,7 @@ interface recordFieldsProps {
 }
   
   export const RecordFields = ({name, defaultValues,recordFields,setConfig}:RecordFieldsProps) => {
-    const { box, newField,labelAndField, heading, input,label,addField,defaultField,accordion,accordionSummary,accordionContent, accordionItem} = useStyles();
+    const { box, newField,labelAndField, heading, input,label,addField,defaultField,accordion,accordionSummary,accordionContent, combobox, select, labelSelect,tags} = useStyles();
     const [inputFields, setInputFields] = useState<NewMetric[]>([]);
     const [recordFieldsState, setRecordFieldsState] = useState<recordFieldsProps|null>(null);
    //  const [fieldsState, setFieldsState] = useState<any>();
@@ -126,55 +126,118 @@ interface recordFieldsProps {
                 </AccordionSummary>
                 <AccordionDetails className={accordionContent}>
                   {item.name && (
-                    <div className={accordionItem}>
-                      <p className={label}>Name</p>
-                      <select>
-                        <option>{item.name}</option>
+                    <FormControl className={combobox}>
+                      <InputLabel
+                        id={`select-label-${item.name}`}
+                        className={labelSelect}
+                      >
+                        Name
+                      </InputLabel>
+                      <Select
+                        variant="outlined"
+                        className={select}
+                        native
+                        value={item.name}
+                        onChange={() => {}}
+                        inputProps={{
+                          name: name,
+                          id: 'filled-age-native-simple',
+                        }}
+                        labelId={`select-label-${item.name}`}
+                        defaultValue={item.name}
+                      >
                         {recordFieldsState?.name.map(i => (
-                          <option key={i}>{i}</option>
+                          <option key={i} value={i}>
+                            {i}
+                          </option>
                         ))}
-                      </select>
-                    </div>
+                      </Select>
+                    </FormControl>
                   )}
 
                   {item.stat_type && (
-                    <div className={accordionItem}>
-                      <p>Stat Type</p>
-                      <select>
-                        <option>{item.stat_type}</option>
+                    <FormControl className={combobox}>
+                      <InputLabel
+                        id={`select-label-${item.name}`}
+                        className={labelSelect}
+                      >
+                        Stat Type
+                      </InputLabel>
+                      <Select
+                        variant="outlined"
+                        className={select}
+                        native
+                        value={item.name}
+                        onChange={() => {}}
+                        inputProps={{
+                          name: name,
+                          id: 'filled-age-native-simple',
+                        }}
+                        labelId={`select-label-${item.name}`}
+                        defaultValue={item.name}
+                      >
                         {recordFieldsState?.stat_type.map(i => (
-                          <option key={i}>{i}</option>
+                          <option key={i} value={i}>
+                            {i}
+                          </option>
                         ))}
-                      </select>
-                    </div>
+                      </Select>
+                    </FormControl>
                   )}
 
                   {item.sample_rate && (
-                    <div className={accordionItem}>
-                      <p>Sample Rate</p>
-                      <input type="number" defaultValue={item.sample_rate} />
-                    </div>
+                    <TextField
+                      name={item.name}
+                      label="Sample Rate"
+                      variant="outlined"
+                      value={item.name}
+                      // onChange={event => handleChangeInput(event, index)}
+                      onChange={handleChangeInput}
+                      className={input}
+                      required={item.required}
+                      type="number"
+                    />
                   )}
 
                   {item.consumer_identifier && (
-                    <div className={accordionItem}>
-                      <p>Consumer Identifier</p>
-                      <select>
-                        <option>{item.consumer_identifier}</option>
+                    <FormControl className={combobox}>
+                      <InputLabel
+                        id={`select-label-${item.name}`}
+                        className={labelSelect}
+                      >
+                       Consumer Identifier
+                      </InputLabel>
+                      <Select
+                        variant="outlined"
+                        className={select}
+                        native
+                        value={item.name}
+                        onChange={() => {}}
+                        inputProps={{
+                          name: name,
+                          id: 'filled-age-native-simple',
+                        }}
+                        labelId={`select-label-${item.name}`}
+                        defaultValue={item.name}
+                      >
                         {recordFieldsState?.consumer_identifier.map(i => (
-                          <option key={i}>{i}</option>
+                          <option key={i} value={i}>
+                            {i}
+                          </option>
                         ))}
-                      </select>
-                    </div>
+                      </Select>
+                    </FormControl>
                   )}
 
                   {item.tags && (
-                    <IncrementalFields
-                      required={false}
-                      name="Tags"
-                      items={item.tags}
-                      setConfig={setConfig}
+                    <div className={tags}>
+                       <IncrementalFields
+                        required={false}
+                        name="Tags"
+                        items={item.tags}
+                        setConfig={setConfig}
                     />
+                    </div>
                   )}
                 </AccordionDetails>
               </Accordion>
