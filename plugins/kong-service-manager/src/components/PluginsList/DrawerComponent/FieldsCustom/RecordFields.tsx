@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import React, { RefObject, useEffect, useRef, useState } from 'react'
 import { useStyles } from './styles';
-import { Accordion, Box, Button, FormControl, FormLabel, IconButton, Select, TextField } from '@material-ui/core';
+import { Accordion, AccordionActions, Box, Button, FormControl, FormLabel, IconButton, Select, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { SelectComponent } from './SelectComponent';
@@ -9,6 +10,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import { IncrementalFields } from './IncrementalFields';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
 interface RecordFieldsProps {
     name: string,
@@ -32,13 +34,25 @@ interface recordFieldsProps {
   sample_rate?: number,
   consumer_identifier: string[]
 }
+
+interface MetricsStateType {
+  metrics: any[]
+}
   
   export const RecordFields = ({name, defaultValues,recordFields,setConfig}:RecordFieldsProps) => {
     const { box, newField,labelAndField, heading, input,label,addField,defaultField,accordion,accordionSummary,accordionContent, combobox, select, labelSelect,tags} = useStyles();
     const [inputFields, setInputFields] = useState<NewMetric[]>([]);
     const [recordFieldsState, setRecordFieldsState] = useState<recordFieldsProps|null>(null);
-   //  const [fieldsState, setFieldsState] = useState<any>();
+    const [metricsState, setMetricsState] = useState<MetricsStateType|null>(null);
+    const selectRefs = useRef<Array<RefObject<HTMLSelectElement | null>>>([]);
  
+
+    const addToRefs = (ref: RefObject<HTMLSelectElement>) => {
+      if (ref && !selectRefs.current.includes(ref)) {
+        selectRefs.current.push(ref);
+      }
+    };
+
     const handleChangeInput = (
       // event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, 
       // index: number
@@ -47,6 +61,30 @@ interface recordFieldsProps {
       // values = event.target.value;
       setInputFields(values);
     };
+
+    const handleMetricsState = (key: string, value: string) => {
+      if(value!==""){
+        setMetricsState((prevConfigState : any) => {
+          const updatedConfigState = {
+            ...prevConfigState,
+            [key]: value,
+          };
+          return updatedConfigState;
+        });
+      }
+    }
+
+    const editMetrics = (key: string, value: string, index: number) => {
+      if (metricsState && metricsState.metrics[index]) {
+        const updatedMetrics = [...metricsState.metrics];
+        updatedMetrics[index] = { ...updatedMetrics[index], [key]: value };
+    
+        setMetricsState((prevMetricsState) => ({
+          ...prevMetricsState,
+          metrics: updatedMetrics,
+        }));
+      }
+    };;
   
     const handleAddFields = () => setInputFields([...inputFields, {
       name: "New Metric",
@@ -61,52 +99,70 @@ interface recordFieldsProps {
       setInputFields(values);
     };
 
-    // eslint-disable-next-line no-console
-    // console.log("RECORD FIELDS", recordFields)
-    // // eslint-disable-next-line no-console
-    // console.log("DEFAULT VALUES", defaultValues)
+
+    console.log("RECORD FIELDS", recordFields)
+    console.log("DEFAULT VALUES", defaultValues)
 
     useEffect(()=>{
-      recordFields.map(r => {
-        switch (r.name) {
-          case 'name':
-            setRecordFieldsState((prevConfigState : any) => {
-              const updatedState = {
-                ...prevConfigState,
-                [r.name]: r.arrayOptions,
-              };
-              return updatedState;
-             });
-            break;
-          case 'stat_type':
-            setRecordFieldsState((prevConfigState : any) => {
-              const updatedState = {
-                ...prevConfigState,
-                [r.name]: r.arrayOptions,
-              };
-              return updatedState;
-             });
-            break;
-          case 'consumer_identifier':
-            setRecordFieldsState((prevConfigState : any) => {
-              const updatedState = {
-                ...prevConfigState,
-                [r.name]: r.arrayOptions,
-              };
-              return updatedState;
-             });
-            break;
-          default:
-            return ;
-        }
-       
-      })
+      if(recordFields){
+        recordFields.map(r => {
+          switch (r.name) {
+            case 'name':
+              setRecordFieldsState((prevConfigState : any) => {
+                const updatedState = {
+                  ...prevConfigState,
+                  [r.name]: r.arrayOptions,
+                };
+                return updatedState;
+               });
+              break;
+            case 'stat_type':
+              setRecordFieldsState((prevConfigState : any) => {
+                const updatedState = {
+                  ...prevConfigState,
+                  [r.name]: r.arrayOptions,
+                };
+                return updatedState;
+               });
+              break;
+            case 'consumer_identifier':
+              setRecordFieldsState((prevConfigState : any) => {
+                const updatedState = {
+                  ...prevConfigState,
+                  [r.name]: r.arrayOptions,
+                };
+                return updatedState;
+               });
+              break;
+            default:
+              return ;
+          }
+         
+        })
+      }
     },[recordFields]);
 
     useEffect(()=>{
-      // eslint-disable-next-line no-console
-      console.log(defaultValues)
-    },[defaultValues])
+      setMetricsState(null);
+      if(defaultValues){
+        const metrics : MetricsStateType = { metrics: []};
+        metrics.metrics.push(defaultValues);
+        setMetricsState(metrics);
+      }
+    },[defaultValues]);
+
+    useEffect(()=>{
+     if(metricsState){
+      console.log("METRICS STATE",metricsState)
+      setConfig((prevConfigState : any) => {
+        const updatedConfigState = {
+          ...prevConfigState,
+          ...metricsState,
+        };
+        return updatedConfigState;
+      });
+     }
+    },[metricsState]);
   
     return (
       <Box className={box}>
@@ -117,12 +173,17 @@ interface recordFieldsProps {
             <div key={index} className={defaultField}>
               <Accordion className={accordion}>
                 <AccordionSummary
-                  expandIcon={<AddIcon />}
+                  expandIcon={<KeyboardArrowDownIcon />}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                   className={accordionSummary}
                 >
-                  <Typography className={heading}>{item.name}</Typography>
+                  <Typography className={heading}>
+                    {(metricsState &&
+                      metricsState.metrics[index] &&
+                      metricsState.metrics[index].name) ??
+                      item.name}
+                  </Typography>
                 </AccordionSummary>
                 <AccordionDetails className={accordionContent}>
                   {item.name && (
@@ -137,14 +198,27 @@ interface recordFieldsProps {
                         variant="outlined"
                         className={select}
                         native
-                        value={item.name}
-                        onChange={() => {}}
+                        value={
+                          (metricsState &&
+                            metricsState.metrics[index] &&
+                            metricsState.metrics[index].name) ??
+                          item.name
+                        }
+                        ref={ref =>
+                          addToRefs(ref as RefObject<HTMLSelectElement>)
+                        }
+                        onChange={event => {
+                          editMetrics(
+                            'name',
+                            event.target.value as string,
+                            index as number,
+                          );
+                        }}
                         inputProps={{
                           name: name,
                           id: 'filled-age-native-simple',
                         }}
                         labelId={`select-label-${item.name}`}
-                        defaultValue={item.name}
                       >
                         {recordFieldsState?.name.map(i => (
                           <option key={i} value={i}>
@@ -158,7 +232,7 @@ interface recordFieldsProps {
                   {item.stat_type && (
                     <FormControl className={combobox}>
                       <FormLabel
-                        id={`select-label-${item.name}`}
+                        id={`select-label-${item.stat_type}`}
                         className={labelSelect}
                       >
                         Stat Type
@@ -167,14 +241,27 @@ interface recordFieldsProps {
                         variant="outlined"
                         className={select}
                         native
-                        value={item.name}
-                        onChange={() => {}}
+                        value={
+                          (metricsState &&
+                            metricsState.metrics[index] &&
+                            metricsState.metrics[index].stat_type) ??
+                          item.stat_type
+                        }
+                        ref={ref =>
+                          addToRefs(ref as RefObject<HTMLSelectElement>)
+                        }
+                        onChange={event => {
+                          editMetrics(
+                            'stat_type',
+                            event.target.value as string,
+                            index as number,
+                          );
+                        }}
                         inputProps={{
                           name: name,
                           id: 'filled-age-native-simple',
                         }}
-                        labelId={`select-label-${item.name}`}
-                        defaultValue={item.name}
+                        labelId={`select-label-${item.stat_type}`}
                       >
                         {recordFieldsState?.stat_type.map(i => (
                           <option key={i} value={i}>
@@ -190,9 +277,19 @@ interface recordFieldsProps {
                       name={item.name}
                       label="Sample Rate"
                       variant="outlined"
-                      value={item.name}
-                      // onChange={event => handleChangeInput(event, index)}
-                      onChange={handleChangeInput}
+                      value={
+                        (metricsState &&
+                          metricsState.metrics[index] &&
+                          metricsState.metrics[index].sample_rate) ??
+                        item.sample_rate
+                      }
+                      onChange={event => {
+                        editMetrics(
+                          'sample_rate',
+                          event.target.value as string,
+                          index as number,
+                        );
+                      }}
                       className={input}
                       required={item.required}
                       type="number"
@@ -205,20 +302,33 @@ interface recordFieldsProps {
                         id={`select-label-${item.name}`}
                         className={labelSelect}
                       >
-                       Consumer Identifier
+                        Consumer Identifier
                       </FormLabel>
                       <Select
                         variant="outlined"
                         className={select}
                         native
-                        value={item.name}
-                        onChange={() => {}}
+                        value={
+                          (metricsState &&
+                            metricsState.metrics[index] &&
+                            metricsState.metrics[index].consumer_identifier) ??
+                          item.consumer_identifier
+                        }
+                        ref={ref =>
+                          addToRefs(ref as RefObject<HTMLSelectElement>)
+                        }
+                        onChange={event => {
+                          editMetrics(
+                            'consumer_identifier',
+                            event.target.value as string,
+                            index as number,
+                          );
+                        }}
                         inputProps={{
                           name: name,
                           id: 'filled-age-native-simple',
                         }}
                         labelId={`select-label-${item.name}`}
-                        defaultValue={item.name}
                       >
                         {recordFieldsState?.consumer_identifier.map(i => (
                           <option key={i} value={i}>
@@ -231,16 +341,21 @@ interface recordFieldsProps {
 
                   {item.tags && (
                     <div className={tags}>
-                       <IncrementalFields
+                      <IncrementalFields
                         required={false}
                         name="Tags"
                         items={item.tags}
                         setConfig={setConfig}
                         noLabel
-                    />
+                      />
                     </div>
                   )}
                 </AccordionDetails>
+                <AccordionActions>
+                  <Button variant="outlined" color="secondary" title="Delete Metric" onClick={() => {}}>
+                    Delete Metric
+                  </Button>
+                </AccordionActions>
               </Accordion>
             </div>
           ))}

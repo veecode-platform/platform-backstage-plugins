@@ -66,7 +66,7 @@ export const useStyles = makeStyles(theme => ({
       color: theme.palette.link,
       padding: '.5rem 1rem',
       border: `1px solid ${theme.palette.link}`,
-      marginBottom: '1rem'
+      marginBottom: '1rem',
     },
     input: {
       minWidth: '95%',

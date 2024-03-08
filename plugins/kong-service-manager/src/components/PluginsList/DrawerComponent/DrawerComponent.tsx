@@ -100,6 +100,11 @@ export const DrawerComponent = () => {
     }
   },[processingData])
 
+  useEffect(()=>{
+    // eslint-disable-next-line no-console
+    console.log(configState)
+  },[configState])
+
   return (
     <Drawer
       classes={{
@@ -212,9 +217,9 @@ export const DrawerComponent = () => {
                               name={field.name}
                               required={field.required}
                               items={
-                                field.defaultValue
+                                (field.defaultValue
                                   ? field.defaultValue
-                                  : field.defaultValues
+                                  : field.defaultValues)??[]
                               }
                               setConfig={setConfigState}
                             />
