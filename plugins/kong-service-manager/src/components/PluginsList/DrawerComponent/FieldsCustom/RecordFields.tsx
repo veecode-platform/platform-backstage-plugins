@@ -4,8 +4,6 @@ import React, { RefObject, useEffect, useRef, useState } from 'react'
 import { useStyles } from './styles';
 import { Accordion, AccordionActions, Box, Button, FormControl, FormLabel, IconButton, Select, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-// import DeleteIcon from '@material-ui/icons/Delete';
-// import { SelectComponent } from './SelectComponent';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
@@ -110,7 +108,6 @@ interface MetricsStateType {
      
     }
   
-
     // console.log("RECORD FIELDS", recordFields)
     // console.log("DEFAULT VALUES", defaultValues)
 
@@ -283,9 +280,16 @@ interface MetricsStateType {
                   )}
 
                   {item.sample_rate && (
-                    <TextField
+                    <FormControl className={combobox}>
+                      <FormLabel
+                          id={`textField-label-${item.sample_rate}`}
+                          className={labelSelect}
+                        >
+                          Sample Rate
+                        </FormLabel>
+                      <TextField
                       name={item.name}
-                      label="Sample Rate"
+                      label=""
                       variant="outlined"
                       value={
                         (metricsState &&
@@ -303,7 +307,9 @@ interface MetricsStateType {
                       className={input}
                       required={item.required}
                       type="number"
+                      id={`textField-label-${item.sample_rate}`}
                     />
+                    </FormControl>
                   )}
 
                   {item.consumer_identifier && (
