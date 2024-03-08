@@ -35,6 +35,7 @@ export const useStyles = makeStyles(theme => ({
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
+      flexDirection: 'column',
       gap: '1rem',
       padding: '1rem',
       borderRadius: '8px',
@@ -46,7 +47,7 @@ export const useStyles = makeStyles(theme => ({
       alignItems: 'flex-start',
       justifyContent: 'center',
       flexDirection: 'column',
-      gap: '1rem',
+      gap: '1rem'
     },
     emptyField:{
       width: '100%',
@@ -99,5 +100,9 @@ export const useStyles = makeStyles(theme => ({
     tags:{
       width: '98%',
       marginTop: '-.5rem'
+    },
+    buttonsGroup:{
+      width: '30%',
+      textAlign: 'center'
     }
   }));

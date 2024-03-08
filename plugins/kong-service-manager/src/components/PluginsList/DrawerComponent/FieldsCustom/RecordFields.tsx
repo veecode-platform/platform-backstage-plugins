@@ -4,13 +4,15 @@ import React, { RefObject, useEffect, useRef, useState } from 'react'
 import { useStyles } from './styles';
 import { Accordion, AccordionActions, Box, Button, FormControl, FormLabel, IconButton, Select, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { SelectComponent } from './SelectComponent';
+// import DeleteIcon from '@material-ui/icons/Delete';
+// import { SelectComponent } from './SelectComponent';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import { IncrementalFields } from './IncrementalFields';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import SaveIcon from '@material-ui/icons/Save';
+import ClearIcon from '@material-ui/icons/Clear';
 
 interface RecordFieldsProps {
     name: string,
@@ -19,14 +21,6 @@ interface RecordFieldsProps {
     recordFields: any[]|[],
     setConfig: React.Dispatch<any>
   }
-
-interface NewMetric {
-   name: string,
-   stat_type: string,
-   sample_rate: number,
-   custom_identifier: string
-}
-
 interface recordFieldsProps {
   name: string[],
   stat_type: string[],
@@ -40,10 +34,11 @@ interface MetricsStateType {
 }
   
   export const RecordFields = ({name, defaultValues,recordFields,setConfig}:RecordFieldsProps) => {
-    const { box, newField,labelAndField, heading, input,label,addField,defaultField,accordion,accordionSummary,accordionContent, combobox, select, labelSelect,tags} = useStyles();
-    const [inputFields, setInputFields] = useState<NewMetric[]>([]);
+    const { box, newField,labelAndField, heading, input,label,addField,defaultField,accordion,accordionSummary,accordionContent, combobox, select, labelSelect,tags, buttonsGroup} = useStyles();
+    const [inputFields, setInputFields] = useState<any[]>([]);
     const [recordFieldsState, setRecordFieldsState] = useState<recordFieldsProps|null>(null);
     const [metricsState, setMetricsState] = useState<MetricsStateType|null>(null);
+    const [newMetric, setNewMetric] = useState<any>({});
     const selectRefs = useRef<Array<RefObject<HTMLSelectElement | null>>>([]);
  
 
@@ -53,42 +48,6 @@ interface MetricsStateType {
       }
     };
 
-    const handleChangeInput = (
-      // event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, 
-      // index: number
-      ) => {
-      const values = [...inputFields];
-      // values = event.target.value;
-      setInputFields(values);
-    };
-
-    const handleMetricsState = (key: string, value: string, index: number) => {
-      if (value !== "") {
-        setMetricsState((prevMetricsState: MetricsStateType | null) => {
-          const updatedMetrics = [...(prevMetricsState?.metrics || [])];
-          if (updatedMetrics[index]) {
-            updatedMetrics[index] = {
-              ...updatedMetrics[index],
-              [key]: value,
-            };
-          }
-          return { metrics: updatedMetrics };
-        });
-      }
-    };
-
-    const editMetrics = (key: string, value: string, index: number) => {
-      if (metricsState && metricsState.metrics[index]) {
-        const updatedMetrics = [...metricsState.metrics];
-        updatedMetrics[index] = { ...updatedMetrics[index], [key]: value };
-  
-        setMetricsState((prevMetricsState) => ({
-          ...prevMetricsState,
-          metrics: updatedMetrics,
-        }));
-      }
-    };
-  
     const handleAddFields = () => setInputFields([...inputFields, {
       name: "New Metric",
       stat_type: "none",
@@ -100,11 +59,60 @@ interface MetricsStateType {
       const values = [...inputFields];
       values.splice(index, 1);
       setInputFields(values);
+      setNewMetric({})
     };
 
+    const submitDataToConfig = (index: number) => {
+      if (newMetric) {
+        setMetricsState((prevMetricsState) => {
+          const updatedMetrics = { metrics: [...(prevMetricsState?.metrics || [])] };
+          updatedMetrics.metrics.push(newMetric);
+          handleRemoveFields(index);
+          return updatedMetrics;
+        });
+        setNewMetric({});
+      }
+    };
 
-    console.log("RECORD FIELDS", recordFields)
-    console.log("DEFAULT VALUES", defaultValues)
+    const handleAddMetric = (key: string, value: string | number | string[]) => {
+      if (value !== "") {
+        setNewMetric((prevMetric: any) => ({
+          ...prevMetric,
+          [key]: value,
+        }));
+      }
+    };
+
+    const handleEditMetrics = (key: string, value: string | number | string[], index: number) => {
+      if (metricsState && metricsState.metrics[index]) {
+        const updatedMetrics = [...metricsState.metrics];
+        updatedMetrics[index] = { ...updatedMetrics[index], [key]: value };
+  
+        setMetricsState((prevMetricsState) => ({
+          ...prevMetricsState,
+          metrics: updatedMetrics,
+        }));
+      }
+    };
+
+    const handleDeleteMetrics = (index:number) => {
+      if(metricsState){
+        setMetricsState((prevMetricsState) => {
+          const updatedMetrics = prevMetricsState!.metrics.filter(
+            (_, i) => i !== index
+          );
+          return {
+            ...prevMetricsState,
+            metrics: updatedMetrics,
+          };
+        });
+      }
+     
+    }
+  
+
+    // console.log("RECORD FIELDS", recordFields)
+    // console.log("DEFAULT VALUES", defaultValues)
 
     useEffect(()=>{
       if(recordFields){
@@ -159,7 +167,7 @@ interface MetricsStateType {
       setConfig((prevConfigState : any) => {
         const updatedConfigState = {
           ...prevConfigState,
-          metricsState,
+          metrics: metricsState.metrics,
         };
         return updatedConfigState;
       });
@@ -170,8 +178,8 @@ interface MetricsStateType {
       <Box className={box}>
         <FormLabel className={label}>config.{name}</FormLabel>
 
-        {defaultValues &&
-          defaultValues.map((item, index) => (
+        {metricsState &&
+          metricsState.metrics.map((item, index) => (
             <div key={index} className={defaultField}>
               <Accordion className={accordion}>
                 <AccordionSummary
@@ -210,7 +218,7 @@ interface MetricsStateType {
                           addToRefs(ref as RefObject<HTMLSelectElement>)
                         }
                         onChange={event => {
-                          editMetrics(
+                          handleEditMetrics(
                             'name',
                             event.target.value as string,
                             index as number,
@@ -253,7 +261,7 @@ interface MetricsStateType {
                           addToRefs(ref as RefObject<HTMLSelectElement>)
                         }
                         onChange={event => {
-                          editMetrics(
+                          handleEditMetrics(
                             'stat_type',
                             event.target.value as string,
                             index as number,
@@ -286,7 +294,7 @@ interface MetricsStateType {
                         item.sample_rate
                       }
                       onChange={event => {
-                        editMetrics(
+                        handleEditMetrics(
                           'sample_rate',
                           event.target.value as string,
                           index as number,
@@ -320,7 +328,7 @@ interface MetricsStateType {
                           addToRefs(ref as RefObject<HTMLSelectElement>)
                         }
                         onChange={event => {
-                          editMetrics(
+                          handleEditMetrics(
                             'consumer_identifier',
                             event.target.value as string,
                             index as number,
@@ -354,7 +362,11 @@ interface MetricsStateType {
                   )}
                 </AccordionDetails>
                 <AccordionActions>
-                  <Button variant="outlined" color="secondary" title="Delete Metric" onClick={() => {}}>
+                  <Button 
+                   variant="outlined" 
+                   color="secondary" 
+                   title="Delete Metric" 
+                   onClick={()=>handleDeleteMetrics(index)}>
                     Delete Metric
                   </Button>
                 </AccordionActions>
@@ -367,40 +379,96 @@ interface MetricsStateType {
             <div className={labelAndField}>
               <span>{inputField.name}</span>
               {recordFields.map(r => {
-                if (r.name === 'name' || r.name === 'stat_type') {
+                if (r.name === 'name' || r.name === 'stat_type' || r.name === 'consumer_identifier' ) {
                   return (
-                    <SelectComponent
-                      label={r.name}
-                      items={r.arrayOptions}
-                      key={r.name}
-                    />
+                    <FormControl className={combobox}>
+                    <FormLabel
+                      id={`select-label-${r.name}`}
+                      className={labelSelect}
+                    >
+                      {r.name}
+                    </FormLabel>
+                    <Select
+                      variant="outlined"
+                      className={select}
+                      native
+                      value={newMetric[r.name] ?? ''}
+                      ref={ref =>
+                        addToRefs(ref as RefObject<HTMLSelectElement>)
+                      }
+                      onChange={(event)=>handleAddMetric(r.name as string, event.target.value as string)}
+                      inputProps={{
+                        name: r.name,
+                        id: 'filled-age-native-simple',
+                      }}
+                      labelId={`select-label-${r.name}`}
+                    >
+                      {r.arrayOptions.map((i:string) => (
+                        <option key={i} value={i}>
+                          {i}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
                   );
                 }
+                if (r.name === 'tags') {
+                  return(
+                    <FormControl className={combobox}>
+                    <FormLabel
+                      id={`textField-label-${r.name}`}
+                      className={labelSelect}
+                    >
+                      {r.name}
+                    </FormLabel>
+                    <IncrementalFields
+                      required={r.required}
+                      name="tags"
+                      items={r.arrayOptions ?? []}
+                      setConfig={setConfig}
+                      noLabel
+                    />
+                    </FormControl>
+                  )
+                }
                 return (
+                  <FormControl className={combobox}>
+                    <FormLabel
+                      id={`textField-label-${r.name}`}
+                      className={labelSelect}
+                    >
+                      {r.name}
+                    </FormLabel>
                   <TextField
                     name={r.name}
-                    label={r.name}
+                    label=""
                     variant="outlined"
-                    value={r.name}
+                    value={newMetric[r.name] ?? ''}
                     key={r.name}
-                    // onChange={event => handleChangeInput(event, index)}
-                    onChange={handleChangeInput}
+                    onChange={(event)=>handleAddMetric(r.name as string, event.target.value as string)}
                     className={input}
                     required={r.required}
+                    id={`textField-label-${r.name}`}
                     type={r.type}
                   />
+                  </FormControl>
                 );
               })}
             </div>
             {inputFields.length >= 1 && (
-              <IconButton onClick={() => handleRemoveFields(index)}>
-                <DeleteIcon />
-              </IconButton>
+              <div className={buttonsGroup}>
+                <IconButton onClick={()=>submitDataToConfig(index)} title="Save Metric">
+                  <SaveIcon />
+                </IconButton>
+                <IconButton onClick={() => handleRemoveFields(index)} title="Decline">
+                  <ClearIcon />
+                </IconButton>
+              </div>
             )}
           </div>
         ))}
 
-        <Button className={addField} onClick={() => handleAddFields()}>
+        <Button className={addField} disabled={inputFields.length >= 1} onClick={() => handleAddFields()}>
           <AddIcon /> New Item
         </Button>
       </Box>
