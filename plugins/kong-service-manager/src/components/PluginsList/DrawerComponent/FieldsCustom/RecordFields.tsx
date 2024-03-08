@@ -62,29 +62,32 @@ interface MetricsStateType {
       setInputFields(values);
     };
 
-    const handleMetricsState = (key: string, value: string) => {
-      if(value!==""){
-        setMetricsState((prevConfigState : any) => {
-          const updatedConfigState = {
-            ...prevConfigState,
-            [key]: value,
-          };
-          return updatedConfigState;
+    const handleMetricsState = (key: string, value: string, index: number) => {
+      if (value !== "") {
+        setMetricsState((prevMetricsState: MetricsStateType | null) => {
+          const updatedMetrics = [...(prevMetricsState?.metrics || [])];
+          if (updatedMetrics[index]) {
+            updatedMetrics[index] = {
+              ...updatedMetrics[index],
+              [key]: value,
+            };
+          }
+          return { metrics: updatedMetrics };
         });
       }
-    }
+    };
 
     const editMetrics = (key: string, value: string, index: number) => {
       if (metricsState && metricsState.metrics[index]) {
         const updatedMetrics = [...metricsState.metrics];
         updatedMetrics[index] = { ...updatedMetrics[index], [key]: value };
-    
+  
         setMetricsState((prevMetricsState) => ({
           ...prevMetricsState,
           metrics: updatedMetrics,
         }));
       }
-    };;
+    };
   
     const handleAddFields = () => setInputFields([...inputFields, {
       name: "New Metric",
@@ -146,18 +149,17 @@ interface MetricsStateType {
       setMetricsState(null);
       if(defaultValues){
         const metrics : MetricsStateType = { metrics: []};
-        metrics.metrics.push(defaultValues);
+        metrics.metrics.push(...defaultValues);
         setMetricsState(metrics);
       }
     },[defaultValues]);
 
     useEffect(()=>{
      if(metricsState){
-      console.log("METRICS STATE",metricsState)
       setConfig((prevConfigState : any) => {
         const updatedConfigState = {
           ...prevConfigState,
-          ...metricsState,
+          metricsState,
         };
         return updatedConfigState;
       });
