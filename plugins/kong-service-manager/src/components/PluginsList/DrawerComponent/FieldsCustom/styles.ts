@@ -23,12 +23,21 @@ export const useStyles = makeStyles(theme => ({
       gap:'1rem'
     },
     label:{
-      color: theme.palette.text.primary
+      transform: 'initial',
+      fontWeight: 'bold',
+      fontSize: theme.typography.body2.fontSize,
+      fontFamily: theme.typography.fontFamily,
+      color: theme.palette.text.primary,
+      marginBottom:'.5rem',
+      '&.Mui-focused': {
+        color: theme.palette.text.primary,
+      },
     },
     field: {
       display: 'flex',
       justifyContent: 'space-between',
       minWidth: '100%',
+      marginTop: '-.5rem'
     },
     newField:{
       width: '100%',
@@ -71,6 +80,15 @@ export const useStyles = makeStyles(theme => ({
     },
     input: {
       minWidth: '95%',
+      borderRadius: theme.shape.borderRadius,
+      position: 'relative',
+      backgroundColor: theme.palette.background.paper,
+      border: '1px solid #ced4da',
+      fontSize: theme.typography.body1.fontSize,
+      '&:focus': {
+        background: theme.palette.background.paper,
+        borderRadius: theme.shape.borderRadius,
+      },
     },
     accordion:{
       width: '100%'
@@ -93,9 +111,6 @@ export const useStyles = makeStyles(theme => ({
       },
     select: {
       width: '100%',
-    },
-    labelSelect:{
-      padding: '.5rem 0',
     },
     tags:{
       width: '98%',

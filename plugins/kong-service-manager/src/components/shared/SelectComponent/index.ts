@@ -1,4 +1,4 @@
-export { SelectComponent as Select } from './Select';
+export * from './Select';
 export type {
   SelectClassKey,
   SelectedItems,
