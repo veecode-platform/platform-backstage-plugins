@@ -113,8 +113,8 @@ export const useStyles = makeStyles(theme => ({
       width: '100%',
     },
     tags:{
-      width: '98%',
-      marginTop: '-.5rem'
+      width: '99%',
+      marginTop: '-.5rem',
     },
     buttonsGroup:{
       width: '30%',

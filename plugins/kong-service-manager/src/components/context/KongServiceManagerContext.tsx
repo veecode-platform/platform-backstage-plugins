@@ -19,7 +19,11 @@ export type KongServiceManagerContextType = {
     setPluginState: (data: PluginCard) => void;
     selectedPlugin: PluginCard | null;
     editPlugin: (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => Promise<void | null>;
-    pluginsPerCategory: PluginsPerCategoryType
+    pluginsPerCategory: PluginsPerCategoryType,
+    configState: any,
+    setConfigState: React.Dispatch<any>
+
+    
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!);

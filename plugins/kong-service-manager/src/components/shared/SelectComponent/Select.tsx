@@ -45,7 +45,7 @@ const BootstrapInput = withStyles(
         },
         width: '100%',
         '&.Mui-focused > div[role=button]': {
-          borderColor: theme.palette.primary.main,
+        borderColor: theme.palette.primary.main,
         },
       },
       input: {
@@ -115,7 +115,7 @@ const useStyles = makeStyles(
 
       root: {
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: 'column'
       },
     }),
   { name: 'BackstageSelect' },

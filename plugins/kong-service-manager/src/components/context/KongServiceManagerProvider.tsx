@@ -29,11 +29,13 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     transformations: { plugins: [] },
     logging: { plugins: [] },
   }); 
+  const [configState, setConfigState ] = useState<any|null>(null);
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
   const alertApi = useApi(alertApiRef);
 
   const handleToggleDrawer = () => {
+    if(!openDrawer) setConfigState(null);
     setOpenDrawer(!openDrawer);
   }
 
@@ -258,7 +260,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         setPluginState,
         selectedPlugin,
         editPlugin,
-        pluginsPerCategory
+        pluginsPerCategory,
+        configState,
+        setConfigState
       }}
     >
       {children}

@@ -2,9 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import { useStyles } from './styles';
-import { Accordion, AccordionActions, Box, Button, FormControl, FormLabel, IconButton, 
-  // Select, 
-  TextField } from '@material-ui/core';
+import { Accordion, AccordionActions, Box, Button, FormControl, FormLabel, IconButton, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -13,7 +11,6 @@ import { IncrementalFields } from './IncrementalFields';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import SaveIcon from '@material-ui/icons/Save';
 import ClearIcon from '@material-ui/icons/Clear';
-// import { Select } from '@backstage/core-components';
 import { transformToSelectOptions } from '../../../../utils/common/transformToSelectOptions';
 import {SelectComponent } from '../../../shared'
 
@@ -42,12 +39,13 @@ interface MetricsStateType {
     const [recordFieldsState, setRecordFieldsState] = useState<recordFieldsProps|null>(null);
     const [metricsState, setMetricsState] = useState<MetricsStateType|null>(null);
     const [newMetric, setNewMetric] = useState<any>({});
+    const [tagsState, setTagsState] = useState<string[]>([]);
  
     const handleAddFields = () => setInputFields([...inputFields, {
       name: "New Metric",
       stat_type: "none",
       sample_rate: 0,
-      custom_identifier: "teste xpto"
+      custom_identifier: "test"
     }]);
   
     const handleRemoveFields = (index: number) => {
@@ -104,9 +102,6 @@ interface MetricsStateType {
       }
      
     }
-  
-    // console.log("RECORD FIELDS", recordFields)
-    // console.log("DEFAULT VALUES", defaultValues)
 
     useEffect(()=>{
       if(recordFields){
@@ -167,7 +162,8 @@ interface MetricsStateType {
       });
      }
     },[metricsState]);
-  
+ 
+
     return (
       <Box className={box}>
         <FormLabel className={label}>config.{name}</FormLabel>
@@ -283,9 +279,13 @@ interface MetricsStateType {
                     <div className={tags}>
                       <IncrementalFields
                         required={false}
-                        name="Tags"
+                        name="tags"
+                        isMetrics
                         items={item.tags}
-                        setConfig={setConfig}
+                        id={index}
+                        state={tagsState}
+                        handleChange={handleEditMetrics}
+                        setState={setTagsState}
                       />
                     </div>
                   )}
@@ -333,8 +333,11 @@ interface MetricsStateType {
                       <IncrementalFields
                         required={r.required}
                         name="tags"
+                        isMetrics
                         items={r.arrayOptions ?? []}
-                        setConfig={setConfig}
+                        state={tagsState}
+                        handleChange={handleAddMetric}
+                        setState={setTagsState}
                       />
                     </div>
                   );

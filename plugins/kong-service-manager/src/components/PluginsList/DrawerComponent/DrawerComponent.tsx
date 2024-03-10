@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @backstage/no-undeclared-imports */
 import React, { useContext, useEffect, useState } from 'react';
@@ -18,10 +19,9 @@ export const DrawerComponent = () => {
   const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction, spinner} = useStyles();
   const { entity } = useEntity();
   const { serviceName, kongInstance } = useEntityAnnotation(entity);
-  const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPlugin, allAssociatedPlugins} = useContext(KongServiceManagerContext);
+  const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPlugin, allAssociatedPlugins, setConfigState, configState} = useContext(KongServiceManagerContext);
   const [fieldsComponents, setFieldsComponents ] = useState<any[]|[]>([]);
   const [ isLoading, setLoading] = useState<boolean>(false);
-  const [configState, setConfigState ] = useState<any|null>(null);
   const [processingData, setProcessingData] = useState<boolean>(false);
 
 
@@ -40,15 +40,10 @@ export const DrawerComponent = () => {
 
   const handleEnablePlugin = async () => {
     if (selectedPlugin && allAssociatedPlugins && configState) {
-      // eslint-disable-next-line no-console
-      console.log(configState)
       setProcessingData(true);
       const config = {
         config: configState,
-        tags: [],
-        name: selectedPlugin.slug, 
-        protocols: [],
-        enabled: true
+        name: selectedPlugin.slug
       } 
       await enablePlugin(serviceName as string,config,kongInstance as string);
       setProcessingData(false)  
@@ -65,8 +60,6 @@ export const DrawerComponent = () => {
     const fields = await getPluginFields(pluginName, proxyPath);
     if(fields) {
       let updatedConfigState = { ...configState };
-      // eslint-disable-next-line no-console
-      console.log(fields)
       fields.forEach((f) => {
         if (f.defaultValue !== undefined) {
           updatedConfigState = {
@@ -91,7 +84,7 @@ export const DrawerComponent = () => {
   },[selectedPlugin]);
 
   useEffect(()=>{
-    setConfigState({})
+    setConfigState(null)
   },[]);
 
   useEffect(()=>{
@@ -102,7 +95,7 @@ export const DrawerComponent = () => {
 
   useEffect(()=>{
     // eslint-disable-next-line no-console
-    console.log(configState)
+    console.log("CONFIG ALTERADA",configState)
   },[configState])
 
   return (
@@ -144,7 +137,7 @@ export const DrawerComponent = () => {
                 autoComplete="off"
                 className={form}
               >
-                  {fieldsComponents.map(field => {
+                  {fieldsComponents.map((field,index) => {
                     switch (field.type) {
                       case 'string':
                         return (
@@ -153,7 +146,7 @@ export const DrawerComponent = () => {
                             name={field.name}
                             type={field.type}
                             required={field.required}
-                            key={field.name}
+                            key={index}
                             label={`config.${field.name}`}
                             variant="outlined"
                             className={input}
@@ -173,7 +166,7 @@ export const DrawerComponent = () => {
                             name={field.name}
                             type={field.type}
                             required={field.required}
-                            key={field.name}
+                            key={index}
                             label={`config.${field.name}`}
                             variant="outlined"
                             className={input}
@@ -189,7 +182,7 @@ export const DrawerComponent = () => {
                       case 'boolean':
                         return (
                           <FormControlLabel
-                            key={field.name}
+                            key={index}
                             labelPlacement="end"
                             label={`config.${field.name}`}
                             control={
@@ -213,7 +206,7 @@ export const DrawerComponent = () => {
                         if (field.arrayType === 'string')
                           return (
                             <IncrementalFields
-                              key={field.name}
+                              key={index}
                               name={field.name}
                               required={field.required}
                               items={
@@ -221,7 +214,7 @@ export const DrawerComponent = () => {
                                   ? field.defaultValue
                                   : field.defaultValues)??[]
                               }
-                              setConfig={setConfigState}
+                              setState={setConfigState}
                             />
                           );
                         if (field.arrayType === 'record')
@@ -231,8 +224,8 @@ export const DrawerComponent = () => {
                               required={field.required}
                               defaultValues={field.defaultValue}
                               recordFields={field.recordFields}
+                              key={index}
                               setConfig={setConfigState}
-                              key={field.name}
                             />
                           );
                         return <></>;
