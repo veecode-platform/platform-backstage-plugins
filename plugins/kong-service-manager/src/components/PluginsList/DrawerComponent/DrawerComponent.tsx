@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @backstage/no-undeclared-imports */
 import React, { useContext, useEffect, useState } from 'react';
@@ -114,11 +113,6 @@ export const DrawerComponent = () => {
     setLoading(false)
    },1000)
   },[selectedPlugin]);
-
-  useEffect(()=>{
-    // eslint-disable-next-line no-console
-    console.log("CONFIG ALTERADA",configState)
-  },[configState])
 
   return (
     <Drawer
