@@ -202,6 +202,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     try{ 
       const response = await api.editServicePlugin(serviceIdOrName, pluginId, config, proxyPath);
       if(response) {
+        await listAssociatedPlugins(serviceIdOrName,proxyPath);
         return alertApi.post({
           message: 'Plugin successfully edited!',
           severity: 'success',
