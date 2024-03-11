@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Box, Button, Checkbox, CircularProgress, Drawer, FormControl, FormControlLabel, IconButton, TextField, Typography } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
 import { KongServiceManagerContext } from '../../context';
-import { CreatePlugin, PluginFieldsResponse } from '../../../utils/types';
+import { PluginFieldsResponse } from '../../../utils/types';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from '../../../hooks';
 import { EmptyStateComponent } from '../../shared';
@@ -51,9 +51,17 @@ export const DrawerComponent = () => {
     }
   };
 
-  const handleEditAction = async (config: CreatePlugin) => { 
-    await editPlugin(serviceName as string, config, kongInstance as string);
-    handleToggleDrawer();
+  const handleEditAction = async () => { 
+    if (selectedPlugin && allAssociatedPlugins && configState) {
+      setProcessingData(true);
+      const config = {
+        config: configState,
+        name: selectedPlugin.slug
+      } 
+      await editPlugin(serviceName as string,config,kongInstance as string);
+      setProcessingData(false)  
+      handleToggleDrawer();
+    }
   }
 
   const handlePluginFields = async (pluginName: string, proxyPath: string) => {
@@ -258,7 +266,7 @@ export const DrawerComponent = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={() => handleEditAction}
+              onClick={handleEditAction}
               disabled={processingData}
             >
               {processingData ? (
