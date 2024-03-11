@@ -249,7 +249,7 @@ export const DrawerComponent = () => {
                         if (field.arrayType === 'record')
                           return (
                             <RecordFields
-                              name={field.name}
+                              inputName={field.name}
                               required={field.required}
                               defaultValues={field.defaultValue}
                               recordFields={field.recordFields}

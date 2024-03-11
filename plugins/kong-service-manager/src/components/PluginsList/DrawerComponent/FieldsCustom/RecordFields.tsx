@@ -15,13 +15,14 @@ import { transformToSelectOptions } from '../../../../utils/common/transformToSe
 import {SelectComponent } from '../../../shared'
 
 interface RecordFieldsProps {
-    name: string,
+    inputName: string,
     required: boolean,
     defaultValues: any[]|[],
     recordFields: any[]|[],
     setConfig: React.Dispatch<any>
   }
 interface recordFieldsProps {
+  objectKey: string,
   name: string[],
   stat_type: string[],
   tags?: string[],
@@ -29,74 +30,71 @@ interface recordFieldsProps {
   consumer_identifier: string[]
 }
 
-interface MetricsStateType {
-  metrics: any[]
+interface RecordStateType {
+  [key: string]: { [key: string]: any }[];
 }
   
-  export const RecordFields = ({name, defaultValues,recordFields,setConfig}:RecordFieldsProps) => {
+  export const RecordFields = ({inputName, defaultValues,recordFields,setConfig}:RecordFieldsProps) => {
     const { box, newField,labelAndField, heading, input, addField,defaultField,field,accordion,accordionSummary,accordionContent, combobox, label,tags, buttonsGroup} = useStyles();
     const [inputFields, setInputFields] = useState<any[]>([]);
     const [recordFieldsState, setRecordFieldsState] = useState<recordFieldsProps|null>(null);
-    const [metricsState, setMetricsState] = useState<MetricsStateType|null>(null);
-    const [newMetric, setNewMetric] = useState<any>({});
+    const [recordState, setRecordState] = useState<RecordStateType|null>(null);
+    const [newItem, setNewItem] = useState<any>({});
     const [tagsState, setTagsState] = useState<string[]>([]);
  
     const handleAddFields = () => setInputFields([...inputFields, {
-      name: "New Metric",
-      stat_type: "none",
-      sample_rate: 0,
-      custom_identifier: "test"
+      name: "New Item"
     }]);
   
     const handleRemoveFields = (index: number) => {
       const values = [...inputFields];
       values.splice(index, 1);
       setInputFields(values);
-      setNewMetric({})
+      setNewItem({})
     };
 
-    const submitDataToConfig = (index: number) => {
-      if (newMetric) {
-        setMetricsState((prevMetricsState) => {
-          const updatedMetrics = { metrics: [...(prevMetricsState?.metrics || [])] };
-          updatedMetrics.metrics.push(newMetric);
+    const submitDataToConfig = (key: string, index: number) => {
+      if (newItem) {
+        setRecordState((prevRecordState) => {
+          const updatedItems = { [key]: [...(prevRecordState?.[key] || [])] };  // check
+          updatedItems[key].push(newItem);
           handleRemoveFields(index);
-          return updatedMetrics;
+          return updatedItems;
         });
-        setNewMetric({});
+        setNewItem({});
       }
     };
 
-    const handleAddMetric = (key: string, value: string | number | string[]) => {
+    const handleAddItem = (key: string, value: string | number | string[]) => {
       if (value !== "") {
-        setNewMetric((prevMetric: any) => ({
-          ...prevMetric,
+        setNewItem((prevItem: any) => ({
+          ...prevItem,
           [key]: value,
         }));
       }
     };
 
-    const handleEditMetrics = (key: string, value: string | number | string[], index: number) => {
-      if (metricsState && metricsState.metrics[index]) {
-        const updatedMetrics = [...metricsState.metrics];
-        updatedMetrics[index] = { ...updatedMetrics[index], [key]: value };
+    const handleEditItems = ( key: string, value: string | number | string[], index: number) => {
+      if (recordState && recordState[inputName][index]) {
+        const updatedItems = [...recordState[inputName]];
+        updatedItems[index] = { ...updatedItems[index], [key]: value };
   
-        setMetricsState((prevMetricsState) => ({
-          ...prevMetricsState,
-          metrics: updatedMetrics,
+        setRecordState((prevrecordState) => ({
+          ...prevrecordState,
+          [inputName]: updatedItems,
         }));
       }
     };
 
-    const handleDeleteMetrics = (index:number) => {
-      if(metricsState){
-        setMetricsState((prevMetricsState) => {
-          const updatedMetrics = prevMetricsState!.metrics.filter(
+    const handleDeleteItems = (index:number) => {
+      if(recordState){
+        setRecordState((prevrecordState) => {
+          const updateItem = prevrecordState![inputName].filter(
             (_, i) => i !== index
           );
           return {
-            ...prevMetricsState,
-            metrics: updatedMetrics,
+            ...prevrecordState,
+            [inputName]: updateItem,
           };
         });
       }
@@ -105,13 +103,14 @@ interface MetricsStateType {
 
     useEffect(()=>{
       if(recordFields){
+        console.log("Atualizou o recordFields")
         recordFields.map(r => {
           switch (r.name) {
             case 'name':
               setRecordFieldsState((prevConfigState : any) => {
                 const updatedState = {
                   ...prevConfigState,
-                  [r.name]: r.arrayOptions,
+                  [r.name]: r.arrayOptions !== undefined ? r.arrayOptions : [],
                 };
                 return updatedState;
                });
@@ -120,7 +119,7 @@ interface MetricsStateType {
               setRecordFieldsState((prevConfigState : any) => {
                 const updatedState = {
                   ...prevConfigState,
-                  [r.name]: r.arrayOptions,
+                  [r.name]:  r.arrayOptions !== undefined ? r.arrayOptions : [],
                 };
                 return updatedState;
                });
@@ -129,47 +128,58 @@ interface MetricsStateType {
               setRecordFieldsState((prevConfigState : any) => {
                 const updatedState = {
                   ...prevConfigState,
-                  [r.name]: r.arrayOptions,
+                  [r.name]:  r.arrayOptions !== undefined ? r.arrayOptions : [],
                 };
                 return updatedState;
                });
               break;
+            case 'value':
+                setRecordFieldsState((prevConfigState : any) => {
+                  const updatedState = {
+                    ...prevConfigState,
+                    [r.name]: r.arrayOptions !== undefined ? r.arrayOptions : [],
+                  };
+                  return updatedState;
+                 });
+                break;
             default:
               return ;
           }
          
         })
       }
+      console.log(recordFields,inputFields)
     },[recordFields]);
 
-    useEffect(()=>{
-      setMetricsState(null);
-      if(defaultValues){
-        const metrics : MetricsStateType = { metrics: []};
-        metrics.metrics.push(...defaultValues);
-        setMetricsState(metrics);
+    useEffect(() => {
+      console.log(inputName)
+      if (defaultValues && defaultValues !== undefined) {
+        const recordData: RecordStateType = { [inputName]: [...defaultValues] };
+        setRecordState(recordData);
       }
-    },[defaultValues]);
+      else setRecordState(null)
+    }, [defaultValues, inputName]);
 
     useEffect(()=>{
-     if(metricsState){
+     if(recordState){
+      console.log("CHAMEI")
       setConfig((prevConfigState : any) => {
         const updatedConfigState = {
           ...prevConfigState,
-          metrics: metricsState.metrics,
+          [inputName]: recordState[inputName],
         };
         return updatedConfigState;
       });
      }
-    },[metricsState]);
+    },[recordState]);
  
 
     return (
       <Box className={box}>
-        <FormLabel className={label}>config.{name}</FormLabel>
+        <FormLabel className={label}>config.{inputName}</FormLabel>
 
-        {metricsState &&
-          metricsState.metrics.map((item, index) => (
+        {recordState &&
+          recordState[inputName].map((item, index) => (
             <div key={index} className={defaultField}>
               <Accordion className={accordion}>
                 <AccordionSummary
@@ -179,40 +189,75 @@ interface MetricsStateType {
                   className={accordionSummary}
                 >
                   <Typography className={heading}>
-                    {(metricsState &&
-                      metricsState.metrics[index] &&
-                      metricsState.metrics[index].name) ??
+                    {(recordState &&
+                      recordState[inputName][index] &&
+                      recordState[inputName][index].name) ??
                       item.name}
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails className={accordionContent}>
                   {item.name && (
-                      <div className={combobox}>
-                        <SelectComponent
-                          onChange={event => { handleEditMetrics('name', event as string, index as number)}}
-                          label="Name"
-                          selected={
-                            (metricsState &&
-                              metricsState.metrics[index] &&
-                              metricsState.metrics[index].name) ??
-                            item.name }
-                          items={
-                            recordFieldsState
-                              ? transformToSelectOptions(recordFieldsState.name)
-                              : []
-                          }
-                        />
-                      </div>
+                      <>
+                      { (recordFieldsState && recordFieldsState.name.length > 0) ?
+                        (<div className={combobox}>
+                          <SelectComponent
+                            onChange={event => { handleEditItems('name', event as string, index as number)}}
+                            label="Name"
+                            selected={
+                              (recordState &&
+                                recordState[inputName][index] &&
+                                recordState[inputName][index].name) ??
+                              item.name }
+                            items={
+                              recordFieldsState
+                                ? transformToSelectOptions(recordFieldsState.name)
+                                : []
+                            }
+                          />
+                        </div>):(
+                            <FormControl className={combobox}>
+                             <FormLabel
+                               id={`textField-label-${item.name}`}
+                               className={label}
+                             >
+                               Name
+                             </FormLabel>
+                             <TextField
+                               name={item.name}
+                               label=""
+                               variant="outlined"
+                               value={
+                                 (recordState &&
+                                   recordState[inputName][index] &&
+                                   recordState[inputName][index].name) ??
+                                 item.name
+                               }
+                               onChange={event => {
+                                 handleEditItems(
+                                   'name',
+                                    event.target.value,
+                                   index as number,
+                                 );
+                               }}
+                               className={input}
+                               required={item.required}
+                               type={item.type}
+                               id={`textField-label-${item.name}`}
+                             />
+                           </FormControl>
+                        )
+                        }
+                      </>
                     )}
                   {item.stat_type && (
                       <div className={combobox}>
                       <SelectComponent
-                        onChange={event => { handleEditMetrics('stat_type', event as string, index as number)}}
+                        onChange={event => { handleEditItems('stat_type', event as string, index as number)}}
                         label="Stat Type"
                         selected={
-                          (metricsState &&
-                            metricsState.metrics[index] &&
-                            metricsState.metrics[index].stat_type) ??
+                          (recordState &&
+                            recordState[inputName][index] &&
+                            recordState[inputName][index].stat_type) ??
                             item.stat_type }
                         items={
                           recordFieldsState
@@ -236,13 +281,13 @@ interface MetricsStateType {
                         label=""
                         variant="outlined"
                         value={
-                          (metricsState &&
-                            metricsState.metrics[index] &&
-                            metricsState.metrics[index].sample_rate) ??
+                          (recordState &&
+                            recordState[inputName][index] &&
+                            recordState[inputName][index].sample_rate) ??
                           item.sample_rate
                         }
                         onChange={event => {
-                          handleEditMetrics(
+                          handleEditItems(
                             'sample_rate',
                             Number(event.target.value),
                             index as number,
@@ -256,15 +301,48 @@ interface MetricsStateType {
                     </FormControl>
                   )}
 
+                {item.value && (
+                    <FormControl className={combobox}>
+                      <FormLabel
+                        id={`textField-label-${item.value}`}
+                        className={label}
+                      >
+                        Value
+                      </FormLabel>
+                      <TextField
+                        name={item.value}
+                        label=""
+                        variant="outlined"
+                        value={
+                          (recordState &&
+                            recordState[inputName][index] &&
+                            recordState[inputName][index].value) ??
+                          item.value
+                        }
+                        onChange={event => {
+                          handleEditItems(
+                            'value',
+                            event.target.value,
+                            index as number,
+                          );
+                        }}
+                        className={input}
+                        required={item.required}
+                        type={item.type}
+                        id={`textField-label-${item.value}`}
+                      />
+                    </FormControl>
+                  )}
+
                   {item.consumer_identifier && (
                     <div className={combobox}>
                       <SelectComponent
-                        onChange={event => { handleEditMetrics('consumer_identifier', event as string, index as number)}}
+                        onChange={event => { handleEditItems('consumer_identifier', event as string, index as number)}}
                         label="Consumer Identifier"
                         selected={
-                          (metricsState &&
-                            metricsState.metrics[index] &&
-                            metricsState.metrics[index].consumer_identifier) ??
+                          (recordState &&
+                            recordState[inputName][index] &&
+                            recordState[inputName][index].consumer_identifier) ??
                             item.consumer_identifier }
                         items={
                           recordFieldsState
@@ -284,7 +362,7 @@ interface MetricsStateType {
                         items={item.tags}
                         id={index}
                         state={tagsState}
-                        handleChange={handleEditMetrics}
+                        handleChange={handleEditItems}
                         setState={setTagsState}
                       />
                     </div>
@@ -295,7 +373,7 @@ interface MetricsStateType {
                     variant="outlined"
                     color="secondary"
                     title="Delete Metric"
-                    onClick={() => handleDeleteMetrics(index)}
+                    onClick={() => handleDeleteItems(index)}
                   >
                     Delete Metric
                   </Button>
@@ -308,42 +386,73 @@ interface MetricsStateType {
           <div key={index} className={newField}>
             <div className={labelAndField}>
               <span>{inputField.name}</span>
-              {recordFields.map(r => {
+              {recordFields.map((r,_index) => {
                 if (
                   r.name === 'name' ||
                   r.name === 'stat_type' ||
                   r.name === 'consumer_identifier'
                 ) {
                   return (
-                    <SelectComponent
-                      onChange={event =>
-                        handleAddMetric(r.name as string, event as string)
+                    <>
+                      {
+                        r.name.arrayOptions ? 
+                          ( <SelectComponent
+                            onChange={event =>
+                              handleAddItem(r.name as string, event as string)
+                            }
+                            selected={newItem[r.name] ?? r.arrayOptions[0]}
+                            placeholder="Select the option"
+                            label={r.name}
+                            items={transformToSelectOptions(r.arrayOptions)}
+                            key={_index}
+                          /> ) :
+                          ( <FormControl className={field} key={_index}>
+                              <FormLabel
+                                id={`textField-label-${r.name}`}
+                                className={label}
+                              >
+                                {r.name}
+                              </FormLabel>
+                              <TextField
+                                name={r.name}
+                                label=""
+                                variant="outlined"
+                                value={newItem[r.name]}
+                                defaultValue={r.defaultValue !== undefined ? r.defaultValue : ''}
+                                key={r.name}
+                                onChange={event =>
+                                  handleAddItem(
+                                    r.name as string,
+                                    event.target.value,
+                                  )
+                                }
+                                className={input}
+                                required={r.required}
+                                id={`textField-label-${r.name}`}
+                                type={r.type}
+                              />
+                            </FormControl>)
                       }
-                      selected={newMetric[r.name] ?? r.arrayOptions[0]}
-                      placeholder="Select the option"
-                      label={r.name}
-                      items={transformToSelectOptions(r.arrayOptions)}
-                      key={r.name}
-                    />
+                    </>
                   );
                 }
                 if (r.name === 'tags') {
                   return (
-                    <div className={tags}>
+                    <div className={tags} key={_index}>
                       <IncrementalFields
                         required={r.required}
                         name="tags"
                         isMetrics
                         items={r.arrayOptions ?? []}
                         state={tagsState}
-                        handleChange={handleAddMetric}
+                        handleChange={handleAddItem}
                         setState={setTagsState}
                       />
                     </div>
                   );
                 }
                 return (
-                  <FormControl className={field} key={r.name}>
+                  <FormControl className={field} key={_index}>
                     <FormLabel
                       id={`textField-label-${r.name}`}
                       className={label}
@@ -354,11 +463,11 @@ interface MetricsStateType {
                       name={r.name}
                       label=""
                       variant="outlined"
-                      value={newMetric[r.name]}
-                      defaultValue={r.defaultValue ? r.defaultValue : ''}
+                      value={newItem[r.name]}
+                      defaultValue={r.defaultValue !== undefined ? r.defaultValue : ''}
                       key={r.name}
                       onChange={event =>
-                        handleAddMetric(
+                        handleAddItem(
                           r.name as string,
                           event.target.value as string,
                         )
@@ -375,7 +484,7 @@ interface MetricsStateType {
             {inputFields.length >= 1 && (
               <div className={buttonsGroup}>
                 <IconButton
-                  onClick={() => submitDataToConfig(index)}
+                  onClick={() => submitDataToConfig(inputName,index)}
                   title="Save Metric"
                 >
                   <SaveIcon />
