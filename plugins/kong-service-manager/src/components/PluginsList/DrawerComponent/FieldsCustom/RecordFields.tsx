@@ -244,7 +244,7 @@ interface MetricsStateType {
                         onChange={event => {
                           handleEditMetrics(
                             'sample_rate',
-                            event.target.value as string,
+                            Number(event.target.value),
                             index as number,
                           );
                         }}

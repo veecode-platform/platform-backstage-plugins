@@ -35,7 +35,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   const alertApi = useApi(alertApiRef);
 
   const handleToggleDrawer = () => {
-    if(!openDrawer) setConfigState(null);
+    if(!openDrawer) setConfigState(null)
     setOpenDrawer(!openDrawer);
   }
 

@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Box, Button, Checkbox, CircularProgress, Drawer, FormControl, FormControlLabel, IconButton, TextField, Typography } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
 import { KongServiceManagerContext } from '../../context';
-import { CreatePlugin } from '../../../utils/types';
+import { CreatePlugin, PluginFieldsResponse } from '../../../utils/types';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from '../../../hooks';
 import { EmptyStateComponent } from '../../shared';
@@ -51,16 +51,39 @@ export const DrawerComponent = () => {
     }
   };
 
-  const handleEditAction = async (config: CreatePlugin) => { // to do
+  const handleEditAction = async (config: CreatePlugin) => { 
     await editPlugin(serviceName as string, config, kongInstance as string);
     handleToggleDrawer();
   }
 
   const handlePluginFields = async (pluginName: string, proxyPath: string) => {
     const fields = await getPluginFields(pluginName, proxyPath);
-    if(fields) {
+    
+    if (fields) {
+      let fieldsData: PluginFieldsResponse[] = [];
+      
+      if (selectedPlugin?.associated && allAssociatedPlugins) {
+        allAssociatedPlugins.forEach((plugin) => {
+          if (plugin.name === selectedPlugin.slug) {
+            const config = plugin.config;
+            const updateFields: PluginFieldsResponse[] = [];          
+            fields.forEach((field) => {    
+              if (config[field.name] !== null) {
+                updateFields.push({
+                  ...field,
+                  defaultValue: config[field.name],
+                });
+              }
+            });
+            fieldsData = fieldsData.concat(updateFields);
+          }
+        });
+      }
+      else fieldsData = fields;
+      
       let updatedConfigState = { ...configState };
-      fields.forEach((f) => {
+      
+      fieldsData.forEach((f) => {
         if (f.defaultValue !== undefined) {
           updatedConfigState = {
             ...updatedConfigState,
@@ -68,9 +91,10 @@ export const DrawerComponent = () => {
           };
         }
       });
+  
       setConfigState(updatedConfigState);
-      setFieldsComponents(fields)
-    };
+      setFieldsComponents(fieldsData);
+    }
   };
 
   useEffect(()=>{
@@ -82,16 +106,6 @@ export const DrawerComponent = () => {
     setLoading(false)
    },1000)
   },[selectedPlugin]);
-
-  useEffect(()=>{
-    setConfigState(null)
-  },[]);
-
-  useEffect(()=>{
-    if(!processingData) {
-      setConfigState(null)
-    }
-  },[processingData])
 
   useEffect(()=>{
     // eslint-disable-next-line no-console
