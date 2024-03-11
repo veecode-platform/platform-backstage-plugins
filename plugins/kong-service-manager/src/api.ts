@@ -185,13 +185,10 @@ class Client {
             ...config,
             tags: ["devportal", "plugin-kong-service-manager"],
             protocols: ["https", "http"],
-            service: null,
-            consumer: null,
-            route: null,
             enabled: true
         }
         const headers: RequestInit = {
-            method: "PUT",
+            method: "PATCH",
             body: JSON.stringify(body)
         }
         const response = await this.fetch(`/services/${serviceIdOrName}/plugins/${pluginId}`, proxyPath, headers)

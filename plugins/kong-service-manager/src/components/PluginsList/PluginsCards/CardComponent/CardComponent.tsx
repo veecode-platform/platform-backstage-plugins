@@ -55,8 +55,8 @@ export const CardComponent = ({data}:CardComponentProps) => {
         action={
           <>
             {data.associated ? (
-              <IconButton aria-label="settings" title="Edit Plugin">
-                <Edit onClick={handleEditAction} />
+              <IconButton aria-label="settings" title="Edit Plugin" onClick={handleEditAction}>
+                <Edit />
               </IconButton>
             ) : (
               <></>

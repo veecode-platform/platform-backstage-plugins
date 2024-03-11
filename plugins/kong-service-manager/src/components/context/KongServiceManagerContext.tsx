@@ -18,7 +18,7 @@ export type KongServiceManagerContextType = {
     openDrawer: boolean;
     setPluginState: (data: PluginCard) => void;
     selectedPlugin: PluginCard | null;
-    editPlugin: (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => Promise<void | null>;
+    editPlugin: (serviceIdOrName: string, pluginId: string,config: CreatePlugin, proxyPath: string) => Promise<void | null>;
     pluginsPerCategory: PluginsPerCategoryType,
     configState: any,
     setConfigState: React.Dispatch<any>
