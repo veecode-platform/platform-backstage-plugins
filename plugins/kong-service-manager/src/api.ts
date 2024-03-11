@@ -187,10 +187,11 @@ class Client {
             protocols: ["https", "http"],
             service: null,
             consumer: null,
+            route: null,
             enabled: true
         }
         const headers: RequestInit = {
-            method: "PATCH",
+            method: "PUT",
             body: JSON.stringify(body)
         }
         const response = await this.fetch(`/services/${serviceIdOrName}/plugins/${pluginId}`, proxyPath, headers)
