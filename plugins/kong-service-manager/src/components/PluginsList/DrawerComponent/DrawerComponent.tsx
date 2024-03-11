@@ -69,7 +69,7 @@ export const DrawerComponent = () => {
     
     if (fields) {
       let fieldsData: PluginFieldsResponse[] = [];
-      
+    
       if (selectedPlugin?.associated && allAssociatedPlugins) {
         allAssociatedPlugins.forEach((plugin) => {
           if (plugin.name === selectedPlugin.slug) {
