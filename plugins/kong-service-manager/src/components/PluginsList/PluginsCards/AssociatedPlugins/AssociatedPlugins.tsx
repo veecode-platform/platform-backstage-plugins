@@ -29,39 +29,14 @@ export const AssociatedPlugins = () => {
 
   return (
     <>
-      {aiPlugins.length >= 1 && (
-        <CategoryComponent label="AI" plugins={aiPlugins} />
-      )}
-      {analiticsPlugins.length >= 1 && (
-        <CategoryComponent
-          label="Analitics & Monitoring"
-          plugins={analiticsPlugins}
-        />
-      )}
-      {authPlugins.length >= 1 && (
-        <CategoryComponent label="Authentication" plugins={authPlugins} />
-      )}
-      {loggingPlugins.length >= 1 && (
-        <CategoryComponent label="Logging" plugins={loggingPlugins} />
-      )}
-      {securityPlugins.length >= 1 && (
-        <CategoryComponent label="Security" plugins={securityPlugins} />
-      )}
-      {serverlessPlugins.length >= 1 && (
-        <CategoryComponent label="Serverless" plugins={serverlessPlugins} />
-      )}
-      {trafficControlPlugins.length >= 1 && (
-        <CategoryComponent
-          label="Traffic Control"
-          plugins={trafficControlPlugins}
-        />
-      )}
-      {transformationsPlugins.length >= 1 && (
-        <CategoryComponent
-          label="Transformations"
-          plugins={transformationsPlugins}
-        />
-      )}
+      {aiPlugins.length >= 1 && (<CategoryComponent label="AI" plugins={aiPlugins} />)}
+      {analiticsPlugins.length >= 1 && (<CategoryComponent label="Analitics & Monitoring" plugins={analiticsPlugins}/>)}
+      {authPlugins.length >= 1 && (<CategoryComponent label="Authentication" plugins={authPlugins} />)}
+      {loggingPlugins.length >= 1 && (<CategoryComponent label="Logging" plugins={loggingPlugins} />)}
+      {securityPlugins.length >= 1 && (<CategoryComponent label="Security" plugins={securityPlugins} />)}
+      {serverlessPlugins.length >= 1 && (<CategoryComponent label="Serverless" plugins={serverlessPlugins} />)}
+      {trafficControlPlugins.length >= 1 && (<CategoryComponent label="Traffic Control" plugins={trafficControlPlugins} />)}
+      {transformationsPlugins.length >= 1 && (<CategoryComponent label="Transformations" plugins={transformationsPlugins}/>)}
     </>
   );
 };

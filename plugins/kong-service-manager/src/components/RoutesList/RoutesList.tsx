@@ -24,10 +24,10 @@ export const RoutesList = () => {
   const { getRoutesList, allRoutes } = useContext(KongServiceManagerContext);
   const { content } = useStyles();
   const { entity } = useEntity();
-  const { serviceName, kongInstance } = useEntityAnnotation(entity);
+  const { serviceName} = useEntityAnnotation(entity);
 
   const getRoutes = async () => {
-    await getRoutesList(serviceName as string,kongInstance as string);
+    await getRoutesList(serviceName as string);
   };
 
   const { loading, error } = useAsync(async (): Promise<void> => {

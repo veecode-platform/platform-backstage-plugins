@@ -14,6 +14,7 @@ interface KongServiceManagerProviderProps {
 
 export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProps> = ({children}) => {
 
+  const [instance, setInstance] = useState<string | null>(null);
   const [allAssociatedPlugins, setAllAssociatedPlugins] = useState<AssociatedPluginsResponse[]|null>(null);
   const [allRoutes, setAllRoutes] = useState<RoutesResponse[]|null>(null);
   const [serviceDetails, setServiceDetails] = useState<ServiceInfoResponse|null>(null);
@@ -35,6 +36,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   const errorApi = useApi(errorApiRef);
   const alertApi = useApi(alertApiRef);
 
+  const setInstanceState = (instanceState: string) => {
+    setInstance(instanceState);
+  }
+
   const handleToggleDrawer = () => {
     if(!openDrawer) setConfigState(null)
     setOpenDrawer(!openDrawer);
@@ -50,9 +55,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     setAssociatedPluginsName(newData)
 };
 
-  const listAllEnabledPlugins = async (proxyPath:string)=>{
+  const listAllEnabledPlugins = async ()=>{
     try{
-        const plugins = await api.getEnabledPlugins(proxyPath);
+        const plugins = await api.getEnabledPlugins(instance!);
         if (plugins !== null && plugins !== undefined){
 
             const pluginsData: PluginsPerCategoryType = { 
@@ -125,9 +130,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  const listAssociatedPlugins = async (serviceIdOrName:string,proxyPath:string)=>{
+  const listAssociatedPlugins = async (serviceIdOrName:string)=>{
     try{
-        const plugins = await api.getServiceAssociatedPlugins(serviceIdOrName,proxyPath);
+        const plugins = await api.getServiceAssociatedPlugins(serviceIdOrName,instance!);
         if (plugins !== null && plugins !== undefined){
           setAllAssociatedPlugins(plugins);
           return plugins;
@@ -140,9 +145,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  const getServiceDetails = async (serviceIdOrName: string, proxyPath: string) =>{
+  const getServiceDetails = async (serviceIdOrName: string) =>{
     try{ 
-      const details = await api.getServiceInfo(serviceIdOrName, proxyPath);
+      const details = await api.getServiceInfo(serviceIdOrName, instance!);
       if(details) {
         setServiceDetails(details);
         return details
@@ -154,9 +159,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  const getRoutesList = async (serviceIdOrName: string, proxyPath: string) => {
+  const getRoutesList = async (serviceIdOrName: string) => {
     try{ 
-      const routes = await api.getRoutesFromService(serviceIdOrName, proxyPath);
+      const routes = await api.getRoutesFromService(serviceIdOrName, instance!);
       if(routes) {
         setAllRoutes(routes);
         return routes
@@ -168,9 +173,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  const getPluginFields = async (pluginName: string, proxyPath: string) => {
+  const getPluginFields = async (pluginName: string) => {
     try{ 
-      const fields = await api.getPluginFields(pluginName, proxyPath);
+      const fields = await api.getPluginFields(pluginName, instance!);
       if(fields) {
         return fields
       }
@@ -181,11 +186,11 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  const enablePlugin = async (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => {
+  const enablePlugin = async (serviceIdOrName: string, config: CreatePlugin) => {
     try{ 
-      const response = await api.createServicePlugin(serviceIdOrName, config,proxyPath);
+      const response = await api.createServicePlugin(serviceIdOrName, config,instance!);
       if(response) {
-         await listAssociatedPlugins(serviceIdOrName,proxyPath);
+         await listAssociatedPlugins(serviceIdOrName);
          return alertApi.post({
           message: 'Plugin successfully enabled!',
           severity: 'success',
@@ -199,11 +204,11 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  const editPlugin = async (serviceIdOrName: string, pluginId: string,config: CreatePlugin, proxyPath: string) => {
+  const editPlugin = async (serviceIdOrName: string, pluginId: string,config: CreatePlugin) => {
     try{ 
-      const response = await api.editServicePlugin(serviceIdOrName, pluginId, config, proxyPath);
+      const response = await api.editServicePlugin(serviceIdOrName, pluginId, config, instance!);
       if(response) {
-        await listAssociatedPlugins(serviceIdOrName,proxyPath);
+        await listAssociatedPlugins(serviceIdOrName);
         return alertApi.post({
           message: 'Plugin successfully edited!',
           severity: 'success',
@@ -217,13 +222,13 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  const disablePlugin = async (serviceIdOrName: string, pluginId: string, proxyPath: string) => {
+  const disablePlugin = async (serviceIdOrName: string, pluginId: string) => {
     try{ 
-      const response = await api.removeServicePlugin(serviceIdOrName, pluginId,proxyPath);
+      const response = await api.removeServicePlugin(serviceIdOrName, pluginId,instance!);
       if(response && allAssociatedPlugins) {
           const newAssociatedPluginsData = allAssociatedPlugins.filter(p => p.id !== pluginId && p);
             setAllAssociatedPlugins(newAssociatedPluginsData);
-            await listAllEnabledPlugins(proxyPath);
+            await listAllEnabledPlugins();
             return alertApi.post({
               message: 'Plugin successfully disabled',
               severity: 'success',
@@ -246,6 +251,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   return (
     <KongServiceManagerContext.Provider
       value={{
+        instance,
+        setInstanceState,
         listAllEnabledPlugins,
         getServiceDetails,
         serviceDetails,

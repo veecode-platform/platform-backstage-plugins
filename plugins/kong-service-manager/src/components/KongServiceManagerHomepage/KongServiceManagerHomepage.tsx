@@ -7,6 +7,7 @@ import { AboutPage } from '../AboutPage';
 import { RoutesList } from '../RoutesList';
 import { PluginsList } from '../PluginsList';
 import { KongServiceManagerProvider } from '../context';
+import { SelectInstance } from '../SelectInstance';
 
 const useStyles = makeStyles(theme=>({
   divider: {
@@ -23,6 +24,7 @@ export const KongServiceManagerHomepage = () => {
       <Container maxWidth="xl">
         <Grid container spacing={4}>
           <Grid item lg={2} className={classes.divider}>
+            <SelectInstance/>
             <MenuOptions />
           </Grid>
           <Grid item lg={10}>

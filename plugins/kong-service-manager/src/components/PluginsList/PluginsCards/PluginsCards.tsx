@@ -6,8 +6,6 @@ import { AllPlugins } from './AllPlugins';
 import { useStyles } from './styles';
 import { AssociatedPlugins } from './AssociatedPlugins';
 import { DrawerComponent } from '../DrawerComponent';
-import { useEntity } from '@backstage/plugin-catalog-react';
-import { useEntityAnnotation } from '../../../hooks';
 import { KongServiceManagerContext } from '../../context';
 
 export interface PluginsCardsProps {
@@ -17,12 +15,10 @@ export interface PluginsCardsProps {
 export const PluginsCards = ({filterByAssociated}:PluginsCardsProps) => {
 
   const { content } = useStyles();
-  const { entity } = useEntity();
-  const { kongInstance } = useEntityAnnotation(entity)
   const {listAllEnabledPlugins,associatedPluginsName} = useContext(KongServiceManagerContext)
 
   useEffect(()=>{
-     listAllEnabledPlugins(kongInstance as string)
+     listAllEnabledPlugins()
    },[associatedPluginsName])
 
   return (

@@ -27,15 +27,15 @@ export const PluginsList = () => {
 
   const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins} = useContext(KongServiceManagerContext);
   const { entity } = useEntity();
-  const { serviceName,kongInstance } = useEntityAnnotation(entity);
+  const { serviceName } = useEntityAnnotation(entity);
   const { wrapper, emptyContent } = useStyles();
 
   const getPluginsEnabled = async () => {
-    await listAllEnabledPlugins(kongInstance as string);
+    await listAllEnabledPlugins();
   };
 
   const getAssociatedPlugins = async () => {
-    await listAssociatedPlugins(serviceName as string,kongInstance as string);
+    await listAssociatedPlugins(serviceName as string);
   };
 
   const { loading, error } = useAsync(async (): Promise<void> => {

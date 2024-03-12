@@ -3,22 +3,24 @@ import { AssociatedPluginsResponse, CreatePlugin, PluginCard, PluginFieldsRespon
 
 
 export type KongServiceManagerContextType = {
-    listAllEnabledPlugins: (proxyPath: string) => Promise<PluginsPerCategoryType | never[]>;
-    getServiceDetails: (serviceIdOrName: string, proxyPath: string) => Promise<ServiceInfoResponse | null>;
+    instance: string | null;
+    setInstanceState: (instanceState: string) => void;
+    listAllEnabledPlugins: () => Promise<PluginsPerCategoryType | never[]>;
+    getServiceDetails: (serviceIdOrName: string) => Promise<ServiceInfoResponse | null>;
     serviceDetails: ServiceInfoResponse | null;
-    getRoutesList: (serviceIdOrName: string, proxyPath: string) => Promise<RoutesResponse[] | null>;
+    getRoutesList: (serviceIdOrName: string) => Promise<RoutesResponse[] | null>;
     allRoutes: RoutesResponse[] | null;
-    listAssociatedPlugins: (serviceIdOrName: string, proxyPath: string) => Promise<AssociatedPluginsResponse[]|null>;
+    listAssociatedPlugins: (serviceIdOrName: string) => Promise<AssociatedPluginsResponse[]|null>;
     allAssociatedPlugins: AssociatedPluginsResponse[] | null;
     associatedPluginsName: [] | string[];
-    getPluginFields: (pluginName: string, proxyPath: string) => Promise<PluginFieldsResponse[] | null>;
-    enablePlugin: (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => Promise<void | null>;
-    disablePlugin: (serviceIdOrName: string, pluginId: string, proxyPath: string) => Promise<any>;
+    getPluginFields: (pluginName: string) => Promise<PluginFieldsResponse[] | null>;
+    enablePlugin: (serviceIdOrName: string, config: CreatePlugin) => Promise<void | null>;
+    disablePlugin: (serviceIdOrName: string, pluginId: string) => Promise<any>;
     handleToggleDrawer: () => void;
     openDrawer: boolean;
     setPluginState: (data: PluginCard) => void;
     selectedPlugin: PluginCard | null;
-    editPlugin: (serviceIdOrName: string, pluginId: string,config: CreatePlugin, proxyPath: string) => Promise<void | null>;
+    editPlugin: (serviceIdOrName: string, pluginId: string,config: CreatePlugin) => Promise<void | null>;
     pluginsPerCategory: PluginsPerCategoryType,
     configState: any,
     setConfigState: React.Dispatch<any>

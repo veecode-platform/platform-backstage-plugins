@@ -43,11 +43,11 @@ export const AboutPage = () => {
   const { listComponent, listItemWrapper, listItem, itemValue } = useStyles();
   const { getServiceDetails, serviceDetails } = useContext(KongServiceManagerContext);
   const { entity } = useEntity();
-  const { serviceName, kongInstance } = useEntityAnnotation(entity);
+  const { serviceName } = useEntityAnnotation(entity);
   const [ isLoading, setLoading] = useState<boolean>(false);
 
   const getDetails = async () => {
-    await getServiceDetails(serviceName as string,kongInstance as string);
+    await getServiceDetails(serviceName as string);
   };
 
   const { error } = useAsync(async (): Promise<void> => {
