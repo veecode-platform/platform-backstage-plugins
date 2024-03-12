@@ -1,6 +1,6 @@
 /* eslint-disable @backstage/no-undeclared-imports */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { Suspense, useContext, useEffect, useState } from 'react';
+import React, { Suspense, useContext } from 'react';
 import { Select, SelectedItems } from '@backstage/core-components';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
@@ -10,39 +10,11 @@ import { transformToSelectOptions } from '../../utils/common/transformToSelectOp
 import { Tooltip } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 
-
-type OptionsProps = {
-  label: string;
-  value: string;
-};
-
 export const SelectInstance = () => {
 
   const { entity } = useEntity();
   const { kongInstances } = useEntityAnnotation(entity as Entity);
-  const [instances, setInstances] = useState<string[]>([]);
-  const [options, setOptions] = useState<OptionsProps[]>([]);
-  const [instanceDefault, setInstanceDefault ] = useState<string>(kongInstances ? kongInstances[0] : '');
   const { instance, setInstanceState } = useContext(KongServiceManagerContext);
-  const optionDetault = {label: 'Select the Kong Instance', value: 'Select the Kong Instance'}
-
-  useEffect(() => {
-       if(kongInstances){
-        setInstances(kongInstances);
-        setInstanceDefault(kongInstances[0] as string);
-       }
-  }, []);
-
-  useEffect(() => {
-    setInstanceState(instanceDefault);
-  }, [instanceDefault]);
-
-  useEffect(() => {
-    if (instances) {
-      const newOptions = transformToSelectOptions(instances);
-      setOptions(newOptions);
-    }
-  }, [instances]);
 
   const handleSelectChange = (event: SelectedItems) => {
     const selectedValue = event;
@@ -56,8 +28,8 @@ export const SelectInstance = () => {
           <Select
             onChange={handleSelectChange}
             label=""
-            selected={instance ?? "Select the Kong Instance"}
-            items={options ?? optionDetault}
+            selected={instance !== "" ? instance : (kongInstances && kongInstances[0])}
+            items={ kongInstances ? transformToSelectOptions(kongInstances as string[]) : []}
           />
         </div>
       </Tooltip>
