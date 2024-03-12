@@ -4,8 +4,9 @@ import { useState } from "react";
 import { kongServiceManagerApiRef } from "../../api";
 import { KongServiceManagerContext } from "./KongServiceManagerContext";
 import { AssociatedPluginsResponse, CreatePlugin, PluginCard, PluginsPerCategoryType, RoutesResponse, ServiceInfoResponse } from "../../utils/types";
-import PluginsInfoData from '../../data/plugins.json';
+// import PluginsInfoData from '../../data/plugins.json';
 import { KongPluginsCategoriesEnum } from "../../utils/enums/KongPluginCategories";
+import { PluginsInfoData } from "../../data/data";
 
 interface KongServiceManagerProviderProps {
     children : ReactNode
