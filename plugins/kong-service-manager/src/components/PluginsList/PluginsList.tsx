@@ -53,7 +53,7 @@ export const PluginsList = () => {
 
   return (
     <ErrorBoundary>
-      <BoxComponent title="Kong Plugins">
+      <BoxComponent title="Kong Plugins" searchBar>
         <Box className={wrapper}>
           <TabbedCard title="">
             <CardTab label="All Plugins">
