@@ -1,9 +1,9 @@
 import React from 'react';
 import InputBase from '@material-ui/core/InputBase';
-import { createStyles, alpha, Theme, makeStyles } from '@material-ui/core/styles';
+import { createStyles, alpha, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
     search: {
       position: 'relative',

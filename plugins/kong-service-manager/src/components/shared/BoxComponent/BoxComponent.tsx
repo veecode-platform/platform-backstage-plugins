@@ -1,7 +1,7 @@
 import { Box, Toolbar, Typography, makeStyles } from '@material-ui/core';
 import React, { ReactNode } from 'react';
 import { SelectInstance } from '../../SelectInstance';
-import { SearchBar } from '../../PluginsList/SearchBar';
+import { SearchBar } from '../SearchBar';
 
 interface BoxComponentProps {
     title: string,
