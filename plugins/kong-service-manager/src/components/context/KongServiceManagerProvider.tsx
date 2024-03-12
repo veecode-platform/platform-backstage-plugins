@@ -74,7 +74,6 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
             plugins.forEach(pluginName => {
               PluginsInfoData.categories.forEach(c => {
                 const foundPlugin = c.plugins.find(i => i.slug === pluginName);
-        
                 if (foundPlugin) {
                   const isAssociated = (associatedPluginsName && associatedPluginsName.length >= 1) && associatedPluginsName.find( i => i === pluginName);
                   const newPlugin = {
@@ -85,7 +84,6 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
                     tags: foundPlugin.tags,
                     description: foundPlugin.description,
                   };
-        
                   switch (c.category) {
                     case KongPluginsCategoriesEnum.ai:
                       (pluginsData.ai.plugins as PluginCard[]).push(newPlugin);

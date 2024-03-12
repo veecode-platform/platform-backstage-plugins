@@ -17,7 +17,7 @@ export const DrawerComponent = () => {
 
   const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction, spinner} = useStyles();
   const { entity } = useEntity();
-  const { serviceName, kongInstance } = useEntityAnnotation(entity);
+  const { serviceName } = useEntityAnnotation(entity);
   const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPlugin, allAssociatedPlugins, setConfigState, configState} = useContext(KongServiceManagerContext);
   const [fieldsComponents, setFieldsComponents ] = useState<any[]|[]>([]);
   const [ isLoading, setLoading] = useState<boolean>(false);
@@ -44,7 +44,7 @@ export const DrawerComponent = () => {
         config: configState,
         name: selectedPlugin.slug
       } 
-      await enablePlugin(serviceName as string,config,kongInstance as string);
+      await enablePlugin(serviceName as string,config);
       setProcessingData(false)  
       handleToggleDrawer();
     }
@@ -63,17 +63,16 @@ export const DrawerComponent = () => {
         config: configState,
         name: selectedPlugin.slug
       } 
-      await editPlugin(serviceName as string,id,config,kongInstance as string);
+      await editPlugin(serviceName as string,id,config);
       setProcessingData(false)  
       handleToggleDrawer();
     }
   }
 
-  const handlePluginFields = async (pluginName: string, proxyPath: string) => {
-    const fields = await getPluginFields(pluginName, proxyPath);
+  const handlePluginFields = async (pluginName: string) => {
+    const fields = await getPluginFields(pluginName);
     
     if (fields) {
-      console.log("FIELDS >>>>",fields)
       let fieldsData: PluginFieldsResponse[] = [];
     
       if (selectedPlugin?.associated && allAssociatedPlugins) {
@@ -113,7 +112,7 @@ export const DrawerComponent = () => {
 
   useEffect(()=>{
    if(selectedPlugin) {
-    handlePluginFields(selectedPlugin.slug as string, kongInstance as string);
+    handlePluginFields(selectedPlugin.slug as string);
   }
    setLoading(true);
    setTimeout(()=>{

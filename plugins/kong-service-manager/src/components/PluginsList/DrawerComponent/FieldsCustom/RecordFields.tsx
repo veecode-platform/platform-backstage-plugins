@@ -103,7 +103,6 @@ interface RecordStateType {
 
     useEffect(()=>{
       if(recordFields){
-        console.log("Atualizou o recordFields")
         recordFields.map(r => {
           switch (r.name) {
             case 'name':
@@ -148,11 +147,9 @@ interface RecordStateType {
          
         })
       }
-      console.log(recordFields,inputFields)
     },[recordFields]);
 
     useEffect(() => {
-      console.log(inputName)
       if (defaultValues && defaultValues !== undefined) {
         const recordData: RecordStateType = { [inputName]: [...defaultValues] };
         setRecordState(recordData);
@@ -162,7 +159,6 @@ interface RecordStateType {
 
     useEffect(()=>{
      if(recordState){
-      console.log("CHAMEI")
       setConfig((prevConfigState : any) => {
         const updatedConfigState = {
           ...prevConfigState,
