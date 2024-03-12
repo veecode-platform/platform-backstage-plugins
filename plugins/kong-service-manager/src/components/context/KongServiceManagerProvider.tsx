@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { alertApiRef, errorApiRef, useApi } from "@backstage/core-plugin-api";
 import React, { ReactNode, useEffect } from "react";
 import { useState } from "react";
@@ -32,12 +33,17 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     logging: { plugins: [] },
   }); 
   const [configState, setConfigState ] = useState<any|null>(null);
+  const [searchTerm, setSeachTerm] = useState<string>("")
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
   const alertApi = useApi(alertApiRef);
 
   const setInstanceState = (instanceState: string) => {
     setInstance(instanceState);
+  }
+
+  const setSearchState = (search: string) => {
+    setSeachTerm(search);
   }
 
   const handleToggleDrawer = () => {
@@ -58,8 +64,15 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   const listAllEnabledPlugins = async ()=>{
     try{
         const plugins = await api.getEnabledPlugins(instance!);
-        if (plugins !== null && plugins !== undefined){
+        let pluginsList = plugins;
 
+        if (searchTerm !== "") {
+          pluginsList = plugins.filter(plugin =>
+            plugin.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        }
+    
+        if (pluginsList !== null && pluginsList !== undefined){
             const pluginsData: PluginsPerCategoryType = { 
               ai: { plugins: [] },
               auth: { plugins: [] },
@@ -71,7 +84,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
               logging: { plugins: [] },
             };
 
-            plugins.forEach(pluginName => {
+            pluginsList.forEach(pluginName => {
               PluginsInfoData.categories.forEach(c => {
                 const foundPlugin = c.plugins.find(i => i.slug === pluginName);
                 if (foundPlugin) {
@@ -246,6 +259,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   },[allAssociatedPlugins]);
 
+  useEffect(()=>{
+    listAllEnabledPlugins()
+  },[searchTerm])
+
   return (
     <KongServiceManagerContext.Provider
       value={{
@@ -269,7 +286,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         editPlugin,
         pluginsPerCategory,
         configState,
-        setConfigState
+        setConfigState,
+        setSearchState
       }}
     >
       {children}

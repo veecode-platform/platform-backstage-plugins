@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import InputBase from '@material-ui/core/InputBase';
 import { createStyles, alpha, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
+import { KongServiceManagerContext } from '../../context';
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -49,6 +50,11 @@ const useStyles = makeStyles(theme =>
 export const SearchBar = () => {
     
  const {search, searchIcon, inputRoot,inputInput} = useStyles();
+ const { setSearchState } = useContext(KongServiceManagerContext);
+ 
+ const handleSearchTerms = (event : React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>)=>{
+  setSearchState(event?.target.value)
+ }
 
   return (
     <div className={search}>
@@ -57,6 +63,7 @@ export const SearchBar = () => {
     </div>
     <InputBase
       placeholder="Search…"
+      onChange={(e)=>handleSearchTerms(e)}
       classes={{
         root: inputRoot,
         input: inputInput,
