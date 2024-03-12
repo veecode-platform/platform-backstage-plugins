@@ -53,11 +53,17 @@ export const DrawerComponent = () => {
   const handleEditAction = async () => { 
     if (selectedPlugin && allAssociatedPlugins && configState) {
       setProcessingData(true);
+      let id = ""
+        allAssociatedPlugins.forEach(p => {
+          if(p.name === selectedPlugin.slug){
+            id = p.id
+          }
+        });
       const config = {
         config: configState,
         name: selectedPlugin.slug
       } 
-      await editPlugin(serviceName as string,config,kongInstance as string);
+      await editPlugin(serviceName as string,id,config,kongInstance as string);
       setProcessingData(false)  
       handleToggleDrawer();
     }
@@ -67,6 +73,7 @@ export const DrawerComponent = () => {
     const fields = await getPluginFields(pluginName, proxyPath);
     
     if (fields) {
+      console.log("FIELDS >>>>",fields)
       let fieldsData: PluginFieldsResponse[] = [];
     
       if (selectedPlugin?.associated && allAssociatedPlugins) {
@@ -236,7 +243,7 @@ export const DrawerComponent = () => {
                         if (field.arrayType === 'record')
                           return (
                             <RecordFields
-                              name={field.name}
+                              inputName={field.name}
                               required={field.required}
                               defaultValues={field.defaultValue}
                               recordFields={field.recordFields}

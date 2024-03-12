@@ -4,8 +4,9 @@ import { useState } from "react";
 import { kongServiceManagerApiRef } from "../../api";
 import { KongServiceManagerContext } from "./KongServiceManagerContext";
 import { AssociatedPluginsResponse, CreatePlugin, PluginCard, PluginsPerCategoryType, RoutesResponse, ServiceInfoResponse } from "../../utils/types";
-import PluginsInfoData from '../../data/plugins.json';
+// import PluginsInfoData from '../../data/plugins.json';
 import { KongPluginsCategoriesEnum } from "../../utils/enums/KongPluginCategories";
+import { PluginsInfoData } from "../../data/data";
 
 interface KongServiceManagerProviderProps {
     children : ReactNode
@@ -198,12 +199,13 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  const editPlugin = async (serviceIdOrName: string, config: CreatePlugin, proxyPath: string) => {
+  const editPlugin = async (serviceIdOrName: string, pluginId: string,config: CreatePlugin, proxyPath: string) => {
     try{ 
-      const response = await api.editServicePlugin(serviceIdOrName, config,proxyPath);
+      const response = await api.editServicePlugin(serviceIdOrName, pluginId, config, proxyPath);
       if(response) {
+        await listAssociatedPlugins(serviceIdOrName,proxyPath);
         return alertApi.post({
-          message: 'Plugin successfully enabled!',
+          message: 'Plugin successfully edited!',
           severity: 'success',
           display: 'transient',
       });

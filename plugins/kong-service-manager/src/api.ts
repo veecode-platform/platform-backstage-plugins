@@ -39,7 +39,7 @@ export interface KongServiceManagerApi {
 
     createServicePlugin(serviceIdOrName: string, config: CreatePlugin, proxyPath?: string): Promise<any>;
 
-    editServicePlugin(serviceIdOrName: string, config: CreatePlugin, proxyPath?: string): Promise<any>;
+    editServicePlugin(serviceIdOrName: string, pluginId: string, config: CreatePlugin, proxyPath?: string): Promise<any>;
 
     removeServicePlugin(serviceIdOrName: string, pluginId: string, proxyPath?: string): Promise<any>;
 
@@ -180,20 +180,18 @@ class Client {
         return response
     }
 
-    async editServicePlugin(serviceIdOrName: string, config: CreatePlugin, proxyPath?: string): Promise<any> {
+    async editServicePlugin(serviceIdOrName: string, pluginId: string, config: CreatePlugin, proxyPath?: string): Promise<any> {
         const body = {
             ...config,
             tags: ["devportal", "plugin-kong-service-manager"],
             protocols: ["https", "http"],
-            service: null,
-            consumer: null,
             enabled: true
         }
         const headers: RequestInit = {
             method: "PATCH",
             body: JSON.stringify(body)
         }
-        const response = await this.fetch(`/services/${serviceIdOrName}/plugins`, proxyPath, headers)
+        const response = await this.fetch(`/services/${serviceIdOrName}/plugins/${pluginId}`, proxyPath, headers)
         return response
 
     }
@@ -254,8 +252,8 @@ export class KongServiceManagerApiClient implements KongServiceManagerApi {
         return this.client.createServicePlugin(serviceIdOrName, config, proxyPath)
     }
 
-    async editServicePlugin(serviceIdOrName: string, config: CreatePlugin, proxyPath?: string | undefined): Promise<any> {
-        return this.client.editServicePlugin(serviceIdOrName, config, proxyPath)
+    async editServicePlugin(serviceIdOrName: string, pluginId: string, config: CreatePlugin, proxyPath?: string | undefined): Promise<any> {
+        return this.client.editServicePlugin(serviceIdOrName, pluginId, config, proxyPath)
     }
 
     async removeServicePlugin(serviceIdOrName: string, pluginId: string, proxyPath?: string | undefined): Promise<any> {
