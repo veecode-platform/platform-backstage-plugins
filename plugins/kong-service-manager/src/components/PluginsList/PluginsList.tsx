@@ -60,11 +60,8 @@ export const PluginsList = () => {
               <PluginsCards />
             </CardTab>
             <CardTab label="Associated Plugins">
-              {allAssociatedPlugins && allAssociatedPlugins.length >= 1 ? (
-                <PluginsCards filterByAssociated />
-              ) : (
-                <div className={emptyContent}> No data to display ...</div>
-              )}
+              {allAssociatedPlugins && allAssociatedPlugins.length >= 1 ? (<PluginsCards filterByAssociated />) 
+              : <div className={emptyContent}> No data to display ...</div>}
             </CardTab>
           </TabbedCard>
         </Box>
