@@ -66,12 +66,14 @@ export const SelectBranch = () => {
 
   return (
     <Tooltip title="Select the branch" placement="top">
-      <Select
-        onChange={handleSelectChange}
-        label=""
-        selected={branch ?? branchDefault}
-        items={options}
-      />
+      <div>
+        <Select
+          onChange={handleSelectChange}
+          label=""
+          selected={branch ?? branchDefault}
+          items={options}
+        />
+      </div>
     </Tooltip>
   );
 };
