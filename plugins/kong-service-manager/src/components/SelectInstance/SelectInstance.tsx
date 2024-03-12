@@ -48,12 +48,12 @@ export const SelectInstance = () => {
   };
 
   return (
-    <Tooltip title="Select the Kong Instance" placement="top">
+    <Tooltip title="Select the Kong Instance" placement="left">
       <div>
         <Select
           onChange={handleSelectChange}
           label=""
-          selected={instance ? instance : instanceDefault}
+          selected={(instance ? instance as string : instanceDefault as string) ?? ""}
           items={options}
         />
       </div>
