@@ -4,9 +4,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Select, SelectedItems } from '@backstage/core-components';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
-import { Tooltip } from '@material-ui/core';
 import { KongServiceManagerContext } from '../context';
 import { useEntityAnnotation } from '../../hooks';
+import { transformToSelectOptions } from '../../utils/common/transformToSelectOptions';
+import { Tooltip } from '@material-ui/core';
 
 
 type OptionsProps = {
@@ -15,33 +16,28 @@ type OptionsProps = {
 };
 
 export const SelectInstance = () => {
-  
-  const [instances, setInstances] = useState<string[]>([]);
-  const [options, setOptions] = useState<OptionsProps[]>([]);
-  const [instanceDefault, setInstanceDefault ] = useState<string>('');
-  const { instance, setInstanceState } = useContext(KongServiceManagerContext);
+
   const { entity } = useEntity();
   const { kongInstances } = useEntityAnnotation(entity as Entity);
-
+  const [instances, setInstances] = useState<string[]>([]);
+  const [options, setOptions] = useState<OptionsProps[]>([]);
+  const [instanceDefault, setInstanceDefault ] = useState<string>(kongInstances ? kongInstances[0] : '');
+  const { instance, setInstanceState } = useContext(KongServiceManagerContext);
+   
   useEffect(() => {
        if(kongInstances){
         setInstances(kongInstances);
-          setInstanceDefault(kongInstances[0] as string)
+        setInstanceDefault(kongInstances[0] as string);
        }
-  }, [kongInstances, setInstances]);
+  }, []);
 
-  useEffect(()=>{
-    setInstanceState(instanceDefault)
-  },[instanceDefault])
+  useEffect(() => {
+    setInstanceState(instanceDefault);
+  }, [instanceDefault]);
 
   useEffect(() => {
     if (instances) {
-      const newOptions = instances.map((item) => {
-        return {
-          label: item,
-          value: item,
-        };
-      });
+      const newOptions = transformToSelectOptions(instances)
       setOptions(newOptions);
     }
   }, [instances]);
@@ -52,13 +48,15 @@ export const SelectInstance = () => {
   };
 
   return (
-    <Tooltip title="Select the branch" placement="top">
-      <Select
-        onChange={handleSelectChange}
-        label=""
-        selected={instance ?? instanceDefault}
-        items={options}
-      />
+    <Tooltip title="Select the Kong Instance" placement="top">
+      <div>
+        <Select
+          onChange={handleSelectChange}
+          label=""
+          selected={instance ? instance : instanceDefault}
+          items={options}
+        />
+      </div>
     </Tooltip>
   );
 };

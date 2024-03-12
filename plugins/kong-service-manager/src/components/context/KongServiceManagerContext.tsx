@@ -3,7 +3,7 @@ import { AssociatedPluginsResponse, CreatePlugin, PluginCard, PluginFieldsRespon
 
 
 export type KongServiceManagerContextType = {
-    instance: string | null;
+    instance: string;
     setInstanceState: (instanceState: string) => void;
     listAllEnabledPlugins: () => Promise<PluginsPerCategoryType | never[]>;
     getServiceDetails: (serviceIdOrName: string) => Promise<ServiceInfoResponse | null>;

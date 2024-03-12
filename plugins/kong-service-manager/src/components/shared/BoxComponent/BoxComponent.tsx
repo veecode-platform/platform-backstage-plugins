@@ -1,5 +1,6 @@
 import { Box, Toolbar, Typography, makeStyles } from '@material-ui/core';
 import React, { ReactNode } from 'react';
+import { SelectInstance } from '../../SelectInstance';
 
 interface BoxComponentProps {
     title: string,
@@ -14,6 +15,9 @@ const useStyles = makeStyles(theme=>({
     border: `1px solid ${theme.palette.divider}`,
     borderRadius: '10px'
   },
+  toolbar:{
+    paddingBottom: theme.spacing(2)
+  },
   titlebar: {
     flexGrow: 1,
     color: theme.palette.text.primary
@@ -24,12 +28,13 @@ const useStyles = makeStyles(theme=>({
 
 export const BoxComponent = ({title,children}:BoxComponentProps) => {
 
-  const { container, titlebar } = useStyles();
+  const { container,toolbar, titlebar } = useStyles();
 
   return (
     <Box className={container}>
-    <Toolbar>
+    <Toolbar className={toolbar}>
       <Typography variant="h6" className={titlebar}>{title}</Typography>
+      <SelectInstance/>
     </Toolbar>
 
       {children}

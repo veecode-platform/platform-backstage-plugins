@@ -14,7 +14,7 @@ interface KongServiceManagerProviderProps {
 
 export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProps> = ({children}) => {
 
-  const [instance, setInstance] = useState<string | null>(null);
+  const [instance, setInstance] = useState<string>("");
   const [allAssociatedPlugins, setAllAssociatedPlugins] = useState<AssociatedPluginsResponse[]|null>(null);
   const [allRoutes, setAllRoutes] = useState<RoutesResponse[]|null>(null);
   const [serviceDetails, setServiceDetails] = useState<ServiceInfoResponse|null>(null);
