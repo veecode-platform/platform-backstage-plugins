@@ -13261,7 +13261,7 @@ __metadata:
     "@types/pg": ^8.6.6
     "@types/supertest": ^2.0.8
     "@types/uuid": ^8.0.0
-    "@veecode-platform/plugin-application-common": ^0.1.42
+    "@veecode-platform/plugin-application-common": ^0.1.43
     axios: 0.27.0
     class-validator: ^0.11.0
     express: ^4.17.1
@@ -13281,7 +13281,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/plugin-application-common@^0.1.42, @veecode-platform/plugin-application-common@workspace:plugins/application-common":
+"@veecode-platform/plugin-application-common@^0.1.43, @veecode-platform/plugin-application-common@workspace:plugins/application-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/plugin-application-common@workspace:plugins/application-common"
   dependencies:
@@ -13316,7 +13316,7 @@ __metadata:
     "@testing-library/react": ^12.1.3
     "@testing-library/user-event": ^14.0.0
     "@types/node": "*"
-    "@veecode-platform/plugin-application-common": ^0.1.42
+    "@veecode-platform/plugin-application-common": ^0.1.43
     axios: ^1.2.3
     cross-fetch: ^3.1.5
     lodash: ^4.17.21
@@ -13379,8 +13379,8 @@ __metadata:
   linkType: soft
 
 "@veecode-platform/plugin-kong-service-manager@npm:latest":
-  version: 0.1.4
-  resolution: "@veecode-platform/plugin-kong-service-manager@npm:0.1.4"
+  version: 0.1.5
+  resolution: "@veecode-platform/plugin-kong-service-manager@npm:0.1.5"
   dependencies:
     "@backstage/catalog-model": ^1.4.4
     "@backstage/core-components": ^0.14.0
@@ -13393,7 +13393,7 @@ __metadata:
     react-use: ^17.2.4
   peerDependencies:
     react: ^17.0.0
-  checksum: f262d89bd9096f4d7077f607307635630cceae92cc74dfbfe4637fa18e921f7f248f2f6c22c778cc96cfbdacfd12435b5b1f2d5767d3204f542dae331d5eaa55
+  checksum: 3818e981acccf68dca84759bf2c0c5d53b53d6f497984993d25d3d875372c84bb95263475fa0e9764e6a3afd573c1d7df15040609f90c1d52d5d4378c39bf0e5
   languageName: node
   linkType: hard
 

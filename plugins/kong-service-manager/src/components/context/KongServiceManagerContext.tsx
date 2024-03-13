@@ -5,6 +5,7 @@ import { AssociatedPluginsResponse, CreatePlugin, PluginCard, PluginFieldsRespon
 export type KongServiceManagerContextType = {
     instance: string;
     setInstanceState: (instanceState: string) => void;
+    allEnabledPlugins: string[];
     listAllEnabledPlugins: () => Promise<PluginsPerCategoryType | never[]>;
     getServiceDetails: (serviceIdOrName: string) => Promise<ServiceInfoResponse | null>;
     serviceDetails: ServiceInfoResponse | null;

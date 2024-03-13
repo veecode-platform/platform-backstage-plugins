@@ -16,6 +16,7 @@ interface KongServiceManagerProviderProps {
 export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProps> = ({children}) => {
 
   const [instance, setInstance] = useState<string>("");
+  const [allEnabledPlugins, setAllEnabledPlugins] = useState<string[]>([]);
   const [allAssociatedPlugins, setAllAssociatedPlugins] = useState<AssociatedPluginsResponse[]|null>(null);
   const [allRoutes, setAllRoutes] = useState<RoutesResponse[]|null>(null);
   const [serviceDetails, setServiceDetails] = useState<ServiceInfoResponse|null>(null);
@@ -71,6 +72,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
             plugin.toLowerCase().includes(searchTerm.toLowerCase())
           );
         }
+
+        setAllEnabledPlugins(pluginsList);
     
         if (pluginsList !== null && pluginsList !== undefined){
             const pluginsData: PluginsPerCategoryType = { 
@@ -268,6 +271,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
       value={{
         instance,
         setInstanceState,
+        allEnabledPlugins,
         listAllEnabledPlugins,
         getServiceDetails,
         serviceDetails,

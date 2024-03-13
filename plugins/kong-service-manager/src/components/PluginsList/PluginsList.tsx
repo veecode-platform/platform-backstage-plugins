@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme=>({
 
 export const PluginsList = () => {
 
-  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins} = useContext(KongServiceManagerContext);
+  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins, allEnabledPlugins} = useContext(KongServiceManagerContext);
   const { entity } = useEntity();
   const { serviceName } = useEntityAnnotation(entity);
   const { wrapper, emptyContent } = useStyles();
@@ -47,6 +47,7 @@ export const PluginsList = () => {
     getPluginsEnabled();
   },[allAssociatedPlugins]);
 
+
   if (loading) return <Progress />;
 
   if(error) return <EmptyStateComponent/>;
@@ -57,7 +58,7 @@ export const PluginsList = () => {
         <Box className={wrapper}>
           <TabbedCard title="">
             <CardTab label="All Plugins">
-              <PluginsCards />
+              {allEnabledPlugins && allEnabledPlugins.length >=1 ? <PluginsCards /> : <div className={emptyContent}> No data to display ...</div>}
             </CardTab>
             <CardTab label="Associated Plugins">
               {allAssociatedPlugins && allAssociatedPlugins.length >= 1 ? (<PluginsCards filterByAssociated />) 
