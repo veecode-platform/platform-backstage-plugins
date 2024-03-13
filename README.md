@@ -26,13 +26,14 @@ Veecode Platform Backstage Plugins
 
 | Plugin           |  link |
 | --------------------------- | ------------------------------------------------------------ |
+| **Cluster Explorer**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/cluster-explorer) |
+| **Database Explorer**       |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/database-explorer) |
+| **Environment Explorer**    |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/environment-explorer) |
 | **Github Workfklows**        | [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/github-workflows) |
 | **Gitlab Pipelines**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/gitlab-pipelines) |
-| **Veecode Platform Common** |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-platform-common) |
-| **Environment Explorer**    |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/environment-explorer) |
-| **Database Explorer**       |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/database-explorer) |
-| **Cluster Explorer**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/cluster-explorer) |
+| **Kong Service Manager**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/kong-service-manager) |
 | **Vault Explorer**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/vault-explorer) |
+| **Veecode Platform Common** |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-platform-common) |
 
 
 ---
