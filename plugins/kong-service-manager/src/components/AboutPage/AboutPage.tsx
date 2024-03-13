@@ -19,7 +19,6 @@ export const useStyles = makeStyles(theme=>({
     height: '100%',
     minHeight: '65vh',
     margin:'.5rem',
-
   },
   listItemWrapper:{
     width: '100%',

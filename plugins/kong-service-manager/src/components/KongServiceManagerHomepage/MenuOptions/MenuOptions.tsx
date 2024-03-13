@@ -22,6 +22,10 @@ const useStyles = makeStyles(theme => ({
    listComponent: {
     height: '100%',
     minHeight: '70vh',
+    [theme.breakpoints.down('md')]: {
+      display: 'flex',
+      minHeight: 'auto',
+     }
    },
    link:{
     color: theme.palette.text.primary,
@@ -53,6 +57,9 @@ const useStyles = makeStyles(theme => ({
     '&:hover':{
         background: '#CDCDCD90',
     },
+    [theme.breakpoints.down('md')]: {
+      minWidth: '200px',
+     }
    }
 }));
 

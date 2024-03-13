@@ -7,24 +7,31 @@ import { AboutPage } from '../AboutPage';
 import { RoutesList } from '../RoutesList';
 import { PluginsList } from '../PluginsList';
 import { KongServiceManagerProvider } from '../context';
-// import { SelectInstance } from '../SelectInstance';
 
 const useStyles = makeStyles(theme=>({
+  content:{
+    [theme.breakpoints.down('md')]: {
+      minWidth: '60vw',
+      overflowX: 'scroll'
+     }
+  },
   divider: {
-    borderRight: `1px solid ${theme.palette.divider}`
+    borderRight: `1px solid ${theme.palette.divider}`,
+    [theme.breakpoints.down('md')]: {
+      borderRight: `1px solid transparent`
+     }
   }
 }))
 
 export const KongServiceManagerHomepage = () => {
 
-  const classes = useStyles();
+  const {content, divider} = useStyles();
 
   return (
     <KongServiceManagerProvider>
       <Container maxWidth="xl">
-        <Grid container spacing={4}>
-          <Grid item lg={2} className={classes.divider}>
-            {/* <SelectInstance/> */}
+        <Grid container spacing={4} className={content}>
+          <Grid item lg={2} className={divider}>
             <MenuOptions />
           </Grid>
           <Grid item lg={10}>
