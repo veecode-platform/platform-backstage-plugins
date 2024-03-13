@@ -1,4 +1,4 @@
-# Kong Service Manager Plugin
+# Kong Service Manager Plugin 
 
 The Kong Service Manager plugin offers the facility to manipulate your service from different Kong environments, in your component, detailing information about the service, listing the routes it has and also offering the possibility of manipulating plugins without leaving the backstage.
 
