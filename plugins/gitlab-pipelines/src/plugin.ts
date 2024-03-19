@@ -1,3 +1,4 @@
+/* eslint-disable @backstage/no-undeclared-imports */
 import { createApiFactory, createComponentExtension, createPlugin, discoveryApiRef, identityApiRef } from '@backstage/core-plugin-api';
 import { scmAuthApiRef } from '@backstage/integration-react';
 import { rootRouteRef } from './routes';

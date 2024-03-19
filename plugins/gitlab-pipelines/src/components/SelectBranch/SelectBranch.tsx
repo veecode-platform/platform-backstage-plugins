@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import { Select, SelectedItems } from '@backstage/core-components';
 import { useApi } from '@backstage/core-plugin-api';
@@ -7,7 +8,6 @@ import { Entity } from '@backstage/catalog-model';
 import { gitlabPipelinesApiRef } from '../../api';
 import { GitlabPipelinesContext } from '../context/GitlabPipelinesContext';
 import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
-// import { entityMock } from '../../mocks/component';
 
 
 type OptionsProps = {

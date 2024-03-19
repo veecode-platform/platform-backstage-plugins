@@ -13222,11 +13222,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-gitlab-pipelines@workspace:plugins/gitlab-pipelines"
   dependencies:
+    "@backstage/catalog-model": ^1.4.4
     "@backstage/cli": ^0.25.2
     "@backstage/core-app-api": ^1.12.0
     "@backstage/core-components": ^0.14.0
     "@backstage/core-plugin-api": ^1.9.0
     "@backstage/dev-utils": ^1.0.27
+    "@backstage/plugin-catalog-react": ^1.10.0
     "@backstage/test-utils": ^1.5.0
     "@backstage/theme": ^0.5.1
     "@material-ui/core": ^4.12.2
@@ -13261,7 +13263,7 @@ __metadata:
     "@types/pg": ^8.6.6
     "@types/supertest": ^2.0.8
     "@types/uuid": ^8.0.0
-    "@veecode-platform/plugin-application-common": ^0.1.45
+    "@veecode-platform/plugin-application-common": ^0.1.46
     axios: 0.27.0
     class-validator: ^0.11.0
     express: ^4.17.1
@@ -13281,7 +13283,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/plugin-application-common@^0.1.45, @veecode-platform/plugin-application-common@workspace:plugins/application-common":
+"@veecode-platform/plugin-application-common@^0.1.46, @veecode-platform/plugin-application-common@workspace:plugins/application-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/plugin-application-common@workspace:plugins/application-common"
   dependencies:
@@ -13316,7 +13318,7 @@ __metadata:
     "@testing-library/react": ^12.1.3
     "@testing-library/user-event": ^14.0.0
     "@types/node": "*"
-    "@veecode-platform/plugin-application-common": ^0.1.45
+    "@veecode-platform/plugin-application-common": ^0.1.46
     axios: ^1.2.3
     cross-fetch: ^3.1.5
     lodash: ^4.17.21

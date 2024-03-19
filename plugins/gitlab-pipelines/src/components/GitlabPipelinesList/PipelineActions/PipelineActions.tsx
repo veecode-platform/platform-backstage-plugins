@@ -7,7 +7,6 @@ import { Box, Button, makeStyles, Tooltip } from '@material-ui/core';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotations } from '../../../hooks';
-// import { entityMock } from '../../../mocks/component';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
 import { ModalComponent } from '../../ModalComponent/ModalComponent';
 import { GitlabPipelinesStatus } from '../../../utils/enums/GitlabPipelinesStatus';
@@ -92,8 +91,8 @@ export const PipelineActions = ({ status }: PipelineActionsProps) => {
     await updateData();
   }
 
-  const handleClickActions = (status: string) => {
-      if (status !== GitlabPipelinesStatus.running) handleShowModal();
+  const handleClickActions = (statusValue: string) => {
+      if (statusValue !== GitlabPipelinesStatus.running) handleShowModal();
       else handleStopPipeline();
   }
 
@@ -120,7 +119,6 @@ export const PipelineActions = ({ status }: PipelineActionsProps) => {
       <Box
         className={classes.button}
         role="button"
-        aria-disabled={true}
       >
         <p>Please await ...</p>
         <Tooltip title="await... pending" placement="top">

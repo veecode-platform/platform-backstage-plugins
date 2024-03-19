@@ -42,16 +42,15 @@ const TextFieldComponent = ({ setVariables, setError, errors }: TextFieldProps) 
     const handleChangeInput = (index: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const values = [...inputFields];
         if (event.target.name === "key") {
-            values[index].key = event.target.value;
-            event.target.value === "" ? setError({ ...errors, [`key_${index}`]: true }) : setError({ ...errors, [`key_${index}`]: false })
-        }
-        else {
-            values[index].value = event.target.value;
-            event.target.value === "" ? setError({ ...errors, [`value_${index}`]: true }) : setError({ ...errors, [`value_${index}`]: false })
+          values[index].key = event.target.value;
+          setError({ ...errors, [`key_${index}`]: event.target.value === "" });
+        } else {
+          values[index].value = event.target.value;
+          setError({ ...errors, [`value_${index}`]: event.target.value === "" });
         }
         setInputFields(values);
         setVariables(values);
-    };
+      };
 
     const handleAddFields = () => {
         setInputFields([...inputFields, { key: '', value: '' }])
@@ -64,19 +63,17 @@ const TextFieldComponent = ({ setVariables, setError, errors }: TextFieldProps) 
     }
 
     const touchedField = (index: number, event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
-        if (event.target.value === ""){
-            const values = [...inputFields];
-            if (event.target.name === "key") {
-                values[index].key = event.target.value;
-                event.target.value === "" ? setError({ ...errors, [`key_${index}`]: true }) : setError({ ...errors, [`key_${index}`]: false })
-            }
-            else {
-                values[index].value = event.target.value;
-                event.target.value === "" ? setError({ ...errors, [`value_${index}`]: true }) : setError({ ...errors, [`value_${index}`]: false })
-            }
+        if (event.target.value === "") {
+          const values = [...inputFields];
+          if (event.target.name === "key") {
+            values[index].key = event.target.value;
+            setError({ ...errors, [`key_${index}`]: true });
+          } else {
+            values[index].value = event.target.value;
+            setError({ ...errors, [`value_${index}`]: true });
+          }
         }
-        return;
-      }
+      };
 
     return (
         <Container>

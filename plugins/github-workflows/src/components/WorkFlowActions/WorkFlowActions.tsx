@@ -210,7 +210,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
           </Tooltip>
         )}
 
-{       (status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.aborted) && (
+        {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.aborted) && (
           <Tooltip title="Re-run" placement="right">
             <TimerIcon
               onClick={() => handleClickActions(StatusWorkflowEnum.timeOut)}
@@ -234,20 +234,20 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
           </Tooltip>
         )}
 
-      {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.completed) && (
-          <Tooltip title="Re-run" placement="right">
-            <SyncIcon
-              onClick={() => handleClickActions(StatusWorkflowEnum.success)}
-            />
-          </Tooltip>
+        {(status.toLocaleLowerCase() === StatusWorkflowEnum.completed && conclusion?.toLocaleLowerCase() === StatusWorkflowEnum.completed) && (
+            <Tooltip title="Re-run" placement="right">
+              <SyncIcon
+                onClick={() => handleClickActions(StatusWorkflowEnum.success)}
+              />
+            </Tooltip>
         )}
 
-      {(status.toLocaleLowerCase() === StatusWorkflowEnum.default) && (
-          <Tooltip title="Run Workflow" placement="right">
-            <ReplayIcon
-              onClick={() => handleClickActions(StatusWorkflowEnum.success)}
-            />
-          </Tooltip>
+        {(status.toLocaleLowerCase() === StatusWorkflowEnum.default) && (
+            <Tooltip title="Run Workflow" placement="right">
+              <ReplayIcon
+                onClick={() => handleClickActions(StatusWorkflowEnum.success)}
+              />
+            </Tooltip>
         )}
 
         {
