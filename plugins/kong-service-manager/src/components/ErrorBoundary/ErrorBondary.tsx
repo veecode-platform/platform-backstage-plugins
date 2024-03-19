@@ -30,11 +30,11 @@ const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
         Something went wrong. Please make sure that you installed:
         <strong>
           <a
-            href="https://github.com/veecode-platform/platform-backstage-plugins/plugins/github-workflows"
+            href="https://github.com/veecode-platform/platform-backstage-plugins/plugins/kong-service-manager"
             target="_blank"
             rel="noopener noreferrer"
           >
-            @veecode/github-workflows
+            @veecode/kong-service-manager
           </a>
         </strong>
       </Alert>

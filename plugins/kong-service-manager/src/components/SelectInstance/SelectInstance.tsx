@@ -1,5 +1,4 @@
 /* eslint-disable @backstage/no-undeclared-imports */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { Suspense, useContext } from 'react';
 import { Select, SelectedItems } from '@backstage/core-components';
 import { useEntity } from '@backstage/plugin-catalog-react';
