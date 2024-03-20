@@ -2,6 +2,11 @@ export interface SchemaFields {
     [key: string]: any;
 }
 
+export interface NewEnabledPluginsResponse {
+  category: string,
+  plugins: PluginCard[]
+}
+
 export interface PluginFieldsResponse {
     name: string,
     type: string

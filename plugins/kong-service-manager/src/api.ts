@@ -1,5 +1,6 @@
 import { createApiRef, DiscoveryApi, IdentityApi } from '@backstage/core-plugin-api';
-import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse } from './utils/types';
+import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse, PluginCard, NewEnabledPluginsResponse } from './utils/types';
+import { PluginsInfoData } from "../src/data/data"
 
 export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
     id: 'plugin.kongservicemanager',
@@ -46,6 +47,8 @@ export interface KongServiceManagerApi {
     getRoutesFromService(serviceIdOrName: string, proxyPath?: string): Promise<RoutesResponse[]>;
 
     getServiceInfo(serviceIdOrName: string, proxyPath?: string): Promise<ServiceInfoResponse>;
+
+    getNewEnabledPlugins(serviceIdOrName: string, proxyPath?: string): Promise<NewEnabledPluginsResponse[]>;
 
 
 }
@@ -98,6 +101,36 @@ class Client {
     async getEnabledPlugins(proxyPath?: string): Promise<string[]> {
         const response = await this.fetch("/plugins/enabled", proxyPath)
         return response.enabled_plugins
+    }
+
+    async getNewEnabledPlugins(serviceIdOrName: string, proxyPath?: string): Promise<NewEnabledPluginsResponse[]> {
+        const response = await this.fetch("/plugins/enabled", proxyPath)
+        const availablePluginsList = response.enabled_plugins as string[]
+        const associatedPluginsList = await this.getServiceAssociatedPlugins(serviceIdOrName, proxyPath)
+
+        const mapedEnabledPluginsList = PluginsInfoData.categories.map((category) => {
+
+            return {
+                category: category.category,
+                plugins: category.plugins.flatMap((categoryPlugin) => {
+                    const filteredPluginMatch = availablePluginsList.find((availablePlugin) => availablePlugin === categoryPlugin.slug)
+                    if (!filteredPluginMatch) return []
+    
+                    const filteredAssocietedPluginMatch = associatedPluginsList.find((associatedPlugin) => associatedPlugin.name === categoryPlugin.slug)
+                    return {
+                        id: filteredAssocietedPluginMatch?.id,
+                        name: categoryPlugin.name,
+                        slug: categoryPlugin.slug,
+                        associated: filteredAssocietedPluginMatch?.enabled,
+                        image: categoryPlugin.image,
+                        tags: categoryPlugin.tags,
+                        description: categoryPlugin.description
+                    }
+                })
+            }
+        })
+        return mapedEnabledPluginsList
+
     }
 
     async getPluginSchema(pluginName: string, proxyPath?: string): Promise<any> {
@@ -266,5 +299,9 @@ export class KongServiceManagerApiClient implements KongServiceManagerApi {
 
     async getServiceInfo(serviceIdOrName: string, proxyPath?: string | undefined): Promise<ServiceInfoResponse> {
         return this.client.getServiceInfo(serviceIdOrName, proxyPath)
+    }
+
+    async getNewEnabledPlugins(serviceIdOrName: string, proxyPath?: string | undefined): Promise<NewEnabledPluginsResponse[]> {
+        return this.client.getNewEnabledPlugins(serviceIdOrName, proxyPath)
     }
 }
