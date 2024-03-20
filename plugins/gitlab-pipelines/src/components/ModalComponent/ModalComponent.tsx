@@ -5,11 +5,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {
-  Box,
-  // Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, 
-  makeStyles
-} from '@material-ui/core';
+import { Box,makeStyles } from '@material-ui/core';
 import { GitlabPipelinesContext } from '../context/GitlabPipelinesContext';
 import { validateString } from '../../utils/validators';
 import TextFieldComponent from './TextFieldComponent/TextFieldComponent';
@@ -51,9 +47,9 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
   const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) => {
     if (required) {
       if (type === "string" && validateString(event.target.value as string)) {
-        return setErrorsState({ ...errorsState, [event.target.name!]: true });
+       setErrorsState({ ...errorsState, [event.target.name!]: true });
       }
-      if (event.target.value === "") return setErrorsState({ ...errorsState, [event.target.name!]: true });
+      if (event.target.value === "")  setErrorsState({ ...errorsState, [event.target.name!]: true });
     }
     if (event) {
       if(modalType === "Job"){
@@ -116,9 +112,9 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
                 fullWidth
                 onBlur={(event) => touchedField(event, true)}
                 onChange={(event) => handleChange(event, true, 'string')}
-                error={errorsState['jobVariableKey']}
+                error={errorsState.jobVariableKey}
                 helperText={
-                  errorsState['jobVariableKey']
+                  errorsState.jobVariableKey
                     ? 'use at least 3 characters'
                     : null
                 }
@@ -135,9 +131,9 @@ export const ModalComponent = ({ open, title, subtitle, handleModal, handleStart
                 fullWidth
                 onBlur={(event) => touchedField(event, true)}
                 onChange={(event) => handleChange(event, true, 'string')}
-                error={errorsState['jobVariableValue']}
+                error={errorsState.jobVariableValue}
                 helperText={
-                  errorsState['jobVariableValue']
+                  errorsState.jobVariableValue
                     ? 'use at least 3 characters'
                     : null
                 }

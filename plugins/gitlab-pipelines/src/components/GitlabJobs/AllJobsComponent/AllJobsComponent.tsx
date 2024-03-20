@@ -1,7 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
-import { ErrorBoundary, MissingAnnotationEmptyState,
-   Progress, ResponseErrorPanel 
-  } from '@backstage/core-components';
+import { ErrorBoundary, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
 import { Box, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography, makeStyles } from '@material-ui/core';
 import useAsync from 'react-use/lib/useAsync';
 import { useEntity } from '@backstage/plugin-catalog-react';
@@ -11,7 +10,6 @@ import CachedIcon from '@material-ui/icons/Cached';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
 import { JobAnnotationProps } from '../../../utils/types';
 import { GITLAB_JOBS_ANNOTATION, useEntityAnnotations } from '../../../hooks';
-// import { entityMock } from '../../../mocks/component';
 import { JobItem } from '../JobItem';
 import GitlabIcon from '../../assets/gitlabIcon';
 
@@ -124,13 +122,13 @@ export const Cards = ({ items, updateData }: JobItemProps) => {
                 <>
                   { branch === "" ? (<Box className={classes.loadingComponent}><CircularProgress/></Box>):
                       items.map(item =>
-                        <JobItem
+                        (<JobItem
                           id={item.id}
                           key={item.id}
                           name={item.label}
                           variable={item.var}
                           status={item.status}
-                        />
+                        />)
                       )
                   }
                 </>
@@ -148,14 +146,14 @@ export const AllJobsComponent = () => {
   const { jobsAnnotations } = useEntityAnnotations(entity as Entity);
   const { branch, setJobsByAnnotation, jobsByAnnotation } = useContext(GitlabPipelinesContext);
 
-  useEffect(() => {
-    updateData()
-  }, [branch]);
-
   const updateData = () => {
     if(jobsByAnnotation) setJobsByAnnotation(jobsByAnnotation);
     else setJobsByAnnotation(jobsAnnotations);
   }
+
+  useEffect(() => {
+    updateData()
+  }, [branch]);
 
   const { loading, error } = useAsync(async (): Promise<void> => {
     updateData();

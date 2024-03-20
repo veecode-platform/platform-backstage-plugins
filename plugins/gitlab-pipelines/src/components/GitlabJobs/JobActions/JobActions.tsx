@@ -6,7 +6,6 @@ import { makeStyles, Tooltip } from '@material-ui/core';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotations } from '../../../hooks';
-// import { entityMock } from '../../../mocks/component';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
 import { GitlabPipelinesStatus } from '../../../utils/enums/GitlabPipelinesStatus';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
@@ -123,8 +122,8 @@ export const JobActions = ({ id, variable, status }: JobActionsProps) => {
     // await updateData();
   };
 
-  const handleClickActions = (status: string) => {
-    if (status !== GitlabPipelinesStatus.running) handleStartJob();
+  const handleClickActions = (statusValue: string) => {
+    if (statusValue !== GitlabPipelinesStatus.running) handleStartJob();
     else handleStopJob();
   }
 

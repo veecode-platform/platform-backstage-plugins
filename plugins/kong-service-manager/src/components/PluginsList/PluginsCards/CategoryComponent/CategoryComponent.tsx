@@ -20,15 +20,7 @@ export const CategoryComponent = ({label, plugins}:CategoryComponentProps) => {
         {label}
       </Typography>
       <ItemCardGrid>
-        {plugins.map(item => (
-          <div key={item.slug}>
-            {item.associated ? (
-              <CardComponent data={item} />
-            ) : (
-              <CardComponent data={item} />
-            )}
-          </div>
-        ))}
+        {plugins.map(item => <CardComponent key={item.slug} data={item} />)}
       </ItemCardGrid>
     </Box>
   );

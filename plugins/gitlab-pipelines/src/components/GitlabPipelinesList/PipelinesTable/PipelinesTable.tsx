@@ -1,14 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { 
-  Table, 
-  TableColumn,
-  Progress,
-  ResponseErrorPanel,
-  Link,
-  EmptyState,
-  MissingAnnotationEmptyState
- } from '@backstage/core-components';
+import { Table, TableColumn,Progress,ResponseErrorPanel,Link,EmptyState,MissingAnnotationEmptyState} from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 import LanguageIcon from '@material-ui/icons/Language';
 import { Box, Button, Typography } from '@material-ui/core';
@@ -17,7 +10,6 @@ import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import SyncIcon from '@material-ui/icons/Sync';
-// import { entityMock } from '../../../mocks/component';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
 import { truncateString } from '../../../utils/commons';
 import { StatusComponent } from '../../StatusComponent';
@@ -28,6 +20,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
 import GitlabIcon from '../../assets/gitlabIcon';
+
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
@@ -140,7 +133,7 @@ export const DenseTable = ({ items }: DenseTableProps) => {
           <GitlabIcon/>
           All Pipelines
         </Typography>
-        <Box role="select" className={classes.options}>
+        <Box role="combobox" className={classes.options}>
             <SelectBranch/>
             <Box className={classes.action}>
               <PipelineActions 
@@ -180,6 +173,10 @@ export const PipelinesTable = () => {
   const [ loadingState, setLoadingState ] = useState(true);
   const { branch, listAllPipelines, pipelineListState} = useContext(GitlabPipelinesContext);
 
+  const updateData = async ()=> {
+    await listAllPipelines(projectName);
+  }
+
   useEffect(()=>{
     setTimeout(()=>{
       setLoadingState(false)
@@ -190,9 +187,6 @@ export const PipelinesTable = () => {
     updateData();
   },[branch]);
 
-  const updateData = async ()=> {
-    await listAllPipelines(projectName);
-  }
   
   const { loading, error } = useAsync(async (): Promise<void> => {
     updateData();

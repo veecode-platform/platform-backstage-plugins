@@ -1,3 +1,4 @@
+/* eslint-disable @backstage/no-undeclared-imports */
 import { createApiRef, DiscoveryApi, IdentityApi } from '@backstage/core-plugin-api';
 import { JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse, VariablesParams } from './utils/types';
 import { ScmAuthApi } from '@backstage/integration-react';
