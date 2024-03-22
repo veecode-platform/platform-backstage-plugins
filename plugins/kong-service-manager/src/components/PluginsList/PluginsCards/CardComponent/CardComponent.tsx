@@ -17,7 +17,7 @@ export const CardComponent = ({data}:CardComponentProps) => {
   const {card, cardHeader, cardTitle, cardIcon,description, button,spinner} = useStyles();
   const { entity } = useEntity();
   const { serviceName} = useEntityAnnotation(entity);
-  const { handleToggleDrawer, setPluginState, disablePlugin, allAssociatedPlugins } = useContext(KongServiceManagerContext);
+  const { handleToggleDrawer, setPluginState, disablePlugin } = useContext(KongServiceManagerContext);
   const [processingData, setProcessingData] = useState<boolean>(false);
 
   const handlePluginEnable = async () => {
@@ -29,14 +29,9 @@ export const CardComponent = ({data}:CardComponentProps) => {
   }
 
   const handlePluginRemove = async () =>{
-     if(allAssociatedPlugins){
+     if(data.id){
       setProcessingData(true)
-        let id = ""
-        allAssociatedPlugins.forEach(p => {
-          if(p.name === data.slug){
-            id = p.id
-          }
-        });
+        const id = data.id;
         await disablePlugin(serviceName as string, id);
         setProcessingData(false)
         }

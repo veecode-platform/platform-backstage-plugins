@@ -25,13 +25,13 @@ const useStyles = makeStyles(theme=>({
 
 export const PluginsList = () => {
 
-  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins, allEnabledPlugins} = useContext(KongServiceManagerContext);
+  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins, pluginsPerCategory, setServiceNameOrIdData} = useContext(KongServiceManagerContext);
   const { entity } = useEntity();
   const { serviceName } = useEntityAnnotation(entity);
   const { wrapper, emptyContent } = useStyles();
 
   const getPluginsEnabled = async () => {
-    await listAllEnabledPlugins();
+    await listAllEnabledPlugins(serviceName as string);
   };
 
   const getAssociatedPlugins = async () => {
@@ -41,6 +41,7 @@ export const PluginsList = () => {
   const { loading, error } = useAsync(async (): Promise<void> => {
     getPluginsEnabled();
     getAssociatedPlugins();
+    setServiceNameOrIdData(serviceName as string)
   }, []);
 
   useEffect(()=>{
@@ -58,7 +59,7 @@ export const PluginsList = () => {
         <Box className={wrapper}>
           <TabbedCard title="">
             <CardTab label="All Plugins">
-              {allEnabledPlugins && allEnabledPlugins.length >=1 ? <PluginsCards /> : <div className={emptyContent}> No data to display ...</div>}
+              {pluginsPerCategory && pluginsPerCategory.length >=1 ? <PluginsCards /> : <div className={emptyContent}> No data to display ...</div>}
             </CardTab>
             <CardTab label="Associated Plugins">
               {allAssociatedPlugins && allAssociatedPlugins.length >= 1 ? (<PluginsCards filterByAssociated />) 

@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @backstage/no-undeclared-imports */
-import React, { Suspense, useContext } from 'react';
+import React, { Suspense, useContext, useEffect } from 'react';
 import { Select, SelectedItems } from '@backstage/core-components';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
@@ -19,6 +20,10 @@ export const SelectInstance = () => {
     const selectedValue = event;
     setInstanceState(selectedValue as string); 
   };
+
+  useEffect(()=>{
+    if(kongInstances) setInstanceState(kongInstances[0])
+  },[])
 
   return (
     <Suspense fallback={<Skeleton variant="rect" width={210} height={118} animation="wave" />}>

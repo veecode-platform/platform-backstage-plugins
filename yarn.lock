@@ -13263,7 +13263,7 @@ __metadata:
     "@types/pg": ^8.6.6
     "@types/supertest": ^2.0.8
     "@types/uuid": ^8.0.0
-    "@veecode-platform/plugin-application-common": ^0.1.46
+    "@veecode-platform/plugin-application-common": ^0.1.47
     axios: 0.27.0
     class-validator: ^0.11.0
     express: ^4.17.1
@@ -13283,7 +13283,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/plugin-application-common@^0.1.46, @veecode-platform/plugin-application-common@workspace:plugins/application-common":
+"@veecode-platform/plugin-application-common@^0.1.47, @veecode-platform/plugin-application-common@workspace:plugins/application-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/plugin-application-common@workspace:plugins/application-common"
   dependencies:
@@ -13318,7 +13318,7 @@ __metadata:
     "@testing-library/react": ^12.1.3
     "@testing-library/user-event": ^14.0.0
     "@types/node": "*"
-    "@veecode-platform/plugin-application-common": ^0.1.46
+    "@veecode-platform/plugin-application-common": ^0.1.47
     axios: ^1.2.3
     cross-fetch: ^3.1.5
     lodash: ^4.17.21
@@ -13380,26 +13380,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/plugin-kong-service-manager@npm:latest":
-  version: 0.1.7
-  resolution: "@veecode-platform/plugin-kong-service-manager@npm:0.1.7"
-  dependencies:
-    "@backstage/catalog-model": ^1.4.4
-    "@backstage/core-components": ^0.14.0
-    "@backstage/core-plugin-api": ^1.9.0
-    "@backstage/theme": ^0.5.1
-    "@material-ui/core": ^4.9.13
-    "@material-ui/icons": ^4.9.1
-    "@material-ui/lab": ^4.0.0-alpha.61
-    dayjs: ^1.11.10
-    react-use: ^17.2.4
-  peerDependencies:
-    react: ^17.0.0
-  checksum: fa0c711688af69a37e0582d8183cae4da72fa7bbc2292c675378d1a7ab3fa492942f4ec9d416920f431f96da30eabc9aec891ee5299f1ce1cb8bb9815524fcd8
-  languageName: node
-  linkType: hard
-
-"@veecode-platform/plugin-kong-service-manager@workspace:plugins/kong-service-manager":
+"@veecode-platform/plugin-kong-service-manager@0.1.9, @veecode-platform/plugin-kong-service-manager@workspace:plugins/kong-service-manager":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/plugin-kong-service-manager@workspace:plugins/kong-service-manager"
   dependencies:
@@ -14133,7 +14114,7 @@ __metadata:
     "@types/react-dom": "*"
     "@veecode-platform/backstage-plugin-cluster-explorer": latest
     "@veecode-platform/backstage-plugin-gitlab-pipelines": latest
-    "@veecode-platform/plugin-kong-service-manager": latest
+    "@veecode-platform/plugin-kong-service-manager": 0.1.9
     cross-env: ^7.0.0
     cypress: ^9.7.0
     eslint-plugin-cypress: ^2.10.3

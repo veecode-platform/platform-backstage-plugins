@@ -2,9 +2,9 @@ export interface SchemaFields {
     [key: string]: any;
 }
 
-export interface NewEnabledPluginsResponse {
+export interface PluginPerCategory {
   category: string,
-  plugins: PluginCard[]
+  plugins: PluginCard[] | []
 }
 
 export interface PluginFieldsResponse {
@@ -63,6 +63,7 @@ export interface ServiceInfoResponse {
 }
   
   export interface PluginCard {
+    id?: string | null,
     name: string,
     slug: string,
     associated?: boolean,
@@ -71,30 +72,4 @@ export interface ServiceInfoResponse {
     description: string,
   }
   
-  export interface PluginsPerCategoryType  {
-    ai: { 
-      plugins: PluginCard[] | [] 
-    };
-    auth: { 
-      plugins: PluginCard[] | [] 
-    };
-    security: { 
-      plugins: PluginCard[] | [] 
-    };
-    trafficControl: { 
-      plugins: PluginCard[] | [] 
-    };
-    serverless: { 
-      plugins: PluginCard[] | [] 
-    };
-    analitics: {
-      plugins: PluginCard[] | [];
-    };
-    transformations: {
-      plugins: PluginCard[] | [];
-    };
-    logging: {
-      plugins: PluginCard[] | [];
-    };
-  };
   

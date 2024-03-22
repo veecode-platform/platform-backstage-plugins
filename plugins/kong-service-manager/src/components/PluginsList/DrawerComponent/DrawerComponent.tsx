@@ -51,14 +51,9 @@ export const DrawerComponent = () => {
   };
 
   const handleEditAction = async () => { 
-    if (selectedPlugin && allAssociatedPlugins && configState) {
+    if (selectedPlugin && selectedPlugin.id && allAssociatedPlugins && configState) {
       setProcessingData(true);
-      let id = ""
-        allAssociatedPlugins.forEach(p => {
-          if(p.name === selectedPlugin.slug){
-            id = p.id
-          }
-        });
+      const id = selectedPlugin.id;
       const config = {
         config: configState,
         name: selectedPlugin.slug
