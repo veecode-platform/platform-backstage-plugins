@@ -57,7 +57,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   const listAllEnabledPlugins = async (serviceIdOrName:string) => {
     try{
         if(instance && serviceIdOrName){
-            const plugins = await api.getNewEnabledPlugins(serviceIdOrName,instance,searchTerm);
+            const plugins = await api.getAllEnabledPlugins(serviceIdOrName,instance,searchTerm);
             setPluginsPerCategory(plugins);
           }       
       }
