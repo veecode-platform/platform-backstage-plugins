@@ -12,11 +12,14 @@ import { SelectBranch } from '../SelectBranch';
 import { WorkflowResultsProps } from '../../utils/types';
 import CachedIcon from '@material-ui/icons/Cached';
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
+import GithubIcon from '../assets/GithubIcon';
 
 const useStyles = makeStyles(theme => ({
   title: {
     paddingLeft: '1.5rem',
-    fontSize: '1.5rem'
+    fontSize: '1.5rem',
+    display: 'flex',
+    alignItems: 'center'
   },
   options:{
     padding: '0 0 1rem 0',
@@ -85,7 +88,10 @@ export const Cards = ({ items, updateData }: CardsProps) => {
 
   const TitleBar = (
     <>
-      <Typography className={classes.title}>Workflows</Typography>
+      <Typography className={classes.title}>
+        <GithubIcon/>
+        Workflows
+      </Typography>
     </>
   );
 
@@ -123,8 +129,8 @@ export const Cards = ({ items, updateData }: CardsProps) => {
                       (<WorkFlowItem
                         id={item.id!}
                         key={item.id}
-                        status={item.lastRunId !== undefined ? item.status : StatusWorkflowEnum.default}
-                        conclusion={item.conclusion}
+                        status={item.status}
+                        conclusion={item.lastRunId !== undefined ? item.conclusion : StatusWorkflowEnum.default}
                         workflowName={item.name as string}
                         parameters={item.parameters}
                         lastRunId={item.lastRunId?.toString()}

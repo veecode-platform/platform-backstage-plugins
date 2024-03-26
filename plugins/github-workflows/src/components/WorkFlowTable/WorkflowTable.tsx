@@ -20,7 +20,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../ModalComponent';
 import DescriptionIcon from '@material-ui/icons/Description';
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
-import GithubIcon from '../assets/githubIcon.png';
+import GithubIcon from '../assets/GithubIcon';
 
 
 const useStyles = makeStyles(theme => ({
@@ -29,7 +29,6 @@ const useStyles = makeStyles(theme => ({
     fontSize: '1.5rem',
     display: 'flex',
     alignItems: 'center',
-    gap: '.5rem'
   },
   icon: {
     width: '40px',
@@ -156,7 +155,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
   const TitleBar = (
       <>
         <Typography className={classes.title}>
-          <img src={GithubIcon} alt="" className={classes.icon}/>
+          <GithubIcon/>
           All Workflows
         </Typography>
         <Box role="combobox" className={classes.options}>

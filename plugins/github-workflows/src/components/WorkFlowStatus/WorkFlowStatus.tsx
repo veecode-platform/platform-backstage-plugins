@@ -54,6 +54,7 @@ export const WorkFlowStatus = ({ status, conclusion, icon }: WorkFlowStatusProps
                 case StatusWorkflowEnum.skipped:
                 case StatusWorkflowEnum.canceled:
                 case StatusWorkflowEnum.aborted:
+                case StatusWorkflowEnum.default:
                     return (
                         <>
                             <StatusAborted /> {!icon && "Aborted"}
