@@ -126,8 +126,8 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
               }
           
             <WorkFlowActions
-              status={item.lastRunId !== undefined ? item.status : StatusWorkflowEnum.default}
-              conclusion={item.conclusion}
+              status={item.status}
+              conclusion={item.lastRunId !== undefined ? item.conclusion : StatusWorkflowEnum.default}
               workflowId={item.id} 
               parameters={item.parameters ?? []}
               />
