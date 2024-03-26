@@ -5,8 +5,6 @@ import { BoxComponent, EmptyStateComponent } from '../shared'
 import { Box, makeStyles } from '@material-ui/core'
 import { PluginsCards } from './PluginsCards';
 import { KongServiceManagerContext } from '../context';
-import { useEntity } from '@backstage/plugin-catalog-react';
-import { useEntityAnnotation } from '../../hooks';
 import useAsync from 'react-use/lib/useAsync';
 import { CardTab, Progress, TabbedCard } from '@backstage/core-components';
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
@@ -25,23 +23,20 @@ const useStyles = makeStyles(theme=>({
 
 export const PluginsList = () => {
 
-  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins, pluginsPerCategory, setServiceNameOrIdData} = useContext(KongServiceManagerContext);
-  const { entity } = useEntity();
-  const { serviceName } = useEntityAnnotation(entity);
+  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins, pluginsPerCategory} = useContext(KongServiceManagerContext);
   const { wrapper, emptyContent } = useStyles();
 
   const getPluginsEnabled = async () => {
-    await listAllEnabledPlugins(serviceName as string);
+    await listAllEnabledPlugins();
   };
 
   const getAssociatedPlugins = async () => {
-    await listAssociatedPlugins(serviceName as string);
+    await listAssociatedPlugins();
   };
 
   const { loading, error } = useAsync(async (): Promise<void> => {
     getPluginsEnabled();
     getAssociatedPlugins();
-    setServiceNameOrIdData(serviceName as string)
   }, []);
 
   useEffect(()=>{

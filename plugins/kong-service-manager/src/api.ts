@@ -6,7 +6,7 @@ export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
     id: 'plugin.kongservicemanager',
 });
 
-const KONG_SERVICE_MANAGER_DEFAULT_PROXY_URL = "/kong-manager/api";
+// const KONG_SERVICE_MANAGER_DEFAULT_PROXY_URL = "/kong-manager/api";
 
 function getPluginFieldType(type: string) {
     switch (type) {
@@ -70,13 +70,13 @@ class Client {
     constructor(opts: Options) {
         this.discoveryApi = opts.discoveryApi;
         this.identityApi = opts.identityAPi;
-        this.proxyPath = opts.proxyPath || KONG_SERVICE_MANAGER_DEFAULT_PROXY_URL;
+        this.proxyPath = opts.proxyPath as string;
     }
 
     public async fetch<T = any>(input: string, proxyPath?: string, init?: RequestInit): Promise<T> {
 
         const apiUrl = await this.apiUrl(proxyPath);
-        const identityToken = await this.identityApi.getCredentials()
+        const identityToken = await this.identityApi.getCredentials();
 
         const resp = await fetch(`${apiUrl}${input}`, {
             ...init,
@@ -86,7 +86,7 @@ class Client {
         });
 
         if (!resp.ok) {
-            throw new Error(`Request failed with ${resp.status} - ${resp.statusText}`);
+            throw new Error(`[${resp.type}] Request failed with ${resp.status} - ${resp.statusText}`);
         }
 
         if (resp.status === 204) return { message: "deleted" } as any

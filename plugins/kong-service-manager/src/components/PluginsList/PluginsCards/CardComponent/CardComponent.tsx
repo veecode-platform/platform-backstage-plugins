@@ -5,8 +5,6 @@ import Edit from '@material-ui/icons/Edit'
 import { useStyles } from '../styles'
 import { KongServiceManagerContext } from '../../../context'
 import { PluginCard } from '../../../../utils/types'
-import { useEntity } from '@backstage/plugin-catalog-react';
-import { useEntityAnnotation } from '../../../../hooks'
 
 interface CardComponentProps {
     data: PluginCard
@@ -15,8 +13,6 @@ interface CardComponentProps {
 export const CardComponent = ({data}:CardComponentProps) => {
 
   const {card, cardHeader, cardTitle, cardIcon,description, button,spinner} = useStyles();
-  const { entity } = useEntity();
-  const { serviceName} = useEntityAnnotation(entity);
   const { handleToggleDrawer, setPluginState, disablePlugin } = useContext(KongServiceManagerContext);
   const [processingData, setProcessingData] = useState<boolean>(false);
 
@@ -32,7 +28,7 @@ export const CardComponent = ({data}:CardComponentProps) => {
      if(data.id){
       setProcessingData(true)
         const id = data.id;
-        await disablePlugin(serviceName as string, id);
+        await disablePlugin(id);
         setProcessingData(false)
         }
      }

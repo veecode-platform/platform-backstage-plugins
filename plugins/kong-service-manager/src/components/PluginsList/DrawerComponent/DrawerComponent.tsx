@@ -5,8 +5,6 @@ import { Box, Button, Checkbox, CircularProgress, Drawer, FormControl, FormContr
 import Close from '@material-ui/icons/Close';
 import { KongServiceManagerContext } from '../../context';
 import { PluginFieldsResponse } from '../../../utils/types';
-import { useEntity } from '@backstage/plugin-catalog-react';
-import { useEntityAnnotation } from '../../../hooks';
 import { EmptyStateComponent } from '../../shared';
 import { Progress } from '@backstage/core-components';
 import { useStyles } from './styles';
@@ -16,8 +14,6 @@ import { IncrementalFields, RecordFields } from './FieldsCustom';
 export const DrawerComponent = () => {
 
   const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction, spinner} = useStyles();
-  const { entity } = useEntity();
-  const { serviceName } = useEntityAnnotation(entity);
   const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPlugin, allAssociatedPlugins, setConfigState, configState} = useContext(KongServiceManagerContext);
   const [fieldsComponents, setFieldsComponents ] = useState<any[]|[]>([]);
   const [ isLoading, setLoading] = useState<boolean>(false);
@@ -44,7 +40,7 @@ export const DrawerComponent = () => {
         config: configState,
         name: selectedPlugin.slug
       } 
-      await enablePlugin(serviceName as string,config);
+      await enablePlugin(config);
       setProcessingData(false)  
       handleToggleDrawer();
     }
@@ -58,7 +54,7 @@ export const DrawerComponent = () => {
         config: configState,
         name: selectedPlugin.slug
       } 
-      await editPlugin(serviceName as string,id,config);
+      await editPlugin(id,config);
       setProcessingData(false)  
       handleToggleDrawer();
     }

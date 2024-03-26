@@ -3,8 +3,6 @@ import { Box, Chip, List, ListItem, ListItemText, makeStyles } from '@material-u
 import React, { useContext, useState } from 'react';
 import { BoxComponent, EmptyStateComponent } from '../shared';
 import { KongServiceManagerContext } from '../context';
-import { useEntity } from '@backstage/plugin-catalog-react';
-import { useEntityAnnotation } from '../../hooks';
 import useAsync from 'react-use/lib/useAsync';
 import { CopyTextButton } from '@backstage/core-components';
 import { LabelField } from './Fields';
@@ -41,12 +39,10 @@ export const AboutPage = () => {
 
   const { listComponent, listItemWrapper, listItem, itemValue } = useStyles();
   const { getServiceDetails, serviceDetails } = useContext(KongServiceManagerContext);
-  const { entity } = useEntity();
-  const { serviceName } = useEntityAnnotation(entity);
   const [ isLoading, setLoading] = useState<boolean>(false);
 
   const getDetails = async () => {
-    await getServiceDetails(serviceName as string);
+    await getServiceDetails();
   };
 
   const { error } = useAsync(async (): Promise<void> => {

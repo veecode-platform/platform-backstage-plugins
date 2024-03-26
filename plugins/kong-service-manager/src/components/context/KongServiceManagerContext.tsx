@@ -5,23 +5,22 @@ import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard,
 export type KongServiceManagerContextType = {
     instance: string;
     setInstanceState: (instanceState: string) => void;
-    setServiceNameOrIdData: (serviceNameOrId: string) => void;
-    listAllEnabledPlugins: (serviceIdOrName: string) => Promise<void>;
-    getServiceDetails: (serviceIdOrName: string) => Promise<void>;
+    listAllEnabledPlugins: () => Promise<void>;
+    getServiceDetails: () => Promise<void>;
     serviceDetails: ServiceInfoResponse | null;
-    getRoutesList: (serviceIdOrName: string) => Promise<void>;
+    getRoutesList: () => Promise<void>;
     allRoutes: RoutesResponse[] | null;
-    listAssociatedPlugins: (serviceIdOrName: string) => Promise<void>;
+    listAssociatedPlugins: () => Promise<void>;
     allAssociatedPlugins: AssociatedPluginsResponse[] | null;
     associatedPluginsName: [] | string[];
     getPluginFields: (pluginName: string) => Promise<PluginFieldsResponse[] | null>;
-    enablePlugin: (serviceIdOrName: string, config: CreatePlugin) => Promise<void | null>;
-    disablePlugin: (serviceIdOrName: string, pluginId: string) => Promise<any>;
+    enablePlugin: (config: CreatePlugin) => Promise<void | null>;
+    disablePlugin: (pluginId: string) => Promise<any>;
     handleToggleDrawer: () => void;
     openDrawer: boolean;
     setPluginState: (data: PluginCard) => void;
     selectedPlugin: PluginCard | null;
-    editPlugin: (serviceIdOrName: string, pluginId: string,config: CreatePlugin) => Promise<void | null>;
+    editPlugin: (pluginId: string,config: CreatePlugin) => Promise<void | null>;
     pluginsPerCategory: [] | PluginPerCategory[],
     configState: any;
     setConfigState: React.Dispatch<any>;
