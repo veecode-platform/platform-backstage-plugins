@@ -11,6 +11,7 @@ import {
   catalogImportPlugin,
 } from '@backstage/plugin-catalog-import';
 import { ScaffolderPage, scaffolderPlugin } from '@backstage/plugin-scaffolder';
+import { ScaffolderFieldExtensions } from '@backstage/plugin-scaffolder-react';
 import { orgPlugin } from '@backstage/plugin-org';
 import { SearchPage } from '@backstage/plugin-search';
 import { TechRadarPage } from '@backstage/plugin-tech-radar';
@@ -41,8 +42,8 @@ import { discoveryApiRef, useApi } from '@backstage/core-plugin-api';
 import { setTokenCookie } from './cookieAuth';
 
 import { KongServiceManagerPage } from '@veecode-platform/plugin-kong-service-manager';
-// import { ApplicationPage } from '@veecode-platform/plugin-application';
-// import { VaultExplorerPage } from '@veecode-platform/plugin-vault-explorer';
+import { RepoUrlPlatformExtension, ResourcePickerExtension } from '@veecode-platform/veecode-scaffolder-extensions';
+
 
 const app = createApp({
   apis,
@@ -104,7 +105,12 @@ const routes = (
         <ReportIssue />
       </TechDocsAddons>
     </Route>
-    <Route path="/create" element={<ScaffolderPage />} />
+    <Route path="/create" element={<ScaffolderPage />}>
+      <ScaffolderFieldExtensions>
+          <RepoUrlPlatformExtension/>
+          <ResourcePickerExtension/>
+      </ScaffolderFieldExtensions>
+    </Route>
     <Route path="/api-docs" element={<ApiExplorerPage />} />
     <Route path="/cluster-explorer" element={<ClusterExplorerPage />} />
     <Route
@@ -123,10 +129,8 @@ const routes = (
       {searchPage}
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
-    {/* <Route path="/applications" element={<ApplicationPage />} /> */}
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/kong-service-manager" element={<KongServiceManagerPage />} />
-    {/* <Route path="/vault-explorer" element={<VaultExplorerPage />} /> */}
   </FlatRoutes>
 );
 
