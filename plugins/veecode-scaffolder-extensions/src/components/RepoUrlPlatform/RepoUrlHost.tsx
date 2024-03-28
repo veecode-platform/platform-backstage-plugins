@@ -22,7 +22,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import { useApi } from '@backstage/core-plugin-api';
 import { scaffolderApiRef } from '@backstage/plugin-scaffolder-react';
 import useAsync from 'react-use/lib/useAsync';
-import { useIntegrations } from '../../hooks/useIntegrations';
+import { useScaffolder } from '../../hooks/useScaffolder';
 
 export const RepoUrlPickerHost = (props: {
   host?: string;
@@ -34,7 +34,7 @@ export const RepoUrlPickerHost = (props: {
   const scaffolderApi = useApi(scaffolderApiRef);
   const [hostsData, setHostsData]=useState<string[]>([]);
   const [hostList, setHostList] = useState<SelectItem[]>();
-  const { githubIntegrationsExists, gitlabIntegrationsExists, githubHostIntegration, gitlabHostIntegration  } = useIntegrations();
+  const { githubScaffolderExists, gitlabScaffolderExists, githubHostScaffolder, gitlabHostScaffolder  } = useScaffolder();
 
   const itemsList = (data:string[]) : SelectItem[] => {
     if(data !== undefined){
@@ -66,8 +66,8 @@ export const RepoUrlPickerHost = (props: {
     async function fetchData(){
       try{
         const hostss = [];
-        if(githubIntegrationsExists) hostss.push(githubHostIntegration);
-        if(gitlabIntegrationsExists) hostss.push(gitlabHostIntegration);
+        if(githubScaffolderExists) hostss.push(githubHostScaffolder);
+        if(gitlabScaffolderExists) hostss.push(gitlabHostScaffolder);
         setHostsData(hostss);
       }catch(err: any){
         // throw new Error(err)

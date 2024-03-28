@@ -4,7 +4,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { Select, SelectItem } from '@backstage/core-components';
 import { RepoUrlPickerState } from './types';
-import { useIntegrations } from '../../hooks/useIntegrations';
+import { useScaffolder } from '../../hooks/useScaffolder';
 import { Grid, Input, InputLabel } from '@material-ui/core';
 import { getUserAndOrgs } from '../../services';
 
@@ -28,7 +28,7 @@ export const GithubRepoPicker = (props: {
   const [items, setItems] = useState<string[]>();
   const [hasIntegration, setHasIntegration] = useState<boolean>(false);
   const [ownerList, setOwnerList] = useState<SelectItem[]>();
-  const { githubIntegrationsExists, githubTokenIntegration, githubHostIntegration } = useIntegrations();
+  const { githubScaffolderExists, githubTokenScaffolder, githubHostScaffolder } = useScaffolder();
 
   const itemsList = (data:string[]) : SelectItem[] => {
     if(data !== undefined){
@@ -49,7 +49,7 @@ export const GithubRepoPicker = (props: {
 
   useEffect(()=>{
     async function fetchData(){
-      const params = {provider: 'github', host: githubHostIntegration, token: githubTokenIntegration};
+      const params = {provider: 'github', host: githubHostScaffolder, token: githubTokenScaffolder};
       const getData = getUserAndOrgs(params); 
       try{
         const user = (await getData).username;
@@ -69,7 +69,7 @@ export const GithubRepoPicker = (props: {
         throw new Error(err)
       }
     }
-    if(!hosts?.includes('github') || githubIntegrationsExists ){
+    if(!hosts?.includes('github') || githubScaffolderExists ){
       fetchData()
     }
 },[]);

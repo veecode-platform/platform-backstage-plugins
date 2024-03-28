@@ -106,7 +106,12 @@ auth:
         clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
 
 scaffolder:
-  # see https://backstage.io/docs/features/software-templates/configuration for software template options
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN_SECRET}
+  gitlab:
+   - host: gitlab.com
+     token: ${GITLAB_TOKEN_SECRET}
 
 catalog:
  
