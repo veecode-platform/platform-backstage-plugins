@@ -82,7 +82,8 @@ const routes = (
 
 You can now use the field in your templates.
 
-![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/308ef9b8-c3a6-41ea-8d17-01b90ecaa2c7)
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/ffdd052f-6a94-4a17-8dde-f1ce00b0421d)
+
 
 Add the field to your template file like this:
 
