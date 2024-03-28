@@ -1,3 +1,4 @@
+/* eslint-disable @backstage/no-undeclared-imports */
 /*
  * Copyright 2021 The Backstage Authors
  *
@@ -14,7 +15,7 @@
  * limitations under the License.
  */
 
-import { FieldValidation } from '@rjsf/core';
+import { FieldValidation } from '@rjsf/utils';
 import { ApiHolder } from '@backstage/core-plugin-api';
 import { scmIntegrationsApiRef } from '@backstage/integration-react';
 
