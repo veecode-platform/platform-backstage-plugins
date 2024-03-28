@@ -34,6 +34,7 @@ Veecode Platform Backstage Plugins
 | **Kong Service Manager**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/kong-service-manager) |
 | **Vault Explorer**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/vault-explorer) |
 | **Veecode Platform Common** |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-platform-common) |
+| **Veecode Scaffolder Extensions** |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-scaffolder-extensions) |
 
 
 ---

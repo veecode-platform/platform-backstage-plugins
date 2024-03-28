@@ -1,13 +1,29 @@
-# veecode-scaffolder-extensions
+# VeeCode Scaffolder Extensions
 
-Welcome to the veecode-scaffolder-extensions plugin!
+## Intro 💡
 
-_This plugin was created through the Backstage CLI_
+O plugin **Veecode Scaffolder Extensions** é uma extensão do plugin `@backstage/plugin-scaffolder`, ele oferece dois novos fields customizados para serem usados em seu aplicativo backstage:
+
+- RepoUrlSelector
+- ResourcePicker
+
+
+## Installation 🔧
+
+
+If you are using yarn 3.x:
+
+```bash
+yarn workspace app add @veecode-platform/veecode-scaffolder-extensions
+```
+
+If you are using other versions:
+
+```bash
+yarn add --cwd packages/app @veecode-platform/veecode-scaffolder-extensions
+```
+
 
 ## Getting started
 
-Your plugin has been added to the example app in this repository, meaning you'll be able to access it by running `yarn start` in the root directory, and then navigating to [/veecode-scaffolder-extensions](http://localhost:3000/veecode-scaffolder-extensions).
-
-You can also serve the plugin in isolation by running `yarn start` in the plugin directory.
-This method of serving the plugin provides quicker iteration speed and a faster startup and hot reloads.
-It is only meant for local development, and the setup for it can be found inside the [/dev](./dev) directory.
+### RepoUrlSelector
