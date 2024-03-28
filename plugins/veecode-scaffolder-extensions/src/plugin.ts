@@ -1,15 +1,15 @@
 /* eslint-disable @backstage/no-undeclared-imports */
 import { scaffolderPlugin } from '@backstage/plugin-scaffolder';
 import { createScaffolderFieldExtension } from '@backstage/plugin-scaffolder-react';
-import { RepoUrlPlatform, RepoUrlPlatformSchema } from './components/RepoUrlPlatform/RepoUrlPlatform';
+import { RepoUrlSelector, RepoUrlSelectorSchema } from './components/RepoUrlSelector/RepoUrlSelector';
 import { ResourcePicker, ResourcePickerSchema } from './components/ResourcePicker/ResourcePicker';
 
 
-export const RepoUrlPlatformExtension = scaffolderPlugin.provide(
+export const RepoUrlSelectorExtension = scaffolderPlugin.provide(
   createScaffolderFieldExtension({
-    name: 'RepoUrlPlatform',
-    component: RepoUrlPlatform,
-    schema: RepoUrlPlatformSchema
+    name: 'RepoUrlSelector',
+    component: RepoUrlSelector,
+    schema: RepoUrlSelectorSchema
   }),
 );
 

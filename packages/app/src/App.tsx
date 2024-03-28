@@ -42,7 +42,7 @@ import { discoveryApiRef, useApi } from '@backstage/core-plugin-api';
 import { setTokenCookie } from './cookieAuth';
 
 import { KongServiceManagerPage } from '@veecode-platform/plugin-kong-service-manager';
-import { RepoUrlPlatformExtension, ResourcePickerExtension } from '@veecode-platform/veecode-scaffolder-extensions';
+import { RepoUrlSelectorExtension, ResourcePickerExtension } from '@veecode-platform/veecode-scaffolder-extensions';
 
 
 const app = createApp({
@@ -107,7 +107,7 @@ const routes = (
     </Route>
     <Route path="/create" element={<ScaffolderPage />}>
       <ScaffolderFieldExtensions>
-          <RepoUrlPlatformExtension/>
+          <RepoUrlSelectorExtension/>
           <ResourcePickerExtension/>
       </ScaffolderFieldExtensions>
     </Route>

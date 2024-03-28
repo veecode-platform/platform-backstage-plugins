@@ -7,7 +7,7 @@ import { GitlabRepoPicker } from './GitlabRepoPicker';
 import { RepoUrlPickerHost } from './RepoUrlHost';
 import { RepoUrlPickerRepoName } from './RepoUrlRepoName';
 import { parseRepoPickerUrl, serializeRepoPickerUrl } from './utils';
-import { RepoUrlPlatformProps } from './schema';
+import { RepoUrlSelectorProps } from './schema';
 import { RepoUrlPickerState } from './types';
 import useDebounce from 'react-use/lib/useDebounce';
 import { useTemplateSecrets } from '@backstage/plugin-scaffolder-react';
@@ -15,7 +15,7 @@ import { BitbucketRepoPicker } from './BitbucketRepoPicker';
 import { AzureRepoPicker } from './AzureRepoPicker';
 import { GerritRepoPicker } from './GerritRepoPicker';
 
-export { RepoUrlPlatformSchema } from './schema';
+export { RepoUrlSelectorSchema } from './schema';
 
 /**
  * The underlying component that is rendered in the form for the `RepoUrlPicker`
@@ -23,7 +23,7 @@ export { RepoUrlPlatformSchema } from './schema';
  *
  * @public
  */
-export const RepoUrlPlatform = (props: RepoUrlPlatformProps) => {
+export const RepoUrlSelector = (props: RepoUrlSelectorProps) => {
 
   const { uiSchema, onChange, rawErrors, formData } = props;
   const [state, setState] = useState<RepoUrlPickerState>(

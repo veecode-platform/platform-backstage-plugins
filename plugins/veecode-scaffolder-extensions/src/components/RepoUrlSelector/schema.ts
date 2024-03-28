@@ -20,29 +20,29 @@ import { makeFieldSchemaFromZod } from '../../utils';
 /**
  * @public
  */
-export const RepoUrlPlatformFieldSchema = makeFieldSchemaFromZod(
+export const RepoUrlSelectorFieldSchema = makeFieldSchemaFromZod(
   z.string(),
   z.object({
     allowedHosts: z
       .array(z.string())
       .optional()
-      .describe('List of allowed SCM platform hosts'),
+      .describe('List of allowed SCM selector hosts'),
     allowedOrganizations: z
       .array(z.string())
       .optional()
-      .describe('List of allowed organizations in the given SCM platform'),
+      .describe('List of allowed organizations in the given SCM selector'),
     allowedOwners: z
       .array(z.string())
       .optional()
-      .describe('List of allowed owners in the given SCM platform'),
+      .describe('List of allowed owners in the given SCM selector'),
     allowedProjects: z
       .array(z.string())
       .optional()
-      .describe('List of allowed projects in the given SCM platform'),
+      .describe('List of allowed projects in the given SCM selector'),
     allowedRepos: z
       .array(z.string())
       .optional()
-      .describe('List of allowed repos in the given SCM platform'),
+      .describe('List of allowed repos in the given SCM selector'),
     requestUserCredentials: z
       .object({
         secretsKey: z
@@ -78,7 +78,7 @@ export const RepoUrlPlatformFieldSchema = makeFieldSchemaFromZod(
       })
       .optional()
       .describe(
-        'If defined will request user credentials to auth against the given SCM platform',
+        'If defined will request user credentials to auth against the given SCM selector',
       ),
   }),
 );
@@ -89,12 +89,12 @@ export const RepoUrlPlatformFieldSchema = makeFieldSchemaFromZod(
  *
  * @public
  */
-export type RepoUrlPlatformUiOptions =
-  typeof RepoUrlPlatformFieldSchema.uiOptionsType;
+export type RepoUrlSelectorUiOptions =
+  typeof RepoUrlSelectorFieldSchema.uiOptionsType;
 
-export type RepoUrlPlatformProps = typeof RepoUrlPlatformFieldSchema.type;
+export type RepoUrlSelectorProps = typeof RepoUrlSelectorFieldSchema.type;
 
 // NOTE: There is a bug with this failing validation in the custom field explorer due
 // to https://github.com/rjsf-team/react-jsonschema-form/issues/675 even if
 // requestUserCredentials is not defined
-export const RepoUrlPlatformSchema = RepoUrlPlatformFieldSchema.schema;
+export const RepoUrlSelectorSchema = RepoUrlSelectorFieldSchema.schema;

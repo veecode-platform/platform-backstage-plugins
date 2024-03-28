@@ -1,5 +1,5 @@
 export {
-  RepoUrlPlatformFieldSchema,
-  type RepoUrlPlatformUiOptions,
+  RepoUrlSelectorFieldSchema,
+  type RepoUrlSelectorUiOptions,
 } from './schema';
 export { repoCustomValidation } from './validation';
