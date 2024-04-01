@@ -194,3 +194,4 @@ example:
 ```
 
 The use of 'pick' helps you select the property you want to use, from the return of the parseJSON function, remember to validate that the selected entity has this property, otherwise the values will be empty.
+
