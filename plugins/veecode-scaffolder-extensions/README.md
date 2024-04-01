@@ -122,3 +122,73 @@ In the case of `github` or `gitlab`, you can omit the `allowedHosts`, the scaffo
 
 ---
 
+
+### ResourcePicker
+
+In the context of using the `ResourcePicker` component, the environment is used to reuse information that will be useful when creating new entities for the catalog.
+
+
+We have developed customizable components to provide scaffolder with the ability to analyze environment key information of our type.
+
+
+With it we can approach the reuse of this information in the creation of entities via templates.
+
+Example of the `catalog-info.yaml` of an entity:
+
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: Environment
+metadata:
+  name: "test_environment"
+  environment:
+    domain: your.domain
+    hostedZoneId: xxxxxxxxxxxxxxx
+    vpc_id: vpc-xxxxxxxxxxxxxxx
+    vpc_name: xxxxxxxxxxx
+    certManagerEmail: xxx@xxx.com
+    certManagerIssuerType: staging
+  annotations:
+    github.com/project-slug: xxxxxxxxxxxxxxxxxx
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: service
+  lifecycle: development
+  owner: "group:default/admin"
+```
+
+Example of using `ResourcePicker` in a template:
+
+    - title: Enviroment Settings
+      properties:
+        reuseResource:
+          title: Select the enviromnet from our catalog
+          type: string
+          ui:field: ResourcePicker
+          ui:options:
+            catalogFilter:
+              kind: [Environment]
+            
+
+In this case, we will list in the catalog all our entities that have the type `Environment` , and behind the scenes we will scan the metadata.enviromnetchave of the chosen entity, and thus parse the information as values to serve the skeleton of our template, using the parseJSON function, also present in our core.
+
+
+> ℹ️ To use the function `parseJSON` in the templates in order to parse all the results coming from the filter `ResourcePicker` we need the function to be added to the plugin `Scaffolder-backend`.
+
+
+example:
+
+```yaml
+...
+  steps:
+    - id: template
+      name: Fetch Skeleton + Template
+      action: fetch:template
+      input:
+        url: ./skeleton      
+        values:
+          vpc: ${{ parameters.reuseResource | parseJSON | pick('vpc_id') }}
+          domain: ${{ parameters.reuseResource | parseJSON | pick('domain') }}
+...
+```
+
+The use of 'pick' helps you select the property you want to use, from the return of the parseJSON function, remember to validate that the selected entity has this property, otherwise the values will be empty.
