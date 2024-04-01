@@ -7,7 +7,7 @@ The plugin **Veecode Scaffolder Extensions** is an extension of the plugin `@bac
 - RepoUrlSelector
 - ResourcePicker
 
-## Pré Requisitos 📄
+## Pre-requisites📄
 
 - Backstage version: "1.23.4"
 - @backstage/plugin-scaffolder": "^1.18.0",
