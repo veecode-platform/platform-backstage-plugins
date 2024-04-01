@@ -20,6 +20,7 @@
     "@backstage/catalog-client": "^1.6.0",
     "@backstage/catalog-model": "^1.4.4",
     "@backstage/config": "^1.1.1",
+    "@backstage/integration": "^1.9.1",
     "@backstage/plugin-app-backend": "^0.3.61",
     "@backstage/plugin-auth-backend": "^0.21.3",
     "@backstage/plugin-auth-node": "^0.4.8",
@@ -35,6 +36,7 @@
     "@backstage/plugin-search-backend-module-pg": "^0.5.22",
     "@backstage/plugin-search-backend-node": "^1.2.17",
     "@backstage/plugin-techdocs-backend": "^1.9.6",
+    "@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions": "workspace:^",
     "@veecode-platform/plugin-veecode-platform-common": "^0.1.0",
     "app": "link:../app",
     "better-sqlite3": "^9.4.3",
@@ -42,6 +44,7 @@
     "dockerode": "^3.3.1",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
+    "jose": "^5.2.3",
     "pg": "^8.3.0",
     "winston": "^3.2.1"
   },
