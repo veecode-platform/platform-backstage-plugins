@@ -13,6 +13,7 @@ import { GITLAB_JOBS_ANNOTATION, useEntityAnnotations } from '../../../hooks';
 import { JobItem } from '../JobItem';
 import GitlabIcon from '../../assets/gitlabIcon';
 
+
 const useStyles = makeStyles(theme => ({
   wrapper:{
     margin: 'auto' ,
