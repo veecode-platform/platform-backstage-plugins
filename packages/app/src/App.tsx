@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Route } from 'react-router-dom';
-import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
+import { ApiExplorerPage } from '@veecode-platform/backstage-plugin-api-explorer';
 import {
   CatalogEntityPage,
   CatalogIndexPage,
@@ -43,6 +43,7 @@ import { setTokenCookie } from './cookieAuth';
 
 import { KongServiceManagerPage } from '@veecode-platform/plugin-kong-service-manager';
 import { RepoUrlSelectorExtension, ResourcePickerExtension } from '@veecode-platform/veecode-scaffolder-extensions';
+import { apiDocsPlugin } from '@backstage/plugin-api-docs';
 
 
 const app = createApp({

@@ -53,5 +53,8 @@
       "prettier --write"
     ]
   },
-  "packageManager": "yarn@3.6.3"
+  "packageManager": "yarn@3.6.3",
+  "dependencies": {
+    "jose": "^5.2.3"
+  }
 }

@@ -48,8 +48,8 @@ const useStyles = makeStyles({
 // test
 
 export interface Annotations {
-  [key: string]: string;
-}
+  [key: string]: string | string [] | number | boolean;
+} 
 
 /**
  * The underlying component that is rendered in the form for the `ResourcePicker`
