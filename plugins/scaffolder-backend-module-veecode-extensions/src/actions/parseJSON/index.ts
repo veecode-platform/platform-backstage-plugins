@@ -21,8 +21,7 @@ import { JsonSpec } from './types';
 
 export function ParseJsonAction() {
   return createTemplateAction<{
-    objectString: string;
-    option: string;
+    resource: string;
   }>({
     id: 'veecode-platform:extensions:parseJSON',
     description:
@@ -31,22 +30,17 @@ export function ParseJsonAction() {
     schema: {
       input: {
         type: 'object',
-        required: ['objectString','option'],
+        required: ['resource'],
         properties: {
-         objectString: {
-            title: 'Nos informe o objeto que deseja parsear',
+          resource: {
+            title: 'Indicate the object you want to parse',
             description: 'Lembre-se que este precisa estar transformado em string',
-            type: 'string',
-          },
-          option: {
-            title: 'Qual item voce quer parsear?',
-            description: 'informe o item que deseja retornar',
             type: 'string',
           }
         },
       },
       output: {
-        type: 'string',
+        type: 'object',
         properties: {
           result: {
             title: 'Output result from parseJSON',
@@ -56,31 +50,16 @@ export function ParseJsonAction() {
       },
     },
     async handler(ctx) {
-      let parsed;
+      let parsed : JsonSpec;
 
       try{
-        parsed = JSON.parse(ctx.input.objectString)
+        parsed = JSON.parse(ctx.input.resource)
       }
       catch(error){
         throw new InputError(`Invalid object passed to publisher, ${error}`);      
       }
-      
-      const results: JsonSpec  = {};
-      let result: string = '';
 
-      if (parsed) {
-      for (const key in parsed) {
-        if (parsed.hasOwnProperty(key)) {
-          results[key] = parsed[key];
-            }
-        }
-      }
-
-      if(ctx.input.option){
-        result = results[ctx.input.option]
-      }
-
-      ctx.output('result', result);
+      ctx.output('result', parsed);
     },
   });
 }
