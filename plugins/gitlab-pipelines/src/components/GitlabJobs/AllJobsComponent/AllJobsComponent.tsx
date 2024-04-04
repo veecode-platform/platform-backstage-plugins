@@ -14,26 +14,46 @@ import { JobItem } from '../JobItem';
 import GitlabIcon from '../../assets/gitlabIcon';
 
 const useStyles = makeStyles(theme => ({
+  wrapper:{
+    margin: 'auto' ,
+    width:'100%',
+    [theme.breakpoints.up('md')]: {    
+      maxWidth: '55vw', 
+     },
+     [theme.breakpoints.down('md')]: {
+      maxWidth: '75vw',
+     },
+     [theme.breakpoints.down('xs')]: {
+      maxWidth: '90vw',
+     }
+  },
   title: {
     paddingLeft: '1.5rem',
-    fontSize: '1.5rem'
+    fontSize: '1.5rem',
+    display: 'flex',
+    alignItems: 'center'
   },
-  options: {
+  options:{
     padding: '0 0 1rem 0',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: '1rem'
   },
-  buttonRefresh: {
+  buttonRefresh:{
     marginTop: '10%'
   },
-  loadingComponent: {
-    width: '100%',
+  loadingComponent:{
+    width:'100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     padding: '.3rem 0'
+  },
+  item:{
+    maxWidth: '100% !important',
+    overflow: 'hidden',
+    background: 'red'
   },
   workflowsGroup: {
     width: '95%',
@@ -109,8 +129,8 @@ export const Cards = ({ items, updateData }: JobItemProps) => {
 
 
   return (
-    <Paper>
-      <Card>
+     <Paper>
+       <Card className={classes.wrapper}>
         <CardHeader
           title={TitleBar}
           action={ActionsCard}
@@ -119,7 +139,7 @@ export const Cards = ({ items, updateData }: JobItemProps) => {
           {loading ?
             (<Box className={classes.loadingComponent}> <CircularProgress />  </Box>) :
             ( 
-                <>
+              <>
                   { branch === "" ? (<Box className={classes.loadingComponent}><CircularProgress/></Box>):
                       items.map(item =>
                         (<JobItem
@@ -136,7 +156,7 @@ export const Cards = ({ items, updateData }: JobItemProps) => {
           }
         </CardContent>
       </Card>
-    </Paper>
+     </Paper>
   )
 }
 
