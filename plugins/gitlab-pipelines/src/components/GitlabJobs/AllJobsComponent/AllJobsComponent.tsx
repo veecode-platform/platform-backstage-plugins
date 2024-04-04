@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import { ErrorBoundary, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
-import { Box, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography, makeStyles } from '@material-ui/core';
+import { Box, Card, CardContent, CardHeader, CircularProgress, IconButton, Typography, makeStyles } from '@material-ui/core';
 import useAsync from 'react-use/lib/useAsync';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     margin: 'auto' ,
     width:'100%',
     [theme.breakpoints.up('md')]: {    
-      maxWidth: '55vw', 
+      maxWidth: '57vw', 
      },
      [theme.breakpoints.down('md')]: {
       maxWidth: '75vw',
@@ -129,7 +129,6 @@ export const Cards = ({ items, updateData }: JobItemProps) => {
 
 
   return (
-     <Paper>
        <Card className={classes.wrapper}>
         <CardHeader
           title={TitleBar}
@@ -156,7 +155,6 @@ export const Cards = ({ items, updateData }: JobItemProps) => {
           }
         </CardContent>
       </Card>
-     </Paper>
   )
 }
 
