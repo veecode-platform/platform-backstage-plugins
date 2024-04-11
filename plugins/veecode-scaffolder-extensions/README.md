@@ -160,21 +160,18 @@ Example of using `ResourcePicker` in a template:
 
     - title: Enviroment Settings
       properties:
-        reuseResource:
+        environmentResource:
           title: Select the enviromnet from our catalog
-          type: string
+          type: object
           ui:field: ResourcePicker
           ui:options:
             catalogFilter:
               kind: [Environment]
             
 
-In this case, we will list in the catalog all our entities that have the type `Environment` , and behind the scenes we will scan the metadata.enviromnetchave of the chosen entity, and thus parse the information as values to serve the skeleton of our template, using the parseJSON function, also present in our core.
+In this case, we will list in the catalog all our entities that have the type `Environment` , and behind the scenes we will scan the metadata.environment key of the chosen entity, and thus parse the information as values to serve the skeleton of our template.
 
 > ℹ️ We've used the custom kind `Environment` as an example, but the field can be used with any kind, as long as its `catalog-info.yaml` the selected component has a key "metadata.environment" and within it the values to be used, following the key-value order.
-
-
-> ℹ️ To use the function `parseJSON` in the templates in order to parse all the results coming from the filter `ResourcePicker` we need the function to be added to the plugin `Scaffolder-backend`.
 
 
 example:
@@ -188,10 +185,12 @@ example:
       input:
         url: ./skeleton      
         values:
-          vpc: ${{ parameters.reuseResource | parseJSON | pick('vpc_id') }}
-          domain: ${{ parameters.reuseResource | parseJSON | pick('domain') }}
+          vpc: ${{ parameters.environmentResource.vpc_id }}
+          domain: ${{ parameters.environmentResource.domain }}
 ...
 ```
 
-The use of 'pick' helps you select the property you want to use, from the return of the parseJSON function, remember to validate that the selected entity has this property, otherwise the values will be empty.
+ℹ️ Remember to validate that the selected entity has this property, otherwise the values will be empty.
+
+The example above shows the properties of a custom kind called environment, which can be installed in your application using our [VeeCode Platform Common plugin ⭐](https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/veecode-platform-common/README.md).
 
