@@ -1,3 +1,4 @@
+/* eslint-disable @backstage/no-undeclared-imports */
 /*
  * Copyright 2020 The Backstage Authors
  *
