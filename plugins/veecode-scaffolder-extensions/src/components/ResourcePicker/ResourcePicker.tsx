@@ -45,8 +45,6 @@ const useStyles = makeStyles({
   },
 });
 
-// test
-
 export interface Annotations {
   [key: string]: string | string [] | number | boolean;
 } 
