@@ -58,9 +58,9 @@ export const ResourcePickerFieldSchema = makeFieldSchemaFromZod(
 export type ResourcePickerUiOptions =
   typeof ResourcePickerFieldSchema.uiOptionsType;
 
-export type ResourcePickerProps = typeof ResourcePickerFieldSchema.type & {
-  onChange: (newFormData: object | undefined, es?: ErrorSchema<string>, id?: string) => any;
-};
+  export type ResourcePickerProps = typeof ResourcePickerFieldSchema.type & {
+    onChange: (newFormData: object | any, es?: ErrorSchema<string>, id?: string) => any;
+  };
 
 export const ResourcePickerSchema = ResourcePickerFieldSchema.schema;
 
