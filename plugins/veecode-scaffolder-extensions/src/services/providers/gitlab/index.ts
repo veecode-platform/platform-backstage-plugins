@@ -15,54 +15,59 @@
  */
 // eslint-disable-next-line @backstage/no-undeclared-imports
 import axios from 'axios';
-import { ParamsProvider } from '../../../types';
 
-export async function getOrgsGitlab(Params: ParamsProvider): Promise<string[]> {
-  const { host, token } = Params;
+export class GitlabServiceInfo {
+ 
+  constructor(
+    public host: string,
+    private token: string
+  ){}
 
-  const GITLAB_ORGS_URL = `https://${host}/api/v4/groups`;
+  public async getOrgsGitlab():Promise<string[]> {
+    const GITLAB_ORGS_URL = `https://${this.host}/api/v4/groups`;
 
-  const headers = {
-    'Private-Token': token,
-  };
-  const orgsList = [];
-
-  try {
-    const response = await axios.get(GITLAB_ORGS_URL, { headers });
-
-    if (response.status === 200) {
-      const orgs = response.data;
-      for (const org of orgs) {
-        orgsList.push(org.full_path as string);
+    const headers = {
+      'Private-Token': this.token,
+    };
+    const orgsList = [];
+  
+    try {
+      const response = await axios.get(GITLAB_ORGS_URL, { headers });
+  
+      if (response.status === 200) {
+        const orgs = response.data;
+        for (const org of orgs) {
+          orgsList.push(org.full_path as string);
+        }
+        return orgsList;
       }
+      orgsList.push('Not Orgs');
+      return orgsList;
+    } catch (error) {
+      orgsList.push('Not orgs');
       return orgsList;
     }
-    orgsList.push('Not Orgs');
-    return orgsList;
-  } catch (error) {
-    orgsList.push('Not Orgs');
-    return orgsList;
   }
-}
 
-export async function getUserGitlab(Params: ParamsProvider): Promise<string> {
-  const { host, token } = Params;
-
-  const GITLAB_USER_URL = `https://${host}/api/v4/user`;
-
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
-
-  try {
-    const response = await axios.get(GITLAB_USER_URL, { headers });
-
-    if (response.status === 200) {
-      const owner = response.data.username;
-      return owner;
+  public async getUserGitlab():Promise<string> {
+ 
+    const GITLAB_USER_URL = `https://${this.host}/api/v4/user`;
+  
+    const headers = {
+      Authorization: `Bearer ${this.token}`,
+    };
+  
+    try {
+      const response = await axios.get(GITLAB_USER_URL, { headers });
+  
+      if (response.status === 200) {
+        const owner = response.data.username;
+        return owner;
+      }
+      return 'Not found';
+    } catch (error) {
+      return 'Not Found';
     }
-    return 'Not found';
-  } catch (error) {
-    return 'Not Found';
   }
+
 }

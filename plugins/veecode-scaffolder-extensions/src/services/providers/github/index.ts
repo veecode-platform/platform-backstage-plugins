@@ -15,54 +15,58 @@
  */
 // eslint-disable-next-line @backstage/no-undeclared-imports
 import axios from 'axios';
-import { ParamsProvider } from '../../../types';
 
-export async function getOrgsGithub(Params: ParamsProvider): Promise<string[]> {
-  const { host, token } = Params;
+export class GithubServiceInfo {
 
-  const GITHUB_ORGS_URL = `https://api.${host}/user/orgs`;
+  constructor(
+    public host: string,
+    private token: string
+  ){}
 
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
-  const orgsList = [];
+  public async getOrgsGithub():Promise<string[]> {
+    const GITHUB_ORGS_URL = `https://api.${this.host}/user/orgs`;
 
-  try {
-    const response = await axios.get(GITHUB_ORGS_URL, { headers });
-
-    if (response.status === 200) {
-      const orgs = response.data;
-      for (const org of orgs) {
-        orgsList.push(org.login as string);
+    const headers = {
+      Authorization: `Bearer ${this.token}`,
+    };
+    const orgsList = [];
+  
+    try {
+      const response = await axios.get(GITHUB_ORGS_URL, { headers });
+  
+      if (response.status === 200) {
+        const orgs = response.data;
+        for (const org of orgs) {
+          orgsList.push(org.login as string);
+        }
+        return orgsList;
       }
+      orgsList.push('Not orgs');
+      return orgsList;
+    } catch (error) {
+      orgsList.push('Not orgs');
       return orgsList;
     }
-    orgsList.push('Not orgs');
-    return orgsList;
-  } catch (error) {
-    orgsList.push('Not orgs');
-    return orgsList;
   }
-}
 
-export async function getUserGithub(Params: ParamsProvider): Promise<string> {
-  const { host, token } = Params;
-
-  const GITHUB_USER_URL = `https://api.${host}/user`;
-
-  const headers = {
-    Authorization: `token ${token}`,
-  };
-
-  try {
-    const response = await axios.get(GITHUB_USER_URL, { headers });
-
-    if (response.status === 200) {
-      const owner = response.data.login;
-      return owner;
+  public async getUserGithub():Promise<string> {
+ 
+    const GITHUB_USER_URL = `https://api.${this.host}/user`;
+  
+    const headers = {
+      Authorization: `token ${this.token}`,
+    };
+  
+    try {
+      const response = await axios.get(GITHUB_USER_URL, { headers });
+  
+      if (response.status === 200) {
+        const owner = response.data.login;
+        return owner;
+      }
+      return 'Not found';
+    } catch (error) {
+      return 'Not Found';
     }
-    return 'Not found';
-  } catch (error) {
-    return 'Not Found';
   }
 }

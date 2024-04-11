@@ -6,7 +6,7 @@ import { Select, SelectItem } from '@backstage/core-components';
 import { RepoUrlPickerState } from './types';
 import { useScaffolder } from '../../hooks/useScaffolder';
 import { Grid, Input, InputLabel } from '@material-ui/core';
-import { getUserAndOrgs } from '../../services';
+import { ProviderService } from '../../services';
 
 export const GitlabRepoPicker = (props: {
   allowedOwners?: string[];
@@ -46,8 +46,7 @@ export const GitlabRepoPicker = (props: {
 
   useEffect(()=>{
     async function fetchData(){
-      const params = {provider: 'gitlab', host: gitlabHostScaffolder ,token: gitlabTokenScaffolder};
-      const getData = getUserAndOrgs(params);
+      const getData = new ProviderService('gitlab',gitlabHostScaffolder,gitlabTokenScaffolder).getUserAndOrgs();
       try{
         const user = (await getData).username;
         const organizations = (await getData).organizations

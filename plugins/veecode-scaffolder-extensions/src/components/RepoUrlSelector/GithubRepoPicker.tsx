@@ -6,7 +6,7 @@ import { Select, SelectItem } from '@backstage/core-components';
 import { RepoUrlPickerState } from './types';
 import { useScaffolder } from '../../hooks/useScaffolder';
 import { Grid, Input, InputLabel } from '@material-ui/core';
-import { getUserAndOrgs } from '../../services';
+import { ProviderService } from '../../services';
 
 const messageLoading = "loading ...";
 
@@ -49,8 +49,7 @@ export const GithubRepoPicker = (props: {
 
   useEffect(()=>{
     async function fetchData(){
-      const params = {provider: 'github', host: githubHostScaffolder, token: githubTokenScaffolder};
-      const getData = getUserAndOrgs(params); 
+      const getData = new ProviderService('github',githubHostScaffolder,githubTokenScaffolder).getUserAndOrgs();
       try{
         const user = (await getData).username;
         const organizations = (await getData).organizations;
