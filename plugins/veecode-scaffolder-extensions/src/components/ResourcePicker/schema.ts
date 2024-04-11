@@ -17,6 +17,7 @@
 
 import { z } from 'zod';
 import { makeFieldSchemaFromZod } from '../../utils';
+import { ErrorSchema } from '@rjsf/utils';
 
 /**
  * @public
@@ -57,7 +58,9 @@ export const ResourcePickerFieldSchema = makeFieldSchemaFromZod(
 export type ResourcePickerUiOptions =
   typeof ResourcePickerFieldSchema.uiOptionsType;
 
-export type ResourcePickerProps = typeof ResourcePickerFieldSchema.type;
+export type ResourcePickerProps = typeof ResourcePickerFieldSchema.type & {
+  onChange: (newFormData: object | undefined, es?: ErrorSchema<string>, id?: string) => any;
+};
 
 export const ResourcePickerSchema = ResourcePickerFieldSchema.schema;
 

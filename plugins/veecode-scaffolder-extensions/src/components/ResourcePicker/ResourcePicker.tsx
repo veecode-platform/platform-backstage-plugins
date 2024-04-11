@@ -76,7 +76,7 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
       name: metadata.name,
       ...(metadata.environment ? metadata.environment as Object : {}),
     }
-    onChange(JSON.stringify(dataToChange));
+    onChange(dataToChange);
     return items;
   });
 
@@ -87,14 +87,18 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
         name: entity.name,
         ...(entity.environment ? entity.environment as Object : {}),
       }
-      onChange(JSON.stringify(dataToChange));
+      onChange(dataToChange);
     }
   }, [entities, onChange]);
 
   const entitiesOptions: SelectItem[] = entities
     ? entities.map(i => ({
         label: i.metadata.name,
-        value: JSON.stringify(i.metadata.environment ? {name: i.metadata.name, ...(i.metadata.environment ? i.metadata.environment as Object : {})} : {name: i.metadata.name}),
+        value: JSON.stringify(
+          i.metadata.environment ? 
+          {name: i.metadata.name, ...(i.metadata.environment ? i.metadata.environment as Object : {})} 
+          : {name: i.metadata.name}
+          ),
       }))
     : [{ label: 'Loading...', value: 'loading' }];
 
@@ -111,7 +115,7 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
             label="Resource Available"
             onChange={selected => {
               setEntityNameSelected(selected as string);
-              onChange(selected as string);
+              onChange(JSON.parse(selected as string));
             }}
             disabled={entities.length === 1}
             selected={entityNameSelected}
