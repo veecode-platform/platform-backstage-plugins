@@ -214,7 +214,7 @@ In the context we envisioned for the project, the Database is used to reuse info
 
 We have developed customizable components to provide the scaffolder with the possibility of parsing information from the **environment** key of our **Kind**.
 
-This is our **ResourcePicker**, which is exclusive to our **core**;
+This is our **ResourcePicker**, [➡️ here's how to install it.](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-scaffolder-extensions)
 
 With it we can approach the reuse of this information when creating entities via a template.
 
@@ -223,15 +223,15 @@ Example:
 ```yaml
     - title: Database Settings
       properties:
-        reuseResource:
+        dataBaseResource:
           title: Select the Database from our catalog
-          type: string
+          type: object
           ui:field: ResourcePicker
           ui:options:
             catalogFilter:
               kind: [Database]
 ```
-In this case, we will list all our entities in the catalog that have the **Database** kind, and under the hood we will scan the `metadata.enviromnet` key of the chosen entity, and thus parse the information as **values** to serve the **skeleton** of our template, using the **parseJSON** function, also present in our core.
+In this case, we will list all our entities in the catalog that have the **Database** kind, and under the hood we will scan the `metadata.enviromnet` key of the chosen entity, and thus parse the information as **values** to serve the **skeleton** of our template.
 
 example:
 
@@ -244,9 +244,9 @@ example:
       input:
         url: ./skeleton      
         values:
-          dns: ${{ parameters.reuseResource | parseJSON | pick('dns') }}
+          dns: ${{ parameters.dataBaseResource.dns }}
 
 ...
 ```
 
-The use of 'pick' helps to select the property you want to use, from the return of the parseJSON function, remember to validate that the selected entity has this property, otherwise the values will be empty.
+ℹ️ Remember to validate that the selected entity has this property, otherwise the values will be empty.

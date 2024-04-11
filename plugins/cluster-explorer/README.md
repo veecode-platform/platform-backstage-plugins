@@ -170,3 +170,45 @@ kubernetes:
 ```
 
 
+## How to reuse the resources of the Cluster entity
+
+In the context we envisioned for the project, the Cluster is used to reuse information that will be useful when creating new entities for our catalog.
+
+We have developed customizable components to provide the scaffolder with the possibility of parsing information from the **environment** key of our **Kind**.
+
+This is our **ResourcePicker**, [➡️ here's how to install it.](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-scaffolder-extensions)
+
+With it we can approach the reuse of this information when creating entities via a template.
+
+Example:
+
+```yaml
+    - title: Cluster Settings
+      properties:
+        clusterResource:
+          title: Select the Cluster from our catalog
+          type: object
+          ui:field: ResourcePicker
+          ui:options:
+            catalogFilter:
+              kind: [Cluster]
+```
+In this case, we will list all our entities in the catalog that have the **Cluster** kind, and under the hood we will scan the `metadata.enviromnet` key of the chosen entity, and thus parse the information as **values** to serve the **skeleton** of our template.
+
+example:
+
+```yaml
+...
+  steps:
+    - id: template
+      name: Fetch Skeleton + Template
+      action: fetch:template
+      input:
+        url: ./skeleton      
+        values:
+          dns: ${{ parameters.clusterResource.type }}
+
+...
+```
+
+ℹ️ Remember to validate that the selected entity has this property, otherwise the values will be empty.

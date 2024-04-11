@@ -227,7 +227,7 @@ In the context we envisioned for the project, the environment is used to reuse i
 
 We have developed customizable components to provide the scaffolder with the possibility of parsing information from the **environment** key of our **Kind**.
 
-This is our **ResourcePicker**, which is exclusive to our **core**;
+This is our **ResourcePicker**, [➡️ here's how to install it.](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-scaffolder-extensions)
 
 With it we can approach the reuse of this information in the creation of entities via template.
 
@@ -236,16 +236,16 @@ Example:
 ```yaml
     - title: Enviroment Settings
       properties:
-        reuseResource:
+        environmentResource:
           title: Select the enviromnet from our catalog
-          type: string
+          type: object
           ui:field: ResourcePicker
           ui:options:
             catalogFilter:
               kind: [Environment]
 ```
 
-In this case, we will list all our entities in the catalog that have the **Environment** kind, and under the hood we will scan the `metadata.enviromnet` key of the chosen entity, and thus parse the information as **values** to serve the **skeleton** of our template, using the **parseJSON** function, also present in our core.
+In this case, we will list all our entities in the catalog that have the **Environment** kind, and under the hood we will scan the `metadata.enviromnet` key of the chosen entity, and thus parse the information as **values** to serve the **skeleton** of our template.
 
 example:
 
@@ -258,14 +258,12 @@ example:
       input:
         url: ./skeleton      
         values:
-          vpc: ${{ parameters.reuseResource | parseJSON | pick('vpc_id') }}
-          domain: ${{ parameters.reuseResource | parseJSON | pick('domain') }}
-
+          vpc: ${{ parameters.environmentResource.vpc_id }}
+          domain: ${{ parameters.environmentResource.domain }}
 ...
 ```
 
-The use of 'pick' helps to select the property you want to use, from the return of the **parseJSON function**, remember to validate that the selected entity has this property, otherwise the values will be empty.
-
+ℹ️ Remember to validate that the selected entity has this property, otherwise the values will be empty.
 
 
 

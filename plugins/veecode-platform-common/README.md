@@ -1,4 +1,4 @@
-# Veecode Platform Common Plugin
+# VeeCode Platform Common Plugin
 
 The **Veecode Platform Common** plugin is a backend plugin that extends the backstage catalog, adding new features to the application's standard behavior.
 
