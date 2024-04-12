@@ -1,7 +1,7 @@
-import { ClusterOverviewPlugin } from './plugin';
+import { ClusterExplorerPlugin } from './plugin';
 
 describe('veecode-cluster-overview', () => {
   it('should export plugin', () => {
-    expect(ClusterOverviewPlugin).toBeDefined();
+    expect(ClusterExplorerPlugin).toBeDefined();
   });
 });

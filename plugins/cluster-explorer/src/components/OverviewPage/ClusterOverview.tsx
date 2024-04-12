@@ -14,14 +14,14 @@ import {
     InfoCard,
     Content,
     Link,
-    //ContentHeader,
-    //SupportButton,
+    // ContentHeader,
+    // SupportButton,
     StructuredMetadataTable,
     Table,
     StatusOK,
     StatusError,
     StatusWarning,
-    //StatusRunning,
+    // StatusRunning,
 } from '@backstage/core-components';
 
 const useDrawerStyles = makeStyles((theme: Theme) =>

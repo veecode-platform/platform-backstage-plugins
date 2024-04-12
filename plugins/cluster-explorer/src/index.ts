@@ -1,1 +1,2 @@
-export { ClusterOverviewPlugin, ClusterOverviewPage, ClusterExplorerPage } from './plugin';
+export { ClusterExplorerPlugin, ClusterOverviewPage, ClusterExplorerPage, ClusterInstructionsCard } from './plugin';
+export * from './hooks'
