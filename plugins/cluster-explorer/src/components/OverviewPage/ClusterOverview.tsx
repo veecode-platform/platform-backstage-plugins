@@ -1,28 +1,21 @@
+/* eslint-disable @backstage/no-undeclared-imports */
 import React, { useState } from 'react'
 import { useApi } from '@backstage/core-plugin-api';
 import { kubernetesApiRef } from '@backstage/plugin-kubernetes';
 import useAsync from 'react-use/lib/useAsync';
-import { Progress, ErrorPage } from '@backstage/core-components';
+import { Progress } from '@backstage/core-components';
 import { useEntity, MissingAnnotationEmptyState } from '@backstage/plugin-catalog-react';
 import { Grid, Drawer, IconButton } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
 import OpenInNewIcon from "@material-ui/icons/OpenInNew"
-
-import {
-    InfoCard,
-    Content,
-    Link,
-    // ContentHeader,
-    // SupportButton,
-    StructuredMetadataTable,
-    Table,
-    StatusOK,
-    StatusError,
-    StatusWarning,
-    // StatusRunning,
-} from '@backstage/core-components';
+import { InfoCard, Content, Link, StructuredMetadataTable, Table, StatusOK, StatusError, StatusWarning} from '@backstage/core-components';
+import { BoxInfo } from '../shared';
+import { ClusterCapacity, ClusterInformation, ClusterLinks, ClusterNamespace, ClusterNodes, ClusterResponse, NamespacesResponse, NodeResponse } from '../../utils/types';
+import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
+import { Entity } from '@backstage/catalog-model';
+import { ClusterInstructionsCard } from '../InstructionsCard';
 
 const useDrawerStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -32,57 +25,6 @@ const useDrawerStyles = makeStyles((theme: Theme) =>
         },
     }),
 );
-
-export type ClusterNamespace = {
-    status: React.JSX.Element
-    name: string
-}
-
-export type ClusterNodes = {
-    name: string
-    createdAt: string
-    id: string
-    os: string
-    arch: string
-    region: string
-    capacity: {
-        cpu: string
-        memory: string
-        pods: string
-    },
-    internalIp: string
-    externalIp: string
-    kubeletVersion: string
-    kernelVersion: string
-    osImage: string
-}
-
-export type ClusterCapacity = {
-    cpu: number
-    memory: string
-    pods: number
-}
-
-export type ClusterInformation = {
-    name: string
-    status: React.JSX.Element,
-    namespaces: any,
-}
-
-export type ClusterLinks = {
-    admin?: React.JSX.Element
-}
-
-export type ClusterResponse = {
-    nodes: ClusterNodes[],
-    capacity: ClusterCapacity,
-    info: ClusterInformation,
-    ingressClasses: any[],
-    links?: ClusterLinks
-}
-
-type NodeResponse = { metadata: { [x: string]: any; name: any; creationTimestamp: any; uid: any; region: any; }; status: { capacity: { cpu: any; memory: any; pods: any; }; addresses: { address: any; }[]; nodeInfo: { kubeletVersion: any; kernelVersion: any; osImage: any; }; }; }
-type NamespacesResponse = { metadata: { name: string; }; status: { phase: string; }; }
 
 const switchStatuses = (status: string) => {
     switch (status) {
@@ -99,18 +41,18 @@ const convertMemoryValues = (value: string) => {
     const splited = value.split(/(?=[a-zA-z])|(?<=[a-zA-z])/g)
 
     switch (splited[1].toLowerCase()) {
-        case "k"://k
-            return parseInt(splited[0])
+        case "k": // k
+            return Number(splited[0])
         case "m":
-            return parseInt(splited[0]) / 1024// k*1024
+            return Number(splited[0]) / 1024 // k*1024
         case "g":
-            return parseInt(splited[0]) / 1024 ** 2// k*1024*2
+            return Number(splited[0]) / 1024 ** 2 // k*1024*2
         case "t":
-            return parseInt(splited[0]) / 1024 ** 3// k*1024*3
+            return Number(splited[0]) / 1024 ** 3 // k*1024*3
         case "p":
-            return parseInt(splited[0]) / 1024 ** 4// k*1024*4
+            return Number(splited[0]) / 1024 ** 4 // k*1024*4
         default:
-            return parseInt(splited[0])
+            return Number(splited[0])
     }
 }
 
@@ -121,19 +63,20 @@ const showMemoryDisplayValueInGi = (valueInKi: number) => {
 const convertCpuValues = (value: string) => {
     const splited = value.split(/(?=[a-zA-z])|(?<=[a-zA-z])/g)
 
-    if (splited.length == 1) return parseInt(value)
+    if (splited.length === 1) return Number(value)
 
     switch (splited[1].toLowerCase()) {
         case "m":
-            return parseInt(splited[0]) / 1000
+            return Number(splited[0]) / 1000
 
         default:
-            return parseInt(splited[0])
+            return Number(splited[0])
     }
 }
 
 export const ClusterOverview = () => {
     const { entity } = useEntity();
+    const { clusterName } = useEntityAnnotations(entity as Entity);
     const kubernetesApi = useApi(kubernetesApiRef);
     const [isOpen, toggleDrawer] = useState(false);
     const classes = useDrawerStyles();
@@ -153,13 +96,10 @@ export const ClusterOverview = () => {
         </IconButton>)
     }
 
-    const CLUSTER_NAME = entity.metadata?.annotations?.["veecode/cluster-name"] || entity.metadata?.name
-    if (!CLUSTER_NAME) return <MissingAnnotationEmptyState annotation={["veecode/cluster-name", "metadata.name"]} />
-
     const { loading, error, value } = useAsync(async (): Promise<ClusterResponse> => {
 
         const namespaces: any = await (await kubernetesApi.proxy({
-            clusterName: CLUSTER_NAME,
+            clusterName: clusterName,
             path: '/api/v1/namespaces',
 
         })).json();
@@ -167,7 +107,7 @@ export const ClusterOverview = () => {
         if (!namespaces.items) throw new Error(namespaces.message);
 
         const nodes: any = await (await kubernetesApi.proxy({
-            clusterName: CLUSTER_NAME,
+            clusterName: clusterName,
             path: '/api/v1/nodes',
 
         })).json();
@@ -175,7 +115,7 @@ export const ClusterOverview = () => {
         if (!nodes.items) throw new Error(nodes.message);
 
         const ingressClasses: any = await (await kubernetesApi.proxy({
-            clusterName: CLUSTER_NAME,
+            clusterName: clusterName,
             path: '/apis/networking.k8s.io/v1/ingressclasses',
 
         })).json();
@@ -183,12 +123,12 @@ export const ClusterOverview = () => {
         if (!ingressClasses.items) throw new Error(ingressClasses.message);
 
         const clusterStatus: Response = await kubernetesApi.proxy({
-            clusterName: CLUSTER_NAME,
+            clusterName: clusterName,
             path: '/api/v1',
         })
 
         const services: any = await (await kubernetesApi.proxy({
-            clusterName: CLUSTER_NAME,
+            clusterName: clusterName,
             path: '/api/v1/services',
 
         })).json();
@@ -234,13 +174,13 @@ export const ClusterOverview = () => {
         nodesList.forEach(node => {
             capacity.cpu += convertCpuValues(node.capacity.cpu)
             memory += convertMemoryValues(node.capacity.memory)
-            capacity.pods += parseInt(node.capacity.pods)
+            capacity.pods += Number(node.capacity.pods)
         })
         capacity.memory = showMemoryDisplayValueInGi(memory)
 
         const info: ClusterInformation = {
             status: clusterStatus.status === 200 ? <StatusOK>{clusterStatus.statusText}</StatusOK> : <StatusError>{clusterStatus.statusText}</StatusError>,
-            name: CLUSTER_NAME,
+            name: clusterName,
             namespaces: namespacesList
         }
 
@@ -274,7 +214,7 @@ export const ClusterOverview = () => {
         if (hasAdminUrl) {
             const clusterlinks: ClusterLinks = {
                 admin:
-                    <Link to={`https://${hasAdminUrl}.console.aws.amazon.com/eks/home?region=${hasAdminUrl}#/clusters/${CLUSTER_NAME}`}>
+                    <Link to={`https://${hasAdminUrl}.console.aws.amazon.com/eks/home?region=${hasAdminUrl}#/clusters/${clusterName}`}>
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "2px" }}>
                             Cluster Manager Console
                             <OpenInNewIcon />
@@ -287,14 +227,26 @@ export const ClusterOverview = () => {
         return response
 
     }, []);
+    
+    if (!clusterName) return <MissingAnnotationEmptyState annotation={["veecode/cluster-name", "metadata.name"]} />
 
-    if (loading) {
-        return <Progress />;
-    }
-    if (error) {
-        console.log("Error: ", error)
-        return <ErrorPage status={error.name} statusMessage={error.message} />;
-    }
+    if (loading) return <Progress />;
+    
+    //  if (error) return <ErrorPage status={error.name} statusMessage={error.message} />;
+    if (error) return (
+      <Content>
+        <Grid container spacing={2}>
+          <BoxInfo
+            message={error.message}
+            url="https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/cluster-explorer"
+          />
+          <Grid item lg={6} md={12} xs={12}>
+            <ClusterInstructionsCard />
+          </Grid>
+        </Grid>
+      </Content>
+    );
+    
     if (value) {
         const { nodes, capacity, info, ingressClasses, links } = value
 
@@ -359,7 +311,7 @@ export const ClusterOverview = () => {
                         <Grid container spacing={2}>
                             <Grid item md={12}>
                                 <Table
-                                    title={"Nodes"}
+                                    title="Nodes"
                                     columns={[
                                         { title: 'Name', field: 'name' },
                                         { title: 'Os', field: 'os' },
@@ -372,7 +324,7 @@ export const ClusterOverview = () => {
                             </Grid>
                             <Grid item md={12}>
                                 <Table
-                                    title={"Ingress classes"}
+                                    title="Ingress classes"
                                     columns={[
                                         { title: 'Name', field: 'name' },
                                         { title: 'Ip', field: 'ip' },
