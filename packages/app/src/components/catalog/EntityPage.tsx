@@ -62,7 +62,7 @@ import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 import { isGithubWorkflowsAvailable, GithubWorkflowsCard, GithubWorkflowsList, isGithubAvailable } from '@veecode-platform/backstage-plugin-github-workflows'
 import { GitlabJobs, GitlabPipelineList, isGitlabAvailable, isGitlabJobsAvailable } from '@veecode-platform/backstage-plugin-gitlab-pipelines';
 import { EntityKubernetesContent } from '@backstage/plugin-kubernetes';
-import { ClusterOverviewPage } from '@veecode-platform/backstage-plugin-cluster-explorer';
+import { ClusterInstructionsCard, ClusterOverviewPage, isClusterInstructionsAvailable } from '@veecode-platform/backstage-plugin-cluster-explorer';
 import { DatabaseOverview } from '@veecode-platform/plugin-database-explorer';
 import { RELATION_ENVIRONMENT_OF, RELATION_FROM_ENVIRONMENT } from '@veecode-platform/plugin-veecode-platform-common';
 // kong
@@ -512,6 +512,14 @@ const clusterPage = (
           <EntitySwitch.Case if={isGitlabJobsAvailable}>
             <Grid item lg={8} xs={12}>
               <GitlabJobs />
+            </Grid>
+          </EntitySwitch.Case>
+        </EntitySwitch>
+        {/* Instructions */}
+        <EntitySwitch>
+          <EntitySwitch.Case if={isClusterInstructionsAvailable}>
+            <Grid item lg={8} xs={12}>
+              <ClusterInstructionsCard />
             </Grid>
           </EntitySwitch.Case>
         </EntitySwitch>
