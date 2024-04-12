@@ -1,9 +1,9 @@
 import React from 'react';
 import { createDevApp } from '@backstage/dev-utils';
-import { ClusterOverviewPlugin, ClusterOverviewPage } from '../src/plugin';
+import { ClusterExplorerPlugin, ClusterOverviewPage } from '../src/plugin';
 
 createDevApp()
-  .registerPlugin(ClusterOverviewPlugin)
+  .registerPlugin(ClusterExplorerPlugin)
   .addPage({
     element: <ClusterOverviewPage />,
     title: 'Root Page',
