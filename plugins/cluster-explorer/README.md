@@ -194,6 +194,9 @@ spec:
 
 This way, we'll have a card on the Cluster Overview Page with instructions on how to set up the cluster correctly.
 
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/fd0a9329-f7b2-4168-a094-d8370007d848)
+
+
 
 ## How to reuse the resources of the Cluster entity
 
