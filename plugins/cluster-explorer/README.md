@@ -170,7 +170,7 @@ kubernetes:
 ```
 
 
-## How to add annotation `cluster/instructions`:
+## How to add annotation `cluster/instructions`: 
 
 The `cluster/instruction` annotation is based on a block of text with instructions for raising the cluster, according to its type.
 It needs to be filled in the cluster's `catalog-info.yaml` as shown in the example:
