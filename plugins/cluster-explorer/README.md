@@ -170,6 +170,31 @@ kubernetes:
 ```
 
 
+## How to add annotation `cluster/instructions`:
+
+The `cluster/instruction` annotation is based on a block of text with instructions for raising the cluster, according to its type.
+It needs to be filled in the cluster's `catalog-info.yaml` as shown in the example:
+
+```diff
+apiVersion: veecode.backstage.io/v1alpha1
+kind: Cluster
+metadata:
+  name: "ec2-cluster-2"
+  annotations:
+    github.com/project-slug: xxxxxxxxxxxxxxxx
+    backstage.io/techdocs-ref: dir:.
++    cluster/instructions: |
++      mkdir test
++      echo 'hello world'
+spec:
+  type: ec2
+  lifecycle: development
+  owner: "admin"
+```
+
+This way, we'll have a card on the Cluster Overview Page with instructions on how to set up the cluster correctly.
+
+
 ## How to reuse the resources of the Cluster entity
 
 In the context we envisioned for the project, the Cluster is used to reuse information that will be useful when creating new entities for our catalog.

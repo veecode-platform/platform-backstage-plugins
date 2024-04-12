@@ -1,15 +1,15 @@
 import { Box, Button, makeStyles } from '@material-ui/core'
 import React from 'react'
 
-type BoxInfoPropType = {
+type InfoBoxPropType = {
     message: string,
     url: string
 }
 
 const useStyles = makeStyles({
-    boxInfo: {
+  content: {
       width: '100%',
-      padding: '.7rem 1rem',
+      padding: '0 1rem',
       fontSize: '1rem',
       borderRadius: '8px',
       background: '#60a5fa40',
@@ -21,12 +21,12 @@ const useStyles = makeStyles({
     },
   });
 
-export const BoxInfo = ({message,url}:BoxInfoPropType) => {
+export const InfoBox = ({message,url}:InfoBoxPropType) => {
 
-  const { boxInfo } = useStyles();
+  const { content } = useStyles();
 
   return (
-    <Box className={boxInfo}>
+    <Box className={content}>
       ⚠️ {message}
       <Button
         href={url}

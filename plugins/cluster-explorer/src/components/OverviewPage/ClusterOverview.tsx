@@ -11,7 +11,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
 import OpenInNewIcon from "@material-ui/icons/OpenInNew"
 import { InfoCard, Content, Link, StructuredMetadataTable, Table, StatusOK, StatusError, StatusWarning} from '@backstage/core-components';
-import { BoxInfo } from '../shared';
+import { InfoBox } from '../shared';
 import { ClusterCapacity, ClusterInformation, ClusterLinks, ClusterNamespace, ClusterNodes, ClusterResponse, NamespacesResponse, NodeResponse } from '../../utils/types';
 import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
 import { Entity } from '@backstage/catalog-model';
@@ -236,7 +236,7 @@ export const ClusterOverview = () => {
     if (error) return (
       <Content>
         <Grid container spacing={2}>
-          <BoxInfo
+          <InfoBox
             message={error.message}
             url="https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/cluster-explorer"
           />

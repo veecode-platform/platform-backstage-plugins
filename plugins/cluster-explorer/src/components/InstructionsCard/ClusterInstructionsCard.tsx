@@ -4,7 +4,7 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { Typography } from '@material-ui/core';
 import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
 import { Entity } from '@backstage/catalog-model';
-import { BoxInfo } from '../shared';
+import { InfoBox } from '../shared';
 
 export const ClusterInstructionsCard = () => {
 
@@ -14,7 +14,7 @@ export const ClusterInstructionsCard = () => {
   if(!instructions) return (
     <InfoCard title="Cluster Instructions">
       <Typography variant="body1">
-        <BoxInfo
+        <InfoBox
           message="No instruction available"
           url="https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/cluster-explorer"
          />

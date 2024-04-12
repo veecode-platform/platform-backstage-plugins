@@ -1,1 +1,1 @@
-export { BoxInfo } from './BoxInfo'
+export { InfoBox } from './InfoBox'
