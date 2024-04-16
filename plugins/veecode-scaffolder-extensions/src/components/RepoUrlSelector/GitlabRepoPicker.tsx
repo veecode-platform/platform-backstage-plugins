@@ -20,7 +20,6 @@ export const GitlabRepoPicker = (props: {
     ? allowedOwners.map(i => ({ label: i, value: i }))
     : [{ label: 'Loading...', value: 'loading' }];
   const { owner } = state;
-  const [ownerData, setOwnerData ] = useState<string>("loading ...");
   const [items, setItems] = useState<string[]>();
   const [hasIntegration, setHasIntegration] = useState<boolean>(false);
   const [ownerList, setOwnerList] = useState<SelectItem[]>();
@@ -52,12 +51,10 @@ export const GitlabRepoPicker = (props: {
         const organizations = (await getData).organizations
         if(user !== "Not found")
         { const ownerDataResult = [user, ...organizations];
-          setOwnerData(user);
           setItems(ownerDataResult);
           setHasIntegration(true)
         } else {
           const ownerDataResult = ["Not Found"];
-          setOwnerData("Not Found");
           setItems(ownerDataResult);
           setHasIntegration(false)
         }
@@ -76,16 +73,13 @@ useEffect(()=>{
   setOwnerList( data !== undefined ? data : [{label: messageLoading, value: messageLoading}]);
 },[items]);
 
-useEffect(()=>{
-  onChange({ owner: ownerData as string })
-},[ownerData])
   
   return (
     <>
       <FormControl
         margin="normal"
         required
-        error={rawErrors?.length > 0 && !ownerData}
+        error={rawErrors?.length > 0 && !owner}
       >
         {
           hasIntegration ? (
@@ -98,8 +92,8 @@ useEffect(()=>{
                   onChange({ owner: String(Array.isArray(s) ? s[0] : s) })
                 }
                 disabled={allowedOwners.length === 1}
-                selected={owner??""}
-                items={ownerItems}
+                selected={owner}
+                items={ownerItems as SelectItem[]}
               />
             ) : (
               <>
@@ -111,7 +105,7 @@ useEffect(()=>{
                       onChange({ owner: String(Array.isArray(s) ? s[0] : s) })
                     }
                     disabled={allowedOwners.length === 1}
-                    selected={ownerData}
+                    selected={owner}
                     items={ownerList as SelectItem[]}
                   />
                 </Grid>
@@ -131,7 +125,7 @@ useEffect(()=>{
                     }
                     disabled={allowedOwners.length === 1}
                     selected={owner}
-                    items={ownerItems}
+                    items={ownerItems as SelectItem[]}
                   />
                 ) : (
                   <>

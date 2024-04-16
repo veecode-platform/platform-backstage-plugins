@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import FormControl from '@material-ui/core/FormControl';
@@ -24,7 +25,6 @@ export const GithubRepoPicker = (props: {
 
   const { owner } = state;
 
-  const [ownerData, setOwnerData ] = useState<string>(messageLoading);
   const [items, setItems] = useState<string[]>();
   const [hasIntegration, setHasIntegration] = useState<boolean>(false);
   const [ownerList, setOwnerList] = useState<SelectItem[]>();
@@ -55,12 +55,10 @@ export const GithubRepoPicker = (props: {
         const organizations = (await getData).organizations;
         if(user !== "Not found")
         { const ownerDataResult = [user, ...organizations];
-          setOwnerData(user);
           setItems(ownerDataResult);
           setHasIntegration(true)
         } else {
           const ownerDataResult = ["No owner available"];
-          setOwnerData("No owner available");
           setItems(ownerDataResult);
           setHasIntegration(false)
         }
@@ -78,9 +76,6 @@ useEffect(()=>{
   setOwnerList( data !== undefined ? data : [{label: messageLoading, value: messageLoading}]);
 },[items]);
 
-useEffect(()=>{
-  onChange({ owner: ownerData as string })
-},[ownerData])
 
 
   
@@ -89,7 +84,7 @@ useEffect(()=>{
       <FormControl
         margin="normal"
         required
-        error={rawErrors?.length > 0 && !ownerData}
+        error={rawErrors?.length > 0 && !state.owner}
       >
         {
           hasIntegration ? (
@@ -115,7 +110,7 @@ useEffect(()=>{
                             onChange({ owner: String(Array.isArray(s) ? s[0] : s) })
                           }
                           disabled={allowedOwners.length === 1}
-                          selected={ownerData}
+                          selected={owner}
                           items={ownerList as SelectItem[]}
                         />
                       </Grid>
@@ -133,7 +128,7 @@ useEffect(()=>{
                   }
                   disabled={allowedOwners.length === 1}
                   selected={owner}
-                  items={ownerItems}
+                  items={ownerItems as SelectItem[]}
                 />
               ) : (
                 <>
