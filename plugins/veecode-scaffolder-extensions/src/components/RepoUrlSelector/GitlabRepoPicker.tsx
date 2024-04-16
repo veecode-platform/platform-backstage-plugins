@@ -84,33 +84,33 @@ useEffect(()=>{
         {
           hasIntegration ? (
             <>
-                          {allowedOwners?.length ? (
-              <Select
-                native
-                label="Owner Available"
-                onChange={s =>
-                  onChange({ owner: String(Array.isArray(s) ? s[0] : s) })
-                }
-                disabled={allowedOwners.length === 1}
-                selected={owner}
-                items={ownerItems as SelectItem[]}
-              />
-            ) : (
-              <>
-                <Grid item style={{marginBottom:'1rem'}}>
-                  <Select        
-                    native
-                    label="Owner"
-                    onChange={s =>
-                      onChange({ owner: String(Array.isArray(s) ? s[0] : s) })
-                    }
-                    disabled={allowedOwners.length === 1}
-                    selected={owner}
-                    items={ownerList as SelectItem[]}
-                  />
-                </Grid>
-              </>
-            )}
+                {allowedOwners?.length ? (
+                    <Select
+                      native
+                      label="Owner Available"
+                      onChange={s =>
+                        onChange({ owner: String(Array.isArray(s) ? s[0] : s) })
+                      }
+                      disabled={allowedOwners.length === 1}
+                      selected={owner}
+                      items={ownerItems as SelectItem[]}
+                    />
+                  ) : (
+                    <>
+                      <Grid item style={{marginBottom:'1rem'}}>
+                        <Select        
+                          native
+                          label="Owner"
+                          onChange={s =>
+                            onChange({ owner: String(Array.isArray(s) ? s[0] : s) })
+                          }
+                          disabled={allowedOwners.length === 1}
+                          selected={owner}
+                          items={ownerList as SelectItem[]}
+                        />
+                      </Grid>
+                    </>
+                  )}
             </>
           ): (
             <>
