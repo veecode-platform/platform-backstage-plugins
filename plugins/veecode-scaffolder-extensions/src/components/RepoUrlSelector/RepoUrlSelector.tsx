@@ -14,6 +14,7 @@ import { useTemplateSecrets } from '@backstage/plugin-scaffolder-react';
 import { BitbucketRepoPicker } from './BitbucketRepoPicker';
 import { AzureRepoPicker } from './AzureRepoPicker';
 import { GerritRepoPicker } from './GerritRepoPicker';
+import { Box, Divider, Typography } from '@material-ui/core';
 
 export { RepoUrlSelectorSchema } from './schema';
 
@@ -25,7 +26,7 @@ export { RepoUrlSelectorSchema } from './schema';
  */
 export const RepoUrlSelector = (props: RepoUrlSelectorProps) => {
 
-  const { uiSchema, onChange, rawErrors, formData } = props;
+  const { uiSchema, onChange, rawErrors, formData, schema } = props;
   const [state, setState] = useState<RepoUrlPickerState>(
     parseRepoPickerUrl(formData),
   );
@@ -141,6 +142,15 @@ export const RepoUrlSelector = (props: RepoUrlSelectorProps) => {
 
   return (
     <>
+      {schema.title && (
+        <Box my={1}>
+          <Typography variant="h5">{schema.title}</Typography>
+          <Divider />
+        </Box>
+      )}
+      {schema.description && (
+        <Typography variant="body1">{schema.description}</Typography>
+      )}
       <RepoUrlPickerHost
         host={state.host}
         hosts={allowedHosts}

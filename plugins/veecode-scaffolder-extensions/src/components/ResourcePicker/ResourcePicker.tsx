@@ -21,7 +21,7 @@ import {
 } from '@backstage/catalog-client';
 import { useApi } from '@backstage/core-plugin-api';
 import { catalogApiRef } from '@backstage/plugin-catalog-react';
-import { Box, Button, FormHelperText, makeStyles } from '@material-ui/core';
+import { Box, Button, Divider, FormHelperText, Typography, makeStyles } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import FormControl from '@material-ui/core/FormControl';
 import React, { useEffect, useState } from 'react';
@@ -56,7 +56,7 @@ export interface Annotations {
  * @public
  */
 export const ResourcePicker = (props: ResourcePickerProps) => {
-  const { onChange, required, uiSchema, rawErrors, formData } = props;
+  const { onChange, required, uiSchema, rawErrors, formData, schema } = props;
 
   const [entityNameSelected, setEntityNameSelected] = useState<string>(
     'Select the Resource',
@@ -102,6 +102,15 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
 
   return (
     <>
+      {schema.title && (
+        <Box my={1}>
+          <Typography variant="h5">{schema.title}</Typography>
+          <Divider />
+        </Box>
+      )}
+      {schema.description && (
+        <Typography variant="body1">{schema.description}</Typography>
+      )}
       {entities && entities.length > 0 ? (
         <FormControl
           margin="normal"
