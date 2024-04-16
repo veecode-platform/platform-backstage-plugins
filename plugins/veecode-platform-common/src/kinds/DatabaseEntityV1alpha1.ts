@@ -34,6 +34,7 @@ export interface DatabaseEntityV1alpha1 extends Entity {
     type: string;
     lifecycle: string;
     owner: string;
+    environment: string;
     subcomponentOf?: string;
     providesApis?: string[];
     consumesApis?: string[];
