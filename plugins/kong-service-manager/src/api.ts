@@ -104,9 +104,8 @@ class Client {
     }
 
     async getAllEnabledPlugins(serviceIdOrName: string, proxyPath?: string, searchFilter?:string): Promise<PluginPerCategory[]> {
-        const response = await this.fetch("/", proxyPath);
-        const availableOnServer =  Object.keys(response.plugins.available_on_server);        
-        const availablePluginsResponse = availableOnServer as string[]
+        const response = await this.fetch("/", proxyPath);      
+        const availablePluginsResponse = Object.keys(response.plugins.available_on_server);
         let availablePluginsList = availablePluginsResponse;
 
         if (searchFilter !== "" && searchFilter) {
