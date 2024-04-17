@@ -70,7 +70,6 @@ export const RepoUrlPickerHost = (props: {
         if(gitlabScaffolderExists) hostss.push(gitlabHostScaffolder);
         setHostsData(hostss);
       }catch(err: any){
-        // throw new Error(err)
         // eslint-disable-next-line no-console              
         console.log(err)
       }
@@ -94,19 +93,10 @@ useEffect(() => {
       if (hosts?.length) {
         onChange(hosts[0]);
         // if there's no hosts provided, fallback to using the first integration
-      } else if (hostsData?.length) {
-        onChange(hostsData[0]);
-      }
+      } 
     }
   }, [hosts, host, onChange, integrations]);
 
-  // If there are no allowedHosts provided, then show all integrations. Otherwise, only show integrations
-  // that are provided in the dropdown for the user to choose from.
-  // const hostsOptions: SelectItem[] = integrations
-  //   ? integrations
-  //       .filter(i => (hosts?.length ? hosts?.includes(i.host) : true))
-  //       .map(i => ({ label: i.title, value: i.host }))
-  //   : [{ label: 'Loading...', value: 'loading' }];
 
   const notAvaliable = [{label: "No hosts available", value: "No hosts available"}];
 
@@ -128,7 +118,7 @@ useEffect(() => {
           disabled={hosts?.length === 1}
           label="Host"
           onChange={s => onChange(String(Array.isArray(s) ? s[0] : s))}
-          selected={hostsData[0]}
+          selected={host}
           items={selectOptions}
           data-testid="host-select"
         />
