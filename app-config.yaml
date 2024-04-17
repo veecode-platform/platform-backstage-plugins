@@ -67,14 +67,14 @@ proxy:
         Accept: application/json
       
     '/kong-manager/api':
-      target: https://api.manager.apr.vee.codes/default
+      target: https://api.manager.apr.vee.codes
       allowedHeaders: ['Authorization']
       headers: 
         Accept: application/json
         content-type: application/json
 
     '/kong-other-manager/api': #should be used as a annotation
-      target: https://api.manager.apr.vee.codes/default
+      target: https://api.manager.apr.vee.codes
       allowedHeaders: ['Authorization']
       headers: 
         Accept: application/json
