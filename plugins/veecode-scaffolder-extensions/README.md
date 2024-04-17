@@ -80,6 +80,64 @@ const routes = (
 ...
 ```
 
+To make the **scaffolder** key information in `app-config.yaml` visible and accessible, we need to make a few changes:
+In the `packages.json` present in `packages>app>package.json`, add the following code:
+
+```diff
+{
+  "name": "app",
+  "version": "0.0.0",
+  "private": true,
+  "bundled": true,
+  "backstage": {
+    "role": "frontend"
+  },
+...
++  "configSchema": "config.d.ts"
+}
+```
+
+Then create a file called `config.d.ts` at the same level as `package.json`:
+
+```ts
+export interface Config {
+  /**
+  * Configuration for scaffolder towards various external repository provider systems
+  * @visibility frontend
+  */
+  scaffolder?: {
+    /** Integration configuration for GitHub */
+    github?: Array<{
+      /**
+       * The hostname of the given GitHub instance
+       * @visibility frontend
+       */
+      host: string;
+      /**
+       * Token used to authenticate requests.
+       * @visibility frontend
+       */
+      token?: string;
+    }>;
+
+    /** Integration configuration for Gitlab */
+    gitlab?: Array<{
+      /**
+       * The hostname of the given Gitlab instance
+       * @visibility frontend
+       */
+      host: string;
+      /**
+       * Token used to authenticate requests.
+       * @visibility frontend
+       */
+      token?: string;
+    }>;
+  };
+}
+
+```
+
 You can now use the field in your templates.
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/ffdd052f-6a94-4a17-8dde-f1ce00b0421d)
