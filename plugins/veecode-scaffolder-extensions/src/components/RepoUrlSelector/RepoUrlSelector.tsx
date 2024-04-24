@@ -26,7 +26,7 @@ export { RepoUrlSelectorSchema } from './schema';
  */
 export const RepoUrlSelector = (props: RepoUrlSelectorProps) => {
 
-  const { uiSchema, onChange, rawErrors, formData, schema } = props;
+  const { uiSchema, onChange, rawErrors, formData, schema, formContext } = props;
   const [state, setState] = useState<RepoUrlPickerState>(
     parseRepoPickerUrl(formData),
   );
@@ -202,6 +202,7 @@ export const RepoUrlSelector = (props: RepoUrlSelectorProps) => {
       )}
       <RepoUrlPickerRepoName
         repoName={state.repoName}
+        formContext={formContext}
         allowedRepos={allowedRepos}
         onChange={repo =>
           setState(prevState => ({ ...prevState, repoName: repo }))

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /*
  * Copyright 2021 The Backstage Authors
  *
@@ -25,8 +26,9 @@ export const RepoUrlPickerRepoName = (props: {
   allowedRepos?: string[];
   onChange: (host: string) => void;
   rawErrors: string[];
+  formContext: any
 }) => {
-  const { repoName, allowedRepos, onChange, rawErrors } = props;
+  const { repoName, allowedRepos, onChange, rawErrors,formContext } = props;
 
   useEffect(() => {
     // If there is no repoName chosen currently
@@ -36,7 +38,14 @@ export const RepoUrlPickerRepoName = (props: {
         onChange(allowedRepos[0]);
       }
     }
-  }, [allowedRepos, repoName, onChange]);
+  }, [allowedRepos, repoName, onChange, formContext]);
+
+  useEffect(()=>{
+    const {formData} = formContext;
+    if(formData.componentId){
+      onChange(formData.componentId)
+    }
+  },[formContext])
 
   const repoItems: SelectItem[] = allowedRepos
     ? allowedRepos.map(i => ({ label: i, value: i }))
@@ -65,7 +74,7 @@ export const RepoUrlPickerRepoName = (props: {
             <InputLabel htmlFor="repoNameInput">Repository</InputLabel>
             <Input
               id="repoNameInput"
-              onChange={e => onChange(String(e.target.value))}
+              onChange={(e)=>onChange(String(e.target.value))}
               value={repoName}
             />
           </>
