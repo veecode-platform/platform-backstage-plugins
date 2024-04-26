@@ -42,7 +42,7 @@ import { discoveryApiRef, useApi } from '@backstage/core-plugin-api';
 import { setTokenCookie } from './cookieAuth';
 
 import { KongServiceManagerPage } from '@veecode-platform/plugin-kong-service-manager';
-import { RepoUrlSelectorExtension, ResourcePickerExtension } from '@veecode-platform/veecode-scaffolder-extensions';
+import { RepoUrlSelectorExtension, ResourcePickerExtension, UploadFilePickerExtension } from '@veecode-platform/veecode-scaffolder-extensions';
 import { apiDocsPlugin } from '@backstage/plugin-api-docs';
 
 
@@ -110,6 +110,7 @@ const routes = (
       <ScaffolderFieldExtensions>
           <RepoUrlSelectorExtension/>
           <ResourcePickerExtension/>
+          <UploadFilePickerExtension/>
       </ScaffolderFieldExtensions>
     </Route>
     <Route path="/api-docs" element={<ApiExplorerPage />} />
