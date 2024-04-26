@@ -16,11 +16,15 @@
 
 /** Configuration for the devportal plugin behavior */
 export interface Config {
+  /**
+  * Configuration for scaffolder towards various external repository provider systems
+  * @visibility frontend
+  */
+  scaffolder?: {
     /**
-    * Configuration for scaffolder towards various external repository provider systems
-    * @visibility frontend
-    */
-    scaffolder?: {
+      * @visibility frontend
+      */
+    providers?: {
       /** Integration configuration for GitHub */
       github?: Array<{
         /**
@@ -34,7 +38,7 @@ export interface Config {
          */
         token?: string;
       }>;
-  
+
       /** Integration configuration for Gitlab */
       gitlab?: Array<{
         /**
@@ -48,5 +52,6 @@ export interface Config {
          */
         token?: string;
       }>;
-    };
-  }
+    }
+  };
+}

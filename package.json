@@ -7,6 +7,7 @@
   },
   "scripts": {
     "dev": "concurrently \"yarn start\" \"yarn start-backend\"",
+    "dev-local": "NODE_OPTIONS='--no-node-snapshot' concurrently \"yarn start --config ../../app-config.local.yaml\" \"yarn start-backend --config ../../app-config.local.yaml\"",
     "start": "yarn workspace app start",
     "start-backend": "yarn workspace backend start",
     "build:backend": "yarn workspace backend build",
