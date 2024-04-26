@@ -40,12 +40,13 @@ To configure RepoUrlSelector, we need to make a few settings first:
 ```diff
 ...
 + scaffolder:
-+   github:
-+     - host: github.com
-+       token: ${GITHUB_TOKEN_SECRET}
-+   gitlab:
-+    - host: gitlab.com
-+      token: ${GITLAB_TOKEN_SECRET}
++   providers:
++     github:
++       - host: github.com
++         token: ${GITHUB_TOKEN_SECRET}
++     gitlab:
++       - host: gitlab.com
++         token: ${GITLAB_TOKEN_SECRET}
 ```
 
 <br/>
@@ -106,34 +107,39 @@ export interface Config {
   * @visibility frontend
   */
   scaffolder?: {
-    /** Integration configuration for GitHub */
-    github?: Array<{
-      /**
-       * The hostname of the given GitHub instance
-       * @visibility frontend
-       */
-      host: string;
-      /**
-       * Token used to authenticate requests.
-       * @visibility frontend
-       */
-      token?: string;
-    }>;
+    /**
+    * @visibility frontend
+    */
+    providers:{
+      /** Integration configuration for GitHub */
+        github?: Array<{
+          /**
+           * The hostname of the given GitHub instance
+           * @visibility frontend
+           */
+          host: string;
+          /**
+           * Token used to authenticate requests.
+           * @visibility frontend
+           */
+          token?: string;
+        }>;
 
-    /** Integration configuration for Gitlab */
-    gitlab?: Array<{
-      /**
-       * The hostname of the given Gitlab instance
-       * @visibility frontend
-       */
-      host: string;
-      /**
-       * Token used to authenticate requests.
-       * @visibility frontend
-       */
-      token?: string;
-    }>;
-  };
+        /** Integration configuration for Gitlab */
+        gitlab?: Array<{
+          /**
+           * The hostname of the given Gitlab instance
+           * @visibility frontend
+           */
+          host: string;
+          /**
+           * Token used to authenticate requests.
+           * @visibility frontend
+           */
+          token?: string;
+        }>;
+      };
+    }
 }
 
 ```
