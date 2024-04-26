@@ -1,15 +1,16 @@
 import React from 'react';
 import { UploadFilePickerProps } from "./schema";
-import { Box } from '@material-ui/core';
+import { Avatar, Box, Divider, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Typography } from '@material-ui/core';
+import RemoveIcon from '@material-ui/icons/Remove';
 import { useDropzone } from 'react-dropzone';
 import { useStyles } from './styles';
-import { FileUpload } from './assets/fileUpload';
-import RemoveIcon from '@material-ui/icons/Remove';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
+import { InfoBox } from '../shared';
 
 
 export const UploadFilePicker = (props:UploadFilePickerProps) => {
-   // const { onChange, rawErrors, required, formData } = props;
+    const { /* onChange, rawErrors, required, formData */ schema } = props;
 
    const onDrop = async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -25,7 +26,7 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
   };
 
    const {acceptedFiles, getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
-   const {uploadWrapper, uploadElement,textUploadElement, thumbsContainer, thumb, removeThumb} = useStyles();
+   const {uploadWrapper, uploadElement,textUploadElement, uploadedFileWrapper, thumb,iconUpload, removeThumb} = useStyles();
 
 
 //   const handleRemoveThumbnail = (thumbnailURL: string) => {
@@ -46,31 +47,63 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
 //   };
 
     // eslint-disable-next-line no-console
-    console.log(props)
+    console.log(props.schema.title)
 
     return (
-      <Box className={uploadWrapper}>
-        <div {...getRootProps({ className: `${uploadElement} dropzone` })}>
-          <input {...getInputProps()} />
-          <FileUpload/>
-          <p className={textUploadElement}>
-          {isDragActive ? "Drop the file here!" : "Drag the file here or click to upload..."}
-          </p>
+      <>
+        <Box my={1}>
+          <Typography variant="h5">
+            {schema.title ?? 'Upload a File'}
+          </Typography>
+          <Divider />
+        </Box>
+        <Box my={2}>
+          <Typography variant="body1">
+            {schema.description ?? 'Drag and drop or click anywhere below and add the file that will be used in the template.'}
+          </Typography>
+        </Box>
+
+        <div className={uploadWrapper}>
+        {acceptedFiles.length === 0 ?
+          (
+            <div {...getRootProps({ className: `${uploadElement} dropzone` })}>
+              <input {...getInputProps()} accept=".yaml, .yml, .json"/>
+              <CloudUploadIcon className={iconUpload} />
+              {acceptedFiles.length === 0 && (
+                <div className={textUploadElement}>
+                  {isDragActive
+                    ? <Typography variant="h6">Drop the file here</Typography>
+                    : <Typography variant="h6">Drag and drop a file or <strong>search</strong></Typography>  }
+                  <Typography variant="subtitle2">the file must be YAML or JSON</Typography>
+                </div>
+              )}
+            </div>
+          )
+           : (
+              <div className={uploadedFileWrapper}>
+                  <InfoBox message="✅ Uploaded File"/>
+                  <List className={thumb}>
+                    {acceptedFiles.map(file => (
+                      <ListItem key={file.name}>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <InsertDriveFileIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={file.name}
+                          secondary={`${file.size} bytes`}
+                        />
+                        <ListItemSecondaryAction className={removeThumb}>
+                          <RemoveIcon />
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                    ))}
+                  </List>
+              </div>
+            )}
         </div>
-        <aside className={thumbsContainer}>
-          <ul className={thumb}>
-            {acceptedFiles.map(file => (
-              <li key={file.name}>
-                <InsertDriveFileIcon/>
-                {file.name} - {file.size} bytes
-                <span className={removeThumb}>
-                    <RemoveIcon/>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </aside>
-      </Box>
+      </>
     );
 
 }
