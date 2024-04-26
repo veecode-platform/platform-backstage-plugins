@@ -13094,6 +13094,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-dropzone@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "@types/react-dropzone@npm:5.1.0"
+  dependencies:
+    react-dropzone: "*"
+  checksum: 2b68fcf0153fb00e17088907490b823b6d81a29a02e615f820e347df2546f9318c5f025eeb33d575c648d01a14e55a19e528c32907608b5a7f727ff0e96b3923
+  languageName: node
+  linkType: hard
+
 "@types/react-redux@npm:^7.1.20":
   version: 7.1.33
   resolution: "@types/react-redux@npm:7.1.33"
@@ -13876,7 +13885,7 @@ __metadata:
     "@types/pg": ^8.6.6
     "@types/supertest": ^2.0.8
     "@types/uuid": ^8.0.0
-    "@veecode-platform/plugin-application-common": ^0.1.61
+    "@veecode-platform/plugin-application-common": ^0.1.63
     axios: 0.27.0
     class-validator: ^0.11.0
     express: ^4.17.1
@@ -13896,7 +13905,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/plugin-application-common@^0.1.61, @veecode-platform/plugin-application-common@workspace:plugins/application-common":
+"@veecode-platform/plugin-application-common@^0.1.63, @veecode-platform/plugin-application-common@workspace:plugins/application-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/plugin-application-common@workspace:plugins/application-common"
   dependencies:
@@ -13931,7 +13940,7 @@ __metadata:
     "@testing-library/react": ^12.1.3
     "@testing-library/user-event": ^14.0.0
     "@types/node": "*"
-    "@veecode-platform/plugin-application-common": ^0.1.61
+    "@veecode-platform/plugin-application-common": ^0.1.63
     axios: ^1.2.3
     cross-fetch: ^3.1.5
     lodash: ^4.17.21
@@ -14068,7 +14077,9 @@ __metadata:
     "@testing-library/jest-dom": ^6.0.0
     "@testing-library/react": ^14.0.0
     "@testing-library/user-event": ^14.0.0
+    "@types/react-dropzone": ^5.1.0
     msw: ^1.0.0
+    react-dropzone: ^14.2.3
     react-use: ^17.2.4
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
@@ -15254,6 +15265,13 @@ __metadata:
   version: 1.0.0
   resolution: "atomic-sleep@npm:1.0.0"
   checksum: b95275afb2f80732f22f43a60178430c468906a415a7ff18bcd0feeebc8eec3930b51250aeda91a476062a90e07132b43a1794e8d8ffcf9b650e8139be75fa36
+  languageName: node
+  linkType: hard
+
+"attr-accept@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "attr-accept@npm:2.2.2"
+  checksum: 496f7249354ab53e522510c1dc8f67a1887382187adde4dc205507d2f014836a247073b05e9d9ea51e2e9c7f71b0d2aa21730af80efa9af2d68303e5f0565c4d
   languageName: node
   linkType: hard
 
@@ -20510,6 +20528,15 @@ __metadata:
   dependencies:
     flat-cache: ^3.0.4
   checksum: f49701feaa6314c8127c3c2f6173cfefff17612f5ed2daaafc6da13b5c91fd43e3b2a58fd0d63f9f94478a501b167615931e7200e31485e320f74a33885a9c74
+  languageName: node
+  linkType: hard
+
+"file-selector@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "file-selector@npm:0.6.0"
+  dependencies:
+    tslib: ^2.4.0
+  checksum: 7d051b6e5d793f3c6e2ab287ba5e7c2c6a0971bccc9d56e044c8047ba483e18f60fc0b5771c951dc707c0d15f4f36ccb4f1f1aaf385d21ec8f7700dadf8325ba
   languageName: node
   linkType: hard
 
@@ -30229,6 +30256,19 @@ __metadata:
   peerDependencies:
     react: ">= 0.14.7"
   checksum: f81c13bdf698d6f699178b6597cb43fff3ec7d2b47f489ee306499a814151822e21b2daed995840832a11261f24dbd56573fe9225d43df22c14af5c564041bc0
+  languageName: node
+  linkType: hard
+
+"react-dropzone@npm:*, react-dropzone@npm:^14.2.3":
+  version: 14.2.3
+  resolution: "react-dropzone@npm:14.2.3"
+  dependencies:
+    attr-accept: ^2.2.2
+    file-selector: ^0.6.0
+    prop-types: ^15.8.1
+  peerDependencies:
+    react: ">= 16.8 || 18.0.0"
+  checksum: 174b744d5ca898cf3d84ec1aeb6cef5211c446697e45dc8ece8287a03d291f8d07253206d5a1247ef156fd385d65e7de666d4d5c2986020b8543b8f2434e8b40
   languageName: node
   linkType: hard
 
