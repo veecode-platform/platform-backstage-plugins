@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UploadFilePickerProps } from "./schema";
 import { Avatar, Box, Divider, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Typography } from '@material-ui/core';
 import RemoveIcon from '@material-ui/icons/Remove';
@@ -10,44 +10,44 @@ import { InfoBox } from '../shared';
 
 
 export const UploadFilePicker = (props:UploadFilePickerProps) => {
-    const { /* onChange, rawErrors, required, formData */ schema } = props;
+  const {  onChange, formData,  schema } = props;
+    const [fileUploaded,setFileUploaded] = useState<File[]>([])
+    const {uploadWrapper, uploadElement,textUploadElement, uploadedFileWrapper, thumb,iconUpload, removeThumb} = useStyles();
 
    const onDrop = async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (file) {
-      // const thumbnailURL = await readThumbnailURL(file);
-
-
-      // eslint-disable-next-line no-console
-      console.log(file)
-      // onChange(file)
-     // setThumbnails([thumbnailURL]);
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64Data = reader.result as string;
+        onChange(base64Data)
+      }
+      reader.readAsDataURL(file);
+      setFileUploaded([file])  
     }
   };
 
-   const {acceptedFiles, getRootProps, getInputProps, isDragActive} = useDropzone({onDrop});
-   const {uploadWrapper, uploadElement,textUploadElement, uploadedFileWrapper, thumb,iconUpload, removeThumb} = useStyles();
+
+   const {acceptedFiles, getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, accept:{
+    'application/json': ['.json'], 
+    'application/x-yaml': ['.yaml', '.yml'] 
+   }});
 
 
-//   const handleRemoveThumbnail = (thumbnailURL: string) => {
-//     setThumbnails((prevThumbnails) =>
-//       prevThumbnails.filter((url) => url !== thumbnailURL)
-//     );
-//   };
+   const handleRemoveItem = (f: File) => {
+    const updateFiles = acceptedFiles.filter(fileItem => fileItem.name !== f.name);
+    setFileUploaded(updateFiles)
+  };
 
-//   const readThumbnailURL = (file: File): Promise<string> => {
-//     return new Promise((resolve) => {
-//       const reader = new FileReader();
-//       reader.onload = (event) => {
-//         const thumbnailURL = event.target?.result as string;
-//         resolve(thumbnailURL);
-//       };
-//       reader.readAsDataURL(file);
-//     });
-//   };
-
-    // eslint-disable-next-line no-console
-    console.log(props.schema.title)
+  useEffect(()=>{
+    if(formData){
+      const base64Content = formData.split(",")[1];
+      const buffer = Uint8Array.from(atob(base64Content), c => c.charCodeAt(0)).buffer;
+      const blob = new Blob([buffer], { type: 'application/octet-stream' });
+      const file = new File([blob], 'File', { type: 'application/octet-stream' });
+      setFileUploaded([file])
+    }
+  },[formData]);
 
     return (
       <>
@@ -64,41 +64,39 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
         </Box>
 
         <div className={uploadWrapper}>
-        {acceptedFiles.length === 0 ?
+        {!fileUploaded.length ?
           (
             <div {...getRootProps({ className: `${uploadElement} dropzone` })}>
               <input {...getInputProps()} accept=".yaml, .yml, .json"/>
-              <CloudUploadIcon className={iconUpload} />
-              {acceptedFiles.length === 0 && (
+              <CloudUploadIcon className={iconUpload} />  
                 <div className={textUploadElement}>
                   {isDragActive
                     ? <Typography variant="h6">Drop the file here</Typography>
                     : <Typography variant="h6">Drag and drop a file or <strong>search</strong></Typography>  }
                   <Typography variant="subtitle2">the file must be YAML or JSON</Typography>
-                </div>
-              )}
+                </div>   
             </div>
           )
            : (
               <div className={uploadedFileWrapper}>
                   <InfoBox message="✅ Uploaded File"/>
                   <List className={thumb}>
-                    {acceptedFiles.map(file => (
-                      <ListItem key={file.name}>
-                        <ListItemAvatar>
-                          <Avatar>
-                            <InsertDriveFileIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={file.name}
-                          secondary={`${file.size} bytes`}
-                        />
-                        <ListItemSecondaryAction className={removeThumb}>
-                          <RemoveIcon />
-                        </ListItemSecondaryAction>
-                      </ListItem>
-                    ))}
+                      {fileUploaded.map(file => (
+                          <ListItem key={file.name}>
+                            <ListItemAvatar>
+                              <Avatar>
+                                <InsertDriveFileIcon />
+                              </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                              primary={file.name}
+                              secondary={`${file.size} bytes`}
+                            />
+                            <ListItemSecondaryAction className={removeThumb} onClick={()=>handleRemoveItem(file)}>
+                              <RemoveIcon />
+                            </ListItemSecondaryAction>
+                          </ListItem>
+                      ))}
                   </List>
               </div>
             )}

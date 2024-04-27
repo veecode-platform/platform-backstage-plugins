@@ -33,7 +33,7 @@ export const resourceQueryFilterExpressionSchema = z.record(
  * @public
  */
 export const ResourcePickerFieldSchema = makeFieldSchemaFromZod(
-  z.string(),
+  z.object({}),
   z.object({
     defaultKind: z
       .string()
@@ -59,7 +59,7 @@ export type ResourcePickerUiOptions =
   typeof ResourcePickerFieldSchema.uiOptionsType;
 
   export type ResourcePickerProps = typeof ResourcePickerFieldSchema.type & {
-    onChange: (newFormData: object | any, es?: ErrorSchema<string>, id?: string) => any;
+    onChange: (newFormData: object, es?: ErrorSchema<string>, id?: string) => any;
   };
 
 export const ResourcePickerSchema = ResourcePickerFieldSchema.schema;

@@ -22,7 +22,6 @@ export const useStyles = makeStyles(theme => ({
         gap: '1rem',
         padding: '2rem .5rem',
         marginTop: '.6rem',
-        transition: 'all 0.3s ease-in',
         '& strong':{
             color: theme.palette.link,
             cursor: 'pointer'
@@ -45,6 +44,7 @@ export const useStyles = makeStyles(theme => ({
     uploadedFileWrapper:{
         width:'90%',
         maxWidth:'1100px',
+        padding: '1.1rem .5rem'
     },
     thumb:{
         width: '100%',

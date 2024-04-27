@@ -8,9 +8,8 @@ import { makeFieldSchemaFromZod } from '../../utils';
  */
 
 export const UploadFileFieldPickerSchema = makeFieldSchemaFromZod(
-    // z.string(),
+    z.string(),
     z.object({
-        file: z.instanceof(FileList).transform(list=>list.item(0)),
         format: z.string().nonempty('Format is required').describe('Format used YAML or JSON ')
     })
 )
