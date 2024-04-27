@@ -37,6 +37,7 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
    const handleRemoveItem = (f: File) => {
     const updateFiles = acceptedFiles.filter(fileItem => fileItem.name !== f.name);
     setFileUploaded(updateFiles)
+    onChange(undefined)
   };
 
   useEffect(()=>{
