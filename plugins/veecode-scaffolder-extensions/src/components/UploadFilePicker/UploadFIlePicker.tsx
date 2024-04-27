@@ -65,7 +65,7 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
         </Box>
 
         <div className={uploadWrapper}>
-        {!fileUploaded.length ?
+        {!formData ?
           (
             <div {...getRootProps({ className: `${uploadElement} dropzone` })}>
               <input {...getInputProps()} accept=".yaml, .yml, .json"/>
