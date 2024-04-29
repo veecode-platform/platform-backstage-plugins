@@ -3,7 +3,7 @@ import { createBuiltinActions, createRouter } from '@backstage/plugin-scaffolder
 import { Router } from 'express';
 import type { PluginEnvironment } from '../types';
 import { ScmIntegrations } from '@backstage/integration';
-import { ParseJsonAction } from '@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions';
+import { parseJsonAction,createFileAction } from '@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions';
 
 export default async function createPlugin(
   env: PluginEnvironment,
@@ -14,7 +14,8 @@ export default async function createPlugin(
   const integrations = ScmIntegrations.fromConfig(env.config);
 
   const actions = [
-    ParseJsonAction(),
+    parseJsonAction(),
+    createFileAction(),
     ...createBuiltinActions({
       integrations,
       config: env.config,
