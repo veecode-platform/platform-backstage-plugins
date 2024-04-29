@@ -19,7 +19,7 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { InputError } from '@backstage/errors';
 import { JsonSpec } from './types';
 
-export function ParseJsonAction() {
+export function parseJsonAction() {
   return createTemplateAction<{
     resource: string;
   }>({
