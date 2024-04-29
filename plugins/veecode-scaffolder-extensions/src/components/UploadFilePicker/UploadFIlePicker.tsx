@@ -9,6 +9,7 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import { InfoBox } from '../shared';
 import { convertToFile } from './utils';
 
+// Possible future improvement: multiple files
 
 export const UploadFilePicker = (props:UploadFilePickerProps) => {
   const {  onChange, formData, required, rawErrors, schema } = props;
@@ -32,7 +33,9 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
    const {acceptedFiles, getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, accept:{
     'application/json': ['.json'], 
     'application/x-yaml': ['.yaml', '.yml'] 
-   }});
+   },
+    maxSize: 1000000
+  });
 
 
    const handleRemoveItem = (f: File) => {
@@ -40,7 +43,6 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
     setFileUploaded(updateFiles)
     onChange(undefined)
   };
-
 
     return (
       <>
@@ -88,7 +90,7 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
                             </ListItemAvatar>
                             <ListItemText
                               primary={file.name}
-                              secondary={`${file.size} bytes`}
+                              secondary={`${(file.size/1024).toFixed(2)} KB`}
                             />
                             <ListItemSecondaryAction className={removeThumb} onClick={()=>handleRemoveItem(file)}>
                               <RemoveIcon />
