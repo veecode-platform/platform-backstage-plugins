@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState } from 'react';
 import { UploadFilePickerProps } from "./schema";
-import { Avatar, Box, Divider, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Typography } from '@material-ui/core';
+import { Avatar, Box, Divider, FormControl, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText, Typography } from '@material-ui/core';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { useDropzone } from 'react-dropzone';
 import { useStyles } from './styles';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import { InfoBox } from '../shared';
+import { convertToFile } from './utils';
 
 
 export const UploadFilePicker = (props:UploadFilePickerProps) => {
-  const {  onChange, formData,  schema } = props;
-    const [fileUploaded,setFileUploaded] = useState<File[]>([])
+  const {  onChange, formData, required, rawErrors, schema } = props;
+    const [fileUploaded,setFileUploaded] = useState<File[]>(formData ? [convertToFile(formData)] : [])
     const {uploadWrapper, uploadElement,textUploadElement, uploadedFileWrapper, thumb,iconUpload, removeThumb} = useStyles();
 
    const onDrop = async (acceptedFiles: File[]) => {
@@ -40,15 +41,6 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
     onChange(undefined)
   };
 
-  useEffect(()=>{
-    if(formData){
-      const base64Content = formData.split(",")[1];
-      const buffer = Uint8Array.from(atob(base64Content), c => c.charCodeAt(0)).buffer;
-      const blob = new Blob([buffer], { type: 'application/octet-stream' });
-      const file = new File([blob], 'File', { type: 'application/octet-stream' });
-      setFileUploaded([file])
-    }
-  },[formData]);
 
     return (
       <>
@@ -64,11 +56,16 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
           </Typography>
         </Box>
 
-        <div className={uploadWrapper}>
+        <FormControl 
+          className={uploadWrapper}
+          margin="normal"
+          required={required}
+          error={rawErrors?.length > 0}
+          >
         {!formData ?
           (
             <div {...getRootProps({ className: `${uploadElement} dropzone` })}>
-              <input {...getInputProps()} accept=".yaml, .yml, .json"/>
+              <input {...getInputProps()} />
               <CloudUploadIcon className={iconUpload} />  
                 <div className={textUploadElement}>
                   {isDragActive
@@ -101,7 +98,7 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
                   </List>
               </div>
             )}
-        </div>
+        </FormControl>
       </>
     );
 
