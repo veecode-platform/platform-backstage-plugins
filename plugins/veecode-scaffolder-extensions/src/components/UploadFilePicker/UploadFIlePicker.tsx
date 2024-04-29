@@ -73,7 +73,7 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
                   {isDragActive
                     ? <Typography variant="h6">Drop the file here</Typography>
                     : <Typography variant="h6">Drag and drop a file or <strong>search</strong></Typography>  }
-                  <Typography variant="subtitle2">the file must be YAML or JSON</Typography>
+                  <Typography variant="subtitle2">The file must be YAML or JSON and up to <strong>1MB in size</strong></Typography>
                 </div>   
             </div>
           )
