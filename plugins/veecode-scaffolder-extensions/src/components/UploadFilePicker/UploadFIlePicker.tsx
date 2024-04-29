@@ -103,5 +103,4 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
         </FormControl>
       </>
     );
-
 }
