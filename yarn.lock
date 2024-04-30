@@ -15058,7 +15058,7 @@ __metadata:
     "@types/pg": ^8.6.6
     "@types/supertest": ^2.0.8
     "@types/uuid": ^8.0.0
-    "@veecode-platform/plugin-application-common": ^0.1.68
+    "@veecode-platform/plugin-application-common": ^0.1.69
     axios: 0.27.0
     class-validator: ^0.11.0
     express: ^4.17.1
@@ -15078,7 +15078,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/plugin-application-common@^0.1.68, @veecode-platform/plugin-application-common@workspace:plugins/application-common":
+"@veecode-platform/plugin-application-common@^0.1.69, @veecode-platform/plugin-application-common@workspace:plugins/application-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/plugin-application-common@workspace:plugins/application-common"
   dependencies:
@@ -15113,7 +15113,7 @@ __metadata:
     "@testing-library/react": ^12.1.3
     "@testing-library/user-event": ^14.0.0
     "@types/node": "*"
-    "@veecode-platform/plugin-application-common": ^0.1.68
+    "@veecode-platform/plugin-application-common": ^0.1.69
     axios: ^1.2.3
     cross-fetch: ^3.1.5
     lodash: ^4.17.21
