@@ -49,7 +49,7 @@ export const useStyles = makeStyles<Theme>(theme=>({
       width: '100%',
       display: 'flex',
       margin: '10rem 1rem',
-      gap: '2rem'
+      gap: '2rem',
     },
     jobItem:{
       width: '350px',
