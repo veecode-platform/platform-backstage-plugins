@@ -1,3 +1,4 @@
+/** @public */
 export interface Workflow {
     id: number;
     nodeId: string;
@@ -10,39 +11,65 @@ export interface Workflow {
     html_url: string;
     badgeUrl: string;
 }
+
+/** @public */
 export interface WorkflowResponseFromApi {
     total_count: number;
     workflows: Workflow[];
 }
 
+/** @public */
 export interface WorkflowRun {  
     id: number;
     name: string;
-    headBranch: string;
+    head_branch: string;
     event: string;
     status: string;
     conclusion: string;
-    runStartedAt: string;
-    createdAt: string;
-    updatedAt: string;
+    run_started_at: string;
+    created_at: string;
+    updated_at: string;
+    actor?: Actor;
+    path?:string;
+    artifacts_url?:string;
+    head_sha?:string;
+    repository?: Repository
 }
 
+/** @public */
+export type Actor = {
+  id: number,
+  login: string,
+  avatar_url: string
+}
+
+/** @public */
+export type Repository = {
+  id: number,
+  name: string,
+  full_name: string
+}
+
+/** @public */
 export interface WorkflowRunsResponseFromApi {
     total_count: number;
     workflow_runs: WorkflowRun[];
 }
 
+/** @public */
 export interface Branches {
     name: string;
     commit?: Commit,
     protected: boolean;
 }
 
+/** @public */
 export interface Commit {
     sha: string ,
     url: string
 }
 
+/** @public */
 export interface WorkflowResultsProps {
     id?: number,
     name?: string,
@@ -54,7 +81,8 @@ export interface WorkflowResultsProps {
     parameters?: WorkflowDispatchParameters[] | []
   }
 
-  export interface WorkflowDispatchParameters {
+/** @public */
+export interface WorkflowDispatchParameters {
     name: string
     description: string
     required: boolean
@@ -62,3 +90,32 @@ export interface WorkflowResultsProps {
     default: string | boolean 
     options?: Array<any>
 }
+
+/** @public */
+export interface Step {
+    name: string;
+    status: string;
+    conclusion?: string;
+    number: number; // starts from 1
+    started_at?: string;
+    completed_at?: string;
+  };
+  
+  /** @public */
+  export interface Job {
+    html_url?: string;
+    status: string;
+    conclusion?: string;
+    started_at: string;
+    completed_at?: string;
+    id: number;
+    name: string;
+    steps?: Step[];
+  };
+  
+  /** @public */
+  export interface Jobs {
+    total_count: number;
+    jobs: Job[];
+  };
+

@@ -1,6 +1,6 @@
 import { createApiRef, DiscoveryApi, IdentityApi } from '@backstage/core-plugin-api';
 import { ScmAuthApi } from '@backstage/integration-react';
-import { Branches, WorkflowDispatchParameters, WorkflowResponseFromApi, WorkflowRun, WorkflowRunsResponseFromApi } from './utils/types';
+import { Branches, Jobs, WorkflowDispatchParameters, WorkflowResponseFromApi, WorkflowRun, WorkflowRunsResponseFromApi } from './utils/types';
 import YAML from "js-yaml"
 import { StatusWorkflowEnum } from './utils/enums/WorkflowListEnum';
 
@@ -43,6 +43,14 @@ export interface GithubWorkflowsApi {
     * stop a run from a worflow
     */
     stopWorkflowRun(runId: string, githubRepoSlug: string): Promise<void>;
+    /**
+    * list all jobs from a workflow run
+    */
+    listJobsForWorkflowRun(githubRepoSlug: string, workflowId: number,pageSize?:number,page?:number): Promise<Jobs>;
+    /**
+     *  get a workflow by id
+     */
+    getWorkflowRunById(runId: string, githubRepoSlug: string): Promise<WorkflowRun>
 }
 
 export const githubWorkflowsApiRef = createApiRef<GithubWorkflowsApi>({
@@ -240,6 +248,11 @@ class Client {
         }))
         return response
     }
+
+    async listJobsForWorkflowRun(githubRepoSlug: string, id:number){
+        const response = await this.fetch<any>(`/actions/runs/${id}/jobs`, githubRepoSlug)
+        return response
+    }
 }
 
 export class GithubWorkflowsApiClient implements GithubWorkflowsApi {
@@ -265,4 +278,12 @@ export class GithubWorkflowsApiClient implements GithubWorkflowsApi {
     async stopWorkflowRun(runId: string, githubRepoSlug: string): Promise<void> {
         return this.client.stopWorkFlowRun(runId, githubRepoSlug)
     }
+    // check pageSize and page params
+    async listJobsForWorkflowRun(githubRepoSlug: string, id:number): Promise<Jobs> {
+        return this.client.listJobsForWorkflowRun(githubRepoSlug, id)
+    }
+    async getWorkflowRunById(runId: string, githubRepoSlug: string) {
+        return this.client.getWorkflowRunById(runId,githubRepoSlug)
+    }
 }
+
