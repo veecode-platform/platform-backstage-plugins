@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from '@material-ui/core'
+import { Box, Paper, Tooltip, Typography } from '@material-ui/core'
 import React from 'react'
 import { Job } from '../../../utils/types'
 import { calculateDuration, getFileNameToPath } from '../../../utils/common'
@@ -20,18 +20,32 @@ export const JobsComponent : React.FC<JobsComponentProps> = (props) => {
   return (
     <Paper variant="outlined" className={jobsSection}>
       <Typography variant="h5">{title}</Typography>
-      <Typography variant="subtitle1" color="textSecondary">on: {event}</Typography>
-        <div className={jobsContent}>
-          {jobs.map(j => (
-            <Box key={j.id} className={jobItem}>
-              <WorkFlowStatus status={j.status} conclusion={j.conclusion} icon/>
+      <Typography variant="subtitle1" color="textSecondary">
+        on: {event}
+      </Typography>
+      <div className={jobsContent}>
+        {jobs.map(j => (
+          <Tooltip 
+            key={j.id} 
+            title="Click to see the steps..."
+            arrow
+            >
+            <Box className={jobItem}>
+              <WorkFlowStatus
+                status={j.status}
+                conclusion={j.conclusion}
+                icon
+              />
               <Typography variant="body1">{j.name}</Typography>
               <div className={jobDuration}>
-                <Typography variant='body1' align="right">{calculateDuration(j.started_at,j.completed_at!)}</Typography>
+                <Typography variant="body1" align="right">
+                  {calculateDuration(j.started_at, j.completed_at!)}
+                </Typography>
               </div>
             </Box>
-          ))}
-        </div>
+          </Tooltip>
+        ))}
+      </div>
     </Paper>
-  )
+  );
 }
