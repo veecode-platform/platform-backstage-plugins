@@ -5,14 +5,23 @@ export const useStyles = makeStyles<Theme>(theme=>({
       margin: theme.spacing(2)
     },
     container:{
-      backgroundColor: theme.palette.background.paper,
-      padding: '1rem'
+      padding: '1rem',
+      [theme.breakpoints.up('md')]: {    
+        backgroundColor: theme.palette.background.paper 
+       },
+       [theme.breakpoints.down('md')]: {
+        minWidth:'500px'
+       }
     },
     workflowDetailsNavbar:{
       padding: '.5rem 1rem',
     },
     itemContent:{
       width: '100%',
+      [theme.breakpoints.down('md')]: {
+        width: 'auto',
+        margin: '1rem'
+       }
     },
     itemWrapper:{
       flexDirection: 'column',
