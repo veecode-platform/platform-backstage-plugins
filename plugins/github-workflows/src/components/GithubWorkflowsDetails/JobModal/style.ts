@@ -28,18 +28,48 @@ export const useModalStyle = makeStyles(theme=>({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    marginTop: '.5rem',
     '& time':{
         fontWeight: 'bold'
     }
    },
    jobsList:{
     width: '100%',
-    '& > li:nth-child(even)':{
+    '& > li:nth-child(odd)':{
      backgroundColor: theme.palette.background.paper
     }
    },
    jobListItem:{
     width: '100%',
     height: '56px'
-   }
+   },
+   AccordionLogs:{
+    marginTop: '.5rem',
+    padding: '.5rem',
+    backgroundColor: theme.palette.background.paper
+   },
+   button: {
+    order: -1,
+    marginRight: 0,
+    marginLeft: '-20px',
+    },
+    modalLog: {
+        display: 'flex',
+        alignItems: 'center',
+        width: '85%',
+        height: '85%',
+        justifyContent: 'center',
+        margin: 'auto',
+    },
+    normalLogContainer: {
+        height: '75vh',
+        width: '100%',
+    },
+    modalLogContainer: {
+        height: '100%',
+        width: '100%',
+    },
+    log: {
+       backgroundColor: theme.palette.background.default,
+    },
 }));

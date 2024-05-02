@@ -97,6 +97,18 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
      }
   }
 
+  const downloadJobLogs = async (projectSlug: string,jobId:number) => {
+    try{
+      const response = await api.downloadJobLogsForWorkflowRun(projectSlug,jobId);
+      if(response) return response;
+      return null
+      } 
+    catch (e:any) {
+      errorApi.post(e);
+      return null
+     }
+  }
+
   return (
     <GithubWorkflowsContext.Provider
       value={{
@@ -112,7 +124,8 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
         workflowsByAnnotationsState,
         setWorkflowsByAnnotationsState,
         handleStartWorkflowRun,
-        handleStopWorkflowRun
+        handleStopWorkflowRun,
+        downloadJobLogs
       }}>
       {children}
     </GithubWorkflowsContext.Provider>

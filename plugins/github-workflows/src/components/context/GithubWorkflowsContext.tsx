@@ -15,7 +15,8 @@ export type GithubWorkflowsContextType = {
   workflowsByAnnotationsState: WorkflowResultsProps[] | null,
   setWorkflowsByAnnotationsState:  React.Dispatch<React.SetStateAction<WorkflowResultsProps[] | null>>,
   handleStartWorkflowRun: (workFlowId: number, projectSlug: string) => Promise<WorkflowRun | null>,
-  handleStopWorkflowRun: (runId: number, projectSlug: string) => Promise<void>
+  handleStopWorkflowRun: (runId: number, projectSlug: string) => Promise<void>,
+  downloadJobLogs: (projectSlug: string, jobId: number) => Promise<any>
 };
 
 export const GithubWorkflowsContext = createContext<GithubWorkflowsContextType>(null!);
