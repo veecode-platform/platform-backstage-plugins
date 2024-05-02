@@ -81,7 +81,8 @@ const cicdContent = (
   // You can for example enforce that all components of type 'service' should use GitHubActions
   <EntitySwitch>
     <EntitySwitch.Case if={isGithubActionsAvailable}>
-      <EntityGithubActionsContent />
+      {/* <EntityGithubActionsContent /> */}
+      <GithubWorkflowsList/>
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isGitlabAvailable}>
@@ -107,30 +108,30 @@ const cicdContent = (
   </EntitySwitch>
 );
 
-const WorkflowsContent = (
-  <EntitySwitch>
-    <EntitySwitch.Case if={isGithubActionsAvailable}>
-      <GithubWorkflowsList />
-    </EntitySwitch.Case>
+// const WorkflowsContent = (
+//   <EntitySwitch>
+//     <EntitySwitch.Case if={isGithubActionsAvailable}>
+//       <GithubWorkflowsList />
+//     </EntitySwitch.Case>
 
-    <EntitySwitch.Case>
-      <EmptyState
-        title="No CI/CD available for this entity"
-        missing="info"
-        description="You need to add an annotation to your component if you want to enable CI/CD for it. You can read more about annotations in Backstage by clicking the button below."
-        action={
-          <Button
-            variant="contained"
-            color="primary"
-            href="https://backstage.io/docs/features/software-catalog/well-known-annotations"
-          >
-            Read more
-          </Button>
-        }
-      />
-    </EntitySwitch.Case>
-  </EntitySwitch>
-);
+//     <EntitySwitch.Case>
+//       <EmptyState
+//         title="No CI/CD available for this entity"
+//         missing="info"
+//         description="You need to add an annotation to your component if you want to enable CI/CD for it. You can read more about annotations in Backstage by clicking the button below."
+//         action={
+//           <Button
+//             variant="contained"
+//             color="primary"
+//             href="https://backstage.io/docs/features/software-catalog/well-known-annotations"
+//           >
+//             Read more
+//           </Button>
+//         }
+//       />
+//     </EntitySwitch.Case>
+//   </EntitySwitch>
+// );
 
 const entityWarningContent = (
   <>
@@ -206,11 +207,11 @@ const serviceEntityPage = (
       <EntityKubernetesContent refreshIntervalMs={30000} />
     </EntityLayout.Route>
 
-    <EntityLayout.Route
+    {/* <EntityLayout.Route
       if={isGithubAvailable}
       path="/workflows" title="Workflows">
       {WorkflowsContent}
-    </EntityLayout.Route>
+    </EntityLayout.Route> */}
 
     <EntityLayout.Route
       if={isKongServiceManagerAvailable}
@@ -256,11 +257,11 @@ const websiteEntityPage = (
       {cicdContent}
     </EntityLayout.Route>
 
-    <EntityLayout.Route
+    {/* <EntityLayout.Route
       if={isGithubAvailable}
       path="/workflows" title="Workflows">
       {WorkflowsContent}
-    </EntityLayout.Route>
+    </EntityLayout.Route> */}
 
     <EntityLayout.Route
       if={isKongServiceManagerAvailable}
@@ -532,12 +533,12 @@ const clusterPage = (
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
     </EntityLayout.Route>
-
+{/* 
     <EntityLayout.Route
       if={isGithubAvailable}
       path="/workflows" title="Workflows">
       {WorkflowsContent}
-    </EntityLayout.Route>
+    </EntityLayout.Route> */}
 
     <EntityLayout.Route
       if={(entity) => {
@@ -584,14 +585,14 @@ const databasePage = (
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
     </EntityLayout.Route>
-    <EntityLayout.Route
+    {/* <EntityLayout.Route
       if={(entity) => {
         if(isGithubAvailable(entity)) return true;
         return false
       }}
       path="/workflows" title="Workflows">
       {WorkflowsContent}
-    </EntityLayout.Route>
+    </EntityLayout.Route> */}
   </EntityLayout>
 );
 

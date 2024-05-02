@@ -26,7 +26,6 @@ export const GithubRepoPicker = (props: {
   const { owner } = state;
 
   const [items, setItems] = useState<string[]>();
-  const [hasIntegration, setHasIntegration] = useState<boolean>(false);
   const [ownerList, setOwnerList] = useState<SelectItem[]>();
   const { githubScaffolderExists, githubTokenScaffolder, githubHostScaffolder } = useScaffolder();
 
@@ -47,36 +46,38 @@ export const GithubRepoPicker = (props: {
     }]
   }
 
-  useEffect(()=>{
-    async function fetchData(){
-      const getData = new ProviderService('github',githubHostScaffolder,githubTokenScaffolder).getUserAndOrgs();
-      try{
-        const user = (await getData).username;
-        const organizations = (await getData).organizations;
-        if(user !== "Not found")
-        { const ownerDataResult = [user, ...organizations];
-          setItems(ownerDataResult);
-          setHasIntegration(true)
-        } else {
-          const ownerDataResult = ["No owner available"];
-          setItems(ownerDataResult);
-          setHasIntegration(false)
-        }
-      }catch(err:any){
-        throw new Error(err)
+  const  fetchData = async () => {
+    const getData = new ProviderService('github',githubHostScaffolder,githubTokenScaffolder).getUserAndOrgs();
+    try{
+      const user = (await getData).username;
+      const organizations = (await getData).organizations;
+      if(user !== "Not found")
+      { const ownerDataResult = [user, ...organizations];
+        setItems(ownerDataResult);
+      } else {
+        const ownerDataResult = ["No owner available"];
+        setItems(ownerDataResult);
       }
+    }catch(err:any){
+      throw new Error(err)
     }
+  }
+
+useEffect(()=>{
     if(!hosts?.includes('github') || githubScaffolderExists ){
       fetchData()
     }
 },[]);
 
 useEffect(()=>{
-  const data = itemsList(items as string[]);
-  setOwnerList( data !== undefined ? data : [{label: messageLoading, value: messageLoading}]);
+  if(items){
+    const data = itemsList(items as string[]);
+    setOwnerList( data !== undefined ? data : [{label: messageLoading, value: messageLoading}]);
+    if(!owner){
+      onChange({owner:items[0]})
+    }
+  }
 },[items]);
-
-
 
   
   return (
@@ -87,7 +88,7 @@ useEffect(()=>{
         error={rawErrors?.length > 0 && !state.owner}
       >
         {
-          hasIntegration ? (
+          githubScaffolderExists ? (
             <>
               {allowedOwners?.length ? (
                     <Select

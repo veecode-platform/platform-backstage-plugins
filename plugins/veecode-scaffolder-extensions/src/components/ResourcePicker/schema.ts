@@ -17,7 +17,6 @@
 
 import { z } from 'zod';
 import { makeFieldSchemaFromZod } from '../../utils';
-import { ErrorSchema } from '@rjsf/utils';
 
 /**
  * @public
@@ -33,7 +32,7 @@ export const resourceQueryFilterExpressionSchema = z.record(
  * @public
  */
 export const ResourcePickerFieldSchema = makeFieldSchemaFromZod(
-  z.string(),
+  z.object({}),
   z.object({
     defaultKind: z
       .string()
@@ -58,9 +57,7 @@ export const ResourcePickerFieldSchema = makeFieldSchemaFromZod(
 export type ResourcePickerUiOptions =
   typeof ResourcePickerFieldSchema.uiOptionsType;
 
-  export type ResourcePickerProps = typeof ResourcePickerFieldSchema.type & {
-    onChange: (newFormData: object | any, es?: ErrorSchema<string>, id?: string) => any;
-  };
+  export type ResourcePickerProps = typeof ResourcePickerFieldSchema.type;
 
 export const ResourcePickerSchema = ResourcePickerFieldSchema.schema;
 

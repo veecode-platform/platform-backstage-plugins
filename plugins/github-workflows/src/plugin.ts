@@ -1,12 +1,13 @@
-import { createApiFactory, createPlugin, discoveryApiRef, createComponentExtension, identityApiRef } from '@backstage/core-plugin-api';
+import { createApiFactory, createPlugin, discoveryApiRef, createComponentExtension, identityApiRef, createRoutableExtension } from '@backstage/core-plugin-api';
 import { scmAuthApiRef } from '@backstage/integration-react';
-import { rootRouteRef } from './routes';
+import { buildRouteRef, rootRouteRef } from './routes';
 import { githubWorkflowsApiRef, GithubWorkflowsApiClient } from './api';
 
 export const githubWorkflowsPlugin = createPlugin({
   id: 'githubWorkflows',
   routes: {
     root: rootRouteRef,
+    buildRoute: buildRouteRef
   },
   apis: [
     createApiFactory({
@@ -34,12 +35,11 @@ export const GithubWorkflowsOverview = githubWorkflowsPlugin.provide(
 );
 
 export const GithubWorkflowsList = githubWorkflowsPlugin.provide(
-  createComponentExtension({
+  createRoutableExtension({
     name: 'GithubWorkflowsList',
-    component: {
-      lazy: () =>
+    component: () =>
         import('./components/GitubWorkflowsList').then(m => m.GithubWorkflowsList),
-    },
+    mountPoint: rootRouteRef,
   })
 )
 

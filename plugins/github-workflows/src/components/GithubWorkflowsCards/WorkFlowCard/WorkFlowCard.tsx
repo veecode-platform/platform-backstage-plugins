@@ -3,16 +3,16 @@ import React, { useContext, useEffect, useState } from 'react';
 import { EmptyState, ErrorBoundary, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
 import { Box, Button, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography, makeStyles } from '@material-ui/core';
 import { WorkFlowItem } from './WorkFlowItem';
-import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
+import { GithubWorkflowsContext } from '../../context/GithubWorkflowsContext';
 import useAsync from 'react-use/lib/useAsync';
-import { WORKFLOW_ANNOTATION, useEntityAnnotations } from '../../hooks/useEntityAnnotations';
+import { WORKFLOW_ANNOTATION, useEntityAnnotations } from '../../../hooks/useEntityAnnotations';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
-import { SelectBranch } from '../SelectBranch';
-import { WorkflowResultsProps } from '../../utils/types';
+import { SelectBranch } from '../../SelectBranch';
+import { WorkflowResultsProps } from '../../../utils/types';
 import CachedIcon from '@material-ui/icons/Cached';
-import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
-import GithubIcon from '../assets/GithubIcon';
+import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
+import GithubIcon from '../../assets/GithubIcon';
 
 const useStyles = makeStyles(theme => ({
   title: {

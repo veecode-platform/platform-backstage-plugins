@@ -55,6 +55,27 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
     }
   }
 
+  const getWorkflowById = async (id: number,projectName:string) => {
+    try{
+      const workflow = await api.getWorkflowRunById(id.toString(),projectName);
+      return workflow
+    }catch(e:any){
+      errorApi.post(e);
+      return null
+    }
+  }
+
+  const listJobsForWorkflowRun = async (projectName:string, id: number) => {
+    try{
+      const data = await api.listJobsForWorkflowRun(projectName,id);
+      return data.jobs;
+    }catch(e:any){
+      errorApi.post(e);
+      return []
+
+    }
+  }
+
   const handleStartWorkflowRun = async (workFlowId: number, projectSlug: string) => { 
     try {
       const response = await api.startWorkflowRun(workFlowId.toString(), projectSlug, branch!, inputsWorkflowsParams ?? {});
@@ -76,20 +97,35 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
      }
   }
 
+  const downloadJobLogs = async (projectSlug: string,jobId:number) => {
+    try{
+      const response = await api.downloadJobLogsForWorkflowRun(projectSlug,jobId);
+      if(response) return response;
+      return null
+      } 
+    catch (e:any) {
+      errorApi.post(e);
+      return null
+     }
+  }
+
   return (
     <GithubWorkflowsContext.Provider
       value={{
         listAllWorkflows,
+        listJobsForWorkflowRun,
         branch,
         setBranchState,
         setInputs,
         inputsWorkflowsParams,
+        getWorkflowById,
         workflowsState,
         setWorkflowsState,
         workflowsByAnnotationsState,
         setWorkflowsByAnnotationsState,
         handleStartWorkflowRun,
-        handleStopWorkflowRun
+        handleStopWorkflowRun,
+        downloadJobLogs
       }}>
       {children}
     </GithubWorkflowsContext.Provider>

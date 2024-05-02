@@ -21,7 +21,6 @@ export const GitlabRepoPicker = (props: {
     : [{ label: 'Loading...', value: 'loading' }];
   const { owner } = state;
   const [items, setItems] = useState<string[]>();
-  const [hasIntegration, setHasIntegration] = useState<boolean>(false);
   const [ownerList, setOwnerList] = useState<SelectItem[]>();
   const { gitlabScaffolderExists, gitlabTokenScaffolder, gitlabHostScaffolder } = useScaffolder();
   const messageLoading = "loading ...";
@@ -43,25 +42,24 @@ export const GitlabRepoPicker = (props: {
     }]
   }
 
-  useEffect(()=>{
-    async function fetchData(){
-      const getData = new ProviderService('gitlab',gitlabHostScaffolder,gitlabTokenScaffolder).getUserAndOrgs();
-      try{
-        const user = (await getData).username;
-        const organizations = (await getData).organizations
-        if(user !== "Not found")
-        { const ownerDataResult = [user, ...organizations];
-          setItems(ownerDataResult);
-          setHasIntegration(true)
-        } else {
-          const ownerDataResult = ["Not Found"];
-          setItems(ownerDataResult);
-          setHasIntegration(false)
-        }
-      }catch(err:any){
-        throw new Error(err)
+  const fetchData= async () => {
+    const getData = new ProviderService('gitlab',gitlabHostScaffolder,gitlabTokenScaffolder).getUserAndOrgs();
+    try{
+      const user = (await getData).username;
+      const organizations = (await getData).organizations
+      if(user !== "Not found")
+      { const ownerDataResult = [user, ...organizations];
+        setItems(ownerDataResult);
+      } else {
+        const ownerDataResult = ["Not Found"];
+        setItems(ownerDataResult);
       }
+    }catch(err:any){
+      throw new Error(err)
     }
+  }
+
+  useEffect(()=>{
     if(!hosts?.includes('gitlab') || gitlabScaffolderExists){
       fetchData()
     }
@@ -69,8 +67,13 @@ export const GitlabRepoPicker = (props: {
 
 
 useEffect(()=>{
-  const data = itemsList(items as string[]);
-  setOwnerList( data !== undefined ? data : [{label: messageLoading, value: messageLoading}]);
+  if(items){
+    const data = itemsList(items as string[]);
+    setOwnerList( data !== undefined ? data : [{label: messageLoading, value: messageLoading}]);
+    if(!owner){
+      onChange({owner:items[0]})
+    }
+  }
 },[items]);
 
   
@@ -82,7 +85,7 @@ useEffect(()=>{
         error={rawErrors?.length > 0 && !owner}
       >
         {
-          hasIntegration ? (
+          gitlabScaffolderExists ? (
             <>
                 {allowedOwners?.length ? (
                     <Select

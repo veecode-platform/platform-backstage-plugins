@@ -1,26 +1,29 @@
+/* eslint-disable no-console */
+/* eslint-disable @backstage/no-undeclared-imports */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Table, TableColumn, Progress, ResponseErrorPanel, Link, EmptyState } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 import LanguageIcon from '@material-ui/icons/Language';
-import { WorkFlowStatus } from '../WorkFlowStatus';
-import { WorkFlowActions } from '../WorkFlowActions';
+import { WorkFlowStatus } from '../../WorkFlowStatus';
+import { WorkFlowActions } from '../../WorkFlowActions';
 import { Box, Button, Tooltip, Typography } from '@material-ui/core';
-import { SelectBranch } from '../SelectBranch';
-import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
-import { WorkflowDispatchParameters, WorkflowResultsProps } from '../../utils/types';
-import { truncateString } from '../../utils/common';
-import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
-import { useEntityAnnotations } from '../../hooks';
+import { SelectBranch } from '../../SelectBranch';
+import { GithubWorkflowsContext } from '../../context/GithubWorkflowsContext';
+import { WorkflowDispatchParameters, WorkflowResultsProps } from '../../../utils/types';
+import { truncateString } from '../../../utils/common';
+import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
+import { useEntityAnnotations } from '../../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import SyncIcon from '@material-ui/icons/Sync';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { ModalComponent } from '../ModalComponent';
+import { ModalComponent } from '../../ModalComponent';
 import DescriptionIcon from '@material-ui/icons/Description';
-import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
-import GithubIcon from '../assets/GithubIcon';
+import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
+import GithubIcon from '../../assets/GithubIcon';
+import { useNavigate } from 'react-router-dom';
 
 
 const useStyles = makeStyles(theme => ({
@@ -78,6 +81,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
   const [ showModal, setShowModal ] = useState<boolean>(false);
   const [parametersState, setParametersState] = useState<WorkflowDispatchParameters[]|null>(null)
   const [ loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
   const classes = useStyles();
 
   const refresh = async ()=> {
@@ -90,10 +94,8 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
     setShowModal(!showModal)
   }
 
-  const handleCICDLogs = (id: string) => {
-    const baseUrl = window.location.origin;
-    const newUrl = `${baseUrl}/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}/ci-cd/${id}`;
-    window.location.href = newUrl;
+  const handleCICDLogs = (id: string) => {   
+    navigate(`/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}/ci-cd/${id}`) 
   }
 
   const columns: TableColumn[] = [
@@ -142,10 +144,14 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
          </Box>
          ),
       logs:(
-        <Tooltip title="View Logs" placement="top">
+        <Tooltip title={item.lastRunId ?"Last run Logs..." : "First, run the workflow!"} placement="bottom">
           <DescriptionIcon 
             className={classes.clickable}
-            onClick={()=>handleCICDLogs(item.lastRunId!.toString())}
+            onClick={()=>{
+              if (!item.lastRunId) return;
+              handleCICDLogs(item.lastRunId!.toString())
+            }}
+            color={item.lastRunId? 'primary':'disabled'}
           />
          </Tooltip>
       )

@@ -1,9 +1,9 @@
 import { CatalogClient } from '@backstage/catalog-client';
-import { createBuiltinActions, createRouter } from '@backstage/plugin-scaffolder-backend';
+import { /* createBuiltinActions */ createRouter } from '@backstage/plugin-scaffolder-backend';
 import { Router } from 'express';
 import type { PluginEnvironment } from '../types';
-import { ScmIntegrations } from '@backstage/integration';
-import { ParseJsonAction } from '@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions';
+// import { ScmIntegrations } from '@backstage/integration';
+// import { parseJsonAction,createFileAction } from '@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions';
 
 export default async function createPlugin(
   env: PluginEnvironment,
@@ -11,17 +11,18 @@ export default async function createPlugin(
   const catalogClient = new CatalogClient({
     discoveryApi: env.discovery,
   });
-  const integrations = ScmIntegrations.fromConfig(env.config);
+ //  const integrations = ScmIntegrations.fromConfig(env.config);
 
-  const actions = [
-    ParseJsonAction(),
-    ...createBuiltinActions({
-      integrations,
-      config: env.config,
-      catalogClient,
-      reader: env.reader,
-    }),
-  ];
+  // const actions = [
+  //   parseJsonAction(),
+  //   createFileAction(),
+  //   ...createBuiltinActions({
+  //     integrations,
+  //     config: env.config,
+  //     catalogClient,
+  //     reader: env.reader,
+  //   }),
+  // ];
 
 
   return await createRouter({
@@ -31,6 +32,6 @@ export default async function createPlugin(
     reader: env.reader,
     catalogClient,
     identity: env.identity,
-    actions
+    // actions
   });
 }

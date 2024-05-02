@@ -2,7 +2,7 @@ import { configApiRef, useApi } from "@backstage/core-plugin-api";
 
 export function useScaffolder() {
     const config = useApi(configApiRef);
-    const scaffolder = config.getOptionalConfig('scaffolder');
+    const scaffolder = config.getOptionalConfig('scaffolder.providers');
     if(!scaffolder) return {};
     const gitlabScaffolder = (scaffolder.getOptional('gitlab') || []) as any[];
     const githubScaffolder = (scaffolder.getOptional('github') || []) as any[];
