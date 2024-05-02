@@ -18,7 +18,6 @@ export const useStyles = makeStyles<Theme>(theme=>({
       flexDirection: 'column',
       justifyContent: 'flex-start',
       alignItems: 'center',
-
     },
     workflowInfo:{
       display:'flex',
@@ -39,6 +38,14 @@ export const useStyles = makeStyles<Theme>(theme=>({
       hover:{
         color: theme.palette.linkHover
       }
+    },
+    footer:{
+      width: 'auto',
+      background: theme.palette.background.paper,
+      padding: '1rem 0',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end'
     },
     jobsSection:{
       marginTop: '1.5rem',

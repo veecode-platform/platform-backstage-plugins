@@ -1,10 +1,9 @@
-import { Chip, Grid, Paper, Typography } from '@material-ui/core';
+import { Chip, Grid, Paper,Typography } from '@material-ui/core';
 import React from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
 import { calculateDuration, truncateString } from '../../../utils/common';
-import TurnedInNotIcon from '@material-ui/icons/TurnedInNot';
 import { useStyles } from '../styles';
 import { WorkFlowStatus } from '../../WorkFlowStatus';
 
@@ -20,18 +19,17 @@ export type WorkflowDetailsProps = {
     author: string,
     branch: string,
     headCommit: string,
-    repo: string,
-    artifacts: string,
+    repo: string
 }
 
 
 export const WorkflowDetails: React.FC<WorkflowDetailsProps> = (props) => {
-  const { runStartedAt,status,conclusion,updatedAt,avatar,author, branch, headCommit,repo, artifacts } = props; 
-  const {workflowDetailsNavbar,itemContent,itemWrapper,workflowInfo, avatarImg, link} = useStyles();
+  const { runStartedAt,status,conclusion,updatedAt,avatar,author, branch, headCommit,repo } = props; 
+  const {workflowDetailsNavbar,itemContent,itemWrapper,workflowInfo, avatarImg,link} = useStyles();
 
   return (
     <Paper variant="outlined" className={workflowDetailsNavbar}>
-      <Grid container direction='row'>
+      <Grid container direction='row' alignItems='center'>
         <Grid item lg={4} className={itemContent}>
           <div className={itemWrapper}>
               <Typography variant="subtitle2" color="textSecondary"> Triggered to <time>{dayjs(runStartedAt).fromNow()}</time> </Typography>
@@ -58,16 +56,6 @@ export const WorkflowDetails: React.FC<WorkflowDetailsProps> = (props) => {
           <div className={itemWrapper}>
             <Typography variant="subtitle2" color="textSecondary" align='center'>Total duration</Typography>
             <Typography variant="h6" align='center'>{calculateDuration(runStartedAt, updatedAt)}</Typography>
-          </div>
-        </Grid>
-        <Grid item lg={2} className={itemContent}>
-          <div className={itemWrapper}>
-            <Typography variant="subtitle2" color="textSecondary" align='center'>Artifacts</Typography>
-            <a href={artifacts} target="_blank" title="Artifacts">
-              <Typography variant="h6" color="textSecondary" align='center'>
-                <TurnedInNotIcon />
-               </Typography>
-            </a>
           </div>
         </Grid>
       </Grid>

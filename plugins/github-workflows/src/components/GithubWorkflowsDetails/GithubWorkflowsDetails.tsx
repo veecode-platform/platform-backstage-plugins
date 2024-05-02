@@ -1,3 +1,4 @@
+/* eslint-disable @backstage/no-undeclared-imports */
 import React, { useContext, useState } from 'react'
 import { GithubWorkflowsContext, GithubWorkflowsProvider } from '../context';
 import { useRouteRefParams } from '@backstage/core-plugin-api';
@@ -8,15 +9,12 @@ import { Entity } from '@backstage/catalog-model';
 import useAsync from 'react-use/lib/useAsync';
 import { Progress, ResponseErrorPanel } from '@backstage/core-components';
 import { useStyles } from './styles';
-import { Grid } from '@material-ui/core';
+import { Button, Grid, Tooltip } from '@material-ui/core';
 import { WorkflowDetails } from './WorklowDetails';
 import { Job, WorkflowRun } from '../../utils/types';
 import {JobsComponent} from './JobsComponent/JobsComponent';
-
-// links
-// https://docs.github.com/en/rest/actions/workflow-jobs?apiVersion=2022-11-28
-// https://github.dev/backstage/community-plugins/blob/main/workspaces/github-actions/plugins/github-actions/src/components/WorkflowRunDetails/WorkflowRunDetails.tsx
-// https://github.com/ValberJunior/api-node-teste/actions/runs/8896179220
+import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
+import { useNavigate } from 'react-router-dom'
 
 const GithubWorkflowsDetails = () => {
   
@@ -26,7 +24,8 @@ const GithubWorkflowsDetails = () => {
   const { getWorkflowById,listJobsForWorkflowRun } = useContext(GithubWorkflowsContext);
   const [workflowRun,setWorkflowRun] = useState<WorkflowRun|null>(null);
   const [jobsRun, setJobsRun] = useState<Job[]|[]>([]);
-  const { root,container } = useStyles();
+  const { root,container,footer } = useStyles();
+  const navigate = useNavigate();
 
   const { loading, error } = useAsync(async (): Promise<void> => {
     const workflowPromise = await getWorkflowById(Number(id), projectName);
@@ -35,6 +34,10 @@ const GithubWorkflowsDetails = () => {
     setWorkflowRun(workflow);
     setJobsRun(jobs);
   }, []);
+
+  const handleBackNavigation = () => {
+    navigate(-1)
+  }
 
   if(loading){
     return <Progress />
@@ -59,13 +62,19 @@ const GithubWorkflowsDetails = () => {
                 branch={workflowRun!.head_branch}
                 headCommit={workflowRun!.head_sha!}
                 repo={workflowRun!.repository!.full_name}
-                artifacts={workflowRun!.artifacts_url!}
                />
                <JobsComponent 
                  path={workflowRun?.path!}
                  event={workflowRun?.event!}
                  jobs={jobsRun}
-                 />               
+                 />   
+               <div className={footer}>
+                <Tooltip title="Back" arrow placement='top-start'>
+                  <Button variant="outlined" onClick={handleBackNavigation}>
+                    <KeyboardReturnIcon/> 
+                  </Button>
+                </Tooltip> 
+               </div>           
             </Grid>
         </div>
     </GithubWorkflowsProvider>
