@@ -32,13 +32,8 @@ const GithubWorkflowsDetails = () => {
     const workflowPromise = await getWorkflowById(Number(id), projectName);
     const jobsPromise = await listJobsForWorkflowRun(projectName,Number(id));
     const [workflow, jobs] = await Promise.all([workflowPromise, jobsPromise]);
-
-    // eslint-disable-next-line no-console
-    console.log(jobs)
-
     setWorkflowRun(workflow);
     setJobsRun(jobs);
-
   }, []);
 
   if(loading){
@@ -70,16 +65,7 @@ const GithubWorkflowsDetails = () => {
                  path={workflowRun?.path!}
                  event={workflowRun?.event!}
                  jobs={jobsRun}
-                 />
-                {/* /**  JOBS
-                * <PATH-NAME-FILE>
-                * on <EVENT>
-                * 
-                * < [status] JOB1 [duration] > --- <[status] JOB2 [duration]>
-                *     JOB1 > accordion steps ... 
-                *  
-              */}
-                
+                 />               
             </Grid>
         </div>
     </GithubWorkflowsProvider>
