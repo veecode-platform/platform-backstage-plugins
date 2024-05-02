@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @backstage/no-undeclared-imports */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
@@ -93,11 +94,8 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
     setShowModal(!showModal)
   }
 
-  const handleCICDLogs = (id: string) => {
-    // const baseUrl = window.location.origin;
-    // const newUrl = `${baseUrl}/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}/ci-cd/${id}`;
-    // window.location.href = newUrl;
-    navigate(`/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}/ci-cd/${id}`)
+  const handleCICDLogs = (id: string) => {   
+    navigate(`/catalog/${entity.metadata.namespace}/${entity.kind.toLowerCase()}/${entity.metadata.name}/ci-cd/${id}`) 
   }
 
   const columns: TableColumn[] = [
@@ -146,10 +144,14 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
          </Box>
          ),
       logs:(
-        <Tooltip title="View Logs" placement="top">
+        <Tooltip title={item.lastRunId ?"Last run Logs..." : "First, run the workflow!"} placement="bottom">
           <DescriptionIcon 
             className={classes.clickable}
-            onClick={()=>handleCICDLogs(item.lastRunId!.toString())}
+            onClick={()=>{
+              if (!item.lastRunId) return;
+              handleCICDLogs(item.lastRunId!.toString())
+            }}
+            color={item.lastRunId? 'primary':'disabled'}
           />
          </Tooltip>
       )
