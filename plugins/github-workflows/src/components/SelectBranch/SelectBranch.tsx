@@ -8,8 +8,6 @@ import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
 import { Branches } from '../../utils/types';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
-import { Tooltip } from '@material-ui/core';
-
 
 type OptionsProps = {
   label: string;
@@ -27,19 +25,20 @@ export const SelectBranch = () => {
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity as Entity);
 
+  const getBranches = async () => {
+    try{
+      const data = await api.listBranchesFromRepo(projectName);
+      if (data) {
+        setBranches(data as Branches[]);
+        setBranchDefault(data[0].name as string)
+      }
+    }
+    catch(e:any){
+      errorApi.post(e);
+    }
+  };
+
   useEffect(() => {
-    const getBranches = async () => {
-      try{
-        const data = await api.listBranchesFromRepo(projectName);
-        if (data) {
-          setBranches(data as Branches[]);
-          setBranchDefault(data[0].name as string)
-        }
-      }
-      catch(e:any){
-        errorApi.post(e);
-      }
-    };
     getBranches();
   }, [api, projectName, setBranches]);
 
@@ -65,8 +64,7 @@ export const SelectBranch = () => {
   };
 
   return (
-    <Tooltip title="Select the branch" placement="top">
-      <div>
+      <div title="Select the branch">
         <Select
           onChange={handleSelectChange}
           label=""
@@ -74,6 +72,5 @@ export const SelectBranch = () => {
           items={options}
         />
       </div>
-    </Tooltip>
   );
 };

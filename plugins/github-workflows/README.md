@@ -27,7 +27,7 @@ The plugin offers two distinct approaches to integrate with your component:
 Before installing the plugin, there are some prerequisites to ensure its functionality:
 
 - Have a locally installed Backstage project, :heavy_check_mark: [How to create a Backstage app :page_with_curl:](https://backstage.io/docs/getting-started/create-an-app) .
-- Set up the catalog and integrate with GitHub, :heavy_check_mark: [How to configure the integration :page_with_curl:](https://backstage.io/docs/integrations/) .
+- Set up the catalog and integrate with GitHub with a `Personal Access Token`  or `Github App` , :heavy_check_mark: [How to configure the integration :page_with_curl:](https://backstage.io/docs/integrations/) .
 - Configure GitHub authentication, :heavy_check_mark: [How to configure authentication :page_with_curl:](https://backstage.io/docs/auth/) .
 - Configure the default GitHub Actions plugin, :heavy_check_mark: [Documentation of the Github actions plugin :page_with_curl:](https://github.com/backstage/backstage/tree/master/plugins/github-actions) .
 <br>
@@ -132,7 +132,7 @@ metadata:
     - title: Discord Chat
       url: https://discord.com/invite/EBHEGzX
   annotations:
-+    github.com/project-slug: example/ExampleComponent
++    github.com/project-slug: owner/repo
     backstage.io/techdocs-ref: dir:.
    
 spec:
@@ -152,7 +152,8 @@ spec:
 
 
 
-![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/6c82c7c7-b7e3-4bde-853f-c161e71dbb9e)
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/8e8e0e74-7a3e-4128-b7c6-ed9e90e28bb5)
+
 
 
 
@@ -192,7 +193,7 @@ We encourage users to create a new tab in their catalog named "Workflows" and ke
 + import { GithubWorkflowsList, isGithubAvailable } from '@veecode-platform/backstage-plugin-github-workflows'
 ...
 
-+ const WorkflowsContent = (
++ const cicdContent = (
 +  <EntitySwitch>
 +    <EntitySwitch.Case if={isGithubActionsAvailable}>
 +      <GithubWorkflowsList/>
@@ -217,85 +218,6 @@ We encourage users to create a new tab in their catalog named "Workflows" and ke
 +    </EntitySwitch.Case>
 +  </EntitySwitch>
 + );
-
-...
-
-const serviceEntityPage = (
-  <EntityLayout>
-    <EntityLayout.Route path="/" title="Overview">
-      {overviewContent}
-    </EntityLayout.Route>
-
-    <EntityLayout.Route path="/ci-cd" title="CI/CD">
-      {cicdContent}
-    </EntityLayout.Route>
-    
-+  <EntityLayout.Route
-+    if={isGithubAvailable}
-+    path="/workflows" title="Workflows">
-+    {WorkflowsContent}
-+  </EntityLayout.Route>
-
-    <EntityLayout.Route path="/api" title="API">
-      <Grid container spacing={3} alignItems="stretch">
-        <Grid item md={6}>
-          <EntityProvidedApisCard />
-        </Grid>
-        <Grid item md={6}>
-          <EntityConsumedApisCard />
-        </Grid>
-      </Grid>
-    </EntityLayout.Route>
-
-    <EntityLayout.Route path="/dependencies" title="Dependencies">
-      <Grid container spacing={3} alignItems="stretch">
-        <Grid item md={6}>
-          <EntityDependsOnComponentsCard variant="gridItem" />
-        </Grid>
-        <Grid item md={6}>
-          <EntityDependsOnResourcesCard variant="gridItem" />
-        </Grid>
-      </Grid>
-    </EntityLayout.Route>
-
-    <EntityLayout.Route path="/docs" title="Docs">
-      {techdocsContent}
-    </EntityLayout.Route>
-  </EntityLayout>
-);
-
-const websiteEntityPage = (
-  <EntityLayout>
-    <EntityLayout.Route path="/" title="Overview">
-      {overviewContent}
-    </EntityLayout.Route>
-
-    <EntityLayout.Route path="/ci-cd" title="CI/CD">
-      {cicdContent}
-    </EntityLayout.Route>
-
-+    <EntityLayout.Route
-+      if={isGithubAvailable}
-+      path="/workflows" title="Workflows">
-+      {WorkflowsContent}
-+    </EntityLayout.Route>
-
-    <EntityLayout.Route path="/dependencies" title="Dependencies">
-      <Grid container spacing={3} alignItems="stretch">
-        <Grid item md={6}>
-          <EntityDependsOnComponentsCard variant="gridItem" />
-        </Grid>
-        <Grid item md={6}>
-          <EntityDependsOnResourcesCard variant="gridItem" />
-        </Grid>
-      </Grid>
-    </EntityLayout.Route>
-
-    <EntityLayout.Route path="/docs" title="Docs">
-      {techdocsContent}
-    </EntityLayout.Route>
-  </EntityLayout>
-);
 
 ...
 
@@ -329,7 +251,7 @@ metadata:
     - title: Discord Chat
       url: https://discord.com/invite/EBHEGzX
   annotations:
-    github.com/project-slug: example/ExampleComponent
+    github.com/project-slug: owner/repo
     backstage.io/techdocs-ref: dir:.
 +   github.com/workflows: fileName.yaml
    
@@ -452,26 +374,31 @@ The functioning of the actions is also similar, when you click on the action but
 
 
 
-### Integration with github actions plugin
+### Workflow Details & Logs
 
-For a greater experience, we highlight the use of the default github actions plugin that backstage already provides, where it lists all the runs executed in the repository, and in it are also present all the logs of each action.
+In the Workflows List component, clicking on the Logs column:
 
-In the Workflows List component, integration occurs by clicking on the Logs column:
-
-![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/81419190-f31b-4b03-bf8c-6d8d037ddfa2)
-
-In the Card component, the integration occurs by clicking under the component label:
-
-![image (1)](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/2e502435-2cfd-44ad-b400-3100a6675544)
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/3a74f198-f6d0-4552-9810-71ce1a8f6849)
 
 
-With it correctly installed and available in the **CI-CD** tab, we were able to integrate the triggers of the actions with their logs and all their history:
+In the Card component, clicking under the component label:
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/a02b88f2-40fc-4281-a88f-44d903a57930)
 
 
+The Details component is then rendered with information about the last time the workflow was run, it stores information about the author of the commit, the commit id with link to github, the status and duration of the workflow in total.
 
+In addition, in the body of the page, it contains the name and filePath of the workflow and how it was executed, followed by the jobs:
 
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/31363776-44bb-4e20-8bdf-766919677910)
 
-![image10](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/3aec7a92-0fdb-4058-9f04-1b8cdb712966)
+In each Job we have the steps executed and at the end we have the log of that job, which can be rendered in the component itself or expanded to a new modal:
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/87c83b09-300e-4103-90f2-5cc965ff593c)
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/f671c396-7215-44e7-bfd4-d51c684633e2)
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/aadd7f14-a76a-4d93-9f07-f64630a8f5b7)
 
 
 

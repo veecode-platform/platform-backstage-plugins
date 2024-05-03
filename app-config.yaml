@@ -38,9 +38,13 @@ backend:
   # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
 integrations:
+  # github:
+  #   - host: github.com
+  #     token: ${GITHUB_TOKEN_SECRET}
   github:
     - host: github.com
-      token: ${GITHUB_TOKEN_SECRET}
+      apps:
+        - $include: github-app-backstage-devportal-gap-credentials.yaml
     ### Example for how to add your GitHub Enterprise instance using the API:
     # - host: ghe.example.net
     #   apiBaseUrl: https://ghe.example.net/api/v3
