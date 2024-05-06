@@ -401,4 +401,12 @@ In each Job we have the steps executed and at the end we have the log of that jo
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/aadd7f14-a76a-4d93-9f07-f64630a8f5b7)
 
 
+ ℹ️ **For github profile avatars to render, add this url to be allowed in your `app-config.yaml`**
+ 
 
+ ```diff
+   csp:
+    connect-src: ["'self'", 'http:', 'https:']
+    script-src: ["'self'", "'unsafe-eval'"]
++   img-src: ["'self'", 'data:','https://avatars.githubusercontent.com/']
+```

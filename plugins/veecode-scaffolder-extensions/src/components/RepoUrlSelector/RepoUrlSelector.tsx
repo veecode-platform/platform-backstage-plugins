@@ -204,6 +204,7 @@ export const RepoUrlSelector = (props: RepoUrlSelectorProps) => {
         repoName={state.repoName}
         formContext={formContext}
         allowedRepos={allowedRepos}
+        reuseName={schema.reuseName ?? null}
         onChange={repo =>
           setState(prevState => ({ ...prevState, repoName: repo }))
         }

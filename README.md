@@ -32,9 +32,10 @@ Veecode Platform Backstage Plugins
 | **Github Workfklows**        | [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/github-workflows) |
 | **Gitlab Pipelines**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/gitlab-pipelines) |
 | **Kong Service Manager**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/kong-service-manager) |
+| **Scaffolder Backend Module VeeCode Extensions**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/scaffolder-backend-module-veecode-extensions) |
 | **Vault Explorer**        |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/vault-explorer) |
-| **Veecode Platform Common** |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-platform-common) |
-| **Veecode Scaffolder Extensions** |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-scaffolder-extensions) |
+| **VeeCode Platform Common** |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-platform-common) |
+| **VeeCode Scaffolder Extensions** |  [docs 📑](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/veecode-scaffolder-extensions) |
 
 
 ---
