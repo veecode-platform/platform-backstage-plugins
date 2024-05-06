@@ -9,7 +9,7 @@ The plugin **Veecode Scaffolder Extensions** is an extension of the plugin `@bac
 
 ## Pre-requisites📄
 
-- Backstage version: "1.23.4"
+- Backstage version: "^1.23.4"
 - @backstage/plugin-scaffolder": "^1.18.0",
 - @backstage/plugin-scaffolder-react": "^1.8.3",
 
