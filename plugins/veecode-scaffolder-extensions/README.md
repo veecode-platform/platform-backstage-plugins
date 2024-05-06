@@ -258,3 +258,53 @@ example:
 
 The example above shows the properties of a custom kind called environment, which can be installed in your application using our [VeeCode Platform Common plugin ⭐](https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/veecode-platform-common/README.md).
 
+--- 
+
+### UploadFilePicker
+
+This custom field is used to upload files to our templates, it receives a file and transforms it into `base64` to be dealt with later.
+
+> ℹ️ At the moment the only formats accepted are **JSON** and **YAML**.
+
+We encourage you to use a custom action to handle the output of this field, we even have a custom action plugin to handle the output of this component and create a file within the skeleton of your template. [scaffolder-backend-module-veecode-extensions plugin ⭐]([https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/veecode-platform-common/README.md](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/scaffolder-backend-module-veecode-extensions)).
+
+**Example of use**
+
+```yaml
+ ...your template
+
+    - title: Upload a file
+      properties:
+        UploadFilePicker:
+          #title: -> optional
+          #description: -> optional
+          type: string
+          ui:field: UploadFilePicker
+          ui:options:
+            format: yaml  #or json
+          ui:backstage:
+            review:
+              show: false
+
+...
+```
+
+This is what the rendering of the field will look like:
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/dd61a165-ceb9-4fd0-9fa5-a3219db6a5cc)
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/fad17dfb-b196-44b2-af1c-d2de25663c87)
+
+As previously mentioned, the output of this field will be a `base64`. To handle this output and create a new file within our skeleton, we'll use a custom action present in the plugin **@scaffolder-backend-module-veecode-extension**, call `Create File`:
+
+```yaml
+# em Steps
+  steps:
+    - id: createFile
+      name: Create File
+      action: veecode-platform:extensions:createFile
+      input:
+        path: ./${{ parameters.componentId }}.yaml  # file name + ".extension"
+        content: ${{ parameters.UploadFilePicker }}  # referring to the field that was uploaded
+        format: yaml     # formato do conteudo
+```
