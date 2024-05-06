@@ -266,7 +266,7 @@ This custom field is used to upload files to our templates, it receives a file a
 
 > ℹ️ At the moment the only formats accepted are **JSON** and **YAML**.
 
-We encourage you to use a custom action to handle the output of this field, we even have a custom action plugin to handle the output of this component and create a file within the skeleton of your template. [scaffolder-backend-module-veecode-extensions plugin ⭐]([https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/veecode-platform-common/README.md](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/scaffolder-backend-module-veecode-extensions)).
+We encourage you to use a custom action to handle the output of this field, we even have a custom action plugin to handle the output of this component and create a file within the skeleton of your template. [scaffolder-backend-module-veecode-extensions plugin ⭐](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/scaffolder-backend-module-veecode-extensions).
 
 **Example of use**
 
