@@ -23,6 +23,13 @@ import { makeFieldSchemaFromZod } from '../../utils';
 export const RepoUrlSelectorFieldSchema = makeFieldSchemaFromZod(
   z.string(),
   z.object({
+    isLocation: z
+    .boolean()
+    .optional()
+    .default(false),
+    reuseName: z
+    .string()
+    .optional(),
     allowedHosts: z
       .array(z.string())
       .optional()
