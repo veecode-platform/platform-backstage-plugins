@@ -24,13 +24,13 @@ import InputLabel from '@material-ui/core/InputLabel';
 export const RepoUrlPickerRepoName = (props: {
   repoName?: string;
   allowedRepos?: string[];
-  reuseName?: string,
-  isLocation:  boolean,
+  reuseName?: string | null,
   onChange: (host: string) => void;
   rawErrors: string[];
   formContext: any
 }) => {
-  const { repoName, allowedRepos,reuseName,isLocation, onChange, rawErrors,formContext } = props;
+  const { repoName, allowedRepos,reuseName, onChange, rawErrors,formContext } = props;
+  const {formData} = formContext;
 
   useEffect(() => {
     // If there is no repoName chosen currently
@@ -43,8 +43,7 @@ export const RepoUrlPickerRepoName = (props: {
   }, [allowedRepos, repoName, onChange, formContext]);
 
   useEffect(()=>{
-    const {formData} = formContext;
-    if(formData[`${reuseName}`] && isLocation){
+    if(formData[`${reuseName}`]){
       onChange(formData[`${reuseName}`])
     }
   },[formContext])
@@ -77,6 +76,7 @@ export const RepoUrlPickerRepoName = (props: {
             <Input
               id="repoNameInput"
               onChange={(e)=>onChange(String(e.target.value))}
+              disabled={formData[`${reuseName}`]? true : false}
               value={repoName}
             />
           </>
