@@ -298,7 +298,7 @@ This is what the rendering of the field will look like:
 As previously mentioned, the output of this field will be a `base64`. To handle this output and create a new file within our skeleton, we'll use a custom action present in the plugin **@scaffolder-backend-module-veecode-extension**, call `Create File`:
 
 ```yaml
-# em Steps
+# Steps
   steps:
     - id: createFile
       name: Create File
@@ -306,5 +306,5 @@ As previously mentioned, the output of this field will be a `base64`. To handle 
       input:
         path: ./${{ parameters.componentId }}.yaml  # file name + ".extension"
         content: ${{ parameters.UploadFilePicker }}  # referring to the field that was uploaded
-        format: yaml     # formato do conteudo
+        format: yaml     # format
 ```
