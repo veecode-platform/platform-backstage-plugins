@@ -160,6 +160,8 @@ Add the field to your template file like this:
           title: Repository Location
           type: string
           description: Choose a location to create the Express Project
+          isLocation: true     # If used to register the component in git
+          reuseName:  # optional ->  if the parameter that collects the name of the component is different from componentId, add the name of the parameter in this option, if it is 'componentId' you don't need to add this option
           ui:field: RepoUrlSelector
           ui:options:
             allowedHosts:

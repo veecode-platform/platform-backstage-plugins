@@ -28,6 +28,48 @@ yarn add --cwd packages/backend @veecode-platform/backstage-plugin-scaffolder-ba
 ### parseJSON
 
 Receive objects transformed into strings, through a request or a specific field, parse this output and return an object with values that can be used in your template.
+
+in `packages/backend/src/plugins/scaffolder.ts`:
+
+```diff
+import { CatalogClient } from '@backstage/catalog-client';
+import { createBuiltinActions, createRouter } from '@backstage/plugin-scaffolder-backend';
+import { Router } from 'express';
+import type { PluginEnvironment } from '../types';
+import { ScmIntegrations } from '@backstage/integration';
++ import { parseJsonAction } from '@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions';
+
+export default async function createPlugin(
+  env: PluginEnvironment,
+): Promise<Router> {
+  const catalogClient = new CatalogClient({
+    discoveryApi: env.discovery,
+  });
+  const integrations = ScmIntegrations.fromConfig(env.config);
+
+  const actions = [
++   parseJsonAction(),
+    ...createBuiltinActions({
+      integrations,
+      config: env.config,
+      catalogClient,
+      reader: env.reader,
+    }),
+  ];
+
+
+  return await createRouter({
+    logger: env.logger,
+    config: env.config,
+    database: env.database,
+    reader: env.reader,
+    catalogClient,
+    identity: env.identity,
+    actions
+  });
+}
+```
+
 Here's an example:
 
 ```yaml
@@ -70,6 +112,47 @@ This custom action has the functionality of creating a file in the project gener
 It receives content in `base64`, and the format and name of the file to be created:
 
 > ℹ️ So far, the accepted formats are **YAML** and **JSON**
+
+in `packages/backend/src/plugins/scaffolder.ts`:
+
+```diff
+import { CatalogClient } from '@backstage/catalog-client';
+import { createBuiltinActions, createRouter } from '@backstage/plugin-scaffolder-backend';
+import { Router } from 'express';
+import type { PluginEnvironment } from '../types';
+import { ScmIntegrations } from '@backstage/integration';
++ import { createFileAction } from '@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions';
+
+export default async function createPlugin(
+  env: PluginEnvironment,
+): Promise<Router> {
+  const catalogClient = new CatalogClient({
+    discoveryApi: env.discovery,
+  });
+  const integrations = ScmIntegrations.fromConfig(env.config);
+
+  const actions = [
++   createFileAction(),
+    ...createBuiltinActions({
+      integrations,
+      config: env.config,
+      catalogClient,
+      reader: env.reader,
+    }),
+  ];
+
+
+  return await createRouter({
+    logger: env.logger,
+    config: env.config,
+    database: env.database,
+    reader: env.reader,
+    catalogClient,
+    identity: env.identity,
+    actions
+  });
+}
+```
 
 ```yaml
       - id: writeFile
