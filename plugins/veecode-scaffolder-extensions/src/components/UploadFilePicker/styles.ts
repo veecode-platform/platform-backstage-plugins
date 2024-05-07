@@ -20,7 +20,7 @@ export const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
         flexDirection: 'column',
         gap: '1rem',
-        padding: '2rem .5rem',
+        padding: '2.2rem .5rem',
         marginTop: '.6rem',
         '& strong':{
             color: theme.palette.link,
@@ -31,10 +31,11 @@ export const useStyles = makeStyles(theme => ({
         }
     },
     textUploadElement:{
-        fontSize: '1.2rem',
+        fontSize: '1rem',
         fontBold: '700',
         width: '70%',
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop: '-1rem'
     },
     uploadedFileWrapper:{
         width:'90%',
