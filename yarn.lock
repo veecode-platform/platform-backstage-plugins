@@ -3617,7 +3617,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-auth-backend-module-atlassian-provider@npm:^0.1.5, @backstage/plugin-auth-backend-module-atlassian-provider@npm:^0.1.9":
+"@backstage/plugin-auth-backend-module-atlassian-provider@npm:^0.1.9":
   version: 0.1.9
   resolution: "@backstage/plugin-auth-backend-module-atlassian-provider@npm:0.1.9"
   dependencies:
@@ -3630,7 +3630,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-auth-backend-module-aws-alb-provider@npm:^0.1.4, @backstage/plugin-auth-backend-module-aws-alb-provider@npm:^0.1.9":
+"@backstage/plugin-auth-backend-module-aws-alb-provider@npm:^0.1.9":
   version: 0.1.9
   resolution: "@backstage/plugin-auth-backend-module-aws-alb-provider@npm:0.1.9"
   dependencies:
@@ -3690,7 +3690,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-auth-backend-module-gcp-iap-provider@npm:^0.2.12, @backstage/plugin-auth-backend-module-gcp-iap-provider@npm:^0.2.8":
+"@backstage/plugin-auth-backend-module-gcp-iap-provider@npm:^0.2.12":
   version: 0.2.12
   resolution: "@backstage/plugin-auth-backend-module-gcp-iap-provider@npm:0.2.12"
   dependencies:
@@ -3703,7 +3703,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-auth-backend-module-github-provider@npm:^0.1.10, @backstage/plugin-auth-backend-module-github-provider@npm:^0.1.14":
+"@backstage/plugin-auth-backend-module-github-provider@npm:^0.1.14":
   version: 0.1.14
   resolution: "@backstage/plugin-auth-backend-module-github-provider@npm:0.1.14"
   dependencies:
@@ -3714,7 +3714,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-auth-backend-module-gitlab-provider@npm:^0.1.10, @backstage/plugin-auth-backend-module-gitlab-provider@npm:^0.1.14":
+"@backstage/plugin-auth-backend-module-gitlab-provider@npm:^0.1.14":
   version: 0.1.14
   resolution: "@backstage/plugin-auth-backend-module-gitlab-provider@npm:0.1.14"
   dependencies:
@@ -3727,7 +3727,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-auth-backend-module-google-provider@npm:^0.1.10, @backstage/plugin-auth-backend-module-google-provider@npm:^0.1.14":
+"@backstage/plugin-auth-backend-module-google-provider@npm:^0.1.14":
   version: 0.1.14
   resolution: "@backstage/plugin-auth-backend-module-google-provider@npm:0.1.14"
   dependencies:
@@ -3739,7 +3739,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-auth-backend-module-microsoft-provider@npm:^0.1.12, @backstage/plugin-auth-backend-module-microsoft-provider@npm:^0.1.8":
+"@backstage/plugin-auth-backend-module-microsoft-provider@npm:^0.1.12":
   version: 0.1.12
   resolution: "@backstage/plugin-auth-backend-module-microsoft-provider@npm:0.1.12"
   dependencies:
@@ -3755,7 +3755,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-auth-backend-module-oauth2-provider@npm:^0.1.10, @backstage/plugin-auth-backend-module-oauth2-provider@npm:^0.1.14":
+"@backstage/plugin-auth-backend-module-oauth2-provider@npm:^0.1.14":
   version: 0.1.14
   resolution: "@backstage/plugin-auth-backend-module-oauth2-provider@npm:0.1.14"
   dependencies:
@@ -3767,7 +3767,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-auth-backend-module-oauth2-proxy-provider@npm:^0.1.10, @backstage/plugin-auth-backend-module-oauth2-proxy-provider@npm:^0.1.6":
+"@backstage/plugin-auth-backend-module-oauth2-proxy-provider@npm:^0.1.10":
   version: 0.1.10
   resolution: "@backstage/plugin-auth-backend-module-oauth2-proxy-provider@npm:0.1.10"
   dependencies:
@@ -3779,7 +3779,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-auth-backend-module-oidc-provider@npm:^0.1.3, @backstage/plugin-auth-backend-module-oidc-provider@npm:^0.1.8":
+"@backstage/plugin-auth-backend-module-oidc-provider@npm:^0.1.8":
   version: 0.1.8
   resolution: "@backstage/plugin-auth-backend-module-oidc-provider@npm:0.1.8"
   dependencies:
@@ -3804,80 +3804,6 @@ __metadata:
     express: ^4.18.2
     passport: ^0.7.0
   checksum: 41dc70eb4928fc47d86053b291f5cb6f4608230851fd18e505831ef02909d08e2d13e5b9869263dfea1c2511b4561892150c7a0fd2898aace1ccf333115406fd
-  languageName: node
-  linkType: hard
-
-"@backstage/plugin-auth-backend-module-okta-provider@npm:^0.0.6":
-  version: 0.0.6
-  resolution: "@backstage/plugin-auth-backend-module-okta-provider@npm:0.0.6"
-  dependencies:
-    "@backstage/backend-plugin-api": ^0.6.13
-    "@backstage/plugin-auth-node": ^0.4.8
-    "@davidzemon/passport-okta-oauth": ^0.0.5
-    express: ^4.18.2
-    passport: ^0.7.0
-  checksum: 1b3cb910733f6f163f18ec4f40549c619c411054eff07752c49e551530e00095e0bfe5083a288eecd60d6fda85e602aa97747f6c66c68d53d4d1f3aa89e0d8fd
-  languageName: node
-  linkType: hard
-
-"@backstage/plugin-auth-backend@npm:^0.21.3":
-  version: 0.21.3
-  resolution: "@backstage/plugin-auth-backend@npm:0.21.3"
-  dependencies:
-    "@backstage/backend-common": ^0.21.3
-    "@backstage/backend-plugin-api": ^0.6.13
-    "@backstage/catalog-client": ^1.6.0
-    "@backstage/catalog-model": ^1.4.4
-    "@backstage/config": ^1.1.1
-    "@backstage/errors": ^1.2.3
-    "@backstage/plugin-auth-backend-module-atlassian-provider": ^0.1.5
-    "@backstage/plugin-auth-backend-module-aws-alb-provider": ^0.1.4
-    "@backstage/plugin-auth-backend-module-gcp-iap-provider": ^0.2.8
-    "@backstage/plugin-auth-backend-module-github-provider": ^0.1.10
-    "@backstage/plugin-auth-backend-module-gitlab-provider": ^0.1.10
-    "@backstage/plugin-auth-backend-module-google-provider": ^0.1.10
-    "@backstage/plugin-auth-backend-module-microsoft-provider": ^0.1.8
-    "@backstage/plugin-auth-backend-module-oauth2-provider": ^0.1.10
-    "@backstage/plugin-auth-backend-module-oauth2-proxy-provider": ^0.1.6
-    "@backstage/plugin-auth-backend-module-oidc-provider": ^0.1.3
-    "@backstage/plugin-auth-backend-module-okta-provider": ^0.0.6
-    "@backstage/plugin-auth-node": ^0.4.8
-    "@backstage/plugin-catalog-node": ^1.7.3
-    "@backstage/types": ^1.1.1
-    "@google-cloud/firestore": ^7.0.0
-    "@node-saml/passport-saml": ^4.0.4
-    "@types/express": ^4.17.6
-    "@types/passport": ^1.0.3
-    compression: ^1.7.4
-    connect-session-knex: ^4.0.0
-    cookie-parser: ^1.4.5
-    cors: ^2.8.5
-    express: ^4.17.1
-    express-promise-router: ^4.1.0
-    express-session: ^1.17.1
-    fs-extra: ^11.2.0
-    google-auth-library: ^8.0.0
-    jose: ^4.6.0
-    knex: ^3.0.0
-    lodash: ^4.17.21
-    luxon: ^3.0.0
-    minimatch: ^5.0.0
-    morgan: ^1.10.0
-    node-cache: ^5.1.2
-    node-fetch: ^2.6.7
-    openid-client: ^5.2.1
-    passport: ^0.7.0
-    passport-auth0: ^1.4.3
-    passport-bitbucket-oauth2: ^0.1.2
-    passport-github2: ^0.1.12
-    passport-google-oauth20: ^2.0.0
-    passport-microsoft: ^1.0.0
-    passport-oauth2: ^1.6.1
-    passport-onelogin-oauth: ^0.0.1
-    uuid: ^8.0.0
-    winston: ^3.2.1
-    yn: ^4.0.0
-  checksum: 2aa8af14a9b6920d9d416495fba3f59abf4af0bf6531f6508e21942dc67ee20d201187f467f1715538ca300f8fba6d95a2189b95dc044f0c97c3e5e18f17d939
   languageName: node
   linkType: hard
 
@@ -15033,7 +14959,7 @@ __metadata:
     "@backstage/config": ^1.1.1
     "@backstage/integration": ^1.9.1
     "@backstage/plugin-app-backend": ^0.3.61
-    "@backstage/plugin-auth-backend": ^0.21.3
+    "@backstage/plugin-auth-backend": ^0.22.4
     "@backstage/plugin-auth-node": ^0.4.8
     "@backstage/plugin-catalog-backend": ^1.17.3
     "@backstage/plugin-catalog-backend-module-github": ^0.5.3
@@ -19775,13 +19701,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-text-encoding@npm:^1.0.0":
-  version: 1.0.6
-  resolution: "fast-text-encoding@npm:1.0.6"
-  checksum: 9d58f694314b3283e785bf61954902536da228607ad246905e30256f9ab8331f780ac987e7222c9f5eafd04168d07e12b8054c85cedb76a2c05af0e82387a903
-  languageName: node
-  linkType: hard
-
 "fast-xml-parser@npm:4.2.5":
   version: 4.2.5
   resolution: "fast-xml-parser@npm:4.2.5"
@@ -20417,18 +20336,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gaxios@npm:^5.0.0, gaxios@npm:^5.0.1":
-  version: 5.1.3
-  resolution: "gaxios@npm:5.1.3"
-  dependencies:
-    extend: ^3.0.2
-    https-proxy-agent: ^5.0.0
-    is-stream: ^2.0.0
-    node-fetch: ^2.6.9
-  checksum: 1cf72697715c64f6db1d6fa6e9243bb57ee14b0c758338a33790ecac2675d819a1fc0c51b2fab312d9bfe8201cc981c171b70ff60adcaaec881c5bc5610c42f1
-  languageName: node
-  linkType: hard
-
 "gaxios@npm:^6.0.0, gaxios@npm:^6.0.2, gaxios@npm:^6.1.1":
   version: 6.5.0
   resolution: "gaxios@npm:6.5.0"
@@ -20439,16 +20346,6 @@ __metadata:
     node-fetch: ^2.6.9
     uuid: ^9.0.1
   checksum: 72c7ae11a4364e40b9338de69165223a38afc06ef1c1430b90169b93e5fec7315681f08146da0b058d9d97e783f6f1f0460d79cc5306bfc4846066ff090168c3
-  languageName: node
-  linkType: hard
-
-"gcp-metadata@npm:^5.3.0":
-  version: 5.3.0
-  resolution: "gcp-metadata@npm:5.3.0"
-  dependencies:
-    gaxios: ^5.0.0
-    json-bigint: ^1.0.0
-  checksum: 891ea0b902a17f33d7bae753830d23962b63af94ed071092c30496e7d26f8128ba9af43c3d38474bea29cb32a884b4bcb5720ce8b9de4a7e1108475d3d7ae219
   languageName: node
   linkType: hard
 
@@ -20860,23 +20757,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"google-auth-library@npm:^8.0.0":
-  version: 8.9.0
-  resolution: "google-auth-library@npm:8.9.0"
-  dependencies:
-    arrify: ^2.0.0
-    base64-js: ^1.3.0
-    ecdsa-sig-formatter: ^1.0.11
-    fast-text-encoding: ^1.0.0
-    gaxios: ^5.0.0
-    gcp-metadata: ^5.3.0
-    gtoken: ^6.1.0
-    jws: ^4.0.0
-    lru-cache: ^6.0.0
-  checksum: 8e0bc5f1e91804523786413bf4358e4c5ad94b1e873c725ddd03d0f1c242e2b38e26352c0f375334fbc1d94110f761b304aa0429de49b4a27ebc3875a5b56644
-  languageName: node
-  linkType: hard
-
 "google-auth-library@npm:^9.0.0, google-auth-library@npm:^9.3.0, google-auth-library@npm:^9.6.3":
   version: 9.9.0
   resolution: "google-auth-library@npm:9.9.0"
@@ -20915,17 +20795,6 @@ __metadata:
   version: 3.2.34
   resolution: "google-libphonenumber@npm:3.2.34"
   checksum: a14579bb8d4934dc6b9cfb33f818375ccdc67be12f13f842a4c16d7c3bd8ef9f2aacc30d368770f33a97ba8674e23b318cb59f26616c7fa2ce60fae52b2f6ebf
-  languageName: node
-  linkType: hard
-
-"google-p12-pem@npm:^4.0.0":
-  version: 4.0.1
-  resolution: "google-p12-pem@npm:4.0.1"
-  dependencies:
-    node-forge: ^1.3.1
-  bin:
-    gp12-pem: build/src/bin/gp12-pem.js
-  checksum: 59a5026331ea67455672e83770da29f09d979f02e06cb2227ea5916f8cca437887c2d3869f2602a686dc84437886ae9d2ac010780803cbe8e5f161c2d02d8efd
   languageName: node
   linkType: hard
 
@@ -21066,17 +20935,6 @@ __metadata:
   version: 15.8.0
   resolution: "graphql@npm:15.8.0"
   checksum: 423325271db8858428641b9aca01699283d1fe5b40ef6d4ac622569ecca927019fce8196208b91dd1d8eb8114f00263fe661d241d0eb40c10e5bfd650f86ec5e
-  languageName: node
-  linkType: hard
-
-"gtoken@npm:^6.1.0":
-  version: 6.1.2
-  resolution: "gtoken@npm:6.1.2"
-  dependencies:
-    gaxios: ^5.0.1
-    google-p12-pem: ^4.0.0
-    jws: ^4.0.0
-  checksum: cf3210afe2ccee8feaa06f0c7eb942e217244a8563a1d0a71aa3095eea545015896741c1d48654d8de35b7b07579f93e25e5dfe817f06b7e753646b67f7a4ecf
   languageName: node
   linkType: hard
 
@@ -23330,7 +23188,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^4.15.5, jose@npm:^4.6.0":
+"jose@npm:^4.15.5":
   version: 4.15.5
   resolution: "jose@npm:4.15.5"
   checksum: 7dde76447c7707bd4b448f914b216f3858e701aa83f00447434252461af5b9e159dcbffb88badea3f9616739526763581267c9560622f0a058df8d68c86d7f79
@@ -25798,7 +25656,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^5.0.0, minimatch@npm:^5.0.1, minimatch@npm:^5.1.0, minimatch@npm:^5.1.1":
+"minimatch@npm:^5.0.1, minimatch@npm:^5.1.0, minimatch@npm:^5.1.1":
   version: 5.1.6
   resolution: "minimatch@npm:5.1.6"
   dependencies:
