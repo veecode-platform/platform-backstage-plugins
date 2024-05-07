@@ -10,7 +10,7 @@ export const useStyles = makeStyles(theme => ({
     },
     uploadElement:{
         background: theme.palette.background.paper,
-        border: `6px dashed ${theme.palette.divider}`,
+        border: `2px dashed ${theme.palette.divider}`,
         borderRadius: '8px',
         width:'90%',
         maxWidth:'1000px',
@@ -27,13 +27,8 @@ export const useStyles = makeStyles(theme => ({
             cursor: 'pointer'
         },
         '&:hover':{
-          border: `6px dashed ${theme.palette.grey[500]}`,
+          border: `2px dashed ${theme.palette.grey[500]}`,
         }
-    },
-    iconUpload: {
-        width: '60px',
-        height: '60px',
-        fill: theme.palette.link,
     },
     textUploadElement:{
         fontSize: '1.2rem',

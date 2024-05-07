@@ -1341,29 +1341,29 @@ __metadata:
   linkType: hard
 
 "@azure/msal-browser@npm:^3.11.1":
-  version: 3.13.0
-  resolution: "@azure/msal-browser@npm:3.13.0"
+  version: 3.14.0
+  resolution: "@azure/msal-browser@npm:3.14.0"
   dependencies:
-    "@azure/msal-common": 14.9.0
-  checksum: 978c3ae577fd9a17a58035627429bad379e839996273b4d8eff245aeee365fc6aa630cc1732748344de407dd8b37bc16e631360b5015b0467a4c48100781a5ac
+    "@azure/msal-common": 14.10.0
+  checksum: 747cd3df32f082e515c5e268d64f0d16afa0ce21ab5154e235ee0eb0fd0e2902504d12bac1f94839afaf9cc94c823d961775c3f57c3f20f12864d13a5ed0fa44
   languageName: node
   linkType: hard
 
-"@azure/msal-common@npm:14.9.0":
-  version: 14.9.0
-  resolution: "@azure/msal-common@npm:14.9.0"
-  checksum: f5d071c5241aba68a6585eb53fcf049aa976719f31f211c0044c0d0107b7300d4827412ce0389f7e6d3ce7bc6444c20d2baba3e9a7c1a1116ccc1f1b3edd253b
+"@azure/msal-common@npm:14.10.0":
+  version: 14.10.0
+  resolution: "@azure/msal-common@npm:14.10.0"
+  checksum: 50994f54cdce7425bef42d44b3b15e756ede11efa5d2f84440da41ea13f0b0c00e8c262925e42b2f6d5f6f850233dccf99d810ced7b2cf372b9a645ed53489f8
   languageName: node
   linkType: hard
 
 "@azure/msal-node@npm:^2.6.6":
-  version: 2.7.0
-  resolution: "@azure/msal-node@npm:2.7.0"
+  version: 2.8.0
+  resolution: "@azure/msal-node@npm:2.8.0"
   dependencies:
-    "@azure/msal-common": 14.9.0
+    "@azure/msal-common": 14.10.0
     jsonwebtoken: ^9.0.0
     uuid: ^8.3.0
-  checksum: e83d02790ccd2dafdada1598513b5582f911127d16d6afa7bb58f65e9c256814881076a4e5d748f4da0ae4b4d21970f5202e79b8478201ca515dc81677e98ac2
+  checksum: 778b7f8a9088ec264b7b59c1dd06ca9f4d9acfe7dd9e9fa92fb1fbcb8da3f9917ebf641715d4fe2338da17eae00a571cb8f1b6431c419609c8eff372654ce378
   languageName: node
   linkType: hard
 
@@ -7851,11 +7851,11 @@ __metadata:
   linkType: hard
 
 "@npmcli/fs@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "@npmcli/fs@npm:3.1.0"
+  version: 3.1.1
+  resolution: "@npmcli/fs@npm:3.1.1"
   dependencies:
     semver: ^7.3.5
-  checksum: a50a6818de5fc557d0b0e6f50ec780a7a02ab8ad07e5ac8b16bf519e0ad60a144ac64f97d05c443c3367235d337182e1d012bbac0eb8dbae8dc7b40b193efd0e
+  checksum: d960cab4b93adcb31ce223bfb75c5714edbd55747342efb67dcc2f25e023d930a7af6ece3e75f2f459b6f38fc14d031c766f116cd124fdc937fd33112579e820
   languageName: node
   linkType: hard
 
@@ -12312,6 +12312,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash@npm:^4.17.1":
+  version: 4.17.1
+  resolution: "@types/lodash@npm:4.17.1"
+  checksum: 01984d5b44c09ef45258f8ac6d0cf926900624064722d51a020ba179e5d4a293da0068fb278d87dc695586afe7ebd3362ec57f5c0e7c4f6c1fab9d04a80e77f5
+  languageName: node
+  linkType: hard
+
 "@types/long@npm:^4.0.0":
   version: 4.0.2
   resolution: "@types/long@npm:4.0.2"
@@ -12905,9 +12912,9 @@ __metadata:
   linkType: hard
 
 "@types/webpack-env@npm:^1.15.2":
-  version: 1.18.4
-  resolution: "@types/webpack-env@npm:1.18.4"
-  checksum: f195b3ae974ac3b631477b57737dad7b6c44ecca86770cf3c29f284e02961c9f2dfc619e3e253d8c23966864cb052b1e8437e9834ede32ac97972e6e2235bb51
+  version: 1.18.5
+  resolution: "@types/webpack-env@npm:1.18.5"
+  checksum: 4ca8eb4c44e1e1807c3e245442fce7aaf2816a163056de9436bbac44cc47c8bc5b1c9a330dc05748d6616431b1fb5bd5379733fb1da0b78d03c59f4ec824c184
   languageName: node
   linkType: hard
 
@@ -13356,7 +13363,7 @@ __metadata:
     "@types/pg": ^8.6.6
     "@types/supertest": ^2.0.8
     "@types/uuid": ^8.0.0
-    "@veecode-platform/plugin-application-common": ^0.1.73
+    "@veecode-platform/plugin-application-common": ^0.1.75
     axios: 0.27.0
     class-validator: ^0.11.0
     express: ^4.17.1
@@ -13376,7 +13383,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/plugin-application-common@^0.1.73, @veecode-platform/plugin-application-common@workspace:plugins/application-common":
+"@veecode-platform/plugin-application-common@^0.1.75, @veecode-platform/plugin-application-common@workspace:plugins/application-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/plugin-application-common@workspace:plugins/application-common"
   dependencies:
@@ -13411,7 +13418,7 @@ __metadata:
     "@testing-library/react": ^12.1.3
     "@testing-library/user-event": ^14.0.0
     "@types/node": "*"
-    "@veecode-platform/plugin-application-common": ^0.1.73
+    "@veecode-platform/plugin-application-common": ^0.1.75
     axios: ^1.2.3
     cross-fetch: ^3.1.5
     lodash: ^4.17.21
@@ -13465,6 +13472,7 @@ __metadata:
     "@testing-library/jest-dom": ^5.10.1
     "@testing-library/react": ^12.1.3
     "@testing-library/user-event": ^14.0.0
+    "@types/lodash": ^4.17.1
     "@types/node": "*"
     msw: ^1.0.0
     react-use: ^17.2.4
@@ -18494,12 +18502,12 @@ __metadata:
   linkType: hard
 
 "enhanced-resolve@npm:^5.16.0":
-  version: 5.16.0
-  resolution: "enhanced-resolve@npm:5.16.0"
+  version: 5.16.1
+  resolution: "enhanced-resolve@npm:5.16.1"
   dependencies:
     graceful-fs: ^4.2.4
     tapable: ^2.2.0
-  checksum: ccfd01850ecf2aa51e8554d539973319ff7d8a539ef1e0ba3460a0ccad6223c4ef6e19165ee64161b459cd8a48df10f52af4434c60023c65fde6afa32d475f7e
+  checksum: 6e4c166fef72ef231455f9119686d93ecccb11874f8256d73a42de5b293cb2536050849382468864b25973514ca4fa4cb13c37be2ff857a211e2aca3ff05bb6c
   languageName: node
   linkType: hard
 
@@ -22658,8 +22666,8 @@ __metadata:
   linkType: hard
 
 "isomorphic-git@npm:^1.23.0":
-  version: 1.25.8
-  resolution: "isomorphic-git@npm:1.25.8"
+  version: 1.25.9
+  resolution: "isomorphic-git@npm:1.25.9"
   dependencies:
     async-lock: ^1.1.0
     clean-git-ref: ^2.0.1
@@ -22674,7 +22682,7 @@ __metadata:
     simple-get: ^4.0.1
   bin:
     isogit: cli.cjs
-  checksum: 3d4fa69dc8335ce936d2928d1a16bc911ac84fa6e551f0052f31ef5c952ef9d69818ddf36f61d8171efe6453e1335a51512260d82dfd2079341217044674fd70
+  checksum: 4887a403924ccb7a04683c627034a61ff6d76580969d57004ff36c88bc613551cbe5a06eeabba57756b595e7ba0deb5396ecf1c7f87b3f0fcfaa7edd4661e4de
   languageName: node
   linkType: hard
 
@@ -32463,8 +32471,8 @@ __metadata:
   linkType: hard
 
 "swagger-ui-react@npm:^5.0.0":
-  version: 5.17.5
-  resolution: "swagger-ui-react@npm:5.17.5"
+  version: 5.17.6
+  resolution: "swagger-ui-react@npm:5.17.6"
   dependencies:
     "@babel/runtime-corejs3": ^7.24.5
     "@braintree/sanitize-url": =7.0.1
@@ -32502,7 +32510,7 @@ __metadata:
   peerDependencies:
     react: ">=16.8.0 <19"
     react-dom: ">=16.8.0 <19"
-  checksum: 158d0948e186a7ee5439598e022e9bcbb7a07dd51ed5daef20d78b0e3b1c963cf64899b18c14284bae3eb385cf333d4b2b9ff0eb77a03b83e18105d8984d3596
+  checksum: f6d0f2a8e5bf62f26b43568efa2defccf7d4a71680149d2c0ea42a478b68ff661701917a5993c63c7367551bcdefce82eca5739dbb0c9dacb3c1d0b2cfa0ea56
   languageName: node
   linkType: hard
 
