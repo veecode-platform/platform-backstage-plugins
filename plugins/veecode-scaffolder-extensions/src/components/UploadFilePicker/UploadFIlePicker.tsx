@@ -4,17 +4,17 @@ import { Avatar, Box, Divider, FormControl, List, ListItem, ListItemAvatar, List
 import RemoveIcon from '@material-ui/icons/Remove';
 import { useDropzone } from 'react-dropzone';
 import { useStyles } from './styles';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import { InfoBox } from '../shared';
 import { convertToFile } from './utils';
+import UploadIcon from './assets/UploadIcon';
 
 // Possible future improvement: multiple files
 
 export const UploadFilePicker = (props:UploadFilePickerProps) => {
   const {  onChange, formData, required, rawErrors, schema } = props;
     const [fileUploaded,setFileUploaded] = useState<File[]>(formData ? [convertToFile(formData)] : [])
-    const {uploadWrapper, uploadElement,textUploadElement, uploadedFileWrapper, thumb,iconUpload, removeThumb} = useStyles();
+    const {uploadWrapper, uploadElement,textUploadElement, uploadedFileWrapper, thumb,removeThumb} = useStyles();
 
    const onDrop = async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
@@ -68,7 +68,7 @@ export const UploadFilePicker = (props:UploadFilePickerProps) => {
           (
             <div {...getRootProps({ className: `${uploadElement} dropzone` })}>
               <input {...getInputProps()} />
-              <CloudUploadIcon className={iconUpload} />  
+              <UploadIcon/>
                 <div className={textUploadElement}>
                   {isDragActive
                     ? <Typography variant="h6">Drop the file here</Typography>
