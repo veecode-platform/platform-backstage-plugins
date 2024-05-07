@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { CodeSnippet, InfoCard } from '@backstage/core-components';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Typography } from '@material-ui/core';
@@ -24,9 +24,7 @@ export const ClusterInstructionsCard = () => {
 
   return (
     <InfoCard title="Cluster Instructions">
-      <Typography variant="body1">
-        <CodeSnippet text={instructions} language='bash' showCopyCodeButton/>
-      </Typography>
+      <CodeSnippet text={instructions} language="bash" showCopyCodeButton />
     </InfoCard>
   );
 }

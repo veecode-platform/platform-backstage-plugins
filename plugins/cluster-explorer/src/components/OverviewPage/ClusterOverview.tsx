@@ -1,5 +1,5 @@
 /* eslint-disable @backstage/no-undeclared-imports */
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useApi } from '@backstage/core-plugin-api';
 import { kubernetesApiRef } from '@backstage/plugin-kubernetes';
 import useAsync from 'react-use/lib/useAsync';
@@ -249,7 +249,7 @@ export const ClusterOverview = () => {
           />
           <Grid item lg={12} md={12} xs={12}>
             <EmptyState
-              title="❌ Cluster not configured"
+              title="Cluster not configured"
               missing="field"
               description="You need to add the settings for this cluster to the application's configuration files, like this:"
               action={
