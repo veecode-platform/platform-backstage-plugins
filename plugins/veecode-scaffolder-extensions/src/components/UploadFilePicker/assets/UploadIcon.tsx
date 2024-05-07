@@ -10,10 +10,10 @@ const UploadIcon = () => {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="90"
+      width="70"
       zoomAndPan="magnify"
       viewBox="0 0 375 374.999991"
-      height="100"
+      height="70"
       preserveAspectRatio="xMidYMid meet"
       version="1.0"
     >
