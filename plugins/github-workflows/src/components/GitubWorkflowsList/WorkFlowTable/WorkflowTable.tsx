@@ -24,6 +24,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
 import GithubIcon from '../../assets/GithubIcon';
 import { useNavigate } from 'react-router-dom';
+import Timer from '@material-ui/icons/Timer';
 
 
 const useStyles = makeStyles(theme => ({
@@ -111,50 +112,81 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
       name: item.name,
       status: (
         <WorkFlowStatus
-          status={item.lastRunId !== undefined ? item.status : StatusWorkflowEnum.default}
+          status={
+            item.lastRunId !== undefined
+              ? item.status
+              : StatusWorkflowEnum.default
+          }
           conclusion={item.conclusion}
-         />
-        ),
+        />
+      ),
       action: (
         <Box className={classes.action}>
-          {(item.parameters && item.parameters?.length > 0 && item.status !== StatusWorkflowEnum.queued) && 
+          {item.parameters &&
+            item.parameters?.length > 0 &&
+            item.status !== StatusWorkflowEnum.queued && (
               <Tooltip title="Add Parameters" placement="top">
-                  <SettingsIcon
-                    onClick={() => {
-                      setParametersState(item.parameters ?? [])
-                      handleShowModal()
-                    }} />
-                </Tooltip>
-              }
-          
-            <WorkFlowActions
-              status={item.status}
-              conclusion={item.lastRunId !== undefined ? item.conclusion : StatusWorkflowEnum.default}
-              workflowId={item.id} 
-              parameters={item.parameters ?? []}
-              />
+                <SettingsIcon
+                  onClick={() => {
+                    setParametersState(item.parameters ?? []);
+                    handleShowModal();
+                  }}
+                />
+              </Tooltip>
+            )}
+
+          <WorkFlowActions
+            status={item.status}
+            conclusion={
+              item.lastRunId !== undefined
+                ? item.conclusion
+                : StatusWorkflowEnum.default
+            }
+            workflowId={item.id}
+            parameters={item.parameters ?? []}
+          />
         </Box>
       ),
       source: (
         <Box className={classes.source}>
-            <LanguageIcon/> 
-            <Link to={item.source ?? ''} title='Visite workflow' target="_blank">
-              {truncateString(item.source as string, 40)}
-            </Link>
-         </Box>
-         ),
-      logs:(
-        <Tooltip title={item.lastRunId ?"Last run Logs..." : "First, run the workflow!"} placement="bottom">
-          <DescriptionIcon 
-            className={classes.clickable}
-            onClick={()=>{
-              if (!item.lastRunId) return;
-              handleCICDLogs(item.lastRunId!.toString())
-            }}
-            color={item.lastRunId? 'primary':'disabled'}
-          />
-         </Tooltip>
-      )
+          <LanguageIcon />
+          <Link to={item.source ?? ''} title="Visite workflow" target="_blank">
+            {truncateString(item.source as string, 40)}
+          </Link>
+        </Box>
+      ),
+      logs: (
+        <>
+          {
+            item.status === StatusWorkflowEnum.inProgress ||
+            item.status === StatusWorkflowEnum.queued ? (
+              <Tooltip title="Please wait the workflow run" placement="bottom">
+                <Timer
+                  className={classes.clickable}
+                  color="disabled"
+                  style={{ cursor: 'wait' }}
+                />
+              </Tooltip>
+            ) : (
+              <Tooltip
+                title={
+                  item.lastRunId ? 'Last run Logs...' : 'First, run the workflow!'
+                }
+                placement="bottom"
+              >
+                <DescriptionIcon
+                  className={classes.clickable}
+                  onClick={() => {
+                    if (!item.lastRunId) return;
+                    handleCICDLogs(item.lastRunId!.toString());
+                  }}
+                  color={item.lastRunId ? 'primary' : 'disabled'}
+                />
+              </Tooltip>
+            )
+          }
+        </>
+      ),
     };
   });
 
