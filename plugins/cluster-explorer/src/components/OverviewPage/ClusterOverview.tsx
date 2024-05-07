@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useApi } from '@backstage/core-plugin-api';
 import { kubernetesApiRef } from '@backstage/plugin-kubernetes';
 import useAsync from 'react-use/lib/useAsync';
-import { Progress } from '@backstage/core-components';
+import { CodeSnippet, EmptyState, Progress } from '@backstage/core-components';
 import { useEntity, MissingAnnotationEmptyState } from '@backstage/plugin-catalog-react';
 import { Grid, Drawer, IconButton } from '@material-ui/core';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
@@ -211,6 +211,7 @@ export const ClusterOverview = () => {
         }
         const hasAdminUrl = entity.metadata?.annotations?.["eks/region"]
 
+
         if (hasAdminUrl) {
             const clusterlinks: ClusterLinks = {
                 admin:
@@ -228,11 +229,17 @@ export const ClusterOverview = () => {
 
     }, []);
     
-    if (!clusterName) return <MissingAnnotationEmptyState annotation={["veecode/cluster-name", "metadata.name"]} />
+    if (!clusterName)
+      return (
+        <Grid item lg={12}>
+          <MissingAnnotationEmptyState
+            annotation={['veecode/cluster-name']}
+          />
+        </Grid>
+      );
 
     if (loading) return <Progress />;
-    
-    //  if (error) return <ErrorPage status={error.name} statusMessage={error.message} />;
+   
     if (error) return (
       <Content>
         <Grid container spacing={2}>
@@ -240,8 +247,23 @@ export const ClusterOverview = () => {
             message={error.message}
             url="https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/cluster-explorer"
           />
-          <Grid item lg={6} md={12} xs={12}>
-            <ClusterInstructionsCard />
+          <Grid item lg={12} md={12} xs={12}>
+            <EmptyState
+              title="❌ Cluster not configured"
+              missing="field"
+              description="You need to add the settings for this cluster to the application's configuration files, like this:"
+              action={
+                <>
+                  <InfoCard title="Configuration">
+                       <CodeSnippet 
+                         text={`kubernetes:\n  serviceLocatorMethod:\n    type: multiTenant\n  clusterLocatorMethods:\n   - type: "config"\n     clusters:\n       - url: $KUBERNETES_URL\n         name: $NAME\n         authProvider: serviceAccount\n         skipTLSVerify: false\n         skipMetricsLookup: false\n         skipMetricsLookup: false\n         serviceAccountToken: $KUBERNETES_SERVICE_ACCOUNT_TOKEN\n         caData: $KUBERNETES_CERTIFICATE_DATA`} 
+                         language="yaml" 
+                         showCopyCodeButton 
+                         />
+                  </InfoCard>
+                </>
+              }
+            />
           </Grid>
         </Grid>
       </Content>
@@ -302,6 +324,10 @@ export const ClusterOverview = () => {
                                 <InfoCard title="Capacity">
                                     <StructuredMetadataTable metadata={capacity} />
                                 </InfoCard>
+                            </Grid>
+
+                            <Grid item md={12} sm={12} style={{maxHeight: "600px", overflow: "auto"}}>
+                                <ClusterInstructionsCard/>
                             </Grid>
 
                         </Grid>
