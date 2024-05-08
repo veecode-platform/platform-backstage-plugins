@@ -15,7 +15,6 @@ import { InfoBox } from '../shared';
 import { ClusterCapacity, ClusterInformation, ClusterLinks, ClusterNamespace, ClusterNodes, ClusterResponse, NamespacesResponse, NodeResponse } from '../../utils/types';
 import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
 import { Entity } from '@backstage/catalog-model';
-import { ClusterInstructionsCard } from '../InstructionsCard';
 
 const useDrawerStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -325,11 +324,6 @@ export const ClusterOverview = () => {
                                     <StructuredMetadataTable metadata={capacity} />
                                 </InfoCard>
                             </Grid>
-
-                            <Grid item md={12} sm={12} style={{maxHeight: "600px", overflow: "auto"}}>
-                                <ClusterInstructionsCard/>
-                            </Grid>
-
                         </Grid>
                     </Grid>
 
