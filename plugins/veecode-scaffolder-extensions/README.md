@@ -232,6 +232,7 @@ Example of using `ResourcePicker` in a template:
           ui:options:
             catalogFilter:
               kind: [Environment]
+              #type: 'service' <- example ...  It is optional, it expects a string to filter a specific type of the kind selected above, if it has it.
             
 
 In this case, we will list in the catalog all our entities that have the type `Environment` , and behind the scenes we will scan the metadata.environment key of the chosen entity, and thus parse the information as values to serve the skeleton of our template.
