@@ -1,137 +1,168 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @backstage/no-undeclared-imports */
-/*
- * Copyright 2021 The Backstage Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-import {
-  type EntityFilterQuery,
-  CATALOG_FILTER_EXISTS,
-} from '@backstage/catalog-client';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ResourcePickerProps } from "./schema";
+import { Box, Button, Divider, FormControl, FormHelperText, TextField, Typography, makeStyles } from '@material-ui/core';
 import { useApi } from '@backstage/core-plugin-api';
 import { catalogApiRef } from '@backstage/plugin-catalog-react';
-import { Box, Button, Divider, FormHelperText, Typography, makeStyles } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
-import FormControl from '@material-ui/core/FormControl';
-import React, { useEffect, useState } from 'react';
-import useAsync from 'react-use/lib/useAsync';
-import { ResourcePickerFilterQueryValue,ResourcePickerProps,ResourcePickerUiOptions,ResourcePickerFilterQuery} from './schema';
-import { Select, SelectItem } from '@backstage/core-components';
-
+import { Autocomplete, AutocompleteChangeReason } from '@material-ui/lab';
+import useAsync from 'react-use/esm/useAsync';
 
 export { ResourcePickerSchema } from './schema';
 
-const useStyles = makeStyles({
-  boxInfo: {
-    padding: '1rem',
-    fontSize: '1rem',
-    borderRadius: '8px',
-    background: '#60a5fa40',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: '.5rem',
-  },
-});
-
-export interface Annotations {
+export type Annotations ={
   [key: string]: string | string [] | number | boolean;
 } 
 
-/**
- * The underlying component that is rendered in the form for the `ResourcePicker`
- * field extension.
- *
- * @public
- */
+export type EntityResourceProps = {
+  name: string;
+  [key:string]: Object
+}
+
+const useStyle = makeStyles(theme=>({
+    autocompleteWrapper:{
+      width: '100%',
+      maxWidth: '1100px'
+    },
+    descriptionContent:{
+        paddingTop: theme.spacing(2),
+    },
+    boxInfo: {
+        padding: '1rem',
+        fontSize: '1rem',
+        borderRadius: '8px',
+        background: '#60a5fa40',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '.5rem',
+      },
+}))
+
 export const ResourcePicker = (props: ResourcePickerProps) => {
-  const { onChange, required, uiSchema, rawErrors, formData, schema } = props;
 
-  const [entityNameSelected, setEntityNameSelected] = useState<string>(
-    'Select the Resource',
-  );
-  const catalogFilter = buildCatalogFilter(uiSchema);
-  const catalogApi = useApi(catalogApiRef);
-  const classes = useStyles();
+    const {uiSchema,schema,onChange,formData,required,rawErrors,idSchema,} = props;
+    const [catalogFilter,type] = resolveCatalogFilter(uiSchema);
+    const catalogApi = useApi(catalogApiRef);
+    const [entities, setEntities] = useState<EntityResourceProps[]>([]);
+    const [entitySelected, setEntitySelected] = useState<EntityResourceProps|null>(null);
+    const { autocompleteWrapper,descriptionContent,boxInfo } = useStyle();
+  
+    const { loading } = useAsync(async () => {
+      const { items } = await catalogApi.getEntities(
+        catalogFilter ? { filter: catalogFilter as any } : undefined,
+      );
+      if (type) {
+        const entityData = items.filter(
+          item => item.spec && item.spec.type === type,
+        );
+        const updateEntities = entityData.map(i => {
+          if (i.metadata.environment) {
+            return {
+              name: i.metadata.name,
+              ...(i.metadata.environment as Object),
+            };
+          }
+          return { name: i.metadata.name };
+        });
+        setEntities(prevState => [...prevState, ...updateEntities]);
+      } else {
+        const updateEntities = items.map(i => {
+          if (i.metadata.environment) {
+            return {
+              name: i.metadata.name,
+              ...(i.metadata.environment as Object),
+            };
+          }
+          return { name: i.metadata.name };
+        });
+        setEntities(prevState => [...prevState, ...updateEntities]);
+      }
+    },[]);
 
-  const { value: entities } = useAsync(async () => {
-    const { items } = await catalogApi.getEntities(
-      catalogFilter ? { filter: catalogFilter } : undefined,
+    const onSelect = useCallback(
+      (_: any, ref: object | null, reason: AutocompleteChangeReason) => {
+        if (typeof ref !== 'string' && ref) {
+          onChange(ref);
+        } else {
+          if (reason === 'blur' || reason === 'create-option') {
+            let entityRef = ref;
+            try {
+              entityRef = JSON.parse(entityRef! as string)
+            } catch (err) {
+              // If the passed in value isn't an entity ref, do nothing.
+            }
+            if (formData !== ref) {
+              onChange(JSON.parse(entityRef! as string));
+            }
+          }
+        }
+      },
+      [onChange, formData]
     );
-    const metadata = items[0].metadata;
-    const dataToChange = {
-      name: metadata.name,
-      ...(metadata.environment ? metadata.environment as Object : {}),
-    }
-    onChange(dataToChange);
-    return items;
-  });
+
 
   useEffect(() => {
-    if (entities && entities?.length === 1) {
-      const entity = entities[0].metadata;
-      const dataToChange = {
-        name: entity.name,
-        ...(entity.environment ? entity.environment as Object : {}),
-      }
-      onChange(dataToChange);
+    if (entities?.length === 1) {
+      onChange((entities[0]));
     }
-  }, [entities, onChange]);
+    if(!formData){
+      onChange(entities[0])
+      setEntitySelected(entities[0])
+    }
+  }, [entities]);
 
-  const entitiesOptions: SelectItem[] = entities
-    ? entities.map(i => ({
-        label: i.metadata.name,
-        value: JSON.stringify(
-          i.metadata.environment ? 
-          {name: i.metadata.name, ...(i.metadata.environment ? i.metadata.environment as Object : {})} 
-          : {name: i.metadata.name}
-          ),
-      }))
-    : [{ label: 'Loading...', value: 'loading' }];
+  useEffect(()=>{
+    if(formData){
+      setEntitySelected(formData as EntityResourceProps)
+    }
+  },[onChange,formData])
 
-  return (
-    <>
-      {schema.title && (
+    return (
+      <>
         <Box my={1}>
-          <Typography variant="h5">{schema.title}</Typography>
+          <Typography variant="h5">
+            {schema.title ?? 'Reusing resources'}
+          </Typography>
           <Divider />
         </Box>
-      )}
-      {schema.description && (
-        <Typography variant="body1">{schema.description}</Typography>
-      )}
-      {entities && entities.length > 0 ? (
+        <Box className={descriptionContent}>
+          <Typography variant="body1">
+            {schema.description ??
+              'Reuse resources from your catalog of entities'}
+          </Typography>
+        </Box>
+        {entities && entities.length > 0 ? (
         <FormControl
           margin="normal"
           required={required}
           error={rawErrors?.length > 0 && !formData}
         >
-          <Select
-            native
-            label="Resource Available"
-            onChange={selected => {
-              setEntityNameSelected(selected as string);
-              onChange(JSON.parse(selected as string));
-            }}
-            disabled={entities.length === 1}
-            selected={entityNameSelected}
-            items={entitiesOptions}
+          <Autocomplete
+            disabled={entities?.length === 1}
+            className={autocompleteWrapper}
+            id={idSchema?.$id}
+            value={entitySelected ? entitySelected : entities[0]}
+            loading={loading}
+            onChange={onSelect}
+            options={entities || []}           
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => 
+              (<TextField 
+               {...params} 
+               label="Select the resource..." 
+               variant="outlined"
+               margin="dense"
+               FormHelperTextProps={{ margin: 'dense', style: { marginLeft: 0 } }}
+               InputProps={params.InputProps}
+                />)
+              }
           />
           <FormHelperText>Select the desired resource</FormHelperText>
         </FormControl>
       ) : (
-        <Box className={classes.boxInfo}>
+        <Box className={boxInfo}>
           ⚠️ No resources available
           <Button
             component={RouterLink}
@@ -144,77 +175,12 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
           </Button>
         </Box>
       )}
-    </>
-  );
-};
-
-/**
- * Converts a especial `{exists: true}` value to the `CATALOG_FILTER_EXISTS` symbol.
- *
- * @param value - The value to convert.
- * @returns The converted value.
- */
-function convertOpsValues(
-  value: Exclude<ResourcePickerFilterQueryValue, Array<any>>,
-): string | symbol {
-  if (typeof value === 'object' && value.exists) {
-    return CATALOG_FILTER_EXISTS;
-  }
-  return value?.toString();
+      </>
+    );
 }
 
-/**
- * Converts schema filters to entity filter query, replacing `{exists:true}` values
- * with the constant `CATALOG_FILTER_EXISTS`.
- *
- * @param schemaFilters - An object containing schema filters with keys as filter names
- * and values as filter values.
- * @returns An object with the same keys as the input object, but with `{exists:true}` values
- * transformed to `CATALOG_FILTER_EXISTS` symbol.
- */
-function convertSchemaFiltersToQuery(
-  schemaFilters: ResourcePickerFilterQuery,
-): Exclude<EntityFilterQuery, Array<any>> {
-  const query: EntityFilterQuery = {};
-
-  for (const [key, value] of Object.entries(schemaFilters)) {
-    if (Array.isArray(value)) {
-      query[key] = value;
-    } else {
-      query[key] = convertOpsValues(value);
-    }
-  }
-
-  return query;
-}
-
-/**
- * Builds an `EntityFilterQuery` based on the `uiSchema` passed in.
- * If `catalogFilter` is specified in the `uiSchema`, it is converted to a `EntityFilterQuery`.
- * If `allowedKinds` is specified in the `uiSchema` will support the legacy `allowedKinds` option.
- *
- * @param uiSchema The `uiSchema` of an `ResourcePicker` component.
- * @returns An `EntityFilterQuery` based on the `uiSchema`, or `undefined` if `catalogFilter` is not specified in the `uiSchema`.
- */
-function buildCatalogFilter(
-  uiSchema: ResourcePickerProps['uiSchema'],
-): EntityFilterQuery | undefined {
-  const defaultKind = uiSchema['ui:options']?.defaultKind;
-
-  const catalogFilter:
-    | ResourcePickerUiOptions['catalogFilter']
-    | undefined
-    | any =
-    uiSchema['ui:options']?.catalogFilter ||
-    (defaultKind && { kind: defaultKind });
-
-  if (!catalogFilter) {
-    return undefined;
-  }
-
-  if (Array.isArray(catalogFilter)) {
-    return catalogFilter.map(convertSchemaFiltersToQuery);
-  }
-
-  return convertSchemaFiltersToQuery(catalogFilter);
+export function resolveCatalogFilter(uiSchema:ResourcePickerProps['uiSchema']) {
+    const type =   uiSchema['ui:options']?.catalogFilter!.type ?? null;
+    const catalogFilter = {kind: uiSchema['ui:options']?.catalogFilter!.kind} ?? null;
+    return [catalogFilter,type]
 }
