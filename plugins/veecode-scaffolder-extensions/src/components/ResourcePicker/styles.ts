@@ -21,6 +21,7 @@ export const useStyles = makeStyles(theme=>({
       skeletonContent:{
         width: '100%',
         maxWidth: '1100px',
+        height: '96px',
         padding: '1rem 0'
       }
 }))
