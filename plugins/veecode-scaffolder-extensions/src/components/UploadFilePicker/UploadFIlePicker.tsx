@@ -11,6 +11,8 @@ import UploadIcon from './assets/UploadIcon';
 
 // Possible future improvement: multiple files
 
+export { UploadFilePickerSchema } from './schema';
+
 export const UploadFilePicker = (props:UploadFilePickerProps) => {
   const {  onChange, formData, required, rawErrors, schema } = props;
     const [fileUploaded,setFileUploaded] = useState<File[]>(formData ? [convertToFile(formData)] : [])
