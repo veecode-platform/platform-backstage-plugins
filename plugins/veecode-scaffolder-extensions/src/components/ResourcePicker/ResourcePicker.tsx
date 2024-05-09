@@ -2,12 +2,14 @@
 /* eslint-disable @backstage/no-undeclared-imports */
 import React, { useCallback, useEffect, useState } from 'react';
 import { ResourcePickerProps } from "./schema";
-import { Box, Button, Divider, FormControl, FormHelperText, TextField, Typography, makeStyles } from '@material-ui/core';
+import { Box, Button, Divider, FormControl, FormHelperText, TextField, Typography } from '@material-ui/core';
 import { useApi } from '@backstage/core-plugin-api';
 import { catalogApiRef } from '@backstage/plugin-catalog-react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Autocomplete, AutocompleteChangeReason } from '@material-ui/lab';
 import useAsync from 'react-use/esm/useAsync';
+import { useStyles } from './styles';
+import { SkeletonComponent } from './skeletonComponent';
 
 export { ResourcePickerSchema } from './schema';
 
@@ -20,26 +22,6 @@ export type EntityResourceProps = {
   [key:string]: Object
 }
 
-const useStyle = makeStyles(theme=>({
-    autocompleteWrapper:{
-      width: '100%',
-      maxWidth: '1100px'
-    },
-    descriptionContent:{
-        paddingTop: theme.spacing(2),
-    },
-    boxInfo: {
-        padding: '1rem',
-        fontSize: '1rem',
-        borderRadius: '8px',
-        background: '#60a5fa40',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '.5rem',
-      },
-}))
-
 export const ResourcePicker = (props: ResourcePickerProps) => {
 
     const {uiSchema,schema,onChange,formData,required,rawErrors,idSchema,} = props;
@@ -47,11 +29,11 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
     const catalogApi = useApi(catalogApiRef);
     const [entities, setEntities] = useState<EntityResourceProps[]>([]);
     const [entitySelected, setEntitySelected] = useState<EntityResourceProps|null>(null);
-    const { autocompleteWrapper,descriptionContent,boxInfo } = useStyle();
+    const { autocompleteWrapper,descriptionContent,boxInfo } = useStyles();
   
     const { loading } = useAsync(async () => {
       const { items } = await catalogApi.getEntities(
-        catalogFilter ? { filter: catalogFilter as any } : undefined,
+        catalogFilter ? { filter: catalogFilter as any } : {filter: ''},
       );
       if (type) {
         const entityData = items.filter(
@@ -118,6 +100,13 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
       setEntitySelected(formData as EntityResourceProps)
     }
   },[onChange,formData])
+  
+   if(loading) return (
+     <SkeletonComponent 
+       title={schema.title ?? 'Reusing resources'} 
+       description={schema.description ?? 'Reuse resources from your catalog of entities'} 
+      />
+    )
 
     return (
       <>
@@ -134,53 +123,53 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
           </Typography>
         </Box>
         {entities && entities.length > 0 ? (
-        <FormControl
-          margin="normal"
-          required={required}
-          error={rawErrors?.length > 0 && !formData}
-        >
-          <Autocomplete
-            disabled={entities?.length === 1}
-            className={autocompleteWrapper}
-            id={idSchema?.$id}
-            value={entitySelected ? entitySelected : entities[0]}
-            loading={loading}
-            onChange={onSelect}
-            options={entities || []}           
-            getOptionLabel={(option) => option.name}
-            renderInput={(params) => 
-              (<TextField 
-               {...params} 
-               label="Select the resource..." 
-               variant="outlined"
-               margin="dense"
-               FormHelperTextProps={{ margin: 'dense', style: { marginLeft: 0 } }}
-               InputProps={params.InputProps}
-                />)
-              }
-          />
-          <FormHelperText>Select the desired resource</FormHelperText>
-        </FormControl>
-      ) : (
-        <Box className={boxInfo}>
-          ⚠️ No resources available
-          <Button
-            component={RouterLink}
-            to="/create"
-            style={{ margin: '16px' }}
-            size="large"
-            variant="outlined"
+          <FormControl
+            margin="normal"
+            required={required}
+            error={rawErrors?.length > 0 && !formData}
           >
-            Register Resource
-          </Button>
-        </Box>
+            <Autocomplete
+                disabled={entities?.length === 1}
+                className={autocompleteWrapper}
+                id={idSchema?.$id}
+                value={entitySelected ? entitySelected : entities[0]}
+                loading={loading}
+                onChange={onSelect}
+                options={entities || []}           
+                getOptionLabel={(option) => option.name}
+                renderInput={(params) => 
+                  (<TextField 
+                  {...params} 
+                  label="Select the resource..." 
+                  variant="outlined"
+                  margin="dense"
+                  FormHelperTextProps={{ margin: 'dense', style: { marginLeft: 0 } }}
+                  InputProps={params.InputProps}
+                    />)
+                  }
+              />
+            <FormHelperText>Select the desired resource</FormHelperText>
+          </FormControl>
+        ) : (
+          <Box className={boxInfo}>
+            ⚠️ No resources available
+            <Button
+              component={RouterLink}
+              to="/create"
+              style={{ margin: '16px' }}
+              size="large"
+              variant="outlined"
+            >
+              Register Resource
+            </Button>
+          </Box>
       )}
       </>
     );
 }
 
 export function resolveCatalogFilter(uiSchema:ResourcePickerProps['uiSchema']) {
-    const type = uiSchema['ui:options']?.catalogFilter!.type;
-    const catalogFilter = {kind: uiSchema['ui:options']?.catalogFilter!.kind};
+    const type = uiSchema['ui:options']?.catalogFilter?.type;
+    const catalogFilter = {kind: uiSchema['ui:options']?.catalogFilter?.kind};
     return [catalogFilter,type]
 }
