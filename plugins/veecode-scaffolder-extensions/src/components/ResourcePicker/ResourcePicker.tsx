@@ -180,7 +180,7 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
 }
 
 export function resolveCatalogFilter(uiSchema:ResourcePickerProps['uiSchema']) {
-    const type =   uiSchema['ui:options']?.catalogFilter!.type ?? null;
-    const catalogFilter = {kind: uiSchema['ui:options']?.catalogFilter!.kind} ?? null;
+    const type = uiSchema['ui:options']?.catalogFilter!.type;
+    const catalogFilter = {kind: uiSchema['ui:options']?.catalogFilter!.kind};
     return [catalogFilter,type]
 }
