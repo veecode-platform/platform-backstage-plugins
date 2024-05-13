@@ -13,7 +13,7 @@ import OpenInNewIcon from "@material-ui/icons/OpenInNew"
 import { InfoCard, Content, Link, StructuredMetadataTable, Table, StatusOK, StatusError, StatusWarning} from '@backstage/core-components';
 import { InfoBox } from '../shared';
 import { ClusterCapacity, ClusterInformation, ClusterLinks, ClusterNamespace, ClusterNodes, ClusterResponse, NamespacesResponse, NodeResponse } from '../../utils/types';
-import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
+import { useEntityAnnotations } from '../../hooks';
 import { Entity } from '@backstage/catalog-model';
 
 const useDrawerStyles = makeStyles((theme: Theme) =>
@@ -75,7 +75,7 @@ const convertCpuValues = (value: string) => {
 
 export const ClusterOverview = () => {
     const { entity } = useEntity();
-    const { clusterName } = useEntityAnnotations(entity as Entity);
+    const { clusterName,clusterMode } = useEntityAnnotations(entity as Entity);
     const kubernetesApi = useApi(kubernetesApiRef);
     const [isOpen, toggleDrawer] = useState(false);
     const classes = useDrawerStyles();
@@ -327,7 +327,7 @@ export const ClusterOverview = () => {
                         </Grid>
                     </Grid>
 
-                    <Grid item md={9} sm={12}> {/* right-side div: node table + ingress classes*/}
+                   <Grid item md={9} sm={12}> {/* right-side div: node table + ingress classes*/}
                         <Grid container spacing={2}>
                             <Grid item md={12}>
                                 <Table
@@ -342,7 +342,7 @@ export const ClusterOverview = () => {
                                     data={nodes}
                                     options={{ search: true, paging: true }} />
                             </Grid>
-                            <Grid item md={12}>
+                            { clusterMode !== "demo" && ( <Grid item md={12}>
                                 <Table
                                     title="Ingress classes"
                                     columns={[
@@ -353,7 +353,7 @@ export const ClusterOverview = () => {
                                     ]}
                                     data={ingressClasses}
                                     options={{ search: true, paging: true }} />
-                            </Grid>
+                            </Grid>)}
                         </Grid>
                     </Grid>
                 </Grid>
