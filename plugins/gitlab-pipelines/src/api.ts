@@ -1,5 +1,5 @@
 /* eslint-disable @backstage/no-undeclared-imports */
-import { createApiRef, DiscoveryApi, IdentityApi } from '@backstage/core-plugin-api';
+import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
 import { JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse, VariablesParams } from './utils/types';
 import { ScmAuthApi } from '@backstage/integration-react';
 
@@ -68,7 +68,6 @@ export const gitlabPipelinesApiRef = createApiRef<GitlabPipelinesApi>({
 export type Options = {
     discoveryApi: DiscoveryApi;
     scmAuthApi: ScmAuthApi;
-    identityApi: IdentityApi;
     /**
     * Path to use for requests via the proxy, defaults to /gitlab/api
     */
@@ -80,12 +79,10 @@ class Client {
     private readonly discoveryApi: DiscoveryApi;
     private readonly proxyPath: string;
     private readonly scmAuthApi: ScmAuthApi;
-    private readonly identityApi: IdentityApi;
 
     constructor(opts: Options) {
         this.discoveryApi = opts.discoveryApi;
         this.scmAuthApi = opts.scmAuthApi;
-        this.identityApi = opts.identityApi;
         this.proxyPath = opts.proxyPath ?? GITLAB_PIPELINES_PROXY_URL
     }
 
@@ -99,14 +96,11 @@ class Client {
            }
         })
         const apiUrl = await this.apiUrl(gitlabReposlug);
-        const identityToken = await this.identityApi.getCredentials()
 
        const resp = await fetch(`${apiUrl}${input}`, {
            ...init,
            headers: {
-              Authorization: `Bearer ${token}`,
-              "X-authorization-identity": `${identityToken.token}`
-           }
+              Authorization: `Bearer ${token}`}
        });
 
         if (!resp.ok) {

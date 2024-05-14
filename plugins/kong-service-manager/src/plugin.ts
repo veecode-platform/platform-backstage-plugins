@@ -1,4 +1,4 @@
-import { createApiFactory, createPlugin, discoveryApiRef, identityApiRef, createRoutableExtension } from '@backstage/core-plugin-api';
+import { createApiFactory, createPlugin, discoveryApiRef, createRoutableExtension } from '@backstage/core-plugin-api';
 import { addPluginRouteRef, pluginsListRouteRef, removePluginRouteRef, kongServiceRouteRef, routesListRouteRef } from './routes';
 import { kongServiceManagerApiRef, KongServiceManagerApiClient } from './api';
 
@@ -14,11 +14,10 @@ export const kongServiceManagerPlugin = createPlugin({
   apis: [
     createApiFactory({
       api: kongServiceManagerApiRef,
-      deps: { discoveryApi: discoveryApiRef, identityApi: identityApiRef },
-      factory: ({discoveryApi, identityApi}) => {
+      deps: { discoveryApi: discoveryApiRef },
+      factory: ({discoveryApi}) => {
         return new KongServiceManagerApiClient({
           discoveryApi: discoveryApi,
-          identityAPi: identityApi
         })
       }
     })

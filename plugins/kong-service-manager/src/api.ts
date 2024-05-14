@@ -1,4 +1,4 @@
-import { createApiRef, DiscoveryApi, IdentityApi } from '@backstage/core-plugin-api';
+import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
 import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse, PluginPerCategory } from './utils/types';
 import { PluginsInfoData } from "../src/data/data"
 
@@ -55,7 +55,6 @@ export interface KongServiceManagerApi {
 
 export type Options = {
     discoveryApi: DiscoveryApi;
-    identityAPi: IdentityApi;
     /**
     * Path to use for requests via the proxy, defaults to /kong-manager/api
     */
@@ -65,24 +64,20 @@ export type Options = {
 class Client {
     private readonly discoveryApi: DiscoveryApi;
     private readonly proxyPath: string;
-    private readonly identityApi: IdentityApi;
 
     constructor(opts: Options) {
         this.discoveryApi = opts.discoveryApi;
-        this.identityApi = opts.identityAPi;
         this.proxyPath = opts.proxyPath as string;
     }
 
     public async fetch<T = any>(input: string, proxyPath?: string, init?: RequestInit): Promise<T> {
 
         const apiUrl = await this.apiUrl(proxyPath);
-        const identityToken = await this.identityApi.getCredentials();
 
         const resp = await fetch(`${apiUrl}${input}`, {
             ...init,
-            headers: {
-                "X-kong-authorization-identity": `${identityToken.token}`
-            }
+            //headers: {
+            //}
         });
 
         if (!resp.ok) {

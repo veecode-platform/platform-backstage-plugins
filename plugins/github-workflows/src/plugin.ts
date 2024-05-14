@@ -1,4 +1,4 @@
-import { createApiFactory, createPlugin, discoveryApiRef, createComponentExtension, identityApiRef, createRoutableExtension } from '@backstage/core-plugin-api';
+import { createApiFactory, createPlugin, discoveryApiRef, createComponentExtension, createRoutableExtension } from '@backstage/core-plugin-api';
 import { scmAuthApiRef } from '@backstage/integration-react';
 import { buildRouteRef, rootRouteRef } from './routes';
 import { githubWorkflowsApiRef, GithubWorkflowsApiClient } from './api';
@@ -12,12 +12,11 @@ export const githubWorkflowsPlugin = createPlugin({
   apis: [
     createApiFactory({
       api: githubWorkflowsApiRef,
-      deps: { discoveryApi: discoveryApiRef, scmAuthApi: scmAuthApiRef, identityApi: identityApiRef },
-      factory: ({discoveryApi, scmAuthApi, identityApi}) => {
+      deps: { discoveryApi: discoveryApiRef, scmAuthApi: scmAuthApiRef },
+      factory: ({discoveryApi, scmAuthApi}) => {
         return new GithubWorkflowsApiClient({
           discoveryApi: discoveryApi,
-          scmAuthApi: scmAuthApi,
-          identityAPi: identityApi
+          scmAuthApi: scmAuthApi
         })
       }
     })

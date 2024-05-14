@@ -38,8 +38,6 @@ import { providers } from './identityProviders';
 import { ClusterExplorerPage } from '@veecode-platform/backstage-plugin-cluster-explorer';
 
 import type { IdentityApi } from '@backstage/core-plugin-api';
-import { discoveryApiRef, useApi } from '@backstage/core-plugin-api';
-import { setTokenCookie } from './cookieAuth';
 
 import { KongServiceManagerPage } from '@veecode-platform/plugin-kong-service-manager';
 import { RepoUrlSelectorExtension, ResourcePickerExtension, UploadFilePickerExtension } from '@veecode-platform/veecode-scaffolder-extensions';
@@ -50,18 +48,13 @@ const app = createApp({
   apis,
   components: {
     SignInPage: props => {
-      const discoveryApi = useApi(discoveryApiRef);
       return (
         <SignInPage
           {...props}
           providers={['guest',...providers]}
           title="Select a sign-in method"
           align="center"
-          onSignInSuccess={async (identityApi: IdentityApi) => {
-            setTokenCookie(
-              await discoveryApi.getBaseUrl('cookie'),
-              identityApi,
-            );
+          onSignInSuccess={async (identityApi: IdentityApi) => {           
             props.onSignInSuccess(identityApi);
           }}
         />
