@@ -3,7 +3,7 @@ import '../../shared/globalstyle.css';
 import React, { useContext, useState } from 'react'
 import { Job, Step } from '../../../utils/types'
 import { Accordion, AccordionSummary, Box, CircularProgress, Fade, List, ListItem, ListItemAvatar, ListItemText, Modal, Tooltip, Typography, Zoom } from '@material-ui/core'
-import { useModalStyle } from './style'
+import { useModalStyles } from './styles'
 import { WorkFlowStatus } from '../../WorkFlowStatus'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -52,7 +52,7 @@ type JobLogsComponentProps = {
 
 const HeaderComponent : React.FC<HeaderComponentProps> = (props) => {
     const {jobName, jobStatus, jobConclusion, jobStartedAt, jobCompletedAt } = props;
-    const { modalHeader,subtitle } = useModalStyle();
+    const { modalHeader,subtitle } = useModalStyles();
     return (
         <div className={modalHeader}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
@@ -70,7 +70,7 @@ const HeaderComponent : React.FC<HeaderComponentProps> = (props) => {
 
 const StepsListComponent : React.FC<StepsListComponentsProps> = (props) => {
     const {steps} = props;
-    const {jobsList,jobListItem} = useModalStyle();
+    const {jobsList,jobListItem} = useModalStyles();
     return (
       <List className={jobsList}>
         {steps.map(step => (
@@ -100,7 +100,7 @@ const JobLogsComponent : React.FC<JobLogsComponentProps> = (props) => {
     const { projectName } = useEntityAnnotations(entity as Entity);
     const [jobLogs,setJobLogs] = useState<string>('No Values Found');
     const [open, setOpen] = React.useState(false);
-    const {AccordionLogs,button,modalLog,modalLogContainer,log,normalLogContainer} = useModalStyle();
+    const {AccordionLogs,button,modalLog,modalLogContainer,log,normalLogContainer} = useModalStyles();
 
     const { loading, error } = useAsync(async (): Promise<void> => {
         const logs = await downloadJobLogs(projectName,jobId);
@@ -167,7 +167,7 @@ const JobLogsComponent : React.FC<JobLogsComponentProps> = (props) => {
 
 export const JobModal : React.FC<JobModalProps> = (props) => {
   const { job, show, handleCloseModal } = props;
-  const { modalOnBlur,modalContent} = useModalStyle();
+  const { modalOnBlur,modalContent} = useModalStyles();
 
   return (
     <Modal

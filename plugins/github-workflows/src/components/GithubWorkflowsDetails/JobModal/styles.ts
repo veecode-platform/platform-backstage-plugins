@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 
-export const useModalStyle = makeStyles(theme=>({
+export const useModalStyles = makeStyles(theme=>({
    modalOnBlur:{
     width: '100%',
     height: '100%',
