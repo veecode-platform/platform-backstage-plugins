@@ -243,7 +243,7 @@ export const ClusterOverview = () => {
       <Content>
         <Grid container spacing={2}>
           <InfoBox
-            message={error.message ?? "The cluster information could not be loaded. Possible reason: the cluster has been paused or is slow...."}
+            message={error.stack?.split(',')[0] ?? "The cluster information could not be loaded. Possible reason: the cluster has been paused or is slow...."}
             url="https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/cluster-explorer"
           />
           <Grid item lg={12} md={12} xs={12}>
