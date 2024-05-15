@@ -1,6 +1,6 @@
 import { Theme, makeStyles } from "@material-ui/core";
 
-export const useStyles = makeStyles<Theme>(theme=>({
+export const useWorkflowDetailsStyles = makeStyles<Theme>(theme=>({
     root:{
       margin: theme.spacing(2)
     },
