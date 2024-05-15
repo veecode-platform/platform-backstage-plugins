@@ -15,6 +15,7 @@ import { InfoBox } from '../shared';
 import { ClusterCapacity, ClusterInformation, ClusterLinks, ClusterNamespace, ClusterNodes, ClusterResponse, NamespacesResponse, NodeResponse } from '../../utils/types';
 import { useEntityAnnotations } from '../../hooks';
 import { Entity } from '@backstage/catalog-model';
+import { truncateMessage } from '../../utils/common/truncateMessage';
 
 const useDrawerStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -243,7 +244,7 @@ export const ClusterOverview = () => {
       <Content>
         <Grid container spacing={2}>
           <InfoBox
-            message={error.stack?.split(',')[0] ?? "The cluster information could not be loaded. Possible reason: the cluster has been paused or is slow...."}
+            message={truncateMessage(error.stack?.split(',')[0] as string) ?? "The cluster information could not be loaded. Possible reason: the cluster has been paused or is slow...."}
             url="https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/cluster-explorer"
           />
           <Grid item lg={12} md={12} xs={12}>
