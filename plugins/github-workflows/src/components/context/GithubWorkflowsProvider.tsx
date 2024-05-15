@@ -1,4 +1,5 @@
-import React, { ReactNode, useContext } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { ReactNode, useCallback, useContext } from 'react';
 import { useState } from "react";
 import { GithubWorkflowsContext } from './GithubWorkflowsContext';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
@@ -19,10 +20,8 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
   const [workflowsByAnnotationsState, setWorkflowsByAnnotationsState] = useState<WorkflowResultsProps[] | null>(null);
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
-
-  const setBranchState = (branchState: string) => {
-    setBranch(branchState);
-  }
+  
+  const setBranchState = useCallback((branchState: string) => setBranch(branchState),[branch])
 
   const setInputs = (inputs: object) => {
     setInputsWorkflowsParams(inputs);

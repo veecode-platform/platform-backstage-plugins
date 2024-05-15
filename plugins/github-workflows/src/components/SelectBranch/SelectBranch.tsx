@@ -1,25 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Select, SelectedItems } from '@backstage/core-components';
 import { useApi, errorApiRef, } from '@backstage/core-plugin-api';
 import { githubWorkflowsApiRef } from '../../api';
-import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
 import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
 import { Branches } from '../../utils/types';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
+import { OptionsProps } from './type';
+import { useGithuWorkflowsProvider } from '../context';
 
-type OptionsProps = {
-  label: string;
-  value: string;
-};
 
-export const SelectBranch = () => {
+const SelectBranch = () => {
   
   const [branches, setBranches] = useState<Branches[]>([]);
   const [options, setOptions] = useState<OptionsProps[]>([]);
   const [branchDefault, setBranchDefault ] = useState<string>('');
-  const { branch, setBranchState } = useContext(GithubWorkflowsContext);
+  const { branch, setBranchState } = useGithuWorkflowsProvider();
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
   const { entity } = useEntity();
@@ -36,6 +33,11 @@ export const SelectBranch = () => {
     catch(e:any){
       errorApi.post(e);
     }
+  };
+
+  const handleSelectChange = (event: SelectedItems) => {
+    const selectedValue = event;
+    setBranchState(selectedValue as string); 
   };
 
   useEffect(() => {
@@ -58,11 +60,6 @@ export const SelectBranch = () => {
     }
   }, [branches]);
 
-  const handleSelectChange = (event: SelectedItems) => {
-    const selectedValue = event;
-    setBranchState(selectedValue as string); 
-  };
-
   return (
       <div title="Select the branch">
         <Select
@@ -74,3 +71,6 @@ export const SelectBranch = () => {
       </div>
   );
 };
+
+
+export default memo(SelectBranch)

@@ -1,6 +1,6 @@
 /* eslint-disable @backstage/no-undeclared-imports */
-import React, { useContext, useState } from 'react'
-import { GithubWorkflowsContext, GithubWorkflowsProvider } from '../context';
+import React, { useState } from 'react'
+import { GithubWorkflowsProvider, useGithuWorkflowsProvider } from '../context';
 import { useRouteRefParams } from '@backstage/core-plugin-api';
 import { buildRouteRef } from '../../routes';
 import { useEntityAnnotations } from '../../hooks';
@@ -8,7 +8,7 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import useAsync from 'react-use/lib/useAsync';
 import { Progress, ResponseErrorPanel } from '@backstage/core-components';
-import { useStyles } from './styles';
+import { useWorkflowDetailsStyles } from './styles';
 import { Button, Grid, Tooltip } from '@material-ui/core';
 import { WorkflowDetails } from './WorklowDetails';
 import { Job, WorkflowRun } from '../../utils/types';
@@ -21,10 +21,10 @@ const GithubWorkflowsDetails = () => {
   const { id } = useRouteRefParams(buildRouteRef);
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity as Entity);
-  const { getWorkflowById,listJobsForWorkflowRun } = useContext(GithubWorkflowsContext);
+  const { getWorkflowById,listJobsForWorkflowRun } = useGithuWorkflowsProvider();
   const [workflowRun,setWorkflowRun] = useState<WorkflowRun|null>(null);
   const [jobsRun, setJobsRun] = useState<Job[]|[]>([]);
-  const { root,container,footer } = useStyles();
+  const { root,container,footer } = useWorkflowDetailsStyles();
   const navigate = useNavigate();
 
   const { loading, error } = useAsync(async (): Promise<void> => {

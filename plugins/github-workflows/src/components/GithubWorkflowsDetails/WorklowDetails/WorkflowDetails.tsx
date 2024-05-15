@@ -4,28 +4,17 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
 import { calculateDuration, truncateString } from '../../../utils/common';
-import { useStyles } from '../styles';
+import { useWorkflowDetailsStyles } from '../styles';
 import { WorkFlowStatus } from '../../WorkFlowStatus';
+import { WorkflowDetailsProps } from '../types';
 
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
-export type WorkflowDetailsProps = {
-    runStartedAt: string,
-    conclusion: string,
-    status: string,
-    updatedAt: string,
-    avatar: string,
-    author: string,
-    branch: string,
-    headCommit: string,
-    repo: string
-}
-
 
 export const WorkflowDetails: React.FC<WorkflowDetailsProps> = (props) => {
   const { runStartedAt,status,conclusion,updatedAt,avatar,author, branch, headCommit,repo } = props; 
-  const {workflowDetailsNavbar,itemContent,itemWrapper,workflowInfo, avatarImg,link} = useStyles();
+  const { workflowDetailsNavbar,itemContent,itemWrapper,workflowInfo, avatarImg,link } = useWorkflowDetailsStyles();
 
   return (
     <Paper variant="outlined" className={workflowDetailsNavbar}>

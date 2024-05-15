@@ -7,16 +7,8 @@ import useAsync from 'react-use/lib/useAsync';
 import { useModalStyles } from './styles';
 import { Skeleton } from '@material-ui/lab';
 import { InfoBox } from '../shared';
+import { EnvironmentFieldProps } from './types';
 
-type EnvironmentFieldProps = {
-  name: string;
-  description: string;
-  value: string | null;
-  defaultValue: string | boolean;
-  required: boolean;
-  onSelect: (event: React.ChangeEvent<{ name?: string | undefined; value: unknown;}>) => void,
-  onTouch: (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>, required: boolean) => void
-}
 
 const EnvironmentFieldComponent : React.FC<EnvironmentFieldProps> = ({name,description,value, defaultValue, required,onSelect,onTouch})=> {
 

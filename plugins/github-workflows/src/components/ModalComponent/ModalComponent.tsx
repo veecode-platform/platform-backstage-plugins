@@ -7,19 +7,13 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { WorkflowDispatchParameters } from '../../utils/types';
 import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { validateString } from '../../utils/validators';
 import { useGithuWorkflowsProvider } from '../context';
 import { useModalStyles } from './styles';
 import EnvironmentFieldComponent from './EnvironmentFieldComponent';
+import { ModalComponentProps } from './types';
 
-type ModalComponentProps = {
-  open: boolean,
-  handleModal: () => void,
-  parameters: WorkflowDispatchParameters[],
-  handleStartWorkflow?: () => Promise<void>
-}
 
 export const ModalComponent = ({open, handleModal, parameters, handleStartWorkflow }:ModalComponentProps) => {
 

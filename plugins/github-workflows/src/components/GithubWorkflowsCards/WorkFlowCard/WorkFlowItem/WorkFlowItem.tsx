@@ -3,20 +3,11 @@ import React, { useState } from 'react';
 import { WorkFlowStatus } from '../../../WorkFlowStatus';
 import { truncateString } from '../../../../utils/common';
 import { WorkFlowActions } from '../../../WorkFlowActions';
-import { WorkflowDispatchParameters } from '../../../../utils/types';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../../../ModalComponent';
 import { StatusWorkflowEnum } from '../../../../utils/enums/WorkflowListEnum';
 import { useEntity } from '@backstage/plugin-catalog-react';
-
-type WorkFlowItemProps = {
-  id: number,
-  workflowName: string,
-  conclusion?: string,
-  status?: string,
-  parameters?: WorkflowDispatchParameters[] | [],
-  lastRunId?: string
-}
+import { WorkFlowItemProps } from '../types';
 
 const useStyles = makeStyles(theme => ({
   workflow: {
@@ -44,7 +35,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export const WorkFlowItem = ({ id, status, conclusion, workflowName, parameters, lastRunId }: WorkFlowItemProps) => {
+export const WorkFlowItem : React.FC<WorkFlowItemProps> = ({ id, status, conclusion, workflowName, parameters, lastRunId }) => {
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const classes = useStyles();

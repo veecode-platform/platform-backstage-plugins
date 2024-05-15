@@ -1,16 +1,12 @@
-/* eslint-disable no-console */
-/* eslint-disable @backstage/no-undeclared-imports */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+/* eslint-disable @backstage/no-undeclared-imports */
+import React, { memo, useEffect, useState } from 'react';
 import { Table, TableColumn, Progress, ResponseErrorPanel, Link, EmptyState } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 import LanguageIcon from '@material-ui/icons/Language';
 import { WorkFlowStatus } from '../../WorkFlowStatus';
 import { WorkFlowActions } from '../../WorkFlowActions';
 import { Box, Button, Tooltip, Typography } from '@material-ui/core';
-import { SelectBranch } from '../../SelectBranch';
-import { GithubWorkflowsContext } from '../../context/GithubWorkflowsContext';
 import { WorkflowDispatchParameters, WorkflowResultsProps } from '../../../utils/types';
 import { truncateString } from '../../../utils/common';
 import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
@@ -25,65 +21,20 @@ import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
 import GithubIcon from '../../assets/GithubIcon';
 import { useNavigate } from 'react-router-dom';
 import Timer from '@material-ui/icons/Timer';
+import { useWorkflowTableStyles } from './styles';
+import { useGithuWorkflowsProvider } from '../../context';
+import { DenseTableProps } from './types';
+import SelectBranch from '../../SelectBranch/SelectBranch';
 
 
-const useStyles = makeStyles(theme => ({
-  title:{
-    paddingLeft: '2rem',
-    fontSize: '1.5rem',
-    display: 'flex',
-    alignItems: 'center',
-  },
-  icon: {
-    width: '40px',
-    },
-  options:{
-    position: 'absolute',
-    top: '0%',
-    right: '5%',
-    background: 'transparent',
-    borderRadius: '30px',
-    fontSize: '1rem',
-    display: 'flex',
-    alignItems: 'center',
-    color: theme.palette.border,
-  },
-  action: {
-    width: '90%',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '.8rem'
-  },
-  source: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '1rem'
-  },
-  clickable:{
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '90%',
-  },
-}));
-
-type DenseTableProps = {
-  items: WorkflowResultsProps[] | [],
-  updateData: () => Promise<void>
-};
-
-export const DenseTable = ({ items, updateData}: DenseTableProps) => {
+export const DenseTable : React.FC<DenseTableProps> = ({ items, updateData} ) => {
   
   const { entity } = useEntity();
   const [ showModal, setShowModal ] = useState<boolean>(false);
   const [parametersState, setParametersState] = useState<WorkflowDispatchParameters[]|null>(null)
   const [ loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  const classes = useStyles();
+  const {action,source,clickable,title,options} = useWorkflowTableStyles();
 
   const refresh = async ()=> {
     setLoading(true)
@@ -121,7 +72,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
         />
       ),
       action: (
-        <Box className={classes.action}>
+        <Box className={action}>
           {item.parameters &&
             item.parameters?.length > 0 &&
             item.status !== StatusWorkflowEnum.queued && (
@@ -148,7 +99,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
         </Box>
       ),
       source: (
-        <Box className={classes.source}>
+        <Box className={source}>
           <LanguageIcon />
           <Link to={item.source ?? ''} title="Visite workflow" target="_blank">
             {truncateString(item.source as string, 40)}
@@ -162,7 +113,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
             item.status === StatusWorkflowEnum.queued ? (
               <Tooltip title="Please wait the workflow run" placement="bottom">
                 <Timer
-                  className={classes.clickable}
+                  className={clickable}
                   color="disabled"
                   style={{ cursor: 'wait' }}
                 />
@@ -175,7 +126,7 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
                 placement="bottom"
               >
                 <DescriptionIcon
-                  className={classes.clickable}
+                  className={clickable}
                   onClick={() => {
                     if (!item.lastRunId) return;
                     handleCICDLogs(item.lastRunId!.toString());
@@ -192,11 +143,11 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
 
   const TitleBar = (
       <>
-        <Typography className={classes.title}>
+        <Typography className={title}>
           <GithubIcon/>
           All Workflows
         </Typography>
-        <Box role="combobox" className={classes.options}>
+        <Box role="combobox" className={options}>
             <SelectBranch/>
         </Box>
       </>
@@ -235,17 +186,21 @@ export const DenseTable = ({ items, updateData}: DenseTableProps) => {
   );
 };
 
-export const WorkflowTable = () => {
+const WorkflowTable = () => {
 
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity as Entity);
   const [ loadingState, setLoadingState ] = useState(true);
-  const { branch, listAllWorkflows, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
+  const { branch, listAllWorkflows, workflowsState, setWorkflowsState } = useGithuWorkflowsProvider();
 
   const updateData = async ()=> {
     const data = await listAllWorkflows(projectName);
     setWorkflowsState(data as WorkflowResultsProps[])
   }
+  
+  const { loading, error } = useAsync(async (): Promise<void> => {
+    updateData();
+  }, []);
 
   useEffect(()=>{
     setTimeout(()=>{
@@ -254,13 +209,8 @@ export const WorkflowTable = () => {
   },[])
 
   useEffect(()=>{
-      updateData();
-  },[branch]);
-
-  
-  const { loading, error } = useAsync(async (): Promise<void> => {
     updateData();
-  }, []);
+},[branch]);
 
 
   if (loading) {
@@ -301,3 +251,5 @@ export const WorkflowTable = () => {
     </ErrorBoundary>
   );
 };
+
+export default memo(WorkflowTable)

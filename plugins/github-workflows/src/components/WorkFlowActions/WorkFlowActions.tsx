@@ -1,77 +1,32 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 import SyncIcon from '@material-ui/icons/Sync';
 import ReplayIcon from '@material-ui/icons/Replay';
 import TimerIcon from '@material-ui/icons/Timer';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import { makeStyles, Tooltip } from '@material-ui/core';
-import { GithubWorkflowsContext } from '../context/GithubWorkflowsContext';
-import { WorkflowDispatchParameters, WorkflowResultsProps } from '../../utils/types';
+import { Tooltip } from '@material-ui/core';
+import { WorkflowResultsProps } from '../../utils/types';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotations } from '../../hooks';
 import { ModalComponent } from '../ModalComponent';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
+import { useWorkflowActionsStyles } from './styles';
+import { WorkFlowActionsProps } from './types';
+import { useGithuWorkflowsProvider } from '../context';
 
-type WorkFlowActionsProps = {
-    workflowId?: number,
-    status?: string,
-    conclusion?: string
-    parameters?: WorkflowDispatchParameters[] | []
-}
 
-const useStyles = makeStyles({
-    inProgress:{
-      animation: '$spin 2s linear infinite'
-    },
-    waitResponse:{
-      animation: '$pulse 2s linear infinite',
-      color: '#FEF050',
-      cursor: 'wait'
-    },
-    buttonWait:{
-      background: 'transparent',
-      border: 'none',
-      outline: 'none'
-    },
-    '@keyframes spin':{
-      '0%':{
-        transform: 'rotate(0deg)'
-      },
-      '100%': {
-        transform: 'rotate(360deg)'
-      }
-    },
-    '@keyframes pulse': {
-      '50%': {
-        transform: 'scale(1.1)',
-      },
-      '100%': {
-        transform: 'scale(1.3)',
-      }
-    }
-  });
-
-export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:WorkFlowActionsProps) => {
+export const WorkFlowActions : React.FC<WorkFlowActionsProps> = ({workflowId, status, conclusion, parameters}) => {
 
     const { entity } = useEntity();  
     const { projectName } = useEntityAnnotations(entity as Entity);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [workFlowSelected, setWorkFlowSelected] = useState<WorkflowResultsProps>();
-    const {inputsWorkflowsParams,  workflowsState, setWorkflowsState , handleStartWorkflowRun, handleStopWorkflowRun } = useContext(GithubWorkflowsContext);
-    const classes = useStyles();
+    const {inputsWorkflowsParams,  workflowsState, setWorkflowsState , handleStartWorkflowRun, handleStopWorkflowRun } = useGithuWorkflowsProvider();
+    const { buttonWait,waitResponse,inProgress } = useWorkflowActionsStyles();
     const errorApi = useApi(errorApiRef);
-
-    useEffect(() => {
-      if (workflowsState) {
-        const workFlowFilter = workflowsState.find((w: WorkflowResultsProps) => w.id === workflowId);
-        setWorkFlowSelected(workFlowFilter);
-      }
-    }, [workflowsState, workflowId]);
-
-    if(!status) return null;
 
     const handleShowModal = () => {
       setShowModal(!showModal)
@@ -163,14 +118,23 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
        }
        return Promise.resolve();
     }
+
+    useEffect(() => {
+      if (workflowsState) {
+        const workFlowFilter = workflowsState.find((w: WorkflowResultsProps) => w.id === workflowId);
+        setWorkFlowSelected(workFlowFilter);
+      }
+    }, [workflowsState, workflowId]);
+
+    if(!status) return null;
     
     return(
       <>
         {status.toLocaleLowerCase() === StatusWorkflowEnum.queued && (
            <Tooltip title="Please wait" placement="right">
-            <button className={classes.buttonWait} disabled>
+            <button className={buttonWait} disabled>
               <RadioButtonCheckedIcon
-              className={classes.waitResponse}
+              className={waitResponse}
               onClick={()=>handleClickActions(StatusWorkflowEnum.queued)}
               />
             </button>
@@ -180,7 +144,7 @@ export const WorkFlowActions = ({workflowId, status, conclusion, parameters}:Wor
         {status.toLocaleLowerCase() === StatusWorkflowEnum.inProgress && (
           <Tooltip title="Stop" placement="right">
                <RefreshIcon 
-                  className={classes.inProgress} 
+                  className={inProgress} 
                   onClick={()=>handleClickActions(StatusWorkflowEnum.inProgress)}
                    />
               </Tooltip>

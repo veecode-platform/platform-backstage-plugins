@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import '../../shared/globalstyle.css';
 import React, { useContext, useState } from 'react'
-import { Job, Step } from '../../../utils/types'
 import { Accordion, AccordionSummary, Box, CircularProgress, Fade, List, ListItem, ListItemAvatar, ListItemText, Modal, Tooltip, Typography, Zoom } from '@material-ui/core'
 import { useModalStyles } from './styles'
 import { WorkFlowStatus } from '../../WorkFlowStatus'
@@ -22,33 +21,10 @@ import { LogViewer, Progress } from '@backstage/core-components'
 import DescriptionIcon from '@material-ui/icons/Description';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum'
+import { HeaderComponentProps, JobLogsComponentProps, JobModalProps, StepsListComponentsProps } from '../types';
 
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
-
-type JobModalProps = {
-    job: Job,
-    show: boolean,
-    handleCloseModal: () => void
-}
-
-type HeaderComponentProps = {
-    jobName: string,
-    jobStatus: string,
-    jobConclusion: string,
-    jobStartedAt: string,
-    jobCompletedAt: string
-}
-
-type StepsListComponentsProps = {
-    steps: Step[]
-};
-
-
-type JobLogsComponentProps = {
-    jobId: number,
-    running: boolean
-}
 
 const HeaderComponent : React.FC<HeaderComponentProps> = (props) => {
     const {jobName, jobStatus, jobConclusion, jobStartedAt, jobCompletedAt } = props;

@@ -2,15 +2,10 @@ import { Box, Paper, Tooltip, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
 import { Job } from '../../../utils/types'
 import { calculateDuration, getFileNameToPath } from '../../../utils/common'
-import { useStyles } from '../styles'
+import { useWorkflowDetailsStyles } from '../styles'
 import { WorkFlowStatus } from '../../WorkFlowStatus'
 import { JobModal } from '../JobModal'
-
-export type JobsComponentProps = {
-    path:string,
-    event: string,
-    jobs: Job[]
-}
+import { JobsComponentProps } from '../types'
 
 export const JobsComponent : React.FC<JobsComponentProps> = (props) => {
 
@@ -18,7 +13,7 @@ export const JobsComponent : React.FC<JobsComponentProps> = (props) => {
   const title = getFileNameToPath(path);
   const [ showModalSteps,setShowModalSteps ] = useState<boolean>(false);
   const [ jobSelected, setJobSelected] = useState<Job|null>(null);
-  const {jobsSection, jobsContent,jobItem,jobDuration} = useStyles();
+  const {jobsSection, jobsContent,jobItem,jobDuration} = useWorkflowDetailsStyles();
 
   const handleToggleModal = () => setShowModalSteps(!showModalSteps);
 

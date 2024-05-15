@@ -8,7 +8,7 @@ type WorkFlowStatusProps = {
     icon?: boolean
 }
 
-export const WorkFlowStatus = ({ status, conclusion, icon }: WorkFlowStatusProps) => {
+export const WorkFlowStatus : React.FC<WorkFlowStatusProps> = ({ status, conclusion, icon }) => {
 
     if (!status) return null;
 

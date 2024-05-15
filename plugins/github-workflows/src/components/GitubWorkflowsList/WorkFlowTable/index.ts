@@ -1,1 +1,1 @@
-export { WorkflowTable } from './WorkflowTable';
+export *  from './WorkflowTable';

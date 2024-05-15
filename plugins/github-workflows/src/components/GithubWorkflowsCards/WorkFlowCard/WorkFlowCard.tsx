@@ -1,84 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react';
-import { EmptyState, ErrorBoundary, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
-import { Box, Button, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography, makeStyles } from '@material-ui/core';
+import React, { memo, useEffect, useState } from 'react';
+import { EmptyState, ErrorBoundary, Progress, ResponseErrorPanel } from '@backstage/core-components';
+import { Box, Button, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography } from '@material-ui/core';
 import { WorkFlowItem } from './WorkFlowItem';
-import { GithubWorkflowsContext } from '../../context/GithubWorkflowsContext';
 import useAsync from 'react-use/lib/useAsync';
 import { WORKFLOW_ANNOTATION, useEntityAnnotations } from '../../../hooks/useEntityAnnotations';
-import { useEntity } from '@backstage/plugin-catalog-react';
+import { useEntity,MissingAnnotationEmptyState } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
-import { SelectBranch } from '../../SelectBranch';
 import { WorkflowResultsProps } from '../../../utils/types';
 import CachedIcon from '@material-ui/icons/Cached';
 import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
 import GithubIcon from '../../assets/GithubIcon';
-
-const useStyles = makeStyles(theme => ({
-  title: {
-    paddingLeft: '1.5rem',
-    fontSize: '1.5rem',
-    display: 'flex',
-    alignItems: 'center'
-  },
-  options:{
-    padding: '0 0 1rem 0',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '1rem'
-  },
-  buttonRefresh:{
-    marginTop: '10%'
-  },
-  loadingComponent:{
-    width:'100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '.3rem 0'
-  },
-  workflowsGroup: {
-    width: '95%',
-    margin: 'auto',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    padding: '2rem 1rem',
-    gap: '1.5rem',
-    overflow: 'auto',
-    borderTop: `1px solid ${theme.palette.divider}`,
-    '&::-webkit-scrollbar': {
-      width: '10px',
-      height: '4px'
-    },
-    '&::-webkit-scrollbar-thumb': {
-      borderRadius: '50px',
-      background: theme.palette.grey[600],
-
-    },
-    '&::-webkit-scrollbar-track': {
-      background: 'transparent',
-      height: '2px'
-    }
-  },
-  info: {
-    width: '100%',
-    textAlign: 'center'
-  }
-
-}));
+import { useWorkflowCardStyles } from './styles';
+import { useGithuWorkflowsProvider } from '../../context';
+import { CardsProps } from './types';
+import SelectBranch from '../../SelectBranch/SelectBranch';
 
 
-type CardsProps = {
-  items: WorkflowResultsProps[] | [],
-  updateData: () => Promise<void>
-}
-
-export const Cards = ({ items, updateData }: CardsProps) => {
+export const Cards : React.FC<CardsProps> = ({ items, updateData }) => {
 
   const [ loading, setLoading] = useState<boolean>(false);
-  const classes = useStyles();
+  const {title, options, buttonRefresh,workflowsGroup,loadingComponent,info} = useWorkflowCardStyles();
 
   const refresh = async ()=> {
     setLoading(true)
@@ -88,7 +30,7 @@ export const Cards = ({ items, updateData }: CardsProps) => {
 
   const TitleBar = (
     <>
-      <Typography className={classes.title}>
+      <Typography className={title}>
         <GithubIcon/>
         Workflows
       </Typography>
@@ -96,14 +38,14 @@ export const Cards = ({ items, updateData }: CardsProps) => {
   );
 
   const ActionsCard = (
-    <Box className={classes.options}>
+    <Box className={options}>
       <SelectBranch/>
 
       <IconButton
         aria-label="Refresh"
         title="Refresh"
         onClick={() => refresh()}
-        className={classes.buttonRefresh}
+        className={buttonRefresh}
       >
         <CachedIcon />
       </IconButton>
@@ -118,13 +60,13 @@ export const Cards = ({ items, updateData }: CardsProps) => {
           title={TitleBar}
           action={ActionsCard}
          />
-         <CardContent className={classes.workflowsGroup}>
+         <CardContent className={workflowsGroup}>
           {loading ?
-            (<Box className={classes.loadingComponent}> <CircularProgress />  </Box>) :
+            (<Box className={loadingComponent}> <CircularProgress />  </Box>) :
             (
               <>
                 {
-                  items.length === 0 ? <div className={classes.info}>No records to display</div> : (
+                  items.length === 0 ? <div className={info}>No records to display</div> : (
                     items.map(item =>
                       (<WorkFlowItem
                         id={item.id!}
@@ -147,20 +89,16 @@ export const Cards = ({ items, updateData }: CardsProps) => {
   )
 }
 
-export const WorkFlowCard = () => {
+const WorkFlowCard = () => {
   
   const { entity } = useEntity();
   const { projectName, workflows } = useEntityAnnotations(entity as Entity)
-  const { listAllWorkflows, branch, workflowsState, setWorkflowsState } = useContext(GithubWorkflowsContext);
+  const { listAllWorkflows, branch, workflowsState, setWorkflowsState } = useGithuWorkflowsProvider();
 
   const updateData = async ()=> {
     const data = await listAllWorkflows(projectName, workflows as string[]);
     setWorkflowsState(data as WorkflowResultsProps[])
   }
-
-  useEffect(()=>{
-      updateData();
-  },[branch])
 
   const { loading, error } = useAsync(async (): Promise<void> => {
     if(workflows){
@@ -168,6 +106,11 @@ export const WorkFlowCard = () => {
       setWorkflowsState(data as WorkflowResultsProps[])
     }
 }, []);
+
+  useEffect(()=>{
+    updateData();
+  },[branch])
+
 
   if(!workflows){
     return (
@@ -208,3 +151,5 @@ export const WorkFlowCard = () => {
     </ErrorBoundary>
     );
 };
+
+export default memo(WorkFlowCard)
