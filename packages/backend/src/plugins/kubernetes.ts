@@ -11,6 +11,7 @@ export default async function createPlugin(
     logger: env.logger,
     config: env.config,
     catalogApi,
+    discovery: env.discovery,
     permissions: env.permissions,
   }).build();
   return router;
