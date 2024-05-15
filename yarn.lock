@@ -4386,7 +4386,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@backstage/plugin-permission-common@npm:^0.7.13":
+"@backstage/plugin-permission-common@npm:^0.7.12, @backstage/plugin-permission-common@npm:^0.7.13":
   version: 0.7.13
   resolution: "@backstage/plugin-permission-common@npm:0.7.13"
   dependencies:
@@ -13451,7 +13451,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/plugin-application-common@^0.1.86, @veecode-platform/plugin-application-common@workspace:plugins/application-common":
+"@veecode-platform/plugin-application-common@npm:^0.1.86":
+  version: 0.1.86
+  resolution: "@veecode-platform/plugin-application-common@npm:0.1.86"
+  dependencies:
+    "@backstage/plugin-permission-common": ^0.7.12
+  checksum: 24fe351425ff4bf38279b60806e0cd85278609d3c611e559cd18b05b3a51f49651a1fdb5ac726656713f23f4d5ad99e96c2c18180974f670d6d3911e82258a84
+  languageName: node
+  linkType: hard
+
+"@veecode-platform/plugin-application-common@workspace:plugins/application-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/plugin-application-common@workspace:plugins/application-common"
   dependencies:
@@ -13599,7 +13608,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/plugin-veecode-platform-common@^0.1.0, @veecode-platform/plugin-veecode-platform-common@workspace:plugins/veecode-platform-common":
+"@veecode-platform/plugin-veecode-platform-common@npm:^0.1.0":
+  version: 0.1.115
+  resolution: "@veecode-platform/plugin-veecode-platform-common@npm:0.1.115"
+  checksum: a98c95a9252c9e9363b07b93ab51b74fde8c5b02f69963cc4e75e7ec9d7bfe0fd3ea0ee677f865b8a7c72489d92cff494dc8b909d24d42c8c5328b3c53902f6f
+  languageName: node
+  linkType: hard
+
+"@veecode-platform/plugin-veecode-platform-common@workspace:plugins/veecode-platform-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/plugin-veecode-platform-common@workspace:plugins/veecode-platform-common"
   dependencies:
