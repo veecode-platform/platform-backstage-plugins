@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useContext } from 'react';
 import { useState } from "react";
 import { GithubWorkflowsContext } from './GithubWorkflowsContext';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
@@ -109,6 +109,17 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
      }
   }
 
+  const listAllEnvironments = async(projectSlug:string)=>{
+    try{
+      const response = await api.getEnvironmentsList(projectSlug);
+      if(response) return response;
+      return null
+    }catch(e:any){
+      errorApi.post(e);
+      return null
+    }
+  }
+
   return (
     <GithubWorkflowsContext.Provider
       value={{
@@ -125,9 +136,12 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
         setWorkflowsByAnnotationsState,
         handleStartWorkflowRun,
         handleStopWorkflowRun,
-        downloadJobLogs
+        downloadJobLogs,
+        listAllEnvironments
       }}>
       {children}
     </GithubWorkflowsContext.Provider>
   );
 };
+
+export const useGithuWorkflowsProvider = () => useContext(GithubWorkflowsContext)
