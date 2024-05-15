@@ -57,6 +57,10 @@ export interface GithubWorkflowsApi {
      *  download job logs
      */
     downloadJobLogsForWorkflowRun(githubRepoSlug: string, jobId: number): Promise<RestEndpointMethodTypes['actions']['downloadJobLogsForWorkflowRun']['response']['data']>
+    /**
+     *  list all environments
+     */
+    getEnvironmentsList(githubRepoSlug: string) : Promise<RestEndpointMethodTypes['repos']['getAllEnvironments']['response']['data']>
 }
 
 export const githubWorkflowsApiRef = createApiRef<GithubWorkflowsApi>({
@@ -374,6 +378,37 @@ class Client {
     );
     return response.data;
   }
+
+  async getEnvironmentsList(githubRepoSlug: string) : Promise<RestEndpointMethodTypes['repos']['getAllEnvironments']['response']['data']> {
+    const hostname = 'github.com';
+    const owner = githubRepoSlug.split('/')[0];
+    const repo = githubRepoSlug.split('/')[1];
+
+    const { token } = await this.scmAuthApi.getCredentials({
+      url: `https://${hostname}/`,
+      additionalScope: {
+        customScopes: {
+          github: ['repo'],
+        },
+      },
+    });
+
+    const octokit = new Octokit({
+      auth: token,
+    });
+
+    const response = await octokit.request(
+      `GET /repos/${githubRepoSlug}/environments`,
+      {
+        owner,
+        repo,
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+      },
+    );
+    return response.data;
+  }
 }
 
 export class GithubWorkflowsApiClient implements GithubWorkflowsApi {
@@ -408,6 +443,9 @@ export class GithubWorkflowsApiClient implements GithubWorkflowsApi {
     }
     async downloadJobLogsForWorkflowRun(githubRepoSlug: string, jobId:number):Promise<RestEndpointMethodTypes['actions']['downloadJobLogsForWorkflowRun']['response']['data']>{
         return this.client.downloadJobLogsForWorkflowRun(githubRepoSlug,jobId)
+    }
+    async getEnvironmentsList(githubRepoSlug: string):Promise<RestEndpointMethodTypes['repos']['getAllEnvironments']['response']['data']>{
+        return this.client.getEnvironmentsList(githubRepoSlug)
     }
 }
 
