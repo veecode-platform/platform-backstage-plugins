@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -8,9 +8,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { WorkflowDispatchParameters } from '../../utils/types';
-import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, makeStyles } from '@material-ui/core';
-import { GithubWorkflowsContext } from '../context';
+import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { validateString } from '../../utils/validators';
+import { useGithuWorkflowsProvider } from '../context';
+import { useModalStyles } from './styles';
+import EnvironmentFieldComponent from './EnvironmentFieldComponent';
 
 type ModalComponentProps = {
   open: boolean,
@@ -19,52 +21,16 @@ type ModalComponentProps = {
   handleStartWorkflow?: () => Promise<void>
 }
 
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    padding: '4rem',
-    borderTop: `1px solid ${theme.palette.divider}`,
-    display: 'flex',
-    alignItems: 'stretch',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    gap: '1rem'
-  },
-  formControl: {
-    width: '100%'
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-  footer:{
-    paddingBottom: '1rem'
-  }
-}));
-
 export const ModalComponent = ({open, handleModal, parameters, handleStartWorkflow }:ModalComponentProps) => {
 
   const [stateCheckbox, setStateCheckbox ] = useState<boolean>(false);
   const [valueOption, setValueOption] = useState<string|null>(null);
   const [ inputWorkflow, setInputWorkflow ] = useState<object>({});
   const [errorsState, setErrorsState] = useState<Record<string, boolean>>({});
-  const classes = useStyles();
-  const { setInputs } = useContext(GithubWorkflowsContext);
+  const {modal,label,formControl,footer} = useModalStyles();
+  const { setInputs } = useGithuWorkflowsProvider();
 
-  useEffect(() => {
-    const data: any = {};
-    parameters.forEach(p => {
-      data[p.name] = p.default;
-    });
-    setInputWorkflow(data);
-  }, []);
-  
-  const handleChangeSelect = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
-   setValueOption(event.target.value as string);
-   if(event){
-     setInputWorkflow({...inputWorkflow, [event.target.name!]: event.target.value})
-   }
-  };
-
-  const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) : void => {    
+  const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) : void => {
     if(required){
       if(type === "string" && validateString(event.target.value as string)){
         setErrorsState({...errorsState, [event.target.name!] : true });
@@ -93,17 +59,32 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
     if (required && event.target.value === "") setErrorsState({ ...errorsState, [event.target.name!]: true })
     return;
   }
-  
+
   const handleSetInputs = () => {
     setInputs(inputWorkflow);
     handleModal();
     if(!!handleStartWorkflow) handleStartWorkflow();
   }
 
+  const handleChangeSelect = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
+   setValueOption(event.target.value as string);
+   if(event){
+     setInputWorkflow({...inputWorkflow, [event.target.name!]: event.target.value})
+   }
+  };
+
+  useEffect(() => {
+    const data: any = {};
+    parameters.forEach(p => {
+      data[p.name] = p.default;
+    });
+    setInputWorkflow(data);
+  }, []);
+
   return (
       <Dialog open={open} onClose={handleModal} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Workflows Parameters</DialogTitle>
-        <DialogContent className={classes.modal}>
+        <DialogContent className={modal}>
           <DialogContentText>
           Fill in the fields according to the values set in the project workflow.
           </DialogContentText>
@@ -121,7 +102,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                   type="string"
                   fullWidth
                   onBlur={(event) => touchedField(event, p.required)}
-                  onChange={(event) => handleChange(event, p.required, p.type)}  
+                  onChange={(event) => handleChange(event, p.required, p.type)}
                   error={errorsState[p.name]}
                     helperText={
                       errorsState[p.name]
@@ -140,17 +121,18 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                   label={p.description}
                   onBlur={(event) => touchedField(event, p.required)}
                   type="number"
-                  fullWidth  
-                  onChange={(event) => handleChange(event, p.required, p.type)}  
+                  fullWidth
+                  onChange={(event) => handleChange(event, p.required, p.type)}
               />
               )}
               {p.type === "choice" && (
-                  <FormControl variant="outlined" className={classes.formControl} >
-                    <InputLabel id={p.name}>{p.description}</InputLabel>
+                  <FormControl variant="outlined" className={formControl} >
+                    <InputLabel className={label} id={p.name}>{p.description}</InputLabel>
                     <Select
                       labelId={p.name}
                       id="select-outlined"
                       value={valueOption ?? p.default}
+                      variant="filled"
                       onChange={handleChangeSelect}
                       label={p.description}
                       required={p.required as boolean}
@@ -164,6 +146,17 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                       ))}
                     </Select>
                   </FormControl>
+              )}
+               {p.type === "environment" && (
+                  <EnvironmentFieldComponent
+                    name={p.name}
+                    description={p.description}
+                    value={valueOption}
+                    defaultValue={p.default}
+                    required={p.required}
+                    onSelect={handleChangeSelect}
+                    onTouch={touchedField}
+                  />
               )}
                 {p.type === "boolean" && (
                   <FormControlLabel
@@ -184,11 +177,11 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
             ))
           }
         </DialogContent>
-        <DialogActions className={classes.footer}>
+        <DialogActions className={footer}>
           <Button onClick={handleModal} color="primary">
             Cancel
           </Button>
-          <Button 
+          <Button
             disabled={Object.values(errorsState).some((error) => error)}
             onClick={handleSetInputs}
             color="primary"
