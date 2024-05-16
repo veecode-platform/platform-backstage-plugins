@@ -1,7 +1,7 @@
 /* eslint-disable @backstage/no-undeclared-imports */
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import { GithubWorkflowsProvider } from '../context/GithubWorkflowsProvider'
+import { GithubWorkflowsProvider } from '../../context/GithubWorkflowsProvider'
 import { Route, Routes } from 'react-router-dom'
 import GithubWorkflowsDetails from '../GithubWorkflowsDetails/GithubWorkflowsDetails'
 import WorkflowTable from './WorkFlowTable/WorkflowTable'

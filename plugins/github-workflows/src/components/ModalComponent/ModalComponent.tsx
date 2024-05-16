@@ -9,7 +9,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select } from '@material-ui/core';
 import { validateString } from '../../utils/validators';
-import { useGithuWorkflowsProvider } from '../context';
+import { useGithuWorkflowsContext } from '../../context';
 import { useModalStyles } from './styles';
 import EnvironmentFieldComponent from './EnvironmentFieldComponent';
 import { ModalComponentProps } from './types';
@@ -22,7 +22,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
   const [ inputWorkflow, setInputWorkflow ] = useState<object>({});
   const [errorsState, setErrorsState] = useState<Record<string, boolean>>({});
   const {modal,label,formControl,footer} = useModalStyles();
-  const { setInputs } = useGithuWorkflowsProvider();
+  const { setInputs } = useGithuWorkflowsContext();
 
   const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) : void => {
     if(required){

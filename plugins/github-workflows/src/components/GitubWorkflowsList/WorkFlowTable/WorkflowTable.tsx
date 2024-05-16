@@ -18,11 +18,11 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../../ModalComponent';
 import DescriptionIcon from '@material-ui/icons/Description';
 import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
-import GithubIcon from '../../assets/GithubIcon';
+import GithubIcon from '../../../assets/GithubIcon';
 import { useNavigate } from 'react-router-dom';
 import Timer from '@material-ui/icons/Timer';
 import { useWorkflowTableStyles } from './styles';
-import { useGithuWorkflowsProvider } from '../../context';
+import { useGithuWorkflowsContext } from '../../../context';
 import { DenseTableProps } from './types';
 import SelectBranch from '../../SelectBranch/SelectBranch';
 
@@ -191,7 +191,7 @@ const WorkflowTable = () => {
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity as Entity);
   const [ loadingState, setLoadingState ] = useState(true);
-  const { branch, listAllWorkflows, workflowsState, setWorkflowsState } = useGithuWorkflowsProvider();
+  const { branch, listAllWorkflows, workflowsState, setWorkflowsState } = useGithuWorkflowsContext();
 
   const updateData = async ()=> {
     const data = await listAllWorkflows(projectName);

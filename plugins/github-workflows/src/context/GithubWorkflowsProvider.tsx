@@ -3,9 +3,9 @@ import React, { ReactNode, useCallback, useContext } from 'react';
 import { useState } from "react";
 import { GithubWorkflowsContext } from './GithubWorkflowsContext';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
-import { githubWorkflowsApiRef } from '../../api';
-import { WorkflowResultsProps } from '../../utils/types';
-import { sortWorflowsByName } from '../../utils/common';
+import { githubWorkflowsApiRef } from '../api';
+import { WorkflowResultsProps } from '../utils/types';
+import { sortWorflowsByName } from '../utils/common';
 
 interface GithubWorkflowsProviderProps {
   children: ReactNode;
@@ -143,4 +143,4 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
   );
 };
 
-export const useGithuWorkflowsProvider = () => useContext(GithubWorkflowsContext)
+export const useGithuWorkflowsContext = () => useContext(GithubWorkflowsContext)

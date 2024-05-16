@@ -1,6 +1,6 @@
 /* eslint-disable @backstage/no-undeclared-imports */
 import React, { useState } from 'react'
-import { GithubWorkflowsProvider, useGithuWorkflowsProvider } from '../context';
+import { GithubWorkflowsProvider, useGithuWorkflowsContext } from '../../context';
 import { useRouteRefParams } from '@backstage/core-plugin-api';
 import { buildRouteRef } from '../../routes';
 import { useEntityAnnotations } from '../../hooks';
@@ -21,7 +21,7 @@ const GithubWorkflowsDetails = () => {
   const { id } = useRouteRefParams(buildRouteRef);
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity as Entity);
-  const { getWorkflowById,listJobsForWorkflowRun } = useGithuWorkflowsProvider();
+  const { getWorkflowById,listJobsForWorkflowRun } = useGithuWorkflowsContext();
   const [workflowRun,setWorkflowRun] = useState<WorkflowRun|null>(null);
   const [jobsRun, setJobsRun] = useState<Job[]|[]>([]);
   const { root,container,footer } = useWorkflowDetailsStyles();

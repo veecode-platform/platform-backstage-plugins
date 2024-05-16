@@ -1,5 +1,5 @@
 import { createContext} from "react";
-import { Job, WorkflowResultsProps, WorkflowRun } from "../../utils/types";
+import { Job, WorkflowResultsProps, WorkflowRun } from "../utils/types";
 import { RestEndpointMethodTypes } from "@octokit/rest";
 
 

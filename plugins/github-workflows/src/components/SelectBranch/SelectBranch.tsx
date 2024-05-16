@@ -8,7 +8,7 @@ import { Branches } from '../../utils/types';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { OptionsProps } from './type';
-import { useGithuWorkflowsProvider } from '../context';
+import { useGithuWorkflowsContext } from '../../context';
 
 
 const SelectBranch = () => {
@@ -16,7 +16,7 @@ const SelectBranch = () => {
   const [branches, setBranches] = useState<Branches[]>([]);
   const [options, setOptions] = useState<OptionsProps[]>([]);
   const [branchDefault, setBranchDefault ] = useState<string>('');
-  const { branch, setBranchState } = useGithuWorkflowsProvider();
+  const { branch, setBranchState } = useGithuWorkflowsContext();
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
   const { entity } = useEntity();

@@ -10,9 +10,9 @@ import { Entity } from '@backstage/catalog-model';
 import { WorkflowResultsProps } from '../../../utils/types';
 import CachedIcon from '@material-ui/icons/Cached';
 import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
-import GithubIcon from '../../assets/GithubIcon';
+import GithubIcon from '../../../assets/GithubIcon';
 import { useWorkflowCardStyles } from './styles';
-import { useGithuWorkflowsProvider } from '../../context';
+import { useGithuWorkflowsContext } from '../../../context';
 import { CardsProps } from './types';
 import SelectBranch from '../../SelectBranch/SelectBranch';
 
@@ -93,7 +93,7 @@ const WorkFlowCard = () => {
   
   const { entity } = useEntity();
   const { projectName, workflows } = useEntityAnnotations(entity as Entity)
-  const { listAllWorkflows, branch, workflowsState, setWorkflowsState } = useGithuWorkflowsProvider();
+  const { listAllWorkflows, branch, workflowsState, setWorkflowsState } = useGithuWorkflowsContext();
 
   const updateData = async ()=> {
     const data = await listAllWorkflows(projectName, workflows as string[]);

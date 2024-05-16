@@ -2,7 +2,7 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import React, { memo } from 'react';
 import { useEntityAnnotations } from '../../hooks';
 import { FormControl,InputLabel, MenuItem, Select} from '@material-ui/core';
-import { useGithuWorkflowsProvider } from '../context';
+import { useGithuWorkflowsContext } from '../../context';
 import useAsync from 'react-use/lib/useAsync';
 import { useModalStyles } from './styles';
 import { Skeleton } from '@material-ui/lab';
@@ -14,7 +14,7 @@ const EnvironmentFieldComponent : React.FC<EnvironmentFieldProps> = ({name,descr
 
     const {entity} = useEntity();
     const {projectName} = useEntityAnnotations(entity);
-    const { listAllEnvironments } = useGithuWorkflowsProvider();
+    const { listAllEnvironments } = useGithuWorkflowsContext();
     const {label,formControl} = useModalStyles();
 
     const {error, loading, value: options} = useAsync(async()=>{

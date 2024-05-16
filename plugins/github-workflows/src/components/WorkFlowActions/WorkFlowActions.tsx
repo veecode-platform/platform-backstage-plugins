@@ -15,7 +15,7 @@ import { ModalComponent } from '../ModalComponent';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import { useWorkflowActionsStyles } from './styles';
 import { WorkFlowActionsProps } from './types';
-import { useGithuWorkflowsProvider } from '../context';
+import { useGithuWorkflowsContext } from '../../context';
 
 
 export const WorkFlowActions : React.FC<WorkFlowActionsProps> = ({workflowId, status, conclusion, parameters}) => {
@@ -24,7 +24,7 @@ export const WorkFlowActions : React.FC<WorkFlowActionsProps> = ({workflowId, st
     const { projectName } = useEntityAnnotations(entity as Entity);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [workFlowSelected, setWorkFlowSelected] = useState<WorkflowResultsProps>();
-    const {inputsWorkflowsParams,  workflowsState, setWorkflowsState , handleStartWorkflowRun, handleStopWorkflowRun } = useGithuWorkflowsProvider();
+    const {inputsWorkflowsParams,  workflowsState, setWorkflowsState , handleStartWorkflowRun, handleStopWorkflowRun } = useGithuWorkflowsContext();
     const { buttonWait,waitResponse,inProgress } = useWorkflowActionsStyles();
     const errorApi = useApi(errorApiRef);
 

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import '../../shared/globalstyle.css';
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { Accordion, AccordionSummary, Box, CircularProgress, Fade, List, ListItem, ListItemAvatar, ListItemText, Modal, Tooltip, Typography, Zoom } from '@material-ui/core'
 import { useModalStyles } from './styles'
 import { WorkFlowStatus } from '../../WorkFlowStatus'
@@ -12,7 +12,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import BlockIcon from '@material-ui/icons/Block';
 import useAsync from 'react-use/lib/useAsync'
-import { GithubWorkflowsContext } from '../../context'
+import { useGithuWorkflowsContext } from '../../../context'
 import { useEntity } from '@backstage/plugin-catalog-react'
 import { useEntityAnnotations } from '../../../hooks'
 import { Entity } from '@backstage/catalog-model'
@@ -71,7 +71,7 @@ const StepsListComponent : React.FC<StepsListComponentsProps> = (props) => {
 const JobLogsComponent : React.FC<JobLogsComponentProps> = (props) => {
 
     const {jobId,running } = props;
-    const {downloadJobLogs} = useContext(GithubWorkflowsContext);
+    const {downloadJobLogs} = useGithuWorkflowsContext();
     const { entity } = useEntity();
     const { projectName } = useEntityAnnotations(entity as Entity);
     const [jobLogs,setJobLogs] = useState<string>('No Values Found');
