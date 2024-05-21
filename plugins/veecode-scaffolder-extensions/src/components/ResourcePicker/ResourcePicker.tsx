@@ -19,6 +19,7 @@ export type Annotations ={
 
 export type EntityResourceProps = {
   name: string;
+  type: string;
   [key:string]: Object
 }
 
@@ -43,10 +44,11 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
           if (i.metadata.environment) {
             return {
               name: i.metadata.name,
+              type: i.spec!.type as string,
               ...(i.metadata.environment as Object),
             };
           }
-          return { name: i.metadata.name };
+          return { name: i.metadata.name, type: i.spec!.type as string, };
         });
         setEntities(prevState => [...prevState, ...updateEntities]);
       } else {
@@ -54,10 +56,11 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
           if (i.metadata.environment) {
             return {
               name: i.metadata.name,
+              type: i.spec!.type as string,
               ...(i.metadata.environment as Object),
             };
           }
-          return { name: i.metadata.name };
+          return { name: i.metadata.name, type: i.spec!.type as string, };
         });
         setEntities(prevState => [...prevState, ...updateEntities]);
       }
