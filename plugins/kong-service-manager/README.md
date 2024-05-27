@@ -201,7 +201,7 @@ Finally, we have the list of plugins:
 
 For the example, we'll use the **rate limiting** plugin:
 
-![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/ec5730b4-b3a7-4aab-a93e-c7d989fe2cb2)
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/aaa55c9b-6471-4c9e-ab4e-2ab1888c18ba)
 
 When you install it, it will appear on the `Associated Plugins` tab:
 
