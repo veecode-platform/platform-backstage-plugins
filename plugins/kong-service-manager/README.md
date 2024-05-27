@@ -31,19 +31,75 @@ proxy:
    "/kong-manager/api":
         target: https://api.manager.apr.vee.codes/default
         allowedHeaders: ['Authorization', 'Content-Type']
+        workspace: 'default'        # Set the workspace / optional
         headers: 
+          Authorization: Basic ${KONG_ACCESS_TOKEN_}
           Accept: application/json
           Content-Type: 'application/json'
 
-    "/kong-other-manager/api":          <<-- If you have more than one instance of Kong, we need to list it too, as long as the proxy endpoint is different
+    "/kong-other-manager/api":          # In case of more than one instance
       target: https://api.manager.apr.vee.codes/default
       allowedHeaders: ['Authorization', 'Content-Type']
+      workspace: 'default'        # Set the workspace / optional
       headers: 
+        Authorization: Basic ${KONG_ACCESS_TOKEN_}
         Accept: application/json
         Content-Type: 'application/json'
 ```
 
-**2- Annotations**
+**2- Additional settings**
+
+  In this step, we need to expose some proxy information so that the plugin's api can handle requests consistently. To do this, we need to change 2 files in `packages > app`:
+- At the end of the file `package.json`, add the following information:
+ ```diff
+{
+ ....
+  "files": [
+    "dist",
+ +   "config.d.ts"
+  ],
+ + "configSchema": "config.d.ts"
+}
+```
+- After that, create a file called `config.d.ts` in the root of the `packages > app`. The content should display some information about the proxy, like this:
+```ts
+export interface Config {
+  /**
+  * @visibility frontend
+  */
+  proxy?: {
+    /** @visibility frontend */
+    endpoints?: {
+      /** @visibility frontend */
+      [key: string]:
+        | string
+        | {
+             /** @visibility frontend */
+              target: string;
+             /** @visibility frontend */
+              allowedHeaders?: string[];
+             /** @visibility frontend */
+              workspace?: string;
+             /** @visibility frontend */
+              headers?: {
+                  /** @visibility secret */
+                  Authorization?: string;
+                  /** @visibility secret */
+                  authorization?: string;
+                  /** @visibility secret */
+                  'X-Api-Key'?: string;
+                  /** @visibility secret */
+                  'x-api-key'?: string;
+                  [key: string]: string | undefined;
+                  };
+          };
+    };
+  } 
+}
+```
+
+
+**3- Annotations**
 
  The Plugin recognizes 2 annotations for its operation, the first being **`kong-manager/service-name`**, which will identify the service that will be used as a parameter. In this annotation you can enter the name of the service or its id, preferably the name. It's also worth noting that each `catalog-info.yaml` can only receive one service.
 The other annotation will be **`kong-manager/instance`**, which will receive the instances in which the kong will make the calls, this one can receive more than one item, properly separated by commas and without spaces. It's important to note that the instances must be configured as endpoints in the `app-config.yaml`, as per the previous section, if they haven't been properly configured the calls won't be answered.
@@ -157,9 +213,9 @@ From then on, the plugin will already be configured in your service:
 
 
 
-
 ---
 
+💡 See more about Kong:
 
-> **Kong Docs **: https://docs.konghq.com/
+> **Kong Docs**:  <https://docs.konghq.com/>
 
