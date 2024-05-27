@@ -6,8 +6,6 @@ export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
     id: 'plugin.kongservicemanager',
 });
 
-// const KONG_SERVICE_MANAGER_DEFAULT_PROXY_URL = "/kong-manager/api";
-
 function getPluginFieldType(type: string) {
     switch (type) {
         case "string":
@@ -67,10 +65,7 @@ export type ProxyOptions = {
 }
 
 export type KongProxyOptions = {
-    target: string,
-    allowedHeaders: string[],
-    workspace: string,
-    headers: object
+    workspace: string
 }
 
 class Client {
@@ -90,9 +85,7 @@ class Client {
         const apiUrl = await this.apiUrl(proxyPath);
 
         const resp = await fetch(`${apiUrl}${input}`, {
-            ...init,
-            // headers: {
-            // }
+            ...init
         });
 
         if (!resp.ok) {

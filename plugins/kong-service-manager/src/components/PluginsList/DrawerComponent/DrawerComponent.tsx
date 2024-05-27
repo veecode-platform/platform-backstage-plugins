@@ -1,20 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @backstage/no-undeclared-imports */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Checkbox, CircularProgress, Drawer, FormControl, FormControlLabel, IconButton, TextField, Typography } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
-import { KongServiceManagerContext } from '../../context';
 import { PluginFieldsResponse } from '../../../utils/types';
 import { EmptyStateComponent } from '../../shared';
 import { Progress } from '@backstage/core-components';
 import { useStyles } from './styles';
 import { IncrementalFields, RecordFields } from './FieldsCustom';
+import { useKongServiceManagerContext } from '../../../context';
 
 
 export const DrawerComponent = () => {
 
   const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction, spinner} = useStyles();
-  const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPlugin, allAssociatedPlugins, setConfigState, configState} = useContext(KongServiceManagerContext);
+  const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPlugin, allAssociatedPlugins, setConfigState, configState} = useKongServiceManagerContext();
   const [fieldsComponents, setFieldsComponents ] = useState<any[]|[]>([]);
   const [ isLoading, setLoading] = useState<boolean>(false);
   const [processingData, setProcessingData] = useState<boolean>(false);

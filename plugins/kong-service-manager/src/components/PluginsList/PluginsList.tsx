@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @backstage/no-undeclared-imports */
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { BoxComponent, EmptyStateComponent } from '../shared'
 import { Box, makeStyles } from '@material-ui/core'
 import { PluginsCards } from './PluginsCards';
-import { KongServiceManagerContext } from '../context';
 import useAsync from 'react-use/lib/useAsync';
 import { CardTab, Progress, TabbedCard } from '@backstage/core-components';
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
+import { useKongServiceManagerContext } from '../../context';
 
 const useStyles = makeStyles(theme=>({
    wrapper:{
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme=>({
 
 export const PluginsList = () => {
 
-  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins, pluginsPerCategory} = useContext(KongServiceManagerContext);
+  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins, pluginsPerCategory} = useKongServiceManagerContext();
   const { wrapper, emptyContent } = useStyles();
 
   const getPluginsEnabled = async () => {

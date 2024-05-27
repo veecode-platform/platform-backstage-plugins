@@ -1,10 +1,10 @@
 /* eslint-disable @backstage/no-undeclared-imports */
 import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, IconButton, Typography } from '@material-ui/core'
-import React, { useContext, useState }  from 'react'
+import React, { useState }  from 'react'
 import Edit from '@material-ui/icons/Edit'
 import { useStyles } from '../styles'
-import { KongServiceManagerContext } from '../../../context'
 import { PluginCard } from '../../../../utils/types'
+import { useKongServiceManagerContext } from '../../../../context'
 
 interface CardComponentProps {
     data: PluginCard
@@ -13,7 +13,7 @@ interface CardComponentProps {
 export const CardComponent = ({data}:CardComponentProps) => {
 
   const {card, cardHeader, cardTitle, cardIcon,description, button,spinner} = useStyles();
-  const { handleToggleDrawer, setPluginState, disablePlugin } = useContext(KongServiceManagerContext);
+  const { handleToggleDrawer, setPluginState, disablePlugin } = useKongServiceManagerContext();
   const [processingData, setProcessingData] = useState<boolean>(false);
 
   const handlePluginEnable = async () => {

@@ -2,13 +2,13 @@
 /* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { alertApiRef, errorApiRef, useApi } from "@backstage/core-plugin-api";
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, useContext, useEffect } from "react";
 import { useState } from "react";
-import { kongServiceManagerApiRef } from "../../api";
+import { kongServiceManagerApiRef } from "../api";
 import { KongServiceManagerContext } from "./KongServiceManagerContext";
-import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard, RoutesResponse, ServiceInfoResponse } from "../../utils/types";
+import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard, RoutesResponse, ServiceInfoResponse } from "../utils/types";
 import { useEntity } from '@backstage/plugin-catalog-react';
-import { useEntityAnnotation } from "../../hooks";
+import { useEntityAnnotation } from "../hooks";
 
 interface KongServiceManagerProviderProps {
     children : ReactNode
@@ -229,3 +229,6 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   );
 
 }
+
+
+export const useKongServiceManagerContext = () => useContext(KongServiceManagerContext)

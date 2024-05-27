@@ -1,15 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { CategoryComponent } from '../CategoryComponent';
-import { KongServiceManagerContext } from '../../../context';
+import { useKongServiceManagerContext } from '../../../../context';
+import { PluginPerCategory } from '../../../../utils/types';
 
 export const AllPlugins = () => {
 
-  const { pluginsPerCategory } = useContext(KongServiceManagerContext)
+  const { pluginsPerCategory } = useKongServiceManagerContext();
 
   return (
     <>
       { pluginsPerCategory.map( 
-        category => 
+        (category:PluginPerCategory) => 
           category.plugins.length >= 1 ? 
           <CategoryComponent label={category.category} plugins={category.plugins} key={category.category}/> 
           : null

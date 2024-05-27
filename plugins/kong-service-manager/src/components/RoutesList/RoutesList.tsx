@@ -1,12 +1,12 @@
 /* eslint-disable @backstage/no-undeclared-imports */
-import React, { useContext } from 'react'
+import React from 'react'
 import { BoxComponent, EmptyStateComponent } from '../shared'
 import { Box, makeStyles } from '@material-ui/core';
-import { KongServiceManagerContext } from '../context';
 import useAsync from 'react-use/lib/useAsync';
 import { Progress } from '@backstage/core-components';
 import { TableComponent } from './TableComponent';
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
+import { useKongServiceManagerContext } from '../../context';
 
 const useStyles = makeStyles(theme=>({
   content:{
@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme=>({
 
 export const RoutesList = () => {
 
-  const { getRoutesList, allRoutes } = useContext(KongServiceManagerContext);
+  const { getRoutesList, allRoutes } = useKongServiceManagerContext();
   const { content } = useStyles();
 
   const getRoutes = async () => {

@@ -1,14 +1,14 @@
 /* eslint-disable @backstage/no-undeclared-imports */
 import { Box, Chip, List, ListItem, ListItemText, makeStyles } from '@material-ui/core';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { BoxComponent, EmptyStateComponent } from '../shared';
-import { KongServiceManagerContext } from '../context';
 import useAsync from 'react-use/lib/useAsync';
 import { CopyTextButton } from '@backstage/core-components';
 import { LabelField } from './Fields';
 import dayjs from 'dayjs';
 import { SkeletonComponent } from './SkeletonComponent';
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
+import { useKongServiceManagerContext } from '../../context';
 
 
 export const useStyles = makeStyles(theme=>({
@@ -38,7 +38,7 @@ export const useStyles = makeStyles(theme=>({
 export const AboutPage = () => {
 
   const { listComponent, listItemWrapper, listItem, itemValue } = useStyles();
-  const { getServiceDetails, serviceDetails } = useContext(KongServiceManagerContext);
+  const { getServiceDetails, serviceDetails } = useKongServiceManagerContext();
   const [ isLoading, setLoading] = useState<boolean>(false);
 
   const getDetails = async () => {

@@ -2,6 +2,16 @@
 
 The Kong Service Manager plugin offers the facility to manipulate your service from different Kong environments, in your component, detailing information about the service, listing the routes it has and also offering the possibility of manipulating plugins without leaving the backstage.
 
+### Our community
+
+> 💬  **Join Us**
+>
+> Join our community to resolve questions about our **Plugins**. We look forward to welcoming you! <br>
+>
+>    [Go to Community  🚀](https://github.com/orgs/veecode-platform/discussions)
+
+<br><br>
+
 
 ## Installation 🔧
 

@@ -6,7 +6,8 @@ import { Route, Routes} from 'react-router';
 import { AboutPage } from '../AboutPage';
 import { RoutesList } from '../RoutesList';
 import { PluginsList } from '../PluginsList';
-import { KongServiceManagerProvider } from '../context';
+import { KongServiceManagerProvider } from '../../context';
+
 
 const useStyles = makeStyles(theme=>({
   content:{
