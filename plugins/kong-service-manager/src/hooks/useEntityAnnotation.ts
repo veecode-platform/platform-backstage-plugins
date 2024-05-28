@@ -10,7 +10,7 @@ export const useEntityAnnotation = (entity: Entity) => {
     if (!kongInstance) {
         return {
           serviceName,
-          kongInstance: null,
+          kongInstance: '/kong-manager/api',
           workspace
         };
       }
