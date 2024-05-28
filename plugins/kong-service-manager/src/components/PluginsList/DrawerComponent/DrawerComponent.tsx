@@ -6,14 +6,14 @@ import Close from '@material-ui/icons/Close';
 import { PluginFieldsResponse } from '../../../utils/types';
 import { EmptyStateComponent } from '../../shared';
 import { Progress } from '@backstage/core-components';
-import { useStyles } from './styles';
+import { useDrawerStyles } from './styles';
 import { IncrementalFields, RecordFields } from './FieldsCustom';
 import { useKongServiceManagerContext } from '../../../context';
 
 
 export const DrawerComponent = () => {
 
-  const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction, spinner} = useStyles();
+  const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction, spinner} = useDrawerStyles();
   const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPlugin, allAssociatedPlugins, setConfigState, configState} = useKongServiceManagerContext();
   const [fieldsComponents, setFieldsComponents ] = useState<any[]|[]>([]);
   const [ isLoading, setLoading] = useState<boolean>(false);

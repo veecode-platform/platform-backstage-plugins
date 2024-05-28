@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 
-export const useStyles = makeStyles(theme => ({
+export const useDrawerStyles = makeStyles(theme => ({
     paper: {
       width: '50%',
       justifyContent: 'space-between',
