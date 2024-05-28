@@ -1,1 +1,1 @@
-export { RoutesList } from './RoutesList';
+export  *  from './RoutesList';
