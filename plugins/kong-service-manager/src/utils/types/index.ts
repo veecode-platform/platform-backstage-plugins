@@ -25,7 +25,7 @@ export interface KongServiceManagerApi {
 
 export type Options = {
     discoveryApi: DiscoveryApi;
-    proxyPath: string;
+    proxyPath?: string;
 };
 export interface SchemaFields {
     [key: string]: any;
