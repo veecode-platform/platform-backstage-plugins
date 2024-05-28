@@ -26,6 +26,7 @@ export const entityMock = {
         'github.com/project-slug': 'ValberJunior/LoginNextJS',
         'backstage.io/techdocs-ref': 'dir:.',
         'kong-manager/service-name': 'LoginNextJS',
+        'kong-manager/workspace':'default',
         'kong-manager/instance': '/kong-manager/api'
       },
     },
