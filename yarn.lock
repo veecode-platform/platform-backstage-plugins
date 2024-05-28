@@ -3039,6 +3039,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@backstage/backend-defaults@npm:^0.2.18":
+  version: 0.2.18
+  resolution: "@backstage/backend-defaults@npm:0.2.18"
+  dependencies:
+    "@backstage/backend-app-api": ^0.7.3
+    "@backstage/backend-common": ^0.22.0
+    "@backstage/plugin-events-node": ^0.3.4
+  checksum: 08004b945d064139343a7755576c3feb4f70c9329324c3381209928128f9e2d787cc52e877449859e6ca992eb371ee0d5ec7d9ec735ffa4e37b108dda7b0907d
+  languageName: node
+  linkType: hard
+
 "@backstage/backend-dev-utils@npm:^0.1.4":
   version: 0.1.4
   resolution: "@backstage/backend-dev-utils@npm:0.1.4"
@@ -3906,6 +3917,20 @@ __metadata:
     google-auth-library: ^9.0.0
     passport-google-oauth20: ^2.0.0
   checksum: dee68a94ab1e4d7e5c412a47332f6e76be2b44757057b98f92544d7a2292754f68f6fe7b2cb668f48b78c2af40e89e98835d914f3023d4200e067a8ad4a9a1f2
+  languageName: node
+  linkType: hard
+
+"@backstage/plugin-auth-backend-module-guest-provider@npm:^0.1.4":
+  version: 0.1.4
+  resolution: "@backstage/plugin-auth-backend-module-guest-provider@npm:0.1.4"
+  dependencies:
+    "@backstage/backend-common": ^0.22.0
+    "@backstage/backend-plugin-api": ^0.6.18
+    "@backstage/catalog-model": ^1.5.0
+    "@backstage/errors": ^1.2.4
+    "@backstage/plugin-auth-node": ^0.4.13
+    passport-oauth2: ^1.7.0
+  checksum: 322ad75f88ca19e6eb71466d3084934c55dd4ce41fc4b09499644081a5dc59059e4f670deb170eeb7aaa17718dfc34afb99f2e5bbf294b0277ca8cf17ef35391
   languageName: node
   linkType: hard
 
@@ -6624,6 +6649,29 @@ __metadata:
   checksum: 39992c5f183c5ca3d761d6ed9dfabcb79b5f3750bf1b7f3532e1dc439ca370138bbd426ee250fdaba460bc948e6761fbefd484b8f4f36885d71ded96138340d1
   languageName: node
   linkType: hard
+
+"@internal/backstage-plugin-infracost-backend@workspace:^, @internal/backstage-plugin-infracost-backend@workspace:plugins/infracost-backend":
+  version: 0.0.0-use.local
+  resolution: "@internal/backstage-plugin-infracost-backend@workspace:plugins/infracost-backend"
+  dependencies:
+    "@backstage/backend-common": ^0.22.0
+    "@backstage/backend-defaults": ^0.2.18
+    "@backstage/backend-plugin-api": ^0.6.18
+    "@backstage/cli": ^0.26.5
+    "@backstage/config": ^1.2.0
+    "@backstage/plugin-auth-backend": ^0.22.5
+    "@backstage/plugin-auth-backend-module-guest-provider": ^0.1.4
+    "@types/express": "*"
+    "@types/supertest": ^2.0.8
+    express: ^4.17.1
+    express-promise-router: ^4.1.0
+    msw: ^1.0.0
+    node-fetch: ^2.6.7
+    supertest: ^6.2.4
+    winston: ^3.2.1
+    yn: ^4.0.0
+  languageName: unknown
+  linkType: soft
 
 "@ioredis/commands@npm:^1.1.1":
   version: 1.2.0
@@ -14899,7 +14947,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asap@npm:^2.0.3":
+"asap@npm:^2.0.0, asap@npm:^2.0.3":
   version: 2.0.6
   resolution: "asap@npm:2.0.6"
   checksum: b296c92c4b969e973260e47523207cd5769abd27c245a68c26dc7a0fe8053c55bb04360237cb51cab1df52be939da77150ace99ad331fb7fb13b3423ed73ff3d
@@ -15348,6 +15396,7 @@ __metadata:
     "@backstage/plugin-search-backend-module-pg": ^0.5.27
     "@backstage/plugin-search-backend-node": ^1.2.23
     "@backstage/plugin-techdocs-backend": ^1.10.5
+    "@internal/backstage-plugin-infracost-backend": "workspace:^"
     "@types/cookie-parser": ^1.4.6
     "@types/dockerode": ^3.3.0
     "@types/express": ^4.17.6
@@ -16810,7 +16859,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"component-emitter@npm:^1.2.0":
+"component-emitter@npm:^1.2.0, component-emitter@npm:^1.3.0":
   version: 1.3.1
   resolution: "component-emitter@npm:1.3.1"
   checksum: 94550aa462c7bd5a61c1bc480e28554aa306066930152d1b1844a0dd3845d4e5db7e261ddec62ae184913b3e59b55a2ad84093b9d3596a8f17c341514d6c483d
@@ -17168,7 +17217,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cookiejar@npm:^2.1.0":
+"cookiejar@npm:^2.1.0, cookiejar@npm:^2.1.4":
   version: 2.1.4
   resolution: "cookiejar@npm:2.1.4"
   checksum: c4442111963077dc0e5672359956d6556a195d31cbb35b528356ce5f184922b99ac48245ac05ed86cf993f7df157c56da10ab3efdadfed79778a0d9b1b092d5b
@@ -18371,6 +18420,16 @@ __metadata:
     detect: ./bin/detect-port
     detect-port: ./bin/detect-port
   checksum: 9dc37b1fa4a9dd6d4889e1045849b8d841232b598d1ca888bf712f4035b07a17cf6d537465a0d7323250048d3a5a0540e3b7cf89457efc222f96f77e2c40d16a
+  languageName: node
+  linkType: hard
+
+"dezalgo@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "dezalgo@npm:1.0.4"
+  dependencies:
+    asap: ^2.0.0
+    wrappy: 1
+  checksum: 895389c6aead740d2ab5da4d3466d20fa30f738010a4d3f4dcccc9fc645ca31c9d10b7e1804ae489b1eb02c7986f9f1f34ba132d409b043082a86d9a4e745624
   languageName: node
   linkType: hard
 
@@ -20087,7 +20146,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-safe-stringify@npm:2.1.1, fast-safe-stringify@npm:^2.0.6, fast-safe-stringify@npm:^2.0.7":
+"fast-safe-stringify@npm:2.1.1, fast-safe-stringify@npm:^2.0.6, fast-safe-stringify@npm:^2.0.7, fast-safe-stringify@npm:^2.1.1":
   version: 2.1.1
   resolution: "fast-safe-stringify@npm:2.1.1"
   checksum: a851cbddc451745662f8f00ddb622d6766f9bd97642dabfd9a405fb0d646d69fc0b9a1243cbf67f5f18a39f40f6fa821737651ff1bceeba06c9992ca2dc5bd3d
@@ -20512,6 +20571,18 @@ __metadata:
   version: 1.2.6
   resolution: "formidable@npm:1.2.6"
   checksum: 2b68ed07ba88302b9c63f8eda94f19a460cef6017bfda48348f09f41d2a36660c9353137991618e0e4c3db115b41e4b8f6fa63bc973b7a7c91dec66acdd02a56
+  languageName: node
+  linkType: hard
+
+"formidable@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "formidable@npm:2.1.2"
+  dependencies:
+    dezalgo: ^1.0.4
+    hexoid: ^1.0.0
+    once: ^1.4.0
+    qs: ^6.11.0
+  checksum: 81c8e5d89f5eb873e992893468f0de22c01678ca3d315db62be0560f9de1c77d4faefc9b1f4575098eb2263b3c81ba1024833a9fc3206297ddbac88a4f69b7a8
   languageName: node
   linkType: hard
 
@@ -21610,6 +21681,13 @@ __metadata:
   version: 6.2.0
   resolution: "helmet@npm:6.2.0"
   checksum: cf01e024244205bd10d70fd2f3874244b72ba37a10a4604e4383bbd63fe1438ee24bae7672c4ee5c5e16e6cd88ac58003274034fab0ba199761471555a322b37
+  languageName: node
+  linkType: hard
+
+"hexoid@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "hexoid@npm:1.0.0"
+  checksum: 27a148ca76a2358287f40445870116baaff4a0ed0acc99900bf167f0f708ffd82e044ff55e9949c71963852b580fc024146d3ac6d5d76b508b78d927fa48ae2d
   languageName: node
   linkType: hard
 
@@ -26065,6 +26143,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mime@npm:2.6.0":
+  version: 2.6.0
+  resolution: "mime@npm:2.6.0"
+  bin:
+    mime: cli.js
+  checksum: 1497ba7b9f6960694268a557eae24b743fd2923da46ec392b042469f4b901721ba0adcf8b0d3c2677839d0e243b209d76e5edcbd09cfdeffa2dfb6bb4df4b862
+  languageName: node
+  linkType: hard
+
 "mime@npm:^3.0.0":
   version: 3.0.0
   resolution: "mime@npm:3.0.0"
@@ -28191,7 +28278,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"passport-oauth2@npm:1.8.0, passport-oauth2@npm:1.x.x, passport-oauth2@npm:^1.1.2, passport-oauth2@npm:^1.4.0, passport-oauth2@npm:^1.6.0, passport-oauth2@npm:^1.6.1":
+"passport-oauth2@npm:1.8.0, passport-oauth2@npm:1.x.x, passport-oauth2@npm:^1.1.2, passport-oauth2@npm:^1.4.0, passport-oauth2@npm:^1.6.0, passport-oauth2@npm:^1.6.1, passport-oauth2@npm:^1.7.0":
   version: 1.8.0
   resolution: "passport-oauth2@npm:1.8.0"
   dependencies:
@@ -29572,7 +29659,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:^6.10.1, qs@npm:^6.10.2, qs@npm:^6.11.2, qs@npm:^6.5.1, qs@npm:^6.9.1, qs@npm:^6.9.4":
+"qs@npm:^6.10.1, qs@npm:^6.10.2, qs@npm:^6.11.0, qs@npm:^6.11.2, qs@npm:^6.5.1, qs@npm:^6.9.1, qs@npm:^6.9.4":
   version: 6.12.1
   resolution: "qs@npm:6.12.1"
   dependencies:
@@ -32855,6 +32942,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"superagent@npm:^8.1.2":
+  version: 8.1.2
+  resolution: "superagent@npm:8.1.2"
+  dependencies:
+    component-emitter: ^1.3.0
+    cookiejar: ^2.1.4
+    debug: ^4.3.4
+    fast-safe-stringify: ^2.1.1
+    form-data: ^4.0.0
+    formidable: ^2.1.2
+    methods: ^1.1.2
+    mime: 2.6.0
+    qs: ^6.11.0
+    semver: ^7.3.8
+  checksum: f3601c5ccae34d5ba684a03703394b5d25931f4ae2e1e31a1de809f88a9400e997ece037f9accf148a21c408f950dc829db1e4e23576a7f9fe0efa79fd5c9d2f
+  languageName: node
+  linkType: hard
+
 "supertest@npm:^4.0.2":
   version: 4.0.2
   resolution: "supertest@npm:4.0.2"
@@ -32862,6 +32967,16 @@ __metadata:
     methods: ^1.1.2
     superagent: ^3.8.3
   checksum: ec848088c5d0f6743a0829331c274f67ab4c2e5e6ba724f2fdf4965a73afa22d5091448323e28ae5b69137e42fe3ac67235dfc5b0a0acda3c088bdd193313319
+  languageName: node
+  linkType: hard
+
+"supertest@npm:^6.2.4":
+  version: 6.3.4
+  resolution: "supertest@npm:6.3.4"
+  dependencies:
+    methods: ^1.1.2
+    superagent: ^8.1.2
+  checksum: 875c6fa7940f21e5be9bb646579cdb030d4057bf2da643e125e1f0480add1200395d2b17e10b8e54e1009efc63e047422501e9eb30e12828668498c0910f295f
   languageName: node
   linkType: hard
 
