@@ -4,6 +4,8 @@ The Kong Service Manager plugin offers the facility to manipulate your service f
 
 ### Our community
 
+
+
 > 💬  **Join Us**
 >
 > Join our community to resolve questions about our **Plugins**. We look forward to welcoming you! <br>
@@ -13,7 +15,9 @@ The Kong Service Manager plugin offers the facility to manipulate your service f
 <br><br>
 
 
-## Installation 🔧
+
+
+## 🚀 Getting started: 
 
 
 If you are using yarn 3.x:
@@ -41,7 +45,6 @@ proxy:
    "/kong-manager/api":
         target: https://api.manager.apr.vee.codes/default
         allowedHeaders: ['Authorization', 'Content-Type']
-        workspace: 'default'        # Set the workspace / optional
         headers: 
           Authorization: Basic ${KONG_ACCESS_TOKEN_}
           Accept: application/json
@@ -50,52 +53,13 @@ proxy:
     "/kong-other-manager/api":          # In case of more than one instance
       target: https://api.manager.apr.vee.codes/default
       allowedHeaders: ['Authorization', 'Content-Type']
-      workspace: 'default'        # Set the workspace / optional
       headers: 
         Authorization: Basic ${KONG_ACCESS_TOKEN_}
         Accept: application/json
         Content-Type: 'application/json'
 ```
 
-**2- Additional settings**
-
-  In this step, we need to expose some proxy information so that the plugin's api can handle requests consistently. To do this, we need to change 2 files in `packages > app`:
-- At the end of the file `package.json`, add the following information:
- ```diff
-{
- ....
-  "files": [
-    "dist",
- +   "config.d.ts"
-  ],
- + "configSchema": "config.d.ts"
-}
-```
-- After that, create a file called `config.d.ts` in the root of the `packages > app`. The content should display some information about the proxy, like this:
-```ts
-export interface Config {
-  /**
-  * @visibility frontend
-  */
-  proxy?: {
-    /** @visibility frontend */
-    endpoints?: {
-      /** @visibility frontend */
-      [key: string]:
-        | string
-        | {
-             /** @visibility frontend */
-              target: string;
-             /** @visibility frontend */
-              workspace?: string;
-          };
-    };
-  } 
-}
-```
-
-
-**3- Annotations**
+**2- Annotations**
 
  The Plugin recognizes 2 annotations for its operation, the first being **`kong-manager/service-name`**, which will identify the service that will be used as a parameter. In this annotation you can enter the name of the service or its id, preferably the name. It's also worth noting that each `catalog-info.yaml` can only receive one service.
 The other annotation will be **`kong-manager/instance`**, which will receive the instances in which the kong will make the calls, this one can receive more than one item, properly separated by commas and without spaces. It's important to note that the instances must be configured as endpoints in the `app-config.yaml`, as per the previous section, if they haven't been properly configured the calls won't be answered.
@@ -113,6 +77,7 @@ metadata:
     backstage.io/techdocs-ref: dir:.
 +    kong-manager/service-name: nameservice_test_A01
 +    kong-manager/instance: /kong-manager/test,/kong-manager/test1
++    kong-manager/workspace: your_workspace  # optional: If omitted, it will always be 'default'
    
 spec:
   type: service
