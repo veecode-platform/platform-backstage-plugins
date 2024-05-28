@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { Content } from '@backstage/core-components';
 import { AllPlugins } from './AllPlugins';
-import { useStyles } from './styles';
+import { usePluginsCardsStyles } from './styles';
 import { AssociatedPlugins } from './AssociatedPlugins';
 import { DrawerComponent } from '../DrawerComponent';
 import { useKongServiceManagerContext } from '../../../context';
@@ -14,8 +14,8 @@ export interface PluginsCardsProps {
 
 export const PluginsCards = ({filterByAssociated}:PluginsCardsProps) => {
 
-  const { content } = useStyles();
-  const {listAllEnabledPlugins,associatedPluginsName} = useKongServiceManagerContext()
+  const {listAllEnabledPlugins,associatedPluginsName} = useKongServiceManagerContext();
+  const { content } = usePluginsCardsStyles();
 
   useEffect(()=>{
      listAllEnabledPlugins()

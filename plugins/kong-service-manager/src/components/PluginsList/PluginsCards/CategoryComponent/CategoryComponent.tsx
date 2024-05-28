@@ -1,7 +1,7 @@
 import { ItemCardGrid } from '@backstage/core-components'
 import { Box, Typography } from '@material-ui/core'
 import React from 'react'
-import { useStyles } from '../styles';
+import { usePluginsCardsStyles } from '../styles';
 import { CardComponent } from '../CardComponent';
 import { PluginCard } from '../../../../utils/types';
 
@@ -12,7 +12,7 @@ interface CategoryComponentProps {
 
 export const CategoryComponent = ({label, plugins}:CategoryComponentProps) => {
 
-  const {categoryLabel} = useStyles();
+  const {categoryLabel} = usePluginsCardsStyles();
 
   return (
     <Box>
