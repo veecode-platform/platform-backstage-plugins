@@ -43,7 +43,6 @@ export const PluginsList = () => {
     getPluginsEnabled();
   },[allAssociatedPlugins]);
 
-
   if (loading) return <Progress />;
 
   if(error) return <EmptyStateComponent/>;
