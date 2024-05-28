@@ -1,16 +1,17 @@
 import { Entity } from '@backstage/catalog-model';
+import { KONG_SERVICE_INSTANCE_ANNOTATION, KONG_SERVICE_NAME_ANNOTATION, KONG_SERVICE_WORKSPACE } from '../utils/constants/kongAnnotations';
 
-export const KONG_SERVICE_NAME_ANNOTATION = 'kong-manager/service-name';
-export const KONG_SERVICE_INSTANCE_ANNOTATION = 'kong-manager/instance';
 
 export const useEntityAnnotation = (entity: Entity) => {
     const serviceName = entity.metadata.annotations?.[KONG_SERVICE_NAME_ANNOTATION] ?? null;
     const kongInstance = entity.metadata.annotations?.[KONG_SERVICE_INSTANCE_ANNOTATION] ?? null;
+    const workspace = entity.metadata.annotations?.[KONG_SERVICE_WORKSPACE] ?? 'default';
 
     if (!kongInstance) {
         return {
           serviceName,
           kongInstance: null,
+          workspace
         };
       }
   
@@ -18,6 +19,7 @@ export const useEntityAnnotation = (entity: Entity) => {
 
     return {
         serviceName,
-        kongInstances
+        kongInstances,
+        workspace
     }
 }
