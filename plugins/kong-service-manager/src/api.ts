@@ -1,4 +1,4 @@
-import { ConfigApi, createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
+import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
 import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse, PluginPerCategory } from './utils/types';
 import { PluginsInfoData } from "../src/data/data"
 
@@ -53,7 +53,6 @@ export interface KongServiceManagerApi {
 
 export type Options = {
     discoveryApi: DiscoveryApi;
-    configApi: ConfigApi;
     /**
     * Path to use for requests via the proxy, defaults to /kong-manager/api
     */
@@ -70,13 +69,11 @@ export type KongProxyOptions = {
 
 class Client {
     private readonly discoveryApi: DiscoveryApi;
-    private readonly configApi: ConfigApi;
     private readonly proxyPath: string;
     
 
     constructor(opts: Options) {
         this.discoveryApi = opts.discoveryApi;
-        this.configApi = opts.configApi;
         this.proxyPath = opts.proxyPath as string;
     }
 
@@ -99,13 +96,6 @@ class Client {
     async apiUrl(proxyPath?: string):Promise<string> {
         const baseUrl = await this.discoveryApi.getBaseUrl("proxy")
         return `${baseUrl}${proxyPath || this.proxyPath}`
-    }
-
-    async getWorkspace(proxyPath:string):Promise<string>{
-        const data: ProxyOptions = this.configApi.getConfig('proxy').get('endpoints') as ProxyOptions;
-        const workspaceResult: Partial<KongProxyOptions> = data[proxyPath];
-        if (!workspaceResult)  return 'default';
-        return workspaceResult.workspace as string;
     }
 
     async getEnabledPlugins(proxyPath?: string): Promise<string[]> {
@@ -152,8 +142,7 @@ class Client {
     }
 
     async getPluginSchema(pluginName: string, proxyPath?: string): Promise<any> {
-        const workspace = await this.getWorkspace(proxyPath as string);
-        const response = await this.fetch(`/${workspace}/schemas/plugins/${pluginName}`, proxyPath)
+        const response = await this.fetch(`/schemas/plugins/${pluginName}`, proxyPath)
 
         const fieldsMap: Map<string, SchemaFields> = response.fields.reduce((map: { set: (arg0: string, arg1: any) => void; }, fieldObj: { [x: string]: any; }) => {
             const fieldName = Object.keys(fieldObj)[0];
@@ -199,8 +188,7 @@ class Client {
     }
 
     async getServiceAssociatedPlugins(serviceIdOrName: string, proxyPath?: string): Promise<AssociatedPluginsResponse[]> {
-        const workspace = await this.getWorkspace(proxyPath as string);
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins`, proxyPath)
+        const response = await this.fetch(`/services/${serviceIdOrName}/plugins`, proxyPath)
         const mapedPluginsData: AssociatedPluginsResponse[] = response.data.map((data: { name: any; id: any; tags: any; enabled: any; created_at: any; config: any; }) => {
             return {
                 name: data.name,
@@ -228,8 +216,7 @@ class Client {
             method: "POST",
             body: JSON.stringify(body)
         }
-        const workspace = await this.getWorkspace(proxyPath as string);
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins`, proxyPath, headers)
+        const response = await this.fetch(`/services/${serviceIdOrName}/plugins`, proxyPath, headers)
         return response
     }
 
@@ -244,8 +231,7 @@ class Client {
             method: "PATCH",
             body: JSON.stringify(body)
         }
-        const workspace = await this.getWorkspace(proxyPath as string);
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins/${pluginId}`, proxyPath, headers)
+        const response = await this.fetch(`/services/${serviceIdOrName}/plugins/${pluginId}`, proxyPath, headers)
         return response
 
     }
@@ -254,14 +240,12 @@ class Client {
         const headers: RequestInit = {
             method: "DELETE",
         }
-        const workspace = await this.getWorkspace(proxyPath as string);
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins/${pluginId}`, proxyPath, headers)
+        const response = await this.fetch(`/services/${serviceIdOrName}/plugins/${pluginId}`, proxyPath, headers)
         return response.message
     }
 
     async getRoutesFromService(serviceIdOrName: string, proxyPath?: string): Promise<RoutesResponse[]> {
-        const workspace = await this.getWorkspace(proxyPath as string);
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes`, proxyPath)
+        const response = await this.fetch(`/services/${serviceIdOrName}/routes`, proxyPath)
 
         const mapedRoutesResponse: RoutesResponse[] = response.data.map((route: { name: any; protocols: any; methods: any; tags: any; hosts: any; paths: any; }) => {
             return {
@@ -278,8 +262,7 @@ class Client {
     }
 
     async getServiceInfo(serviceIdOrName: string, proxyPath?: string): Promise<ServiceInfoResponse> {
-        const workspace = await this.getWorkspace(proxyPath as string);
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}`, proxyPath)
+        const response = await this.fetch(`/services/${serviceIdOrName}`, proxyPath)
         return response
     }
 
