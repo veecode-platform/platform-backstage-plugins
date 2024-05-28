@@ -10,6 +10,7 @@ Such as new **kinds**, new **schemas** and a new **apiversion**.
 - Cluster
 - Database
 - Vault
+- FinOps
 
 
 
