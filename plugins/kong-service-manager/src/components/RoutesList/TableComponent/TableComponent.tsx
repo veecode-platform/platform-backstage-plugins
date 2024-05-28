@@ -10,6 +10,7 @@ import { HtmlTooltip } from '../../shared';
 import MoreIcon from '@material-ui/icons/More';
 
 interface TableComponentProps {
+  isLoading: boolean;
   dataProps: RoutesResponse[] | []
 }  
 
@@ -32,7 +33,7 @@ const useStyle = makeStyles({
   }
 })
 
-export const TableComponent = ({dataProps}:TableComponentProps) => {
+export const TableComponent = ({isLoading,dataProps}:TableComponentProps) => {
 
   const {tooltipContent, tags} = useStyle();
 
@@ -166,6 +167,7 @@ export const TableComponent = ({dataProps}:TableComponentProps) => {
 
   return (
       <Table
+        isLoading={isLoading}
         options={{ paging: true, padding: 'dense',minBodyHeight:'55vh',paginationType:'stepped', paginationPosition:'bottom' }}
         data={generateData(dataProps)}
         columns={columns}
