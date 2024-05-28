@@ -34,7 +34,6 @@ export interface FinOpsEntityV1alpha1 extends Entity {
     type: string;
     lifecycle: string;
     owner: string;
-    environment: string;
     subcomponentOf?: string;
     dependsOn?: string[];
     system?: string;
