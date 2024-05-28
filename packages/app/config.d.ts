@@ -17,23 +17,6 @@
 /** Configuration for the devportal plugin behavior */
 export interface Config {
   /**
-  * @visibility frontend
-  */
-  proxy?: {
-    /** @visibility frontend */
-    endpoints?: {
-      /** @visibility frontend */
-      [key: string]:
-        | string
-        | {
-             /** @visibility frontend */
-              target: string;
-             /** @visibility frontend */
-              workspace?: string;
-          };
-    };
-  } 
-  /**
   * Configuration for scaffolder towards various external repository provider systems
   * @visibility frontend
   */
