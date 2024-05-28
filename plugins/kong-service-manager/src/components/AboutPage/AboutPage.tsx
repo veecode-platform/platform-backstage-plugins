@@ -1,6 +1,6 @@
 /* eslint-disable @backstage/no-undeclared-imports */
-import { Box, Chip, List, ListItem, ListItemText, makeStyles } from '@material-ui/core';
-import React, { useState } from 'react';
+import React from 'react';
+import { Box, Chip, List, ListItem, ListItemText } from '@material-ui/core';
 import { BoxComponent, EmptyStateComponent } from '../shared';
 import useAsync from 'react-use/lib/useAsync';
 import { CopyTextButton } from '@backstage/core-components';
@@ -9,51 +9,23 @@ import dayjs from 'dayjs';
 import { SkeletonComponent } from './SkeletonComponent';
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
 import { useKongServiceManagerContext } from '../../context';
+import { ServiceInfoResponse } from '../../utils/types';
+import { useAboutStyles } from './styles';
 
-
-export const useStyles = makeStyles(theme=>({
-  listComponent:{
-    background: theme.palette.background.default,
-    height: '100%',
-    minHeight: '65vh',
-    margin:'.5rem',
-  },
-  listItemWrapper:{
-    width: '100%',
-    '&:nth-child(even)':{
-      background: theme.palette.background.paper
-    }
-  },
-  listItem:{
-    width: '100%',
-    display: 'flex',
-    'align-items': 'center',
-    'justify-content': 'flex-start',
-  },
-  itemValue: {
-    width: '70%',
-  }
-}));
 
 export const AboutPage = () => {
 
-  const { listComponent, listItemWrapper, listItem, itemValue } = useStyles();
-  const { getServiceDetails, serviceDetails } = useKongServiceManagerContext();
-  const [ isLoading, setLoading] = useState<boolean>(false);
-
-  const getDetails = async () => {
-    await getServiceDetails();
-  };
-
-  const { error } = useAsync(async (): Promise<void> => {
-    setLoading(true)
-    getDetails();
-    setTimeout(()=> setLoading(false), 1500);
+  const { getServiceDetails } = useKongServiceManagerContext();
+  const { listComponent, listItemWrapper, listItem, itemValue } = useAboutStyles();
+  
+  const { error, loading, value:serviceDetails } = useAsync(async (): Promise<ServiceInfoResponse | null> => {
+    const data = await getServiceDetails();
+    return data
   }, []);
 
   if(error) return <EmptyStateComponent/>
 
-  if(isLoading) return (
+  if(loading) return (
     <BoxComponent title="Configuration">
       <List className={listComponent}>
         <SkeletonComponent />
@@ -74,7 +46,7 @@ export const AboutPage = () => {
                   <LabelField title="ID"/>
                   <ListItemText className={itemValue}>
                   {serviceDetails.id}
-                  <CopyTextButton 
+                  <CopyTextButton
                     text={serviceDetails.id}
                     tooltipText="Copy ID"
                     tooltipDelay={3000}/>
@@ -103,7 +75,7 @@ export const AboutPage = () => {
               <ListItem className={listItemWrapper}>
                 <Box className={listItem}>
                   <LabelField title="Last updated"/>
-                <ListItemText className={itemValue} title={dayjs.unix(serviceDetails.updated_at).format('MM/DD/YYYY')}>            
+                <ListItemText className={itemValue} title={dayjs.unix(serviceDetails.updated_at).format('MM/DD/YYYY')}>
                     {`Updated ${dayjs().diff(dayjs.unix(serviceDetails.updated_at), 'day')} days ago`}
                 </ListItemText>
                 </Box>
@@ -170,7 +142,7 @@ export const AboutPage = () => {
                   <ListItemText>No records to display</ListItemText>
                 </ListItem>
               )
-          }    
+          }
       </List>
     </BoxComponent>
    </ErrorBoundary>
