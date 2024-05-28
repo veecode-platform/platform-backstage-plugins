@@ -5,11 +5,9 @@ import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard,
 export type KongServiceManagerContextType = {
     instance: string;
     setInstanceState: (instanceState: string) => void;
-    listAllEnabledPlugins: () => Promise<void>;
-    getServiceDetails: () => Promise<void>;
-    serviceDetails: ServiceInfoResponse | null;
-    getRoutesList: () => Promise<void>;
-    allRoutes: RoutesResponse[] | null;
+    listAllEnabledPlugins: () => Promise<PluginPerCategory[] | null>;
+    getServiceDetails: () => Promise<ServiceInfoResponse | null>;
+    getRoutesList: () => Promise<RoutesResponse[] | null>;
     listAssociatedPlugins: () => Promise<void>;
     allAssociatedPlugins: AssociatedPluginsResponse[] | null;
     associatedPluginsName: [] | string[];
@@ -24,7 +22,8 @@ export type KongServiceManagerContextType = {
     pluginsPerCategory: [] | PluginPerCategory[],
     configState: any;
     setConfigState: React.Dispatch<any>;
-    setSearchState: (search: string) => void    
+    setSearchState: (search: string) => void;
+    searchTerm: string 
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!);
