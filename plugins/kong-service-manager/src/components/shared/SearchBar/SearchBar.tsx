@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme =>
 export const SearchBar = () => {
     
  const {search, searchIcon, inputRoot,inputInput} = useStyles();
- const { setSearchState } = useKongServiceManagerContext();
+ const { setSearchState,searchTerm } = useKongServiceManagerContext();
  
  const handleSearchTerms = (event : React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>)=>{
   setSearchState(event?.target.value)
@@ -64,6 +64,7 @@ export const SearchBar = () => {
     <InputBase
       placeholder="Search…"
       onChange={(e)=>handleSearchTerms(e)}
+      value={searchTerm}
       classes={{
         root: inputRoot,
         input: inputInput,
