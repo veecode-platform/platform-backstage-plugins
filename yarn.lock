@@ -14397,6 +14397,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@veecode-platform/backstage-plugin-cluster-explorer-common@workspace:plugins/cluster-explorer-common":
+  version: 0.0.0-use.local
+  resolution: "@veecode-platform/backstage-plugin-cluster-explorer-common@workspace:plugins/cluster-explorer-common"
+  dependencies:
+    "@backstage/cli": ^0.26.5
+  languageName: unknown
+  linkType: soft
+
 "@veecode-platform/backstage-plugin-cluster-explorer@workspace:^, @veecode-platform/backstage-plugin-cluster-explorer@workspace:plugins/cluster-explorer":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-cluster-explorer@workspace:plugins/cluster-explorer"
@@ -14423,6 +14431,14 @@ __metadata:
     react-use: ^17.2.4
   peerDependencies:
     react: ^16.13.1 || ^17.0.0
+  languageName: unknown
+  linkType: soft
+
+"@veecode-platform/backstage-plugin-github-workflows-common@workspace:plugins/github-workflows-common":
+  version: 0.0.0-use.local
+  resolution: "@veecode-platform/backstage-plugin-github-workflows-common@workspace:plugins/github-workflows-common"
+  dependencies:
+    "@backstage/cli": ^0.26.5
   languageName: unknown
   linkType: soft
 
@@ -14457,6 +14473,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@veecode-platform/backstage-plugin-gitlab-pipelines-common@workspace:plugins/gitlab-pipelines-common":
+  version: 0.0.0-use.local
+  resolution: "@veecode-platform/backstage-plugin-gitlab-pipelines-common@workspace:plugins/gitlab-pipelines-common"
+  dependencies:
+    "@backstage/cli": ^0.26.5
+  languageName: unknown
+  linkType: soft
+
 "@veecode-platform/backstage-plugin-gitlab-pipelines@workspace:^, @veecode-platform/backstage-plugin-gitlab-pipelines@workspace:plugins/gitlab-pipelines":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-gitlab-pipelines@workspace:plugins/gitlab-pipelines"
@@ -14482,6 +14506,14 @@ __metadata:
     react-use: ^17.2.4
   peerDependencies:
     react: ^16.13.1 || ^17.0.0
+  languageName: unknown
+  linkType: soft
+
+"@veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common":
+  version: 0.0.0-use.local
+  resolution: "@veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common"
+  dependencies:
+    "@backstage/cli": ^0.26.5
   languageName: unknown
   linkType: soft
 
