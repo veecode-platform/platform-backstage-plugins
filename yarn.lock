@@ -6665,6 +6665,7 @@ __metadata:
     "@types/supertest": ^2.0.8
     express: ^4.17.1
     express-promise-router: ^4.1.0
+    knex: ^3.1.0
     msw: ^1.0.0
     node-fetch: ^2.6.7
     supertest: ^6.2.4
@@ -24510,7 +24511,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knex@npm:3, knex@npm:^3.0.0, knex@npm:^3.0.1":
+"knex@npm:3, knex@npm:^3.0.0, knex@npm:^3.0.1, knex@npm:^3.1.0":
   version: 3.1.0
   resolution: "knex@npm:3.1.0"
   dependencies:
@@ -31374,6 +31375,7 @@ __metadata:
     "@types/pluralize": ^0.0.33
     concurrently: ^6.0.0
     jose: ^5.2.3
+    knex: ^3.1.0
     lerna: ^8.1.2
     node-gyp: ^9.0.0
     prettier: ^2.3.2
