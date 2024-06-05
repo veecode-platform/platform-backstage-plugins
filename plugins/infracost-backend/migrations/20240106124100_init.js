@@ -79,5 +79,12 @@ exports.up = async function up(knex) {
    * @param {import('knex').Knex} knex
    */
   exports.down = async function down(knex) {
-    await knex.schema.dropTable('infracost_projects_estimate');
+    try {
+      await knex.schema.dropTable('infracost_projects_estimate');
+    }catch(e){
+      console.error('Error Migrate: DOWN',e)
+    } finally {
+      knex.destroy();
+    }
+    return true;
   };
