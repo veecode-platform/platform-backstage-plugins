@@ -1,1 +1,1 @@
-export { RepoUrlSelectorExtension, ResourcePickerExtension, UploadFilePickerExtension } from './plugin';
+export { RepoUrlSelectorExtension, ResourcePickerExtension, UploadFilePickerExtension, OptionsPickerExtension } from './plugin';

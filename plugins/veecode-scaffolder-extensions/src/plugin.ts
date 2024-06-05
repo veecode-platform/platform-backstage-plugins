@@ -4,6 +4,7 @@ import { createScaffolderFieldExtension } from '@backstage/plugin-scaffolder-rea
 import { RepoUrlSelector, RepoUrlSelectorSchema } from './components/RepoUrlSelector/RepoUrlSelector';
 import { ResourcePicker, ResourcePickerSchema } from './components/ResourcePicker/ResourcePicker';
 import { UploadFilePicker,UploadFilePickerSchema } from './components/UploadFilePicker/UploadFIlePicker';
+import { OptionsPicker, OptionsPickerSchema } from './components/OptionsPicker';
 
 
 export const RepoUrlSelectorExtension = scaffolderPlugin.provide(
@@ -29,3 +30,11 @@ export const UploadFilePickerExtension = scaffolderPlugin.provide(
     schema: UploadFilePickerSchema
   })
 )
+
+export const OptionsPickerExtension = scaffolderPlugin.provide(
+  createScaffolderFieldExtension({
+    name: 'OptionsPicker',
+    component: OptionsPicker,
+    schema: OptionsPickerSchema
+  }),
+);
