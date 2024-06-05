@@ -40,9 +40,8 @@ import { ClusterExplorerPage } from '@veecode-platform/backstage-plugin-cluster-
 import type { IdentityApi } from '@backstage/core-plugin-api';
 
 import { KongServiceManagerPage } from '@veecode-platform/plugin-kong-service-manager';
-import { RepoUrlSelectorExtension, ResourcePickerExtension, UploadFilePickerExtension } from '@veecode-platform/veecode-scaffolder-extensions';
+import { RepoUrlSelectorExtension, ResourcePickerExtension, UploadFilePickerExtension,OptionsPickerExtension } from '@veecode-platform/veecode-scaffolder-extensions';
 import { apiDocsPlugin } from '@backstage/plugin-api-docs';
-
 
 const app = createApp({
   apis,
@@ -104,6 +103,7 @@ const routes = (
           <RepoUrlSelectorExtension/>
           <ResourcePickerExtension/>
           <UploadFilePickerExtension/>
+          <OptionsPickerExtension/>
       </ScaffolderFieldExtensions>
     </Route>
     <Route path="/api-docs" element={<ApiExplorerPage />} />
