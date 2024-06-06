@@ -1,9 +1,14 @@
 exports.up = async function up(knex) {
-    await knex.schema.createTable('infracost_projects_estimate', table => {
+    await knex.schema
+    /**
+     * all infracost_projects_estimate
+    */ 
+    .createTable('infracost_projects_estimate', table => {
      table
      .comment('Registered infracost projects estimate from catalog');
      table
      .uuid('id')
+     .defaultTo(knex.fn.uuid())
      .primary()
      .notNullable()
      .comment('Auto-generated ID of the Infracost estimate component');
@@ -19,39 +24,39 @@ exports.up = async function up(knex) {
      .jsonb('projects')
      .comment('The projects that belong to the estimate');
      table
-     .decimal('total_hourly_cost',20,16)
+     .string('total_hourly_cost',50)
      .notNullable()
      .comment('The total hourly cost');
      table
-     .decimal('total_monthly_cost',20,16)
+     .string('total_monthly_cost',50)
      .notNullable()
      .comment('The total monthly cost') ; 
      table
-     .decimal('total_monthly_usage_cost',20,16)
+     .string('total_monthly_usage_cost',50)
      .notNullable()
      .comment('The total monthly usage cost');
      table
-     .decimal('past_total_hourly_cost',20,16)
+     .string('past_total_hourly_cost',50)
      .notNullable()
      .comment('The past total hourly cost'); 
      table
-     .decimal('past_total_monthly_cost',20,16)
+     .string('past_total_monthly_cost',50)
      .notNullable()
      .comment('The past total monthly cost'); 
      table
-     .decimal('past_total_monthly_usage_cost',20,16)
+     .string('past_total_monthly_usage_cost',50)
      .notNullable()
      .comment('The total monthly usage cost'); 
      table
-     .decimal('diff_total_hourly_cost',20,16)
+     .string('diff_total_hourly_cost',50)
      .notNullable()
      .comment('The diff total hourly cost'); 
      table
-     .decimal('diff_total_monthly_cost',20,16)
+     .string('diff_total_monthly_cost',50)
      .notNullable()
      .comment('The diff total monthly cost');
      table
-     .decimal('diff_total_monthly_usage_cost',20,16)
+     .string('diff_total_monthly_usage_cost',50)
      .notNullable()
      .comment('The diff total monthly usage cost');  
      table
