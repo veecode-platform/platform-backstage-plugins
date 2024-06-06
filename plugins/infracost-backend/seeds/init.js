@@ -104,16 +104,16 @@ exports.seed = async (knex) => {
                 }
             }
         ]),
-        totalHourlyCost: "0.0426958904109589",
-        totalMonthlyCost: "31.168",
-        totalMonthlyUsageCost: "0",
-        pastTotalHourlyCost: "0.0426958904109589",
-        pastTotalMonthlyCost: "31.168",
-        pastTotalMonthlyUsageCost: "0",
-        diffTotalHourlyCost: "0",
-        diffTotalMonthlyCost: "0",
+        total_hourly_cost: "0.0426958904109589",
+        total_monthly_cost: "31.168",
+        total_monthly_usage_const: "0",
+        past_total_hourly_cost: "0.0426958904109589",
+        past_total_monthly_cost: "31.168",
+        past_tota_monthly_usage_cost: "0",
+        diff_total_hourly_cost: "0",
+        diff_total_monthly_cost: "0",
         diffTotalMonthlyUsageCost: "0",
-        timeGenerated: "2024-05-06T13:24:32.166510534Z",
+        diff_total_monthly_usage_cost: "2024-05-06T13:24:32.166510534Z",
         sumary: JSON.stringify({
             totalDetectedResources: 9,
             totalSupportedResources: 2,
@@ -130,7 +130,10 @@ exports.seed = async (knex) => {
                 aws_security_group: 1,
                 aws_subnet: 1
             }
-        })
+        }),
+        time_generated: "2024-05-06T13:24:32.166510534Z",
+        created_at: "2024-05-06T13:24:32.166510534Z",
+        updated_at: "2024-05-06T13:24:32.166510534Z"
     }
   ])
 }
