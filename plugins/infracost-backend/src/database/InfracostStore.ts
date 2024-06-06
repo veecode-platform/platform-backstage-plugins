@@ -1,11 +1,7 @@
 /* eslint-disable @backstage/no-undeclared-imports */
 import { JsonObject } from "@backstage/types"
 
-/**
- * @public
- */
-
-export type DbInfracostEstimateRow ={
+export type InfracostEstimate ={
     id: string,
     name: string,
     currency: string,
@@ -23,4 +19,18 @@ export type DbInfracostEstimateRow ={
     time_generated: string,
     created_at: string,
     updated_at: string
+}
+
+export interface InfracosteStore {
+    get(options:{
+        id: string,
+        name:string
+    }):Promise<InfracostEstimate>;
+
+    set(options:InfracostEstimate):Promise<void>
+
+    delete(options: {
+        id: string,
+        name: string
+    }):Promise<void>
 }

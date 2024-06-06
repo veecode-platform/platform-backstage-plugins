@@ -1,12 +1,32 @@
-/* eslint-disable @backstage/no-undeclared-imports */
-import { PluginDatabaseManager } from '@backstage/backend-common';
-import { resolvePackagePath } from '@backstage/backend-plugin-api';
-import { NotFoundError } from '@backstage/errors';
-import { JsonValue } from '@backstage/types';
-import { Knex } from 'knex';
-// import types
+import { Knex } from "knex";
+import { LoggerService, resolvePackagePath } from "@backstage/backend-plugin-api";
+import { InfracosteStore } from "./InfracostStore";
+import { PluginDatabaseManager } from "@backstage/backend-common";
 
-const migrationsDir = resolvePackagePath('nome-do-plugin','migrations'); // to do
+const migrationsDir = resolvePackagePath(
+  '@veecode-platform/backstage-plugin-infracost-backend',
+  'migrations'
+)
 
+/**
+ * @public
+ */
 
-// TO DO
+export class DatabaseInfracostStore /* implements InfracosteStore*/ {
+  static async create(options:{
+    database: PluginDatabaseManager
+  }):Promise<DatabaseInfracostStore>{
+    const { database } = options;
+    const client = await database.getClient();
+
+    if(!database.migrations?.skip){
+      await client.migrate.latest({
+        directory: migrationsDir
+      })
+    }
+    return new DatabaseInfracostStore(client)
+  }
+  private constructor(private readonly db: Knex) {}
+
+  // to do
+}
