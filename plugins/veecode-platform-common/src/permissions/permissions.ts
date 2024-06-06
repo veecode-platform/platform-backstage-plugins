@@ -1,3 +1,4 @@
+// eslint-disable-next-line @backstage/no-undeclared-imports
 import { createPermission } from '@backstage/plugin-permission-common';
 
 export const ADMIN_RESOURCE_TYPE = 'admin-entities';

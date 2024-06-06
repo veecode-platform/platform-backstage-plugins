@@ -19,7 +19,9 @@
         "spec": {
           "type": "service",
           "lifecycle": "production",
-          "owner": "tools"
+          "owner": "tools",
+          "system": "artist-engagement-portal",
+          "estimate": "openapi: \"3.0.0\"\ninfo:..."
         }
       }
     ],
@@ -39,7 +41,7 @@
           },
           "spec": {
             "type": "object",
-            "required": ["type", "lifecycle", "owner"],
+            "required": ["type", "lifecycle", "owner","estimate"],
             "properties": {
               "type": {
                 "type": "string",
@@ -62,6 +64,11 @@
               "system": {
                 "type": "string",
                 "description": "An entity reference to the system that the component belongs to.",
+                "minLength": 1
+              },
+              "estimate":{
+                "type": "string",
+                "description": "The estimate definition of the Project, based on the format defined by the type.",
                 "minLength": 1
               },
               "subcomponentOf": {

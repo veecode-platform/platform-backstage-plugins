@@ -37,6 +37,7 @@ export interface FinOpsEntityV1alpha1 extends Entity {
     subcomponentOf?: string;
     dependsOn?: string[];
     system?: string;
+    estimate:string;
   };
 }
 
