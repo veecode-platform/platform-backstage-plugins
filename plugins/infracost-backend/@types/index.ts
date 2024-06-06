@@ -6,57 +6,57 @@ export type ResourceCounts = {
 }
 
 export type Summary = {
-    total_detected_resources: number,
-    total_supported_resources: number,
-    total_unsupported_resources: number,
-    total_usage_base_resources: number,
-    total_no_price_resources: number,
-    unsupported_resource_counts: ResourceCounts| {},
-    no_price_resource_counts: ResourceCounts | {}
+    totalDetectedResources: number,
+    totalSupportedResources: number,
+    totalUnsupportedResources: number,
+    totalUsageBaseResources: number,
+    totalNoPriceResources: number,
+    unsupportedResourceCounts: ResourceCounts| {},
+    noPriceResourceCounts: ResourceCounts | {}
 }
 
 export type CostComponent = {
     name: string,
     unit: string,
-    hourly_quantity: string,
-    monthly_quantity: string,
+    hourlyQuantity: string,
+    monthlyQuantity: string,
     price: string,
-    hourly_cost: string,
-    monthly_cost: string
+    hourlyCost: string,
+    monthlyCost: string
 }
 
 export type SubResources = {
     name: string,
-    hourly_cost: string,
-    monthly_cost: string,
-    cost_components: CostComponent[] | []
+    hourlyCost: string,
+    monthlyCost: string,
+    costComponents: CostComponent[] | []
 }
 
 export type Resource = {
     name: string,
-    resource_type: string,
+    resourceType: string,
     tags : JsonValue  
-    hourly_cost: string,
-    monthly_cost: string,
-    cost_components: CostComponent[] | [],
-    sub_resources: any[] | [],
-    total_hourly_cost: string,
-    total_monthly_cost: string,
-    total_monthly_usage_cost: string 
+    hourlyCost: string,
+    monthlyCost: string,
+    costComponents: CostComponent[] | [],
+    subResources: any[] | [],
+    totalHourlyCost: string,
+    totalMonthlyCost: string,
+    totalMonthlyUsageCost: string 
 }
 
 export type Breakdown = {
     resources: Resource[],
-    total_hourly_cost: string,
-    total_monthly_cost: string,
-    total_monthly_usage_cost: string,
+    totalHourlyCost: string,
+    totalMonthlyCost: string,
+    totalMonthlyUsageCost: string,
 }
 
 export type Diff = {
     resources?: Resource[] | [],
-    total_hourly_cost: string,
-    total_monthly_cost: string,
-    total_monthly_usage_cost: string
+    totalHourlyCost: string,
+    totalMonthlyCost: string,
+    totalMonthlyUsageCost: string
 }
 
 export type Project = {
@@ -70,15 +70,15 @@ export interface InfracostStore {
     name: string,  
     currency: string,
     projects: Project[],
-    total_hourly_cost: string,
-    total_monthly_cost: string,
-    total_monthly_usage_cost: string,
-    past_total_hourly_cost: string,
-    past_total_monthly_cost: string,
-    past_total_monthly_usage_cost: string,
-    diff_total_hourly_cost: string,
-    diff_total_monthly_cost: string,
-    diff_total_monthly_usage_cost: string,
-    time_generated: string,
+    totalHourlyCost: string,
+    totalMonthlyCost: string,
+    totalMonthlyUsageCost: string,
+    pastTotalHourlyCost: string,
+    pastTotalMonthlyCost: string,
+    pastTotalMonthlyUsageCost: string,
+    diffTotalHourlyCost: string,
+    diffTotalMonthlyCost: string,
+    diffTotalMonthlyUsageCost: string,
+    timeGenerated: string,
     summary: Summary
 }
