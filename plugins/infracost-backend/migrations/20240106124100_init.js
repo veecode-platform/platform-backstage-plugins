@@ -11,6 +11,7 @@ exports.up = async function up(knex) {
      .defaultTo(knex.fn.uuid())
      .primary()
      .notNullable()
+     .unique()
      .comment('Auto-generated ID of the Infracost estimate component');
      table
      .string('name',255)
@@ -77,6 +78,7 @@ exports.up = async function up(knex) {
      .defaultTo(knex.fn.now())
      .notNullable()
      .comment('Time the estimate was updated');
+     table.unique(['name'])
     });
   };
   
