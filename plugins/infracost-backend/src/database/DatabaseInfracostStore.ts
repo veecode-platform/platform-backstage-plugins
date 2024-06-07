@@ -2,7 +2,7 @@ import { Knex } from "knex";
 import { LoggerService, resolvePackagePath } from "@backstage/backend-plugin-api";
 import { InfracostEstimate, InfracosteStore } from "./InfracostStore";
 import { PluginDatabaseManager } from "@backstage/backend-common";
-import { INFRACOST_TABLE } from "../utils";
+import { INFRACOST_TABLE } from "../utils/constants";
 
 const migrationsDir = resolvePackagePath(
   '@veecode-platform/backstage-plugin-infracost-backend',
@@ -41,10 +41,10 @@ export class DatabaseInfracostStore  implements InfracosteStore {
           projects: estimate.projects,
           total_hourly_cost: estimate.total_hourly_cost,
           total_monthly_cost: estimate.total_monthly_cost,
-          total_monthly_usage_cost: estimate.total_monthly_usage_const,
+          total_monthly_usage_cost: estimate.total_monthly_usage_cost,
           past_total_hourly_cost: estimate.past_total_hourly_cost,
           past_total_monthly_cost: estimate.past_total_hourly_cost,
-          past_tota_monthly_usage_cost: estimate.past_tota_monthly_usage_cost,
+          past_tota_monthly_usage_cost: estimate.past_total_monthly_usage_cost,
           diff_total_hourly_cost: estimate.diff_total_hourly_cost,
           diff_total_monthly_cost: estimate.diff_total_monthly_cost,
           diff_total_monthly_usage_cost: estimate.diff_total_monthly_usage_cost,
@@ -99,10 +99,10 @@ export class DatabaseInfracostStore  implements InfracosteStore {
                   projects: estimate.projects,
                   total_hourly_cost: estimate.total_hourly_cost,
                   total_monthly_cost: estimate.total_monthly_cost,
-                  total_monthly_usage_cost: estimate.total_monthly_usage_const,
+                  total_monthly_usage_cost: estimate.total_monthly_usage_cost,
                   past_total_hourly_cost: estimate.past_total_hourly_cost,
                   past_total_monthly_cost: estimate.past_total_hourly_cost,
-                  past_tota_monthly_usage_cost: estimate.past_tota_monthly_usage_cost,
+                  past_tota_monthly_usage_cost: estimate.past_total_monthly_usage_cost,
                   diff_total_hourly_cost: estimate.diff_total_hourly_cost,
                   diff_total_monthly_cost: estimate.diff_total_monthly_cost,
                   diff_total_monthly_usage_cost: estimate.diff_total_monthly_usage_cost,
