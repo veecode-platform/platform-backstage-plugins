@@ -9,7 +9,7 @@ import { catalogServiceRef } from '@backstage/plugin-catalog-node/alpha';
  * @public
  */
 export const infracostPlugin = createBackendPlugin({
-  pluginId: 'infracost',
+  pluginId: 'infracost-backend',
   register(env) {
     env.registerInit({
       deps: {

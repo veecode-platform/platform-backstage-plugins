@@ -20,7 +20,7 @@ export async function startStandaloneServer(
     options: ServerOptions
 ): Promise<Server> {
     const logger = options.logger.child({
-        service: 'infracost'
+        service: 'infracost-estimate'
     });
 
     const config = await loadBackendConfig({ logger, argv: process.argv });
@@ -41,7 +41,7 @@ export async function startStandaloneServer(
     
     let service = createServiceBuilder(module)
     .setPort(options.port)
-    .addRouter('/library-check', router);
+    .addRouter('/infracost-estimate', router);
     
     if (options.enableCors) {
     service = service.enableCors({ origin: 'http://localhost:3000' });

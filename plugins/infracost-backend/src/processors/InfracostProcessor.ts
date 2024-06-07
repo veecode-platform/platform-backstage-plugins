@@ -18,32 +18,33 @@ import {
     RELATION_OWNED_BY,
     RELATION_OWNER_OF,
 } from "@backstage/catalog-model";
-import {
-    isInfracostType
-} from "../lib/transformers";
 import type { InfracostEntityV1alpha1 as InfracostEntity } from "../model";
 import { InfracostEntityV1alpha1Validator } from "../model";
-// import { UrlReader } from "@backstage/backend-common";
+import { InfracostEstimate } from "../database/InfracostStore";
 
-export class APICEntityProcessor implements CatalogProcessor {
+export class InfracostEntityProcessor implements CatalogProcessor {
 
     private config: Config;
     private providerConfig: InfracostProviderConfig;
-    // private readonly reader: UrlReader;
     private logger: winston.Logger;
     private cache: CacheService;
     private readonly validators = [InfracostEntityV1alpha1Validator];
+   // private readonly infracostService : InfracostService;   TO DO
 
     getProcessorName(): string {
         return "InfracostEntitiesProcessor";
     }
 
-    constructor(config: Config, logger: winston.Logger, /* reader: UrlReader,*/ cache: CacheService) {
+    constructor(
+        config: Config,
+        logger: winston.Logger,
+        cache: CacheService,
+      ) {
         this.config = config;
         this.logger = logger;
-       // this.reader = reader;
         this.cache = cache;
         this.providerConfig = readProviderConfigs(this.config)[0];
+        // this.infracostService= new InfracostService() // TO DO
     }
 
     async validateEntityKind(entity: Entity): Promise<boolean> {
@@ -69,14 +70,32 @@ export class APICEntityProcessor implements CatalogProcessor {
         return Promise.resolve(false);
     }
 
-    preProcessEntity(
-      entity: Entity, 
-      _location: LocationSpec, 
-      _emit: CatalogProcessorEmit, 
-      _originLocation: LocationSpec, 
-      _cache: CatalogProcessorCache
-    ): Promise<Entity> {
-        return Promise.resolve(entity);
+    private isInfracostType(entity: Entity): boolean {
+      return (!!entity && entity.kind === "Infracost")
+    }
+
+    private extractEstimate(entity: InfracostEntity) : InfracostEstimate {
+      const estimateKey = entity.spec.estimate;
+      const name = entity.metadata.name;
+      const estimateTransform = estimateKey.replace("\n' + '", '');
+      const estimate = JSON.parse(estimateTransform);
+      const estimateResult = {
+          name: name,
+          currency: estimate.currency,
+          projects: estimate.projects,
+          total_hourly_cost: estimate.totalHourlyCost,
+          total_monthly_cost: estimate.totalMothlyCost,
+          total_monthly_usage_cost: estimate.totalMonthlyUsageCost,
+          past_total_hourly_cost: estimate.pastTotalHourlyCost,
+          past_total_monthly_cost: estimate.pastTotalMonthlyCost,
+          past_total_monthly_usage_cost: estimate.pastTotalMonthlyUsageCost,
+          diff_total_hourly_cost: estimate.diffTotalHourlyCost,
+          diff_total_monthly_cost: estimate.diffTotalMonthlyCost,
+          diff_total_monthly_usage_cost: estimate.diffTotalMonthlyUsageCost,
+          sumary: estimate.sumary,
+          time_generated: estimate.timteGenerated
+      }
+      return estimateResult as InfracostEstimate
     }
 
     async postProcessEntity(
@@ -87,9 +106,11 @@ export class APICEntityProcessor implements CatalogProcessor {
       ): Promise<Entity> {
 
         const selfRef = getCompoundEntityRef(entity);
-        if (isInfracostType(entity)) {
+        if (this.isInfracostType(entity)) {
+
             const infracost = entity as InfracostEntity;
             const owner = infracost.spec.owner;
+
             if (owner !== undefined && owner.length) {
                 const targetRef = parseEntityRef(owner, {
                     defaultKind: 'Group',
@@ -118,9 +139,23 @@ export class APICEntityProcessor implements CatalogProcessor {
                     }),
                   );
             }
+            /**
+             *  TO DO 
+             */
+            
+            // const endpoint = this.providerConfig.baseUrl;
+            // const infracostProjectsEstimate = this.extractEstimate(infracost);
+
+            // try{
+            //   this.infracostService.saveInfracostProjectsEstimate(infracostProjectsEstimate,`${endpoint}/infracostEstimates`)
+            // }
+            // catch(error){
+            //   this.logger.error('InfracostEntitiesProcessor: There was an error trying to persist the entity metadata Infracost on database',)
+            // }
         } 
         return entity;
     }
+
 
 
 }
