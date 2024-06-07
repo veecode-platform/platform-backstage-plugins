@@ -66,7 +66,7 @@ export type Project = {
     sumary: Summary
 }
 
-export interface InfracostStore {
+export interface Infracost {
     name: string,  
     currency: string,
     projects: Project[],
