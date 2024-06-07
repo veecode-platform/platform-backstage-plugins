@@ -21,6 +21,7 @@ import {
 import type { InfracostEntityV1alpha1 as InfracostEntity } from "../model";
 import { InfracostEntityV1alpha1Validator } from "../model";
 import { InfracostEstimate } from "../database/InfracostStore";
+import { InfracostService } from "../service/InfracostService";
 
 export class InfracostEntityProcessor implements CatalogProcessor {
 
@@ -29,7 +30,7 @@ export class InfracostEntityProcessor implements CatalogProcessor {
     private logger: winston.Logger;
     private cache: CacheService;
     private readonly validators = [InfracostEntityV1alpha1Validator];
-   // private readonly infracostService : InfracostService;   TO DO
+    private readonly infracostService : InfracostService; 
 
     getProcessorName(): string {
         return "InfracostEntitiesProcessor";
@@ -44,7 +45,7 @@ export class InfracostEntityProcessor implements CatalogProcessor {
         this.logger = logger;
         this.cache = cache;
         this.providerConfig = readProviderConfigs(this.config)[0];
-        // this.infracostService= new InfracostService() // TO DO
+        this.infracostService= new InfracostService() 
     }
 
     async validateEntityKind(entity: Entity): Promise<boolean> {
@@ -138,20 +139,17 @@ export class InfracostEntityProcessor implements CatalogProcessor {
                       target: selfRef,
                     }),
                   );
-            }
-            /**
-             *  TO DO 
-             */
-            
-            // const endpoint = this.providerConfig.baseUrl;
-            // const infracostProjectsEstimate = this.extractEstimate(infracost);
+            }   
+                  
+            const endpoint = this.providerConfig.baseUrl;
+            const infracostProjectsEstimate = this.extractEstimate(infracost);
 
-            // try{
-            //   this.infracostService.saveInfracostProjectsEstimate(infracostProjectsEstimate,`${endpoint}/infracostEstimates`)
-            // }
-            // catch(error){
-            //   this.logger.error('InfracostEntitiesProcessor: There was an error trying to persist the entity metadata Infracost on database',)
-            // }
+            try{
+              this.infracostService.saveInfracostProjectsEstimate(`${endpoint}/infracost-estimate`,infracostProjectsEstimate)
+            }
+            catch(error){
+              this.logger.error('InfracostEntitiesProcessor: There was an error trying to persist the entity metadata Infracost on database',)
+            }
         } 
         return entity;
     }

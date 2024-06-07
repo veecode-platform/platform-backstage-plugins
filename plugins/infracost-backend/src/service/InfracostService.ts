@@ -14,9 +14,9 @@ export class InfracostService {
         }
     }
 
-    async saveInfracostProjectsEstimate( url:string, estimate:InfracostEstimate):Promise<void> {
+    async saveInfracostProjectsEstimate( endpoint:string, estimate:InfracostEstimate):Promise<void> {
         try {
-            await axios.post(`${url}/infracost-estimate`, estimate);
+            await axios.post(endpoint, estimate);
           } catch (error:any) {
             console.log(
               `There was an error trying persist Infracost Projects Estimate [${error.message}]`,

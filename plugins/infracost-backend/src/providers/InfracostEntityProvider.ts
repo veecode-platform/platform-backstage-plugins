@@ -1,10 +1,7 @@
 /* eslint-disable @backstage/no-undeclared-imports */
-import {
-    EntityProvider,
-    EntityProviderConnection,
-  } from '@backstage/plugin-catalog-node';
-  import { TaskRunner } from '@backstage/backend-tasks';
-  import { CacheService } from '@backstage/backend-plugin-api';
+import { EntityProvider, EntityProviderConnection } from '@backstage/plugin-catalog-node';
+import { TaskRunner } from '@backstage/backend-tasks';
+import { CacheService } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';
 import { InfracostProviderConfig, readProviderConfigs } from '../lib/config';
 import * as uuid from 'uuid';
