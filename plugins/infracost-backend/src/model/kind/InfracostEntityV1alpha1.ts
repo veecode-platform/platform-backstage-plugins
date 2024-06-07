@@ -4,8 +4,6 @@ import { ajvCompiledJsonSchemaValidator } from '../utils';
 
 /**
  * Backstage Infracost kind Entity. Represents a single, individual piece of software.
- *
- *
  * @public
  */
 export interface InfracostEntityV1alpha1 extends Entity {
