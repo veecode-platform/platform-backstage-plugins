@@ -1,5 +1,5 @@
 import { Knex } from "knex";
-import { /* LoggerService, */ resolvePackagePath } from "@backstage/backend-plugin-api";
+import { LoggerService, resolvePackagePath } from "@backstage/backend-plugin-api";
 import { InfracostEstimate, InfracosteStore } from "./InfracostStore";
 import { PluginDatabaseManager } from "@backstage/backend-common";
 import { INFRACOST_TABLE } from "../utils";
@@ -11,20 +11,24 @@ const migrationsDir = resolvePackagePath(
 
 export class DatabaseInfracostStore  implements InfracosteStore {
 
-  private constructor(private readonly db: Knex) {}
+  private constructor(
+    private readonly db: Knex,
+    private readonly logger: LoggerService
+  ) {}
 
   static async create(options:{
     database: PluginDatabaseManager,
-    skipMigrations?: boolean
+    skipMigrations?: boolean,
+    logger: LoggerService
   }): Promise<DatabaseInfracostStore> {
-    const {database,skipMigrations} = options;
+    const {database,skipMigrations, logger} = options;
     const client = await database.getClient();
     if (!database.migrations?.skip && !skipMigrations) {
       await client.migrate.latest({
         directory: migrationsDir
       })
     }
-    return new DatabaseInfracostStore(client)
+    return new DatabaseInfracostStore(client,logger)
   }
 
   async createInfracostProjectsEstimate(estimate:InfracostEstimate){
@@ -57,7 +61,8 @@ export class DatabaseInfracostStore  implements InfracosteStore {
         return infracostEstimate || null;
       })
     }
-    catch(err){
+    catch(error:any){
+      this.logger.error(error.message);
       return null
     }
   }
@@ -65,7 +70,9 @@ export class DatabaseInfracostStore  implements InfracosteStore {
   async listInfracostProjectsEstimate():Promise<InfracostEstimate[]|null>{
     try{
       return await this.db.select('*').from(INFRACOST_TABLE)
-    }catch(error){
+    }
+    catch(error:any){
+      this.logger.error(error.message);
       return null
     }
   }
@@ -75,7 +82,8 @@ export class DatabaseInfracostStore  implements InfracosteStore {
       const estimate = await this.db(INFRACOST_TABLE).where('name', '=', name);
       return estimate && estimate.length > 0 ? estimate[0]:null
     }
-    catch(error){
+    catch(error:any){
+      this.logger.error(error.message);
       return null
     }
   };
@@ -106,8 +114,9 @@ export class DatabaseInfracostStore  implements InfracosteStore {
           return null
       })
     }
-    catch(error){
-      return null
+    catch(error:any){
+      this.logger.error(error.message);
+      return null;
     }
   }
 
@@ -117,7 +126,8 @@ export class DatabaseInfracostStore  implements InfracosteStore {
       .where('name','=',name)
       .delete();
       return !!operation;
-    }catch(error){
+    }catch(error:any){
+      this.logger.error(error.message);
       return false
     }
   }
