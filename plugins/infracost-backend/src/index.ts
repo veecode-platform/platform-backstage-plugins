@@ -1,2 +1,5 @@
 export * from './service/router';
-export { infracostPlugin as default } from './plugin';
+export * from './database';
+export * from './processors';
+export * from './providers';
+export * from './lib';
