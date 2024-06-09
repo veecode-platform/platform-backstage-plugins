@@ -25,6 +25,8 @@ import { ServerPermissionClient } from '@backstage/plugin-permission-node';
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
 import permission from './plugins/permission';
 import kubernetes from './plugins/kubernetes';
+// infracost
+import infracost from './plugins/infracost'
 
 function makeCreateEnv(config: Config) {
   const root = getRootLogger();
@@ -81,6 +83,8 @@ async function main() {
   const appEnv = useHotMemoize(module, () => createEnv('app'));
   const permissionEnv = useHotMemoize(module, () => createEnv('permission'));
   const kubernetesEnv = useHotMemoize(module, () => createEnv('kubernetes'));
+  // infracost
+  const infraconstEnv = useHotMemoize(module, () => createEnv('infracost'));
 
 
   const apiRouter = Router();
@@ -92,6 +96,7 @@ async function main() {
   apiRouter.use('/search', await search(searchEnv));
   apiRouter.use('/permission', await permission(permissionEnv));
   apiRouter.use('/kubernetes', await kubernetes(kubernetesEnv));
+  apiRouter.use('/infracost', await infracost(infraconstEnv));
 
   // Add backends ABOVE this line; this 404 handler is the catch-all fallback
   apiRouter.use(notFoundHandler());
