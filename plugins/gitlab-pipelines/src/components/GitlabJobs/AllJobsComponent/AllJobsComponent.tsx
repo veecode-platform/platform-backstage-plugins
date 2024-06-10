@@ -15,19 +15,6 @@ import GitlabIcon from '../../assets/gitlabIcon';
 
 
 const useStyles = makeStyles(theme => ({
-  wrapper:{
-    margin: 'auto' ,
-    width:'100%',
-    [theme.breakpoints.up('md')]: {    
-      maxWidth: '57vw', 
-     },
-     [theme.breakpoints.down('md')]: {
-      maxWidth: '75vw',
-     },
-     [theme.breakpoints.down('xs')]: {
-      maxWidth: '90vw',
-     }
-  },
   title: {
     paddingLeft: '1.5rem',
     fontSize: '1.5rem',
@@ -130,7 +117,7 @@ export const Cards = ({ items, updateData }: JobItemProps) => {
 
 
   return (
-       <Card className={classes.wrapper}>
+       <Card>
         <CardHeader
           title={TitleBar}
           action={ActionsCard}
