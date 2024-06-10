@@ -14,7 +14,7 @@ export type Annotations ={
 
 export const OptionsPicker = (props: OptionsPickerProps) => {
 
-    const {uiSchema,schema,onChange,formData,required,rawErrors,idSchema,} = props;
+    const {uiSchema,schema /* onChange,formData,required,rawErrors,idSchema,*/} = props;
     const [items, setItems] = useState<SelectItem[]>([]);
     const { descriptionContent } = useStyles();
 
