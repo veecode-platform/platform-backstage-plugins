@@ -21,9 +21,10 @@ export class DatabaseInfracostStore  implements InfracosteStore {
     skipMigrations?: boolean,
     logger: LoggerService
   }): Promise<DatabaseInfracostStore> {
-    const {database,skipMigrations, logger} = options;
+    const {database, /* skipMigrations, */ logger} = options;
     const client = await database.getClient();
-    if (!database.migrations?.skip && !skipMigrations) {
+    
+    if (!database.migrations?.skip /* && !skipMigrations */) {
       await client.migrate.latest({
         directory: migrationsDir
       })

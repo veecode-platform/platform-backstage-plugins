@@ -1,5 +1,6 @@
 exports.up = async function up(knex) {
-    await knex.schema
+    try{
+      await knex.schema
     /**
      * all infracost_projects_estimate
     */ 
@@ -80,6 +81,13 @@ exports.up = async function up(knex) {
      .comment('Time the estimate was updated');
      table.unique(['name'])
     });
+    }catch (e) {
+      console.log('ERROR MIGRATE:UP ', e);
+      return false;
+    } finally {
+      knex.destroy();
+    }
+    return true;
   };
   
   /**
