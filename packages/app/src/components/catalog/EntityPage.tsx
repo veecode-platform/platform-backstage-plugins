@@ -173,7 +173,7 @@ const overviewContent = (
 
     <EntitySwitch>
       <EntitySwitch.Case if={isGitlabJobsAvailable}>
-        <Grid item lg={8} xs={12}>
+        <Grid item lg={12}>
           <GitlabJobs />
         </Grid>
       </EntitySwitch.Case>
