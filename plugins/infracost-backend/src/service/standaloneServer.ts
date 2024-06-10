@@ -26,7 +26,10 @@ export async function startStandaloneServer(
     const config = await loadBackendConfig({ logger, argv: process.argv });
 
     const database = useHotMemoize(module, () => {
-        return Knex(config.get('backend.database'));
+        return Knex({
+            connection: config.get('backend.database'),
+            migrations: { directory: './migrations'}
+        });
       });
     
     const db = await DatabaseInfracostStore.create({database: { getClient: async () => database },logger});
