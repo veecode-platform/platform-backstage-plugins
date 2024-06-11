@@ -2,14 +2,14 @@ exports.up = async function up(knex) {
     try{
       await knex.schema
     /**
-     * all infracost_projects_estimate
+     * all projects_estimate
     */ 
-    .createTable('infracost_projects_estimate', table => {
+    .createTable('projects_estimate', table => {
      table
      .comment('Registered infracost projects estimate from catalog');
      table
      .uuid('id')
-     .defaultTo(knex.fn.uuid())
+     .defaultTo(knex.raw('gen_random_uuid()'))
      .primary()
      .notNullable()
      .unique()
@@ -23,7 +23,7 @@ exports.up = async function up(knex) {
      .notNullable()
      .comment('The currency used in the estimate');
      table
-     .jsonb('projects')
+     .json('projects')
      .comment('The projects that belong to the estimate');
      table
      .string('total_hourly_cost',50)
@@ -62,7 +62,7 @@ exports.up = async function up(knex) {
      .notNullable()
      .comment('The diff total monthly usage cost');  
      table
-     .jsonb('sumary')
+     .json('summary')
      .comment('The total summarized costs of all the projects in the estimate');
      table
      .timestamp('time_generated')
@@ -95,7 +95,7 @@ exports.up = async function up(knex) {
    */
   exports.down = async function down(knex) {
     try {
-      await knex.schema.dropTable('infracost_projects_estimate');
+      await knex.schema.dropTable('projects_estimate');
     }catch(e){
       console.error('Error Migrate: DOWN',e)
     } finally {
