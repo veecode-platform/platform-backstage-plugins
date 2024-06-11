@@ -63,7 +63,7 @@ export type Project = {
     name: string,
     breakdown: Breakdown,
     diff: Diff[],
-    sumary: Summary
+    summary: Summary
 }
 
 export interface Infracost {
