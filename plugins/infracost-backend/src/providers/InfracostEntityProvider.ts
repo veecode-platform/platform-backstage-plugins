@@ -1,7 +1,7 @@
 /* eslint-disable @backstage/no-undeclared-imports */
 import { EntityProvider, EntityProviderConnection } from '@backstage/plugin-catalog-node';
 import { TaskRunner } from '@backstage/backend-tasks';
-import { CacheService } from '@backstage/backend-plugin-api';
+import { CacheService, LoggerService } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';
 import { InfracostProviderConfig, readProviderConfigs } from '../lib/config';
 import * as uuid from 'uuid';
@@ -19,8 +19,7 @@ export class InfracostEntityProvider implements EntityProvider {
         options: InfracostEntityProviderOptions
     ):InfracostEntityProvider[]{
         return readProviderConfigs(configRoot).map( providerConfig => {
-            const taskRunner =
-            options.schedule ??
+            const taskRunner = options.schedule ??
             options.scheduler!.createScheduledTaskRunner(providerConfig.schedule!) ;
 
             const provider = new InfracostEntityProvider({
@@ -48,12 +47,27 @@ export class InfracostEntityProvider implements EntityProvider {
       }
 
     getProviderName():string {
-        return `InfracostEntityProvider:${this.options.id}`
+        return `InfracostEntityProvider: ${this.options.id}`
     }
 
     async connect(connection: EntityProviderConnection){
         this.connection = connection;
         await this.scheduleFn?.()
+    }
+
+    async read(options?:{logger?: Logger}){
+      if (!this.connection) {
+        throw new Error('Not initialized');
+      }
+      const logger = options?.logger ?? this.options.logger;
+      const baseUrl = this.options.provider.baseUrl;
+      const entities = await this.infracostService.getAllInfracostProjectsEstimate(`${baseUrl}/api/infracost`);
+
+      const { markReadComplete } = trackProgress(logger);
+      const { markCommitComplete } = markReadComplete({entities})
+
+      markCommitComplete();
+      await this.refresh(logger)
     }
 
     async refresh(logger:Logger){
@@ -62,7 +76,7 @@ export class InfracostEntityProvider implements EntityProvider {
         return
       }
       const baseUrl = this.options.provider.baseUrl;
-      await this.infracostService.getAllInfracostProjectsEstimate(baseUrl);
+      await this.infracostService.getAllInfracostProjectsEstimate(`${baseUrl}/api/infracost`);
     }
 
     private schedule(taskRunner: TaskRunner) {
@@ -77,9 +91,14 @@ export class InfracostEntityProvider implements EntityProvider {
                 taskInstanceId: uuid.v4(),
               });
               try {
-                await this.refresh(logger);
-              } catch (error) {
-                logger.error(error);
+                await this.read({logger});
+              } catch (error: any) {
+                  logger.error('Error while syncing Infracost Entities', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack,
+                    status: error.response?.status,
+                  });
               }
             },
           });
@@ -88,4 +107,25 @@ export class InfracostEntityProvider implements EntityProvider {
     
 }
 
-  
+
+function trackProgress(logger: LoggerService) {
+  let timestamp = Date.now();
+  let summary: string;
+
+  logger.info('Reading Infracost Entities...');
+
+  function markReadComplete(read: { entities: unknown[]; }) {
+    summary = `${read.entities.length} Infracost Entities`;
+    const readDuration = ((Date.now() - timestamp) / 1000).toFixed(1);
+    timestamp = Date.now();
+    logger.info(`Read ${summary} Infracost Entities in ${readDuration} seconds...`);
+    return { markCommitComplete };
+  }
+
+  function markCommitComplete() {
+    const commitDuration = ((Date.now() - timestamp) / 1000).toFixed(1);
+    logger.info(`Processed ${summary} Infracost Projects Estimate in ${commitDuration} seconds.`);
+  }
+
+  return { markReadComplete };
+}
