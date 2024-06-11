@@ -27,8 +27,7 @@ export async function startStandaloneServer(
 
     const database = useHotMemoize(module, () => {
         return Knex({
-            connection: config.get('backend.database'),
-            migrations: { directory: './migrations'}
+            connection: config.get('backend.database')
         });
       });
     

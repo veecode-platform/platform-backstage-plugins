@@ -49,7 +49,7 @@ export async function createRouter(
    * List ALL Infracost Projects Estimate on the database
    */
 
-  router.get('/infracost-estimate',( async (_, response) => {
+  router.get('/',( async (_, response) => {
     const data = await database.listInfracostProjectsEstimate();
     if(!data){
       throw new InputError('There was an error trying to get Infracost Projects Estimate')
@@ -61,7 +61,7 @@ export async function createRouter(
    /**
    * Get by name
    */
-   router.get('/infracost-estimate/id/:name',( async (request, response) => {
+   router.get('/:name',( async (request, response) => {
     const estimateName = request.params.name;
     const data = await database.getInfracostProjectsEstimatebyName(estimateName);
 
@@ -73,7 +73,7 @@ export async function createRouter(
    * Insert / Create a new Infracost Projects Estimate
    */
 
-   router.post('/infracost-estimate',(async(request, response)=>{
+   router.post('/',(async(request, response)=>{
       const newEstimate = request.body;
       const data = await database.createInfracostProjectsEstimate(newEstimate);
 
@@ -81,7 +81,7 @@ export async function createRouter(
         throw new InputError("There was an error trying persist Infracost Projects Estimate on database")
       }
 
-      response.status(201);
+      response.status(200);
       response.json(data)
 
    }) as RequestHandler);
@@ -90,7 +90,7 @@ export async function createRouter(
    * Delete a Infracost Projects Estimate
    */
 
-   router.delete('/infracost-estimate/:name', ( async (request,response)=> {
+   router.delete('/:name', ( async (request,response)=> {
     const estimateName = request.params.name;
     const data = await database.deleteInfracostProjectsEstimate(estimateName) ;
 
@@ -106,7 +106,7 @@ export async function createRouter(
    * Update a Infracost Projects Estimate
    */
 
-   router.put('/infracost-estimate', ( async (request,response)=> {
+   router.put('/', ( async (request,response)=> {
     const updatedEstimate = request.body;
     const data = await database.updateInfracostProjectsEstimate(updatedEstimate);
 

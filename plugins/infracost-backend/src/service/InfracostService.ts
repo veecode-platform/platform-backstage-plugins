@@ -5,7 +5,7 @@ export class InfracostService {
 
     async getAllInfracostProjectsEstimate(url:string): Promise<InfracostEstimate[]|[]>{
         try{
-            const response = await axios(`${url}/infracost-estimate`);
+            const response = await axios(`${url}`);
             return response.data;
         }
         catch(error: any){
@@ -19,7 +19,7 @@ export class InfracostService {
             await axios.post(endpoint, estimate);
           } catch (error:any) {
             console.log(
-              `There was an error trying persist Infracost Projects Estimate [${error.message}]`,
+              `There was an error trying persist Infracost Projects Estimate [${error}]`,
             );
           }
     }
