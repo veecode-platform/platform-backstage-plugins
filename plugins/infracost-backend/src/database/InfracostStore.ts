@@ -1,5 +1,4 @@
-/* eslint-disable @backstage/no-undeclared-imports */
-import { JsonObject } from "@backstage/types"
+export type JsonObject = { [key: string]: any };
 
 export type InfracostEstimate ={
     id?: string,
@@ -15,10 +14,10 @@ export type InfracostEstimate ={
     diff_total_hourly_cost: string,
     diff_total_monthly_cost: string,
     diff_total_monthly_usage_cost: string,
-    sumary: JsonObject,
-    time_generated?: string,
-    created_at?: string,
-    updated_at?: string
+    summary: JsonObject,
+    time_generated?: Date,
+    created_at?: Date,
+    updated_at?: Date
 }
 
 export interface InfracosteStore {
