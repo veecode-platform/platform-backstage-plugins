@@ -85,7 +85,7 @@ export class InfracostEntityProcessor implements CatalogProcessor {
           currency: estimate.currency,
           projects: estimate.projects,
           total_hourly_cost: estimate.totalHourlyCost,
-          total_monthly_cost: estimate.totalMothlyCost,
+          total_monthly_cost: estimate.totalMonthlyCost,
           total_monthly_usage_cost: estimate.totalMonthlyUsageCost,
           past_total_hourly_cost: estimate.pastTotalHourlyCost,
           past_total_monthly_cost: estimate.pastTotalMonthlyCost,
@@ -93,8 +93,8 @@ export class InfracostEntityProcessor implements CatalogProcessor {
           diff_total_hourly_cost: estimate.diffTotalHourlyCost,
           diff_total_monthly_cost: estimate.diffTotalMonthlyCost,
           diff_total_monthly_usage_cost: estimate.diffTotalMonthlyUsageCost,
-          sumary: estimate.sumary,
-          time_generated: estimate.timteGenerated
+          summary: estimate.summary,
+          time_generated: estimate.timeGenerated
       }
       return estimateResult as InfracostEstimate
     }
@@ -145,10 +145,11 @@ export class InfracostEntityProcessor implements CatalogProcessor {
             const infracostProjectsEstimate = this.extractEstimate(infracost);
 
             try{
-              this.infracostService.saveInfracostProjectsEstimate(`${endpoint}/infracost-estimate`,infracostProjectsEstimate)
+              this.infracostService.saveInfracostProjectsEstimate(`${endpoint}/api/infracost`,infracostProjectsEstimate)
+              this.logger.info('InfracostEntitiesProcessor: Saved entity metadata infracost on database')
             }
             catch(error){
-              this.logger.error('InfracostEntitiesProcessor: There was an error trying to persist the entity metadata Infracost on database',)
+              this.logger.error(`InfracostEntitiesProcessor: There was an error trying to persist the entity metadata Infracost on database [${error}]`)
             }
         } 
         return entity;
