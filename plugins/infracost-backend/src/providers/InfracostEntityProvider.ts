@@ -57,26 +57,16 @@ export class InfracostEntityProvider implements EntityProvider {
 
     async read(options?:{logger?: Logger}){
       if (!this.connection) {
-        throw new Error('Not initialized');
+        throw new Error(`${this.getProviderName()}: Not initialized`);
       }
       const logger = options?.logger ?? this.options.logger;
       const baseUrl = this.options.provider.baseUrl;
       const entities = await this.infracostService.getAllInfracostProjectsEstimate(`${baseUrl}/api/infracost`);
 
       const { markReadComplete } = trackProgress(logger);
-      const { markCommitComplete } = markReadComplete({entities})
+      const { markProcessComplete } = markReadComplete({entities})
 
-      markCommitComplete();
-      await this.refresh(logger)
-    }
-
-    async refresh(logger:Logger){
-      if(!this.connection){
-        logger.error(`${this.getProviderName()}: Error trying to initialize Provider`);
-        return
-      }
-      const baseUrl = this.options.provider.baseUrl;
-      await this.infracostService.getAllInfracostProjectsEstimate(`${baseUrl}/api/infracost`);
+      markProcessComplete();
     }
 
     private schedule(taskRunner: TaskRunner) {
@@ -119,10 +109,10 @@ function trackProgress(logger: LoggerService) {
     const readDuration = ((Date.now() - timestamp) / 1000).toFixed(1);
     timestamp = Date.now();
     logger.info(`Read ${summary} Infracost Entities in ${readDuration} seconds...`);
-    return { markCommitComplete };
+    return { markProcessComplete };
   }
 
-  function markCommitComplete() {
+  function markProcessComplete() {
     const commitDuration = ((Date.now() - timestamp) / 1000).toFixed(1);
     logger.info(`Processed ${summary} Infracost Projects Estimate in ${commitDuration} seconds.`);
   }
