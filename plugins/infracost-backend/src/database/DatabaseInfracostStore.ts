@@ -21,46 +21,59 @@ export class DatabaseInfracostStore  implements InfracosteStore {
     skipMigrations?: boolean,
     logger: LoggerService
   }): Promise<DatabaseInfracostStore> {
-    const {database, /* skipMigrations, */ logger} = options;
+    const {database, skipMigrations,  logger} = options;
     const client = await database.getClient();
     
-    if (!database.migrations?.skip /* && !skipMigrations */) {
+    if (!database.migrations?.skip && !skipMigrations ) {
       await client.migrate.latest({
         directory: migrationsDir
       })
-    }
+     }
     return new DatabaseInfracostStore(client,logger)
+  }
+
+  private async existsEstimate(estimate:InfracostEstimate): Promise<boolean>{
+      const exists = await this.db.transaction( async trx => {
+        const result = await trx(INFRACOST_TABLE)
+        .where('name', '=', estimate.name)
+        .first()
+        return result !== undefined ;
+      });
+      return exists
   }
 
   async createInfracostProjectsEstimate(estimate:InfracostEstimate){
     try{
+      if(await this.existsEstimate(estimate)){
+        return await this.updateInfracostProjectsEstimate(estimate);
+      }  
       return await this.db.transaction( async trx => {
-        await trx(INFRACOST_TABLE)
-        .insert({
-          name: estimate.name,
-          currency: estimate.currency,
-          projects: estimate.projects,
-          total_hourly_cost: estimate.total_hourly_cost,
-          total_monthly_cost: estimate.total_monthly_cost,
-          total_monthly_usage_cost: estimate.total_monthly_usage_cost,
-          past_total_hourly_cost: estimate.past_total_hourly_cost,
-          past_total_monthly_cost: estimate.past_total_hourly_cost,
-          past_tota_monthly_usage_cost: estimate.past_total_monthly_usage_cost,
-          diff_total_hourly_cost: estimate.diff_total_hourly_cost,
-          diff_total_monthly_cost: estimate.diff_total_monthly_cost,
-          diff_total_monthly_usage_cost: estimate.diff_total_monthly_usage_cost,
-          sumary: estimate.sumary,
-          time_generated: estimate.time_generated
-        })
-        .onConflict(['name'])
-        .ignore();
-
-        const [infracostEstimate] = await trx(INFRACOST_TABLE).where({
-          name: estimate.name,
-        });
-
-        return infracostEstimate || null;
-      })
+          await trx(INFRACOST_TABLE)
+          .insert({
+            name: estimate.name,
+            currency: estimate.currency,
+            projects: JSON.stringify(estimate.projects),
+            total_hourly_cost: estimate.total_hourly_cost,
+            total_monthly_cost: estimate.total_monthly_cost,
+            total_monthly_usage_cost: estimate.total_monthly_usage_cost,
+            past_total_hourly_cost: estimate.past_total_hourly_cost,
+            past_total_monthly_cost: estimate.past_total_monthly_cost,
+            past_total_monthly_usage_cost: estimate.past_total_monthly_usage_cost,
+            diff_total_hourly_cost: estimate.diff_total_hourly_cost,
+            diff_total_monthly_cost: estimate.diff_total_monthly_cost,
+            diff_total_monthly_usage_cost: estimate.diff_total_monthly_usage_cost,
+            summary: JSON.stringify(estimate.summary),
+            time_generated: estimate.time_generated
+          })
+          .onConflict(['name'])
+          .ignore();
+  
+          const [infracostEstimate] = await trx(INFRACOST_TABLE).where({
+            name: estimate.name,
+          });
+  
+          return infracostEstimate || null;
+       })
     }
     catch(error:any){
       this.logger.error(error.message);
@@ -81,7 +94,7 @@ export class DatabaseInfracostStore  implements InfracosteStore {
   async getInfracostProjectsEstimatebyName(name: string):Promise<InfracostEstimate|null>{
     try{
       const estimate = await this.db(INFRACOST_TABLE).where('name', '=', name);
-      return estimate && estimate.length > 0 ? estimate[0]:null
+      return estimate && estimate.length > 0 ? estimate[0] : null
     }
     catch(error:any){
       this.logger.error(error.message);
@@ -97,18 +110,20 @@ export class DatabaseInfracostStore  implements InfracosteStore {
         .update({
                   name: estimate.name,
                   currency: estimate.currency,
-                  projects: estimate.projects,
+                  projects: JSON.stringify(estimate.projects),
                   total_hourly_cost: estimate.total_hourly_cost,
                   total_monthly_cost: estimate.total_monthly_cost,
                   total_monthly_usage_cost: estimate.total_monthly_usage_cost,
                   past_total_hourly_cost: estimate.past_total_hourly_cost,
-                  past_total_monthly_cost: estimate.past_total_hourly_cost,
-                  past_tota_monthly_usage_cost: estimate.past_total_monthly_usage_cost,
+                  past_total_monthly_cost: estimate.past_total_monthly_cost,
+                  past_total_monthly_usage_cost: estimate.past_total_monthly_usage_cost,
                   diff_total_hourly_cost: estimate.diff_total_hourly_cost,
                   diff_total_monthly_cost: estimate.diff_total_monthly_cost,
                   diff_total_monthly_usage_cost: estimate.diff_total_monthly_usage_cost,
-                  sumary: estimate.sumary,
-                  time_generated: estimate.time_generated
+                  summary: JSON.stringify(estimate.summary),
+                  time_generated: estimate.time_generated,
+                  created_at: estimate.created_at,
+                  updated_at: new Date()
           });
 
           if(updateEstimateRowsCount === 1) return estimate;
