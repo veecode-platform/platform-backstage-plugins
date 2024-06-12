@@ -28,7 +28,8 @@ export const readProviderConfigs = (config:Config):InfracostProviderConfig[] =>{
     return providersConfig.keys().map(id => {
         const providerConfigInstance = providersConfig.getConfig(id);
 
-        const baseUrl = providerConfigInstance.getString('baseUrl');
+        // const baseUrl = providerConfigInstance.getString('baseUrl');
+        const baseUrl = config.getString("backend.baseUrl");
 
         const schedule = providerConfigInstance.has('schedule')
           ? readTaskScheduleDefinitionFromConfig(
