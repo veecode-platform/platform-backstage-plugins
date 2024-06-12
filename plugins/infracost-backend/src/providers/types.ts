@@ -1,8 +1,7 @@
 /* eslint-disable @backstage/no-undeclared-imports */
 import { PluginTaskScheduler, TaskRunner } from '@backstage/backend-tasks';
 import { PluginDatabaseManager } from '@backstage/backend-common';
-import { Logger } from 'winston';
-import { CacheService } from '@backstage/backend-plugin-api';
+import { CacheService, LoggerService } from '@backstage/backend-plugin-api';
 
 export interface InfracostEntityProviderOptions {
     /**
@@ -32,7 +31,7 @@ export interface InfracostEntityProviderOptions {
     /**
      * The logger to use.
      */
-    logger: Logger;
+    logger: LoggerService;
     cache: CacheService;
     /**
      * The PluginDatabaseManager to use

@@ -9,8 +9,7 @@ import {
 import { LocationSpec } from "@backstage/plugin-catalog-common";
 import { Config } from "@backstage/config";
 import {readProviderConfigs,InfracostProviderConfig} from "../lib/config";
-import * as winston from "winston";
-import { CacheService } from "@backstage/backend-plugin-api";
+import { CacheService, LoggerService } from "@backstage/backend-plugin-api";
 import {
     Entity,
     getCompoundEntityRef,
@@ -27,7 +26,7 @@ export class InfracostEntityProcessor implements CatalogProcessor {
 
     private config: Config;
     private providerConfig: InfracostProviderConfig;
-    private logger: winston.Logger;
+    private logger: LoggerService;
     private cache: CacheService;
     private readonly validators = [InfracostEntityV1alpha1Validator];
     private readonly infracostService : InfracostService; 
@@ -38,7 +37,7 @@ export class InfracostEntityProcessor implements CatalogProcessor {
 
     constructor(
         config: Config,
-        logger: winston.Logger,
+        logger: LoggerService,
         cache: CacheService,
       ) {
         this.config = config;

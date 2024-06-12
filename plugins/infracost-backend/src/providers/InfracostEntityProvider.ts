@@ -5,7 +5,6 @@ import { CacheService, LoggerService } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';
 import { InfracostProviderConfig, readProviderConfigs } from '../lib/config';
 import * as uuid from 'uuid';
-import { Logger } from 'winston';
 import { InfracostService } from '../service/InfracostService';
 import { InfracostEntityProviderOptions } from './types';
 
@@ -39,7 +38,7 @@ export class InfracostEntityProvider implements EntityProvider {
         private options: {
           id: string;
           provider: InfracostProviderConfig;
-          logger: Logger;
+          logger: LoggerService;
           cache: CacheService;
         },
       ) {
@@ -55,7 +54,7 @@ export class InfracostEntityProvider implements EntityProvider {
         await this.scheduleFn?.()
     }
 
-    async read(options?:{logger?: Logger}){
+    async read(options?:{logger?: LoggerService}){
       if (!this.connection) {
         throw new Error(`${this.getProviderName()}: Not initialized`);
       }
