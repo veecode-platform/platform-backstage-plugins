@@ -9,6 +9,10 @@
     "main": "dist/index.cjs.js",
     "types": "dist/index.d.ts"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/veecode-platform/platform-backstage-plugins.git"
+  },
   "backstage": {
     "role": "backend-plugin"
   },
@@ -46,6 +50,6 @@
   },
   "files": [
     "dist",
-    "migrations/*/.{js,d.ts}"
+    "migrations/**/*.{js,d.ts}"
   ]
 }
