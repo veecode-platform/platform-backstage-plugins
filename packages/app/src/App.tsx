@@ -42,6 +42,7 @@ import type { IdentityApi } from '@backstage/core-plugin-api';
 import { KongServiceManagerPage } from '@veecode-platform/plugin-kong-service-manager';
 import { RepoUrlSelectorExtension, ResourcePickerExtension, UploadFilePickerExtension,OptionsPickerExtension } from '@veecode-platform/veecode-scaffolder-extensions';
 import { apiDocsPlugin } from '@backstage/plugin-api-docs';
+import { KubernetesGptAnalyzerPage } from '@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer';
 
 const app = createApp({
   apis,
@@ -126,6 +127,7 @@ const routes = (
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/kong-service-manager" element={<KongServiceManagerPage />} />
+    <Route path="/kubernetes-gpt-analyzer" element={<KubernetesGptAnalyzerPage />} />
   </FlatRoutes>
 );
 

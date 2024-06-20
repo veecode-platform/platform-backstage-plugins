@@ -67,6 +67,8 @@ import { DatabaseOverview } from '@veecode-platform/plugin-database-explorer';
 import { RELATION_ENVIRONMENT_OF, RELATION_FROM_ENVIRONMENT } from '@veecode-platform/plugin-veecode-platform-common';
 // kong
 import { KongServiceManagerPage, isKongServiceManagerAvailable } from '@veecode-platform/plugin-kong-service-manager';
+import { KubernetesGptAnalyzerPage,KubernetesGptAnalyzerCard } from '@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer';
+
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -500,6 +502,10 @@ const clusterPage = (
           <EntityHasComponentsCard variant="gridItem" />
         </Grid>
 
+        <Grid item md={7} sm={12}>
+            <KubernetesGptAnalyzerCard/>
+        </Grid>
+
         {/* Github */}
         <EntitySwitch>
           <EntitySwitch.Case if={isGithubWorkflowsAvailable}>
@@ -532,6 +538,10 @@ const clusterPage = (
 
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/kubernetes-gpt-analyzer" title="Kubernetes GPT">
+      <KubernetesGptAnalyzerPage/>
     </EntityLayout.Route>
 {/* 
     <EntityLayout.Route

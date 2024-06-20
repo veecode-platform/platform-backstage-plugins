@@ -50,11 +50,13 @@
     "@veecode-platform/backstage-plugin-cluster-explorer": "workspace:^",
     "@veecode-platform/backstage-plugin-github-workflows": "workspace:^",
     "@veecode-platform/backstage-plugin-gitlab-pipelines": "workspace:^",
+    "@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer": "workspace:^",
     "@veecode-platform/plugin-kong-service-manager": "workspace:^",
     "@veecode-platform/veecode-scaffolder-extensions": "workspace:^",
     "history": "^5.0.0",
     "react": "^18.0.2",
     "react-dom": "^18.0.2",
+    "react-icons": "^5.2.1",
     "react-router": "^6.3.0",
     "react-router-dom": "^6.3.0",
     "react-use": "^17.2.4"
