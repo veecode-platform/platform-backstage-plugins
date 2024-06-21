@@ -28,7 +28,7 @@ export const useErrorAnalysisStyles = makeStyles(theme=>({
         alignItems: 'center',
         justifyContent: 'flex-start',
         gap: '1rem',
-        [theme.breakpoints.down('sm')]: {
+        [theme.breakpoints.down('md')]: {
            gridTemplate: 'auto / 1fr',
         }
     }
