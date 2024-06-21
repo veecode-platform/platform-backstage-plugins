@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Chip, Typography } from '@material-ui/core'
+import { Button, Chip, Grid, Typography } from '@material-ui/core'
 import { useErrorCardStyles } from './styles'
 import { BsStars } from 'react-icons/bs';
 import { ErrorCardProps } from './types';
@@ -41,7 +41,7 @@ export const ErrorCard : React.FC<ErrorCardProps> = (props) => {
 
   return (
     <>
-      <Box className={card}>
+      <Grid item lg={5} className={card} spacing={3}>
         <div className={cardTitle}> 
           <AnimationError/>
           <Typography variant="h6" className={title}>
@@ -49,8 +49,8 @@ export const ErrorCard : React.FC<ErrorCardProps> = (props) => {
           </Typography>
         </div>
         <div>
-          <Chip label={message.kind} variant="outlined"/>
-          <Chip label={message.name} variant="outlined"/>
+          <Chip style={{padding: '.5rem'}} label={message.kind} variant="default" size="small"/>
+          <Chip style={{padding: '.5rem'}} label={message.name} variant="default" size="small"/>
         </div>
         <Typography variant="body1">{error}</Typography>
         <div className={footer}>
@@ -63,7 +63,7 @@ export const ErrorCard : React.FC<ErrorCardProps> = (props) => {
             Analyze error <BsStars size={18} style={{ marginLeft: '1rem' }} />
           </Button>
         </div>
-      </Box>
+      </Grid>
       
       {showModal && (
         <ModalComponent 

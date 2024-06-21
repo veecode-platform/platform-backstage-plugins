@@ -22,10 +22,11 @@ export const useErrorAnalysisStyles = makeStyles(theme=>({
     content:{
         width: '100%',
         padding: '.5rem',
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        gap: '2rem'
+        margin: 'auto',
+        // display: 'grid',
+        // gridTemplate: 'auto / 1fr 1fr',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        gap: '.5rem'
     }
 }))

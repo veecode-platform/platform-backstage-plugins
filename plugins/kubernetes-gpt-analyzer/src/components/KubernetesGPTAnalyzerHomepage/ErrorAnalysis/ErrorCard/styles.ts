@@ -2,14 +2,12 @@ import { makeStyles } from "@material-ui/core";
 
 export const useErrorCardStyles = makeStyles(theme=>({
     card:{
-        width: '95%',
-        maxWidth: '1200px',
+        minWidth: '49%',
         margin: 'auto',
-        padding: '2.5rem 3rem',
+        padding: '2.5rem 3rem !important',
         backgroundColor: theme.palette.background.paper,
-        // border: `1px solid ${theme.palette.grey[200]}`,
         boxShadow: 'rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px',
-        borderRadius:'5px',
+        borderRadius:'8px',
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'center',
@@ -17,10 +15,13 @@ export const useErrorCardStyles = makeStyles(theme=>({
         gap: '1.5rem'
     },
     cardTitle:{
+        width: '100%',
         position: 'relative',
         display:'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        paddingBottom: '1rem'
     },
     title:{
         marginLeft: '2rem'
