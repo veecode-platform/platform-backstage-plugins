@@ -33,8 +33,8 @@ export const ErrorCard : React.FC<ErrorCardProps> = (props) => {
 
   const [showModal, setShowModal] = React.useState<boolean>(false);
   const { message } = props
-  const { card, cardTitle,title, footer,button } = useErrorCardStyles();
-  const errorTitle = message.error[0].text;
+  const { card, cardTitle,title, footer,button,errorBody } = useErrorCardStyles();
+  const errorContent = message.error[0].text;
   const {error, solution } =  parseErrorSolutionString(message.details);
 
   const handleModal = () =>  setShowModal(!showModal);
@@ -45,14 +45,13 @@ export const ErrorCard : React.FC<ErrorCardProps> = (props) => {
         <div className={cardTitle}> 
           <AnimationError/>
           <Typography variant="h6" className={title}>
-            {errorTitle}
+            {message.name}
           </Typography>
         </div>
         <div>
           <Chip style={{padding: '.5rem'}} label={message.kind} variant="default" size="small"/>
-          <Chip style={{padding: '.5rem'}} label={message.name} variant="default" size="small"/>
         </div>
-        <Typography variant="body1">{error}</Typography>
+        <Typography variant="body1" className={errorBody}>{error}</Typography>
         <div className={footer}>
           <Button
             variant="outlined"
@@ -67,8 +66,8 @@ export const ErrorCard : React.FC<ErrorCardProps> = (props) => {
       
       {showModal && (
         <ModalComponent 
-          errorTitle={errorTitle}
-          errorMessage={error}
+          errorTitle={error}
+          errorMessage={errorContent}
           solution={solution}
           show={showModal} 
           handleCloseModal={handleModal}

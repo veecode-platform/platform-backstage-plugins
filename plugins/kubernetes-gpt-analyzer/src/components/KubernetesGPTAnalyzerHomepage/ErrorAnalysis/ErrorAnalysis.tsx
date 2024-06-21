@@ -1,7 +1,7 @@
 import React from 'react'
 import { useErrorAnalysisStyles } from './styles';
 import { FcInfo } from "react-icons/fc";
-import { Grid, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { ErrorCard } from './ErrorCard';
 import { ErrorAnalysisProps } from './types';
 
@@ -18,14 +18,14 @@ export const ErrorAnalysis : React.FC<ErrorAnalysisProps> = (props) => {
             {errors} Errors found, click on analyze error to generate a solution
           </Typography>
         </div>
-        <Grid container className={content}>
+        <div className={content}>
           {messages.map( message => 
               (<ErrorCard 
                 key={message.metadata.uid} 
                 message={message.spec}
                 />)
            )}
-        </Grid>
+        </div>
       </div>
   );
 }

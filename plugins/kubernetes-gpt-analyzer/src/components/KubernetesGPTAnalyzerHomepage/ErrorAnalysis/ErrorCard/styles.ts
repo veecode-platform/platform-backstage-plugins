@@ -2,7 +2,8 @@ import { makeStyles } from "@material-ui/core";
 
 export const useErrorCardStyles = makeStyles(theme=>({
     card:{
-        minWidth: '49%',
+        minWidth: '100%',
+        minHeight: '335px',
         margin: 'auto',
         padding: '2.5rem 3rem !important',
         backgroundColor: theme.palette.background.paper,
@@ -12,7 +13,10 @@ export const useErrorCardStyles = makeStyles(theme=>({
         alignItems: 'flex-start',
         justifyContent: 'center',
         flexDirection: 'column',
-        gap: '1.5rem'
+        gap: '1.3rem',
+        [theme.breakpoints.down('lg')]: {
+            minHeight: '375px',
+         }
     },
     cardTitle:{
         width: '100%',
@@ -25,6 +29,14 @@ export const useErrorCardStyles = makeStyles(theme=>({
     },
     title:{
         marginLeft: '2rem'
+    },
+    errorBody:{
+        display: '-webkit-box',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'normal',
+        WebkitBoxOrient: 'vertical',
+        WebkitLineClamp: 2,
     },
     footer:{
         width: '100%',

@@ -23,10 +23,13 @@ export const useErrorAnalysisStyles = makeStyles(theme=>({
         width: '100%',
         padding: '.5rem',
         margin: 'auto',
-        // display: 'grid',
-        // gridTemplate: 'auto / 1fr 1fr',
+        display: 'grid',
+        gridTemplate: 'auto / 1fr 1fr',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        gap: '.5rem'
+        gap: '1rem',
+        [theme.breakpoints.down('sm')]: {
+           gridTemplate: 'auto / 1fr',
+        }
     }
 }))
