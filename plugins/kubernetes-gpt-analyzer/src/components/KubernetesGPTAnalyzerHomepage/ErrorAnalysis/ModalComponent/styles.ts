@@ -16,6 +16,9 @@ export const useModalComponentStyles = makeStyles(theme=>({
         height: '100%',
         padding: '1rem',
         borderRadius: '8px',
+        [theme.breakpoints.down('md')]: {
+            width: '100%'
+        }
         // border: `1px solid ${theme.palette.background.paper}`,
        },
        modalHeader:{
@@ -40,7 +43,7 @@ export const useModalComponentStyles = makeStyles(theme=>({
         justifyContent: 'center',
         flexDirection: 'column',
         gap: '3.5rem',
-        margin: '1rem 0'
+        margin: '1rem 0',
        },
        loadingContainer:{
         width: '50%',

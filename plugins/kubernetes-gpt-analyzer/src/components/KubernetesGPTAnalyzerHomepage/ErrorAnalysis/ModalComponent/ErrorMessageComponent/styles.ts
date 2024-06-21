@@ -12,6 +12,12 @@ export const useErrorMessageComponentStyles = makeStyles(theme=>({
         alignItems: 'flex-start',
         justifyContent: 'center',
         flexDirection: 'column',
-        gap: '2rem'
+        gap: '2rem',
+        [theme.breakpoints.down('md')]: {
+            width: '90%'
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: '100%'
+        }
     }
 }))
