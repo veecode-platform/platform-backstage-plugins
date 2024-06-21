@@ -9,7 +9,7 @@ export const ErrorAnalysis : React.FC<ErrorAnalysisProps> = (props) => {
   
   const {container,infoBar,content} = useErrorAnalysisStyles();
   const { errors, messages } = props;
-
+  
   return (
       <div className={container}>
         <div className={infoBar}>

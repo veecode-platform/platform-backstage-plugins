@@ -15,7 +15,7 @@ export const ModalComponent : React.FC<ModalProps> = (props) => {
     const { modalOnBlur,modalContent, modalHeader,closeModal,modalBody,loadingContainer} = useModalComponentStyles();
 
     React.useEffect(()=>{
-      setTimeout(()=>{setLoadingState(false)},2000)
+      setTimeout(()=>{setLoadingState(false)},1000)
     },[])
   
     return (
