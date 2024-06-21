@@ -24,13 +24,19 @@ export const useAnalysisComponentStyles = makeStyles(theme=>({
         maxWidth: '100%',
         textAlign: 'left',
         margin: '1.5rem auto',
-        '&:after': {
-          content: '""',
-          borderRight: `.5rem solid ${theme.palette.linkHover}`,
-          marginLeft: 5,
-          opacity: 1,
-          animation: '$blink .7s infinite',
+        '& > p':{
+          fontSize: '1rem'
         },
+        '& p:last-child':{
+          display: 'inline',
+          '&:after': {
+            content: '""',
+            borderRight: `.5rem solid ${theme.palette.linkHover}`,
+            marginLeft: 5,
+            opacity: 1,
+            animation: '$blink .7s infinite',
+          },
+        }
       },
       '@keyframes blink': {
         '0%, 100%': {
