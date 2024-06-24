@@ -10,14 +10,15 @@ import { ErrorAnalysis } from './ErrorAnalysis';
 import KubernetesIcon from '../../assets/kubernetesIcon';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { PluginNotConfigured } from './pluginNotConfigured';
+import { KubernetesGPTAnalyzerHomepageProps } from './types';
 
 
-export const KubernetesGPTAnalyzerHomepage = () => {
+export const KubernetesGPTAnalyzerHomepage : React.FC<KubernetesGPTAnalyzerHomepageProps> = ({intervalMs}) => {
 
   const [errorsCount, setErrorsCount] = React.useState<number>(0);
   const { entity } = useEntity();
   const { clusterName } = useEntityAnnotations(entity);
-  const {kubernetesResults, error, loading } = useKubernetesResults({clusterId: clusterName});
+  const {kubernetesResults, error, loading } = useKubernetesResults({clusterName,intervalMs});
   const { container,content, titleBar } = useKubernetesGPTAnalyzerHomepageStyles();
 
   React.useEffect(()=>{
