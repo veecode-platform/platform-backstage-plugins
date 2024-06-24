@@ -1,4 +1,4 @@
-# kubernetes-gpt-analyzer ✨
+# Kubernetes GPT Analyzer ✨
 
 The Kubernetes GPT Analyzer plug-in offers an AI approach to your Kubernetes component.
 
