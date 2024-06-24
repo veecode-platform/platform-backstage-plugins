@@ -14129,6 +14129,7 @@ __metadata:
   resolution: "@veecode-platform/backstage-plugin-infracost-common@workspace:plugins/infracost-common"
   dependencies:
     "@backstage/cli": ^0.26.5
+    "@backstage/types": ^1.1.1
   languageName: unknown
   linkType: soft
 
