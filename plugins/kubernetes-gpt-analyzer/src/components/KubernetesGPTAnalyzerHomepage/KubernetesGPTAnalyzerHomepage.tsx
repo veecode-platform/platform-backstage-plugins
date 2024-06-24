@@ -11,6 +11,7 @@ import KubernetesIcon from '../../assets/kubernetesIcon';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { PluginNotConfigured } from './pluginNotConfigured';
 import { KubernetesGPTAnalyzerHomepageProps } from './types';
+import { PLUGIN_DOCS } from '../../utils/constants/docs';
 
 
 export const KubernetesGPTAnalyzerHomepage : React.FC<KubernetesGPTAnalyzerHomepageProps> = ({intervalMs}) => {
@@ -36,7 +37,7 @@ export const KubernetesGPTAnalyzerHomepage : React.FC<KubernetesGPTAnalyzerHomep
         <Typography variant="h6">Kubernetes GPT Analyzer</Typography>
       </Box>
       <div className={content}>
-        {error ? <PluginNotConfigured message={error} url="/"/> 
+        {error ? <PluginNotConfigured message={error} url={PLUGIN_DOCS}/> 
             : (
                   <>
                     {loading ? <LoadingProgress /> : (

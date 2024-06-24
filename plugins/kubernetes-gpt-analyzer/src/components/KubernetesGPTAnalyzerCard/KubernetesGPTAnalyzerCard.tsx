@@ -10,6 +10,7 @@ import { Progress } from '@backstage/core-components';
 import { InfoBox } from '../shared';
 import { useEntityAnnotations , useKubernetesResults } from '../../hooks';
 import { KubernetesGPTAnalyzerCardProps } from './types';
+import { PLUGIN_DOCS } from '../../utils/constants/docs';
 
 /**
  * 
@@ -80,7 +81,7 @@ export const KubernetesGPTAnalyzerCard : React.FC<KubernetesGPTAnalyzerCardProps
           ) : (
             <InfoBox
               message="No configurations were found for this application"
-              url="/"
+              url={PLUGIN_DOCS}
             />
           )}
         </CardContent>
