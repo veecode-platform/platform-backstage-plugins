@@ -43,7 +43,6 @@ import { KongServiceManagerPage } from '@veecode-platform/plugin-kong-service-ma
 import { RepoUrlSelectorExtension, ResourcePickerExtension, UploadFilePickerExtension,OptionsPickerExtension } from '@veecode-platform/veecode-scaffolder-extensions';
 import { apiDocsPlugin } from '@backstage/plugin-api-docs';
 import { KubernetesGptAnalyzerPage } from '@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer';
-import { InfracostPage } from '@veecode-platform/backstage-plugin-infracost';
 
 const app = createApp({
   apis,
@@ -129,7 +128,6 @@ const routes = (
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/kong-service-manager" element={<KongServiceManagerPage />} />
     <Route path="/kubernetes-gpt-analyzer" element={<KubernetesGptAnalyzerPage />} />
-    <Route path="/infracost" element={<InfracostPage />} />
   </FlatRoutes>
 );
 
