@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react';
 import { Box, Paper, Typography } from '@material-ui/core';
 import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
