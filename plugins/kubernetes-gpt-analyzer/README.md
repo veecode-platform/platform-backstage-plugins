@@ -68,7 +68,7 @@ Be aware that the ClusterRole used as described at https://backstage.io/docs/fea
 
 ### UI 🎨
 
-In the Ui we have 2 approaches, the `KubernetesGptAnalyzerCard`, which has a more minimalist look, just showing the number of errors if the AI finds them in its analysis, and a button leading to the `KubernetesGptAnalyzerPage` component, which in turn is the main component, where in addition to notifying the number of errors found (if any), it also addresses the errors found and the possibility of analyzing the errors individually, resulting in an analysis with possible solutions.
+In the Ui we have 2 approaches, the `KubernetesGptAnalyzerCard`, which has a more minimalist look, just showing the number of errors if the AI finds them in its analysis and a button leading to the `KubernetesGptAnalyzerPage` component, which in turn is the main component, where in addition to notifying the number of errors found (if any), it also addresses the errors found and the possibility of analyzing the errors individually, resulting in an analysis with possible solutions.
 Let's take them one at a time, starting with `KubernetesGptAnalyzerCard`:
 
 
