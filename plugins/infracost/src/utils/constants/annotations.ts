@@ -1,0 +1,1 @@
+export const ANNOTATION_INFRACOST_PROJECT = 'infracost/project';
