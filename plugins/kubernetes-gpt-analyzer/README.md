@@ -132,15 +132,15 @@ To configure:
   
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/b06c1851-96f2-4990-bd7a-8902339b0b1d)
 
-- Analyzing the error:
+- **Analyzing the error**:
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/1349d500-a66e-4daf-8816-5cd3de56b8fc)
 
--When there is no proper configuration:
+- **When there is no proper configuration**:
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/b5cb8d71-7c3a-4870-8326-357b5d4066a1)
 
--When there is no error:
+- **When there is no error**:
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/2f346a55-33ad-4852-8c6a-ccbb80cb1f3e)
 
@@ -148,7 +148,7 @@ To configure:
 
 ### Request interval ⏱️
 
-By default, we have determined that analysis requests will be `1000000` ms, or 16.67 minutes. However, if you need an analysis with shorter or longer intervals, both on the Kubernetes Gpt Analyzer Card and on the **Kubernetes Gpt Analyzer Page**, just pass the props **intervalMs** which expects a number:
+By default, we have determined that analysis requests will have intervals of `1000000 milliseconds`, or 16.67 minutes. However, if you need an analysis with shorter or longer intervals, either on the Kubernetes Gpt Analyzer card or on the **Kubernetes Gpt Analyzer page**, just pass the **intervalMs** props which expects a number type data:
 
 See:
 
