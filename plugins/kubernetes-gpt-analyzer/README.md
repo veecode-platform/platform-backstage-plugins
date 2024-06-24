@@ -6,7 +6,6 @@ The plug-in offers a dynamic approach, in conjunction with the `@backstage/plugi
 
 - Application error analysis.
 - Listing of errors and their respective solutions, as well as AI suggestions for resolving them.
-- Interaction with AI chat.
 - Analysis checking, using a timer that can be configured.
   
 <br>
