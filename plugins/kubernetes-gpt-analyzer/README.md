@@ -1,13 +1,67 @@
 # kubernetes-gpt-analyzer
 
-Welcome to the kubernetes-gpt-analyzer plugin!
+The Kubernetes GPT Analyzer plug-in offers an AI approach to your Kubernetes component.
 
-_This plugin was created through the Backstage CLI_
+The plug-in offers a dynamic approach, in conjunction with the `@backstage/plugin-kubernetes` and `k8s-operator`:
 
-## Getting started
+- Application error analysis.
+- Listing of errors and their respective solutions, as well as AI suggestions for resolving them.
+- Interaction with AI chat.
+- Analysis checking, using a timer that can be configured.
+  
+<br>
 
-Your plugin has been added to the example app in this repository, meaning you'll be able to access it by running `yarn start` in the root directory, and then navigating to [/kubernetes-gpt-analyzer](http://localhost:3000/kubernetes-gpt-analyzer).
+### Our community 
 
-You can also serve the plugin in isolation by running `yarn start` in the plugin directory.
-This method of serving the plugin provides quicker iteration speed and a faster startup and hot reloads.
-It is only meant for local development, and the setup for it can be found inside the [/dev](./dev) directory.
+> 💬  **Join Us**
+>
+> Join our community to resolve questions about our **Plugins**. We look forward to welcoming you! <br>
+>
+>    [Go to Community  🚀](https://github.com/orgs/veecode-platform/discussions)
+
+<br>
+
+### Getting Started:
+
+
+
+Before installing the plugin, there are some prerequisites to ensure its functionality:
+
+- Configure the kubernetes plugin and its dependencies , :heavy_check_mark: [How to configure the kubernetes plugin :page_with_curl:](https://backstage.io/docs/features/kubernetes/) .
+- Have an OpenIA Api Token, :heavy_check_mark: [Here's how to get an Open IA API KEY :page_with_curl:](https://openai.com/index/openai-api/) .
+- Configuring k8s-operator, :heavy_check_mark: [How to configure k8s-operator with OpenIA :page_with_curl:](https://github.com/k8sgpt-ai/k8sgpt-operator/) .
+<br>
+
+### Installation
+
+If you are using yarn 3.x:
+
+```bash
+yarn workspace app add @veecode-platform/backstage-plugin-kubernetes-gpt-analyzer
+```
+
+If you are using other versions:
+
+```bash
+yarn add --cwd packages/app @veecode-platform/backstage-plugin-kubernetes-gpt-analyzer
+```
+
+
+### Backstage Configuration
+
+Be aware that the ClusterRole used as described at https://backstage.io/docs/features/kubernetes/configuration#role-based-access-control also needs these permissions to read the k8sgpt results:
+
+```yaml
+- apiGroups:
+  - core.k8sgpt.ai
+  resources:
+  - results
+  verbs:
+  - get
+  - list
+```
+
+
+### UI
+
+
