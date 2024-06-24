@@ -8,7 +8,7 @@ import { UseKubernetesProps, UseKubernetesResponse } from "../utils/types/useKub
 
 
 export const useKubernetesResults = ({
-  clusterId,
+  clusterName,
   intervalMs = 1000000,
 }: UseKubernetesProps): UseKubernetesResponse => {
   const kubernetesApi = useApi(kubernetesApiRef);
@@ -17,14 +17,14 @@ export const useKubernetesResults = ({
     try {
       return await (
         await kubernetesApi.proxy({
-          clusterName: clusterId,
+          clusterName,
           path: KUBERNETES_PATH_RESULTS,
         })
       ).json();
     } catch (error: any) {
       throw new Error(error);
     }
-  }, [kubernetesApi, clusterId]);
+  }, [kubernetesApi, clusterName]);
 
   const { value, loading, error, retry } = useAsyncRetry(
     async () => getResults(),

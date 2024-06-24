@@ -3,6 +3,7 @@ import { Grid } from '@material-ui/core'
 import React from 'react'
 import { InfoBox } from '../../shared'
 import { PluginNotConfiguredProps } from './types'
+import { PLUGIN_DOCS } from '../../../utils/constants/docs'
 
 export const PluginNotConfigured : React.FC<PluginNotConfiguredProps> = (props) => {
 
@@ -24,7 +25,7 @@ export const PluginNotConfigured : React.FC<PluginNotConfiguredProps> = (props) 
             }
             url={
               url ??
-              'https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/cluster-explorer'
+              PLUGIN_DOCS
             }
           />
               }

@@ -1,7 +1,7 @@
 import { KubernetesResult } from "./kubernetesResults"
 
 export type UseKubernetesProps = {
-    clusterId: string,
+    clusterName: string,
     intervalMs?: number
 }
 

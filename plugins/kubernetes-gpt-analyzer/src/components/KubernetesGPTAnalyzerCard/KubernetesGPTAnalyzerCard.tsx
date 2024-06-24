@@ -9,6 +9,8 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { Progress } from '@backstage/core-components';
 import { InfoBox } from '../shared';
 import { useEntityAnnotations , useKubernetesResults } from '../../hooks';
+import { KubernetesGPTAnalyzerCardProps } from './types';
+import { PLUGIN_DOCS } from '../../utils/constants/docs';
 
 /**
  * 
@@ -16,12 +18,12 @@ import { useEntityAnnotations , useKubernetesResults } from '../../hooks';
  * 
  */
 
-export const KubernetesGPTAnalyzerCard : React.FC = () => {
+export const KubernetesGPTAnalyzerCard : React.FC<KubernetesGPTAnalyzerCardProps> = ({intervalMs}) => {
   
   const [notificationsCount, setNotificationsCount] = React.useState<number>(0);
   const { entity } = useEntity();
   const { clusterName } = useEntityAnnotations(entity);
-  const {kubernetesResults, error, loading } = useKubernetesResults({clusterId: clusterName});
+  const {kubernetesResults, error, loading } = useKubernetesResults({clusterName,intervalMs});
   const {title,options,cardHeader,cardBody,content,notificationIcon} = useKubernetesGPTAnalyzerCardStyles();
 
   const handleOpenAnalyzer = () => {
@@ -79,7 +81,7 @@ export const KubernetesGPTAnalyzerCard : React.FC = () => {
           ) : (
             <InfoBox
               message="No configurations were found for this application"
-              url="/"
+              url={PLUGIN_DOCS}
             />
           )}
         </CardContent>
