@@ -12,11 +12,11 @@ export const infracostPlugin = createPlugin({
   },
 });
 
-export const InfracostPage = infracostPlugin.provide(
+export const InfracostOverviewPage = infracostPlugin.provide(
   createRoutableExtension({
-    name: 'InfracostPage',
+    name: 'InfracostOverviewPage',
     component: () =>
-      import('./components/ExampleComponent').then(m => m.ExampleComponent),
+      import('./components/infracostOverviewPage').then(m => m.InfracostOverviewPage),
     mountPoint: rootRouteRef,
   }),
 );

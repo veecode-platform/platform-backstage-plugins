@@ -1,1 +1,1 @@
-export { infracostPlugin, InfracostPage } from './plugin';
+export { infracostPlugin, InfracostOverviewPage } from './plugin';
