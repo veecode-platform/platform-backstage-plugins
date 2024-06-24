@@ -1,4 +1,3 @@
-/* eslint-disable @backstage/no-undeclared-imports */
 import {
     readTaskScheduleDefinitionFromConfig,
     TaskScheduleDefinition,

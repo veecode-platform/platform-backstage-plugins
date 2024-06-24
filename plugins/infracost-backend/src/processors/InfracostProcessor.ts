@@ -1,4 +1,3 @@
-/* eslint-disable @backstage/no-undeclared-imports */
 import {
     CatalogProcessor,
     CatalogProcessorCache,
@@ -19,8 +18,8 @@ import {
 } from "@backstage/catalog-model";
 import type { InfracostEntityV1alpha1 as InfracostEntity } from "../model";
 import { InfracostEntityV1alpha1Validator } from "../model";
-import { InfracostEstimate } from "../database/InfracostStore";
 import { InfracostService } from "../service/InfracostService";
+import { InfracostEstimate } from '@veecode-platform/backstage-plugin-infracost-common';
 
 export class InfracostEntityProcessor implements CatalogProcessor {
 

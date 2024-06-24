@@ -1,5 +1,3 @@
-/* eslint-disable @backstage/no-undeclared-imports */
-
 import { entityKindSchemaValidator, KindValidator } from '@backstage/catalog-model';
 
 // TODO(freben): Left here as a compatibility helper. It would be nicer to

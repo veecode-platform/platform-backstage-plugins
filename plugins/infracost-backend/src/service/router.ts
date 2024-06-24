@@ -1,4 +1,3 @@
-/* eslint-disable @backstage/no-undeclared-imports */
 import { UrlReader, errorHandler } from '@backstage/backend-common';
 import { AuthService, DiscoveryService, HttpAuthService, LoggerService, PermissionsService } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';

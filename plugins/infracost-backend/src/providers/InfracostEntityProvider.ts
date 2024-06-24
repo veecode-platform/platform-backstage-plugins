@@ -1,4 +1,3 @@
-/* eslint-disable @backstage/no-undeclared-imports */
 import { EntityProvider, EntityProviderConnection } from '@backstage/plugin-catalog-node';
 import { TaskRunner } from '@backstage/backend-tasks';
 import { CacheService, LoggerService } from '@backstage/backend-plugin-api';

@@ -1,8 +1,10 @@
 import { Knex } from "knex";
 import { LoggerService, resolvePackagePath } from "@backstage/backend-plugin-api";
-import { InfracostEstimate, InfracosteStore } from "./InfracostStore";
+import { InfracosteStore } from "./InfracostStore";
 import { PluginDatabaseManager } from "@backstage/backend-common";
 import { INFRACOST_TABLE } from "../utils/constants";
+import { InfracostEstimate } from '@veecode-platform/backstage-plugin-infracost-common';
+
 
 const migrationsDir = resolvePackagePath(
   '@veecode-platform/backstage-plugin-infracost-backend',

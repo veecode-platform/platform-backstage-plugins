@@ -1,4 +1,3 @@
-/* eslint-disable @backstage/no-undeclared-imports */
 import { PluginTaskScheduler, TaskRunner } from '@backstage/backend-tasks';
 import { PluginDatabaseManager } from '@backstage/backend-common';
 import { CacheService, LoggerService } from '@backstage/backend-plugin-api';

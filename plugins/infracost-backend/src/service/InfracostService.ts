@@ -1,5 +1,5 @@
-import { InfracostEstimate } from "../database/InfracostStore";
 import axios from 'axios';
+import { InfracostEstimate } from '@veecode-platform/backstage-plugin-infracost-common';
 
 export class InfracostService {
 

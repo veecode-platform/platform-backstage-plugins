@@ -1,4 +1,3 @@
-/* eslint-disable @backstage/no-undeclared-imports */
 import { JsonValue } from '@backstage/types';
 
 export type ResourceCounts = {
