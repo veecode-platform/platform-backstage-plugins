@@ -8,7 +8,7 @@ import { SuccessfulAnalysis } from './SuccessfulAnalysis';
 import { ErrorAnalysis } from './ErrorAnalysis';
 import KubernetesIcon from '../../assets/kubernetesIcon';
 import { useEntity } from '@backstage/plugin-catalog-react';
-import { PluginNotConfigured } from './pluginNotConfigured';
+import { PluginNotConfigured } from '../shared';
 import { KubernetesGPTAnalyzerHomepageProps } from './types';
 import { PLUGIN_DOCS } from '../../utils/constants/docs';
 
