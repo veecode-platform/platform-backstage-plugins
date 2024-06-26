@@ -14,15 +14,16 @@ export const infracostPlugin = createPlugin({
   apis: [
     createApiFactory({
       api: infracostApiRef,
-      deps: { configApi: configApiRef, identityApi: identityApiRef },
-      factory: ({ configApi, identityApi }) =>
-        new InfracostClient({ configApi, identityApi }),
+      deps: { configApi: configApiRef, identityApi: identityApiRef},
+      factory: ({ configApi, identityApi}) =>
+        new InfracostClient({ configApi, identityApi}),
     }),
   ],
   routes: {
     root: rootRouteRef,
   },
 });
+
 
 export const InfracostOverviewPage = infracostPlugin.provide(
   createRoutableExtension({
