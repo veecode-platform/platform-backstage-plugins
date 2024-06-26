@@ -56,7 +56,8 @@ export type CostComponent = {
     monthlyQuantity: string,
     price: string,
     hourlyCost: string,
-    monthlyCost: string
+    monthlyCost: string,
+    usageBased?: boolean,
 }
 
 export type SubResources = {
