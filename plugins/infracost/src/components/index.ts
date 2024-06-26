@@ -1,1 +1,1 @@
-export { InfracostOverviewPage } from './infracostOverviewPage'
+export { InfracostOverviewPage } from './infracostOverviewPage';
