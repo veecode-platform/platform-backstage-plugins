@@ -12,17 +12,14 @@ import { useEntityAnnotations , useKubernetesResults } from '../../hooks';
 import { KubernetesGPTAnalyzerCardProps } from './types';
 import { PLUGIN_DOCS } from '../../utils/constants/docs';
 
-/**
- * 
- *  @public
- * 
- */
 
-export const KubernetesGPTAnalyzerCard : React.FC<KubernetesGPTAnalyzerCardProps> = ({intervalMs}) => {
+
+export const KubernetesGPTAnalyzerCard : React.FC<KubernetesGPTAnalyzerCardProps> = (props) => {
   
   const [notificationsCount, setNotificationsCount] = React.useState<number>(0);
   const { entity } = useEntity();
   const { clusterName } = useEntityAnnotations(entity);
+  const { intervalMs } = props;
   const {kubernetesResults, error, loading } = useKubernetesResults({clusterName,intervalMs});
   const {title,options,cardHeader,cardBody,content,notificationIcon} = useKubernetesGPTAnalyzerCardStyles();
 

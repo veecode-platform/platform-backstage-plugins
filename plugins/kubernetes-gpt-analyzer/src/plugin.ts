@@ -17,7 +17,7 @@ export const KubernetesGptAnalyzerPage = kubernetesGptAnalyzerPlugin.provide(
     name: 'KubernetesGptAnalyzerPage',
     component: {
       lazy: () =>
-        import('./components/KubernetesGPTAnalyzerHomepage').then(m => m.KubernetesGPTAnalyzerHomepage),
+        import('./components/KubernetesGPTAnalyzerHomepage').then(m => m.KubernetesGPTAnalyzerHomepage as any),
     },
   })
 )
@@ -27,7 +27,7 @@ export const KubernetesGptAnalyzerCard = kubernetesGptAnalyzerPlugin.provide(
     name: 'KubernetesGptAnalyzerCard',
     component: {
       lazy: () =>
-        import('./components/KubernetesGPTAnalyzerCard').then(m => m.KubernetesGPTAnalyzerCard),
+        import('./components/KubernetesGPTAnalyzerCard').then(m => m.KubernetesGPTAnalyzerCard as any),
     },
   })
 )

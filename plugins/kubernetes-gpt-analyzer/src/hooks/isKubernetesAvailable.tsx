@@ -3,6 +3,4 @@ import { KUBERNETES_ANNOTATION, KUBERNETES_LABEL_SELECTOR_QUERY_ANNOTATION } fro
 
 export const isKubernetesAvailable = (entity: Entity) =>
     Boolean(entity.metadata.annotations?.[KUBERNETES_ANNOTATION]) ||
-    Boolean(
-      entity.metadata.annotations?.[KUBERNETES_LABEL_SELECTOR_QUERY_ANNOTATION],
-    );
+    Boolean(entity.metadata.annotations?.[KUBERNETES_LABEL_SELECTOR_QUERY_ANNOTATION]);

@@ -1,29 +1,12 @@
-import { Box, Button, makeStyles } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 import React from 'react'
+import { InfoBoxPropType } from './types';
+import { useInfoBoxStyles } from './styles';
 
-type InfoBoxPropType = {
-    message: string,
-    url: string
-}
+export const InfoBox  : React.FC<InfoBoxPropType> = (props) => {
 
-const useStyles = makeStyles({
-  content: {
-      width: '100%',
-      padding: '0 1rem',
-      fontSize: '1rem',
-      borderRadius: '8px',
-      background: '#60a5fa40',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: '.5rem',
-      marginBottom: '1rem',
-    },
-  });
-
-export const InfoBox = ({message,url}:InfoBoxPropType) => {
-
-  const { content } = useStyles();
+  const { content } = useInfoBoxStyles();
+  const {message,url} = props;
 
   return (
     <Box className={content}>
@@ -35,7 +18,7 @@ export const InfoBox = ({message,url}:InfoBoxPropType) => {
         size="large"
         variant="outlined"
       >
-        See Docs
+        Docs
       </Button>
     </Box>
   );

@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 
-export const useKubernetesGPTAnalyzerHomepageStyles = makeStyles(theme=>({
+export const useKubernetesGPTAnalyzerWrapperStyles = makeStyles(theme=>({
     container:{
         backgroundColor: '#1E1E1E05',
         borderRadius: '5px',
