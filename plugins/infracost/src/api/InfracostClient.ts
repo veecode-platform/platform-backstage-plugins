@@ -1,7 +1,7 @@
-import { ConfigApi, IdentityApi } from '@backstage/core-plugin-api';
-import { ResponseError } from '@backstage/errors';
+import { ConfigApi,IdentityApi } from '@backstage/core-plugin-api';
 import { InfracostApi } from './InfracostApi';
 import { InfracostEstimate } from '@veecode-platform/backstage-plugin-infracost-common';
+import { ResponseError } from '@backstage/errors';
 
 export class InfracostClient implements InfracostApi {
   private readonly configApi: ConfigApi;
@@ -17,38 +17,28 @@ export class InfracostClient implements InfracostApi {
 
   private async fetch<T>(path: string): Promise<T> {
 
-    const baseUrl = `${this.configApi.getString("backend.baseUrl")}/`;
-    const url = new URL(path, baseUrl);
+      const baseUrl = `${this.configApi.getString("backend.baseUrl")}/api/infracost/`;
+      const url = new URL(path, baseUrl);
+      const { token } = await this.identityApi.getCredentials();
+      const response = await fetch(url.toString(), {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
 
-    const { token } = await this.identityApi.getCredentials();
-    const response = await fetch(url.toString(), {
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    });
-
-    if (!response.ok) {
-      throw await ResponseError.fromResponse(response);
+    if(!response.ok){
+       throw await ResponseError.fromResponse(response);
     }
 
     return response.json() as Promise<T>;
+
   }
 
   public async getEstimates(): Promise<InfracostEstimate[] | null> {
-    try{
-      const response = await this.fetch<InfracostEstimate[] | null>("");
-      return response
-    }
-    catch(error:any){
-      throw await ResponseError.fromResponse(error);
-    }
+    const response = await this.fetch<InfracostEstimate[] | null>("");
+    return response
   }
 
   public async getEstimateByName(estimateName: string): Promise<InfracostEstimate | null> {
-    try{
-      const response = await this.fetch<InfracostEstimate | null>(estimateName);
-      return response
-    }
-    catch(error:any){
-      throw await ResponseError.fromResponse(error);
-    }
+    const response = await this.fetch<InfracostEstimate | null>(estimateName);
+    return response
   }
 }
