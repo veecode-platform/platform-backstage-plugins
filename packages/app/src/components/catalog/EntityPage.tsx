@@ -68,6 +68,7 @@ import { RELATION_ENVIRONMENT_OF, RELATION_FROM_ENVIRONMENT } from '@veecode-pla
 // kong
 import { KongServiceManagerPage, isKongServiceManagerAvailable } from '@veecode-platform/plugin-kong-service-manager';
 import { KubernetesGptAnalyzerPage,KubernetesGptAnalyzerCard } from '@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer';
+import { InfracostOverviewPage } from '@veecode-platform/backstage-plugin-infracost';
 
 
 const techdocsContent = (
@@ -542,6 +543,10 @@ const clusterPage = (
 
     <EntityLayout.Route path="/kubernetes-gpt-analyzer" title="Kubernetes GPT">
       <KubernetesGptAnalyzerPage/>
+    </EntityLayout.Route>
+
+    <EntityLayout.Route path="/infracost" title="Infracost">
+      <InfracostOverviewPage/>
     </EntityLayout.Route>
 {/* 
     <EntityLayout.Route
