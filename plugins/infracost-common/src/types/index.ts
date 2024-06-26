@@ -60,7 +60,7 @@ export type CostComponent = {
     usageBased?: boolean,
 }
 
-export type SubResources = {
+export type SubResource = {
     name: string,
     hourlyCost: string,
     monthlyCost: string,
@@ -74,7 +74,7 @@ export type Resource = {
     hourlyCost: string,
     monthlyCost: string,
     costComponents: CostComponent[] | [],
-    subResources: any[] | [],
+    subResources: SubResource[] | [],
     totalHourlyCost: string,
     totalMonthlyCost: string,
     totalMonthlyUsageCost: string 
