@@ -1,0 +1,1 @@
+export { ResourcesComponent } from './ResourcesComponent';
