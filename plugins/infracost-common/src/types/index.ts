@@ -43,7 +43,7 @@ export type Summary = {
     totalDetectedResources: number,
     totalSupportedResources: number,
     totalUnsupportedResources: number,
-    totalUsageBaseResources: number,
+    totalUsageBasedResources: number,
     totalNoPriceResources: number,
     unsupportedResourceCounts: ResourceCounts| {},
     noPriceResourceCounts: ResourceCounts | {}
