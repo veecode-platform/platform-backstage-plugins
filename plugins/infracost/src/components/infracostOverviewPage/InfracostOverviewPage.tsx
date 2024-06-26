@@ -5,7 +5,7 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotations, useInfracostProjects } from '../../hooks';
 import { PluginNotConfigured } from '../shared';
 import { truncateMessage } from '../../utils/helpers/truncateMessage';
-import { InfracostDashboard } from './infracostDashboard/InfracostDashboard';
+import { InfracostDashboard } from './infracostDashboard';
 import { InfracostOverviewWrapperProps } from './types';
 
 
