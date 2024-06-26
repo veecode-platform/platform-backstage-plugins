@@ -64,8 +64,12 @@ export async function createRouter(
     const estimateName = request.params.name;
     const data = await database.getInfracostProjectsEstimatebyName(estimateName);
 
+    if(!data){
+      throw new InputError('There was an error trying to get Infracost Projects Estimate')
+    }
+
     response.status(200);
-    response.json(data ?? [])
+    response.json(data)
   }) as RequestHandler);
 
    /**
