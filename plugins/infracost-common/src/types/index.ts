@@ -64,7 +64,7 @@ export type SubResource = {
     name: string,
     hourlyCost: string,
     monthlyCost: string,
-    costComponents: CostComponent[] | []
+    costComponents: CostComponent[]
 }
 
 export type Resource = {
@@ -73,8 +73,8 @@ export type Resource = {
     tags : JsonValue  
     hourlyCost: string,
     monthlyCost: string,
-    costComponents: CostComponent[] | [],
-    subResources: SubResource[] | [],
+    costComponents: CostComponent[],
+    subresources: SubResource[],
     totalHourlyCost: string,
     totalMonthlyCost: string,
     totalMonthlyUsageCost: string 
@@ -88,7 +88,7 @@ export type Breakdown = {
 }
 
 export type Diff = {
-    resources?: Resource[] | [],
+    resources?: Resource[],
     totalHourlyCost: string,
     totalMonthlyCost: string,
     totalMonthlyUsageCost: string
