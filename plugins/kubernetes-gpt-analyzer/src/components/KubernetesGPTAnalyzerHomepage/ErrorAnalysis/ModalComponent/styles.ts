@@ -12,7 +12,7 @@ export const useModalComponentStyles = makeStyles(theme=>({
         // backgroundColor: theme.palette.background.default,
         backdropFilter: 'blur(8px)',
         '-webkit-backdrop-filter':'blur(8px)',
-        width: '80%',
+        width: '100%',
         height: '100%',
         padding: '1rem',
         borderRadius: '8px',
@@ -37,13 +37,13 @@ export const useModalComponentStyles = makeStyles(theme=>({
         }
        },
        modalBody:{
-        width: '95%',
+        width: '80%',
+        margin: 'auto',
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'center',
         flexDirection: 'column',
         gap: '3.5rem',
-        margin: '1rem 0',
        },
        loadingContainer:{
         width: '50%',
