@@ -32,9 +32,9 @@ export const useTableStyles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        // '&:first-child': {
-        //     background: 'green'
-        //   }
+        '&:nth-child(odd)':{
+          backgroundColor: `${theme.palette.grey[700]}85`
+        }
     },
     cell:{
         width: '100%',
