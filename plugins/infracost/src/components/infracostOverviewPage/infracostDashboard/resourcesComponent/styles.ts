@@ -10,7 +10,8 @@ export const useResourcesComponentStyles = makeStyles( theme =>
             [theme.breakpoints.down('lg')]: {
                 gridTemplateColumns: '1fr',
                 gap: '4rem',
-             }
+             },
+            position: 'relative'
         },
         chartStyles:{
            width: '100%',
@@ -32,6 +33,11 @@ export const useResourcesComponentStyles = makeStyles( theme =>
             width: '100%',
             overflowX: 'scroll'
            }
+        },
+        expandDetails:{
+            cursor:'pointer',
+            position: 'absolute',
+            right: '0'
         }
     })
 )
