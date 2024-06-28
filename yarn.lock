@@ -14365,6 +14365,7 @@ __metadata:
     "@testing-library/user-event": ^14.0.0
     "@types/uuidv4": ^5.0.0
     "@veecode-platform/backstage-plugin-infracost-common": "workspace:^"
+    dayjs: ^1.11.11
     lodash: ^4.17.21
     msw: ^1.0.0
     react-icons: ^5.2.1
@@ -18931,7 +18932,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.10.4, dayjs@npm:^1.11.10, dayjs@npm:^1.11.9":
+"dayjs@npm:^1.10.4, dayjs@npm:^1.11.10, dayjs@npm:^1.11.11, dayjs@npm:^1.11.9":
   version: 1.11.11
   resolution: "dayjs@npm:1.11.11"
   checksum: 84788275aad8a87fee4f1ce4be08861df29687aae6b7b43dd65350118a37dda56772a3902f802cb2dc651dfed447a5a8df62d88f0fb900dba8333e411190a5d5
