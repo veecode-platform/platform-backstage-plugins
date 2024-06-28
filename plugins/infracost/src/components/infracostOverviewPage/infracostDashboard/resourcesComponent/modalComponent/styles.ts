@@ -8,7 +8,6 @@ export const useModalComponentStyles = makeStyles(theme =>
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        position: 'relative'
     },
     modalContent:{
         backdropFilter: 'blur(8px)',
@@ -43,17 +42,6 @@ export const useModalComponentStyles = makeStyles(theme =>
         alignItems: 'center',
         justifyContent: 'flex-end'
        },
-       closeModal:{
-        cursor: 'pointer',
-        color: theme.palette.link,
-        transition: 'all .5s ease-in-out',
-        position: 'absolute',
-        top: '1rem',
-        rigth: '5px',
-        '&:hover':{
-            color: theme.palette.linkHover
-        }
-       },
        modalBody:{
         width: '80%',
         margin: 'auto',
@@ -64,6 +52,9 @@ export const useModalComponentStyles = makeStyles(theme =>
         backgroundColor: '#1E1E1E05',
         boxShadow: 'rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px',
         borderRadius: '5px',  
+        [theme.breakpoints.down('md')]: {
+          width: '95%',
+          },
        },
        container:{
         width: '100%',
@@ -73,13 +64,13 @@ export const useModalComponentStyles = makeStyles(theme =>
         border: `1px solid ${theme.palette.grey[700]}`,
         },
         titleBar:{
-          padding: '1rem 2.5rem',
+          padding: '.8rem 2rem',
           backgroundColor: theme.palette.background.default,
           borderRadius: '5px 5px 0 0 ',
           position: 'relative',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'flex-start',
+          justifyContent: 'space-between',
           gap: '1rem',
           '&:after': {
               content: '""',
@@ -93,6 +84,15 @@ export const useModalComponentStyles = makeStyles(theme =>
               borderRadius: '5px 0 0 0'
             }
         },
+        closeModal:{
+          cursor: 'pointer',
+          color: theme.palette.link,
+          transition: 'all .5s ease-in-out',
+          marginRight: '-1rem',
+          '&:hover':{
+              color: theme.palette.linkHover
+          }
+         },
         content:{
           width: '100%',
           padding: '1rem',
@@ -117,6 +117,9 @@ export const useResourceDetailsComponentStyles = makeStyles(theme => ({
     gap: '1rem',
     alignItems: 'center',
     justifyContent: 'space-between',
+    [theme.breakpoints.down('md')]: {
+      gridTemplateColumns: '1fr',
+    },
   },
   chartStyles: {
     width: '100%',
@@ -127,7 +130,6 @@ export const useResourceDetailsComponentStyles = makeStyles(theme => ({
     [theme.breakpoints.down('md')]: {
       width: '100%',
       display: 'block',
-      overflowX: 'scroll',
     },
   },
   tableStyles: {

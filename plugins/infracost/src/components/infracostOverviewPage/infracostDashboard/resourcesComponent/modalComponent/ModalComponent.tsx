@@ -9,10 +9,6 @@ import { Table } from '../../../../shared/table';
 import { CostComponent, Resource, SubResource } from '@veecode-platform/backstage-plugin-infracost-common';
 import { addItem, addRow, initialResourceDetailsChartState, initialResourceDetailsTableState, resourceDetailsChartReducer, resourceDetailsTableReducer } from './state';
 
-/**
- *  implementar um loading fake com useEffect
- */
-
 
 const ResourceDetailsComponent : React.FC<ResourceDetailsComponentProps> = (props) => {
 
@@ -99,19 +95,19 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
      >
       <Fade in={show}>  
         <Box className={modalContent}>
-            <div className={modalHeader}>
-                <Tooltip title="Close">
-                <MdClose 
-                    size={32}
-                    className={closeModal}
-                    onClick={handleCloseModal}
-                    />
-                </Tooltip>
-            </div>
             <div className={modalBody}>
               <Paper className={container}>
                <Box className={titleBar}>
                  <Typography variant="h6">Resources</Typography>
+                 <div className={modalHeader}>
+                    <Tooltip title="Close">
+                      <MdClose 
+                          size={32}
+                          className={closeModal}
+                          onClick={handleCloseModal}
+                          />
+                    </Tooltip>
+                   </div>
                </Box>
                <div className={content}>
                  {resources.map(resource => (
