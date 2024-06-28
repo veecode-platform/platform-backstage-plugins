@@ -9,7 +9,7 @@ import { Table } from '../../../shared/table';
 import { initialResourcesTableState, resourcesTableReducer } from './state/table/reducer';
 import { addRow } from './state/table/actions';
 import { BiExpand } from "react-icons/bi";
-import { Chip, Tooltip } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 import { ModalComponent } from './modalComponent';
 
 export const ResourcesComponent : React.FC<ResourcesComponentProps> = (props) => {
@@ -49,10 +49,8 @@ export const ResourcesComponent : React.FC<ResourcesComponentProps> = (props) =>
         <div className={tableStyles}>
           <Table labels={labelProps} data={tableState} />
         </div>
-        <div className={expandDetails}>
-          <Tooltip title="Expand Details">
-            <BiExpand size="22" color="#B1B1B190" onClick={handleToggleModal}/>
-          </Tooltip>
+        <div className={expandDetails} title="Expand Details">
+          <BiExpand size="22" color="#B1B1B190" onClick={handleToggleModal}/>
         </div>
       </div>
       {showModal && <ModalComponent show={showModal} handleCloseModal={handleToggleModal} resources={resources}/>}
