@@ -1,7 +1,7 @@
 import React from 'react'
 import { TableData, TableProps } from './types'
 import { useTableStyles } from './styles';
-import { Box, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { transformLabel } from '../../../utils/helpers/transformLabel';
 
 
@@ -12,28 +12,25 @@ export const Table =  <T extends TableData>(props: TableProps<T>) => {
 
 
   return (
-    <div className={root}>
-        <Box 
-           className={header}>
-            {labels.map( label => (
-                  <div 
-                    className={th} 
-                    id={label}>
-                    <Typography variant="caption">{transformLabel(label)}</Typography>
-                   </div>
-              ))}
-        </Box>
-        <Box
-         className={tbody}
-         >
+    <table className={root}>
+        <thead className={header}>
+           {labels.map( label => (
+             <th 
+               className={th} 
+               id={label}>
+               <Typography variant="caption">{transformLabel(label)}</Typography>
+             </th>
+           ))}
+        </thead>
+        <tbody className={tbody}>
           {data.map((row) => (
-            <div className={tr} key={row.id}>
+            <tr className={tr} key={row.id}>
                 {Object.values(row).map( value => (
-                    <div className={cell} key={value}>{value}</div>
+                    <td className={cell} key={value}>{value}</td>
                 ))}
-            </div>
+            </tr>
           ))}
-        </Box>
-    </div>
+        </tbody>
+    </table>
   )
 }
