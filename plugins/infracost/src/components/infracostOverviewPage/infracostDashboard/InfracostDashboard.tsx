@@ -21,7 +21,7 @@ export const InfracostDashboard : React.FC<InfracostDashboardProps> = (props) =>
       </Wrapper>
       <Wrapper styles={{ position: 'relative'}}>
         <ResourcesComponent 
-          projectName={project.name}
+          timeGenerated={estimate.time_generated!}
           resources={project.breakdown.resources}
           />
       </Wrapper>

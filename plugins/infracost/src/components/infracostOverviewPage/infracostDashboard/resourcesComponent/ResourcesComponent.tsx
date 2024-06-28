@@ -11,13 +11,17 @@ import { addRow } from './state/table/actions';
 import { BiExpand } from "react-icons/bi";
 import { Chip } from '@material-ui/core';
 import { ModalComponent } from './modalComponent';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 export const ResourcesComponent : React.FC<ResourcesComponentProps> = (props) => {
 
   const [showModal, setShowModal] = React.useState<boolean>(false);
   const [chartState, chartDispatch] = React.useReducer(chartReducer,initialChartState);
   const [tableState, tableDispatch] = React.useReducer(resourcesTableReducer,initialResourcesTableState);
-  const { projectName, resources } = props;
+  const { timeGenerated, resources } = props;
   const { root, title, chartStyles, tableStyles,expandDetails } = useResourcesComponentStyles();
   const labelProps = ['Name','monthly_cost']
   
@@ -41,7 +45,7 @@ export const ResourcesComponent : React.FC<ResourcesComponentProps> = (props) =>
     <>
       <div className={root}>
         <div className={title}>
-          <Chip variant="outlined" label={projectName}/>
+          <Chip variant="outlined" label={`Generated to ${dayjs(timeGenerated).fromNow()}`}/>
         </div>
         <div className={chartStyles}>
           <Chart items={chartState} />
