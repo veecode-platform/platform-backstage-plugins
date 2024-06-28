@@ -10,6 +10,9 @@ export const useResourcesComponentStyles = makeStyles( theme =>
                 gridTemplateColumns: '1fr',
                 gap: '4rem',
              },
+            [theme.breakpoints.down('sm')]: {
+                gap: '0'
+            },
         },
         title:{
             position: 'absolute',
@@ -25,6 +28,10 @@ export const useResourcesComponentStyles = makeStyles( theme =>
            [theme.breakpoints.down('md')]: {
             width: '100%',
             display: 'block',
+            maxHeight: '450px',
+           },
+           [theme.breakpoints.down('sm')]: {
+            marginBottom: '-2rem'
            }
 
         },

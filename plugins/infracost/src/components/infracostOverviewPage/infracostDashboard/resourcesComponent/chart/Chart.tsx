@@ -5,9 +5,24 @@ import { Box } from '@material-ui/core';
 
 export const Chart : React.FC<ChartProps> = (props) => {
 
+ const [ isHidden, setIsHidden ] = React.useState<boolean>(false);
  const { items } = props;
  const chartItems = (items.length === 1 && items[0].value === 0) ? [{id: items[0].id, label: items[0].label, value: 0.001}] : items;
  const size = {height: 450}
+
+ const handleResize = () => {
+  if(window && window.innerWidth < 950) setIsHidden(true);
+  else setIsHidden(false);
+ }
+
+ React.useEffect(()=>{
+  window.addEventListener('resize', handleResize);
+  handleResize();
+  // clean up state
+  return () => {
+    window.removeEventListener('resize',handleResize)
+  }
+ },[])
 
   return (
     <Box sx={{ width: '100%', height: '100%' }}>
@@ -21,6 +36,7 @@ export const Chart : React.FC<ChartProps> = (props) => {
         ]}
         slotProps={{
           legend: {
+            hidden: isHidden,
             direction: 'row',
             position: { vertical: 'bottom', horizontal: 'middle' },
             padding: 0,

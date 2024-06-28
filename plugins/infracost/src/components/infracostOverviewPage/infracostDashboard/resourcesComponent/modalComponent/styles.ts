@@ -131,6 +131,9 @@ export const useResourceDetailsComponentStyles = makeStyles(theme => ({
       width: '100%',
       display: 'block',
     },
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: '-2rem'
+     }
   },
   tableStyles: {
     width: '80%',
