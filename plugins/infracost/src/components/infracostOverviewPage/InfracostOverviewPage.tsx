@@ -3,7 +3,7 @@ import { Box, Paper, Typography } from '@material-ui/core';
 import { useInfracostOverviewWrapperStyles } from './styles';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotations, useInfracostProjects } from '../../hooks';
-import { PluginNotConfigured } from '../shared';
+import { LoadingProgress, PluginNotConfigured } from '../shared';
 import { truncateMessage } from '../../utils/helpers/truncateMessage';
 import { InfracostDashboard } from './infracostDashboard';
 import { InfracostOverviewWrapperProps } from './types';
@@ -30,11 +30,14 @@ export const InfracostOverviewPage = () => {
 
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity);
-  const {estimate, error,loading } = useInfracostProjects(projectName as string);
+  const {estimate, error, loading } = useInfracostProjects(projectName as string);
   
   if(error) return <PluginNotConfigured message={truncateMessage(error?.stack as string)}/>
 
-  if(loading) return <h1>Loading</h1>  // to do
+  if(loading) return ( <InfracostOverviewWrapper>
+    <LoadingProgress />
+  </InfracostOverviewWrapper>
+  )
 
   return (
       <InfracostOverviewWrapper>

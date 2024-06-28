@@ -1,29 +1,17 @@
 import React from 'react'
 import { useLoadingProgressStyles } from './styles'
-// import Lottie from 'react-lottie';
-// import animationData from '../../../assets/lotties/stars.json'
+import { Box } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
+
 
 export const LoadingProgress = () => {
 
-  const {loadingContent} = useLoadingProgressStyles();
-
-  // const defaultOptions = {
-  //   loop: true,
-  //   autoplay: true,
-  //   animationData: animationData,
-  //   rendererSettings: {
-  //     preserveAspectRatio: "xMidYMid slice"
-  //   }
-  // };
-  
+  const {root,baseSkeleton, titlebar,chartbar, detailsbar} = useLoadingProgressStyles();
   return (
-    <div className={loadingContent}>
-        {/* <Lottie 
-          options={defaultOptions}
-          height={200}
-          width={200}
-        /> */}
-        Loading ...
-    </div>
+    <Box className={root}>
+      <Skeleton variant="rect" animation="wave" className={`${baseSkeleton} ${titlebar}`} />
+      <Skeleton variant="rect" animation="wave" className={`${baseSkeleton} ${chartbar}`} />
+      <Skeleton variant="rect" animation="wave" className={`${baseSkeleton} ${detailsbar}`} />
+    </Box>
   )
 }
