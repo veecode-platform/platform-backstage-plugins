@@ -28,12 +28,12 @@ const ResourceDetailsComponent : React.FC<ResourceDetailsComponentProps> = (prop
             costComponents.map(costComponent => {
                 if(costComponent.usageBased){
                     resourceChartDispatch(addItem({label: `${costComponent.name}*`, value: 0}));
-                    resourceTableDispatch(addRow({id: costComponent.name, monthly_qty: `${costComponent.price} per ${costComponent.unit}`, monthly_cost: 'Depends on usage*'}))
+                    resourceTableDispatch(addRow({id: costComponent.name, monthly_qty: `${Number(costComponent.price).toFixed(2)} per ${costComponent.unit}`, monthly_cost: 'Depends on usage*'}))
                 }
                 else if(costComponent.monthlyCost && costComponent.monthlyCost !== '0'){
-                    const monthlyCost = Number(costComponent.monthlyCost)
-                    resourceChartDispatch(addItem({label: costComponent.name, value: Number(monthlyCost.toFixed(2))}));
-                    resourceTableDispatch(addRow({id: costComponent.name, monthly_qty: `${costComponent.monthlyQuantity} ${costComponent.unit}`, monthly_cost: `$ ${Number(monthlyCost.toFixed(2)) ?? '0'}`}))
+                    const monthlyCost = Number(costComponent.monthlyCost).toFixed(2)
+                    resourceChartDispatch(addItem({label: costComponent.name, value: Number(monthlyCost)}));
+                    resourceTableDispatch(addRow({id: costComponent.name, monthly_qty: `${costComponent.monthlyQuantity} ${costComponent.unit}`, monthly_cost: `$ ${monthlyCost ?? '0'}`}))
                 }
             })
           }
@@ -47,9 +47,9 @@ const ResourceDetailsComponent : React.FC<ResourceDetailsComponentProps> = (prop
                         resourceTableDispatch(addRow({id: costComponent.name, monthly_qty: `${costComponent.price} per ${costComponent.unit}`, monthly_cost: 'Depends on usage*'}))
                     }
                     else if(costComponent.monthlyCost && costComponent.monthlyCost !== '0'){
-                        const monthlyCost = Number(costComponent.monthlyCost)
-                        resourceChartDispatch(addItem({label: costComponent.name, value: Number(monthlyCost.toFixed(2))}));
-                        resourceTableDispatch(addRow({id: costComponent.name, monthly_qty: `${costComponent.monthlyQuantity} ${costComponent.unit}`, monthly_cost: `$ ${Number(monthlyCost.toFixed(2)) ?? '0'}`}))
+                        const monthlyCost = Number(costComponent.monthlyCost).toFixed(2)
+                        resourceChartDispatch(addItem({label: costComponent.name, value: Number(monthlyCost)}));
+                        resourceTableDispatch(addRow({id: costComponent.name, monthly_qty: `${costComponent.monthlyQuantity} ${costComponent.unit}`, monthly_cost: `$ ${monthlyCost ?? '0'}`}))
                     }
                 })
             })
