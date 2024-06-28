@@ -43,7 +43,7 @@ export const useModalComponentStyles = makeStyles(theme =>
         justifyContent: 'flex-end'
        },
        modalBody:{
-        width: '80%',
+        width: '85%',
         margin: 'auto',
         display: 'flex',
         alignItems: 'center',

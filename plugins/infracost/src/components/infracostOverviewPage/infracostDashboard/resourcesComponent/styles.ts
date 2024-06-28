@@ -36,7 +36,7 @@ export const useResourcesComponentStyles = makeStyles( theme =>
 
         },
         tableStyles:{
-           width: '80%',
+           width: '100%',
            margin:'auto',
            [theme.breakpoints.down('md')]: {
             width: '100%',
