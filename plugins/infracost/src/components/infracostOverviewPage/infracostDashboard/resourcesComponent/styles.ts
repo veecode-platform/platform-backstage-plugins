@@ -6,7 +6,7 @@ export const useResourcesComponentStyles = makeStyles( theme =>
             display: 'grid',
             gridTemplateColumns: 'repeat(2,1fr)',
             gap: '1rem',
-            padding: '1rem',
+            // padding: '1rem',
             [theme.breakpoints.down('lg')]: {
                 gridTemplateColumns: '1fr',
                 gap: '4rem',

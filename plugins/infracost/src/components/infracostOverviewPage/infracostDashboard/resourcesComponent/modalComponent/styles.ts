@@ -106,7 +106,10 @@ export const useModalComponentStyles = makeStyles(theme =>
 
 export const useResourceDetailsComponentStyles = makeStyles(theme => ({
   title:{
-    marginBottom: '1rem',
+    // marginBottom: '.5rem',
+    position: 'absolute',
+    top: '1.2rem',
+    left: '.8rem'
   }, 
   details: {
     position: 'relative',
@@ -115,7 +118,7 @@ export const useResourceDetailsComponentStyles = makeStyles(theme => ({
     gap: '1rem',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '.5rem',
+    // padding: '.5rem',
   },
   chartStyles: {
     width: '100%',

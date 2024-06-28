@@ -10,7 +10,7 @@ export const Chart : React.FC<ChartProps> = (props) => {
  const size = {height: 450}
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', height: '100%' }}>
       <PieChart
         series={[
           {

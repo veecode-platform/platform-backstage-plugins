@@ -65,7 +65,7 @@ const ResourceDetailsComponent : React.FC<ResourceDetailsComponentProps> = (prop
     
 
     return (
-      <Wrapper styles={{width: '100%'}}>
+      <Wrapper styles={{width: '100%', position:'relative'}}>
         <div className={title}>
           <Chip variant="outlined" label={resourceName}/>
         </div>
