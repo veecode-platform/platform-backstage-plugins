@@ -10,7 +10,7 @@ export const Overall : React.FC<OverallProps> = (props) => {
   const {totalMonthlyCost, projectName, baselineCost, usageCost} = props;
   const { root, header } = useOverallStyles();
   const labelsProps = ['project','baseline_const', 'usage_cost'];
-  const TableData : OverallTablePros[] = [{id: projectName, baseline_cost: Number(baselineCost).toFixed(0) ,usage_cost:`$ ${Number(usageCost).toFixed(0)}`}]
+  const TableData : OverallTablePros[] = [{id: projectName, baseline_cost: `$ ${Number(baselineCost).toFixed(2)}` ,usage_cost:`$ ${Number(usageCost).toFixed(0) ?? '0'}`}]
 
   return (
     <div className={root}>
