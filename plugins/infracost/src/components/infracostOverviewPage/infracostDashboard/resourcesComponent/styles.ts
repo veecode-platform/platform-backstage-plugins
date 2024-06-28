@@ -6,13 +6,16 @@ export const useResourcesComponentStyles = makeStyles( theme =>
             display: 'grid',
             gridTemplateColumns: 'repeat(2,1fr)',
             gap: '1rem',
-            // padding: '1rem',
             [theme.breakpoints.down('lg')]: {
                 gridTemplateColumns: '1fr',
                 gap: '4rem',
              },
-            position: 'relative'
         },
+        title:{
+            position: 'absolute',
+            top: '1rem',
+            left: '.8rem',
+          }, 
         chartStyles:{
            width: '100%',
            display: 'flex',
@@ -22,7 +25,6 @@ export const useResourcesComponentStyles = makeStyles( theme =>
            [theme.breakpoints.down('md')]: {
             width: '100%',
             display: 'block',
-            overflowX: 'scroll'
            }
 
         },
@@ -37,7 +39,7 @@ export const useResourcesComponentStyles = makeStyles( theme =>
         expandDetails:{
             cursor:'pointer',
             position: 'absolute',
-            right: '0'
+            right: '1.5rem'
         }
     })
 )

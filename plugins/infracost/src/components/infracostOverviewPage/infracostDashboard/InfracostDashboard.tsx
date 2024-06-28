@@ -19,8 +19,9 @@ export const InfracostDashboard : React.FC<InfracostDashboardProps> = (props) =>
       <Wrapper>
         <Typography variant="body1">Project: <strong>{estimate.name}</strong> </Typography>
       </Wrapper>
-      <Wrapper>
+      <Wrapper styles={{ position: 'relative'}}>
         <ResourcesComponent 
+          projectName={project.name}
           resources={project.breakdown.resources}
           />
       </Wrapper>

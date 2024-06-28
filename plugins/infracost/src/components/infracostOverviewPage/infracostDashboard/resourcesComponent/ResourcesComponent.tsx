@@ -9,7 +9,7 @@ import { Table } from '../../../shared/table';
 import { initialResourcesTableState, resourcesTableReducer } from './state/table/reducer';
 import { addRow } from './state/table/actions';
 import { BiExpand } from "react-icons/bi";
-import { Tooltip } from '@material-ui/core';
+import { Chip, Tooltip } from '@material-ui/core';
 import { ModalComponent } from './modalComponent';
 
 export const ResourcesComponent : React.FC<ResourcesComponentProps> = (props) => {
@@ -17,8 +17,8 @@ export const ResourcesComponent : React.FC<ResourcesComponentProps> = (props) =>
   const [showModal, setShowModal] = React.useState<boolean>(false);
   const [chartState, chartDispatch] = React.useReducer(chartReducer,initialChartState);
   const [tableState, tableDispatch] = React.useReducer(resourcesTableReducer,initialResourcesTableState);
-  const { resources } = props;
-  const { root, chartStyles, tableStyles,expandDetails } = useResourcesComponentStyles();
+  const { projectName, resources } = props;
+  const { root, title, chartStyles, tableStyles,expandDetails } = useResourcesComponentStyles();
   const labelProps = ['Name','monthly_cost']
   
   const generateResourceData = (resourcesValue: Resource[]) => {
@@ -40,6 +40,9 @@ export const ResourcesComponent : React.FC<ResourcesComponentProps> = (props) =>
   return (
     <>
       <div className={root}>
+        <div className={title}>
+          <Chip variant="outlined" label={projectName}/>
+        </div>
         <div className={chartStyles}>
           <Chart items={chartState} />
         </div>

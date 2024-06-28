@@ -1,6 +1,7 @@
 import { Resource } from "@veecode-platform/backstage-plugin-infracost-common";
 
 export type ResourcesComponentProps = {
+    projectName: string,
     resources: Resource[],
 }
 
