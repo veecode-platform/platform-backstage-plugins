@@ -1,11 +1,11 @@
 import React from 'react';
 import { createDevApp } from '@backstage/dev-utils';
-import { infracostPlugin, InfracostPage } from '../src/plugin';
+import { infracostPlugin, InfracostOverviewPage } from '../src/plugin';
 
 createDevApp()
   .registerPlugin(infracostPlugin)
   .addPage({
-    element: <InfracostPage />,
+    element: <InfracostOverviewPage />,
     title: 'Root Page',
     path: '/infracost',
   })
