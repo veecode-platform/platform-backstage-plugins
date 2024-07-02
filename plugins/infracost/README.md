@@ -257,9 +257,8 @@ const clusterPage = (
 ```
 This way your component, if it has the estimate correctly configured, will have a view of the data coming from Infracost, with an estimate of the costs of the infrastructure, according to your provider:
 
-![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/96041972-f5c8-4657-8fe3-3dae6e578011)
+![infracost](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/75a32bdc-e752-4e30-a86b-a65e4b5ce057)
 
-[Gravação de tela de 02-07-2024 09:10:09.webm](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/281912c6-0055-4277-b27e-edfd477dbb7b)
 
 
 
