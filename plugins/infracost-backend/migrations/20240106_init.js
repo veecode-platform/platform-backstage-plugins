@@ -9,7 +9,7 @@ exports.up = async function up(knex) {
      .comment('Registered infracost projects estimate from catalog');
      table
      .uuid('id')
-     .defaultTo(knex.raw('gen_random_uuid()'))
+     .defaultTo(knex.fn.uuid())
      .primary()
      .notNullable()
      .unique()
