@@ -9,9 +9,8 @@ export const useLoadingProgressStyles = makeStyles(theme=>({
     },
     baseSkeleton:{
       width: '100%',
-      backgroundColor: theme.palette.background.default,
+      backgroundColor: `${theme.palette.grey[500]}60`,
       borderRadius: '5px',
-      border: `1px solid ${theme.palette.grey[700]}`
     },
     titlebar:{
         height: '74px',

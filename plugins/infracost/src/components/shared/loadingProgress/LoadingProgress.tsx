@@ -9,9 +9,9 @@ export const LoadingProgress = () => {
   const {root,baseSkeleton, titlebar,chartbar, detailsbar} = useLoadingProgressStyles();
   return (
     <Box className={root}>
-      <Skeleton variant="rect" animation="wave" className={`${baseSkeleton} ${titlebar}`} />
-      <Skeleton variant="rect" animation="wave" className={`${baseSkeleton} ${chartbar}`} />
-      <Skeleton variant="rect" animation="wave" className={`${baseSkeleton} ${detailsbar}`} />
+      <Skeleton variant="rect" animation="pulse" className={`${baseSkeleton} ${titlebar}`} />
+      <Skeleton variant="rect" animation="pulse" className={`${baseSkeleton} ${chartbar}`} />
+      <Skeleton variant="rect" animation="pulse" className={`${baseSkeleton} ${detailsbar}`} />
     </Box>
   )
 }
