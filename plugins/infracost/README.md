@@ -27,7 +27,7 @@ Before installing the plugin, there are some prerequisites to ensure its functio
 
 - Have a locally installed Backstage project, :heavy_check_mark: [How to create a Backstage app :page_with_curl:](https://backstage.io/docs/getting-started/create-an-app) .
 - Have a Backstage with a properly configured Postgres database, if you haven't already, see how to set it up [here](https://backstage.io/docs/tutorials/switching-sqlite-postgres/).
-- Have the `Infracost-backend` plugin installed on your Backstage, see how to install [here].(https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/infracost-backend/README.md).
+- Have the `Infracost-backend`  plugin installed on your Backstage, see how to install [here](https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/infracost-backend/README.md).
 - The project's infrastructure must be provided via terraform.
 - Have an Infracost API KEY. Here's how to generate one [here](https://www.infracost.io/docs/#2-get-api-key).
 <br>
@@ -139,7 +139,7 @@ Taking into account that the **infracost.yaml** files are already created within
 
 > ℹ️ This example is based on github, if your git provider is not github, feel free to adapt this job, note that it is very simple and open to adaptation.
 
-`.github > workflows > infracost.estimate.yml`
+`.github > workflows > infracost-estimate.yml`
 
 ```yaml
 name: infracost-estimate
@@ -211,11 +211,12 @@ jobs:
 ```
 <br>
 
-> ℹ️ Note that Infracost's **Path** is set to "./.content" because we are giving the example so that it is generated in the ` folder.content`, but if the approach adopted is different, then the folder reference in the **catalog-info.yaml** of kind Location, and in the variable **INFRACOST_PATH** of the workflow.
+> ℹ️ Note that Infracost's **Path** is set to "./.content" because we are giving the example so that it is generated in the `.content` folder, but if the approach adopted is different, then the folder reference in the **catalog-info.yaml** of kind Location, and in the variable **INFRACOST_PATH** of the workflow.
 
 > ℹ️ Another important observation is that in the example we used terraform with aws as the provider, but nothing prevents other providers from being used. Just be aware of the changes to the workflow that this will entail.
 
-This process can also be done manually, as long as the command `terraform plain` has been used before, we can use cli to generate the file **infracost-base.json** like this:
+This process can also be done manually, as long as the command `terraform plain`  has been used before, we can use cli to generate the file **infracost-base.json** like this:
+
 ```bash
 // Do it at the same level as the Infracost entity
 infracost breakdown --path plan_cache_cli.json --format json --out-file infracost-base.json
