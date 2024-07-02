@@ -139,7 +139,7 @@ Taking into account that the **infracost.yaml** files are already created within
 
 > ℹ️ This example is based on github, if your git provider is not github, feel free to adapt this job, note that it is very simple and open to adaptation.
 
-`.github > workflows > infracost.estimate.yml`
+`.github > workflows > infracost-estimate.yml`
 
 ```yaml
 name: infracost-estimate
