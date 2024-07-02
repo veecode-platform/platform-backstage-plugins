@@ -28,8 +28,8 @@ Before installing the plugin, there are some prerequisites to ensure its functio
 - Have a locally installed Backstage project, :heavy_check_mark: [How to create a Backstage app :page_with_curl:](https://backstage.io/docs/getting-started/create-an-app) .
 - Have a Backstage with a properly configured Postgres database, if you haven't already, see how to set it up [here](https://backstage.io/docs/tutorials/switching-sqlite-postgres/).
 - Have the `Infracost-backend` plugin installed on your Backstage, see how to install [here].(https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/infracost-backend/README.md).
-- A infra-estrutura do projeto precisa estar provisionada via terraform.
-- Ter um Infracost API KEY. Veja como gerar um [aqui](https://www.infracost.io/docs/#2-get-api-key).
+- The project's infrastructure must be provided via terraform.
+- Have an Infracost API KEY. Here's how to generate one [here](https://www.infracost.io/docs/#2-get-api-key).
 <br>
 
 ### Installation
@@ -46,20 +46,21 @@ If you are using other versions:
 yarn add --cwd packages/app @veecode-platform/backstage-plugin-infracost
 ```
 
-
+<br>
 
 ### Configuration
 
-Levando em consideração que já existe o plugin de `infracost-backend` devidamento configurado e o kind `Infracost`já está disponível em seu backstage, a próxima etapa é gerar o arquivo **infracost-base.json** e relacioná-lo ao projeto principal e ao kind infracost.
+Bearing in mind that the `infracost-backend` plugin is already configured and the kind `Infracost` is already available in your backstage, the next step is to generate the file **infracost-base.json** and relate it to the main project and the kind infracost.
 
-Podemos gerar uma estimativa para qualquer componente do catálogo, desde que essa estimativa seja referenciada com o mesmo nome e mesmo repositório do componente principal, além disso o arquivo de estimativa tem que ter o nome de **infracost-base.json** e estar no mesmo nível do arquivo da estimativa, que deverá ter o kind **Infracost**.
 
-Na ilustração temos um caso em que o componente **Cluster-ec2** tem em seu repositório uma entidade principal de kind **Cluster** e uma entidade de kind **Infracost** com o arquivo `infracost-base.json` referenciado no mesmo nível.
+We can generate an estimate for any component in the catalog, as long as this estimate is referenced with the same name and the same repository as the main component, and the estimate file must have the name **infracost-base.json** and be at the same level as the estimate file, which should have the kind **Infracost**.
+
+The illustration shows a case where the component **Cluster-ec2** has in its repository a main entity of kind **Cluster** and an entity of kind **Infracost** with the `infracost-base.json` referenced at the same level.
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/365663b3-1556-478c-ad66-e62ba3a713d8)
 
 
-A organização de pastas fica a critério e necessidade desejada, mas suponhamos que essa regra seja adotada:
+The organization of folders is up to you, but let's assume that this rule is adopted:
 
 ```yaml
 .
@@ -71,7 +72,7 @@ A organização de pastas fica a critério e necessidade desejada, mas suponhamo
 
 ```
 
-O catálog-info.yaml é um **location** que irá recuperar todas as outras entidades presentes no repositório desde que sejam referenciadas nele:
+The catalog-info.yaml is a **location** that will retrieve all the other entities present in the repository as long as they are referenced in it:
 
 ```yaml
 apiVersion: backstage.io/v1alpha1
@@ -84,11 +85,11 @@ spec:
     - ./.content/cluster.yaml
     - ./.content/infracost.yaml
 ```
-Desse modo, ao ser registrado no Backstage, o location irá varrer tanto a entidade de Cluster quanto a entidade de Infracost.
+This way, when it is registered in the Backstage, the location will scan both the Cluster entity and the Infracost entity.
 
-> ℹ️ Lembrando que o Cluster é de exemplo, podendo ser usado em qualquer outro kind.
+> ℹ️Remember that the Cluster is an example and can be used for any other kind.
 
-Tanto `cluster.yaml` quanto o `infracost.yaml` deverão ter o mesmo nome, e a entidade **Infracost** deverá ter esse conteúdo:
+Both `cluster.yaml` and `infracost.yaml` should have the same name, and the entity **Infracost** should have this content:
 
 ```yaml
 apiVersion: veecode.backstage.io/v1alpha1
@@ -105,11 +106,13 @@ spec:
    $text: ./infracost-base.json
 ```
 
-Note que o estimate se refere ao arquivo infracost-base.json, mesmo que ainda nao esteja gerado, o ideal é já deixar ele referenciado da forma acima.
+Note that the estimate refers to the infracost-base.json file, even if it hasn't been generated yet, it's best to have it referenced as above.
 
-**Obs** A nível de organização da estrutura de pastas, fica a seu critério, se quiser criar uma pasta só para os arquivos infracost, como `.infracost`, basta referenciá-los da maneira correta no **catalog-info.yaml**.
 
-Já o componente principal, precisa ter a **annotation: infracost/project**, com o nome do projeto:
+> **Obs** In terms of organizing the folder structure, it's up to you if you want to create a folder just for infracost files, such as `.infracost`, just reference them in the correct way in the **catalog-info.yaml**.
+
+
+The main component, on the other hand, needs to have the **annotation: infracost/project**, with the name of the project:
 
 ```diff
 apiVersion: veecode.backstage.io/v1alpha1
@@ -125,15 +128,16 @@ spec:
   lifecycle: experimental
   owner: "group:default/admin"
 ```
+<br>
+
+### Generating the contents of the file `infracost-base.json`:
+
+An important step to note is that the project needs to be provisioned by **Terraform**, it will be via **Terraform** that the provider will be defined and the necessary secrets will be generated.
 
 
-### Gerando o conteúdo do arquivo `infracost-base.json`:
+Taking into account that the **infracost.yaml** files are already created within the repository of the main component, and the `catalog-info.yaml` already follows the kind model **Location**, in your project's repository, create a new workflow to run the estimate of the **Infracost** and commit the file **infracost-base.json** in your repository:
 
-Uma etapa importante de ser destacada é que o projeto precisa ser provisionado pelo **Terraform**, será via **Terraform** que se definirá o provider e serão geradas as secrets necessárias.
-
-Levando em consideração que os arquivos de **infracost.yaml** já está criado dentro do repositório do componente principal, e o `catalog-info.yaml` já segue o modelo de kind **Location**, no repositório de seu projeto, crie um novo workflow para rodar a estimativa do **Infracost** e commite o arquivo **infracost-base.json** no seu repositório:
-
-> ℹ️ Esse exemplo é baseado no github, se seu git provider não é o github, sinta-se a vontade para adaptar esse job, note que ele é bem simples e está aberto a adaptações.
+> ℹ️ This example is based on github, if your git provider is not github, feel free to adapt this job, note that it is very simple and open to adaptation.
 
 `.github > workflows > infracost.estimate.yml`
 
@@ -205,30 +209,35 @@ jobs:
           push_options: '--force'
 
 ```
+<br>
 
-> ℹ️ Note que o **Path** do Infracost está definido como "./.content" por estarmos dando o exemplo para que seja gerado na pasta `.content`, mas se a abordagem adotadafor diferente, então deverá ser tanto alterada a referencia da pasta no **catalog-info.yaml** de kind Location, quanto na variável **INFRACOST_PATH** do workflow.
+> ℹ️ Note that Infracost's **Path** is set to "./.content" because we are giving the example so that it is generated in the ` folder.content`, but if the approach adopted is different, then the folder reference in the **catalog-info.yaml** of kind Location, and in the variable **INFRACOST_PATH** of the workflow.
 
-> ℹ️ Outra observação importante é que no exemplo usamos o terraform com o aws como provider, mas nada impede que sejam utilizadas outros providers. Só fique atento as alterações no workflow que isso implicará.
+> ℹ️ Another important observation is that in the example we used terraform with aws as the provider, but nothing prevents other providers from being used. Just be aware of the changes to the workflow that this will entail.
 
-Esse processo também pode ser manual, desde que tenha sido feito o comando `terraform plain` antes, podemos usar a cli para gerar o arquivo **infracost-base.json** desta forma:
+This process can also be done manually, as long as the command `terraform plain` has been used before, we can use cli to generate the file **infracost-base.json** like this:
 ```bash
-// Faça no mesmo nível da entidade Infracost
+// Do it at the same level as the Infracost entity
 infracost breakdown --path plan_cache_cli.json --format json --out-file infracost-base.json
 ```
 
-### Considerações
+<br>
 
-Com as entidades no repositório, seguindo as regras declaradas acima, e com o arquivo **infracost-base.json** gerado. Basta registrar o location do `catalog-info.yaml` no Backstage, e o processor do backend irá salvar os dados no banco de dados.
-A seguir vamos abordar os componentes de UI, para extrairmos o máximo do plugin de Infracost.
+### Considerations
 
+With the entities in the repository, following the rules stated above, and with the file **infracost-base.json** generated. Simply register the location of the `catalog-info.yaml` in the Backstage, and the backend processor will save the data in the database.
+Next, we'll look at the UI components to get the most out of the Infracost plugin.
+
+<br>
 ---
+<br>
 
 ## UI 🎨
 
-Para começar, precisamos ir em nossa `EntityPage.tsx` e adicionar a tab **Infracost** na página da entidade que preferir, no exemplo vamos adicionar á uma clusterPage:
+To start, we need to go to our `EntityPage.tsx` and add the tab **Infracost** to the page of the entity you prefer, in the example we'll add it to a clusterPage:
 
 ```diff
-... outros imports
+... other imports
 + import { InfracostOverviewPage, isInfracostAvailable } from '@veecode-platform/backstage-plugin-infracost';
 ...
 const clusterPage = (
@@ -246,7 +255,7 @@ const clusterPage = (
   </EntityLayout>
 );
 ```
-Dessa forma seu componente, se tiver a estimativa corretamente configurada, terá uma visão dos dados vindos do Infracost, com uma estimativa de custos da infra, de acordo com seu provider:
+This way your component, if it has the estimate correctly configured, will have a view of the data coming from Infracost, with an estimate of the costs of the infrastructure, according to your provider:
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/96041972-f5c8-4657-8fe3-3dae6e578011)
 
