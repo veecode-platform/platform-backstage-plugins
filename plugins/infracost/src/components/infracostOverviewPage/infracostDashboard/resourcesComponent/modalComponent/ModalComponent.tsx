@@ -23,7 +23,7 @@ const ResourceDetailsComponent : React.FC<ResourceDetailsComponentProps> = (prop
             const costComponents : CostComponent[] = resource.costComponents;
             costComponents.map(costComponent => {
                 if(costComponent.usageBased){
-                    resourceChartDispatch(addItem({label: `${costComponent.name}*`, value: 0}));
+                    // resourceChartDispatch(addItem({label: `${costComponent.name}*`, value: 0}));
                     resourceTableDispatch(addRow({id: costComponent.name, monthly_qty: `${Number(costComponent.price).toFixed(2)} per ${costComponent.unit}`, monthly_cost: 'Depends on usage*'}))
                 }
                 else if(costComponent.monthlyCost && costComponent.monthlyCost !== '0'){
@@ -82,7 +82,10 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
   
   const { show, handleCloseModal, resources} = props;
   const { modalOnBlur,modalContent, modalHeader,closeModal,modalBody, container, titleBar, content } = useModalComponentStyles();
-  const labelProps = ['Name','monthly_qty','monthly_cost']
+  const labelProps = ['Name','monthly_qty','monthly_cost'];
+
+  // eslint-disable-next-line no-console
+  console.log(resources)
 
   return (
     <Modal

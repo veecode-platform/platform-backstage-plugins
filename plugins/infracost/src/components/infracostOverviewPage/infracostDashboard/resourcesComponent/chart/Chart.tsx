@@ -7,7 +7,7 @@ export const Chart : React.FC<ChartProps> = (props) => {
 
  const [ isHidden, setIsHidden ] = React.useState<boolean>(false);
  const { items } = props;
- const chartItems = (items.length === 1 && items[0].value === 0) ? [{id: items[0].id, label: items[0].label, value: 0.001}] : items;
+ const chartItems = (items.length === 0) ? [{id: 0, label: 'Costs are based on usage*', value: 0.001, color:'grey'}] : items;
  const size = {height: 450}
 
  const handleResize = () => {
