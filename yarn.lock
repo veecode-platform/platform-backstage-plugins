@@ -14319,7 +14319,7 @@ __metadata:
     "@sniptt/monads": ^0.5.10
     "@types/express": "*"
     "@types/supertest": ^2.0.8
-    "@veecode-platform/backstage-plugin-infracost-common": "workspace:^"
+    "@veecode-platform/backstage-plugin-infracost-common": latest
     axios: ^1.7.2
     express: ^4.17.1
     express-promise-router: ^4.1.0
@@ -14333,7 +14333,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-infracost-common@workspace:^, @veecode-platform/backstage-plugin-infracost-common@workspace:plugins/infracost-common":
+"@veecode-platform/backstage-plugin-infracost-common@npm:latest":
+  version: 0.1.1
+  resolution: "@veecode-platform/backstage-plugin-infracost-common@npm:0.1.1"
+  dependencies:
+    "@backstage/types": ^1.1.1
+  checksum: 3c64d28fda609d1e15ced96906002474946aeaed2f503c98c2c2e14cf33d75aeb40a7c45318e6f57f674fb07c3190293444d5b1b557887748ba998f2f55c2170
+  languageName: node
+  linkType: hard
+
+"@veecode-platform/backstage-plugin-infracost-common@workspace:plugins/infracost-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-infracost-common@workspace:plugins/infracost-common"
   dependencies:
@@ -14364,7 +14373,7 @@ __metadata:
     "@testing-library/react": ^14.0.0
     "@testing-library/user-event": ^14.0.0
     "@types/uuidv4": ^5.0.0
-    "@veecode-platform/backstage-plugin-infracost-common": "workspace:^"
+    "@veecode-platform/backstage-plugin-infracost-common": latest
     dayjs: ^1.11.11
     lodash: ^4.17.21
     msw: ^1.0.0

@@ -36,7 +36,11 @@ We start by configuring the processor schedule in the file `app-config.yaml`, wh
 
 ```yaml
 catalog:
-...
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow: [Component, System, API, Resource,Template, Location, Infracost]  # add Kind Infracost in rules.allow
   providers:
     infracost:
       default:
