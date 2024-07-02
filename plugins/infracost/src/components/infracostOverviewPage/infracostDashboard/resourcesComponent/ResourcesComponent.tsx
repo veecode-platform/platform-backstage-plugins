@@ -47,14 +47,14 @@ export const ResourcesComponent : React.FC<ResourcesComponentProps> = (props) =>
         <div className={title}>
           <Chip variant="outlined" label={`Generated to ${dayjs(timeGenerated).fromNow()}`}/>
         </div>
+        <div className={expandDetails} title="Expand Details">
+          <BiExpand size="22" color="#B1B1B190" onClick={handleToggleModal}/>
+        </div>
         <div className={chartStyles}>
           <Chart items={chartState} />
         </div>
         <div className={tableStyles}>
           <Table labels={labelProps} data={tableState} />
-        </div>
-        <div className={expandDetails} title="Expand Details">
-          <BiExpand size="22" color="#B1B1B190" onClick={handleToggleModal}/>
         </div>
       </div>
       {showModal && <ModalComponent show={showModal} handleCloseModal={handleToggleModal} resources={resources}/>}

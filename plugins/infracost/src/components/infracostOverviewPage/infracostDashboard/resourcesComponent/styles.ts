@@ -13,6 +13,7 @@ export const useResourcesComponentStyles = makeStyles( theme =>
             [theme.breakpoints.down('sm')]: {
                 gap: '0'
             },
+            padding: '1rem .5rem'
         },
         title:{
             position: 'absolute',
@@ -46,7 +47,8 @@ export const useResourcesComponentStyles = makeStyles( theme =>
         expandDetails:{
             cursor:'pointer',
             position: 'absolute',
-            right: '1.5rem'
+            top: '1rem',
+            right: '.8rem',
         }
     })
 )
