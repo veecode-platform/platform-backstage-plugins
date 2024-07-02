@@ -31,8 +31,9 @@ export const InfracostOverviewPage = () => {
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity);
   const {estimate, error, loading } = useInfracostProjects(projectName as string);
-  
-  if(error) return <PluginNotConfigured message={truncateMessage(error?.stack as string)}/>
+
+ 
+  if(error) return <PluginNotConfigured message={ truncateMessage(error?.stack as string)}/>
 
   if(loading) return ( <InfracostOverviewWrapper>
     <LoadingProgress />

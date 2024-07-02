@@ -12,9 +12,9 @@ export const InfracostDashboard : React.FC<InfracostDashboardProps> = (props) =>
 
     const {estimate} = props;
     const {root, details} = useInfracostDashboardStyles();
-    const project = estimate.projects[0] as Project;
+    const project = typeof estimate.projects === 'string' ? JSON.parse(estimate.projects)[0] : estimate.projects[0] as Project;
 
-  return (
+    return (
     <div className={root}>
       <Wrapper>
         <Typography variant="body1">Project: <strong>{estimate.name}</strong> </Typography>
