@@ -4,7 +4,6 @@
 
 The **Infracost** plugin provides a graphic representation of the application's cost estimate in its respective provider. <br>
 The Plugin offers a generalized approach with all the resources used and also presents a more detailed approach with the cost components that each resource has.<br>
-In this documentation we will cover how to correctly configure the plugin, how to create the job in your pipeline/workflow to generate the estimate and be consumed by the plugin and how to correctly reference the annotation that the UI component expects to render the content on your entityPage.
 <br>
 
 
@@ -58,7 +57,7 @@ The illustration shows a case where the component **Cluster-ec2** has in its rep
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/365663b3-1556-478c-ad66-e62ba3a713d8)
 
-To begin with, we need to add the annotation **infracost/project** to the `catalog-info.yaml` of your component:
+To begin with, we need to add the annotation **`infracost/project`** to the **catalog-info.yaml** of your component:
 
 ```diff
 apiVersion: veecode.backstage.io/v1alpha1
@@ -80,7 +79,7 @@ Note in the example that the name that the annotation will receive will have the
 
 ### Generating the contents of the infracost-base.json file:
 
-For this step, we need to take into account that we can have several possible scenarios for organizing the **Infracost** entity, from implementing the file within the component's own repository, as a practice of creating an **infracost** folder and creating the entity in it and generating the content, adding a **content** folder in the main repository and a `catalog-info.yaml ` of kind Location in the root of the project, pointing to all the entities in the folder. This depends on the approach adopted.
+For this step, we need to consider several possible scenarios for organizing the Infracost entity. We could implement the file within the component's own repository, create an .infracost folder and generate the entity content there, add a .content folder in the main repository with a catalog-info.yaml file of kind Location in the project root pointing to all the entities in the folder, or even create a separate repository just for the generated files. The best approach depends on the strategy adopted.
 
 
 We'll cover an example of introducing estimation manually, and an example of adding a workflow to automate the process.
@@ -142,8 +141,7 @@ The organization of folders is up to you, but let's assume that this rule is ado
 .
 ├── .content
 │   ├── cluster.yaml
-│   ├── infracost.yaml
-│   └── infracost-base.json
+│ 
 └── catalog-info.yaml
 
 ```
@@ -158,58 +156,16 @@ metadata:
   description: Importing components
 spec:
   targets:
-    - ./.content/cluster.yaml
-    - ./.content/infracost.yaml
+    - ./.content/*.yaml
 ```
-This way, when it is registered in the Backstage, the location will scan both the Cluster entity and the Infracost entity.
+This way, when it is registered in the Backstage, the location will scan both the Cluster entity and the Infracost entity (when it is generated).
 
 > ℹ️Remember that the Cluster is an example and can be used for any other kind.
 
-Both `cluster.yaml` and `infracost.yaml` should have the same name, and the entity **Infracost** should have this content:
-
-```yaml
-apiVersion: veecode.backstage.io/v1alpha1
-kind: Infracost
-metadata:
-  name: "cluster-ec2"
-  annotations:
-    backstage.io/techdocs-ref: dir:.
-spec:
-  type: FinOps
-  lifecycle: experimental
-  owner: "group:default/admin"  # your group 
-  estimate:
-   $text: ./infracost-base.json
-```
-
-Note that the estimate refers to the infracost-base.json file, even if it hasn't been generated yet, it's best to have it referenced as above.
-
-
-> **Obs** In terms of organizing the folder structure, it's up to you if you want to create a folder just for infracost files, such as `.infracost`, just reference them in the correct way in the **catalog-info.yaml**.
-
-
-The main component, on the other hand, needs to have the **annotation: infracost/project**, with the name of the project:
-
-```diff
-apiVersion: veecode.backstage.io/v1alpha1
-kind: Cluster
-metadata:
-  name: "cluster-ec2"
-  annotations:
-    github.com/project-slug: test/cluster-ec2
-    backstage.io/techdocs-ref: dir:.
-+    infracost/project: cluster-ec2
-spec:
-  type: ec2
-  lifecycle: experimental
-  owner: "group:default/admin"
-```
-<br>
 
 ### Generating the contents of the file `infracost-base.json`:
 
 An important step to note is that the project needs to be provisioned by **Terraform**, it will be via **Terraform** that the provider will be defined and the necessary secrets will be generated.
-
 
 Taking into account that the **infracost.yaml** files are already created within the repository of the main component, and the `catalog-info.yaml` already follows the kind model **Location**, in your project's repository, create a new workflow to run the estimate of the **Infracost** and commit the file **infracost-base.json** in your repository:
 
@@ -235,7 +191,7 @@ jobs:
     name: Infracost
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
 
     steps:
@@ -274,13 +230,29 @@ jobs:
         run: |
           infracost breakdown --path plan_cache.json --format json --out-file ${{ env.PATH_INFRACOST }}/infracost-base.json
 
+      - name: Generate component infracost.yaml
+        run: |
+          echo 'apiVersion: veecode.backstage.io/v1alpha1
+          kind: Infracost
+          metadata:
+            name: cluster-ec2  # component name
+            annotations:
+             backstage.io/techdocs-ref: dir:.
+          spec:
+            type: FinOps
+            lifecycle: experimental
+            owner: "group:default/admin"
+            estimate:
+             $text: ./infracost-base.json' > ${{ env.PATH_INFRACOST }}/infracost.yaml
+
+  
       - name: Publish generated artifacts
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          file_pattern: "${{ env.PATH_INFRACOST }}/infracost-base.json"
-          commit_user_name: ${{ secrets.gh_username }}
-          commit_user_email: ${{ secrets.gh_email }}
-          commit_author: ${{ secrets.gh_username }}<${{ secrets.gh_email }}>
+          file_pattern: "${{ env.PATH_INFRACOST }}"
+          commit_user_name: ${{ secrets.GH_USERNAME }}
+          commit_user_email: ${{ secrets.GH_EMAIL }}
+          commit_author: ${{ secrets.GH_USERNAME }}<${{ secrets.GH_EMAIL }}>
           commit_message: "Publish infracost estimate"
           push_options: '--force'
 
