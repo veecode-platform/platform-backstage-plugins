@@ -26,7 +26,6 @@ In this documentation we will cover how to correctly configure the plugin, how t
 Before installing the plugin, there are some prerequisites to ensure its functionality:
 
 - Have a locally installed Backstage project, :heavy_check_mark: [How to create a Backstage app :page_with_curl:](https://backstage.io/docs/getting-started/create-an-app) .
-- Have a Backstage with a properly configured Postgres database, if you haven't already, see how to set it up [here](https://backstage.io/docs/tutorials/switching-sqlite-postgres/).
 - Have the `Infracost-backend`  plugin installed on your Backstage, see how to install [here](https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/infracost-backend/README.md).
 - The project's infrastructure must be provided via terraform.
 - Have an Infracost API KEY. Here's how to generate one [here](https://www.infracost.io/docs/#2-get-api-key).
@@ -59,6 +58,83 @@ The illustration shows a case where the component **Cluster-ec2** has in its rep
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/365663b3-1556-478c-ad66-e62ba3a713d8)
 
+To begin with, we need to add the annotation **infracost/project** to the `catalog-info.yaml` of your component:
+
+```diff
+apiVersion: veecode.backstage.io/v1alpha1
+kind: Cluster
+metadata:
+  name: "cluster-ec2"
+  annotations:
+    github.com/project-slug: test/cluster-ec2
+    backstage.io/techdocs-ref: dir:.
++    infracost/project: cluster-ec2
+spec:
+  type: ec2
+  lifecycle: experimental
+  owner: "group:default/admin"
+```
+
+Note in the example that the name that the annotation will receive will have the same name as the component, because it will be referencing the component to the estimate.
+
+
+### Generating the contents of the infracost-base.json file:
+
+For this step, we need to take into account that we can have several possible scenarios for organizing the **Infracost** entity, from implementing the file within the component's own repository, as a practice of creating an **infracost** folder and creating the entity in it and generating the content, adding a **content** folder in the main repository and a `catalog-info.yaml ` of kind Location in the root of the project, pointing to all the entities in the folder. This depends on the approach adopted.
+
+
+We'll cover an example of introducing estimation manually, and an example of adding a workflow to automate the process.
+
+
+## Manual process
+
+Taking into account that the project is already provisioned with terraform and the terraform apply process has already been done, just run the following command:
+
+```bash
+infracost breakdown --path plan_cache_cli.json --format json --out-file infracost-base.json
+```
+
+This command needs to be run in the project's root folder, it will generate a file called **infracost-base.json**.
+Now create a folder in the project root called `.content`, move the file **infracost-base.json** to the folder and create the file **infracost.yaml**, with the following content:
+
+```yaml
+apiVersion: veecode.backstage.io/v1alpha1
+kind: Infracost
+metadata:
+  name: "cluster-ec2"  // here it should have the same name as the main project
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: FinOps
+  lifecycle: experimental
+  owner: "group:default/admin"  # your group 
+  estimate:
+   $text: ./infracost-base.json
+```
+
+Now the next step is to move `catalog-info.yaml`, which is in the root of the project, to the folder `.content ` folder, rename the file to reference your kind, as in the example we are dealing with a cluster we rename it to **cluster.yaml**;
+
+**Obs**: When moving the entities to the **.content** folder, we need to change any annotations that refer to the repository's relative path, such as the **techdocs** annotation:
+
+```diff
+- backstage.io/techdocs-ref: dir:.
++ backstage.io/techdocs-ref: dir:..
+```
+
+In the project root, we'll create a new **catalog-info.yaml**, this time with the **Location** kind that will reference the entities in the **.content** folder:
+
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: cluster-ec2-location
+  description: Importing components
+spec:
+  targets:
+    - ./.content/*.yaml
+```
+
+## Automated process
 
 The organization of folders is up to you, but let's assume that this rule is adopted:
 
@@ -214,13 +290,6 @@ jobs:
 > ℹ️ Note that Infracost's **Path** is set to "./.content" because we are giving the example so that it is generated in the `.content` folder, but if the approach adopted is different, then the folder reference in the **catalog-info.yaml** of kind Location, and in the variable **INFRACOST_PATH** of the workflow.
 
 > ℹ️ Another important observation is that in the example we used terraform with aws as the provider, but nothing prevents other providers from being used. Just be aware of the changes to the workflow that this will entail.
-
-This process can also be done manually, as long as the command `terraform plain`  has been used before, we can use cli to generate the file **infracost-base.json** like this:
-
-```bash
-// Do it at the same level as the Infracost entity
-infracost breakdown --path plan_cache_cli.json --format json --out-file infracost-base.json
-```
 
 <br>
 
