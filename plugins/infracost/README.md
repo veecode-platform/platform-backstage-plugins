@@ -84,6 +84,11 @@ For this step, we need to consider several possible scenarios for organizing the
 
 We'll cover an example of introducing estimation manually, and an example of adding a workflow to automate the process.
 
+<br>
+
+---
+
+<br>
 
 ## Manual process
 
@@ -132,6 +137,12 @@ spec:
   targets:
     - ./.content/*.yaml
 ```
+
+<br>
+
+---
+
+<br>
 
 ## Automated process
 
