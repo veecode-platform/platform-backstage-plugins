@@ -8,11 +8,10 @@ import { makeFieldSchemaFromZod } from '../../utils';
  */
 
 export const OptionsPickerFieldSchema = makeFieldSchemaFromZod(
-    z.string(),  // return
+    z.string(), 
     z.object({
-        // options: z.string().array().optional().describe('Set the options'),
         key: z.string().nonempty('Set the Key').describe('Set the key'),
-        subKey: z.string().nonempty('Set the subKey').describe('Set the subkey'),
+        property: z.string().nonempty('Set the property').describe('Set the property'),
     })
 )
 
