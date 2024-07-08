@@ -57,6 +57,7 @@ proxy:
   endpoints:
     '/github/api':
       target: https://api.github.com/repos
+      credentials: require
       allowedHeaders: ['Authorization', 'X-GitHub-Api-Version']
       headers: 
         #Authorization: Bearer ${GITHUB_TOKEN_SECRET}
@@ -65,6 +66,7 @@ proxy:
     
     '/gitlab/api':
       target: https://gitlab.com/api/v4
+      credentials: require
       allowedHeaders: ['PRIVATE-TOKEN']
       headers:
         PRIVATE-TOKEN: ${GITLAB_TOKEN_SECRET}
@@ -72,6 +74,7 @@ proxy:
       
     '/kong-manager/api':
       target: https://api.manager.apr.vee.codes
+      credentials: require
       allowedHeaders: ['Authorization']
       headers: 
         Accept: application/json
@@ -79,6 +82,7 @@ proxy:
 
     '/kong-other-manager/api': #should be used as a annotation
       target: https://api.manager.apr.vee.codes
+      credentials: require
       allowedHeaders: ['Authorization']
       headers: 
         Accept: application/json

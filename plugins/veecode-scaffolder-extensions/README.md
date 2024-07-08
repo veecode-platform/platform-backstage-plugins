@@ -344,3 +344,40 @@ In the example below we use the **resourcePicker** field which always returns an
 At the end of this step, we'll be able to select an object, and in the next step we'll be able to select an option from the previously selected object, in other words we'll be using the context in scaffolder time to enrich our creation process.<br>
 
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/63b03d5b-2e0a-4c0c-a0c9-47b43d439221)
+
+
+
+---
+
+### OptionsPicker
+
+The **OptionPicker** is a customized field with the purpose of retrieving the context of the template that was typed in and iterating over it. One of its prerequisites is that it always knows the context before it, i.e. all the parameters typed before it, the other prerequisite is that it expects in its **key** filter a data type object, and in its second filter it expects a **property** which must be an array of strings. With this, we can assemble a data selector taking advantage of some previously passed parameter and enriching the construction options of your project.<br>
+In the example below we use the **resourcePicker** field which always returns an object, the **Environment** filter will return an array of entities that have the Environment kind and are in the Backstage catalog. Note that immediately afterwards, we add a new step to fill in the template, entitled"**Define Subnet**, in `ui:field` we set the **OptionsPicker** field, below in `ui:options `, we pass which **key** of the template we are retrieving from the context, see that we retrieve the **environmentResource** key, i.e. we retrieve the object that was selected in this step, and in **property** we define which property of this object we want to scan.<br>
+
+> **Obs**: This selected kind has a property called subnets, and its value is a string array
+
+```diff
+    - title: Resource Reuse
+      properties:
+        environmentResources:
+         type: object
+         ui:field: ResourcePicker
+         ui:options:
+           catalogFilter:
+             kind: [Environment]
+
++    - title: Define Subnet
++      properties:
++        subnets:
++         title: Select the subnets            // set a title for the section
++         description: Select the subnets from Environment   // I set a personalized description
++         type: string
++         ui:field: OptionsPicker            
++         ui:options:
++           key: environmentResources       // here we choose the parameter key
++           property: subnets               // the property that belongs to my parameter.
+```
+
+At the end of this step, we'll be able to select an object, and in the next step we'll be able to select an option from the previously selected object, in other words we'll be using the context in scaffolder time to enrich our creation process.<br>
+
+![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/63b03d5b-2e0a-4c0c-a0c9-47b43d439221)
