@@ -26,17 +26,17 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@backstage/backend-common": "^0.22.0",
-    "@backstage/backend-defaults": "^0.2.18",
-    "@backstage/backend-plugin-api": "^0.6.18",
-    "@backstage/backend-tasks": "^0.5.25",
+    "@backstage/backend-common": "^0.23.2",
+    "@backstage/backend-defaults": "^0.3.3",
+    "@backstage/backend-plugin-api": "^0.6.21",
+    "@backstage/backend-tasks": "^0.5.26",
     "@backstage/catalog-client": "^1.6.5",
     "@backstage/catalog-model": "^1.5.0",
     "@backstage/config": "^1.2.0",
     "@backstage/errors": "^1.2.4",
-    "@backstage/plugin-auth-node": "^0.4.15",
+    "@backstage/plugin-auth-node": "^0.4.16",
     "@backstage/plugin-catalog-common": "^1.0.24",
-    "@backstage/plugin-catalog-node": "^1.12.2",
+    "@backstage/plugin-catalog-node": "^1.12.3",
     "@backstage/types": "^1.1.1",
     "@sniptt/monads": "^0.5.10",
     "@types/express": "*",
@@ -51,9 +51,9 @@
     "yn": "^4.0.0"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.26.5",
-    "@backstage/plugin-auth-backend": "^0.22.5",
-    "@backstage/plugin-auth-backend-module-guest-provider": "^0.1.4",
+    "@backstage/cli": "^0.26.10",
+    "@backstage/plugin-auth-backend": "^0.22.8",
+    "@backstage/plugin-auth-backend-module-guest-provider": "^0.1.7",
     "@types/supertest": "^2.0.8",
     "msw": "^1.0.0",
     "supertest": "^6.2.4"
