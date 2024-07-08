@@ -10,8 +10,14 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "frontend-plugin"
+    "role": "frontend-plugin",
+    "pluginId": "gitlab-pipelines",
+    "pluginPackages": [
+      "@veecode-platform/backstage-plugin-gitlab-pipelines",
+      "@veecode-platform/backstage-plugin-gitlab-pipelines-common"
+    ]
   },
+  "sideEffects": false,
   "scripts": {
     "start": "backstage-cli package start",
     "build": "backstage-cli package build",

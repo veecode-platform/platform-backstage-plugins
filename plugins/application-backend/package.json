@@ -10,7 +10,13 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "backend-plugin"
+    "role": "backend-plugin",
+    "pluginId": "application",
+    "pluginPackages": [
+      "@veecode-platform/plugin-application",
+      "@veecode-platform/plugin-application-backend",
+      "@veecode-platform/plugin-application-common"
+    ]
   },
   "scripts": {
     "start": "backstage-cli package start",

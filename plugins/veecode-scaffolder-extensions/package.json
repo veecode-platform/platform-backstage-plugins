@@ -10,7 +10,11 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "frontend-plugin"
+    "role": "frontend-plugin",
+    "pluginId": "veecode-scaffolder-extensions",
+    "pluginPackages": [
+      "@veecode-platform/veecode-scaffolder-extensions"
+    ]
   },
   "sideEffects": false,
   "scripts": {

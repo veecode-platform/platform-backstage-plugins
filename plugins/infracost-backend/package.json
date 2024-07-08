@@ -14,7 +14,13 @@
     "url": "git+https://github.com/veecode-platform/platform-backstage-plugins.git"
   },
   "backstage": {
-    "role": "backend-plugin"
+    "role": "backend-plugin",
+    "pluginId": "infracost",
+    "pluginPackages": [
+      "@veecode-platform/backstage-plugin-infracost",
+      "@veecode-platform/backstage-plugin-infracost-backend",
+      "@veecode-platform/backstage-plugin-infracost-common"
+    ]
   },
   "scripts": {
     "start": "backstage-cli package start",

@@ -12,8 +12,15 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "common-library"
+    "role": "common-library",
+    "pluginId": "application",
+    "pluginPackages": [
+      "@veecode-platform/plugin-application",
+      "@veecode-platform/plugin-application-backend",
+      "@veecode-platform/plugin-application-common"
+    ]
   },
+  "sideEffects": false,
   "scripts": {
     "build": "backstage-cli package build",
     "lint": "backstage-cli package lint",

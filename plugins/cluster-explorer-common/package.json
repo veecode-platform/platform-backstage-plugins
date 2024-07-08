@@ -12,7 +12,12 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "common-library"
+    "role": "common-library",
+    "pluginId": "cluster-explorer",
+    "pluginPackages": [
+      "@veecode-platform/backstage-plugin-cluster-explorer",
+      "@veecode-platform/backstage-plugin-cluster-explorer-common"
+    ]
   },
   "sideEffects": false,
   "scripts": {

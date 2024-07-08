@@ -12,7 +12,12 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "common-library"
+    "role": "common-library",
+    "pluginId": "gitlab-pipelines",
+    "pluginPackages": [
+      "@veecode-platform/backstage-plugin-gitlab-pipelines",
+      "@veecode-platform/backstage-plugin-gitlab-pipelines-common"
+    ]
   },
   "sideEffects": false,
   "scripts": {

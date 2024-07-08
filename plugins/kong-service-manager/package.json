@@ -10,7 +10,12 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "frontend-plugin"
+    "role": "frontend-plugin",
+    "pluginId": "kong-service-manager",
+    "pluginPackages": [
+      "@veecode-platform/backstage-plugin-kong-service-manager-common",
+      "@veecode-platform/plugin-kong-service-manager"
+    ]
   },
   "sideEffects": false,
   "scripts": {

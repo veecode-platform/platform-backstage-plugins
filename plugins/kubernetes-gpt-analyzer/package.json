@@ -10,7 +10,11 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "frontend-plugin"
+    "role": "frontend-plugin",
+    "pluginId": "kubernetes-gpt-analyzer",
+    "pluginPackages": [
+      "@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer"
+    ]
   },
   "sideEffects": false,
   "scripts": {
