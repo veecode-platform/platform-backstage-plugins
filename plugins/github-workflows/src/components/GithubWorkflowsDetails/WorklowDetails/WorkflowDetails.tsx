@@ -3,7 +3,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
-import { calculateDuration, truncateString } from '../../../utils/common';
+import { calculateDuration, truncateString } from '../../../utils/helpers';
 import { useWorkflowDetailsStyles } from '../styles';
 import { WorkFlowStatus } from '../../WorkFlowStatus';
 import { WorkflowDetailsProps } from '../types';

@@ -1,5 +1,5 @@
 import { Entity } from "@backstage/catalog-model";
-import { GITHUB_ANNOTATION, WORKFLOW_ANNOTATION } from "./useEntityAnnotations";
+import { GITHUB_ANNOTATION, WORKFLOW_ANNOTATION } from "../utils/constants/annotations";
 
 export const isGithubWorkflowsAvailable = (entity: Entity) =>
   !!entity?.metadata.annotations?.[WORKFLOW_ANNOTATION];

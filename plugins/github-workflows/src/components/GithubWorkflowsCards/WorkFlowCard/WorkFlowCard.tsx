@@ -4,7 +4,7 @@ import { EmptyState, ErrorBoundary, Progress, ResponseErrorPanel } from '@backst
 import { Box, Button, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography } from '@material-ui/core';
 import { WorkFlowItem } from './WorkFlowItem';
 import useAsync from 'react-use/lib/useAsync';
-import { WORKFLOW_ANNOTATION, useEntityAnnotations } from '../../../hooks/useEntityAnnotations';
+import { useEntityAnnotations } from '../../../hooks/useEntityAnnotations';
 import { useEntity,MissingAnnotationEmptyState } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { WorkflowResultsProps } from '../../../utils/types';
@@ -15,6 +15,7 @@ import { useWorkflowCardStyles } from './styles';
 import { useGithuWorkflowsContext } from '../../../context';
 import { CardsProps } from './types';
 import SelectBranch from '../../SelectBranch/SelectBranch';
+import { WORKFLOW_ANNOTATION } from '../../../utils/constants/annotations';
 
 
 export const Cards : React.FC<CardsProps> = ({ items, updateData }) => {

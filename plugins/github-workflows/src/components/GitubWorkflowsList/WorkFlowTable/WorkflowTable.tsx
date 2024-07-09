@@ -8,7 +8,7 @@ import { WorkFlowStatus } from '../../WorkFlowStatus';
 import { WorkFlowActions } from '../../WorkFlowActions';
 import { Box, Button, Tooltip, Typography } from '@material-ui/core';
 import { WorkflowDispatchParameters, WorkflowResultsProps } from '../../../utils/types';
-import { truncateString } from '../../../utils/common';
+import { truncateString } from '../../../utils/helpers';
 import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
 import { useEntityAnnotations } from '../../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';

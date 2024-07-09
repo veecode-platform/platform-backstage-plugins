@@ -1,7 +1,7 @@
 import { Box, Tooltip, Typography, makeStyles } from '@material-ui/core';
 import React, { useState } from 'react';
 import { WorkFlowStatus } from '../../../WorkFlowStatus';
-import { truncateString } from '../../../../utils/common';
+import { truncateString } from '../../../../utils/helpers';
 import { WorkFlowActions } from '../../../WorkFlowActions';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../../../ModalComponent';

@@ -1,7 +1,5 @@
 import { Entity } from '@backstage/catalog-model';
-
-export const WORKFLOW_ANNOTATION = 'github.com/workflows';
-export const GITHUB_ANNOTATION = 'github.com/project-slug'
+import { GITHUB_ANNOTATION, GITHUB_INSTANCE, WORKFLOW_ANNOTATION } from '../utils/constants/annotations';
 
 export const useEntityAnnotations = (entity: Entity) => {
 
@@ -9,11 +7,14 @@ export const useEntityAnnotations = (entity: Entity) => {
     entity?.metadata.annotations?.[GITHUB_ANNOTATION] ?? '';
   const workflowsList =
     entity?.metadata.annotations?.[WORKFLOW_ANNOTATION] ?? '';
+  const hostname =
+    entity?.metadata.annotations?.[GITHUB_INSTANCE] ?? 'github.com'
 
     if (!workflowsList) {
       return {
         projectName,
         workflows: null,
+        hostname
       };
     }
 
@@ -22,5 +23,6 @@ export const useEntityAnnotations = (entity: Entity) => {
   return {
     projectName,
     workflows,
+    hostname
   };
 };

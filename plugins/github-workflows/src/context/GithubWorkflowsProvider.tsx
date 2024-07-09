@@ -5,7 +5,7 @@ import { GithubWorkflowsContext } from './GithubWorkflowsContext';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { githubWorkflowsApiRef } from '../api';
 import { WorkflowResultsProps } from '../utils/types';
-import { sortWorflowsByName } from '../utils/common';
+import { sortWorflowsByName } from '../utils/helpers';
 
 interface GithubWorkflowsProviderProps {
   children: ReactNode;

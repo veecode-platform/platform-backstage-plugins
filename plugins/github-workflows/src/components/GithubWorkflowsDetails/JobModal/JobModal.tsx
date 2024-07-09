@@ -7,7 +7,7 @@ import { WorkFlowStatus } from '../../WorkFlowStatus'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
-import { calculateDuration } from '../../../utils/common';
+import { calculateDuration } from '../../../utils/helpers';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import BlockIcon from '@material-ui/icons/Block';
