@@ -12523,6 +12523,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/git-url-parse@npm:^9.0.3":
+  version: 9.0.3
+  resolution: "@types/git-url-parse@npm:9.0.3"
+  checksum: ae5389bf4339e0e863d84e92cd8af137ea485ea7141a25998300ae38ba471617af004791f4c6f86431eb5fb0c70ad4dda3558ca9b0a020a3897058e95a91515e
+  languageName: node
+  linkType: hard
+
 "@types/graceful-fs@npm:^4.1.3":
   version: 4.1.9
   resolution: "@types/graceful-fs@npm:4.1.9"
@@ -13707,13 +13714,16 @@ __metadata:
     "@testing-library/jest-dom": ^5.10.1
     "@testing-library/react": ^12.1.3
     "@testing-library/user-event": ^14.0.0
+    "@types/git-url-parse": ^9.0.3
     "@types/node": "*"
     dayjs: ^1.11.9
+    git-url-parse: ^14.0.0
     js-yaml: ^4.1.0
     msw: ^1.0.0
     react-use: ^17.2.4
   peerDependencies:
     react: ^16.13.1 || ^17.0.0
+    react-router-dom: ^6.24.1
   languageName: unknown
   linkType: soft
 
