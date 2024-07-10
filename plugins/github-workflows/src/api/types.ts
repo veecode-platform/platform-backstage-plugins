@@ -1,4 +1,4 @@
-import { DiscoveryApi } from "@backstage/core-plugin-api";
+import { ConfigApi /* DiscoveryApi */ } from "@backstage/core-plugin-api";
 import { ScmAuthApi } from "@backstage/integration-react";
 import { WorkflowDispatchParameters } from "../utils/types";
 
@@ -9,7 +9,7 @@ export type Integrations = {
 
 
 export type Options = {
-    discoveryApi: DiscoveryApi;
+    configApi: ConfigApi;
     scmAuthApi: ScmAuthApi;
     /**
     * Path to use for requests via the proxy, defaults to /github/api

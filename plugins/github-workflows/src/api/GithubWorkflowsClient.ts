@@ -3,6 +3,11 @@ import { ScmAuthApi } from "@backstage/integration-react";
 import { Octokit, RestEndpointMethodTypes } from "@octokit/rest";
 import { GithubWorkflowsApi } from "./GithubWorkflowsApi";
 import { readGithubIntegrationConfigs } from '@backstage/integration';
+import { regexFileName } from "../utils/helpers";
+import YAML from "js-yaml"
+import { WorkflowDispatchParameters } from "../utils/types";
+import { Options, Workflows } from "./types";
+import { StatusWorkflowEnum } from "../utils/enums/WorkflowListEnum";
 
 
  /**
@@ -12,8 +17,7 @@ import { readGithubIntegrationConfigs } from '@backstage/integration';
  * 
  */ 
 
-
-export class GithubWorkflowsClient implements GithubWorkflowsApi {
+class Client {
   private readonly configApi: ConfigApi;
   private readonly scmAuthApi: ScmAuthApi;
 
@@ -46,19 +50,21 @@ export class GithubWorkflowsClient implements GithubWorkflowsApi {
     return {owner: parse[0], repo: parse[1]}
   } 
 
-  async listWorkflows(options:{hostname?: string,githubRepoSlug: string, /* branch: string, filter?: string[]*/}): Promise<RestEndpointMethodTypes['actions']['listRepoWorkflows']['response']['data']>{
-    const { hostname, githubRepoSlug } = options;
+  async listWorkflows(hostname: string,githubRepoSlug: string, filter?: string[]): Promise<RestEndpointMethodTypes['actions']['listRepoWorkflows']['response']['data']['workflows']>{
     const octokit = await this.getOctokit(hostname);
     const {owner, repo} = this.parseRepo(githubRepoSlug);
     const response = await octokit.actions.listRepoWorkflows({
       owner,
       repo
     });
-    return response.data;
+    if(!filter || filter.length === 0) return response.data.workflows;
+    const filteredWorkflows = response.data.workflows.filter(workflow => 
+      filter.includes(regexFileName(workflow.path))
+    )
+    return filteredWorkflows;
   };
 
-  async listWorkflowRuns(options:{hostname?:string, githubRepoSlug:string, branch:string}):Promise<RestEndpointMethodTypes['actions']['listWorkflowRuns']['response']['data']>{
-    const { hostname, githubRepoSlug, branch } = options;
+  async listWorkflowRuns(hostname:string, githubRepoSlug:string, branch:string):Promise<RestEndpointMethodTypes['actions']['listWorkflowRuns']['response']['data']['workflow_runs']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);
     const response = await octokit.actions.listWorkflowRunsForRepo({
@@ -66,11 +72,21 @@ export class GithubWorkflowsClient implements GithubWorkflowsApi {
       repo,
       branch
     });
-    return response.data
+    return response.data.workflow_runs
   }
 
-  async listBranchesFromRepo(options:{hostname?: string, githubRepoSlug: string}): Promise<RestEndpointMethodTypes['repos']['listBranches']['response']['data']>{
-    const { hostname, githubRepoSlug } = options;
+  async listWorkflowRunsTotalCount(hostname:string, githubRepoSlug:string, branch:string):Promise<RestEndpointMethodTypes['actions']['listWorkflowRuns']['response']['data']['total_count']>{
+    const octokit = await this.getOctokit(hostname);
+    const { owner, repo } = this.parseRepo(githubRepoSlug);
+    const response = await octokit.actions.listWorkflowRunsForRepo({
+      owner,
+      repo,
+      branch
+    });
+    return response.data.total_count
+  }
+
+  async listBranchesFromRepo(hostname: string, githubRepoSlug: string): Promise<RestEndpointMethodTypes['repos']['listBranches']['response']['data']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);
     const response = await octokit.repos.listBranches({
@@ -80,8 +96,7 @@ export class GithubWorkflowsClient implements GithubWorkflowsApi {
     return response.data;
   }
 
-  async getBranchDefaultFromRepo(options:{hostname?: string, githubRepoSlug: string}):Promise<RestEndpointMethodTypes['repos']['get']['response']['data']['default_branch']>{
-    const { hostname, githubRepoSlug } = options;
+  async getBranchDefaultFromRepo(hostname: string, githubRepoSlug: string):Promise<RestEndpointMethodTypes['repos']['get']['response']['data']['default_branch']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);
     const response = await octokit.rest.repos.get({
@@ -91,8 +106,7 @@ export class GithubWorkflowsClient implements GithubWorkflowsApi {
     return response.data.default_branch;
   }
 
-  async startWorkflowRun(options:{hostname?:string, workflowId: number, githubRepoSlug: string, branch: string, inputs?: {[key: string]: unknown} }): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['data']>{
-    const { hostname, workflowId, githubRepoSlug, branch, inputs } = options;
+  async startWorkflowRun(hostname:string, workflowId: number, githubRepoSlug: string, branch: string, inputs?: {[key: string]: unknown}): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['data']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);
     const response = await octokit.actions.createWorkflowDispatch({
@@ -105,8 +119,7 @@ export class GithubWorkflowsClient implements GithubWorkflowsApi {
     return response.data
   }
   
-  async stopWorkflowRun(options:{hostname?:string, runId: number, githubRepoSlug:string}):Promise<RestEndpointMethodTypes['actions']['cancelWorkflowRun']['response']['status']>{
-    const { hostname, runId, githubRepoSlug } = options;
+  async stopWorkflowRun(hostname:string, runId: number, githubRepoSlug:string):Promise<RestEndpointMethodTypes['actions']['cancelWorkflowRun']['response']['status']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);
     const response = await octokit.actions.cancelWorkflowRun({
@@ -117,8 +130,19 @@ export class GithubWorkflowsClient implements GithubWorkflowsApi {
     return response.status
   }
 
-  async listJobsForWorkflowRun(options:{hostname?: string, githubRepoSlug: string, id: number,pageSize?:number,page?:number}): Promise<RestEndpointMethodTypes['actions']['listJobsForWorkflowRun']['response']['data']>{
-    const { hostname, githubRepoSlug, id, pageSize = 100, page = 0 } = options;
+  async getLatestWorkflowRun(hostname:string, workflowId: number, githubRepoSlug: string):Promise<RestEndpointMethodTypes['actions']['listWorkflowRuns']['response']['data']['workflow_runs'][0]>{
+    const octokit = await this.getOctokit(hostname);
+    const { owner, repo } = this.parseRepo(githubRepoSlug);
+    const response = await octokit.actions.listWorkflowRuns({
+      owner,
+      repo,
+      workflow_id: workflowId
+    });
+
+    return response.data.workflow_runs[0]
+  }
+
+  async listJobsForWorkflowRun(hostname: string, githubRepoSlug: string, id: number,pageSize?:number,page?:number): Promise<RestEndpointMethodTypes['actions']['listJobsForWorkflowRun']['response']['data']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);
     const jobs = await octokit.actions.listJobsForWorkflowRun({
@@ -131,8 +155,7 @@ export class GithubWorkflowsClient implements GithubWorkflowsApi {
     return jobs.data
   }
 
-  async getWorkflowRunById(options:{ hostname?:string, githubRepoSlug: string, runId: number}):Promise<RestEndpointMethodTypes['actions']['getWorkflowRun']['response']['data']>{
-    const { hostname, githubRepoSlug, runId} = options;
+  async getWorkflowRunById(hostname:string, githubRepoSlug: string, runId: number):Promise<RestEndpointMethodTypes['actions']['getWorkflowRun']['response']['data']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);
     const workflow = await octokit.actions.getWorkflowRun({
@@ -143,8 +166,90 @@ export class GithubWorkflowsClient implements GithubWorkflowsApi {
     return workflow.data
   }
 
-  async downloadJobLogsForWorkflowRun (options:{hostname?:string, githubRepoSlug: string, jobId: number}): Promise<RestEndpointMethodTypes['actions']['downloadJobLogsForWorkflowRun']['response']['data']>{
-    const { hostname, githubRepoSlug, jobId } = options;
+  async getFileContentFromPath(hostname:string, githubRepoSlug:string, filePath: string, branch:string):Promise<any>{
+    const octokit = await this.getOctokit(hostname);
+    const { owner, repo } = this.parseRepo(githubRepoSlug);
+    const response = await octokit.repos.getContent({
+      owner,
+      repo,
+      path: filePath,
+      ref: branch ?? ''
+    });
+    const content = response.data as any;
+    const yamlContent = YAML.load(
+      Buffer.from(content,'base64').toString('utf8')
+    ) as any;
+    return yamlContent;
+  }
+
+  async listWorkflowsDispatchParameters(hostname:string, githubRepoSlug:string, filePath: string, branch:string):Promise<WorkflowDispatchParameters[]>{
+    const yamlContent = await this.getFileContentFromPath(hostname, githubRepoSlug, filePath, branch);
+    if (!yamlContent.on?.workflow_dispatch?.inputs) return [];
+    const inputs = yamlContent.on.workflow_dispatch?.inputs;
+
+    const mapedInputs: WorkflowDispatchParameters[] = Object.keys(inputs).map(
+      input => {
+        const currentInput = inputs[input];
+        const result: WorkflowDispatchParameters = {
+          name: input,
+          description: currentInput.description ?? '',
+          default: currentInput.default ?? '',
+          required: currentInput.required ?? false,
+          type: currentInput.type ?? 'string',
+        };
+        if (currentInput.type === 'choice') {
+          result.options = currentInput.options;
+        }
+        return result;
+      },
+    );
+    return mapedInputs;
+  }
+
+  async listWorkflowsResponse(hostname: string, githubRepoSlug: string, branch: string, filter?: string[]): Promise<Workflows[]>{
+    const workflows = await this.listWorkflows(hostname, githubRepoSlug, filter);
+    const response = await Promise.all(
+      workflows.map(async (workflow): Promise<Workflows> => {
+        const latestWorkflowRun = await this.getLatestWorkflowRun(
+          hostname,
+          workflow.id,
+          githubRepoSlug,
+        );
+        const dispatchParameters = await this.listWorkflowsDispatchParameters(
+          hostname,
+          githubRepoSlug,
+          workflow.path,
+          branch,
+        );
+        const latestWorkflowRunData = latestWorkflowRun
+          ? {
+              id: latestWorkflowRun.id,
+              status: latestWorkflowRun.status ?? undefined,
+              conclusion: latestWorkflowRun.conclusion ?? undefined,
+            }
+          : {
+              status: StatusWorkflowEnum.completed,
+              conclusion: StatusWorkflowEnum.failure,
+            };
+        return {
+          workflow: {
+            id: workflow.id,
+            name: workflow.name,
+            state: workflow.state,
+            url: workflow.html_url,
+            path: workflow.path,
+            createdAt: workflow.created_at,
+            updatedAt: workflow.updated_at,
+          },
+          latestRun: latestWorkflowRunData,
+          parameters: dispatchParameters,
+        };
+      }),
+    );
+    return response;
+  }
+
+  async downloadJobLogsForWorkflowRun (hostname:string, githubRepoSlug: string, jobId: number): Promise<RestEndpointMethodTypes['actions']['downloadJobLogsForWorkflowRun']['response']['data']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);
     const workflow = await octokit.actions.downloadJobLogsForWorkflowRun({
@@ -156,8 +261,7 @@ export class GithubWorkflowsClient implements GithubWorkflowsApi {
     return workflow.data;
   }
 
-  async getEnvironmentsList(options:{hostname?:string,githubRepoSlug: string}) : Promise<RestEndpointMethodTypes['repos']['getAllEnvironments']['response']['data']>{
-    const { hostname, githubRepoSlug } = options;
+  async getEnvironmentsList(hostname:string,githubRepoSlug: string) : Promise<RestEndpointMethodTypes['repos']['getAllEnvironments']['response']['data']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);
     const environments = await octokit.repos.getAllEnvironments({
@@ -165,5 +269,46 @@ export class GithubWorkflowsClient implements GithubWorkflowsApi {
       repo
     });
     return environments.data
+  }
+}
+
+export class GithubWorflowsClient implements GithubWorkflowsApi {
+
+  private readonly client : Client;
+
+  constructor(opts: Options) {
+    this.client = new Client(opts);
+  }
+
+  async listWorkflows(hostname:string, githubRepoSlug:string,branch: string, filter?: string[]): Promise<Workflows[]>{
+    return this.client.listWorkflowsResponse(hostname, githubRepoSlug,branch,filter)
+  }
+
+  async listBranchesFromRepo(hostname:string, githubRepoSlug: string): Promise<RestEndpointMethodTypes['repos']['listBranches']['response']['data']> {
+    return this.client.listBranchesFromRepo(hostname,githubRepoSlug)
+  }
+
+  async getBranchDefaultFromRepo(hostname:string,githubRepoSlug:string):Promise<RestEndpointMethodTypes['repos']['get']['response']['data']['default_branch']>{
+    return this.client.getBranchDefaultFromRepo(hostname,githubRepoSlug)
+  }
+
+  async startWorkflowRun(hostname:string, workflowId: number, githubRepoSlug: string, branch: string, inputs?: {[key: string]: unknown}): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['data']>{
+    return this.client.startWorkflowRun(hostname,workflowId, githubRepoSlug, branch, inputs)
+  }
+
+  async stopWorkflowRun(hostname: string, runId: number, githubRepoSlug: string): Promise<RestEndpointMethodTypes['actions']['cancelWorkflowRun']['response']['status']> {
+    return this.client.stopWorkflowRun(hostname, runId, githubRepoSlug)
+  }
+  async listJobsForWorkflowRun(hostname:string,githubRepoSlug: string, id: number,pageSize?:number,page?:number): Promise<RestEndpointMethodTypes['actions']['listJobsForWorkflowRun']['response']['data']>{
+    return this.client.listJobsForWorkflowRun(hostname,githubRepoSlug, id, pageSize,page)
+  }
+  async getWorkflowRunById(hostname:string, githubRepoSlug: string, runId: number):Promise<RestEndpointMethodTypes['actions']['getWorkflowRun']['response']['data']> {
+    return this.client.getWorkflowRunById(hostname,githubRepoSlug,runId)
+  }
+  async downloadJobLogsForWorkflowRun(hostname:string, githubRepoSlug: string, jobId: number): Promise<RestEndpointMethodTypes['actions']['downloadJobLogsForWorkflowRun']['response']['data']>{
+    return this.client.downloadJobLogsForWorkflowRun(hostname,githubRepoSlug,jobId)
+  }
+  async getEnvironmentsList(hostname:string, githubRepoSlug: string):Promise<RestEndpointMethodTypes['repos']['getAllEnvironments']['response']['data']>{
+    return this.client.getEnvironmentsList(hostname,githubRepoSlug)
   }
 }
