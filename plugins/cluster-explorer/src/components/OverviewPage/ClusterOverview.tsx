@@ -136,7 +136,7 @@ export const ClusterOverview = () => {
         if (!services.items) throw new Error(services.message);
 
         const namespacesList: ClusterNamespace[] = namespaces.items?.map((namespace: NamespacesResponse) => {
-            return <div>{switchStatuses(namespace.status.phase as string)}{namespace.metadata?.name}</div>
+            return <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>{switchStatuses(namespace.status.phase as string)}{namespace.metadata?.name}</div>
         })
 
         const nodesList: ClusterNodes[] = nodes.items?.map((node: NodeResponse) => {
@@ -305,10 +305,10 @@ export const ClusterOverview = () => {
                     </Drawer>
 
                     <Grid item md={3} sm={12} >{/* left-side div: cluster info + capacity*/}
-                        <Grid container spacing={2}>
+                        <Grid container spacing={1}>
                             <Grid item md={12} sm={12} style={{maxHeight: "600px", overflow: "auto"}}>
                                 <InfoCard title="Cluster information">
-                                    <StructuredMetadataTable metadata={info} />
+                                    <StructuredMetadataTable dense={false} metadata={info} />
                                 </InfoCard>
                             </Grid>
                             {
