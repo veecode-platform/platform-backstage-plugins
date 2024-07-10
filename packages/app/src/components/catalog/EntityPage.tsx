@@ -28,6 +28,7 @@ import {
   isOrphan,
 } from '@backstage/plugin-catalog';
 import {
+  // EntityGithubActionsContent,
   isGithubActionsAvailable,
   // EntityGithubActionsContent,
 } from '@backstage-community/plugin-github-actions';
