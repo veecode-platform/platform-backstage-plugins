@@ -20,7 +20,7 @@ const GithubWorkflowsDetails = () => {
   
   const { id } = useRouteRefParams(buildRouteRef);
   const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entity as Entity);
+  const { projectName,hostname } = useEntityAnnotations(entity as Entity);
   const { getWorkflowById,listJobsForWorkflowRun } = useGithuWorkflowsContext();
   const [workflowRun,setWorkflowRun] = useState<WorkflowRun|null>(null);
   const [jobsRun, setJobsRun] = useState<Job[]|[]>([]);
@@ -28,8 +28,8 @@ const GithubWorkflowsDetails = () => {
   const navigate = useNavigate();
 
   const { loading, error } = useAsync(async (): Promise<void> => {
-    const workflowPromise = await getWorkflowById(Number(id), projectName);
-    const jobsPromise = await listJobsForWorkflowRun(projectName,Number(id));
+    const workflowPromise = await getWorkflowById(hostname, projectName, Number(id));
+    const jobsPromise = await listJobsForWorkflowRun(hostname,projectName,Number(id));
     const [workflow, jobs] = await Promise.all([workflowPromise, jobsPromise]);
     setWorkflowRun(workflow);
     setJobsRun(jobs);

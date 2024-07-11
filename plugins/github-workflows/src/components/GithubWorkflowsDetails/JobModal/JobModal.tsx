@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import '../../shared/globalstyle.css';
 import React, { useState } from 'react'
 import { Accordion, AccordionSummary, Box, CircularProgress, Fade, List, ListItem, ListItemAvatar, ListItemText, Modal, Tooltip, Typography, Zoom } from '@material-ui/core'
@@ -73,13 +72,13 @@ const JobLogsComponent : React.FC<JobLogsComponentProps> = (props) => {
     const {jobId,running } = props;
     const {downloadJobLogs} = useGithuWorkflowsContext();
     const { entity } = useEntity();
-    const { projectName } = useEntityAnnotations(entity as Entity);
+    const { projectName,hostname } = useEntityAnnotations(entity as Entity);
     const [jobLogs,setJobLogs] = useState<string>('No Values Found');
     const [open, setOpen] = React.useState(false);
     const {AccordionLogs,button,modalLog,modalLogContainer,log,normalLogContainer} = useModalStyles();
 
     const { loading, error } = useAsync(async (): Promise<void> => {
-        const logs = await downloadJobLogs(projectName,jobId);
+        const logs = await downloadJobLogs(hostname,projectName,jobId);
         const logText =  String(logs);
         setJobLogs(logText);
       }, []);

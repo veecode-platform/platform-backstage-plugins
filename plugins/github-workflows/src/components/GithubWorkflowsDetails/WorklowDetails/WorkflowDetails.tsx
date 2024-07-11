@@ -14,7 +14,7 @@ dayjs.extend(duration);
 
 export const WorkflowDetails: React.FC<WorkflowDetailsProps> = (props) => {
   const { runStartedAt,status,conclusion,updatedAt,avatar,author, branch, headCommit,repo } = props; 
-  const { workflowDetailsNavbar,itemContent,itemWrapper,workflowInfo, avatarImg,link } = useWorkflowDetailsStyles();
+  const { workflowDetailsNavbar,itemContent,itemWrapper,workflowInfo, avatarImg,link,statusWrapper } = useWorkflowDetailsStyles();
 
   return (
     <Paper variant="outlined" className={workflowDetailsNavbar}>
@@ -35,10 +35,10 @@ export const WorkflowDetails: React.FC<WorkflowDetailsProps> = (props) => {
         <Grid item lg={2} className={itemContent}>
           <div className={itemWrapper}>
             <Typography variant="subtitle2" color="textSecondary" align='center'>Status</Typography>
-            <Typography variant="h6" align='center'>
-              <WorkFlowStatus status={status} conclusion={conclusion} icon/>
-              {conclusion}
-             </Typography>
+            <div className={statusWrapper}>
+                <WorkFlowStatus status={status} conclusion={conclusion} icon/>
+                <Typography variant="h6">{conclusion}</Typography>
+            </div>
           </div>
         </Grid>
         <Grid item lg={2} className={itemContent}>
