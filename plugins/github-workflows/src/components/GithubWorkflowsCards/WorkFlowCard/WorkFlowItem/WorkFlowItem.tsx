@@ -1,4 +1,4 @@
-import { Box, Tooltip, Typography, makeStyles } from '@material-ui/core';
+import { Box, Tooltip, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import { WorkFlowStatus } from '../../../WorkFlowStatus';
 import { truncateString } from '../../../../utils/helpers';
@@ -7,39 +7,15 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../../../ModalComponent';
 import { StatusWorkflowEnum } from '../../../../utils/enums/WorkflowListEnum';
 import { useEntity } from '@backstage/plugin-catalog-react';
-import { WorkFlowItemProps } from '../types';
+import { WorkFlowItemProps } from './types';
+import { useWorkflowItemStyles } from './styles';
 
-const useStyles = makeStyles(theme => ({
-  workflow: {
-    padding: '.8rem 3rem',
-    background: 'transparent',
-    border: `1px solid ${theme.palette.border}`,
-    borderRadius: '30px',
-    fontSize: '1rem',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '1rem',
-    color: theme.palette.text.primary,
-    minWidth: '235px',
-    minHeight: '56px'
-  },
-  name:{
-    cursor: 'pointer'
-  },
-  clickable: {
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '.7rem'
-  }
-}));
 
-export const WorkFlowItem : React.FC<WorkFlowItemProps> = ({ id, status, conclusion, workflowName, parameters, lastRunId }) => {
+export const WorkFlowItem : React.FC<WorkFlowItemProps> = (props) => {
 
   const [showModal, setShowModal] = useState<boolean>(false);
-  const classes = useStyles();
+  const { id, status, conclusion, workflowName, parameters, lastRunId } = props;
+  const classes = useWorkflowItemStyles();
   const { entity } = useEntity();
 
   const handleShowModal = () => {
