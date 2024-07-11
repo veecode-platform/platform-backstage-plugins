@@ -2,32 +2,33 @@
 import React, { memo, useEffect, useState } from 'react';
 import { Select, SelectedItems } from '@backstage/core-components';
 import { useApi, errorApiRef, } from '@backstage/core-plugin-api';
-import { githubWorkflowsApiRef } from '../../api';
 import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
-import { Branches } from '../../utils/types';
+import { Branch } from '../../utils/types';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { OptionsProps } from './type';
 import { useGithuWorkflowsContext } from '../../context';
-
+import { githubWorkflowsApiRef } from '../../api';
 
 const SelectBranch = () => {
   
-  const [branches, setBranches] = useState<Branches[]>([]);
+  const [branches, setBranches] = useState<Branch[]>([]);
   const [options, setOptions] = useState<OptionsProps[]>([]);
   const [branchDefault, setBranchDefault ] = useState<string>('');
   const { branch, setBranchState } = useGithuWorkflowsContext();
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
   const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entity as Entity);
+  const { projectName,hostname } = useEntityAnnotations(entity as Entity);
 
   const getBranches = async () => {
     try{
-      const data = await api.listBranchesFromRepo(projectName);
-      if (data) {
-        setBranches(data as Branches[]);
-        setBranchDefault(data[0].name as string)
+      const branchesData = await api.listBranchesFromRepo(hostname,projectName);
+      const branchDefaultData = await api.getBranchDefaultFromRepo(hostname, projectName)
+
+      if (branchesData) {
+        setBranches(branchesData as Branch[]);
+        setBranchDefault(branchDefaultData)
       }
     }
     catch(e:any){
