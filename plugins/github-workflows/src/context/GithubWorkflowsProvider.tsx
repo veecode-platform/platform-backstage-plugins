@@ -94,12 +94,12 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
   const handleStartWorkflowRun = async (hostname:string,projectSlug: string, workFlowId: number, ) => { 
     try {
       const response = await api.startWorkflowRun(hostname, projectSlug, workFlowId,branch!, inputsWorkflowsParams as any);
-      if(response) return response;
-      return null
+      if(response === 204) return true;
+      return false
     }
     catch (e:any) {
       errorApi.post(e);
-      return null
+      return false
      }
   };
 
