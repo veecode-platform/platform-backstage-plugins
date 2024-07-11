@@ -58,7 +58,7 @@ export const Cards : React.FC<CardsProps> = ({ items, updateData }) => {
     <Paper>
       <Card>
         <CardHeader
-          title={TitleBar}
+          title={TitleBar} 
           action={ActionsCard}
          />
          <CardContent className={workflowsGroup}>
@@ -93,17 +93,17 @@ export const Cards : React.FC<CardsProps> = ({ items, updateData }) => {
 const WorkFlowCard = () => {
   
   const { entity } = useEntity();
-  const { projectName, workflows } = useEntityAnnotations(entity as Entity)
+  const { projectName, workflows, hostname } = useEntityAnnotations(entity as Entity)
   const { listAllWorkflows, branch, workflowsState, setWorkflowsState } = useGithuWorkflowsContext();
 
   const updateData = async ()=> {
-    const data = await listAllWorkflows(projectName, workflows as string[]);
+    const data = await listAllWorkflows(hostname,projectName, workflows as string[]);
     setWorkflowsState(data as WorkflowResultsProps[])
   }
 
   const { loading, error } = useAsync(async (): Promise<void> => {
     if(workflows){
-      const data = await listAllWorkflows(projectName, workflows);
+      const data = await listAllWorkflows(hostname,projectName, workflows);
       setWorkflowsState(data as WorkflowResultsProps[])
     }
 }, []);
@@ -133,7 +133,7 @@ const WorkFlowCard = () => {
         <Button
           variant="contained"
           color="primary"
-          href={`https://github.com/${projectName}/actions/new`}
+          href={`https://${hostname}/${projectName}/actions/new`}
         >
           Create new Workflow
         </Button>

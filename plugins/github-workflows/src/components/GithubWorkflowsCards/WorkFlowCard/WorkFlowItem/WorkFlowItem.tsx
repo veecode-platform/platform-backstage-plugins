@@ -22,6 +22,7 @@ const useStyles = makeStyles(theme => ({
     gap: '1rem',
     color: theme.palette.text.primary,
     minWidth: '235px',
+    minHeight: '56px'
   },
   name:{
     cursor: 'pointer'
