@@ -107,7 +107,7 @@ class Client {
     return response.data.default_branch;
   }
 
-  async startWorkflowRun(hostname:string, githubRepoSlug: string, workflowId: number,branch: string, inputs?: {[key: string]: unknown}): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['data']>{
+  async startWorkflowRun(hostname:string, githubRepoSlug: string, workflowId: number,branch: string, inputs?: {[key: string]: unknown}): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['status']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);
     const inputsParams = inputs || {};
@@ -118,7 +118,7 @@ class Client {
       ref: branch,
       inputs: inputsParams
     }); 
-    return response.data
+    return response.status
   }
   
   async stopWorkflowRun(hostname:string,githubRepoSlug: string, runId: number):Promise<RestEndpointMethodTypes['actions']['cancelWorkflowRun']['response']['status']>{
@@ -298,7 +298,7 @@ export class GithubWorkflowsClient implements GithubWorkflowsApi {
     return this.client.getBranchDefaultFromRepo(hostname,githubRepoSlug)
   }
 
-  async startWorkflowRun(hostname:string, githubRepoSlug: string, workflowId: number, branch: string, inputs?: {[key: string]: unknown}): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['data']>{
+  async startWorkflowRun(hostname:string, githubRepoSlug: string, workflowId: number, branch: string, inputs?: {[key: string]: unknown}): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['status']>{
     return this.client.startWorkflowRun(hostname,githubRepoSlug, workflowId, branch, inputs)
   }
 
