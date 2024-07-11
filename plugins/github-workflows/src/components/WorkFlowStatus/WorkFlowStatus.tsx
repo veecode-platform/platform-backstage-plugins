@@ -1,6 +1,12 @@
-import React from 'react'
-import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum'
-import { StatusAborted, StatusError, StatusOK, StatusPending, StatusRunning, StatusWarning } from '@backstage/core-components'
+import React from 'react';
+import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
+import { FaCircleCheck } from "react-icons/fa6";
+import { IoCloseCircle } from "react-icons/io5";
+import { MdBlock } from "react-icons/md";
+import { RiErrorWarningFill } from "react-icons/ri";
+import { MdPlayCircle } from "react-icons/md";
+import { Loading } from './loading';
+import { Queued } from './queued';
 
 type WorkFlowStatusProps = {
     status?: string,
@@ -8,46 +14,53 @@ type WorkFlowStatusProps = {
     icon?: boolean
 }
 
+const styles = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '.7rem'
+}
+
 export const WorkFlowStatus : React.FC<WorkFlowStatusProps> = ({ status, conclusion, icon }) => {
 
     if (!status) return null;
-
+   
     switch (status.toLocaleLowerCase()) {
         case StatusWorkflowEnum.queued:
         case StatusWorkflowEnum.pending:
         case StatusWorkflowEnum.waiting:
             return (
-                <>
-                    <StatusPending /> {!icon && "Queued"}
-                </>
+                <div style={styles}>
+                    <Queued/> {!icon && "Queued"}
+                </div>
             );
         case StatusWorkflowEnum.actionRequired:
         case StatusWorkflowEnum.neutral:
         case StatusWorkflowEnum.stale:
         case StatusWorkflowEnum.requested:
             return (
-                <>
-                    <StatusWarning /> {!icon && "Please wait"}
-                </>
+                <div style={styles}>
+                    <RiErrorWarningFill size={20} color="orange" /> {!icon && "Please wait"}
+                </div>
             );
         case StatusWorkflowEnum.failure:
         case StatusWorkflowEnum.timeOut:
             return (
-                <>
-                    <StatusError /> {!icon && "Error"}
-                </>
+                <div style={styles}>
+                    <IoCloseCircle size={20} color="#E2524B"/> {!icon && "Error"}
+                </div>
             );
         case StatusWorkflowEnum.aborted:
             return (
-                <>
-                    <StatusAborted /> {!icon && "Aborted"}
-                </>
+                <div style={styles}>
+                    <MdBlock size={20} color="#cdcdcd"/> {!icon && "Aborted"}
+                </div>
             );
         case StatusWorkflowEnum.inProgress:
             return (
-                <>
-                    <StatusRunning /> {!icon && "In progress"}
-                </>
+                <div style={styles}>
+                    <Loading/> {!icon && "In progress"}
+                </div>
             );
         case StatusWorkflowEnum.completed:
             switch (conclusion?.toLocaleLowerCase()) {
@@ -56,38 +69,38 @@ export const WorkFlowStatus : React.FC<WorkFlowStatusProps> = ({ status, conclus
                 case StatusWorkflowEnum.aborted:
                 case StatusWorkflowEnum.default:
                     return (
-                        <>
-                            <StatusAborted /> {!icon && "Aborted"}
-                        </>
+                        <div style={styles}>
+                            <MdBlock size={20} color="#cdcdcd" /> {!icon && "Aborted"}
+                        </div>
                     );
                 case StatusWorkflowEnum.timeOut:
                 case StatusWorkflowEnum.actionRequired:
                 case StatusWorkflowEnum.stale:
                 case StatusWorkflowEnum.neutral:
                     return (
-                        <>
-                            <StatusWarning /> {!icon && "Timed out"}
-                        </>
+                        <div style={styles}>
+                            <RiErrorWarningFill size={20} color="orange" /> {!icon && "Timed out"}
+                        </div>
                     );
                 case StatusWorkflowEnum.failure:
                 case null:
                     return (
-                        <>
-                            <StatusError /> {!icon && "Error"}
-                        </>
+                        <div style={styles}>
+                            <IoCloseCircle size={20} color="#E2524B"/> {!icon && "Error"}
+                        </div>
                     );
                 default:
                     return (
-                        <>
-                            <StatusOK /> {!icon && "Completed"}
-                        </>
+                        <div style={styles}>
+                            <FaCircleCheck size={20} color="#61AB5A"/> {!icon && "Completed"}
+                        </div>
                     );
             }
         default:
             return (
-                <>
-                    <StatusAborted /> {!icon && "Run Workflow"}
-                </>
+                <div style={styles}>
+                    <MdPlayCircle size={22} color="#cdcdcd"/>{!icon && "Run Workflow"}
+                </div>
             )
     }
 }

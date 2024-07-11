@@ -12,7 +12,7 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotations } from '../../hooks';
 import { ModalComponent } from '../ModalComponent';
-import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
+import { IoMdTime } from "react-icons/io";
 import { useWorkflowActionsStyles } from './styles';
 import { WorkFlowActionsProps } from './types';
 import { useGithuWorkflowsContext } from '../../context';
@@ -21,7 +21,7 @@ import { useGithuWorkflowsContext } from '../../context';
 export const WorkFlowActions : React.FC<WorkFlowActionsProps> = ({workflowId, status, conclusion, parameters}) => {
 
     const { entity } = useEntity();  
-    const { projectName } = useEntityAnnotations(entity as Entity);
+    const { projectName, hostname } = useEntityAnnotations(entity as Entity);
     const [showModal, setShowModal] = useState<boolean>(false);
     const [workFlowSelected, setWorkFlowSelected] = useState<WorkflowResultsProps>();
     const {inputsWorkflowsParams,  workflowsState, setWorkflowsState , handleStartWorkflowRun, handleStopWorkflowRun } = useGithuWorkflowsContext();
@@ -51,7 +51,7 @@ export const WorkFlowActions : React.FC<WorkFlowActionsProps> = ({workflowId, st
         return prevWorkflowsState;
       });
 
-      const response = await handleStartWorkflowRun(workFlowSelected?.id as number, projectName);
+      const response = await handleStartWorkflowRun(hostname,projectName,workFlowSelected?.id as number);
          if(response){
            setWorkflowsState((prevWorkflowsState) => {
              if (prevWorkflowsState) {
@@ -90,7 +90,7 @@ export const WorkFlowActions : React.FC<WorkFlowActionsProps> = ({workflowId, st
                 }
                 return handleStartWorkflow();
               case StatusWorkflowEnum.inProgress:
-                await handleStopWorkflowRun(workFlowSelected.lastRunId as number, projectName);
+                await handleStopWorkflowRun(hostname,projectName,workFlowSelected.lastRunId as number);
                 setWorkflowsState((prevWorkflowsState) => {
                   if (prevWorkflowsState) {
                     const updatedWorkflows = prevWorkflowsState.map((workflow) => {
@@ -133,7 +133,7 @@ export const WorkFlowActions : React.FC<WorkFlowActionsProps> = ({workflowId, st
         {status.toLocaleLowerCase() === StatusWorkflowEnum.queued && (
            <Tooltip title="Please wait" placement="right">
             <button className={buttonWait} disabled>
-              <RadioButtonCheckedIcon
+              <IoMdTime
               className={waitResponse}
               onClick={()=>handleClickActions(StatusWorkflowEnum.queued)}
               />
