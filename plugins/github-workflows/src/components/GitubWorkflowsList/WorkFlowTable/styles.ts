@@ -21,6 +21,12 @@ export const useWorkflowTableStyles = makeStyles(theme => ({
       alignItems: 'center',
       color: theme.palette.border,
     },
+    name:{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '.7rem'
+    },
     action: {
       width: '90%',
       cursor: 'pointer',

@@ -28,6 +28,7 @@ export const useModalStyles = makeStyles(theme=>({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
+    gap: '.4rem',
     marginTop: '.5rem',
     '& time':{
         fontWeight: 'bold'

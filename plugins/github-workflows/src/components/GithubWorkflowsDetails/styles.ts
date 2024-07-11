@@ -41,6 +41,12 @@ export const useWorkflowDetailsStyles = makeStyles<Theme>(theme=>({
       height: 'auto',
       borderRadius:'50%'
     },
+    statusWrapper:{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '.5rem'
+    },
     link:{
       color: theme.palette.link,
       textAlign: 'center',
