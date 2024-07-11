@@ -5,8 +5,9 @@ export const useWorkflowActionsStyles = makeStyles({
       animation: '$spin 2s linear infinite'
     },
     waitResponse:{
-      animation: '$pulse 2s linear infinite',
-      color: '#FEF050',
+     // animation: '$pulse 2s linear infinite',
+     fontSize: '20px',
+     color: '#CDCDCD65',
       cursor: 'wait'
     },
     buttonWait:{
