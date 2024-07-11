@@ -13,12 +13,12 @@ import { EnvironmentFieldProps } from './types';
 const EnvironmentFieldComponent : React.FC<EnvironmentFieldProps> = ({name,description,value, defaultValue, required,onSelect,onTouch})=> {
 
     const {entity} = useEntity();
-    const {projectName} = useEntityAnnotations(entity);
+    const {projectName,hostname} = useEntityAnnotations(entity);
     const { listAllEnvironments } = useGithuWorkflowsContext();
     const {label,formControl} = useModalStyles();
 
     const {error, loading, value: options} = useAsync(async()=>{
-        const data = await listAllEnvironments(projectName);
+        const data = await listAllEnvironments(hostname,projectName);
         const environmentOptions : string[] = [''];
         if(data && data.environments){
             data.environments.map(environment => environmentOptions.push(environment.name))
