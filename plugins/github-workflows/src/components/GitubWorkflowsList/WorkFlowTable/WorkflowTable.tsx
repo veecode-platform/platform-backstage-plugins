@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @backstage/no-undeclared-imports */
 import React, { memo, useEffect, useState } from 'react';
 import { Table, TableColumn, Progress, ResponseErrorPanel, Link, EmptyState } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
@@ -25,16 +23,18 @@ import { useWorkflowTableStyles } from './styles';
 import { useGithuWorkflowsContext } from '../../../context';
 import { DenseTableProps } from './types';
 import SelectBranch from '../../SelectBranch/SelectBranch';
+import { IoOpenOutline } from "react-icons/io5";
 
 
 export const DenseTable : React.FC<DenseTableProps> = ({ items, updateData} ) => {
   
-  const { entity } = useEntity();
   const [ showModal, setShowModal ] = useState<boolean>(false);
   const [parametersState, setParametersState] = useState<WorkflowDispatchParameters[]|null>(null)
   const [ loading, setLoading] = useState<boolean>(false);
+  const { entity } = useEntity();
+  const { projectName, hostname } = useEntityAnnotations(entity as Entity);
   const navigate = useNavigate();
-  const {action,source,clickable,title,options} = useWorkflowTableStyles();
+  const {action,source,clickable,title,options,name} = useWorkflowTableStyles();
 
   const refresh = async ()=> {
     setLoading(true)
@@ -58,9 +58,27 @@ export const DenseTable : React.FC<DenseTableProps> = ({ items, updateData} ) =>
     { title: 'Logs', field: 'logs', width:'auto', align:'center'}
   ];
 
+
   const data = items.map(item => {
     return {
-      name: item.name,
+      name: (
+        <div className={name}>
+          {item.name} 
+           <Tooltip
+                title={
+                  item.lastRunId ? 'Open the actions panel on github...' : 'First, run the workflow!'
+                }
+                placement="bottom"
+              >
+                <Link to={item.lastRunId ? `https://${hostname}/${projectName}/actions/runs/${item.lastRunId}` : '#'} target='_blank'>
+                <IoOpenOutline
+                  className={clickable}
+                  color={item.lastRunId ? 'primary' : 'disabled'}
+                />
+                </Link>
+              </Tooltip>
+        </div>
+      ),
       status: (
         <WorkFlowStatus
           status={
@@ -189,12 +207,12 @@ export const DenseTable : React.FC<DenseTableProps> = ({ items, updateData} ) =>
 const WorkflowTable = () => {
 
   const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entity as Entity);
+  const { projectName, hostname } = useEntityAnnotations(entity as Entity);
   const [ loadingState, setLoadingState ] = useState(true);
   const { branch, listAllWorkflows, workflowsState, setWorkflowsState } = useGithuWorkflowsContext();
 
   const updateData = async ()=> {
-    const data = await listAllWorkflows(projectName);
+    const data = await listAllWorkflows(hostname,projectName);
     setWorkflowsState(data as WorkflowResultsProps[])
   }
   
@@ -210,6 +228,7 @@ const WorkflowTable = () => {
 
   useEffect(()=>{
     updateData();
+// eslint-disable-next-line react-hooks/exhaustive-deps
 },[branch]);
 
 
@@ -228,7 +247,7 @@ const WorkflowTable = () => {
         <Button
           variant="contained"
           color="primary"
-          href={`https://github.com/${projectName}/actions/new`}
+          href={`https://${hostname}/${projectName}/actions/new`}
         >
           Create new Workflow
         </Button>
