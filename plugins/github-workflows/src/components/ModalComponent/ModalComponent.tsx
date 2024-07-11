@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -73,6 +72,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
       data[p.name] = p.default;
     });
     setInputWorkflow(data);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
