@@ -2,9 +2,9 @@ import React from 'react';
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoCloseCircle } from "react-icons/io5";
-import { MdBlock } from "react-icons/md";
 import { RiErrorWarningFill } from "react-icons/ri";
 import { MdPlayCircle } from "react-icons/md";
+import { PiWarningOctagon } from "react-icons/pi";
 import { Loading } from './loading';
 import { Queued } from './queued';
 
@@ -53,7 +53,7 @@ export const WorkFlowStatus : React.FC<WorkFlowStatusProps> = ({ status, conclus
         case StatusWorkflowEnum.aborted:
             return (
                 <div style={styles}>
-                    <MdBlock size={20} color="#cdcdcd"/> {!icon && "Aborted"}
+                    <PiWarningOctagon size={20} color="#cdcdcd"/> {!icon && "Aborted"}
                 </div>
             );
         case StatusWorkflowEnum.inProgress:
@@ -70,7 +70,7 @@ export const WorkFlowStatus : React.FC<WorkFlowStatusProps> = ({ status, conclus
                 case StatusWorkflowEnum.default:
                     return (
                         <div style={styles}>
-                            <MdBlock size={20} color="#cdcdcd" /> {!icon && "Aborted"}
+                            <PiWarningOctagon size={22} color="#cdcdcd" /> {!icon && "Aborted"}
                         </div>
                     );
                 case StatusWorkflowEnum.timeOut:
