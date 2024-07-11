@@ -110,12 +110,13 @@ class Client {
   async startWorkflowRun(hostname:string, githubRepoSlug: string, workflowId: number,branch: string, inputs?: {[key: string]: unknown}): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['data']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);
+    const inputsParams = inputs || {};
     const response = await octokit.actions.createWorkflowDispatch({
       owner,
       repo,
       workflow_id: workflowId,
       ref: branch,
-      inputs
+      inputs: inputsParams
     }); 
     return response.data
   }
