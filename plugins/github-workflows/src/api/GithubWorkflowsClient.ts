@@ -180,15 +180,11 @@ class Client {
 
     const data : GithubFileResponse = response.data as GithubFileResponse;
 
-    // const content = data.content as any;
-    // const yamlContent = YAML.load(
-    //   Buffer.from(content,'base64').toString('utf8')
-    // ) as any;
+    const yamlContent = YAML.load(
+      Buffer.from(data.content, 'base64').toString('utf8'),
+    ) as any;
 
-    // // eslint-disable-next-line no-console
-    // console.log("chamaa",yamlContent)
-
-    return data;
+    return yamlContent;
 
   }
 
