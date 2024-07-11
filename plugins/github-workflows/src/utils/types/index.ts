@@ -57,10 +57,20 @@ export interface WorkflowRunsResponseFromApi {
 }
 
 /** @public */
-export interface Branches {
+export interface Branch {
     name: string;
     commit?: Commit,
-    protected: boolean;
+    protected: boolean,
+    protection: Protection,
+    protection_url: string
+}
+
+/** @public */
+export interface Protection {
+  required_status_checks:{
+    enforcement_level: string,
+    contexts: string[]
+  }
 }
 
 /** @public */
