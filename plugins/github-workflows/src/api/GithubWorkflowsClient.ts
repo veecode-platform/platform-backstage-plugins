@@ -3,9 +3,9 @@ import { ScmAuthApi } from "@backstage/integration-react";
 import { Octokit, RestEndpointMethodTypes } from "@octokit/rest";
 import { GithubWorkflowsApi } from "./GithubWorkflowsApi";
 import { regexFileName } from "../utils/helpers";
-// import YAML from "js-yaml"
+import YAML from "js-yaml"
 import { WorkflowDispatchParameters } from "../utils/types";
-import { Options, Workflows } from "./types";
+import { GithubFileResponse, Options, Workflows } from "./types";
 import { StatusWorkflowEnum } from "../utils/enums/WorkflowListEnum";
 import { readGithubIntegrationConfigs } from "@backstage/integration";
 
@@ -178,13 +178,17 @@ class Client {
       branch
     });
 
-    return response.data
+    const data : GithubFileResponse = response.data as GithubFileResponse;
 
-    // const content = response.data as any;
+    // const content = data.content as any;
     // const yamlContent = YAML.load(
     //   Buffer.from(content,'base64').toString('utf8')
     // ) as any;
-    // return yamlContent;
+
+    // // eslint-disable-next-line no-console
+    // console.log("chamaa",yamlContent)
+
+    return data;
 
   }
 
