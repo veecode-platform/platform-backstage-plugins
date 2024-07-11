@@ -24,11 +24,11 @@ export interface GithubWorkflowsApi {
     /**
     * dispatch a run from a branch of a workflow
     */
-    startWorkflowRun(hostname:string, workflowId: number, githubRepoSlug: string, branch: string, inputs?: {[key: string]: unknown}): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['data']>;
+    startWorkflowRun(hostname:string, githubRepoSlug: string, workflowId: number, branch: string, inputs?: {[key: string]: unknown}): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['data']>;
     /**
     * stop a run from a worflow
     */
-    stopWorkflowRun(hostname: string, runId: number, githubRepoSlug: string): Promise<RestEndpointMethodTypes['actions']['cancelWorkflowRun']['response']['status']>;
+    stopWorkflowRun(hostname: string, githubRepoSlug: string, runId: number): Promise<RestEndpointMethodTypes['actions']['cancelWorkflowRun']['response']['status']>;
     /**
     * list all jobs from a workflow run
     */
