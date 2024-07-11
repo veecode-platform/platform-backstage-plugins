@@ -24,7 +24,7 @@ export interface GithubWorkflowsApi {
     /**
     * dispatch a run from a branch of a workflow
     */
-    startWorkflowRun(hostname:string, githubRepoSlug: string, workflowId: number, branch: string, inputs?: {[key: string]: unknown}): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['data']>;
+    startWorkflowRun(hostname:string, githubRepoSlug: string, workflowId: number, branch: string, inputs?: {[key: string]: unknown}): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['status']>;
     /**
     * stop a run from a worflow
     */
