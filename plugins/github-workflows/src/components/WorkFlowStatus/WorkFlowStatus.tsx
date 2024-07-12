@@ -6,6 +6,7 @@ import { RiErrorWarningFill } from "react-icons/ri";
 import { MdPlayCircle } from "react-icons/md";
 import { PiWarningOctagon } from "react-icons/pi";
 import { Loading } from './loading';
+import { Queued } from './queued';
 
 type WorkFlowStatusProps = {
     status?: string,
@@ -30,7 +31,7 @@ export const WorkFlowStatus : React.FC<WorkFlowStatusProps> = ({ status, conclus
         case StatusWorkflowEnum.waiting:
             return (
                 <div style={styles}>
-                    <Loading/> {!icon && "Queued"}
+                    <Queued/> {!icon && "Queued"}
                 </div>
             );
         case StatusWorkflowEnum.actionRequired:
