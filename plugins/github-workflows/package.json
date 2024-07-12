@@ -1,6 +1,6 @@
 {
   "name": "@veecode-platform/backstage-plugin-github-workflows",
-  "version": "0.5.15",
+  "version": "0.5.17",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "license": "Apache-2.0",
@@ -10,8 +10,14 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "frontend-plugin"
+    "role": "frontend-plugin",
+    "pluginId": "github-workflows",
+    "pluginPackages": [
+      "@veecode-platform/backstage-plugin-github-workflows",
+      "@veecode-platform/backstage-plugin-github-workflows-common"
+    ]
   },
+  "sideEffects": false,
   "scripts": {
     "start": "backstage-cli package start",
     "build": "backstage-cli package build",

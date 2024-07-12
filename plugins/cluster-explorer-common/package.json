@@ -1,7 +1,7 @@
 {
   "name": "@veecode-platform/backstage-plugin-cluster-explorer-common",
   "description": "Common functionalities for the cluster-explorer plugin",
-  "version": "0.2.15",
+  "version": "0.2.17",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "license": "Apache-2.0",
@@ -12,7 +12,12 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "common-library"
+    "role": "common-library",
+    "pluginId": "cluster-explorer",
+    "pluginPackages": [
+      "@veecode-platform/backstage-plugin-cluster-explorer",
+      "@veecode-platform/backstage-plugin-cluster-explorer-common"
+    ]
   },
   "sideEffects": false,
   "scripts": {
