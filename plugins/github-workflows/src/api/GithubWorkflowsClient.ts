@@ -75,13 +75,13 @@ class Client {
     return response.data.workflow_runs
   }
 
-  async listWorkflowRunsTotalCount(hostname:string, githubRepoSlug:string, branch:string):Promise<RestEndpointMethodTypes['actions']['listWorkflowRuns']['response']['data']['total_count']>{
+  async listWorkflowRunsTotalCount(hostname:string, githubRepoSlug:string, workflowId:number):Promise<RestEndpointMethodTypes['actions']['listWorkflowRuns']['response']['data']['total_count']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);
-    const response = await octokit.actions.listWorkflowRunsForRepo({
+    const response = await octokit.actions.listWorkflowRuns({
       owner,
       repo,
-      branch
+      workflow_id: workflowId
     });
     return response.data.total_count
   }
@@ -107,10 +107,19 @@ class Client {
     return response.data.default_branch;
   }
 
-  async startWorkflowRun(hostname:string, githubRepoSlug: string, workflowId: number,branch: string, inputs?: {[key: string]: unknown}): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['status']>{
+  async startWorkflowRun(hostname:string, githubRepoSlug: string, workflowId: number, branch: string, inputs?: {[key: string]: unknown}): Promise<RestEndpointMethodTypes['actions']['createWorkflowDispatch']['response']['status']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);
     const inputsParams = inputs || {};
+    
+    const totalWorkflowRunsBefore = await this.listWorkflowRunsTotalCount(
+      hostname,
+      githubRepoSlug,
+      workflowId,
+    );
+    let totalWorkflowRunsAfter = totalWorkflowRunsBefore;
+    const loadTime = 3000;
+
     const response = await octokit.actions.createWorkflowDispatch({
       owner,
       repo,
@@ -118,9 +127,23 @@ class Client {
       ref: branch,
       inputs: inputsParams
     }); 
-    return response.status
+
+    while (totalWorkflowRunsAfter === totalWorkflowRunsBefore) {
+      await this.waitTime(loadTime);
+      totalWorkflowRunsAfter = await this.listWorkflowRunsTotalCount(
+        hostname,
+        githubRepoSlug,
+        workflowId,
+      );
+    }
+
+    return response.status;
   }
-  
+
+  async waitTime(time: number) {
+    return await new Promise(r => setTimeout(r, time));
+  }
+
   async stopWorkflowRun(hostname:string,githubRepoSlug: string, runId: number):Promise<RestEndpointMethodTypes['actions']['cancelWorkflowRun']['response']['status']>{
     const octokit = await this.getOctokit(hostname);
     const { owner, repo } = this.parseRepo(githubRepoSlug);

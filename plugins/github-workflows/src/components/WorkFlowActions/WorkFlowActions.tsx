@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import React, { useEffect, useState } from 'react';
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 import SyncIcon from '@material-ui/icons/Sync';
@@ -22,7 +23,7 @@ export const WorkFlowActions: React.FC<WorkFlowActionsProps> = ({ workflowId, st
   const { projectName, hostname } = useEntityAnnotations(entity as Entity);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [workFlowSelected, setWorkFlowSelected] = useState<WorkflowResultsProps>();
-  const { inputsWorkflowsParams, workflowsState, setWorkflowsState, handleStartWorkflowRun, handleStopWorkflowRun, getWorkflowById } = useGithuWorkflowsContext();
+  const { inputsWorkflowsParams, workflowsState, setWorkflowsState, handleStartWorkflowRun, handleStopWorkflowRun, listAllWorkflows } = useGithuWorkflowsContext();
   const { buttonWait, waitResponse, inProgress } = useWorkflowActionsStyles();
   const errorApi = useApi(errorApiRef);
 
@@ -30,58 +31,48 @@ export const WorkFlowActions: React.FC<WorkFlowActionsProps> = ({ workflowId, st
     setShowModal(!showModal)
   }
 
-  const pollWorkflowStatus = async (workflowIdParam: number) => {
-    let isCompleted = false;
+  const updateWorkflowState = (workflowIdParam: number) => {
+    let intervalId: NodeJS.Timeout;
+    let time = 0;
+  
+    const checkWorkflowStatus = async () => {
+      time += 1;
+      const workflows = await listAllWorkflows(hostname, projectName);
 
-    while (!isCompleted) {
-      await new Promise((resolve) => setTimeout(resolve, 5000));
-
-      const workflow = await getWorkflowById(hostname, projectName, workflowIdParam);
-
-      if (workflow && workflow.status === StatusWorkflowEnum.completed) {
-        setWorkflowsState((prevWorkflowsState) => {
-          if (prevWorkflowsState) {
-            const updatedWorkflows = prevWorkflowsState.map((w) => {
-              if (w.id === workflowIdParam) {
-                return {
-                  ...w,
-                  status: workflow.status,
-                  conclusion: workflow.conclusion ?? '',
-                };
-              }
-              return w;
-            });
-            return updatedWorkflows;
+      if (workflows) {
+        const workflowNewState = workflows.find(w => w.id === workflowIdParam);
+        if (workflowNewState) {
+          setWorkflowsState((prevWorkflowsState) => {
+            if (prevWorkflowsState) {
+              const updatedWorkflows = prevWorkflowsState.map((workflow) => {
+                if (workflow.id === workflowNewState.id) {
+                  return {
+                    ...workflow,
+                    lastRunId: workflowNewState.lastRunId,
+                    status: workflowNewState.status,
+                    conclusion: workflowNewState.conclusion,
+                  };
+                }
+                return workflow;
+              });
+              return updatedWorkflows;
+            }
+            return prevWorkflowsState;
+          });
+  
+          if (workflowNewState.status === StatusWorkflowEnum.completed) {
+            clearInterval(intervalId);
           }
-          return prevWorkflowsState;
-        });
-        isCompleted = true;
-      } else {
-        setWorkflowsState((prevWorkflowsState) => {
-          if (prevWorkflowsState) {
-            const updatedWorkflows = prevWorkflowsState.map((w) => {
-              if (w.id === workflowIdParam) {
-                return {
-                  ...w,
-                  lastRunId: w.lastRunId ?? 0,
-                  status: w.status ?? '',
-                  conclusion: w.conclusion ?? '',
-                };
-              }
-              return w;
-            });
-            return updatedWorkflows;
-          }
-          return prevWorkflowsState;
-        });
+
+        }
       }
-    }
+    };
+    intervalId = setInterval(checkWorkflowStatus, 2000); 
   };
-
-
+  
   const handleStartWorkflow = async () => {
     if (status === StatusWorkflowEnum.pending || status === StatusWorkflowEnum.queued) return;
-
+  
     setWorkflowsState((prevWorkflowsState) => {
       if (prevWorkflowsState) {
         const updatedWorkflows = prevWorkflowsState.map((workflow) => {
@@ -100,28 +91,11 @@ export const WorkFlowActions: React.FC<WorkFlowActionsProps> = ({ workflowId, st
     });
 
     const response = await handleStartWorkflowRun(hostname, projectName, workFlowSelected?.id as number);
-    if (response && workFlowSelected) {
-      setWorkflowsState((prevWorkflowsState) => {
-        if (prevWorkflowsState) {
-          const updatedWorkflows = prevWorkflowsState.map((workflow) => {
-            if (workflow.id === workFlowSelected.id) {
-              return {
-                ...workflow,
-                status: response.status,
-                conclusion: response.conclusion,
-                lastRunId: response.id,
-              };
-            }
-            return workflow;
-          });
-          return updatedWorkflows;
-        }
-        return prevWorkflowsState;
-      });
-
-      pollWorkflowStatus(workFlowSelected.id!);
+    if (response && workFlowSelected && workFlowSelected.id) { 
+        updateWorkflowState(workFlowSelected.id as number)
     }
   };
+  
 
   const handleClickActions = async (statusParams: string): Promise<void> => {
     try {
