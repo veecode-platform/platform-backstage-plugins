@@ -52,9 +52,17 @@ yarn add --cwd packages/app @veecode-platform/backstage-plugin-github-workflows
 
 We'll divide the configuration into three steps:
 
-1- Proxy Configuration.
+1- Configure the apiBaseUrl correctly in integrations, like this:
 
-1.1 - Using github auth provider:
+```diff
+integrations:
+   github:
+     - host: github.com
++      apiBaseUrl: https://api.github.com/   // or according to your instance
+       token: ${GITHUB_TOKEN_SECRET}
+```
+
+2- Add github auth provider:
 
 > :information_source: Make sure you have an github auth provider in your devportal. See how [Add Github Auth Provider 📃](https://backstage.io/docs/auth/github/provider)
 
@@ -68,19 +76,7 @@ auth:
         clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
 ```
 
-```yaml
-proxy:
-  '/github/api':
-    target: https://api.github.com/repos
-    allowedHeaders: ['Authorization', 'X-GitHub-Api-Version']
-    headers: 
-      Accept: application/vnd.github+json
-      X-GitHub-Api-Version: "2022-11-28"
-```
-
-
-
-2- To trigger workflows directly from our component, it's important to add the ` workflow_dispatch:` step in our GitHub workflow, like this:
+3- To trigger workflows directly from our component, it's important to add the ` workflow_dispatch:` step in our GitHub workflow, like this:
 
 ```diff
 # Workflow Example
@@ -111,7 +107,7 @@ Even if no parameters are passed to this key, it must be present in the file to 
 
 
 
-3- We need a primary annotation, commonly used by all Backstage components,`github.com/project-slug`, where the project name is set.
+4- We need a primary annotation, commonly used by all Backstage components,`github.com/project-slug`, where the project name is set.
 
 As a main prerequisite, this annotation must be declared in the `catalog-info.yaml`of the component that will receive this functionality.
 
