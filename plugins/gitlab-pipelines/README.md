@@ -156,6 +156,7 @@ proxy:
   endpoints:
     '/gitlab/api':
       target: https://gitlab.com/api/v4  #or https://gitlab.company.com/api/v4 (According to the version of your instance)
+      credentials: require
       allowedHeaders: ['Authorization', 'Content-Type']
       headers:
         Accept: application/json 

@@ -35,17 +35,23 @@ jobs:
       - name: build workspace plugins
         run: yarn backstage-cli repo build #yarn workspaces foreach run backstage-cli package build
 
-      - name: bump plugins version
-        run: yarn workspaces foreach -v version patch
+      #- name: bump plugins version
+      #  run: yarn workspaces foreach -v version patch
       
-      - name: Prepare workspaces.packages
-        run: jq '.workspaces.packages = ["plugins/*"]' package.json > tmp.json && mv tmp.json package.json
+      #- name: Prepare workspaces.packages
+      #  run: jq '.workspaces.packages = ["plugins/*"]' package.json > tmp.json && mv tmp.json package.json
 
-      - name: publish plugins on npm
-        # run: yarn workspaces foreach npm publish --access public
+      - name: publish plugins with lerna
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --workspaces=true
+        run : yarn lerna publish from-package --yes
+
+
+      #- name: publish plugins on npm
+      #  # run: yarn workspaces foreach npm publish --access public
+      #  env:
+      #    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #  run: npm publish --workspaces=true
 
       - uses: EndBug/add-and-commit@v9
         with:
