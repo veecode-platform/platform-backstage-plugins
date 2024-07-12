@@ -1,5 +1,7 @@
 # Infracost Plugin
 
+<br>
+
 ## Intro 💡
 
 The **Infracost** plugin provides a graphic representation of the application's cost estimate in its respective provider. <br>
