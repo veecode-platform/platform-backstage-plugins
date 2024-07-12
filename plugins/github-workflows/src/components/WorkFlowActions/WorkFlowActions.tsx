@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import React, { useEffect, useState } from 'react';
 import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 import SyncIcon from '@material-ui/icons/Sync';
@@ -32,11 +31,10 @@ export const WorkFlowActions: React.FC<WorkFlowActionsProps> = ({ workflowId, st
   }
 
   const updateWorkflowState = (workflowIdParam: number) => {
+    // eslint-disable-next-line prefer-const
     let intervalId: NodeJS.Timeout;
-    let time = 0;
   
     const checkWorkflowStatus = async () => {
-      time += 1;
       const workflows = await listAllWorkflows(hostname, projectName);
 
       if (workflows) {
