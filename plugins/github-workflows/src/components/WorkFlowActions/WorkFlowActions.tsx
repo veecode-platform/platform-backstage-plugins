@@ -90,7 +90,12 @@ export const WorkFlowActions: React.FC<WorkFlowActionsProps> = ({ workflowId, st
 
     const response = await handleStartWorkflowRun(hostname, projectName, workFlowSelected?.id as number);
     if (response && workFlowSelected && workFlowSelected.id) { 
+      /**
+       *  Force a timeout to compensate for the github API delay
+       */
+       setTimeout(()=>{
         updateWorkflowState(workFlowSelected.id as number)
+       },10000)
     }
   };
   
