@@ -72,6 +72,7 @@ auth:
 proxy:
   '/github/api':
     target: https://api.github.com/repos
+    credentials: require
     allowedHeaders: ['Authorization', 'X-GitHub-Api-Version']
     headers: 
       Accept: application/vnd.github+json

@@ -44,6 +44,7 @@ proxy:
 
    "/kong-manager/api":
         target: https://api.manager.apr.vee.codes/default
+        credentials: require
         allowedHeaders: ['Authorization', 'Content-Type']
         headers: 
           Authorization: Basic ${KONG_ACCESS_TOKEN_}
@@ -52,6 +53,7 @@ proxy:
 
     "/kong-other-manager/api":          # In case of more than one instance
       target: https://api.manager.apr.vee.codes/default
+      credentials: require
       allowedHeaders: ['Authorization', 'Content-Type']
       headers: 
         Authorization: Basic ${KONG_ACCESS_TOKEN_}
