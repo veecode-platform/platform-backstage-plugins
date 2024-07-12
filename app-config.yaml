@@ -60,17 +60,16 @@ proxy:
       credentials: require
       allowedHeaders: ['Authorization', 'X-GitHub-Api-Version']
       headers: 
-        #Authorization: Bearer ${GITHUB_TOKEN_SECRET}
         Accept: application/vnd.github+json
         X-GitHub-Api-Version: "2022-11-28"
     
     '/gitlab/api':
       target: https://gitlab.com/api/v4
       credentials: require
-      allowedHeaders: ['PRIVATE-TOKEN']
+      allowedHeaders: ['Authorization', 'Content-Type']
       headers:
-        PRIVATE-TOKEN: ${GITLAB_TOKEN_SECRET}
-        Accept: application/json
+        Accept: application/json 
+        Content-Type: application/json
       
     '/kong-manager/api':
       target: https://api.manager.apr.vee.codes
