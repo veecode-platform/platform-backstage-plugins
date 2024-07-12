@@ -118,7 +118,7 @@ class Client {
       workflowId,
     );
     let totalWorkflowRunsAfter = totalWorkflowRunsBefore;
-    const loadTime = 3000;
+    const loadTime = 1500;
 
     const response = await octokit.actions.createWorkflowDispatch({
       owner,
