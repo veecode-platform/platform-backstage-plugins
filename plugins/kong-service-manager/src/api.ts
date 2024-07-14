@@ -1,5 +1,5 @@
 import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
-import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse, PluginPerCategory, Options, KongServiceManagerApi } from './utils/types';
+import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse, PluginPerCategory, Options, KongServiceManagerApi, CreateRoute } from './utils/types';
 import { PluginsInfoData } from "../src/data/data"
 
 export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
@@ -222,6 +222,34 @@ class Client implements KongServiceManagerApi {
         return mapedRoutesResponse
     }
 
+    async createRouteFromService(workspace:string, serviceIdOrName: string, config: CreateRoute, proxyPath?: string): Promise<any> {
+        const body = { ...config }
+        const headers: RequestInit = {
+            method: "POST",
+            body: JSON.stringify(body)
+        }
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes`, proxyPath, headers)
+        return response
+    }
+
+    async editRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute, proxyPath?: string): Promise<any> {
+        const body = { ...config }
+        const headers: RequestInit = {
+            method: "PATCH",
+            body: JSON.stringify(body)
+        }
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, proxyPath, headers)
+        return response
+    }
+
+    async removeRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string): Promise<any> {
+        const headers: RequestInit = {
+            method: "DELETE",
+        }
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, proxyPath, headers)
+        return response.message
+    }
+
     async getServiceInfo(workspace:string,serviceIdOrName: string, proxyPath?: string): Promise<ServiceInfoResponse> {
         const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}`, proxyPath)
         return response
@@ -261,8 +289,20 @@ export class KongServiceManagerApiClient implements KongServiceManagerApi {
         return this.client.removeServicePlugin(workspace,serviceIdOrName, pluginId, proxyPath)
     }
 
-    async getRoutesFromService(workspace:string,serviceIdOrName: string, proxyPath?: string | undefined ): Promise<RoutesResponse[]> {
+    async getRoutesFromService(workspace:string, serviceIdOrName: string, proxyPath?: string | undefined ): Promise<RoutesResponse[]> {
         return this.client.getRoutesFromService(workspace,serviceIdOrName, proxyPath)
+    }
+
+    async createRouteFromService(workspace:string, serviceIdOrName: string, config: CreateRoute, proxyPath?: string | undefined ): Promise<any> {
+        return this.client.createRouteFromService(workspace, serviceIdOrName, config, proxyPath)
+    }
+
+    async editRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute, proxyPath?: string | undefined ): Promise<any> {
+        return this.client.editRouteFromService(workspace, serviceIdOrName, routeIdOrName, config, proxyPath)
+    }
+
+    async removeRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string | undefined ): Promise<any> {
+        return this.client.removeRouteFromService(workspace, serviceIdOrName, routeIdOrName, proxyPath)
     }
 
     async getServiceInfo(workspace:string,serviceIdOrName: string, proxyPath?: string | undefined ): Promise<ServiceInfoResponse> {

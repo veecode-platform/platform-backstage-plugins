@@ -16,6 +16,12 @@ export interface KongServiceManagerApi {
 
     getRoutesFromService(workspace:string,serviceIdOrName: string, proxyPath: string): Promise<RoutesResponse[]>;
 
+    createRouteFromService(workspace:string, serviceIdOrName: string, config: CreateRoute, proxyPath?: string | undefined ): Promise<any>;
+
+    editRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute, proxyPath?: string | undefined ): Promise<any>;
+
+    removeRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string | undefined ): Promise<any>;
+
     getServiceInfo(workspace:string,serviceIdOrName: string, proxyPath: string): Promise<ServiceInfoResponse>;
 
     getAllEnabledPlugins(workspace:string,serviceIdOrName: string, proxyPath: string, searchFilter?: string): Promise<PluginPerCategory[]>;
@@ -100,5 +106,22 @@ export interface ServiceInfoResponse {
     tags: string[],
     description: string,
   }
-  
-  
+
+  export interface CreateRoute {
+    name?: string;
+    protocols: string[];
+    methods: string[];
+    hosts: Array<{ id: string; value: string }>;
+    paths: Array<{ id: string; value: string }>;
+    headers: Array<{ id: string; value: string }>;
+    https_redirect_status_code: number;
+    regex_priority: number;
+    strip_path: boolean;
+    path_handling: "v0" | "v1";
+    preserve_host: boolean;
+    request_buffering: boolean;
+    response_buffering: boolean;
+    tags: string[];
+
+  }
+

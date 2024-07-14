@@ -6,7 +6,7 @@ import React, { ReactNode, useContext, useEffect } from "react";
 import { useState } from "react";
 import { kongServiceManagerApiRef } from "../api";
 import { KongServiceManagerContext } from "./KongServiceManagerContext";
-import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard } from "../utils/types";
+import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard, CreateRoute } from "../utils/types";
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from "../hooks";
 
@@ -101,6 +101,26 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
       if(instance && serviceName && workspace){
         const routes = await api.getRoutesFromService(workspace,serviceName, instance);
         if(routes) return routes;
+      }
+      return null
+    } catch(e:any){
+      errorApi.post(e);
+      return null;
+    }
+  }
+
+  const createRoute = async (config: CreateRoute) => {
+    try {
+      if(instance && serviceName && workspace){
+        const response = await api.createRouteFromService(workspace, serviceName, config, instance);
+        if(response) {
+           await getRoutesList();
+           return alertApi.post({
+            message: 'Plugin successfully enabled!',
+            severity: 'success',
+            display: 'transient',
+          });
+        }
       }
       return null
     } catch(e:any){
@@ -227,7 +247,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         configState,
         setConfigState,
         setSearchState,
-        searchTerm
+        searchTerm,
+        createRoute
       }}
     >
       {children}
