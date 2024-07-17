@@ -39,13 +39,16 @@ class Client implements KongServiceManagerApi {
     }
 
     public async fetch <T = any>(input: string, proxyPath?: string, init?: RequestInit): Promise<T> {
-
+        console.log('RequestInit => ', init)
         const apiUrl = await this.apiUrl(proxyPath);
-
+        console.log('apiyrl => ',apiUrl)
         const resp = await fetch(`${apiUrl}${input}`, {
-            ...init
+            ...init,
+            headers: {
+                Authorization: 'Basic a29uZ19hZG1pbjp2a3ByMTIz'
+            }
         });
-
+        console.log('resp => ', resp)
         if (!resp.ok) {
             throw new Error(`[${resp.type}] Request failed with ${resp.status} - ${resp.statusText}`);
         }

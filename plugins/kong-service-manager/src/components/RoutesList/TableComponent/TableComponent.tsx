@@ -5,13 +5,17 @@ import {
   Table,
   TableColumn} from '@backstage/core-components';
 import { RoutesResponse } from '../../../utils/types';
-import { Box, Fade, makeStyles } from '@material-ui/core';
+import { Box, Fade, IconButton, makeStyles } from '@material-ui/core';
 import { HtmlTooltip } from '../../shared';
 import MoreIcon from '@material-ui/icons/More';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Edit from '@material-ui/icons/Edit';
+import { useKongServiceManagerContext } from '../../../context';
 
 interface TableComponentProps {
   isLoading: boolean;
-  dataProps: RoutesResponse[] | []
+  dataProps: RoutesResponse[] | [];
+  handleEditModal?: (route: any) => void;
 }  
 
 interface TableData {
@@ -33,8 +37,8 @@ const useStyle = makeStyles({
   }
 })
 
-export const TableComponent = ({isLoading,dataProps}:TableComponentProps) => {
-
+export const TableComponent = ({isLoading,dataProps, handleEditModal}:TableComponentProps) => {
+  const { removeRoute } = useKongServiceManagerContext();
   const {tooltipContent, tags} = useStyle();
 
   const generateData = (rowData: RoutesResponse[] | [] | null) => {
@@ -55,6 +59,10 @@ export const TableComponent = ({isLoading,dataProps}:TableComponentProps) => {
     return data;
   };
   
+  const handleRemoveRoute = async (routeId: string) => {
+    await removeRoute(routeId);
+  }
+
   const columns: TableColumn[] = [
     {
       id: 'name',
@@ -163,6 +171,23 @@ export const TableComponent = ({isLoading,dataProps}:TableComponentProps) => {
       align: 'center',
       width: '1fr',
     },
+    {
+      id: 'actions',
+      title: 'Actions',
+      highlight: true,
+      render: (row: Partial<TableData>) => (
+        <>
+          <IconButton aria-label="Edit" title="Edit Route" onClick={() => handleEditModal?.(row)}>
+            <Edit />
+          </IconButton>
+          <IconButton aria-label="Delete" title="Delete Route" onClick={() => handleRemoveRoute(row.id as string) }>
+            <DeleteIcon />
+          </IconButton>
+        </>
+      ),
+      align: 'center',
+      width: '1fr',
+    }
   ];
 
   return (

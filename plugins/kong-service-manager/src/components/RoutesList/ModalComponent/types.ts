@@ -1,31 +1,29 @@
-import { Resource } from "@veecode-platform/backstage-plugin-infracost-common"
-
 export type ModalComponentProps = {
     show: boolean,
-    handleCloseModal: () => void,
-    onSave?: () => void;
+    handleCloseModal: (route: any) => void,
+    onSave?: () => void,
+    route?: any,
 }
 
-export type ResourceDetailsComponentProps = {
-    resourceName: string,
-    labelProps: string[],
-    resource: Resource
-    // tableDataProps: any[]
-}
+export type DynamicFieldsProps = {
+    protocolDescription: string;
+    hosts: any[];
+    paths: any[];
+    snis: any[];
+    headers: any[];
+    sources: any[];
+    destinations: any[];
+    methods: any[];
+    handleChange: (event: any, setState: React.Dispatch<React.SetStateAction<any>>, customHandler?: (value: any, checked?: boolean) => any) => void;
+    setHosts: React.Dispatch<React.SetStateAction<any[]>>;
+    setPaths: React.Dispatch<React.SetStateAction<any[]>>;
+    setSnis: React.Dispatch<React.SetStateAction<any[]>>;
+    setHeaders: React.Dispatch<React.SetStateAction<any[]>>;
+    setSources: React.Dispatch<React.SetStateAction<any[]>>;
+    setDestinations: React.Dispatch<React.SetStateAction<any[]>>;
+    setMethods: React.Dispatch<React.SetStateAction<any[]>>;
+  }
 
-export type ResourceDetails = {
-    resourceName: string,
-    costComponents: CostComponentDetails[]
- }
- 
-export type CostComponentDetails = {
-     name: string,
-     monthlyQty: string, // monthlyQty+unit
-     monthlyCost: string // $ 20,00
- }
-
-export type ResourceDetailsTableProps = {
-    id: string,
-    monthly_cost: string,
-    monthly_qty: string,
-}
+export type InputChangeEvent = React.ChangeEvent<{ value: unknown }> | React.ChangeEvent<HTMLInputElement>;
+export type ItemsChangeEvent = { id: string; value: string }[];
+export type SetState<T> = React.Dispatch<React.SetStateAction<T>>;

@@ -25,6 +25,8 @@ export type KongServiceManagerContextType = {
     setSearchState: (search: string) => void;
     searchTerm: string,
     createRoute: (config: CreateRoute) => Promise<void | null>;
+    editRoute: (routeNameOrId: string, config: CreateRoute) => Promise<void | null>;
+    removeRoute: (routeNameOrId: string) => Promise<void | null>;
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!);

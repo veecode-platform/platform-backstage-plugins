@@ -21,7 +21,11 @@ export const RoutesList = () => {
   }, []);
 
   const [showModal, setShowModal] = React.useState<boolean>(false);
-  const handleToggleModal = ()=> setShowModal(!showModal);
+  const [route, setRoute] = React.useState<any>();
+  const handleToggleModal = (route: any) => {
+    setRoute(route);
+    setShowModal(!showModal);
+  }
 
   if(error) return <EmptyStateComponent/>;
 
@@ -30,18 +34,19 @@ export const RoutesList = () => {
       <BoxComponent
         title="All Routes"
         button={
-          <Button variant="contained" color="primary" onClick={handleToggleModal}>
+          <Button variant="contained" color="primary" onClick={() => handleToggleModal({})}>
             Create
           </Button>}
       >
         <Box className={content}>
-          <TableComponent isLoading={loading} dataProps={allRoutes??[]} /> 
+          <TableComponent isLoading={loading} dataProps={allRoutes??[]} handleEditModal={handleToggleModal}/> 
         </Box>
       </BoxComponent>
       {showModal && 
         <ModalComponent
           show={showModal}
-          handleCloseModal={handleToggleModal}
+          handleCloseModal={() => handleToggleModal({})}
+          route={route}
         />
       }
     </ErrorBoundary>

@@ -14,6 +14,10 @@ export const validateRequiredField = (value: any) => {
     return false
 }
 
+export const validatePatch = (str: string): boolean => {
+    return str.charAt(0) === '/';
+}
+
 /**
  * But later, as the project matures, finer validations will be useful.
  */

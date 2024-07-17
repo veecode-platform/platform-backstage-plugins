@@ -111,9 +111,9 @@ export interface ServiceInfoResponse {
     name?: string;
     protocols: string[];
     methods: string[];
-    hosts: Array<{ id: string; value: string }>;
-    paths: Array<{ id: string; value: string }>;
-    headers: Array<{ id: string; value: string }>;
+    hosts: string[];
+    paths: string[];
+    headers: {[key: string]: string[]};
     https_redirect_status_code: number;
     regex_priority: number;
     strip_path: boolean;
@@ -122,6 +122,16 @@ export interface ServiceInfoResponse {
     request_buffering: boolean;
     response_buffering: boolean;
     tags: string[];
+  }
 
+  export interface HeaderObj {
+    id: string;
+    value: string;
+  }
+
+  export interface Headers {
+    headers: {
+        [key: string]: string[];
+    };
   }
 

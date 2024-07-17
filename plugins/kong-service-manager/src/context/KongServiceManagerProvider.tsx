@@ -116,7 +116,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         if(response) {
            await getRoutesList();
            return alertApi.post({
-            message: 'Plugin successfully enabled!',
+            message: 'Route successfully create!',
             severity: 'success',
             display: 'transient',
           });
@@ -126,6 +126,46 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     } catch(e:any){
       errorApi.post(e);
       return null;
+    }
+  }
+
+  const editRoute = async (routeNameOrId: string, config: CreateRoute) => {
+    try {
+      if(instance && serviceName && workspace){
+        const response = await api.editRouteFromService(workspace, serviceName, routeNameOrId, config, instance);
+        if(response) {
+           await getRoutesList();
+           return alertApi.post({
+            message: 'Route successfully update!',
+            severity: 'success',
+            display: 'transient',
+          });
+        }
+      }
+      return null
+    } catch(e:any){
+      errorApi.post(e);
+      return null;
+    }
+  }
+
+  const removeRoute = async (routeNameOrId: string) => {
+    try{ 
+      if(instance && serviceName && workspace){
+        const response = await api.removeRouteFromService(workspace,serviceName,routeNameOrId,instance);
+        if(response && allAssociatedPlugins) {
+          await getRoutesList();
+          return alertApi.post({
+            message: 'Route successfully delete!',
+            severity: 'success',
+            display: 'transient',
+          });
+        }
+      }
+      return null
+    } catch(e:any){
+      errorApi.post(e);
+      return null
     }
   }
 
@@ -248,7 +288,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         setConfigState,
         setSearchState,
         searchTerm,
-        createRoute
+        createRoute,
+        editRoute,
+        removeRoute
       }}
     >
       {children}
