@@ -6,7 +6,7 @@ import React, { ReactNode, useContext, useEffect } from "react";
 import { useState } from "react";
 import { kongServiceManagerApiRef } from "../api";
 import { KongServiceManagerContext } from "./KongServiceManagerContext";
-import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard } from "../utils/types";
+import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard, CreateRoute } from "../utils/types";
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from "../hooks";
 
@@ -106,6 +106,66 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     } catch(e:any){
       errorApi.post(e);
       return null;
+    }
+  }
+
+  const createRoute = async (config: CreateRoute) => {
+    try {
+      if(instance && serviceName && workspace){
+        const response = await api.createRouteFromService(workspace, serviceName, config, instance);
+        if(response) {
+           await getRoutesList();
+           return alertApi.post({
+            message: 'Route successfully create!',
+            severity: 'success',
+            display: 'transient',
+          });
+        }
+      }
+      return null
+    } catch(e:any){
+      errorApi.post(e);
+      return null;
+    }
+  }
+
+  const editRoute = async (routeNameOrId: string, config: CreateRoute) => {
+    try {
+      if(instance && serviceName && workspace){
+        const response = await api.editRouteFromService(workspace, serviceName, routeNameOrId, config, instance);
+        if(response) {
+           await getRoutesList();
+           return alertApi.post({
+            message: 'Route successfully update!',
+            severity: 'success',
+            display: 'transient',
+          });
+        }
+      }
+      return null
+    } catch(e:any){
+      errorApi.post(e);
+      return null;
+    }
+  }
+
+  const removeRoute = async (routeNameOrId: string) => {
+    try{ 
+      if(instance && serviceName && workspace){
+        const response = await api.removeRouteFromService(workspace,serviceName,routeNameOrId,instance);
+        if(response && allAssociatedPlugins) {
+          await getRoutesList();
+          return alertApi.post({
+            message: 'Route successfully delete!',
+            severity: 'success',
+            display: 'transient',
+          });
+        }
+      }
+      return null
+    } catch(e:any){
+      errorApi.post(e);
+      return null
     }
   }
 
@@ -227,7 +287,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         configState,
         setConfigState,
         setSearchState,
-        searchTerm
+        searchTerm,
+        createRoute,
+        editRoute,
+        removeRoute
       }}
     >
       {children}

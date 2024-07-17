@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard, PluginFieldsResponse, RoutesResponse, ServiceInfoResponse } from "../utils/types";
+import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard, PluginFieldsResponse, RoutesResponse, ServiceInfoResponse, CreateRoute } from "../utils/types";
 
 
 export type KongServiceManagerContextType = {
@@ -23,7 +23,10 @@ export type KongServiceManagerContextType = {
     configState: any;
     setConfigState: React.Dispatch<any>;
     setSearchState: (search: string) => void;
-    searchTerm: string 
+    searchTerm: string,
+    createRoute: (config: CreateRoute) => Promise<void | null>;
+    editRoute: (routeNameOrId: string, config: CreateRoute) => Promise<void | null>;
+    removeRoute: (routeNameOrId: string) => Promise<void | null>;
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!);

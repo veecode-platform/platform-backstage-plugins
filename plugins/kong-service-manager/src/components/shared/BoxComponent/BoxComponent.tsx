@@ -6,7 +6,8 @@ import { SearchBar } from '../SearchBar';
 interface BoxComponentProps {
     title: string,
     searchBar?: boolean,
-    children: ReactNode | React.JSX.Element
+    children: ReactNode | React.JSX.Element,
+    button?: ReactNode
 }
 
 const useStyles = makeStyles(theme=>({
@@ -31,14 +32,17 @@ const useStyles = makeStyles(theme=>({
   search:{
     position: 'absolute',
     top: '2.5rem'
+  },
+  buttonToolbar:{
+    padding: '0 1em',
+    position: 'relative',
+    top: '0.5em'
   }
 }));
 
+export const BoxComponent = ({title, searchBar, children, button }:BoxComponentProps) => {
 
-
-export const BoxComponent = ({title, searchBar, children}:BoxComponentProps) => {
-
-  const { container,toolbar, titlebar, search } = useStyles();
+  const { container,toolbar, titlebar, search, buttonToolbar } = useStyles();
 
   return (
     <Box className={container}>
@@ -46,6 +50,7 @@ export const BoxComponent = ({title, searchBar, children}:BoxComponentProps) => 
       <Typography variant="h6" className={titlebar}>{title}</Typography>
       {searchBar && (<div className={search}><SearchBar/></div>)}
       <SelectInstance/>
+      {button && (<div className={buttonToolbar}>{button}</div>)}
     </Toolbar>
       {children}
   </Box>
