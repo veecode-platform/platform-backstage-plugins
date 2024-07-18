@@ -1,6 +1,6 @@
-import { HeaderObj, Headers } from "../types";
+import { HeaderObj } from "../types";
 
-export function convertToHeadersObject(arr: HeaderObj[]): Headers {
+export function convertToHeadersObject(arr: HeaderObj[]): { [key: string]: string[]; } {
     const headers: { [key: string]: string[] } = {};
 
     arr.forEach(obj => {
@@ -10,5 +10,5 @@ export function convertToHeadersObject(arr: HeaderObj[]): Headers {
         headers[obj.id].push(obj.value);
     });
 
-    return { headers };
-  }
+    return headers;
+}

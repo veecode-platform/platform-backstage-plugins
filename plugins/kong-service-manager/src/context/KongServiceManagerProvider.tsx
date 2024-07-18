@@ -109,6 +109,19 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
+  const getRoute = async (routeNameOrId: string) => {
+    try{ 
+      if(instance && serviceName && workspace){
+        const route = await api.getRouteFromService(workspace,serviceName,routeNameOrId,instance);
+        if(route) return route;
+      }
+      return null
+    } catch(e:any){
+      errorApi.post(e);
+      return null;
+    }
+  }
+
   const createRoute = async (config: CreateRoute) => {
     try {
       if(instance && serviceName && workspace){
@@ -290,7 +303,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         searchTerm,
         createRoute,
         editRoute,
-        removeRoute
+        removeRoute,
+        getRoute
       }}
     >
       {children}

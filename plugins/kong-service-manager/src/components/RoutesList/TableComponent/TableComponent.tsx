@@ -11,6 +11,7 @@ import MoreIcon from '@material-ui/icons/More';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import { useKongServiceManagerContext } from '../../../context';
+import { ConfirmDeleteDialog } from '../ConfirmDeleteDialog/ConfirmDeleteDialog';
 
 interface TableComponentProps {
   isLoading: boolean;
@@ -41,6 +42,18 @@ export const TableComponent = ({isLoading,dataProps, handleEditModal}:TableCompo
   const { removeRoute } = useKongServiceManagerContext();
   const {tooltipContent, tags} = useStyle();
 
+  const [showDialog, setShowDialog] = React.useState<boolean>(false)
+  const [routeId, setRouteId] = React.useState<string>()
+
+  const handleOpenDialog = (routeId: string) => {
+    setRouteId(routeId);
+    setShowDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setShowDialog(false);
+  };
+
   const generateData = (rowData: RoutesResponse[] | [] | null) => {
     const data: Array<TableData> = [];
     if(rowData){
@@ -59,7 +72,8 @@ export const TableComponent = ({isLoading,dataProps, handleEditModal}:TableCompo
     return data;
   };
   
-  const handleRemoveRoute = async (routeId: string) => {
+  const handleRemoveRoute = async () => {
+    if (!routeId) return;
     await removeRoute(routeId);
   }
 
@@ -180,7 +194,7 @@ export const TableComponent = ({isLoading,dataProps, handleEditModal}:TableCompo
           <IconButton aria-label="Edit" title="Edit Route" onClick={() => handleEditModal?.(row)}>
             <Edit />
           </IconButton>
-          <IconButton aria-label="Delete" title="Delete Route" onClick={() => handleRemoveRoute(row.id as string) }>
+          <IconButton aria-label="Delete" title="Delete Route" onClick={() => handleOpenDialog(row.id as string) }>
             <DeleteIcon />
           </IconButton>
         </>
@@ -191,13 +205,16 @@ export const TableComponent = ({isLoading,dataProps, handleEditModal}:TableCompo
   ];
 
   return (
-      <Table
-        isLoading={isLoading}
-        options={{ paging: true, padding: 'dense',minBodyHeight:'55vh',paginationType:'stepped', paginationPosition:'bottom' }}
-        data={generateData(dataProps)}
-        columns={columns}
-        title=""
-        style={{marginTop: '-2rem', width: '100%', height:'100%'}}
-      />
+      <>
+        <Table
+          isLoading={isLoading}
+          options={{ paging: true, padding: 'dense',minBodyHeight:'55vh',paginationType:'stepped', paginationPosition:'bottom' }}
+          data={generateData(dataProps)}
+          columns={columns}
+          title=""
+          style={{marginTop: '-2rem', width: '100%', height:'100%'}}
+        />
+        <ConfirmDeleteDialog show={showDialog} handleClose={handleCloseDialog} handleSubmit={handleRemoveRoute}/>
+      </>
   );
 };

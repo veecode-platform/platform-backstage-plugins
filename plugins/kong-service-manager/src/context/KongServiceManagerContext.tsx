@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard, PluginFieldsResponse, RoutesResponse, ServiceInfoResponse, CreateRoute } from "../utils/types";
+import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard, PluginFieldsResponse, RoutesResponse, ServiceInfoResponse, CreateRoute, RouteResponse } from "../utils/types";
 
 
 export type KongServiceManagerContextType = {
@@ -27,6 +27,7 @@ export type KongServiceManagerContextType = {
     createRoute: (config: CreateRoute) => Promise<void | null>;
     editRoute: (routeNameOrId: string, config: CreateRoute) => Promise<void | null>;
     removeRoute: (routeNameOrId: string) => Promise<void | null>;
+    getRoute:  (routeNameOrId: string) => Promise<RouteResponse | null>;
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!);

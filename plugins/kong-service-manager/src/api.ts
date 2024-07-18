@@ -1,5 +1,5 @@
 import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
-import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse, PluginPerCategory, Options, KongServiceManagerApi, CreateRoute } from './utils/types';
+import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse, PluginPerCategory, Options, KongServiceManagerApi, CreateRoute, RouteResponse } from './utils/types';
 import { PluginsInfoData } from "../src/data/data"
 
 export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
@@ -39,16 +39,13 @@ class Client implements KongServiceManagerApi {
     }
 
     public async fetch <T = any>(input: string, proxyPath?: string, init?: RequestInit): Promise<T> {
-        console.log('RequestInit => ', init)
+
         const apiUrl = await this.apiUrl(proxyPath);
-        console.log('apiyrl => ',apiUrl)
+
         const resp = await fetch(`${apiUrl}${input}`, {
-            ...init,
-            headers: {
-                Authorization: 'Basic a29uZ19hZG1pbjp2a3ByMTIz'
-            }
+            ...init
         });
-        console.log('resp => ', resp)
+
         if (!resp.ok) {
             throw new Error(`[${resp.type}] Request failed with ${resp.status} - ${resp.statusText}`);
         }
@@ -225,6 +222,31 @@ class Client implements KongServiceManagerApi {
         return mapedRoutesResponse
     }
 
+    async getRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string): Promise<RouteResponse> {
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, proxyPath)
+
+        const route: RouteResponse = {
+            name: response.name,
+            protocols: response.protocols,
+            methods: response.methods,
+            tags: response.tags,
+            hosts: response.hosts,
+            paths: response.paths,
+            snis: response.snis,
+            headers: response.headers,
+            sources: response.sources,
+            destinations: response.destinations,
+            https_redirect_status_code: response.https_redirect_status_code,
+            regex_priority: response.regex_priority,
+            strip_path: response.strip_path,
+            preserve_host: response.preserve_host,
+            request_buffering: response.request_buffering,
+            response_buffering: response.response_buffering,
+        }
+
+        return route;
+    }
+
     async createRouteFromService(workspace:string, serviceIdOrName: string, config: CreateRoute, proxyPath?: string): Promise<any> {
         const body = { ...config }
         const headers: RequestInit = {
@@ -294,6 +316,10 @@ export class KongServiceManagerApiClient implements KongServiceManagerApi {
 
     async getRoutesFromService(workspace:string, serviceIdOrName: string, proxyPath?: string | undefined ): Promise<RoutesResponse[]> {
         return this.client.getRoutesFromService(workspace,serviceIdOrName, proxyPath)
+    }
+
+    async getRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string | undefined ): Promise<any> {
+        return this.client.getRouteFromService(workspace, serviceIdOrName, routeIdOrName, proxyPath)
     }
 
     async createRouteFromService(workspace:string, serviceIdOrName: string, config: CreateRoute, proxyPath?: string | undefined ): Promise<any> {

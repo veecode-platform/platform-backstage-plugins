@@ -11,30 +11,56 @@ import { convertToHeadersObject } from "../../../utils/helpers/convertoToHeaders
 import { RedirectStatusCode } from "../../../utils/enums/KongRouteRedirectStatusCode";
 import { Protocols, ProtocolDescriptions } from '../../../utils/enums/KongRouteProtocols';
 import DynamicFields from "./DynamicFields";
+import { convertToArrayOfObjects, convertToObjArray } from "../../../utils/helpers/convertToArrayOfObjects";
 
 export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
   const { show, handleCloseModal, route } = props;
   const { field, modalOnBlur,modalContent, modalHeader,closeModal,modalBody, container, titleBar, content } = useModalComponentStyles();
-  const { createRoute, editRoute } = useKongServiceManagerContext();
+  const { createRoute, editRoute, getRoute } = useKongServiceManagerContext();
+
+  React.useEffect(() => {
+    if (show && route.id) {
+        const fetchData = async () => {
+            const response = await getRoute(route.id);
+            setName(response?.name || '');
+            setTags(convertToArrayOfObjects(response?.tags));
+            setProtocols(response?.protocols.toString() || '');
+            setHosts(convertToArrayOfObjects(response?.hosts));
+            setPaths(convertToArrayOfObjects(response?.paths));
+            setSnis(convertToArrayOfObjects(response?.snis));
+            setHeaders(convertToObjArray(response?.headers));
+            setSources(convertToObjArray(response?.sources));
+            setDestinations(convertToObjArray(response?.destinations));
+            setMethods(response?.methods || []);
+            setHttpsRedirectStatusCode(response?.https_redirect_status_code || 0);
+            setRegexPriority(response?.regex_priority || 0);
+            setStripPath(response?.strip_path || true);
+            setPreserveHost(response?.preserve_host || false);
+            setRequestBuffering(response?.request_buffering || true);
+            setResponseBuffering(response?.response_buffering || true);
+        };
+        fetchData();
+    }
+  }, [show]);
   
   const [showFields, setShowFields] = React.useState(false);
-  const [name, setName] = React.useState<string>(route?.name || '');
-  const [tags, setTags] = React.useState<{ id: string; value: string }[]>(route?.tags || []);
-  const [protocols, setProtocols] = React.useState<string>(route?.protocols || 'http, https');
+  const [name, setName] = React.useState<string>('');
+  const [tags, setTags] = React.useState<{ id: string; value: string }[]>([]);
+  const [protocols, setProtocols] = React.useState<string>('http,https');
   const [protocolDescription, setProtocolDescription] = React.useState<string>(ProtocolDescriptions.HTTP_HTTPS);
-  const [hosts, setHosts] = React.useState<{ id: string; value: string }[]>(route?.hosts || []);
-  const [paths, setPaths] = React.useState<{ id: string; value: string }[]>(route?.paths || []);
-  const [snis, setSnis] = React.useState<{ id: string; value: string }[]>(route?.snis || []);
-  const [headers, setHeaders] = React.useState<{ id: string; value: string }[]>(route?.headers || []);
-  const [sources, setSources] = React.useState<{ id: string; value: string }[]>(route?.sources || []);
-  const [destinations, setDestinations] = React.useState<{ id: string; value: string }[]>(route?.destinations || []);
-  const [methods, setMethods] = React.useState<string[]>(route?.methods || []);
-  const [httpsRedirectStatusCode, setHttpsRedirectStatusCode] = React.useState<number>(route?.https_redirect_status_code || 426);
-  const [regexPriority, setRegexPriority] = React.useState<number>(route?.regex_priority || 0);
-  const [stripPath, setStripPath] = React.useState<boolean>(route?.strip_path || true);
-  const [preserveHost, setPreserveHost] = React.useState<boolean>(route?.preserve_host || false);
-  const [requestBuffering, setRequestBuffering] = React.useState<boolean>(route?.request_buffering || true);
-  const [responseBuffering, setResponseBuffering] = React.useState<boolean>(route?.response_buffering || true);
+  const [hosts, setHosts] = React.useState<{ id: string; value: string }[]>([]);
+  const [paths, setPaths] = React.useState<{ id: string; value: string }[]>([]);
+  const [snis, setSnis] = React.useState<{ id: string; value: string }[]>([]);
+  const [headers, setHeaders] = React.useState<{ id: string; value: string }[]>([]);
+  const [sources, setSources] = React.useState<{ id: string; value: string }[]>([]);
+  const [destinations, setDestinations] = React.useState<{ id: string; value: string }[]>([]);
+  const [methods, setMethods] = React.useState<string[]>([]);
+  const [httpsRedirectStatusCode, setHttpsRedirectStatusCode] = React.useState<number>(426);
+  const [regexPriority, setRegexPriority] = React.useState<number>(0);
+  const [stripPath, setStripPath] = React.useState<boolean>(true);
+  const [preserveHost, setPreserveHost] = React.useState<boolean>(false);
+  const [requestBuffering, setRequestBuffering] = React.useState<boolean>(true);
+  const [responseBuffering, setResponseBuffering] = React.useState<boolean>(true);
 
   const handleChange = <T,>(event: InputChangeEvent | ItemsChangeEvent, setState: SetState<T>, transformFn?: (value: unknown, checked?: boolean) => T) => {
     if (Array.isArray(event)) {
@@ -78,13 +104,39 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
   }, [hosts, paths, snis, headers, sources, destinations, methods]);
 
   const handleSaveRoute = async ()=> {
+    const fields = protocolDescription.split(', ');
+    const data = fields.reduce((acc, field) => {
+      switch (field.toLowerCase()) {
+        case 'hosts':
+          acc.hosts = hosts.map(obj => obj.value);
+          break;
+        case 'paths':
+          acc.paths = paths.map(obj => obj.value);
+          break;
+        case 'snis':
+          acc.snis = snis.map(obj => obj.value);
+          break;
+        case 'headers':
+          acc.headers = convertToHeadersObject(headers);
+          break;
+        case 'sources':
+          acc.sources = convertToHeadersObject(sources);
+          break;
+        case 'destinations':
+          acc.destinations = convertToHeadersObject(destinations);
+          break;
+        case 'methods':
+          acc.methods = methods;
+          break;
+        default:
+          break;
+      }
+      return acc;
+    }, {} as { [key: string]: any });
+
     const config: CreateRoute = {
       name,
-      protocols: protocols.split(', '),
-      methods,
-      hosts: hosts.map(obj => obj.value),
-      paths: paths.map(obj => obj.value),
-      headers: convertToHeadersObject(headers).headers,
+      protocols: protocols.split(','),
       tags: tags.map(obj => obj.value),
       https_redirect_status_code: httpsRedirectStatusCode,
       regex_priority: regexPriority,
@@ -92,8 +144,10 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
       preserve_host: preserveHost,
       request_buffering: requestBuffering,
       response_buffering: responseBuffering,
-      path_handling: "v0"
+      path_handling: "v0",
+      ...data
     }
+
     if (route.id) {
       await editRoute(route.id, config);
       return;
