@@ -1,7 +1,6 @@
 import { DiscoveryApi } from "@backstage/core-plugin-api";
 
 export interface KongServiceManagerApi {
-
     getEnabledPlugins(proxyPath: string): Promise<string[]>;
 
     getPluginFields(workspace:string,pluginName: string, proxyPath: string): Promise<PluginFieldsResponse[]>;
@@ -15,6 +14,14 @@ export interface KongServiceManagerApi {
     removeServicePlugin(workspace:string,serviceIdOrName: string, pluginId: string, proxyPath: string): Promise<any>;
 
     getRoutesFromService(workspace:string,serviceIdOrName: string, proxyPath: string): Promise<RoutesResponse[]>;
+
+    getRouteFromService(workspace: string, serviceName: string, routeNameOrId: string, instance: string): Promise<RouteResponse>;
+
+    createRouteFromService(workspace:string, serviceIdOrName: string, config: CreateRoute, proxyPath?: string | undefined ): Promise<any>;
+
+    editRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute, proxyPath?: string | undefined ): Promise<any>;
+
+    removeRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string | undefined ): Promise<any>;
 
     getServiceInfo(workspace:string,serviceIdOrName: string, proxyPath: string): Promise<ServiceInfoResponse>;
 
@@ -100,5 +107,54 @@ export interface ServiceInfoResponse {
     tags: string[],
     description: string,
   }
-  
-  
+
+  export interface CreateRoute {
+    name?: string;
+    protocols?: string[];
+    methods?: string[];
+    hosts?: string[];
+    paths?: string[];
+    snis?: string[];
+    headers?: {[key: string]: string[]};
+    sources?: {[key: string]: string[]};
+    destinations?: {[key: string]: string[]};
+    https_redirect_status_code?: number;
+    regex_priority?: number;
+    strip_path?: boolean;
+    path_handling?: "v0" | "v1";
+    preserve_host?: boolean;
+    request_buffering?: boolean;
+    response_buffering?: boolean;
+    tags?: string[];
+  }
+
+  export interface RouteResponse{
+    name: string,
+    protocols: string[],
+    methods: string[],
+    tags: string[],
+    hosts: string[],
+    paths: string[] 
+    snis: string[],
+    headers: {[key: string]: string[]},
+    sources: {[key: string]: string[]},
+    destinations: {[key: string]: string[]},
+    https_redirect_status_code: number,
+    regex_priority: number,
+    strip_path: boolean,
+    preserve_host: boolean,
+    request_buffering: boolean,
+    response_buffering: boolean,
+  }
+
+  export interface HeaderObj {
+    id: string;
+    value: string;
+  }
+
+  export interface Headers {
+    headers: {
+        [key: string]: string[];
+    };
+  }
+

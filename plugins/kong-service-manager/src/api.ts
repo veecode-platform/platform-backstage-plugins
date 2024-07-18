@@ -1,5 +1,5 @@
 import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
-import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse, PluginPerCategory, Options, KongServiceManagerApi } from './utils/types';
+import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse, PluginPerCategory, Options, KongServiceManagerApi, CreateRoute, RouteResponse } from './utils/types';
 import { PluginsInfoData } from "../src/data/data"
 
 export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
@@ -222,6 +222,59 @@ class Client implements KongServiceManagerApi {
         return mapedRoutesResponse
     }
 
+    async getRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string): Promise<RouteResponse> {
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, proxyPath)
+
+        const route: RouteResponse = {
+            name: response.name,
+            protocols: response.protocols,
+            methods: response.methods,
+            tags: response.tags,
+            hosts: response.hosts,
+            paths: response.paths,
+            snis: response.snis,
+            headers: response.headers,
+            sources: response.sources,
+            destinations: response.destinations,
+            https_redirect_status_code: response.https_redirect_status_code,
+            regex_priority: response.regex_priority,
+            strip_path: response.strip_path,
+            preserve_host: response.preserve_host,
+            request_buffering: response.request_buffering,
+            response_buffering: response.response_buffering,
+        }
+
+        return route;
+    }
+
+    async createRouteFromService(workspace:string, serviceIdOrName: string, config: CreateRoute, proxyPath?: string): Promise<any> {
+        const body = { ...config }
+        const headers: RequestInit = {
+            method: "POST",
+            body: JSON.stringify(body)
+        }
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes`, proxyPath, headers)
+        return response
+    }
+
+    async editRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute, proxyPath?: string): Promise<any> {
+        const body = { ...config }
+        const headers: RequestInit = {
+            method: "PATCH",
+            body: JSON.stringify(body)
+        }
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, proxyPath, headers)
+        return response
+    }
+
+    async removeRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string): Promise<any> {
+        const headers: RequestInit = {
+            method: "DELETE",
+        }
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, proxyPath, headers)
+        return response.message
+    }
+
     async getServiceInfo(workspace:string,serviceIdOrName: string, proxyPath?: string): Promise<ServiceInfoResponse> {
         const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}`, proxyPath)
         return response
@@ -261,8 +314,24 @@ export class KongServiceManagerApiClient implements KongServiceManagerApi {
         return this.client.removeServicePlugin(workspace,serviceIdOrName, pluginId, proxyPath)
     }
 
-    async getRoutesFromService(workspace:string,serviceIdOrName: string, proxyPath?: string | undefined ): Promise<RoutesResponse[]> {
+    async getRoutesFromService(workspace:string, serviceIdOrName: string, proxyPath?: string | undefined ): Promise<RoutesResponse[]> {
         return this.client.getRoutesFromService(workspace,serviceIdOrName, proxyPath)
+    }
+
+    async getRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string | undefined ): Promise<any> {
+        return this.client.getRouteFromService(workspace, serviceIdOrName, routeIdOrName, proxyPath)
+    }
+
+    async createRouteFromService(workspace:string, serviceIdOrName: string, config: CreateRoute, proxyPath?: string | undefined ): Promise<any> {
+        return this.client.createRouteFromService(workspace, serviceIdOrName, config, proxyPath)
+    }
+
+    async editRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute, proxyPath?: string | undefined ): Promise<any> {
+        return this.client.editRouteFromService(workspace, serviceIdOrName, routeIdOrName, config, proxyPath)
+    }
+
+    async removeRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string | undefined ): Promise<any> {
+        return this.client.removeRouteFromService(workspace, serviceIdOrName, routeIdOrName, proxyPath)
     }
 
     async getServiceInfo(workspace:string,serviceIdOrName: string, proxyPath?: string | undefined ): Promise<ServiceInfoResponse> {

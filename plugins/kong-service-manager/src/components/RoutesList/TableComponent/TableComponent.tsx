@@ -5,13 +5,18 @@ import {
   Table,
   TableColumn} from '@backstage/core-components';
 import { RoutesResponse } from '../../../utils/types';
-import { Box, Fade, makeStyles } from '@material-ui/core';
+import { Box, Fade, IconButton, makeStyles } from '@material-ui/core';
 import { HtmlTooltip } from '../../shared';
 import MoreIcon from '@material-ui/icons/More';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Edit from '@material-ui/icons/Edit';
+import { useKongServiceManagerContext } from '../../../context';
+import { ConfirmDeleteDialog } from '../ConfirmDeleteDialog/ConfirmDeleteDialog';
 
 interface TableComponentProps {
   isLoading: boolean;
-  dataProps: RoutesResponse[] | []
+  dataProps: RoutesResponse[] | [];
+  handleEditModal?: (route: any) => void;
 }  
 
 interface TableData {
@@ -33,9 +38,21 @@ const useStyle = makeStyles({
   }
 })
 
-export const TableComponent = ({isLoading,dataProps}:TableComponentProps) => {
-
+export const TableComponent = ({isLoading,dataProps, handleEditModal}:TableComponentProps) => {
+  const { removeRoute } = useKongServiceManagerContext();
   const {tooltipContent, tags} = useStyle();
+
+  const [showDialog, setShowDialog] = React.useState<boolean>(false)
+  const [routeId, setRouteId] = React.useState<string>()
+
+  const handleOpenDialog = (routeId: string) => {
+    setRouteId(routeId);
+    setShowDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setShowDialog(false);
+  };
 
   const generateData = (rowData: RoutesResponse[] | [] | null) => {
     const data: Array<TableData> = [];
@@ -55,6 +72,11 @@ export const TableComponent = ({isLoading,dataProps}:TableComponentProps) => {
     return data;
   };
   
+  const handleRemoveRoute = async () => {
+    if (!routeId) return;
+    await removeRoute(routeId);
+  }
+
   const columns: TableColumn[] = [
     {
       id: 'name',
@@ -163,16 +185,36 @@ export const TableComponent = ({isLoading,dataProps}:TableComponentProps) => {
       align: 'center',
       width: '1fr',
     },
+    {
+      id: 'actions',
+      title: 'Actions',
+      highlight: true,
+      render: (row: Partial<TableData>) => (
+        <>
+          <IconButton aria-label="Edit" title="Edit Route" onClick={() => handleEditModal?.(row)}>
+            <Edit />
+          </IconButton>
+          <IconButton aria-label="Delete" title="Delete Route" onClick={() => handleOpenDialog(row.id as string) }>
+            <DeleteIcon />
+          </IconButton>
+        </>
+      ),
+      align: 'center',
+      width: '1fr',
+    }
   ];
 
   return (
-      <Table
-        isLoading={isLoading}
-        options={{ paging: true, padding: 'dense',minBodyHeight:'55vh',paginationType:'stepped', paginationPosition:'bottom' }}
-        data={generateData(dataProps)}
-        columns={columns}
-        title=""
-        style={{marginTop: '-2rem', width: '100%', height:'100%'}}
-      />
+      <>
+        <Table
+          isLoading={isLoading}
+          options={{ paging: true, padding: 'dense',minBodyHeight:'55vh',paginationType:'stepped', paginationPosition:'bottom' }}
+          data={generateData(dataProps)}
+          columns={columns}
+          title=""
+          style={{marginTop: '-2rem', width: '100%', height:'100%'}}
+        />
+        <ConfirmDeleteDialog show={showDialog} handleClose={handleCloseDialog} handleSubmit={handleRemoveRoute}/>
+      </>
   );
 };
