@@ -76,7 +76,7 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
   };
 
   const getProtocolDescription = (protocol: string): string => {
-    const normalizedProtocol = protocol.replace(/, /g, "_");
+    const normalizedProtocol = protocol.replace(/,/g, "_");
     return ProtocolDescriptions[normalizedProtocol.toUpperCase() as keyof typeof ProtocolDescriptions] || "";
   };
 
