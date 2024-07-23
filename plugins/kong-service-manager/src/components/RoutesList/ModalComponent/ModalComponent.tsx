@@ -14,7 +14,7 @@ import DynamicFields from "./DynamicFields";
 import { convertToArrayOfObjects, convertToObjArray } from "../../../utils/helpers/convertToArrayOfObjects";
 
 export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
-  const { show, handleCloseModal, route } = props;
+  const { show, handleCloseModal, route, refreshList } = props;
   const { field, modalOnBlur,modalContent, modalHeader,closeModal,modalBody, container, titleBar, content } = useModalComponentStyles();
   const { createRoute, editRoute, getRoute } = useKongServiceManagerContext();
 
@@ -80,16 +80,6 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
     return ProtocolDescriptions[normalizedProtocol.toUpperCase() as keyof typeof ProtocolDescriptions] || "";
   };
 
-  const handleReset = () => {
-    setHosts([]);
-    setPaths([]);
-    setSnis([]);
-    setHeaders([]);
-    setSources([]);
-    setDestinations([]);
-    setMethods([]);
-  };
-
   const isSaveDisabled = React.useMemo(() => {
     return !(
       name != '' &&
@@ -98,8 +88,7 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
       snis.length > 0 ||
       headers.length > 0 ||
       sources.length > 0 ||
-      destinations.length > 0 ||
-      methods.length > 0)
+      destinations.length > 0)
     );
   }, [hosts, paths, snis, headers, sources, destinations, methods]);
 
@@ -148,11 +137,22 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
       ...data
     }
 
-    if (route.id) {
-      await editRoute(route.id, config);
-      return;
+    try {
+      if (route.id) {
+        await editRoute(route.id, config);
+        refreshList();
+        handleCloseModal({});
+        return;
+      }
+
+      const createResult = await createRoute(config);
+      if (createResult) {
+        refreshList();
+        handleCloseModal({});
+      }
+    } catch (error) {
+      console.error('Error saving route:', error);
     }
-    await createRoute(config);
   }
 
   const handleTextClick = () => {
@@ -162,7 +162,7 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
   return (
     <Modal
       open={show}
-      onClose={handleCloseModal}
+      onClose={() => handleCloseModal({})}
       aria-labelledby="modal-modal-job-details"
       aria-describedby="modal-modal-jobs-details-and-steps"
       className={modalOnBlur}
@@ -227,7 +227,6 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
                             setProtocolDescription(getProtocolDescription(selectedProtocol));
                             return selectedProtocol;
                           });
-                          handleReset();
                         }}
                       >
                         {Object.values(Protocols).map((protocol) => (

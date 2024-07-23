@@ -17,6 +17,7 @@ interface TableComponentProps {
   isLoading: boolean;
   dataProps: RoutesResponse[] | [];
   handleEditModal?: (route: any) => void;
+  refreshList: () => void
 }  
 
 interface TableData {
@@ -38,7 +39,7 @@ const useStyle = makeStyles({
   }
 })
 
-export const TableComponent = ({isLoading,dataProps, handleEditModal}:TableComponentProps) => {
+export const TableComponent = ({isLoading,dataProps, handleEditModal, refreshList}:TableComponentProps) => {
   const { removeRoute } = useKongServiceManagerContext();
   const {tooltipContent, tags} = useStyle();
 
@@ -75,6 +76,8 @@ export const TableComponent = ({isLoading,dataProps, handleEditModal}:TableCompo
   const handleRemoveRoute = async () => {
     if (!routeId) return;
     await removeRoute(routeId);
+    refreshList();
+    handleCloseDialog();
   }
 
   const columns: TableColumn[] = [

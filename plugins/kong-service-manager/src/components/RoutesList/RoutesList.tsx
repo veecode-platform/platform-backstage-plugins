@@ -11,17 +11,20 @@ import { useRoutesListStyles } from './styles';
 import { ModalComponent } from './ModalComponent/ModalComponent';
 
 export const RoutesList = () => {
+  const [showModal, setShowModal] = React.useState<boolean>(false);
+  const [refresh, setRefresh] = React.useState(false);
+  const [route, setRoute] = React.useState<any>();
 
   const { getRoutesList } = useKongServiceManagerContext();
   const { content } = useRoutesListStyles();
 
-  const { loading, error, value: allRoutes } = useAsync(async (): Promise<RoutesResponse[]|null> => {
+  const fetchRoutes = async (): Promise<RoutesResponse[] | null> => {
     const data = await getRoutesList();
-    return data
-  }, []);
+    return data;
+  }
 
-  const [showModal, setShowModal] = React.useState<boolean>(false);
-  const [route, setRoute] = React.useState<any>();
+  const { loading, error, value: allRoutes } = useAsync(fetchRoutes, [refresh]);
+
   const handleToggleModal = (route: any) => {
     setRoute(route);
     setShowModal(!showModal);
@@ -39,13 +42,19 @@ export const RoutesList = () => {
           </Button>}
       >
         <Box className={content}>
-          <TableComponent isLoading={loading} dataProps={allRoutes??[]} handleEditModal={handleToggleModal}/> 
+          <TableComponent
+            isLoading={loading}
+            dataProps={allRoutes??[]}
+            handleEditModal={handleToggleModal}
+            refreshList={() => setRefresh(prev => !prev)}
+          /> 
         </Box>
       </BoxComponent>
       {showModal && 
         <ModalComponent
           show={showModal}
           handleCloseModal={() => handleToggleModal({})}
+          refreshList={() => setRefresh(prev => !prev)}
           route={route}
         />
       }
