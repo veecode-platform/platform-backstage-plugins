@@ -1,8 +1,8 @@
 export type ModalComponentProps = {
     show: boolean,
     handleCloseModal: (route: any) => void,
-    onSave?: () => void,
     route?: any,
+    refreshList: () => void,
 }
 
 export type DynamicFieldsProps = {

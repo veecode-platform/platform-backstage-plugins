@@ -49,8 +49,8 @@ export const BoxComponent = ({title, searchBar, children, button }:BoxComponentP
     <Toolbar className={toolbar}>
       <Typography variant="h6" className={titlebar}>{title}</Typography>
       {searchBar && (<div className={search}><SearchBar/></div>)}
-      <SelectInstance/>
       {button && (<div className={buttonToolbar}>{button}</div>)}
+      <SelectInstance/>
     </Toolbar>
       {children}
   </Box>
