@@ -36,12 +36,16 @@ const useStyle = makeStyles({
   },
   tags: {
     cursor: 'pointer',
+  },
+  actions:{
+    display: 'flex',
+    alignItems: 'center'
   }
 })
 
 export const TableComponent = ({isLoading,dataProps, handleEditModal, refreshList}:TableComponentProps) => {
   const { removeRoute } = useKongServiceManagerContext();
-  const {tooltipContent, tags} = useStyle();
+  const {tooltipContent, tags, actions} = useStyle();
 
   const [showDialog, setShowDialog] = React.useState<boolean>(false)
   const [routeId, setRouteId] = React.useState<string>()
@@ -193,14 +197,14 @@ export const TableComponent = ({isLoading,dataProps, handleEditModal, refreshLis
       title: 'Actions',
       highlight: true,
       render: (row: Partial<TableData>) => (
-        <>
+        <div className={actions}>
           <IconButton aria-label="Edit" title="Edit Route" onClick={() => handleEditModal?.(row)}>
-            <Edit />
+            <Edit size={154}/>
           </IconButton>
           <IconButton aria-label="Delete" title="Delete Route" onClick={() => handleOpenDialog(row.id as string) }>
             <DeleteIcon />
           </IconButton>
-        </>
+        </div>
       ),
       align: 'center',
       width: '1fr',

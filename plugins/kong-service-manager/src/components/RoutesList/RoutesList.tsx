@@ -37,7 +37,7 @@ export const RoutesList = () => {
       <BoxComponent
         title="All Routes"
         button={
-          <Button variant="contained" color="primary" onClick={() => handleToggleModal({})}>
+          <Button variant="contained" style={{height: '46px', marginBottom: '-.5rem'}} color="primary" onClick={() => handleToggleModal({})}>
             Create
           </Button>}
       >
