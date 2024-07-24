@@ -1,5 +1,6 @@
 export type SummaryProps = {
     resourcesCount: number,
-    usageBasedResources: number,
+    totalSupportedResources: number,
+    totalUnsupportedResources:  number,
     noPriceResources: number,
 }
