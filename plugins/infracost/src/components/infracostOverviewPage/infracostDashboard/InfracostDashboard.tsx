@@ -34,9 +34,10 @@ export const InfracostDashboard : React.FC<InfracostDashboardProps> = (props) =>
              usageCost={project.breakdown.totalMonthlyUsageCost}
             />
           <Summary
-           resourcesCount={project.summary.totalDetectedResources}
-           usageBasedResources={project.summary.totalUsageBasedResources }
-           noPriceResources={project.summary.totalNoPriceResources}
+           resourcesCount={project.summary.totalDetectedResources ?? 0}
+           totalSupportedResources={project.summary.totalSupportedResources ?? 0}
+           totalUnsupportedResources={project.summary.totalUnsupportedResources ?? 0 }
+           noPriceResources={project.summary.totalNoPriceResources ?? 0}
           />
         </div>
       </Wrapper>
