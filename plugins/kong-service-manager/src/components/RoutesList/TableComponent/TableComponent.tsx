@@ -178,14 +178,14 @@ export const TableComponent = ({isLoading,dataProps, handleEditModal, refreshLis
           TransitionProps={{ timeout: 600 }}
           title={
               <Box className={tooltipContent}>
-                {row.tags ? row.tags.map(tag => (
+                {(row.tags && row.tags.length > 0) ? row.tags.map(tag => (
                   <Chip key={tag} label={tag} />
-                )): 'No tags'}
+                )): <Typography variant="caption" color="textPrimary">No Tags ...</Typography>}
               </Box>
           }
         >
           <div className={tags}>
-          <MoreIcon/> 
+          <MoreIcon/>
           </div>
         </HtmlTooltip>
       ),
@@ -199,7 +199,7 @@ export const TableComponent = ({isLoading,dataProps, handleEditModal, refreshLis
       render: (row: Partial<TableData>) => (
         <div className={actions}>
           <IconButton aria-label="Edit" title="Edit Route" onClick={() => handleEditModal?.(row)}>
-            <Edit size={154}/>
+            <Edit/>
           </IconButton>
           <IconButton aria-label="Delete" title="Delete Route" onClick={() => handleOpenDialog(row.id as string) }>
             <DeleteIcon />
