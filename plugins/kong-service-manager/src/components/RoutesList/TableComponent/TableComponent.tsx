@@ -100,7 +100,7 @@ export const TableComponent = ({isLoading,dataProps, handleEditModal, refreshLis
       highlight: true,
       render: (row: Partial<TableData>) => (
         <>
-          {row.protocols
+          {(row.protocols && row.protocols.length)
             ? row.protocols.map(protocol => (
                 <Typography variant="body2" key={protocol}>
                   {protocol}
@@ -118,7 +118,7 @@ export const TableComponent = ({isLoading,dataProps, handleEditModal, refreshLis
       highlight: true,
       render: (row: Partial<TableData>) => (
         <>
-          {row.methods
+          {(row.methods && row.methods.length > 0 )
             ? row.methods.map(method => (
                 <Typography variant="body2" key={method}>
                   {method}
@@ -136,7 +136,7 @@ export const TableComponent = ({isLoading,dataProps, handleEditModal, refreshLis
       highlight: true,
       render: (row: Partial<TableData>) => (
         <>
-          {row.hosts
+          {(row.hosts && row.hosts.length > 0)
             ? row.hosts.map(host => (
                 <Typography variant="body2" key={host}>
                   {host}
@@ -154,7 +154,7 @@ export const TableComponent = ({isLoading,dataProps, handleEditModal, refreshLis
       highlight: true,
       render: (row: Partial<TableData>) => (
         <>
-          {row.paths
+          {(row.paths && row.paths.length > 0)
             ? row.paths.map(path => (
                 <Typography variant="body2" key={path}>
                   {path}
