@@ -169,4 +169,4 @@ See:
 ...
 ```
 
-> ℹ️ Remember that a shorter interval time can increase the consumption of your KEY API.
+> ℹ️ Remember that a shorter interval time can increase the consumption of your OPENAI API KEY.
