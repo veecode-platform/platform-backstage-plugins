@@ -12,6 +12,7 @@ import { RedirectStatusCode } from "../../../utils/enums/KongRouteRedirectStatus
 import { Protocols, ProtocolDescriptions } from '../../../utils/enums/KongRouteProtocols';
 import DynamicFields from "./DynamicFields";
 import { convertToArrayOfObjects, convertToObjArray } from "../../../utils/helpers/convertToArrayOfObjects";
+import { prepareDestinations, prepareSources } from "../../../utils/helpers/preparePayload";
 
 export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
   const { show, handleCloseModal, route, refreshList } = props;
@@ -109,10 +110,10 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
           acc.headers = convertToHeadersObject(headers);
           break;
         case 'sources':
-          acc.sources = convertToHeadersObject(sources);
+          acc.sources = prepareSources(sources);
           break;
         case 'destinations':
-          acc.destinations = convertToHeadersObject(destinations);
+          acc.destinations = prepareDestinations(destinations);
           break;
         case 'methods':
           acc.methods = methods;
@@ -124,7 +125,7 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
     }, {} as { [key: string]: any });
 
     const config: CreateRoute = {
-      name,
+      name: name.replaceAll(' ', '_'),
       protocols: protocols.split(','),
       tags: tags.map(obj => obj.value),
       https_redirect_status_code: httpsRedirectStatusCode,
