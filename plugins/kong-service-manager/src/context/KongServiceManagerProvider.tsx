@@ -124,15 +124,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   const createRoute = async (config: CreateRoute) => {
     try {
-      if(instance && serviceName && workspace){
+      if (instance && serviceName && workspace){
         const response = await api.createRouteFromService(workspace, serviceName, config, instance);
-        if(response) {
-           await getRoutesList();
-           return alertApi.post({
-            message: 'Route successfully create!',
-            severity: 'success',
-            display: 'transient',
-          });
+        if (response) {
+          return response;
         }
       }
       return null

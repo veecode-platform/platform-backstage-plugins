@@ -1,18 +1,28 @@
 import React from 'react';
 import { Box, Button, Chip, TextField } from '@material-ui/core';
+import AlertComponent from '../../shared/Alert/Alert';
 
 interface StringInputListProps {
   label: string;
-    buttonText: string;
-    onItemsChange?: (items: { id: string; value: string }[]) => void;
-    initialItems?: { id: string; value: string }[];
-    twoFields?: boolean;
+  buttonText: string;
+  onItemsChange?: (items: { id: string; value: string }[]) => void;
+  initialItems?: { id: string; value: string }[];
+  twoFields?: boolean;
 }
 
 const StringInputList: React.FC<StringInputListProps> = ({ label, buttonText, onItemsChange, initialItems = [], twoFields = false }) => {
   const [inputValue, setInputValue] = React.useState<string>('');
   const [indexValue, setIndexValue] = React.useState<string>('');
   const [items, setItems] = React.useState<{ id: string; value: string }[]>(initialItems);
+
+  const [show, setShow] = React.useState<boolean>(false);
+  const [status] = React.useState<string>('warning');
+  const [messageStatus, setMessageStatus] = React.useState<string>('');
+
+  const handleClose = (reason: string) => {
+    if (reason === 'clickaway') return;
+    setShow(false);
+  };
 
   React.useEffect(() => {
     setItems(initialItems);
@@ -29,6 +39,13 @@ const StringInputList: React.FC<StringInputListProps> = ({ label, buttonText, on
   const handleAddItem = () => {
     if (inputValue.trim() !== '' && (!twoFields || indexValue.trim() !== '')) {
       const newItem = { id: twoFields ? indexValue.trim() : (items.length + 1).toString(), value: inputValue.trim() };
+      if (label === 'Paths') {
+        newItem.value = (newItem.value.charAt(0) !== '/') ? `/${newItem.value}` : newItem.value;
+      } else if ((label === 'Sources' || label === 'Destinations') && !validateIP(newItem.id)) {
+        setShow(true)
+        setMessageStatus(`invalid ip or cidr range: ${newItem.id}`);
+        return;
+      }
       const newItems = [...items, newItem];
       setItems(newItems);
       setInputValue('');
@@ -47,15 +64,38 @@ const StringInputList: React.FC<StringInputListProps> = ({ label, buttonText, on
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement | HTMLDivElement>, label: string) => {
     if (event.key === 'Enter') {
       event.preventDefault();
       handleAddItem();
     }
+
+    (label === 'Sources' || label === 'Destinations') && validatePort(event);
   };
   
-  const indexLabel = (twoFields) && `Enter a ${label} name`;
-  const inputLabel = (twoFields) ? `Enter a ${label} value` : `Enter a ${label}`;
+  const validatePort = (event: React.KeyboardEvent<HTMLInputElement | HTMLDivElement>) => {
+    if (['Backspace', 'Delete', 'Tab', 'Escape', 'Enter'].includes(event.key)) {
+      return;
+    }
+
+    if (!/\d/.test(event.key)) {
+      event.preventDefault();
+    }
+  };
+
+  const validateIP = (ip: string): boolean => {
+    const ipv4Pattern = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+    const ipv6Pattern = /^(?:[a-fA-F0-9]{1,4}:){7}[a-fA-F0-9]{1,4}$/;
+    return ipv4Pattern.test(ip) || ipv6Pattern.test(ip);
+  }
+
+  let indexLabel = (twoFields) && `Enter a ${label} name`;
+  let inputLabel = (twoFields) ? `Enter a ${label} value` : `Enter a ${label}`;
+
+  if (label === 'Sources' || label === 'Destinations') {
+    indexLabel = `Enter a ${label} IP`;
+    inputLabel = `Enter a ${label} port`;
+  }
 
   return (
     <Box>
@@ -66,7 +106,7 @@ const StringInputList: React.FC<StringInputListProps> = ({ label, buttonText, on
             variant="filled"
             value={indexValue}
             onChange={handleIndexChange}
-            onKeyDown={handleKeyDown}
+            onKeyDown={(event) => handleKeyDown(event, '')}
             style={{ marginRight: '10px' }}
             fullWidth
           />
@@ -76,7 +116,7 @@ const StringInputList: React.FC<StringInputListProps> = ({ label, buttonText, on
           variant="filled"
           value={inputValue}
           onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
+          onKeyDown={(event) => handleKeyDown(event, label)}
           fullWidth 
         />
         <Button variant="contained" color="primary" onClick={handleAddItem} style={{ marginLeft: '10px' }}>
@@ -93,6 +133,12 @@ const StringInputList: React.FC<StringInputListProps> = ({ label, buttonText, on
           />
         ))}
       </Box>
+      <AlertComponent
+        open={show}
+        close={handleClose}
+        message={messageStatus}
+        status={status}
+      />
     </Box>
   );
 };
