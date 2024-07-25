@@ -5,7 +5,7 @@ import { FcInfo } from "react-icons/fc";
 import { List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import DoneIcon from '@material-ui/icons/Done';
-import { MdError } from "react-icons/md";
+import ErrorIcon from '@material-ui/icons/Error';
 import { SummaryProps } from './types';
 
 
@@ -41,7 +41,7 @@ export const Summary : React.FC<SummaryProps> = (props) => {
               {totalUnsupportedResources > 0 && (
                 <ListItem>
                   <ListItemIcon>
-                    <MdError />
+                   <ErrorIcon />
                   </ListItemIcon>
                   <ListItemText
                     primary={`${totalUnsupportedResources} Unsupported resources`}
