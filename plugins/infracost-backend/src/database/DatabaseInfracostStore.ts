@@ -1,6 +1,6 @@
 import { Knex } from "knex";
 import { LoggerService, resolvePackagePath } from "@backstage/backend-plugin-api";
-import { InfracosteStore } from "./InfracostStore";
+import { InfracostStore } from "./InfracostStore";
 import { PluginDatabaseManager } from "@backstage/backend-common";
 import { INFRACOST_TABLE } from "../utils/constants";
 import { InfracostEstimate } from '@veecode-platform/backstage-plugin-infracost-common';
@@ -11,7 +11,7 @@ const migrationsDir = resolvePackagePath(
   'migrations'
 )
 
-export class DatabaseInfracostStore  implements InfracosteStore {
+export class DatabaseInfracostStore  implements InfracostStore {
 
   private constructor(
     private readonly db: Knex,
