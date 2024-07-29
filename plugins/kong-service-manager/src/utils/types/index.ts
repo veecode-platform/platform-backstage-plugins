@@ -158,3 +158,13 @@ export interface ServiceInfoResponse {
     };
   }
 
+  export interface Destination {
+    ip: string;
+    port: number;
+  }
+
+  export interface Sources {
+    ip: string;
+    port: number;
+  }
+
