@@ -26,7 +26,8 @@ export const catalogModuleInfracostProcessor = createBackendModule({
                 scheduler
             })
           );
-          catalog.addProcessor(new InfracostEntityProcessor(config, logger, cache))
+          const infracostProcessor = new InfracostEntityProcessor(config, logger, cache)
+          catalog.addProcessor(infracostProcessor)
         },
       });
     },
