@@ -1,23 +1,16 @@
-import { UrlReader, errorHandler } from '@backstage/backend-common';
-import { AuthService, DiscoveryService, HttpAuthService, LoggerService, PermissionsService } from '@backstage/backend-plugin-api';
+import { errorHandler } from '@backstage/backend-common';
+import { DiscoveryService, LoggerService, PermissionsService } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';
 import express, { RequestHandler } from 'express';
 import Router from 'express-promise-router';
-import { CatalogApi } from '@backstage/catalog-client';
-import { IdentityApi } from '@backstage/plugin-auth-node';
-import { InfracosteStore } from '../database';
+import { InfracostStore } from '../database';
 import { InputError } from '@backstage/errors';
 
 export interface RouterOptions {
   logger: LoggerService;
   config: Config;
-  reader?: UrlReader;
-  database: InfracosteStore;
-  catalogClient?: CatalogApi;
+  database: InfracostStore;
   permissions?: PermissionsService;
-  auth?: AuthService;
-  httpAuth?: HttpAuthService;
-  identity?: IdentityApi;
   discovery?: DiscoveryService;
 }
 
