@@ -1,2 +1,2 @@
 export { DatabaseInfracostStore } from './DatabaseInfracostStore';
-export type { InfracosteStore } from './InfracostStore'
+export type { InfracostStore } from './InfracostStore'
