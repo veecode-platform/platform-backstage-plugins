@@ -1,6 +1,6 @@
 import { InfracostEstimate } from '@veecode-platform/backstage-plugin-infracost-common';
 
-export interface InfracosteStore {
+export interface InfracostStore {
     createInfracostProjectsEstimate(
         estimate:InfracostEstimate
     ):Promise<InfracostEstimate|null>,
