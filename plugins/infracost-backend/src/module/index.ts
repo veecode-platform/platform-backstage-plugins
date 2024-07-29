@@ -1,0 +1,1 @@
+export { catalogModuleInfracostProcessor as default } from './module';
