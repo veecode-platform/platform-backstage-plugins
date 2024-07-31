@@ -155,7 +155,7 @@ No arquivo `packages > backend > src > index.ts`:
 ```diff
 
 import { createBackend } from '@backstage/backend-defaults';
-+ import {catalogModuleInfracostProcessor, infracostPlugin} from '@veecode-platform/backstage-plugin-infracost-backend';
++ import {catalogModuleInfracostProcessor, infracostPlugin} from '@veecode-platform/backstage-plugin-infracost-backend/alpha';
 
 const backend = createBackend();
 
