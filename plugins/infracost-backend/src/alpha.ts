@@ -1,2 +1,2 @@
 export { catalogModuleInfracostProcessor } from './module';
-export { infracostPlugin as default } from './InfracostPlugin';
+export { infracostPlugin } from './InfracostPlugin';
