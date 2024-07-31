@@ -1,6 +1,4 @@
-import { PluginTaskScheduler, TaskRunner } from '@backstage/backend-tasks';
-import { PluginDatabaseManager } from '@backstage/backend-common';
-import { CacheService, LoggerService } from '@backstage/backend-plugin-api';
+import { CacheService, DatabaseService, LoggerService, SchedulerService, SchedulerServiceTaskRunner } from '@backstage/backend-plugin-api';
 
 export interface InfracostEntityProviderOptions {
     /**
@@ -21,12 +19,12 @@ export interface InfracostEntityProviderOptions {
      * {@link @backstage/backend-tasks#PluginTaskScheduler.createScheduledTaskRunner}
      * to enable automatic scheduling of tasks.
      */
-    schedule?: 'manual' | TaskRunner;
+    schedule?: 'manual' | SchedulerServiceTaskRunner;
     /**
      * Scheduler used to schedule refreshes based on
      * the schedule config.
      */
-    scheduler?: PluginTaskScheduler;
+    scheduler?: SchedulerService;
     /**
      * The logger to use.
      */
@@ -35,6 +33,6 @@ export interface InfracostEntityProviderOptions {
     /**
      * The PluginDatabaseManager to use
      */
-    database: PluginDatabaseManager;
+    database: DatabaseService;
   }
   

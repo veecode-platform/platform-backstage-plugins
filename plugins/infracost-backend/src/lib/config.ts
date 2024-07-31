@@ -1,7 +1,4 @@
-import {
-    readTaskScheduleDefinitionFromConfig,
-    TaskScheduleDefinition,
-  } from '@backstage/backend-tasks';
+import {SchedulerServiceTaskScheduleDefinition, readSchedulerServiceTaskScheduleDefinitionFromConfig} from '@backstage/backend-plugin-api';
   import { Config } from '@backstage/config';
 
 /**
@@ -13,7 +10,7 @@ import {
 export type InfracostProviderConfig = {
     id: string;
     baseUrl: string;
-    schedule?: TaskScheduleDefinition;
+    schedule?: SchedulerServiceTaskScheduleDefinition;
   };
   
 
@@ -31,7 +28,7 @@ export const readProviderConfigs = (config:Config):InfracostProviderConfig[] =>{
         const baseUrl = config.getString("backend.baseUrl");
 
         const schedule = providerConfigInstance.has('schedule')
-          ? readTaskScheduleDefinitionFromConfig(
+          ? readSchedulerServiceTaskScheduleDefinitionFromConfig(
               providerConfigInstance.getConfig('schedule'),
             )
           : undefined;
