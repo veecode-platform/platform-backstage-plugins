@@ -129,7 +129,7 @@ export default async function createPlugin({
   });
 }
 ```
-And finally, in `packages > backend > src > index.ts`:
+In the file `packages > backend > src > index.ts`:
 
 ```diff
 + import infracost from './plugins/infracost'
