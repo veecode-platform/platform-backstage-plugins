@@ -129,7 +129,7 @@ export default async function createPlugin({
   });
 }
 ```
-In the file `packages > backend > src > index.ts`:
+In `packages > backend > src > index.ts`:
 
 ```diff
 + import infracost from './plugins/infracost'
@@ -150,7 +150,7 @@ async function main() {
 
 #### 🆕 New Backend
 
-No arquivo `packages > backend > src > index.ts`:
+In `packages > backend > src > index.ts`:
 
 ```diff
 
