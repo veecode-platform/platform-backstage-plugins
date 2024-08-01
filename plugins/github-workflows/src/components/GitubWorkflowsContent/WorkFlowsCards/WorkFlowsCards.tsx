@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React from 'react';
 import { Box, Card, CardContent, CardHeader, CircularProgress, IconButton, Paper, Typography } from '@material-ui/core';
 import { WorkFlowItem } from './WorkFlowItem';
 import CachedIcon from '@material-ui/icons/Cached';
@@ -10,11 +10,12 @@ import SelectBranch from '../../SelectBranch/SelectBranch';
 import { useGithuWorkflowsContext } from '../../../context';
 
 
-const WorkFlowCard : React.FC<CardsProps> = ({ items, updateData }) => {
+const WorkFlowCard : React.FC<CardsProps> = (props) => {
 
-  const [ loading, setLoading] = useState<boolean>(false);
+  const [ loading, setLoading] = React.useState<boolean>(false);
   const {title, options, buttonRefresh,workflowsGroup,loadingComponent,info} = useWorkflowCardStyles();
   const { branch } = useGithuWorkflowsContext();
+  const { items, updateData } = props;
 
   const refresh = async ()=> {
     setLoading(true)
@@ -23,8 +24,8 @@ const WorkFlowCard : React.FC<CardsProps> = ({ items, updateData }) => {
   }
 
   React.useEffect(()=>{
-    // eslint-disable-next-line no-console
-    console.log(`alterou a branch para ${branch}`)
+    updateData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[branch])
 
   const TitleBar = (
@@ -87,4 +88,4 @@ const WorkFlowCard : React.FC<CardsProps> = ({ items, updateData }) => {
   )
 }
 
-export default memo(WorkFlowCard)
+export default React.memo(WorkFlowCard)
