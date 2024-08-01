@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React from 'react';
 import { Select, SelectedItems } from '@backstage/core-components';
 import { useApi, errorApiRef, } from '@backstage/core-plugin-api';
 import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
@@ -15,7 +15,7 @@ const SelectBranch = () => {
   
   const [branchesState, dispatchBranches ] = React.useReducer(branchesReducer,initialBranchesState);
   const [optionsState, dispatchOptions] = React.useReducer(optionsReducer, initialOptionsState);
-  const [branchDefault, setBranchDefault ] = useState<string>('');
+  const [branchDefault, setBranchDefault ] = React.useState<string>('');
   const { branch, setBranchState } = useGithuWorkflowsContext();
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
@@ -42,17 +42,17 @@ const SelectBranch = () => {
     setBranchState(selectedValue as string); 
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     getBranches();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectName, entity]);
 
-  useEffect(()=>{
+  React.useEffect(()=>{
     setBranchState(branchDefault)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[branchDefault])
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (branchesState) {
       const newOptions = branchesState.map((item) => {
         return {
@@ -77,4 +77,4 @@ const SelectBranch = () => {
 };
 
 
-export default memo(SelectBranch)
+export default React.memo(SelectBranch)
