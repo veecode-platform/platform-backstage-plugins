@@ -20,7 +20,7 @@ export const WorkFlowActions: React.FC<WorkFlowActionsProps> = (props) => {
   const { cardsView, workflowsByAnnotation,inputsParamsState, allWorkflowsState, dispatchWorkflows, handleStartWorkflowRun, handleStopWorkflowRun, listAllWorkflows } = useGithuWorkflowsContext();
   const { buttonWait, waitResponse, inProgress } = useWorkflowActionsStyles();
   const errorApi = useApi(errorApiRef);
-  const inputs = workflowsByAnnotation ? workflowsByAnnotation : [];
+  const filters = workflowsByAnnotation ? workflowsByAnnotation : [];
   const { workflowId, status, conclusion, parameters } = props;
 
   const handleShowModal = React.useCallback(() => {
@@ -32,7 +32,7 @@ export const WorkFlowActions: React.FC<WorkFlowActionsProps> = (props) => {
     let intervalId: NodeJS.Timeout;
 
     const checkWorkflowStatus = async () => {
-      await listAllWorkflows( cardsView ? inputs : []);
+      await listAllWorkflows( cardsView ? filters : []);
 
       if (allWorkflowsState) {
         const workflowNewState = allWorkflowsState.find(w => w.id === workflowIdParam);
