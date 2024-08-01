@@ -1,5 +1,5 @@
-import { Chip, Grid, Paper,Typography } from '@material-ui/core';
 import React from 'react';
+import { Chip, Grid, Paper,Typography } from '@material-ui/core';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
@@ -13,6 +13,7 @@ dayjs.extend(duration);
 
 
 export const DetailsComponent: React.FC<WorkflowDetailsProps> = (props) => {
+  
   const { runStartedAt,status,conclusion,updatedAt,avatar,author, branch, headCommit,repo } = props; 
   const { workflowDetailsNavbar,itemContent,itemWrapper,workflowInfo, avatarImg,link,statusWrapper } = useWorkflowDetailsStyles();
 
