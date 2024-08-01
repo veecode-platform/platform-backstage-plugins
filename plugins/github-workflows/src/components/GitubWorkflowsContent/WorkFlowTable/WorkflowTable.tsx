@@ -23,7 +23,7 @@ import { IoOpenOutline } from "react-icons/io5";
 import { WorkFlowStatus } from '../WorkFlowStatus';
 
 
-const WorkflowTable : React.FC<WorkflowTableProps> = ({ items, updateData} ) => {
+const WorkflowTable : React.FC<WorkflowTableProps> = (props) => {
   
   const [ showModal, setShowModal ] = React.useState<boolean>(false);
   const [parametersState, setParametersState] = React.useState<WorkflowDispatchParameters[]|null>(null)
@@ -32,6 +32,7 @@ const WorkflowTable : React.FC<WorkflowTableProps> = ({ items, updateData} ) => 
   const { projectName, hostname } = useEntityAnnotations(entity as Entity);
   const navigate = useNavigate();
   const {action,source,clickable,title,options,name} = useWorkflowTableStyles();
+  const { items, updateData} = props;
 
   const refresh = async ()=> {
     setLoading(true)
