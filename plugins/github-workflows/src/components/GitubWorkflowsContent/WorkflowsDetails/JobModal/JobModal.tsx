@@ -1,5 +1,5 @@
 import '../../../shared/globalstyle.css';
-import React, { useState } from 'react'
+import React from 'react';
 import { Accordion, AccordionSummary, Box, CircularProgress, Fade, List, ListItem, ListItemAvatar, ListItemText, Modal, Tooltip, Typography, Zoom } from '@material-ui/core'
 import { useModalStyles } from './styles'
 import { WorkFlowStatus } from '../../WorkFlowStatus'
@@ -11,9 +11,6 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import BlockIcon from '@material-ui/icons/Block';
 import useAsync from 'react-use/lib/useAsync'
-import { useEntity } from '@backstage/plugin-catalog-react'
-import { useEntityAnnotations } from '../../../../hooks'
-import { Entity } from '@backstage/catalog-model'
 import { InfoBox } from '../../../shared'
 import { LogViewer, Progress } from '@backstage/core-components'
 import DescriptionIcon from '@material-ui/icons/Description';
@@ -69,16 +66,15 @@ const StepsListComponent : React.FC<StepsListComponentsProps> = (props) => {
 
 const JobLogsComponent : React.FC<JobLogsComponentProps> = (props) => {
 
+    const [jobLogs,setJobLogs] = React.useState<string>('No Values Found');
+    const [open, setOpen] = React.useState(false);
     const {jobId,running } = props;
     const {downloadJobLogs} = useGithuWorkflowsContext();
-    const { entity } = useEntity();
-    const { projectName,hostname } = useEntityAnnotations(entity as Entity);
-    const [jobLogs,setJobLogs] = useState<string>('No Values Found');
-    const [open, setOpen] = React.useState(false);
+  
     const {AccordionLogs,button,modalLog,modalLogContainer,log,normalLogContainer} = useModalStyles();
 
     const { loading, error } = useAsync(async (): Promise<void> => {
-        const logs = await downloadJobLogs(hostname,projectName,jobId);
+        const logs = await downloadJobLogs(jobId);
         const logText =  String(logs);
         setJobLogs(logText);
       }, []);
