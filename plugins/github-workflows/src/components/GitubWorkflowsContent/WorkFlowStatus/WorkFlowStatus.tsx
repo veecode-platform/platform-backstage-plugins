@@ -7,12 +7,7 @@ import { PiWarningOctagon } from "react-icons/pi";
 import { Loading } from './loading';
 import { Queued } from './queued';
 import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
-
-type WorkFlowStatusProps = {
-    status?: string,
-    conclusion?: string,
-    icon?: boolean
-}
+import { WorkFlowStatusProps } from './types';
 
 const styles = {
     display: 'flex',
@@ -21,7 +16,9 @@ const styles = {
     gap: '.7rem'
 }
 
-export const WorkFlowStatus : React.FC<WorkFlowStatusProps> = ({ status, conclusion, icon }) => {
+export const WorkFlowStatus : React.FC<WorkFlowStatusProps> = (props) => {
+
+    const { status, conclusion, icon } = props;
 
     if (!status) return null;
    
