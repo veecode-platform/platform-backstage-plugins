@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React from 'react';
 import { Table, TableColumn, Link } from '@backstage/core-components';
 import LanguageIcon from '@material-ui/icons/Language';
 import { WorkFlowActions } from '../WorkFlowActions';
@@ -25,9 +25,9 @@ import { WorkFlowStatus } from '../WorkFlowStatus';
 
 const WorkflowTable : React.FC<WorkflowTableProps> = ({ items, updateData} ) => {
   
-  const [ showModal, setShowModal ] = useState<boolean>(false);
-  const [parametersState, setParametersState] = useState<WorkflowDispatchParameters[]|null>(null)
-  const [ loading, setLoading] = useState<boolean>(false);
+  const [ showModal, setShowModal ] = React.useState<boolean>(false);
+  const [parametersState, setParametersState] = React.useState<WorkflowDispatchParameters[]|null>(null)
+  const [ loading, setLoading] = React.useState<boolean>(false);
   const { entity } = useEntity();
   const { projectName, hostname } = useEntityAnnotations(entity as Entity);
   const navigate = useNavigate();
@@ -201,4 +201,4 @@ const WorkflowTable : React.FC<WorkflowTableProps> = ({ items, updateData} ) => 
   );
 };
 
-export default memo(WorkflowTable)
+export default React.memo(WorkflowTable)
