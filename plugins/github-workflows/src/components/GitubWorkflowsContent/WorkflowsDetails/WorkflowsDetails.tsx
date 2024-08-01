@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useRouteRefParams } from '@backstage/core-plugin-api';
-import { useEntity } from '@backstage/plugin-catalog-react';
-import { Entity } from '@backstage/catalog-model';
 import useAsync from 'react-use/lib/useAsync';
 import { Progress, ResponseErrorPanel } from '@backstage/core-components';
 import { useWorkflowDetailsStyles } from './styles';
@@ -12,26 +10,24 @@ import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import { useNavigate } from 'react-router-dom'
 import { useGithuWorkflowsContext } from '../../../context';
 import { buildRouteRef } from '../../../routes';
-import { useEntityAnnotations } from '../../../hooks';
-import { Job, WorkflowRun } from '../../../utils/types';
+import { addJobs, addWorkflowRun, initialJobsState, initialWorkflowRunState, JobsReducer, WorkflowRunReducer } from './state';
+import { WorkflowRun } from '../../../utils/types';
 
 const WorkflowsDetails = () => {
-  
+
+  const [workflowRunState,dispatchWorkflowRun] = React.useReducer(WorkflowRunReducer,initialWorkflowRunState);
+  const [jobsRunState, dispatchJobs] = React.useReducer(JobsReducer,initialJobsState);
   const { id } = useRouteRefParams(buildRouteRef);
-  const { entity } = useEntity();
-  const { projectName,hostname } = useEntityAnnotations(entity as Entity);
   const { getWorkflowById,listJobsForWorkflowRun } = useGithuWorkflowsContext();
-  const [workflowRun,setWorkflowRun] = useState<WorkflowRun|null>(null);
-  const [jobsRun, setJobsRun] = useState<Job[]|[]>([]);
   const { root,container,footer } = useWorkflowDetailsStyles();
   const navigate = useNavigate();
 
   const { loading, error } = useAsync(async (): Promise<void> => {
-    const workflowPromise = await getWorkflowById(hostname, projectName, Number(id));
-    const jobsPromise = await listJobsForWorkflowRun(hostname,projectName,Number(id));
+    const workflowPromise = await getWorkflowById(Number(id));
+    const jobsPromise = await listJobsForWorkflowRun(Number(id));
     const [workflow, jobs] = await Promise.all([workflowPromise, jobsPromise]);
-    setWorkflowRun(workflow);
-    setJobsRun(jobs);
+    dispatchWorkflowRun(addWorkflowRun(workflow as WorkflowRun));
+    dispatchJobs(addJobs(jobs));
   }, []);
 
   const handleBackNavigation = () => {
@@ -51,20 +47,20 @@ const WorkflowsDetails = () => {
         <div className={root}>
           <Grid container className={container} direction='column'>
               <DetailsComponent
-                runStartedAt={workflowRun!.run_started_at}
-                updatedAt={workflowRun!.updated_at}
-                status={workflowRun!.status}
-                conclusion={workflowRun!.conclusion}
-                avatar={workflowRun!.actor!.avatar_url}
-                author={workflowRun!.actor!.login}
-                branch={workflowRun!.head_branch}
-                headCommit={workflowRun!.head_sha!}
-                repo={workflowRun!.repository!.full_name}
+                runStartedAt={workflowRunState!.run_started_at}
+                updatedAt={workflowRunState!.updated_at}
+                status={workflowRunState!.status}
+                conclusion={workflowRunState!.conclusion}
+                avatar={workflowRunState!.actor!.avatar_url}
+                author={workflowRunState!.actor!.login}
+                branch={workflowRunState!.head_branch}
+                headCommit={workflowRunState!.head_sha!}
+                repo={workflowRunState!.repository!.full_name}
                />
                <JobsComponent 
-                 path={workflowRun?.path!}
-                 event={workflowRun?.event!}
-                 jobs={jobsRun}
+                 path={workflowRunState!.path!}
+                 event={workflowRunState!.event!}
+                 jobs={jobsRunState}
                  />   
                <div className={footer}>
                 <Tooltip title="Back" arrow placement='top-start'>
