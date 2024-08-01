@@ -1,4 +1,4 @@
-import { WorkflowDispatchParameters } from "../../utils/types"
+import { WorkflowDispatchParameters } from "../../../utils/types"
 
 export type WorkFlowActionsProps = {
     workflowId?: number,
