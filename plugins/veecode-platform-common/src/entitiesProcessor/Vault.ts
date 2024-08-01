@@ -33,7 +33,9 @@ import { VaultEntityV1alpha1, VaultEntityV1alpha1Validator } from '../kinds';
   /**
    * Adds support for scaffolder specific entity kinds to the catalog.
    *
-   * @public
+   * @deprecated
+   * 
+   * use @veecode-platform-module plugin , see in https://github.com/veecode-platform/platform-backstage-plugins/tree/develop/plugins/veecode-platform-module
    */
   export class VaultEntitiesProcessor implements CatalogProcessor {
     getProcessorName(): string {

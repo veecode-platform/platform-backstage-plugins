@@ -34,7 +34,9 @@ import { ClusterEntityV1alpha1, ClusterEntityV1alpha1Validator } from '../kinds'
 /**
  * Adds support for @veecode specific entity kind: cluster to the catalog.
  *
- * @public
+ * @deprecated
+ * 
+ *  use @veecode-platform-module plugin , see in https://github.com/veecode-platform/platform-backstage-plugins/tree/develop/plugins/veecode-platform-module
  */
 export class ClusterEntitiesProcessor implements CatalogProcessor {
   getProcessorName(): string {

@@ -34,7 +34,10 @@ import { EnvironmentEntityV1alpha1, EnvironmentEntityV1alpha1Validator } from '.
 /**
  * Adds support for scaffolder specific entity kinds to the catalog.
  *
- * @public
+ * @deprecated
+ * 
+ * use @veecode-platform-module plugin , see in https://github.com/veecode-platform/platform-backstage-plugins/tree/develop/plugins/veecode-platform-module
+ * 
  */
 export class EnvironmentEntitiesProcessor implements CatalogProcessor {
   getProcessorName(): string {
