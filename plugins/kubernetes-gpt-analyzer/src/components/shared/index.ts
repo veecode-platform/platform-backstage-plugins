@@ -1,3 +1,3 @@
-export { InfoBox } from './InfoBox';
-export { LoadingProgress } from './LoadingProgress';
-export { PluginNotConfigured } from './pluginNotConfigured';
+export { InfoBox } from './InfoBox/InfoBox';
+export { LoadingProgress } from './LoadingProgress/LoadingProgress';
+export { PluginNotConfigured } from './pluginNotConfigured/PluginNotConfigured';
