@@ -1,9 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { GithubWorkflowsContext } from './GithubWorkflowsContext';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { githubWorkflowsApiRef } from '../api';
-import { Job, WorkflowResultsProps } from '../utils/types';
+import { Job } from '../utils/types';
 import { sortWorflowsByName } from '../utils/helpers';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
@@ -19,6 +18,7 @@ interface GithubWorkflowsProviderProps {
 
 export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = ({ children }) => {
   
+  const [cardsView, setCardsView] = React.useState<boolean>(false);
   const [branch, setBranch] = React.useState<string>('');
   const [allWorkflowsState, dispatchWorkflows] = React.useReducer(WorkflowsReducer, initialWorkflowsState);
   const [ inputsParamsState, dispatchInputsParams ] = React.useReducer(InputsParamsReducer,initialInputsParamsState);
@@ -31,10 +31,7 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
     dispatchInputsParams(addInputsParams(inputsParams))
   }
 
-  const setWorkflowsState = (workflowsParams: WorkflowResultsProps[]) => {
-    dispatchWorkflows(addWorkflows(workflowsParams))
-  }
-  
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const setBranchState = React.useCallback((branchState: string) => setBranch(branchState),[branch])
 
   const listAllWorkflows = async (filter: string[] = []) => {
@@ -149,6 +146,8 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
   return (
     <GithubWorkflowsContext.Provider
       value={{
+        cardsView,
+        setCardsView,
         entity,
         projectName,
         hostname,
@@ -158,7 +157,7 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
         inputsParamsState,
         setInputParams,
         allWorkflowsState,
-        setWorkflowsState,
+        dispatchWorkflows,
         listAllWorkflows,
         listJobsForWorkflowRun,
         getWorkflowById,

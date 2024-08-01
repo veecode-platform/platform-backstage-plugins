@@ -2,9 +2,12 @@ import { createContext} from "react";
 import { Job, WorkflowResultsProps, WorkflowRun } from "../utils/types";
 import { RestEndpointMethodTypes } from "@octokit/rest";
 import { Entity } from "@backstage/catalog-model";
+import { WorkflowActionType } from "./state";
 
 
 export type GithubWorkflowsContextType = {
+  cardsView: boolean,
+  setCardsView: React.Dispatch<React.SetStateAction<boolean>>,
   entity: Entity,
   projectName: string,
   hostname: string,
@@ -14,7 +17,7 @@ export type GithubWorkflowsContextType = {
   inputsParamsState: object,
   setInputParams: (inputsParams: object) => void,
   allWorkflowsState: WorkflowResultsProps[],
-  setWorkflowsState: (workflowsParams: WorkflowResultsProps[]) => void,
+  dispatchWorkflows: React.Dispatch<WorkflowActionType>,
   listAllWorkflows: (filter?: string[]) => Promise<WorkflowResultsProps[] | null | void>,
   listJobsForWorkflowRun: (id: number) => Promise<Job[]>,
   getWorkflowById:(id: number) => Promise<WorkflowRun|null>,
