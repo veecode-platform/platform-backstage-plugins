@@ -1,13 +1,10 @@
-import React, { memo, useEffect, useState } from 'react';
-import { Table, TableColumn, Progress, ResponseErrorPanel, Link, EmptyState } from '@backstage/core-components';
-import useAsync from 'react-use/lib/useAsync';
+import React, { memo, useState } from 'react';
+import { Table, TableColumn, Link } from '@backstage/core-components';
 import LanguageIcon from '@material-ui/icons/Language';
-import { WorkFlowStatus } from '../../WorkFlowStatus';
-import { WorkFlowActions } from '../../WorkFlowActions';
-import { Box, Button, Tooltip, Typography } from '@material-ui/core';
-import { WorkflowDispatchParameters, WorkflowResultsProps } from '../../../utils/types';
+import { WorkFlowActions } from '../WorkFlowActions';
+import { Box, Tooltip, Typography } from '@material-ui/core';
+import { WorkflowDispatchParameters } from '../../../utils/types';
 import { truncateString } from '../../../utils/helpers';
-import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
 import { useEntityAnnotations } from '../../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
@@ -20,13 +17,13 @@ import GithubIcon from '../../../assets/GithubIcon';
 import { useNavigate } from 'react-router-dom';
 import Timer from '@material-ui/icons/Timer';
 import { useWorkflowTableStyles } from './styles';
-import { useGithuWorkflowsContext } from '../../../context';
-import { DenseTableProps } from './types';
+import { WorkflowTableProps } from './types';
 import SelectBranch from '../../SelectBranch/SelectBranch';
 import { IoOpenOutline } from "react-icons/io5";
+import { WorkFlowStatus } from '../WorkFlowStatus';
 
 
-export const DenseTable : React.FC<DenseTableProps> = ({ items, updateData} ) => {
+const WorkflowTable : React.FC<WorkflowTableProps> = ({ items, updateData} ) => {
   
   const [ showModal, setShowModal ] = useState<boolean>(false);
   const [parametersState, setParametersState] = useState<WorkflowDispatchParameters[]|null>(null)
@@ -201,73 +198,6 @@ export const DenseTable : React.FC<DenseTableProps> = ({ items, updateData} ) =>
         }
         </>
   </>
-  );
-};
-
-const WorkflowTable = () => {
-
-  const { entity } = useEntity();
-  const { projectName, hostname } = useEntityAnnotations(entity as Entity);
-  const [ loadingState, setLoadingState ] = useState(true);
-  const { branch, listAllWorkflows, workflowsState, setWorkflowsState } = useGithuWorkflowsContext();
-
-  const updateData = async ()=> {
-    const data = await listAllWorkflows(hostname,projectName);
-    setWorkflowsState(data as WorkflowResultsProps[])
-  }
-  
-  const { loading, error } = useAsync(async (): Promise<void> => {
-    updateData();
-  }, []);
-
-  useEffect(()=>{
-    setTimeout(()=>{
-      setLoadingState(false)
-    },2000)
-  },[])
-
-  useEffect(()=>{
-    updateData();
-// eslint-disable-next-line react-hooks/exhaustive-deps
-},[branch]);
-
-
-  if (loading) {
-    return <Progress />;
-  }
-
-  if(!error  && !workflowsState) {
-    return (
-      <>
-      { loadingState ? (<Progress />):(<EmptyState
-      missing="data"
-      title="No Workflow Data"
-      description="This component has GitHub Actions enabled, but no data was found. Have you created any Workflows? Click the button below to create a new Workflow."
-      action={
-        <Button
-          variant="contained"
-          color="primary"
-          href={`https://${hostname}/${projectName}/actions/new`}
-        >
-          Create new Workflow
-        </Button>
-      }
-    />)}
-    </>
-    )
-  }
-  
-  if (error) {
-    return <ResponseErrorPanel error={error} />;
-  }
-
-  return (
-    <ErrorBoundary>
-      <DenseTable 
-      items={workflowsState || []} 
-      updateData={updateData}
-      />
-    </ErrorBoundary>
   );
 };
 

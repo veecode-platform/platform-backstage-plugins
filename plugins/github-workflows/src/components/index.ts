@@ -1,4 +1,2 @@
-export * from './GithubWorkflowsOverview';
-export * from './GithubWorkflowsCards';
-export * from './GitubWorkflowsList';
+export * from './GitubWorkflowsContent';
 export * from '../context';

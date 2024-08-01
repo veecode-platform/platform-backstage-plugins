@@ -1,5 +1,4 @@
 import React from 'react';
-import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
 import { FaCircleCheck } from "react-icons/fa6";
 import { IoCloseCircle } from "react-icons/io5";
 import { RiErrorWarningFill } from "react-icons/ri";
@@ -7,6 +6,7 @@ import { MdPlayCircle } from "react-icons/md";
 import { PiWarningOctagon } from "react-icons/pi";
 import { Loading } from './loading';
 import { Queued } from './queued';
+import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
 
 type WorkFlowStatusProps = {
     status?: string,

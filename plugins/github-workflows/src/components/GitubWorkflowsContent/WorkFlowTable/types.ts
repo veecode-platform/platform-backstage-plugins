@@ -1,6 +1,6 @@
 import { WorkflowResultsProps } from "../../../utils/types";
 
-export type DenseTableProps = {
+export type WorkflowTableProps = {
     items: WorkflowResultsProps[] | [],
     updateData: () => Promise<void>
   };

@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { StatusWorkflowEnum } from '../../utils/enums/WorkflowListEnum';
+import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
 import SyncIcon from '@material-ui/icons/Sync';
 import ReplayIcon from '@material-ui/icons/Replay';
 import TimerIcon from '@material-ui/icons/Timer';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { Tooltip } from '@material-ui/core';
-import { WorkflowResultsProps } from '../../utils/types';
+import { WorkflowResultsProps } from '../../../utils/types';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
-import { useEntityAnnotations } from '../../hooks';
-import { ModalComponent } from '../ModalComponent';
+import { useEntityAnnotations } from '../../../hooks';
+import { ModalComponent } from '../../ModalComponent';
 import { IoMdTime } from "react-icons/io";
 import { useWorkflowActionsStyles } from './styles';
 import { WorkFlowActionsProps } from './types';
-import { useGithuWorkflowsContext } from '../../context';
+import { useGithuWorkflowsContext } from '../../../context';
 
 export const WorkFlowActions: React.FC<WorkFlowActionsProps> = ({ workflowId, status, conclusion, parameters }) => {
   const { entity } = useEntity();

@@ -1,14 +1,14 @@
 import { Box, Tooltip, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
-import { WorkFlowStatus } from '../../../WorkFlowStatus';
 import { truncateString } from '../../../../utils/helpers';
-import { WorkFlowActions } from '../../../WorkFlowActions';
+import { WorkFlowActions } from '../../WorkFlowActions';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../../../ModalComponent';
 import { StatusWorkflowEnum } from '../../../../utils/enums/WorkflowListEnum';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { WorkFlowItemProps } from './types';
 import { useWorkflowItemStyles } from './styles';
+import { WorkFlowStatus } from '../../WorkFlowStatus';
 
 
 export const WorkFlowItem : React.FC<WorkFlowItemProps> = (props) => {

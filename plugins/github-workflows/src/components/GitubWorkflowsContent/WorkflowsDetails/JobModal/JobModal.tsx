@@ -1,4 +1,4 @@
-import '../../shared/globalstyle.css';
+import '../../../shared/globalstyle.css';
 import React, { useState } from 'react'
 import { Accordion, AccordionSummary, Box, CircularProgress, Fade, List, ListItem, ListItemAvatar, ListItemText, Modal, Tooltip, Typography, Zoom } from '@material-ui/core'
 import { useModalStyles } from './styles'
@@ -6,21 +6,21 @@ import { WorkFlowStatus } from '../../WorkFlowStatus'
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
-import { calculateDuration } from '../../../utils/helpers';
+import { calculateDuration } from '../../../../utils/helpers';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import CancelIcon from '@material-ui/icons/Cancel';
 import BlockIcon from '@material-ui/icons/Block';
 import useAsync from 'react-use/lib/useAsync'
-import { useGithuWorkflowsContext } from '../../../context'
 import { useEntity } from '@backstage/plugin-catalog-react'
-import { useEntityAnnotations } from '../../../hooks'
+import { useEntityAnnotations } from '../../../../hooks'
 import { Entity } from '@backstage/catalog-model'
-import { InfoBox } from '../../shared'
+import { InfoBox } from '../../../shared'
 import { LogViewer, Progress } from '@backstage/core-components'
 import DescriptionIcon from '@material-ui/icons/Description';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum'
+import { StatusWorkflowEnum } from '../../../../utils/enums/WorkflowListEnum'
 import { HeaderComponentProps, JobLogsComponentProps, JobModalProps, StepsListComponentsProps } from '../types';
+import { useGithuWorkflowsContext } from '../../../../context';
 
 dayjs.extend(relativeTime);
 dayjs.extend(duration);

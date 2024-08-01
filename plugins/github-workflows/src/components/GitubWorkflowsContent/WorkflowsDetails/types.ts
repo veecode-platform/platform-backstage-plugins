@@ -1,4 +1,4 @@
-import { Job, Step } from "../../utils/types"
+import { Job, Step } from "../../../utils/types"
 
 export type WorkflowDetailsProps = {
     runStartedAt: string,

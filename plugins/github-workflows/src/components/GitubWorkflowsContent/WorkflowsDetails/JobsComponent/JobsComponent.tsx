@@ -1,11 +1,11 @@
 import { Box, Paper, Tooltip, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
-import { Job } from '../../../utils/types'
-import { calculateDuration, getFileNameToPath } from '../../../utils/helpers'
 import { useWorkflowDetailsStyles } from '../styles'
 import { WorkFlowStatus } from '../../WorkFlowStatus'
 import { JobModal } from '../JobModal'
 import { JobsComponentProps } from '../types'
+import { calculateDuration, getFileNameToPath } from '../../../../utils/helpers'
+import { Job } from '../../../../utils/types'
 
 export const JobsComponent : React.FC<JobsComponentProps> = (props) => {
 

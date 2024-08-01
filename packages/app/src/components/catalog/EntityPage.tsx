@@ -28,11 +28,6 @@ import {
   isOrphan,
 } from '@backstage/plugin-catalog';
 import {
-  // EntityGithubActionsContent,
-  isGithubActionsAvailable,
-  // EntityGithubActionsContent,
-} from '@backstage-community/plugin-github-actions';
-import {
   EntityUserProfileCard,
   EntityGroupProfileCard,
   EntityMembersListCard,
@@ -60,7 +55,7 @@ import {
 import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 
-import { isGithubWorkflowsAvailable, GithubWorkflowsCard, GithubWorkflowsList, /* isGithubAvailable */} from '@veecode-platform/backstage-plugin-github-workflows'
+import { isGithubWorkflowsAvailable, GithubWorkflowsContent, isGithubAvailable } from '@veecode-platform/backstage-plugin-github-workflows'
 import { GitlabJobs, GitlabPipelineList, isGitlabAvailable, isGitlabJobsAvailable } from '@veecode-platform/backstage-plugin-gitlab-pipelines';
 import { EntityKubernetesContent } from '@backstage/plugin-kubernetes';
 import { ClusterInstructionsCard, ClusterOverviewPage, isClusterInstructionsAvailable } from '@veecode-platform/backstage-plugin-cluster-explorer';
@@ -84,9 +79,9 @@ const cicdContent = (
   // This is an example of how you can implement your company's logic in entity page.
   // You can for example enforce that all components of type 'service' should use GitHubActions
   <EntitySwitch>
-    <EntitySwitch.Case if={isGithubActionsAvailable}>
+    <EntitySwitch.Case if={isGithubAvailable}>
       {/* <EntityGithubActionsContent /> */}
-      <GithubWorkflowsList/>
+      <GithubWorkflowsContent/>
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isGitlabAvailable}>
@@ -170,7 +165,7 @@ const overviewContent = (
     <EntitySwitch>
       <EntitySwitch.Case if={isGithubWorkflowsAvailable}>
         <Grid item lg={12} xs={12}>
-          <GithubWorkflowsCard />
+          <GithubWorkflowsContent cards />
         </Grid>
       </EntitySwitch.Case>
     </EntitySwitch>
@@ -512,7 +507,7 @@ const clusterPage = (
         <EntitySwitch>
           <EntitySwitch.Case if={isGithubWorkflowsAvailable}>
             <Grid item lg={8} xs={12}>
-              <GithubWorkflowsCard />
+              <GithubWorkflowsContent cards />
             </Grid>
           </EntitySwitch.Case>
         </EntitySwitch>
@@ -583,7 +578,7 @@ const databasePage = (
           <EntitySwitch>
             <EntitySwitch.Case if={isGithubWorkflowsAvailable}>
               <Grid item lg={12} xs={12}>
-                <GithubWorkflowsCard />
+                <GithubWorkflowsContent cards />
               </Grid>
             </EntitySwitch.Case>
           </EntitySwitch>

@@ -1,22 +1,21 @@
-/* eslint-disable @backstage/no-undeclared-imports */
 import React, { useState } from 'react'
-import { GithubWorkflowsProvider, useGithuWorkflowsContext } from '../../context';
 import { useRouteRefParams } from '@backstage/core-plugin-api';
-import { buildRouteRef } from '../../routes';
-import { useEntityAnnotations } from '../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import useAsync from 'react-use/lib/useAsync';
 import { Progress, ResponseErrorPanel } from '@backstage/core-components';
 import { useWorkflowDetailsStyles } from './styles';
 import { Button, Grid, Tooltip } from '@material-ui/core';
-import { WorkflowDetails } from './WorklowDetails';
-import { Job, WorkflowRun } from '../../utils/types';
+import { DetailsComponent } from './DetailsComponent';
 import {JobsComponent} from './JobsComponent/JobsComponent';
 import KeyboardReturnIcon from '@material-ui/icons/KeyboardReturn';
 import { useNavigate } from 'react-router-dom'
+import { useGithuWorkflowsContext } from '../../../context';
+import { buildRouteRef } from '../../../routes';
+import { useEntityAnnotations } from '../../../hooks';
+import { Job, WorkflowRun } from '../../../utils/types';
 
-const GithubWorkflowsDetails = () => {
+const WorkflowsDetails = () => {
   
   const { id } = useRouteRefParams(buildRouteRef);
   const { entity } = useEntity();
@@ -49,10 +48,9 @@ const GithubWorkflowsDetails = () => {
 
 
   return (
-    <GithubWorkflowsProvider>
         <div className={root}>
           <Grid container className={container} direction='column'>
-              <WorkflowDetails
+              <DetailsComponent
                 runStartedAt={workflowRun!.run_started_at}
                 updatedAt={workflowRun!.updated_at}
                 status={workflowRun!.status}
@@ -77,8 +75,7 @@ const GithubWorkflowsDetails = () => {
                </div>           
             </Grid>
         </div>
-    </GithubWorkflowsProvider>
   )
 }
 
-export default GithubWorkflowsDetails
+export default WorkflowsDetails
