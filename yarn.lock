@@ -14199,6 +14199,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@veecode-platform/plugin-veecode-platform-module@workspace:plugins/veecode-platform-module":
+  version: 0.0.0-use.local
+  resolution: "@veecode-platform/plugin-veecode-platform-module@workspace:plugins/veecode-platform-module"
+  dependencies:
+    "@backstage/backend-plugin-api": ^0.7.0
+    "@backstage/cli": ^0.26.10
+    "@backstage/plugin-catalog-node": ^1.12.4
+  languageName: unknown
+  linkType: soft
+
 "@veecode-platform/veecode-scaffolder-extensions@workspace:^, @veecode-platform/veecode-scaffolder-extensions@workspace:plugins/veecode-scaffolder-extensions":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/veecode-scaffolder-extensions@workspace:plugins/veecode-scaffolder-extensions"
