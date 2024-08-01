@@ -17,9 +17,10 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
   const {cards} = props;
   const [ loadingState, setLoadingState ] = React.useState(true);
   const { setCardsView, entity, hostname, projectName, workflowsByAnnotation, branch, listAllWorkflows, allWorkflowsState, dispatchWorkflows } = useGithuWorkflowsContext();
+  const filters = workflowsByAnnotation ? workflowsByAnnotation : []
 
   const updateData = async ()=> {
-    const data = await listAllWorkflows(cards ? (workflowsByAnnotation ? workflowsByAnnotation : []) ! : []);
+    const data = await listAllWorkflows(cards ? filters : []);
     dispatchWorkflows(addWorkflows(data as WorkflowResultsProps[]))
   }
   
