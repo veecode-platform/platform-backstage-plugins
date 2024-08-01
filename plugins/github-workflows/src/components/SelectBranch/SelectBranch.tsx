@@ -45,7 +45,7 @@ const SelectBranch = () => {
   useEffect(() => {
     getBranches();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [api, projectName, dispatchBranches]);
+  }, [projectName, entity]);
 
   useEffect(()=>{
     setBranchState(branchDefault)
