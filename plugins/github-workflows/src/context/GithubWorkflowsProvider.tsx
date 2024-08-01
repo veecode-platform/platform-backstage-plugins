@@ -23,7 +23,7 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
   const [allWorkflowsState, dispatchWorkflows] = React.useReducer(WorkflowsReducer, initialWorkflowsState);
   const [ inputsParamsState, dispatchInputsParams ] = React.useReducer(InputsParamsReducer,initialInputsParamsState);
   const { entity } = useEntity();
-  const { projectName,hostname } = useEntityAnnotations(entity as Entity);
+  const { projectName,hostname,workflowsByAnnotation } = useEntityAnnotations(entity as Entity);
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
   
@@ -149,15 +149,19 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
   return (
     <GithubWorkflowsContext.Provider
       value={{
-        listAllWorkflows,
-        listJobsForWorkflowRun,
+        entity,
+        projectName,
+        hostname,
+        workflowsByAnnotation,
         branch,
         setBranchState,
         inputsParamsState,
         setInputParams,
-        getWorkflowById,
         allWorkflowsState,
         setWorkflowsState,
+        listAllWorkflows,
+        listJobsForWorkflowRun,
+        getWorkflowById,
         handleStartWorkflowRun,
         handleStopWorkflowRun,
         downloadJobLogs,
