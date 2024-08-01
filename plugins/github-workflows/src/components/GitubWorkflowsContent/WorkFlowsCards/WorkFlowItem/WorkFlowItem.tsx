@@ -1,22 +1,22 @@
+import React from 'react';
 import { Box, Tooltip, Typography } from '@material-ui/core';
-import React, { useState } from 'react';
 import { truncateString } from '../../../../utils/helpers';
 import { WorkFlowActions } from '../../WorkFlowActions';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { ModalComponent } from '../../../ModalComponent';
 import { StatusWorkflowEnum } from '../../../../utils/enums/WorkflowListEnum';
-import { useEntity } from '@backstage/plugin-catalog-react';
 import { WorkFlowItemProps } from './types';
 import { useWorkflowItemStyles } from './styles';
 import { WorkFlowStatus } from '../../WorkFlowStatus';
+import { useGithuWorkflowsContext } from '../../../../context';
 
 
 export const WorkFlowItem : React.FC<WorkFlowItemProps> = (props) => {
 
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const { id, status, conclusion, workflowName, parameters, lastRunId } = props;
+  const [showModal, setShowModal] = React.useState<boolean>(false);
+  const { entity } = useGithuWorkflowsContext();
   const classes = useWorkflowItemStyles();
-  const { entity } = useEntity();
+  const { id, status, conclusion, workflowName, parameters, lastRunId } = props;
 
   const handleShowModal = () => {
     setShowModal(!showModal)
