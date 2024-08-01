@@ -23,8 +23,8 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
     dispatchWorkflows(addWorkflows(data as WorkflowResultsProps[]))
   }
   
-  const { loading, error } = useAsync(async (): Promise<void> => {
-    updateData();
+  const { value, loading, error } = useAsync(async (): Promise<void> => {
+    await listAllWorkflows(cards ? (workflowsByAnnotation ? workflowsByAnnotation : []) ! : []);
   }, [entity]);
 
   React.useEffect(()=>{
@@ -78,7 +78,7 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
   if (cards) {
     return (
         <Grid item >
-           <WorkFlowsCards items={allWorkflowsState} updateData={updateData} />
+           <WorkFlowsCards items={allWorkflowsState ?? value} updateData={updateData} />
         </Grid>
      )
   }
@@ -87,7 +87,7 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
     <ErrorBoundary>
       <Grid container spacing={3} direction="column">
         <Grid item>
-          <WorkflowTable items={allWorkflowsState} updateData={updateData} />
+          <WorkflowTable items={allWorkflowsState ?? value} updateData={updateData} />
         </Grid>
       </Grid>
     </ErrorBoundary>
