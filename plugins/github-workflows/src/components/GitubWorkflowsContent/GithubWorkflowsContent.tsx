@@ -20,7 +20,7 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
   const { entity } = useEntity();
   const { projectName, hostname, workflows } = useEntityAnnotations(entity as Entity);
   const [ loadingState, setLoadingState ] = React.useState(true);
-  const { branch, listAllWorkflows, workflowsState, setWorkflowsState } = useGithuWorkflowsContext();
+  const { branch, listAllWorkflows, allWorkflowsState, setWorkflowsState } = useGithuWorkflowsContext();
 
   const updateData = async ()=> {
     const data = await listAllWorkflows(cards ? workflows! : []);
@@ -29,7 +29,7 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
   
   const { loading, error } = useAsync(async (): Promise<void> => {
     updateData();
-  }, []);
+  }, [entity]);
 
   React.useEffect(()=>{
     setTimeout(()=>{
@@ -47,7 +47,7 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
     return <Progress />;
   }
 
-  if(!error  && !workflowsState) {
+  if(!error  && !allWorkflowsState) {
     return (
       <>
       { loadingState ? (<Progress />):(<EmptyState
@@ -75,7 +75,7 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
   if (cards) {
     return (
         <Grid item >
-           <WorkFlowsCards items={workflowsState!} updateData={updateData} />
+           <WorkFlowsCards items={allWorkflowsState} updateData={updateData} />
         </Grid>
      )
   }
@@ -84,7 +84,7 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
     <ErrorBoundary>
       <Grid container spacing={3} direction="column">
         <Grid item>
-          <WorkflowTable items={workflowsState!} updateData={updateData} />
+          <WorkflowTable items={allWorkflowsState} updateData={updateData} />
         </Grid>
       </Grid>
     </ErrorBoundary>
