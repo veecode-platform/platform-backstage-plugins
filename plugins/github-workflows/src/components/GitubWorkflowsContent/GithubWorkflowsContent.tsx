@@ -9,17 +9,18 @@ import { WorkflowResultsProps } from '../../utils/types';
 import useAsync from 'react-use/esm/useAsync';
 import { EmptyState, ErrorBoundary, Progress, ResponseErrorPanel } from '@backstage/core-components';
 import WorkflowsDetails from './WorkflowsDetails/WorkflowsDetails';
+import { addWorkflows } from '../../context/state';
 
 
 const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
 
   const {cards} = props;
   const [ loadingState, setLoadingState ] = React.useState(true);
-  const { entity, hostname, projectName, workflowsByAnnotation, branch, listAllWorkflows, allWorkflowsState, setWorkflowsState } = useGithuWorkflowsContext();
+  const { setCardsView, entity, hostname, projectName, workflowsByAnnotation, branch, listAllWorkflows, allWorkflowsState, dispatchWorkflows } = useGithuWorkflowsContext();
 
   const updateData = async ()=> {
     const data = await listAllWorkflows(cards ? (workflowsByAnnotation ? workflowsByAnnotation : []) ! : []);
-    setWorkflowsState(data as WorkflowResultsProps[])
+    dispatchWorkflows(addWorkflows(data as WorkflowResultsProps[]))
   }
   
   const { loading, error } = useAsync(async (): Promise<void> => {
@@ -31,6 +32,13 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
       setLoadingState(false)
     },2000)
   },[])
+
+  React.useEffect(()=>{
+    if(cards){
+      setCardsView(true)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[props])
 
   React.useEffect(()=>{
     updateData();
