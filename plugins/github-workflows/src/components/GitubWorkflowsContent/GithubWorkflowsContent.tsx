@@ -23,7 +23,7 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
   const { branch, listAllWorkflows, workflowsState, setWorkflowsState } = useGithuWorkflowsContext();
 
   const updateData = async ()=> {
-    const data = await listAllWorkflows(hostname,projectName, cards ? workflows! : []);
+    const data = await listAllWorkflows(cards ? workflows! : []);
     setWorkflowsState(data as WorkflowResultsProps[])
   }
   

@@ -1,35 +1,45 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { ReactNode, useCallback, useContext } from 'react';
-import { useState } from "react";
+import React from 'react';
 import { GithubWorkflowsContext } from './GithubWorkflowsContext';
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { githubWorkflowsApiRef } from '../api';
 import { Job, WorkflowResultsProps } from '../utils/types';
 import { sortWorflowsByName } from '../utils/helpers';
+import { useEntity } from '@backstage/plugin-catalog-react';
+import { Entity } from '@backstage/catalog-model';
+import { useEntityAnnotations } from '../hooks';
+import { addWorkflows, initialWorkflowsState, WorkflowsReducer } from './state';
+import { initialInputsParamsState, InputsParamsReducer } from './state/inputParamsState/reducer';
+import { addInputsParams } from './state/inputParamsState/actions';
 
 interface GithubWorkflowsProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 
 export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = ({ children }) => {
-
-  const [branch, setBranch] = useState<string | null>(null);
-  const [workflowsState, setWorkflowsState] = useState<WorkflowResultsProps[] | null>(null);
-  const [ inputsWorkflowsParams, setInputsWorkflowsParams ] = useState<object|null>(null);
-  const [workflowsByAnnotationsState, setWorkflowsByAnnotationsState] = useState<WorkflowResultsProps[] | null>(null);
+  
+  const [branch, setBranch] = React.useState<string>('');
+  const [allWorkflowsState, dispatchWorkflows] = React.useReducer(WorkflowsReducer, initialWorkflowsState);
+  const [ inputsParamsState, dispatchInputsParams ] = React.useReducer(InputsParamsReducer,initialInputsParamsState);
+  const { entity } = useEntity();
+  const { projectName,hostname } = useEntityAnnotations(entity as Entity);
   const api = useApi(githubWorkflowsApiRef);
   const errorApi = useApi(errorApiRef);
   
-  const setBranchState = useCallback((branchState: string) => setBranch(branchState),[branch])
-
-  const setInputs = (inputs: object) => {
-    setInputsWorkflowsParams(inputs);
+  const setInputParams = (inputsParams: object) => {
+    dispatchInputsParams(addInputsParams(inputsParams))
   }
 
-  const listAllWorkflows = async (hostname:string, projectName: string, filter: string[] = []) => {
+  const setWorkflowsState = (workflowsParams: WorkflowResultsProps[]) => {
+    dispatchWorkflows(addWorkflows(workflowsParams))
+  }
+  
+  const setBranchState = React.useCallback((branchState: string) => setBranch(branchState),[branch])
+
+  const listAllWorkflows = async (filter: string[] = []) => {
     try {
-      const workflows = await api.listWorkflows(hostname,projectName, branch!, filter);
+      const workflows = await api.listWorkflows(hostname,projectName, branch, filter);
       if(workflows){
         const newWorkflowsState = await Promise.all(workflows.map(async (w) => {
           return {
@@ -44,7 +54,7 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
           };
         }));
         const ordelyWorkflows = sortWorflowsByName(newWorkflowsState)
-        setWorkflowsState(ordelyWorkflows);
+        dispatchWorkflows(addWorkflows(ordelyWorkflows));
         return ordelyWorkflows;
       }
       return [];
@@ -54,7 +64,7 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
     }
   }
 
-  const getWorkflowById = async (hostname:string,projectName:string,id:number) => {
+  const getWorkflowById = async (id:number) => {
     try{
       const data = await api.getWorkflowRunById(hostname,projectName,id);
       const workflow = {
@@ -80,7 +90,7 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
     }
   }
 
-  const listJobsForWorkflowRun = async (hostname:string, projectName:string, id: number) => {
+  const listJobsForWorkflowRun = async (id: number) => {
     try{
       const data = await api.listJobsForWorkflowRun(hostname,projectName,id);
       return data.jobs as Job[];
@@ -91,9 +101,9 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
     }
   }
 
-  const handleStartWorkflowRun = async (hostname:string,projectSlug: string, workFlowId: number, ) => { 
+  const handleStartWorkflowRun = async ( workFlowId: number, ) => { 
     try {
-      const response = await api.startWorkflowRun(hostname, projectSlug, workFlowId,branch!, inputsWorkflowsParams as any);
+      const response = await api.startWorkflowRun(hostname, projectName, workFlowId,branch, inputsParamsState as any);
       if(response === 204) return true;
       return false
     }
@@ -103,18 +113,18 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
      }
   };
 
-  const handleStopWorkflowRun = async (hostname:string,projectSlug: string,runId: number) => {
+  const handleStopWorkflowRun = async (runId: number) => {
     try {
-      await api.stopWorkflowRun(hostname,projectSlug,runId);
+      await api.stopWorkflowRun(hostname,projectName,runId);
     }
     catch (e:any) {
       errorApi.post(e)
      }
   }
 
-  const downloadJobLogs = async (hostname:string,projectSlug: string,jobId:number) => {
+  const downloadJobLogs = async (jobId:number) => {
     try{
-      const response = await api.downloadJobLogsForWorkflowRun(hostname,projectSlug,jobId);
+      const response = await api.downloadJobLogsForWorkflowRun(hostname,projectName,jobId);
       if(response) return response;
       return null
       } 
@@ -124,9 +134,9 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
      }
   }
 
-  const listAllEnvironments = async(hostname:string,projectSlug:string)=>{
+  const listAllEnvironments = async()=>{
     try{
-      const response = await api.getEnvironmentsList(hostname,projectSlug);
+      const response = await api.getEnvironmentsList(hostname,projectName);
       if(response) return response;
       return null
     }catch(e:any){
@@ -135,6 +145,7 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
     }
   }
 
+
   return (
     <GithubWorkflowsContext.Provider
       value={{
@@ -142,13 +153,11 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
         listJobsForWorkflowRun,
         branch,
         setBranchState,
-        setInputs,
-        inputsWorkflowsParams,
+        inputsParamsState,
+        setInputParams,
         getWorkflowById,
-        workflowsState,
+        allWorkflowsState,
         setWorkflowsState,
-        workflowsByAnnotationsState,
-        setWorkflowsByAnnotationsState,
         handleStartWorkflowRun,
         handleStopWorkflowRun,
         downloadJobLogs,
@@ -159,4 +168,4 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
   );
 };
 
-export const useGithuWorkflowsContext = () => useContext(GithubWorkflowsContext)
+export const useGithuWorkflowsContext = () => React.useContext(GithubWorkflowsContext)

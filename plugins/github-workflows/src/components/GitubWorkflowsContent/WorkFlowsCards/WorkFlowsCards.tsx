@@ -7,18 +7,25 @@ import GithubIcon from '../../../assets/GithubIcon';
 import { useWorkflowCardStyles } from './styles';
 import { CardsProps } from './types';
 import SelectBranch from '../../SelectBranch/SelectBranch';
+import { useGithuWorkflowsContext } from '../../../context';
 
 
 const WorkFlowCard : React.FC<CardsProps> = ({ items, updateData }) => {
 
   const [ loading, setLoading] = useState<boolean>(false);
   const {title, options, buttonRefresh,workflowsGroup,loadingComponent,info} = useWorkflowCardStyles();
+  const { branch } = useGithuWorkflowsContext();
 
   const refresh = async ()=> {
     setLoading(true)
     await updateData()
     setTimeout(()=> setLoading(false), 1500);
   }
+
+  React.useEffect(()=>{
+    // eslint-disable-next-line no-console
+    console.log(`alterou a branch para ${branch}`)
+  },[branch])
 
   const TitleBar = (
     <>
@@ -32,7 +39,6 @@ const WorkFlowCard : React.FC<CardsProps> = ({ items, updateData }) => {
   const ActionsCard = (
     <Box className={options}>
       <SelectBranch/>
-
       <IconButton
         aria-label="Refresh"
         title="Refresh"
@@ -80,68 +86,5 @@ const WorkFlowCard : React.FC<CardsProps> = ({ items, updateData }) => {
     </Paper>
   )
 }
-
-// const WorkFlowCard = () => {
-  
-//   const { entity } = useEntity();
-//   const { projectName, workflows, hostname } = useEntityAnnotations(entity as Entity)
-//   const { listAllWorkflows, branch, workflowsState, setWorkflowsState } = useGithuWorkflowsContext();
-
-//   const updateData = async ()=> {
-//     const data = await listAllWorkflows(hostname,projectName, workflows as string[]);
-//     setWorkflowsState(data as WorkflowResultsProps[])
-//   }
-
-//   const { loading, error } = useAsync(async (): Promise<void> => {
-//     if(workflows){
-//       const data = await listAllWorkflows(hostname,projectName, workflows);
-//       setWorkflowsState(data as WorkflowResultsProps[])
-//     }
-// }, []);
-
-//   useEffect(()=>{
-//     updateData();
-//   },[branch])
-
-
-//   if(!workflows){
-//     return (
-//       <MissingAnnotationEmptyState annotation={WORKFLOW_ANNOTATION} />
-//     )
-//   }
-
-//   if (loading) {
-//     return <Progress />;
-//   } 
-
-//   if(!error && !workflowsState) {
-//     return (
-//       <EmptyState
-//       missing="data"
-//       title="No Workflow Data"
-//       description="This component has GitHub Actions enabled, but no data was found. Have you created any Workflows? Click the button below to create a new Workflow."
-//       action={
-//         <Button
-//           variant="contained"
-//           color="primary"
-//           href={`https://${hostname}/${projectName}/actions/new`}
-//         >
-//           Create new Workflow
-//         </Button>
-//       }
-//     />
-//     )
-//   }
-  
-//   if (error) {
-//     return <ResponseErrorPanel error={error} />;
-//   }
-
-//   return (
-//     <ErrorBoundary>
-//        <Cards items={workflowsState || []} updateData={updateData} />
-//     </ErrorBoundary>
-//     );
-// };
 
 export default memo(WorkFlowCard)
