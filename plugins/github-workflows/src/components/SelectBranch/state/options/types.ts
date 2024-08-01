@@ -1,4 +1,4 @@
-export type OptionsProps = {
+export type OptionProps = {
     label: string;
     value: string;
   };
