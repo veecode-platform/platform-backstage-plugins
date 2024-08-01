@@ -5,9 +5,6 @@ import { Route, Routes } from 'react-router-dom';
 import WorkflowTable from './WorkFlowTable/WorkflowTable';
 import WorkFlowsCards from './WorkFlowsCards/WorkFlowsCards';
 import { GithubWorkflowsEntityProps } from './types';
-import { useEntity } from '@backstage/plugin-catalog-react';
-import { useEntityAnnotations } from '../../hooks';
-import { Entity } from '@backstage/catalog-model';
 import { WorkflowResultsProps } from '../../utils/types';
 import useAsync from 'react-use/esm/useAsync';
 import { EmptyState, ErrorBoundary, Progress, ResponseErrorPanel } from '@backstage/core-components';
@@ -17,13 +14,11 @@ import WorkflowsDetails from './WorkflowsDetails/WorkflowsDetails';
 const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
 
   const {cards} = props;
-  const { entity } = useEntity();
-  const { projectName, hostname, workflows } = useEntityAnnotations(entity as Entity);
   const [ loadingState, setLoadingState ] = React.useState(true);
-  const { branch, listAllWorkflows, allWorkflowsState, setWorkflowsState } = useGithuWorkflowsContext();
+  const { entity, hostname, projectName, workflowsByAnnotation, branch, listAllWorkflows, allWorkflowsState, setWorkflowsState } = useGithuWorkflowsContext();
 
   const updateData = async ()=> {
-    const data = await listAllWorkflows(cards ? workflows! : []);
+    const data = await listAllWorkflows(cards ? (workflowsByAnnotation ? workflowsByAnnotation : []) ! : []);
     setWorkflowsState(data as WorkflowResultsProps[])
   }
   
