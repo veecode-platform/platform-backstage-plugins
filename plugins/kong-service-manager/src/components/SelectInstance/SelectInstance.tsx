@@ -5,7 +5,7 @@ import { Select, SelectedItems } from '@backstage/core-components';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotation } from '../../hooks';
-import { transformToSelectOptions } from '../../utils/common/transformToSelectOptions';
+import { transformToSelectOptions } from '../../utils/helpers/transformToSelectOptions';
 import { Tooltip } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useKongServiceManagerContext } from '../../context';

@@ -11,7 +11,7 @@ import { IncrementalFields } from './IncrementalFields';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import SaveIcon from '@material-ui/icons/Save';
 import ClearIcon from '@material-ui/icons/Clear';
-import { transformToSelectOptions } from '../../../../utils/common/transformToSelectOptions';
+import { transformToSelectOptions } from '../../../../utils/helpers/transformToSelectOptions';
 import {SelectComponent } from '../../../shared'
 
 interface RecordFieldsProps {
