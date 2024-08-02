@@ -1,6 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @backstage/no-undeclared-imports */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Box, Button, Checkbox, CircularProgress, Drawer, FormControl, FormControlLabel, IconButton, TextField, Typography } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
 import { PluginFieldsResponse } from '../../../utils/types';
@@ -9,16 +7,17 @@ import { Progress } from '@backstage/core-components';
 import { useDrawerStyles } from './styles';
 import { IncrementalFields, RecordFields } from './FieldsCustom';
 import { useKongServiceManagerContext } from '../../../context';
+import { addFields, FieldsReducer, initialFieldsState } from './state';
+
 
 
 export const DrawerComponent = () => {
 
+  const [ isLoading, setLoading] = React.useState<boolean>(false);
+  const [processingData, setProcessingData] = React.useState<boolean>(false);
+  const [ fieldsState, fieldsDispatch ] = React.useReducer(FieldsReducer, initialFieldsState);
   const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction, spinner} = useDrawerStyles();
   const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPlugin, allAssociatedPlugins, setConfigState, configState} = useKongServiceManagerContext();
-  const [fieldsComponents, setFieldsComponents ] = useState<any[]|[]>([]);
-  const [ isLoading, setLoading] = useState<boolean>(false);
-  const [processingData, setProcessingData] = useState<boolean>(false);
-
 
   const handleChangeInput = (key: string, value: string | boolean | string[] | number) => {
     if(value!==""){
@@ -97,11 +96,11 @@ export const DrawerComponent = () => {
       });
   
       setConfigState(updatedConfigState);
-      setFieldsComponents(fieldsData);
+      fieldsDispatch(addFields(fieldsData));
     }
   };
 
-  useEffect(()=>{
+  React.useEffect(()=>{
    if(selectedPlugin) {
     handlePluginFields(selectedPlugin.slug as string);
   }
@@ -109,6 +108,7 @@ export const DrawerComponent = () => {
    setTimeout(()=>{
     setLoading(false)
    },1000)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[selectedPlugin]);
 
   return (
@@ -143,14 +143,14 @@ export const DrawerComponent = () => {
           <Progress />
         ) : (
           <>
-            {fieldsComponents.length >= 1 ? (
+            {fieldsState.length >= 1 ? (
               <FormControl
                 component="form"
                 noValidate
                 autoComplete="off"
                 className={form}
               >
-                  {fieldsComponents.map((field,index) => {
+                  {fieldsState.map((field,index) => {
                     switch (field.type) {
                       case 'string':
                         return (
@@ -203,7 +203,7 @@ export const DrawerComponent = () => {
                                 color="primary"
                                 required={field.required}
                                 name={field.name}
-                                defaultChecked={field.defaultValue}
+                                defaultChecked={field.defaultValue as boolean}
                                 onChange={e =>
                                   handleChangeInput(
                                     field.name,

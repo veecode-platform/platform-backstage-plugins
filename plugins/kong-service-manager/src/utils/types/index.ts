@@ -47,7 +47,8 @@ export interface PluginFieldsResponse {
     name: string,
     type: string
     required: boolean,
-    defaultValue: string | number | boolean ,
+    defaultValue: string | number | boolean | any ,
+    defaultValues?: string | string[] | number | boolean | any ,
     arrayType: string | number | boolean | any | undefined,
     arrayOptions: string[] | number[] | boolean[] | any[] | undefined,
     isMultipleArray: boolean,

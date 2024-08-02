@@ -1,46 +1,28 @@
-/* eslint-disable no-console */
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useStyles } from './styles';
 import { Accordion, AccordionActions, Box, Button, FormControl, FormLabel, IconButton, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
-import { IncrementalFields } from './IncrementalFields';
+import { IncrementalFields } from '../incrementalFields/IncrementalFields';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import SaveIcon from '@material-ui/icons/Save';
 import ClearIcon from '@material-ui/icons/Clear';
-import { transformToSelectOptions } from '../../../../utils/helpers/transformToSelectOptions';
-import {SelectComponent } from '../../../shared'
+import { transformToSelectOptions } from '../../../../../utils/helpers/transformToSelectOptions';
+import {SelectComponent } from '../../../../shared'
+import { RecordFieldsProps, RecordFieldsType, RecordStateType } from './types';
 
-interface RecordFieldsProps {
-    inputName: string,
-    required: boolean,
-    defaultValues: any[]|[],
-    recordFields: any[]|[],
-    setConfig: React.Dispatch<any>
-  }
-interface recordFieldsProps {
-  objectKey: string,
-  name: string[],
-  stat_type: string[],
-  tags?: string[],
-  sample_rate?: number,
-  consumer_identifier: string[]
-}
 
-interface RecordStateType {
-  [key: string]: { [key: string]: any }[];
-}
-  
-  export const RecordFields = ({inputName, defaultValues,recordFields,setConfig}:RecordFieldsProps) => {
+  export const RecordFields : React.FC<RecordFieldsProps> = (props) => {
+
+    const {inputName, defaultValues,recordFields,setConfig} = props;
     const { box, newField,labelAndField, heading, input, addField,defaultField,field,accordion,accordionSummary,accordionContent, combobox, label,tags, buttonsGroup} = useStyles();
-    const [inputFields, setInputFields] = useState<any[]>([]);
-    const [recordFieldsState, setRecordFieldsState] = useState<recordFieldsProps|null>(null);
-    const [recordState, setRecordState] = useState<RecordStateType|null>(null);
-    const [newItem, setNewItem] = useState<any>({});
-    const [tagsState, setTagsState] = useState<string[]>([]);
+    const [inputFields, setInputFields] = React.useState<any[]>([]);
+    const [recordFieldsState, setRecordFieldsState] = React.useState<RecordFieldsType|null>(null);
+    const [recordState, setRecordState] = React.useState<RecordStateType|null>(null);
+    const [newItem, setNewItem] = React.useState<any>({});
+    const [tagsState, setTagsState] = React.useState<string[]>([]);
  
     const handleAddFields = () => setInputFields([...inputFields, {
       name: "New Item"
@@ -101,7 +83,7 @@ interface RecordStateType {
      
     }
 
-    useEffect(()=>{
+    React.useEffect(()=>{
       if(recordFields){
         recordFields.map(r => {
           switch (r.name) {
@@ -149,7 +131,7 @@ interface RecordStateType {
       }
     },[recordFields]);
 
-    useEffect(() => {
+    React.useEffect(() => {
       if (defaultValues && defaultValues !== undefined) {
         const recordData: RecordStateType = { [inputName]: [...defaultValues] };
         setRecordState(recordData);
@@ -157,7 +139,7 @@ interface RecordStateType {
       else setRecordState(null)
     }, [defaultValues, inputName]);
 
-    useEffect(()=>{
+    React.useEffect(()=>{
      if(recordState){
       setConfig((prevConfigState : any) => {
         const updatedConfigState = {
@@ -167,6 +149,7 @@ interface RecordStateType {
         return updatedConfigState;
       });
      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[recordState]);
  
 

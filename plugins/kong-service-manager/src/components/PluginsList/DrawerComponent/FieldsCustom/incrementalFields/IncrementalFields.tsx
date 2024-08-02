@@ -1,25 +1,16 @@
-/* eslint-disable no-console */
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Button, FormLabel, IconButton, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useStyles } from './styles';
+import { IncrementalFieldsProps } from './type';
+import { useIncrementalFieldStyles } from './styles';
 
-interface IncrementalFieldsProps {
-    name: string,
-    required: boolean,
-    items: string[]|[],
-    isMetrics?: boolean,
-    setState: React.Dispatch<any>,
-    id?: number,
-    handleChange?: (key: string, value: string | number | string[], index: number) => void,
-    state?: string | string[]
-  }
   
-  export const IncrementalFields = ({name, required, items,isMetrics, setState,handleChange,id,state}:IncrementalFieldsProps) => {
+  export const IncrementalFields : React.FC<IncrementalFieldsProps> = (props) => {
   
-    const { box, field, input,label, addField } = useStyles();
-    const [inputFields, setInputFields] = useState<string[]>(items);
+    const {name, required, items,isMetrics, setState,handleChange,id,state} = props;
+    const { box, field, input,label, addField } = useIncrementalFieldStyles();
+    const [inputFields, setInputFields] = React.useState<string[]>(items);
   
     const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index: number) => {
       if(event.target.value !== ""){

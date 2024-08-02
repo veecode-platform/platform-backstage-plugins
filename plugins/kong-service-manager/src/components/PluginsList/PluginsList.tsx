@@ -1,30 +1,17 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @backstage/no-undeclared-imports */
-import React, { useEffect } from 'react'
+import React from 'react'
 import { BoxComponent, EmptyStateComponent } from '../shared'
-import { Box, makeStyles } from '@material-ui/core'
 import { PluginsCards } from './PluginsCards';
 import useAsync from 'react-use/lib/useAsync';
 import { CardTab, Progress, TabbedCard } from '@backstage/core-components';
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
 import { useKongServiceManagerContext } from '../../context';
-
-const useStyles = makeStyles(theme=>({
-   wrapper:{
-      paddingTop: theme.spacing(4),
-   },
-   emptyContent:{
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: '60vh'
-   }
-}));
+import { usePluginListStyles } from './styles';
+import { Box } from '@material-ui/core';
 
 export const PluginsList = () => {
 
   const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins, pluginsPerCategory} = useKongServiceManagerContext();
-  const { wrapper, emptyContent } = useStyles();
+  const { wrapper, emptyContent } = usePluginListStyles();
 
   const getPluginsEnabled = async () => {
     await listAllEnabledPlugins();
@@ -39,8 +26,9 @@ export const PluginsList = () => {
     getAssociatedPlugins();
   }, []);
 
-  useEffect(()=>{
+  React.useEffect(()=>{
     getPluginsEnabled();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[allAssociatedPlugins]);
 
   if (loading) return <Progress />;
