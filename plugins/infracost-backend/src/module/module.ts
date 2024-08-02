@@ -17,6 +17,7 @@ export const catalogModuleInfracostProcessor = createBackendModule({
           scheduler: coreServices.scheduler
         },
         async init({ catalog, config, logger, cache, database,scheduler }) {
+          // add Entity Provider
           catalog.addEntityProvider(
             InfracostEntityProvider.fromConfig(config,{
                 id: 'default',
@@ -26,7 +27,9 @@ export const catalogModuleInfracostProcessor = createBackendModule({
                 scheduler
             })
           );
-          catalog.addProcessor(new InfracostEntityProcessor(config, logger, cache))
+           // add Processor
+          const infracostProcessor = new InfracostEntityProcessor(config, logger, cache)
+          catalog.addProcessor(infracostProcessor)
         },
       });
     },

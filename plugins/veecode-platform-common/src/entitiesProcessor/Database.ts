@@ -33,7 +33,9 @@ import { DatabaseEntityV1alpha1, DatabaseEntityV1alpha1Validator } from '../kind
   /**
    * Adds support for scaffolder specific entity kinds to the catalog.
    *
-   * @public
+   * @deprecated
+   *
+   *  use @veecode-platform-module plugin , see in https://github.com/veecode-platform/platform-backstage-plugins/tree/develop/plugins/veecode-platform-module 
    */
   export class DatabaseEntitiesProcessor implements CatalogProcessor {
     getProcessorName(): string {

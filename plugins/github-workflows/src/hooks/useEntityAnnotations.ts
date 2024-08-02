@@ -20,16 +20,16 @@ export const useEntityAnnotations = (entity: Entity) => {
     if (!workflowsList) {
       return {
         projectName,
-        workflows: null,
+        workflowsByAnnotation: null,
         hostname
       };
     }
 
-  const workflows = workflowsList.includes(',') ? workflowsList.split(/\s*,\s*/g) : [workflowsList];
+  const workflowsByAnnotation = workflowsList.includes(',') ? workflowsList.split(/\s*,\s*/g) : [workflowsList];
   
   return {
     projectName,
-    workflows,
+    workflowsByAnnotation,
     hostname
   };
 };

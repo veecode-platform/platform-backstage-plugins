@@ -1,100 +1,31 @@
-/* eslint-disable @backstage/no-undeclared-imports */
-import React, { useState } from 'react';
+import React from 'react';
 import { useApi } from '@backstage/core-plugin-api';
 import { kubernetesApiRef } from '@veecode-platform/plugin-kubernetes';
 import useAsync from 'react-use/lib/useAsync';
-import { CodeSnippet, EmptyState, Progress } from '@backstage/core-components';
+import { Progress } from '@backstage/core-components';
 import { useEntity, MissingAnnotationEmptyState } from '@backstage/plugin-catalog-react';
-import { Grid, Drawer, IconButton } from '@material-ui/core';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import InfoIcon from '@material-ui/icons/Info';
-import CloseIcon from '@material-ui/icons/Close';
+import { Grid } from '@material-ui/core';
 import OpenInNewIcon from "@material-ui/icons/OpenInNew"
-import { InfoCard, Content, Link, StructuredMetadataTable, Table, StatusOK, StatusError, StatusWarning} from '@backstage/core-components';
-import { InfoBox } from '../shared';
+import { InfoCard, Content, Link, StructuredMetadataTable, Table, StatusOK, StatusError} from '@backstage/core-components';
 import { ClusterCapacity, ClusterInformation, ClusterLinks, ClusterNamespace, ClusterNodes, ClusterResponse, NamespacesResponse, NodeResponse } from '../../utils/types';
 import { useEntityAnnotations } from '../../hooks';
 import { Entity } from '@backstage/catalog-model';
-import { truncateMessage } from '../../utils/common/truncateMessage';
+import { convertCpuValues } from '../../utils/helpers/convertCpuValues';
+import { convertMemoryValues } from '../../utils/helpers/convertMemoryValues';
+import { showMemoryDisplayValueInGi } from '../../utils/helpers/showMemoryDisplayValueInGi';
+import { initialNodeInfoState, NodeInfoReducer } from './state';
+import { InfoButton } from './infoButton/InfoButton';
+import { ClusterNotConfigured } from './clusterNotConfigured';
+import { SwitchStatuses } from './switchStatuses';
+import { DrawerComponent } from './DrawerComponent/DrawerComponent';
 
-const useDrawerStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        paper: {
-            width: '50%',
-            padding: theme.spacing(2.5),
-        },
-    }),
-);
-
-const switchStatuses = (status: string) => {
-    switch (status) {
-        case "Active":
-            return <StatusOK />
-        case "Terminating":
-            return <StatusError />
-        default:
-            return <StatusWarning />
-    }
-}
-
-const convertMemoryValues = (value: string) => {
-    const splited = value.split(/(?=[a-zA-z])|(?<=[a-zA-z])/g)
-
-    switch (splited[1].toLowerCase()) {
-        case "k": // k
-            return Number(splited[0])
-        case "m":
-            return Number(splited[0]) / 1024 // k*1024
-        case "g":
-            return Number(splited[0]) / 1024 ** 2 // k*1024*2
-        case "t":
-            return Number(splited[0]) / 1024 ** 3 // k*1024*3
-        case "p":
-            return Number(splited[0]) / 1024 ** 4 // k*1024*4
-        default:
-            return Number(splited[0])
-    }
-}
-
-const showMemoryDisplayValueInGi = (valueInKi: number) => {
-    return `${(valueInKi / 1024 ** 2).toFixed(2)} Gi`
-}
-
-const convertCpuValues = (value: string) => {
-    const splited = value.split(/(?=[a-zA-z])|(?<=[a-zA-z])/g)
-
-    if (splited.length === 1) return Number(value)
-
-    switch (splited[1].toLowerCase()) {
-        case "m":
-            return Number(splited[0]) / 1000
-
-        default:
-            return Number(splited[0])
-    }
-}
 
 export const ClusterOverview = () => {
+    const [isOpen, toggleDrawer] = React.useState(false);
+    const [nodeInfoState, nodeInfoDispatch] = React.useReducer(NodeInfoReducer, initialNodeInfoState);
     const { entity } = useEntity();
     const { clusterName,clusterMode } = useEntityAnnotations(entity as Entity);
     const kubernetesApi = useApi(kubernetesApiRef);
-    const [isOpen, toggleDrawer] = useState(false);
-    const classes = useDrawerStyles();
-    const [nodeInfo, setNodeInfo] = useState<Partial<ClusterNodes>>()
-
-    const InfoButton = ({ info }: { info: Partial<ClusterNodes> }) => {
-        return (<IconButton
-            key="open"
-            title="More info"
-            onClick={() => {
-                setNodeInfo(info)
-                toggleDrawer(true)
-            }}
-            color="inherit"
-        >
-            <InfoIcon />
-        </IconButton>)
-    }
 
     const { loading, error, value } = useAsync(async (): Promise<ClusterResponse> => {
 
@@ -136,7 +67,7 @@ export const ClusterOverview = () => {
         if (!services.items) throw new Error(services.message);
 
         const namespacesList: ClusterNamespace[] = namespaces.items?.map((namespace: NamespacesResponse) => {
-            return <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>{switchStatuses(namespace.status.phase as string)}{namespace.metadata?.name}</div>
+            return <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>{<SwitchStatuses status={namespace.status.phase as string}/>}{namespace.metadata?.name}</div>
         })
 
         const nodesList: ClusterNodes[] = nodes.items?.map((node: NodeResponse) => {
@@ -160,7 +91,7 @@ export const ClusterOverview = () => {
             }
             return {
                 ...fullInfo,
-                info: <InfoButton info={fullInfo} />
+                info: <InfoButton info={fullInfo} toggleDrawer={toggleDrawer}  nodeInfoDispatch={nodeInfoDispatch}/>
             }
         })
 
@@ -240,89 +171,38 @@ export const ClusterOverview = () => {
 
     if (loading) return <Progress />;
 
-    if (error) return (
-      <Content>
-        <Grid container spacing={2}>
-          <InfoBox
-            message={truncateMessage(error?.stack as string) ?? "The cluster information could not be loaded. Possible reason: the cluster has been paused or is slow...."}
-            url="https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/cluster-explorer"
-          />
-          <Grid item lg={12} md={12} xs={12}>
-            <EmptyState
-              title="Cluster not configured"
-              missing="field"
-              description="You need to add the settings for this cluster to the application's configuration files, like this:"
-              action={
-                <>
-                  <InfoCard title="Configuration">
-                       <CodeSnippet 
-                         text={`kubernetes:\n  serviceLocatorMethod:\n    type: multiTenant\n  clusterLocatorMethods:\n   - type: "config"\n     clusters:\n       - url: $KUBERNETES_URL\n         name: $NAME\n         authProvider: serviceAccount\n         skipTLSVerify: false\n         skipMetricsLookup: false\n         skipMetricsLookup: false\n         serviceAccountToken: $KUBERNETES_SERVICE_ACCOUNT_TOKEN\n         caData: $KUBERNETES_CERTIFICATE_DATA`} 
-                         language="yaml" 
-                         showCopyCodeButton 
-                         />
-                  </InfoCard>
-                </>
-              }
-            />
-          </Grid>
-        </Grid>
-      </Content>
-    );
-    
-    if (value) {
-        const { nodes, capacity, info, ingressClasses, links } = value
+    if (error) <ClusterNotConfigured error={error}/>
 
+    if(!value) return null;
+    
         return (
             <Content>
                 <Grid container spacing={4} direction="row">
-                    <Drawer
-                        classes={{
-                            paper: classes.paper,
-                        }}
-                        anchor="right"
-                        open={isOpen}
-                        onClose={() => toggleDrawer(false)}
-                    >
-                        <Grid container>
-                            <Grid item md={12}>
-                                <IconButton
-                                    key="dismiss"
-                                    title="Close the drawer"
-                                    onClick={() => toggleDrawer(false)}
-                                    color="inherit"
-                                >
-                                    <CloseIcon />
-                                </IconButton>
-                            </Grid>
+                   <DrawerComponent
+                     isOpen={isOpen}
+                     toggleDrawer={toggleDrawer}
+                     nodeInfoState={nodeInfoState as ClusterNodes}
 
-                            <Grid item md={12}>
-                                <InfoCard title="Information">
-                                    <StructuredMetadataTable metadata={nodeInfo as ClusterNodes} />
-                                </InfoCard>
-                            </Grid>
-
-                        </Grid>
-                    </Drawer>
-
+                    />
                     <Grid item md={3} sm={12} >{/* left-side div: cluster info + capacity*/}
                         <Grid container spacing={1}>
                             <Grid item md={12} sm={12} style={{maxHeight: "600px", overflow: "auto"}}>
                                 <InfoCard title="Cluster information">
-                                    <StructuredMetadataTable dense={false} metadata={info} />
+                                    <StructuredMetadataTable dense={false} metadata={value.info} />
                                 </InfoCard>
                             </Grid>
                             {
-                                links ?
+                                value.links ?
                                     <Grid item md={12}>
                                         <InfoCard title="Links">
-                                            <div>{links.admin}</div>
+                                            <div>{value.links.admin}</div>
                                         </InfoCard>
                                     </Grid>
                                     : null
                             }
                             <Grid item md={12}>
                                 <InfoCard title="Capacity">
-                                    <StructuredMetadataTable metadata={capacity} />
+                                    <StructuredMetadataTable metadata={value.capacity} />
                                 </InfoCard>
                             </Grid>
                         </Grid>
@@ -340,7 +220,7 @@ export const ClusterOverview = () => {
                                         { title: "Info", field: "info" },
                                         { title: 'Creation', field: 'createdAt' }
                                     ]}
-                                    data={nodes}
+                                    data={value.nodes}
                                     options={{ search: true, paging: true }} />
                             </Grid>
                             { clusterMode !== "demo" && ( <Grid item md={12}>
@@ -352,7 +232,7 @@ export const ClusterOverview = () => {
                                         { title: 'Version', field: 'version' },
                                         { title: 'Creation', field: 'createdAt' }
                                     ]}
-                                    data={ingressClasses}
+                                    data={value.ingressClasses}
                                     options={{ search: true, paging: true }} />
                             </Grid>)}
                         </Grid>
@@ -360,6 +240,5 @@ export const ClusterOverview = () => {
                 </Grid>
             </Content>
         )
-    }
-    return <></>
+    
 }

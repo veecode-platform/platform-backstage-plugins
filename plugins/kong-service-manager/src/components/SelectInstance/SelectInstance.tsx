@@ -1,11 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @backstage/no-undeclared-imports */
-import React, { Suspense, useEffect } from 'react';
+import React from 'react';
 import { Select, SelectedItems } from '@backstage/core-components';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotation } from '../../hooks';
-import { transformToSelectOptions } from '../../utils/common/transformToSelectOptions';
+import { transformToSelectOptions } from '../../utils/helpers/transformToSelectOptions';
 import { Tooltip } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { useKongServiceManagerContext } from '../../context';
@@ -21,12 +19,13 @@ export const SelectInstance = () => {
     setInstanceState(selectedValue as string); 
   };
 
-  useEffect(()=>{
+  React.useEffect(()=>{
     if(kongInstances) setInstanceState(kongInstances[0])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (
-    <Suspense fallback={<Skeleton variant="rect" width={210} height={118} animation="wave" />}>
+    <React.Suspense fallback={<Skeleton variant="rect" width={210} height={118} animation="wave" />}>
       <Tooltip title="Select the Kong Instance" placement="left">
         <div>
           <Select
@@ -37,6 +36,6 @@ export const SelectInstance = () => {
           />
         </div>
       </Tooltip>
-    </Suspense>
+    </React.Suspense>
   );
 };

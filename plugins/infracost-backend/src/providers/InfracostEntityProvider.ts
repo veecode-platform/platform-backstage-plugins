@@ -1,6 +1,5 @@
 import { EntityProvider, EntityProviderConnection } from '@backstage/plugin-catalog-node';
-import { TaskRunner } from '@backstage/backend-tasks';
-import { CacheService, LoggerService } from '@backstage/backend-plugin-api';
+import { CacheService, LoggerService, SchedulerServiceTaskRunner } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';
 import { InfracostProviderConfig, readProviderConfigs } from '../lib/config';
 import * as uuid from 'uuid';
@@ -67,7 +66,7 @@ export class InfracostEntityProvider implements EntityProvider {
       markProcessComplete();
     }
 
-    private schedule(taskRunner: TaskRunner) {
+    private schedule(taskRunner: SchedulerServiceTaskRunner) {
         this.scheduleFn = async () => {
           const id = `${this.getProviderName()}:refresh`;
           await taskRunner.run({

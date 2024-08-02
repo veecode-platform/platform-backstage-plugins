@@ -1,4 +1,4 @@
-import { errorHandler } from '@backstage/backend-common';
+import { MiddlewareFactory } from '@backstage/backend-defaults/rootHttpRouter';
 import { DiscoveryService, LoggerService, PermissionsService } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';
 import express, { RequestHandler } from 'express';
@@ -18,7 +18,7 @@ export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
 
-  const {logger,database} = options;
+  const {logger,database, config} = options;
   const router = Router();
 
   router.use(express.json());
@@ -114,7 +114,9 @@ export async function createRouter(
     response.json(data)
    }) as RequestHandler);
 
-  router.use(errorHandler());
+   const middleware = MiddlewareFactory.create({ logger, config });
+
+   router.use(middleware.error());
 
   return router;
 }

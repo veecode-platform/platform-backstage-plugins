@@ -1,7 +1,6 @@
 import { Knex } from "knex";
-import { LoggerService, resolvePackagePath } from "@backstage/backend-plugin-api";
+import { DatabaseService, LoggerService, resolvePackagePath } from "@backstage/backend-plugin-api";
 import { InfracostStore } from "./InfracostStore";
-import { PluginDatabaseManager } from "@backstage/backend-common";
 import { INFRACOST_TABLE } from "../utils/constants";
 import { InfracostEstimate } from '@veecode-platform/backstage-plugin-infracost-common';
 
@@ -19,7 +18,7 @@ export class DatabaseInfracostStore  implements InfracostStore {
   ) {}
 
   static async create(options:{
-    database: PluginDatabaseManager,
+    database: DatabaseService,
     skipMigrations?: boolean,
     logger: LoggerService
   }): Promise<DatabaseInfracostStore> {

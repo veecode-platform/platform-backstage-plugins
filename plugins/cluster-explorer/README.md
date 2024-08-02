@@ -143,12 +143,12 @@ By clicking on the icon in the side menu:
 
 - cluster Listing:
 
-![list](src/assets/cluster_list.png)
+![image](https://github.com/user-attachments/assets/abc6e761-712d-48ab-abb2-4012861e9e86)
 
 
 - cluster Overview:
 
-![overview](src/assets/overview.png)
+![image](https://github.com/user-attachments/assets/482a55f4-2d0a-4af5-8d8f-ae3162b7c947)
 
 
 1- Setting up the kubernetes config in the `app-config.yaml`:

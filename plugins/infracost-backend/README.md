@@ -54,6 +54,9 @@ catalog:
    ```
 
 The next step will be to configure the backend:
+
+#### ⭐ Legacy Backend
+
 In `packages > backend > src > plugins > catalog.ts`:
 
 ```diff
@@ -126,7 +129,7 @@ export default async function createPlugin({
   });
 }
 ```
-And finally, in `packages > backend > src > index.ts`:
+In `packages > backend > src > index.ts`:
 
 ```diff
 + import infracost from './plugins/infracost'
@@ -143,6 +146,30 @@ async function main() {
 + apiRouter.use('/infracost', await infracost(infraconstEnv));
 ...
 }
+```
+
+#### 🆕 New Backend
+
+In `packages > backend > src > index.ts`:
+
+```diff
+
+import { createBackend } from '@backstage/backend-defaults';
++ import {catalogModuleInfracostProcessor, infracostPlugin} from '@veecode-platform/backstage-plugin-infracost-backend/alpha';
+
+const backend = createBackend();
+
+backend.add(import('@backstage/plugin-app-backend/alpha'));
+backend.add(import('@backstage/plugin-proxy-backend/alpha'));
+backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
+backend.add(import('@backstage/plugin-techdocs-backend/alpha'));
+...
+
++ backend.add(catalogModuleInfracostProcessor);
++ backend.add(infracostPlugin);
+
+
+backend.start();
 ```
 
 <br>

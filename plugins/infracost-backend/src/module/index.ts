@@ -1,1 +1,1 @@
-export { catalogModuleInfracostProcessor as default } from './module';
+export { catalogModuleInfracostProcessor } from './module'; 

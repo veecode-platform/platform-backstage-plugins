@@ -1,21 +1,4 @@
-/*
- * Copyright 2020 The Backstage Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 import {
-    // ANNOTATION_EDIT_URL,
-    // ANNOTATION_VIEW_URL,
     Entity,
     RELATION_OWNED_BY,
     RELATION_PART_OF,
@@ -35,8 +18,6 @@ import {
   } from '@backstage/plugin-catalog-react';
   import { Typography } from '@material-ui/core';
   import { withStyles } from '@material-ui/core/styles';
-  // import Edit from '@material-ui/icons/Edit';
-  // import OpenInNew from '@material-ui/icons/OpenInNew';
   import Star from '@material-ui/icons/Star';
   import StarBorder from '@material-ui/icons/StarBorder';
   import { capitalize } from 'lodash';
@@ -85,13 +66,11 @@ import {
         columnFactories.createTitleColumn({ hidden: true }),
         columnFactories.createNameColumn({ defaultKind: filters.kind?.value }),
         ...createEntitySpecificColumns(),
-        // columnFactories.createMetadataDescriptionColumn(),
         columnFactories.createTagsColumn(),
       ];
   
       function createEntitySpecificColumns(): TableColumn<CatalogTableRow>[] {
         const baseColumns = [
-          // columnFactories.createSystemColumn(),
           columnFactories.createOwnerColumn(),
           columnFactories.createSpecTypeColumn(),
           columnFactories.createSpecLifecycleColumn(),
@@ -140,44 +119,6 @@ import {
     }
   
     const defaultActions: TableProps<CatalogTableRow>['actions'] = [
-      /* ({ entity }) => {
-        const url = entity.metadata.annotations?.[ANNOTATION_VIEW_URL];
-        const title = 'View';
-  
-        return {
-          icon: () => (
-            <>
-              <Typography variant="srOnly">{title}</Typography>
-              <OpenInNew fontSize="small" />
-            </>
-          ),
-          tooltip: title,
-          disabled: !url,
-          onClick: () => {
-            if (!url) return;
-            window.open(url, '_blank');
-          },
-        };
-      },
-      ({ entity }) => {
-        const url = entity.metadata.annotations?.[ANNOTATION_EDIT_URL];
-        const title = 'Edit';
-  
-        return {
-          icon: () => (
-            <>
-              <Typography variant="srOnly">{title}</Typography>
-              <Edit fontSize="small" />
-            </>
-          ),
-          tooltip: title,
-          disabled: !url,
-          onClick: () => {
-            if (!url) return;
-            window.open(url, '_blank');
-          },
-        };
-      },*/
       ({ entity }) => {
         const isStarred = isStarredEntity(entity);
         const title = isStarred ? 'Remove from favorites' : 'Add to favorites';

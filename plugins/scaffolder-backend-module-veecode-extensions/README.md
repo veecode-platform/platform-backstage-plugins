@@ -25,6 +25,8 @@ yarn add --cwd packages/backend @veecode-platform/backstage-plugin-scaffolder-ba
 
 ## Getting started
 
+#### ⭐ Legacy Backend
+
 ### parseJSON
 
 Receive objects transformed into strings, through a request or a specific field, parse this output and return an object with values that can be used in your template.
@@ -168,3 +170,30 @@ Here's how to install this field [here ⭐](https://github.com/veecode-platform/
 
 
 
+
+#### 🆕 New Backend
+
+To use the new backend system, just add a single import and it will inject all the actions available in the plugin.
+Usage is similar to that described above.
+
+In `packages > backend > src > index.ts`:
+
+```diff
+
+import { createBackend } from '@backstage/backend-defaults';
+
+const backend = createBackend();
+
+backend.add(import('@backstage/plugin-app-backend/alpha'));
+backend.add(import('@backstage/plugin-proxy-backend/alpha'));
+backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
+backend.add(import('@backstage/plugin-techdocs-backend/alpha'));
+...
+
++ backend.add(@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions/alpha);
+
+
+backend.start();
+```
+
+<br>
