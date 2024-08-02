@@ -1,5 +1,5 @@
-import { Box, ListItem, makeStyles } from '@material-ui/core'
-import React from 'react'
+import React from 'react';
+import { Box, ListItem, makeStyles } from '@material-ui/core';
 import { LabelField } from './Fields';
 import { Skeleton } from '@material-ui/lab';
 

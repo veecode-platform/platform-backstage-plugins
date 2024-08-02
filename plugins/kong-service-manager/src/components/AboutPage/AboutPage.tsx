@@ -1,4 +1,3 @@
-/* eslint-disable @backstage/no-undeclared-imports */
 import React from 'react';
 import { Box, Chip, List, ListItem, ListItemText } from '@material-ui/core';
 import { BoxComponent, EmptyStateComponent } from '../shared';

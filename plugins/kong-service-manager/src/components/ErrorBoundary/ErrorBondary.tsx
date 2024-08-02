@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Alert from '@material-ui/lab/Alert';
 
 
@@ -8,9 +8,9 @@ interface ErrorBoundaryProps {
 }
 
 const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
-  const [hasError, setHasError] = useState(false);
+  const [hasError, setHasError] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const unhandledRejectionHandler = (event: PromiseRejectionEvent) => {
       // eslint-disable-next-line no-console
       console.error('Unhandled Promise Rejection:', event.reason);
