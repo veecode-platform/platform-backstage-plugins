@@ -1,12 +1,10 @@
-/* eslint-disable @backstage/no-undeclared-imports */
-import React, { useState } from 'react';
+import React from 'react';
 import { useApi } from '@backstage/core-plugin-api';
 import { kubernetesApiRef } from '@backstage/plugin-kubernetes';
 import useAsync from 'react-use/lib/useAsync';
 import { CodeSnippet, EmptyState, Progress } from '@backstage/core-components';
 import { useEntity, MissingAnnotationEmptyState } from '@backstage/plugin-catalog-react';
 import { Grid, Drawer, IconButton } from '@material-ui/core';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
 import OpenInNewIcon from "@material-ui/icons/OpenInNew"
@@ -15,16 +13,12 @@ import { InfoBox } from '../shared';
 import { ClusterCapacity, ClusterInformation, ClusterLinks, ClusterNamespace, ClusterNodes, ClusterResponse, NamespacesResponse, NodeResponse } from '../../utils/types';
 import { useEntityAnnotations } from '../../hooks';
 import { Entity } from '@backstage/catalog-model';
-import { truncateMessage } from '../../utils/common/truncateMessage';
+import { truncateMessage } from '../../utils/helpers/truncateMessage';
+import { useDrawerStyles } from './styles';
+import { convertCpuValues } from '../../utils/helpers/convertCpuValues';
+import { convertMemoryValues } from '../../utils/helpers/convertMemoryValues';
+import { showMemoryDisplayValueInGi } from '../../utils/helpers/showMemoryDisplayValueInGi';
 
-const useDrawerStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        paper: {
-            width: '50%',
-            padding: theme.spacing(2.5),
-        },
-    }),
-);
 
 const switchStatuses = (status: string) => {
     switch (status) {
@@ -37,51 +31,16 @@ const switchStatuses = (status: string) => {
     }
 }
 
-const convertMemoryValues = (value: string) => {
-    const splited = value.split(/(?=[a-zA-z])|(?<=[a-zA-z])/g)
 
-    switch (splited[1].toLowerCase()) {
-        case "k": // k
-            return Number(splited[0])
-        case "m":
-            return Number(splited[0]) / 1024 // k*1024
-        case "g":
-            return Number(splited[0]) / 1024 ** 2 // k*1024*2
-        case "t":
-            return Number(splited[0]) / 1024 ** 3 // k*1024*3
-        case "p":
-            return Number(splited[0]) / 1024 ** 4 // k*1024*4
-        default:
-            return Number(splited[0])
-    }
-}
-
-const showMemoryDisplayValueInGi = (valueInKi: number) => {
-    return `${(valueInKi / 1024 ** 2).toFixed(2)} Gi`
-}
-
-const convertCpuValues = (value: string) => {
-    const splited = value.split(/(?=[a-zA-z])|(?<=[a-zA-z])/g)
-
-    if (splited.length === 1) return Number(value)
-
-    switch (splited[1].toLowerCase()) {
-        case "m":
-            return Number(splited[0]) / 1000
-
-        default:
-            return Number(splited[0])
-    }
-}
 
 export const ClusterOverview = () => {
+    const [isOpen, toggleDrawer] = React.useState(false);
+    const [nodeInfo, setNodeInfo] = React.useState<Partial<ClusterNodes>>()
     const { entity } = useEntity();
     const { clusterName,clusterMode } = useEntityAnnotations(entity as Entity);
     const kubernetesApi = useApi(kubernetesApiRef);
-    const [isOpen, toggleDrawer] = useState(false);
     const classes = useDrawerStyles();
-    const [nodeInfo, setNodeInfo] = useState<Partial<ClusterNodes>>()
-
+    
     const InfoButton = ({ info }: { info: Partial<ClusterNodes> }) => {
         return (<IconButton
             key="open"
@@ -268,10 +227,9 @@ export const ClusterOverview = () => {
         </Grid>
       </Content>
     );
-    
-    if (value) {
-        const { nodes, capacity, info, ingressClasses, links } = value
 
+    if(!value) return null;
+    
         return (
             <Content>
                 <Grid container spacing={4} direction="row">
@@ -308,21 +266,21 @@ export const ClusterOverview = () => {
                         <Grid container spacing={1}>
                             <Grid item md={12} sm={12} style={{maxHeight: "600px", overflow: "auto"}}>
                                 <InfoCard title="Cluster information">
-                                    <StructuredMetadataTable dense={false} metadata={info} />
+                                    <StructuredMetadataTable dense={false} metadata={value.info} />
                                 </InfoCard>
                             </Grid>
                             {
-                                links ?
+                                value.links ?
                                     <Grid item md={12}>
                                         <InfoCard title="Links">
-                                            <div>{links.admin}</div>
+                                            <div>{value.links.admin}</div>
                                         </InfoCard>
                                     </Grid>
                                     : null
                             }
                             <Grid item md={12}>
                                 <InfoCard title="Capacity">
-                                    <StructuredMetadataTable metadata={capacity} />
+                                    <StructuredMetadataTable metadata={value.capacity} />
                                 </InfoCard>
                             </Grid>
                         </Grid>
@@ -340,7 +298,7 @@ export const ClusterOverview = () => {
                                         { title: "Info", field: "info" },
                                         { title: 'Creation', field: 'createdAt' }
                                     ]}
-                                    data={nodes}
+                                    data={value.nodes}
                                     options={{ search: true, paging: true }} />
                             </Grid>
                             { clusterMode !== "demo" && ( <Grid item md={12}>
@@ -352,7 +310,7 @@ export const ClusterOverview = () => {
                                         { title: 'Version', field: 'version' },
                                         { title: 'Creation', field: 'createdAt' }
                                     ]}
-                                    data={ingressClasses}
+                                    data={value.ingressClasses}
                                     options={{ search: true, paging: true }} />
                             </Grid>)}
                         </Grid>
@@ -360,6 +318,5 @@ export const ClusterOverview = () => {
                 </Grid>
             </Content>
         )
-    }
-    return <></>
+    
 }

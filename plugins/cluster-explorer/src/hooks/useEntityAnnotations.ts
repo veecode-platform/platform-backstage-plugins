@@ -1,8 +1,5 @@
 import { Entity } from '@backstage/catalog-model';
-
-export const CLUSTER_INSTRUCTIONS = 'cluster/instructions';
-export const CLUSTER_NAME = 'veecode/cluster-name';
-export const CLUSTER_MODE = 'veecode/cluster-mode';
+import { CLUSTER_INSTRUCTIONS, CLUSTER_MODE, CLUSTER_NAME } from '../utils/constants';
 
 export const useEntityAnnotations = (entity: Entity) => {
   const instructions =
