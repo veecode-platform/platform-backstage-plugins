@@ -62,7 +62,7 @@ import { ReportIssue } from '@backstage/plugin-techdocs-module-addons-contrib';
 
 import { isGithubWorkflowsAvailable, GithubWorkflowsCard, GithubWorkflowsList, /* isGithubAvailable */} from '@veecode-platform/backstage-plugin-github-workflows'
 import { GitlabJobs, GitlabPipelineList, isGitlabAvailable, isGitlabJobsAvailable } from '@veecode-platform/backstage-plugin-gitlab-pipelines';
-import { EntityKubernetesContent } from '@backstage/plugin-kubernetes';
+import { EntityKubernetesContent } from '@veecode-platform/plugin-kubernetes';
 import { ClusterInstructionsCard, ClusterOverviewPage, isClusterInstructionsAvailable } from '@veecode-platform/backstage-plugin-cluster-explorer';
 import { DatabaseOverview } from '@veecode-platform/plugin-database-explorer';
 import { RELATION_ENVIRONMENT_OF, RELATION_FROM_ENVIRONMENT } from '@veecode-platform/plugin-veecode-platform-common';
@@ -470,6 +470,11 @@ const clusterPage = (
     <EntityLayout.Route path="/" title="Overview">
       <ClusterOverviewPage />
     </EntityLayout.Route>
+
+    <EntityLayout.Route path="/kubernetes" title="Kubernetes">
+    <EntityKubernetesContent refreshIntervalMs={30000} />
+    </EntityLayout.Route>
+
 
     <EntityLayout.Route path='/about' title='About'>
       <Grid container spacing={3} alignItems="stretch">

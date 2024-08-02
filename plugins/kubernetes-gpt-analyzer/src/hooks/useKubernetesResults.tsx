@@ -1,5 +1,5 @@
 import { useApi } from "@backstage/core-plugin-api";
-import { kubernetesApiRef } from '@backstage/plugin-kubernetes';
+import { kubernetesApiRef } from '@veecode-platform/plugin-kubernetes';
 import { useCallback } from "react";
 import useAsyncRetry from 'react-use/esm/useAsyncRetry';
 import useInterval from 'react-use/esm/useInterval';

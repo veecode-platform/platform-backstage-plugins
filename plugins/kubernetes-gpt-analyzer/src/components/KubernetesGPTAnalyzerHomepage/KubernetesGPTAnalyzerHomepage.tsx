@@ -3,12 +3,12 @@ import { Box, Paper, Typography } from '@material-ui/core';
 import { useEntityAnnotations } from '../../hooks/useEntityAnnotations';
 import { useKubernetesResults } from '../../hooks/useKubernetesResults';
 import { useKubernetesGPTAnalyzerWrapperStyles } from './styles';
-import { LoadingProgress } from '../shared';
+import { LoadingProgress } from '../shared/LoadingProgress/LoadingProgress'
 import { SuccessfulAnalysis } from './SuccessfulAnalysis';
 import { ErrorAnalysis } from './ErrorAnalysis';
 import KubernetesIcon from '../../assets/kubernetesIcon';
 import { useEntity } from '@backstage/plugin-catalog-react';
-import { PluginNotConfigured } from '../shared';
+import { PluginNotConfigured } from '../shared/pluginNotConfigured/PluginNotConfigured';
 import { KubernetesGPTAnalyzerHomepageProps, KubernetesGPTAnalyzerWrapperProps } from './types';
 import { PLUGIN_DOCS } from '../../utils/constants/docs';
 

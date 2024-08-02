@@ -1,7 +1,7 @@
 /* eslint-disable @backstage/no-undeclared-imports */
 import React, { useState } from 'react';
 import { useApi } from '@backstage/core-plugin-api';
-import { kubernetesApiRef } from '@backstage/plugin-kubernetes';
+import { kubernetesApiRef } from '@veecode-platform/plugin-kubernetes';
 import useAsync from 'react-use/lib/useAsync';
 import { CodeSnippet, EmptyState, Progress } from '@backstage/core-components';
 import { useEntity, MissingAnnotationEmptyState } from '@backstage/plugin-catalog-react';
