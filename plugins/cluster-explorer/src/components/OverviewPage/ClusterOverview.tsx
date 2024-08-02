@@ -171,7 +171,7 @@ export const ClusterOverview = () => {
 
     if (loading) return <Progress />;
 
-    if (error) <ClusterNotConfigured error={error}/>
+    if (error) return <ClusterNotConfigured error={error}/>
 
     if(!value) return null;
     
