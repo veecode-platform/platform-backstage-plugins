@@ -1,8 +1,7 @@
-/* eslint-disable @backstage/no-undeclared-imports */
+import React from 'react';
 import { Container, Grid } from '@material-ui/core';
-import React, { useEffect } from 'react';
 import { MenuOptions } from './MenuOptions';
-import { Route, Routes, useNavigate} from 'react-router';
+import { Route, Routes, useNavigate} from 'react-router-dom';
 import { AboutPage } from '../AboutPage';
 import { PluginsList } from '../PluginsList';
 import { KongServiceManagerProvider } from '../../context';
@@ -15,7 +14,7 @@ export const KongServiceManagerHomepage = () => {
   const {content, divider} = useHomepageStyles();
   const navigate = useNavigate();
 
-  useEffect(()=>{
+  React.useEffect(()=>{
    navigate('')
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
