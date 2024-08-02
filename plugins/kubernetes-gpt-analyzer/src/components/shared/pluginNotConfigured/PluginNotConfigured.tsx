@@ -1,7 +1,7 @@
 import React from 'react';
 import { Content, EmptyState } from '@backstage/core-components';
 import { Grid } from '@material-ui/core';
-import { InfoBox } from '../../shared/InfoBox';
+import { InfoBox } from '../InfoBox/InfoBox'
 import { PluginNotConfiguredProps } from './types';
 import { PLUGIN_DOCS } from '../../../utils/constants/docs';
 
