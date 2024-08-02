@@ -5,6 +5,12 @@ export type RecordFieldsProps = {
     recordFields: any[]|[],
     setConfig: React.Dispatch<any>
   }
+
+export type InputFieldType = {
+  name: string,
+  [key:string]: any
+}
+
 export type RecordFieldsType = {
   objectKey: string,
   name: string[],
@@ -17,4 +23,7 @@ export type RecordFieldsType = {
 export type RecordStateType = {
   [key: string]: { [key: string]: any }[];
 }
-  
+
+export type NewItemType = {
+  [key:string]: any
+}
