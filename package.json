@@ -59,5 +59,8 @@
     "@backstage/plugin-catalog-backend-module-scaffolder-entity-model": "^0.1.19",
     "jose": "^5.2.3",
     "knex": "^3.1.0"
+  },
+  "peerDependencies": {
+    "react-router": "*"
   }
 }
