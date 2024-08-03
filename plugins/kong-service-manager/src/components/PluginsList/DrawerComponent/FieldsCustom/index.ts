@@ -1,2 +1,2 @@
 export { IncrementalFields } from './incrementalFields/IncrementalFields';
-export * from './recordFields/RecordFields';
+export { RecordFields } from './recordFields/RecordFields';

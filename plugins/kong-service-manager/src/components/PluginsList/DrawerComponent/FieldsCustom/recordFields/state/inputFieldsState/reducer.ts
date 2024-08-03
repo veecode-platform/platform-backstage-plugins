@@ -5,9 +5,9 @@ type InputFieldAction =
 |{type: 'REMOVE_INPUT_FIELD', payload: string}
 |{type: 'UPDATE_INPUT_FIELD', payload: InputFieldType};
 
-export const initialFieldsState : InputFieldType[] = [];
+export const initialInputFieldsState : InputFieldType[] = [];
 
-export const FieldsReducer = (state: InputFieldType[], action: InputFieldAction): InputFieldType[] => {
+export const InputFieldsReducer = (state: InputFieldType[], action: InputFieldAction): InputFieldType[] => {
     switch(action.type){
         case 'ADD_INPUT_FIELDS':
           return action.payload;

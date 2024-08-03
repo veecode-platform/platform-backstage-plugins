@@ -1,8 +1,8 @@
 import { InputFieldType } from "../../types";
 
-export const addInputFields = (fields:InputFieldType[])=>({
+export const addInputFields = (inputFields:InputFieldType[])=>({
     type: 'ADD_INPUT_FIELDS',
-    payload: fields
+    payload: inputFields
 } as const);
 
 export const removeInputField = (fieldName : string)=>({
@@ -10,9 +10,9 @@ export const removeInputField = (fieldName : string)=>({
     payload: fieldName
 }as const);
 
-export const updateInputField = (field: InputFieldType)=>({
+export const updateInputField = (inputField: InputFieldType)=>({
     type: 'UPDATE_INPUT_FIELD',
-    payload: field
+    payload: inputField
 }as const);
 
 export type FieldsActionType = ReturnType<typeof addInputFields | typeof removeInputField | typeof updateInputField>;
