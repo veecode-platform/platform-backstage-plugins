@@ -1,20 +1,17 @@
-/* eslint-disable @backstage/no-undeclared-imports */
-import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, IconButton, Typography } from '@material-ui/core'
-import React, { useState }  from 'react'
-import Edit from '@material-ui/icons/Edit'
-import { usePluginsCardsStyles } from '../styles'
-import { PluginCard } from '../../../../utils/types'
-import { useKongServiceManagerContext } from '../../../../context'
+import React from 'react';
+import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, IconButton, Typography } from '@material-ui/core';
+import Edit from '@material-ui/icons/Edit';
+import { usePluginsCardsStyles } from '../styles';
+import { useKongServiceManagerContext } from '../../../../context';
+import { CardComponentProps } from './types';
 
-interface CardComponentProps {
-    data: PluginCard
-}
 
-export const CardComponent = ({data}:CardComponentProps) => {
+export const CardComponent : React.FC<CardComponentProps> = (props) => {
   
-  const [processingData, setProcessingData] = useState<boolean>(false);
+  const [processingData, setProcessingData] = React.useState<boolean>(false);
   const { handleToggleDrawer, setPluginState, disablePlugin } = useKongServiceManagerContext();
   const {card, cardHeader, cardTitle, cardIcon,description, button,spinner} = usePluginsCardsStyles();
+  const {data} = props;
 
   const handlePluginEnable = async () => {
     if(data){

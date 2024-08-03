@@ -1,3 +1,3 @@
-export type LabelFieldProps = {
+export interface LabelFieldProps {
     title: string
 }

@@ -1,4 +1,4 @@
-export type IncrementalFieldsProps = {
+export interface IncrementalFieldsProps {
     name: string,
     required: boolean,
     items: string[]|[],

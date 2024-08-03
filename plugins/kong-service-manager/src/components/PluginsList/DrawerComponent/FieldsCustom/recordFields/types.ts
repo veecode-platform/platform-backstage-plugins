@@ -1,4 +1,4 @@
-export type RecordFieldsProps = {
+export interface RecordFieldsProps {
     inputName: string,
     required: boolean,
     defaultValues: any[]|[],

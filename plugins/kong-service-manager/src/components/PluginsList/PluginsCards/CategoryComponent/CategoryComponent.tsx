@@ -1,17 +1,13 @@
-import { ItemCardGrid } from '@backstage/core-components'
-import { Box, Typography } from '@material-ui/core'
-import React from 'react'
+import React from 'react';
+import { ItemCardGrid } from '@backstage/core-components';
+import { Box, Typography } from '@material-ui/core';
 import { usePluginsCardsStyles } from '../styles';
 import { CardComponent } from '../CardComponent';
-import { PluginCard } from '../../../../utils/types';
+import { CategoryComponentProps } from './types';
 
-interface CategoryComponentProps {
-    label: string,
-    plugins: PluginCard[]|[]
-}
+export const CategoryComponent : React.FC<CategoryComponentProps> = (props) => {
 
-export const CategoryComponent = ({label, plugins}:CategoryComponentProps) => {
-
+  const {label, plugins} = props;
   const {categoryLabel} = usePluginsCardsStyles();
 
   return (

@@ -1,24 +1,21 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @backstage/no-undeclared-imports */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Content } from '@backstage/core-components';
 import { AllPlugins } from './AllPlugins';
 import { usePluginsCardsStyles } from './styles';
 import { AssociatedPlugins } from './AssociatedPlugins';
 import { DrawerComponent } from '../DrawerComponent';
 import { useKongServiceManagerContext } from '../../../context';
+import { PluginsCardsProps } from './types';
 
-export interface PluginsCardsProps {
-  filterByAssociated?: boolean
-}
-
-export const PluginsCards = ({filterByAssociated}:PluginsCardsProps) => {
+export const PluginsCards : React.FC<PluginsCardsProps> = (props) => {
 
   const {listAllEnabledPlugins,associatedPluginsName} = useKongServiceManagerContext();
   const { content } = usePluginsCardsStyles();
+  const {filterByAssociated} = props;
 
-  useEffect(()=>{
+  React.useEffect(()=>{
      listAllEnabledPlugins()
+   // eslint-disable-next-line react-hooks/exhaustive-deps
    },[associatedPluginsName])
 
   return (
