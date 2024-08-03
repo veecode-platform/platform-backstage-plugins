@@ -143,7 +143,7 @@ spec:
 
  
 
-### Workflows List
+### Workflows Table View
 
 
 
@@ -176,23 +176,19 @@ When an event is triggered in the workflow, the status is updated, and the concl
 
 
 
-We encourage users to create a new tab in their catalog named "Workflows" and keep the "CI-CD" tab with the default Backstage component. In the following sections, we'll explain the integration between the two plugins.
-
-
-
 **Example of adding the new tab to a serviceEntityPage**
 `packages/app/src/components/catalog/EntityPage.tsx`
 
 
 
 ```diff
-+ import { GithubWorkflowsList, isGithubAvailable } from '@veecode-platform/backstage-plugin-github-workflows'
++ import { GithubWorkflowsContent, isGithubAvailable } from '@veecode-platform/backstage-plugin-github-workflows'
 ...
 
 + const cicdContent = (
 +  <EntitySwitch>
 +    <EntitySwitch.Case if={isGithubActionsAvailable}>
-+      <GithubWorkflowsList/>
++      <GithubWorkflowsContent/>
 +    </EntitySwitch.Case>
 +
 +    <EntitySwitch.Case>
@@ -225,7 +221,7 @@ We encourage users to create a new tab in their catalog named "Workflows" and ke
 
 
 
-### Workflow Cards
+### Workflow Cards View
 
 For this component, we need to add a special annotation, `github.com/workflows`, like this:
 
@@ -288,13 +284,13 @@ The functionality is identical to the workflow listing component, with the main 
 
 
 
-As an indication, we use the cards directly in the component overview, like this:
+To use the `cards view` variant, simply add the `cards` property to our `GithubWorkflowsContent` component:
 
 `packages/app/src/components/catalog/EntityPage.tsx`
 
 
 ```diff
-+ import { isGithubWorkflowsAvailable, GithubWorkflowsCard } from '@veecode-platform/backstage-plugin-github-workflows'
++ import { isGithubWorkflowsAvailable, GithubWorkflowsContent } from '@veecode-platform/backstage-plugin-github-workflows'
 
 ....
 
@@ -311,7 +307,7 @@ const overviewContent = (
 +    <EntitySwitch>
 +      <EntitySwitch.Case if={isGithubWorkflowsAvailable}>
 +        <Grid item lg={8} xs={12}>
-+            <GithubWorkflowsCard />
++            <GithubWorkflowsContent cards />
 +        </Grid>
 +      </EntitySwitch.Case>
 +    </EntitySwitch>
@@ -325,6 +321,8 @@ const overviewContent = (
   </Grid>
 );
 ```
+> ℹ️ It is important to note that for the **cards** variant, we can pass the filter of which workflows we want to view, through the annotation `github.com/workflows`, but if the annotation is not passed, all the workflows in the repository will be listed, as it will assume the default behavior followed by the default component.
+
 
 It works like this:
 
