@@ -1,7 +1,11 @@
-import { createApiFactory, createPlugin, createRoutableExtension, configApiRef } from '@backstage/core-plugin-api';
+import { createApiFactory, createPlugin, createRoutableExtension, configApiRef, createComponentExtension } from '@backstage/core-plugin-api';
 import { scmAuthApiRef } from '@backstage/integration-react';
 import { buildRouteRef, rootRouteRef } from './routes';
 import { githubWorkflowsApiRef, GithubWorkflowsClient } from './api';
+
+/**
+ *  @public
+ */
 
 export const githubWorkflowsPlugin = createPlugin({
   id: 'githubWorkflows',
@@ -20,6 +24,10 @@ export const githubWorkflowsPlugin = createPlugin({
   }
 });
 
+/**
+ *  @public
+ */
+
 export const GithubWorkflowsContent = githubWorkflowsPlugin.provide(
   createRoutableExtension({
     name: 'GithubWorkflowsContent',
@@ -29,3 +37,29 @@ export const GithubWorkflowsContent = githubWorkflowsPlugin.provide(
   })
 )
 
+/**
+ *  @deprecated
+ */
+
+export const GithubWorkflowsList = githubWorkflowsPlugin.provide(
+  createRoutableExtension({
+    name: 'GithubWorkflowsList',
+    component: () =>
+        import('./@deprecated/components/GitubWorkflowsList').then(m => m.GithubWorkflowsList),
+    mountPoint: rootRouteRef,
+  })
+)
+
+/**
+ *  @deprecated
+ */
+
+export const GithubWorkflowsCard = githubWorkflowsPlugin.provide(
+  createComponentExtension({
+    name: 'GithubWorkflowsCard',
+    component: {
+      lazy: () =>
+        import('./@deprecated/components/GithubWorkflowsCards').then(m => m.GithubWorkflowsCards),
+    },
+  })
+)
