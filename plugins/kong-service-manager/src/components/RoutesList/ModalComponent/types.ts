@@ -1,11 +1,11 @@
-export type ModalComponentProps = {
+export interface ModalComponentProps {
     show: boolean,
     handleCloseModal: (route: any) => void,
     route?: any,
     refreshList: () => void,
 }
 
-export type DynamicFieldsProps = {
+export interface DynamicFieldsProps {
     protocolDescription: string;
     hosts: any[];
     paths: any[];

@@ -1,27 +1,28 @@
 import React from 'react';
-import { Box, FormControlLabel, Checkbox } from '@mui/material';
 import StringInputList from '../StringInputList/StringInputList';
 import { Methods } from "../../../utils/enums/KongRouteMethods";
 import { DynamicFieldsProps } from './types';
+import { Box, Checkbox, FormControlLabel } from '@material-ui/core';
 
-const DynamicFields: React.FC<DynamicFieldsProps> = ({
-  protocolDescription,
-  hosts,
-  paths,
-  snis,
-  headers,
-  sources,
-  destinations,
-  methods,
-  handleChange,
-  setHosts,
-  setPaths,
-  setSnis,
-  setHeaders,
-  setSources,
-  setDestinations,
-  setMethods,
-}) => {
+const DynamicFields: React.FC<DynamicFieldsProps> = (props) => {
+  const {
+    protocolDescription,
+    hosts,
+    paths,
+    snis,
+    headers,
+    sources,
+    destinations,
+    methods,
+    handleChange,
+    setHosts,
+    setPaths,
+    setSnis,
+    setHeaders,
+    setSources,
+    setDestinations,
+    setMethods,
+  } = props;
   const fields = protocolDescription.split(', ');
 
   return (
@@ -69,7 +70,7 @@ const DynamicFields: React.FC<DynamicFieldsProps> = ({
                   buttonText="Add"
                   onItemsChange={(items) => handleChange(items, setHeaders)}
                   initialItems={headers}
-                  twoFields={true}
+                  twoFields
                 />
               </Box>
             );
@@ -81,7 +82,7 @@ const DynamicFields: React.FC<DynamicFieldsProps> = ({
                   buttonText="Add"
                   onItemsChange={(items) => handleChange(items, setSources)}
                   initialItems={sources}
-                  twoFields={true}
+                  twoFields
                 />
               </Box>
             );
@@ -93,7 +94,7 @@ const DynamicFields: React.FC<DynamicFieldsProps> = ({
                   buttonText="Add"
                   onItemsChange={(items) => handleChange(items, setDestinations)}
                   initialItems={destinations}
-                  twoFields={true}
+                  twoFields
                 />
               </Box>
             );
@@ -108,7 +109,7 @@ const DynamicFields: React.FC<DynamicFieldsProps> = ({
                         checked={methods.includes(method)}
                         onChange={(event) =>
                           handleChange(event, setMethods, (value, checked) =>
-                            checked ? [...methods, value as string] : methods.filter((method) => method !== value)
+                            checked ? [...methods, value as string] : methods.filter((m) => m !== value)
                           )
                         }
                         value={method}

@@ -5,53 +5,31 @@ import {
   Table,
   TableColumn} from '@backstage/core-components';
 import { RoutesResponse } from '../../../utils/types';
-import { Box, Fade, IconButton, makeStyles } from '@material-ui/core';
+import { Box, Fade, IconButton } from '@material-ui/core';
 import { HtmlTooltip } from '../../shared';
 import MoreIcon from '@material-ui/icons/More';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
 import { useKongServiceManagerContext } from '../../../context';
 import { ConfirmDeleteDialog } from '../ConfirmDeleteDialog/ConfirmDeleteDialog';
+import { TableComponentProps, TableData } from './types';
+import { useTableComponentStyle } from './styles';
 
-interface TableComponentProps {
-  isLoading: boolean;
-  dataProps: RoutesResponse[] | [];
-  handleEditModal?: (route: any) => void;
-  refreshList: () => void
-}  
 
-interface TableData {
-  id: string,
-  name: string,
-  protocols: string[],
-  methods: string[],
-  hosts: string[],
-  paths: string[],
-  tags: string[]
-}
 
-const useStyle = makeStyles({
-  tooltipContent:{
-    width: '100%'
-  },
-  tags: {
-    cursor: 'pointer',
-  },
-  actions:{
-    display: 'flex',
-    alignItems: 'center'
-  }
-})
 
-export const TableComponent = ({isLoading,dataProps, handleEditModal, refreshList}:TableComponentProps) => {
-  const { removeRoute } = useKongServiceManagerContext();
-  const {tooltipContent, tags, actions} = useStyle();
+
+export const TableComponent : React.FC<TableComponentProps> = (props) => {
 
   const [showDialog, setShowDialog] = React.useState<boolean>(false)
   const [routeId, setRouteId] = React.useState<string>()
+  const { removeRoute } = useKongServiceManagerContext();
+  const {tooltipContent, tags, actions} = useTableComponentStyle();
+  const {isLoading,dataProps, handleEditModal, refreshList} = props;
 
-  const handleOpenDialog = (routeId: string) => {
-    setRouteId(routeId);
+
+  const handleOpenDialog = (routeIdParams: string) => {
+    setRouteId(routeIdParams);
     setShowDialog(true);
   };
 

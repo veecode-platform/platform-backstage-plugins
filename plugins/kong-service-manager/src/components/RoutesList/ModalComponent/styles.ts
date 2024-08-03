@@ -102,7 +102,7 @@ export const useModalComponentStyles = makeStyles(theme =>
           flexDirection: 'column',
           gap: '1rem'
         },
-        field: {
+        fieldContent: {
           width: '100%',
           marginBottom: theme.spacing(2),
         },

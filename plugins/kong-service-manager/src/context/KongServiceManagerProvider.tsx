@@ -1,9 +1,5 @@
-/* eslint-disable @backstage/no-undeclared-imports */
-/* eslint-disable no-console */
-/* eslint-disable react-hooks/exhaustive-deps */
+import React from "react";
 import { alertApiRef, errorApiRef, useApi } from "@backstage/core-plugin-api";
-import React, { ReactNode, useContext, useEffect } from "react";
-import { useState } from "react";
 import { kongServiceManagerApiRef } from "../api";
 import { KongServiceManagerContext } from "./KongServiceManagerContext";
 import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard, CreateRoute } from "../utils/types";
@@ -11,21 +7,21 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from "../hooks";
 
 interface KongServiceManagerProviderProps {
-    children : ReactNode
+    children : React.ReactNode
 };
 
 export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProps> = ({children}) => {
 
+  const [allAssociatedPlugins, setAllAssociatedPlugins] = React.useState<AssociatedPluginsResponse[]|null>(null);
+  const [openDrawer, setOpenDrawer] = React.useState<boolean>(false);
+  const [selectedPlugin, setSelectedPlugin] = React.useState<PluginCard|null>(null);
+  const [ associatedPluginsName, setAssociatedPluginsName] = React.useState<string[]|[]>([]);
+  const [pluginsPerCategory, setPluginsPerCategory] = React.useState<PluginPerCategory[]|[]>([]); 
+  const [configState, setConfigState ] = React.useState<any|null>(null);
+  const [searchTerm, setSeachTerm] = React.useState<string>("");
   const { entity } = useEntity();
   const { serviceName, workspace,kongInstances } = useEntityAnnotation(entity);
-  const [instance, setInstance] = useState<string>(kongInstances ? kongInstances[0] : "");
-  const [allAssociatedPlugins, setAllAssociatedPlugins] = useState<AssociatedPluginsResponse[]|null>(null);
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
-  const [selectedPlugin, setSelectedPlugin] = useState<PluginCard|null>(null);
-  const [ associatedPluginsName, setAssociatedPluginsName] = useState<string[]|[]>([]);
-  const [pluginsPerCategory, setPluginsPerCategory] = useState<PluginPerCategory[]|[]>([]); 
-  const [configState, setConfigState ] = useState<any|null>(null);
-  const [searchTerm, setSeachTerm] = useState<string>("")
+  const [instance, setInstance] = React.useState<string>(kongInstances ? kongInstances[0] : "");
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
   const alertApi = useApi(alertApiRef);
@@ -254,22 +250,24 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  useEffect(()=>{
+  React.useEffect(()=>{
     if(allAssociatedPlugins){
       getAssociatedPuginsName(allAssociatedPlugins);
     }
   },[allAssociatedPlugins]);
 
-  useEffect(()=>{
+  React.useEffect(()=>{
    if(serviceName) listAllEnabledPlugins()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[searchTerm])
 
-  useEffect(()=>{
+  React.useEffect(()=>{
     if(instance){
       getServiceDetails();
       listAllEnabledPlugins();
       getRoutesList();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[instance])
 
   return (
@@ -309,4 +307,4 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 }
 
 
-export const useKongServiceManagerContext = () => useContext(KongServiceManagerContext)
+export const useKongServiceManagerContext = () => React.useContext(KongServiceManagerContext)

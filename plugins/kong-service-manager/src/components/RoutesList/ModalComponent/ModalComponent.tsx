@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from "react";
 import { Box, Button, Card, Checkbox, Collapse, Divider, Fade, FormControl, FormControlLabel, FormGroup, Grid, InputLabel, MenuItem, Modal, Paper, Select, TextField, Tooltip, Typography } from '@material-ui/core';
 import Stack from '@mui/material/Stack';
@@ -15,35 +16,7 @@ import { convertToArrayOfObjects, convertToObjArray } from "../../../utils/helpe
 import { prepareDestinations, prepareSources } from "../../../utils/helpers/preparePayload";
 
 export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
-  const { show, handleCloseModal, route, refreshList } = props;
-  const { field, modalOnBlur,modalContent, modalHeader,closeModal,modalBody, container, titleBar, content } = useModalComponentStyles();
-  const { createRoute, editRoute, getRoute } = useKongServiceManagerContext();
 
-  React.useEffect(() => {
-    if (show && route.id) {
-        const fetchData = async () => {
-            const response = await getRoute(route.id);
-            setName(response?.name || '');
-            setTags(convertToArrayOfObjects(response?.tags));
-            setProtocols(response?.protocols.toString() || '');
-            setHosts(convertToArrayOfObjects(response?.hosts));
-            setPaths(convertToArrayOfObjects(response?.paths));
-            setSnis(convertToArrayOfObjects(response?.snis));
-            setHeaders(convertToObjArray(response?.headers));
-            setSources(convertToObjArray(response?.sources));
-            setDestinations(convertToObjArray(response?.destinations));
-            setMethods(response?.methods || []);
-            setHttpsRedirectStatusCode(response?.https_redirect_status_code || 0);
-            setRegexPriority(response?.regex_priority || 0);
-            setStripPath(response?.strip_path || true);
-            setPreserveHost(response?.preserve_host || false);
-            setRequestBuffering(response?.request_buffering || true);
-            setResponseBuffering(response?.response_buffering || true);
-        };
-        fetchData();
-    }
-  }, [show]);
-  
   const [showFields, setShowFields] = React.useState(false);
   const [name, setName] = React.useState<string>('');
   const [tags, setTags] = React.useState<{ id: string; value: string }[]>([]);
@@ -62,7 +35,11 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
   const [preserveHost, setPreserveHost] = React.useState<boolean>(false);
   const [requestBuffering, setRequestBuffering] = React.useState<boolean>(true);
   const [responseBuffering, setResponseBuffering] = React.useState<boolean>(true);
+  const { show, handleCloseModal, route, refreshList } = props;
+  const { fieldContent, modalOnBlur,modalContent, modalHeader,closeModal,modalBody, container, titleBar, content } = useModalComponentStyles();
+  const { createRoute, editRoute, getRoute } = useKongServiceManagerContext();
 
+  
   const handleChange = <T,>(event: InputChangeEvent | ItemsChangeEvent, setState: SetState<T>, transformFn?: (value: unknown, checked?: boolean) => T) => {
     if (Array.isArray(event)) {
       setState(event as T);
@@ -83,7 +60,7 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
 
   const isSaveDisabled = React.useMemo(() => {
     return !(
-      name != '' &&
+      name !== '' &&
       (hosts.length > 0 ||
       paths.length > 0 ||
       snis.length > 0 ||
@@ -91,6 +68,7 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
       sources.length > 0 ||
       destinations.length > 0)
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hosts, paths, snis, headers, sources, destinations, methods]);
 
   const handleSaveRoute = async ()=> {
@@ -160,6 +138,33 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
     setShowFields(!showFields);
   };
 
+
+  React.useEffect(() => {
+    if (show && route.id) {
+        const fetchData = async () => {
+            const response = await getRoute(route.id);
+            setName(response?.name || '');
+            setTags(convertToArrayOfObjects(response?.tags));
+            setProtocols(response?.protocols.toString() || '');
+            setHosts(convertToArrayOfObjects(response?.hosts));
+            setPaths(convertToArrayOfObjects(response?.paths));
+            setSnis(convertToArrayOfObjects(response?.snis));
+            setHeaders(convertToObjArray(response?.headers));
+            setSources(convertToObjArray(response?.sources));
+            setDestinations(convertToObjArray(response?.destinations));
+            setMethods(response?.methods || []);
+            setHttpsRedirectStatusCode(response?.https_redirect_status_code || 0);
+            setRegexPriority(response?.regex_priority || 0);
+            setStripPath(response?.strip_path || true);
+            setPreserveHost(response?.preserve_host || false);
+            setRequestBuffering(response?.request_buffering || true);
+            setResponseBuffering(response?.response_buffering || true);
+        };
+        fetchData();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [show]);
+
   return (
     <Modal
       open={show}
@@ -196,7 +201,7 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
                       id="name"
                       label="Name"
                       variant="filled"
-                      className={field}
+                      className={fieldContent}
                       value={name}
                       onChange={(event) => handleChange(event, setName, (value) => value as string)}
                     />
@@ -215,7 +220,7 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
                     <Typography variant="body2">Route configuration determines how this route will handle incoming requests</Typography>
                   </Grid>
                   <Grid item xs={12}>
-                    <FormControl variant="filled" className={field}>
+                    <FormControl variant="filled" className={fieldContent}>
                       <InputLabel id="protocols-label">Protocols</InputLabel>
                       <Select
                         labelId="protocols-label"
@@ -277,7 +282,7 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
                       </Typography>
                       <Collapse in={showFields}>
                         <Box sx={{ p: 2 }}>
-                          <FormControl variant="filled" className={field}>
+                          <FormControl variant="filled" className={fieldContent}>
                             <InputLabel id="https-redirect-label">HTTPS Redirect Status Code</InputLabel>
                             <Select
                               labelId="https-redirect-label"
@@ -300,7 +305,7 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
                             type="number"
                             onChange={(event) => handleChange(event, setRegexPriority, (value) => value as number)}
                             variant="filled"
-                            className={field}
+                            className={fieldContent}
                           />
                         </Box>
                         <Box sx={{ p: 2 }}>
