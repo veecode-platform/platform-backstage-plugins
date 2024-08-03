@@ -39,6 +39,9 @@ export const GithubWorkflowsContent = githubWorkflowsPlugin.provide(
 
 /**
  *  @deprecated
+ *  The way to use this component has changed, check out the new version by accessing our documentation 
+ *  --> https://platform.vee.codes/plugin/Github%20workflows/
+ * 
  */
 
 export const GithubWorkflowsList = githubWorkflowsPlugin.provide(
@@ -52,6 +55,9 @@ export const GithubWorkflowsList = githubWorkflowsPlugin.provide(
 
 /**
  *  @deprecated
+ *  The way to use this component has changed, check out the new version by accessing our documentation 
+ *  --> https://platform.vee.codes/plugin/Github%20workflows/
+ * 
  */
 
 export const GithubWorkflowsCard = githubWorkflowsPlugin.provide(
