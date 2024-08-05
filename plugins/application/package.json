@@ -44,7 +44,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "4.0.0-alpha.57",
     "@veecode-platform/plugin-application-common": "^0.1.86",
-    "axios": "^1.2.3",
+    "axios": "^0.28.0",
     "lodash": "^4.17.21",
     "react-code-blocks": "^0.0.9-0",
     "react-use": "^17.2.4"
