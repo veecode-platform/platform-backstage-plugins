@@ -6,7 +6,7 @@ for dir in "$plugins_dir"/*; do
     package_json="$dir/package.json"
     if [ -f "$package_json" ]; then
       echo "--------------------------------------------------------------------------------------------------------------------------"
-      echo "Checking dependencies for $(basename "$dir")..."
+      echo "Checking dependencies for '$(basename "$dir")'..."
       output=$(npx --yes depcheck ./plugins/kong-service-manager)
       output=$(echo "$output" | sed 's/^/   /')
       echo "$output"
