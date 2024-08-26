@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes} from 'react-router';
+import { Route, Routes} from 'react-router-dom';
 import { ApplicationDetailsComponent } from "../ApplicationDetailsComponent";
 import { ApplicationListComponent } from "../ApplicationListComponent";
 import { EditComponent } from "../EditApplicationComponent";

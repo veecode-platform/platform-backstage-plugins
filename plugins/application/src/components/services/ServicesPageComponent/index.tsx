@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes} from 'react-router';
+import { Route, Routes} from 'react-router-dom';
 import { ListComponent } from "../ListComponent";
 import { DetailsComponent } from "../DetailsComponent";
 import { CreateComponent } from "../CreateComponent";
