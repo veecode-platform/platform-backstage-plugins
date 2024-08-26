@@ -14262,6 +14262,7 @@ __metadata:
     react-use: ^17.2.4
   peerDependencies:
     react: ^17.0.2
+    react-router-dom: ^6.24.1
   languageName: unknown
   linkType: soft
 
