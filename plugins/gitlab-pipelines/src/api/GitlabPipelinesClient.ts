@@ -1,79 +1,16 @@
-/* eslint-disable @backstage/no-undeclared-imports */
-import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
-import { JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse, VariablesParams } from './utils/types';
-import { ScmAuthApi } from '@backstage/integration-react';
+import { DiscoveryApi } from "@backstage/core-plugin-api";
+import { ScmAuthApi } from "@backstage/integration-react";
+import { Options } from "./types";
+import { GITLAB_PIPELINES_PROXY_URL } from "../utils/constants";
+import { JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse, VariablesParams } from "../utils/types";
+import { GitlabPipelinesApi } from "./GitlabPipelinesApi";
 
-const GITLAB_PIPELINES_PROXY_URL = "/gitlab/api";
-
-export interface GitlabPipelinesApi {
-    /**
-    * list branches from a repository
-    */
-    listBranchesFromRepo(gitlabReposlug: string): Promise<ListBranchResponse[]>;
-    /**
-    * list pipelines
-    */
-    listProjectPipelines(gitlabReposlug: string, branch: string): Promise<PipelineListResponse[]>;
-    /**
-     * Get a Single Pipeline
-     */
-    getSinglePipeline(gitlabReposlug: string, pipelineId: number, branch: string): Promise<PipelineListResponse>;
-    /**
-     * Get Lastest pipeline
-     */
-    getLatestPipeline(gitlabReposlug: string, branch: string): Promise<PipelineResponse>;
-    /**
-     * run a new pipeline
-     */
-    runNewPipeline(gitlabReposlug: string, branch: string, variables: VariablesParams[]): Promise<PipelineResponse>
-    /**
-     *  run a new pipeline with trigger
-     */
-    runNewPipelineWithTrigger(gitlabReposlug: string, triggerToken: string, branch: string): Promise<PipelineResponse>;
-    /**
-     *  retry pipeline jobs
-     */
-    retryPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<PipelineResponse>;
-    /**
-     *  cancel pipeline jobs
-     */
-    cancelPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<PipelineResponse>;
-    /**
-     * list pipelines jobs
-     */
-    listPipelineJobs(gitlabReposlug: string, pipelineId: number, branch: string): Promise<ListJobsResponse[]>;
-    /**
-     * get single job
-     * 
-     */
-    getSingleJob(gitlabReposlug: string, jobId: number, branch: string): Promise<ListJobsResponse>;
-    /**
-     *  run a single job
-     */
-    runJob(gitlabReposlug: string, jobId: number, params: JobsVariablesAttributes[], branch: string): Promise<ListJobsResponse>;
-    /**
-     *  cancel a single job
-     */
-    cancelJob(gitlabReposlug: string, jobId: number, branch: string): Promise<ListJobsResponse>;
-    /**
-     *  retry a single job
-     */
-    retryJob(gitlabReposlug: string, jobId: number, branch: string): Promise<ListJobsResponse>;
-}
-
-export const gitlabPipelinesApiRef = createApiRef<GitlabPipelinesApi>({
-    id: 'plugin.gitlabpipelines',
-});
-
-export type Options = {
-    discoveryApi: DiscoveryApi;
-    scmAuthApi: ScmAuthApi;
-    /**
-    * Path to use for requests via the proxy, defaults to /gitlab/api
-    */
-    proxyPath?: string;
-};
-
+/**
+ * 
+ * New implementation
+ * @public
+ * 
+ */ 
 
 class Client {
     private readonly discoveryApi: DiscoveryApi;
