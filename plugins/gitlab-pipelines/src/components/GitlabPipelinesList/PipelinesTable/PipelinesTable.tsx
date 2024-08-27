@@ -11,7 +11,7 @@ import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import SyncIcon from '@material-ui/icons/Sync';
 import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
-import { truncateString } from '../../../utils/commons';
+import { truncateString } from '../../../utils/helpers';
 import { StatusComponent } from '../../StatusComponent';
 import { Pipeline } from '../../../utils/types';
 import { PipelineActions } from '../PipelineActions';

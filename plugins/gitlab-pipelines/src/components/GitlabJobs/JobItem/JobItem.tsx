@@ -1,7 +1,7 @@
 import { Box, Tooltip, Typography, makeStyles } from '@material-ui/core';
 import React from 'react';
 import { StatusComponent } from '../../StatusComponent';
-import { truncateString } from '../../../utils/commons';
+import { truncateString } from '../../../utils/helpers';
 import { JobActions } from '../JobActions';
 import { GitlabPipelinesStatus } from '../../../utils/enums/GitlabPipelinesStatus';
 
