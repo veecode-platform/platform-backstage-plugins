@@ -5,14 +5,14 @@ import LanguageIcon from '@material-ui/icons/Language';
 import { Box, Button, Typography } from '@material-ui/core';
 import { SelectBranch } from '../../SelectBranch';
 import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
-import { MissingAnnotationEmptyState, useEntity } from '@backstage/plugin-catalog-react';
+import { MissingAnnotationEmptyState } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import SyncIcon from '@material-ui/icons/Sync';
 import { truncateString } from '../../../utils/helpers';
 import { StatusComponent } from '../../StatusComponent';
 import { Pipeline } from '../../../utils/types';
 import { PipelineActions } from '../PipelineActions';
-import {useEntityAnnotations, isGitlabAvailable } from '../../../hooks';
+import {isGitlabAvailable } from '../../../hooks';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
@@ -27,16 +27,14 @@ dayjs.extend(duration);
 
 export const DenseTable : React.FC<DenseTableProps> = (props) => {
   
-  const { entity } = useEntity();
   const [ loading, setLoading] = React.useState<boolean>(false);
-  const { projectName } = useEntityAnnotations(entity as Entity);
   const { listAllPipelines, setPipelineListState } = useGitlabPipelinesContext();
   const classes = usePipelinesTableStyles();
   const { items } = props;
 
   const updateData = async ()=> {
     setLoading(true)
-    const data = await listAllPipelines(projectName);
+    const data = await listAllPipelines();
     setPipelineListState(data as Pipeline[]);
     setTimeout(()=> setLoading(false), 800)
   }
@@ -118,13 +116,11 @@ export const DenseTable : React.FC<DenseTableProps> = (props) => {
 
 export const PipelinesTable = () => {
 
-  const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entity as Entity);
   const [ loadingState, setLoadingState ] = React.useState(true);
-  const { branch, listAllPipelines, pipelineListState} = useGitlabPipelinesContext();
+  const { hostname,projectName, entity, branch, listAllPipelines, pipelineListState } = useGitlabPipelinesContext();
 
   const updateData = async ()=> {
-    await listAllPipelines(projectName);
+    await listAllPipelines();
   }
 
   React.useEffect(()=>{
@@ -159,7 +155,7 @@ export const PipelinesTable = () => {
         <Button
           variant="contained"
           color="primary"
-          href={`https://gitlab.com/${projectName}`}
+          href={`https://${hostname}/${projectName}`}
         >
           Visit your repository
         </Button>

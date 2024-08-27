@@ -2,9 +2,6 @@ import React from 'react'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {Tooltip } from '@material-ui/core';
-import { useEntity } from '@backstage/plugin-catalog-react';
-import { Entity } from '@backstage/catalog-model';
-import { useEntityAnnotations } from '../../../hooks';
 import { GitlabPipelinesStatus } from '../../../utils/enums/GitlabPipelinesStatus';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { useGitlabPipelinesContext } from '../../../context';
@@ -14,8 +11,6 @@ import { useJobActionsStyles } from './styles';
 
 export const JobActions : React.FC<JobActionsProps> = (props) => {
 
-  const { entity } = useEntity();  
-  const { projectName } = useEntityAnnotations(entity as Entity);
   const { runNewPipeline, cancelPipeline, jobsByAnnotation, setJobsByAnnotation } = useGitlabPipelinesContext();
   const { inProgress } = useJobActionsStyles();
   const { id, variable, status } = props;
@@ -43,7 +38,7 @@ export const JobActions : React.FC<JobActionsProps> = (props) => {
         key: variable,
         value: 'true'
       }
-      runNewPipeline(projectName, [variableParam]);
+      runNewPipeline([variableParam]);
       const updatedJobs = jobsByAnnotation!.map(job => {
         if (job.id === id) {
           return {
@@ -59,7 +54,7 @@ export const JobActions : React.FC<JobActionsProps> = (props) => {
   }
 
   const handleStopJob = async () => {
-    await cancelPipeline(projectName);
+    await cancelPipeline();
     const updatedJobs = jobsByAnnotation!.map(job => {
       if (job.id === id) {
         return {

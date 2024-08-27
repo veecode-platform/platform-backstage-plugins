@@ -4,6 +4,9 @@ import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { GitlabPipelinesContext } from './GitlabPipelinesContext';
 import { Job, JobAnnotationProps, JobsVariablesAttributes, ListJobsResponse, Pipeline, VariablesParams } from '../utils/types';
 import { gitlabPipelinesApiRef } from '../api';
+import { useEntity } from '@backstage/plugin-catalog-react';
+import { useEntityAnnotations } from '../hooks';
+import { Entity } from '@backstage/catalog-model';
 
 interface GitlabPipelinesProviderProps {
   children: React.ReactNode;
@@ -20,6 +23,8 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
   const [triggerToken, setTriggerToken] = useState<string>('');
   const [variablesParams, setVariablesParams] = useState<VariablesParams[]|null>(null);
   const [jobParams, setJobParams] = useState<JobsVariablesAttributes|null>(null);
+  const { entity } = useEntity();
+  const { projectName,hostname,jobsAnnotations } = useEntityAnnotations(entity as Entity);
   const api = useApi(gitlabPipelinesApiRef);
   const errorApi = useApi(errorApiRef);
 
@@ -31,9 +36,9 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     setTriggerToken(token)
   }
 
-  const listAllPipelines = async(ProjectName: string ) => {
+  const listAllPipelines = async() => {
     try{
-      const pipelines = await api.listProjectPipelines(ProjectName, branch!);
+      const pipelines = await api.listProjectPipelines(hostname,projectName, branch!);
       if(pipelines.length > 0){
         const newPipelineListState = await Promise.all(pipelines.map(async (p) => {
           return {
@@ -59,9 +64,9 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     }
   }
 
-  const latestPipeline = async(projecName: string )=>{
+  const latestPipeline = async()=>{
     try{
-      const pipeline = await api.getLatestPipeline(projecName, branch!);
+      const pipeline = await api.getLatestPipeline(hostname,projectName, branch!);
       if(pipeline.id){
         const pipelineData : Pipeline = {
           id: pipeline.id,
@@ -86,9 +91,9 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     }
   }
 
-  const runNewPipeline = async(projectName: string, variables: VariablesParams[]) => {
+  const runNewPipeline = async(variables: VariablesParams[]) => {
     try{
-      const response = await api.runNewPipeline(projectName, branch!, variables);
+      const response = await api.runNewPipeline(hostname,projectName, branch!, variables);
       if(response.status === "created"){
         setLatestPipelineState({
           id: response.id,
@@ -102,7 +107,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
           webUrl: response.web_url,
           name: response.name 
         });
-        listAllPipelines(projectName);
+        listAllPipelines();
       };
     }
     catch(e:any){
@@ -110,9 +115,9 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     }
   }
 
-  const runPipelineWithTrigger = async(projectName: string, triggerTokenValue: string)=>{
+  const runPipelineWithTrigger = async(triggerTokenValue: string)=>{
     try{
-      const response = await api.runNewPipelineWithTrigger(projectName, triggerTokenValue, branch!);
+      const response = await api.runNewPipelineWithTrigger(hostname,projectName, triggerTokenValue, branch!);
       if(response.status === "created"){
         setLatestPipelineState({
           id: response.id,
@@ -126,7 +131,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
           webUrl: response.web_url,
           name: response.name 
         });
-        listAllPipelines(projectName);
+        listAllPipelines();
       }
     }
     catch(e:any){
@@ -134,9 +139,9 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     }
   }
 
-  const retryPipeline = async(projectName: string)=>{
+  const retryPipeline = async()=>{
     try{
-      const response = await api.retryPipelineJobs(projectName, latestPipelineState?.id as number, branch!);
+      const response = await api.retryPipelineJobs(hostname,projectName, latestPipelineState?.id as number, branch!);
       if(response.id){
         setLatestPipelineState({
           id: response.id,
@@ -150,7 +155,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
           webUrl: response.web_url,
           name: response.name 
         });
-        listAllPipelines(projectName);
+        listAllPipelines();
       }
     }
     catch(e:any){
@@ -158,9 +163,9 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     }
   }
 
-  const cancelPipeline = async(projectName: string)=>{
+  const cancelPipeline = async()=>{
     try{
-      const response = await api.cancelPipelineJobs(projectName, Number(latestPipelineState?.id), branch!);
+      const response = await api.cancelPipelineJobs(hostname,projectName, Number(latestPipelineState?.id), branch!);
       if(response.id){
         setLatestPipelineState({
           id: response.id,
@@ -174,7 +179,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
           webUrl: response.web_url,
           name: response.name 
         });
-        listAllPipelines(projectName);
+        listAllPipelines();
       }
     }
     catch(e:any){
@@ -182,9 +187,9 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     }
   }
 
-  const allJobs = async(projectName: string, pipelineId: number)=>{
+  const allJobs = async(pipelineId: number)=>{
     try{
-      const response = await api.listPipelineJobs(projectName, pipelineId, branch!);
+      const response = await api.listPipelineJobs(hostname,projectName, pipelineId, branch!);
       if(response.length > 0){
         const JobsList : Job[] = [];
         response.filter((j:ListJobsResponse)=>{
@@ -214,9 +219,9 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     }
   }
 
-  const getSingleJob = async(projectName: string, jobId: number) => {
+  const getSingleJob = async(jobId: number) => {
     try{
-      const response = await api.getSingleJob(projectName, jobId, branch!);
+      const response = await api.getSingleJob(hostname,projectName, jobId, branch!);
       if(response.id){
         const job = {
           id: response.id,
@@ -241,9 +246,9 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     }
   }
 
-  const runJob = async (projectName: string, jobId: number, params: JobsVariablesAttributes[]) => {
+  const runJob = async (jobId: number, params: JobsVariablesAttributes[]) => {
     try{
-      const response = await api.runJob(projectName, jobId, params, branch!);
+      const response = await api.runJob(hostname,projectName, jobId, params, branch!);
       if(response.id){
         const job = {
           id: response.id,
@@ -267,9 +272,9 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     }
   }
 
-  const cancelJob = async(projectName: string, id: number)=>{
+  const cancelJob = async(id: number)=>{
     try{
-      const response = await api.cancelJob(projectName, id, branch!);
+      const response = await api.cancelJob(hostname,projectName, id, branch!);
       if(response.id){
         const job = {
           id: response.id,
@@ -293,9 +298,9 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     }
   }
 
-  const retryJob = async(projectName: string, id: number)=>{
+  const retryJob = async(id: number)=>{
     try{
-      const response = await api.retryJob(projectName, id, branch!);
+      const response = await api.retryJob(hostname,projectName, id, branch!);
       if(response.id){
         const job = {
           id: response.id,
@@ -323,6 +328,10 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     <GitlabPipelinesContext.Provider
       value={{
         branch,
+        jobsAnnotations,
+        projectName,
+        hostname,
+        entity,
         setBranchState,
         listAllPipelines,
         pipelineListState,

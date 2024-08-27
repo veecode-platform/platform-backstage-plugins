@@ -18,11 +18,11 @@ export const SelectBranch = () => {
   const { branch, setBranchState } = useGitlabPipelinesContext();
   const api = useApi(gitlabPipelinesApiRef);
   const { entity } = useEntity();
-  const { projectName } = useEntityAnnotations(entity as Entity);
+  const { hostname,projectName } = useEntityAnnotations(entity as Entity);
 
   React.useEffect(() => {
     const getBranches = async () => {
-      const data = await api.listBranchesFromRepo(projectName);
+      const data = await api.listBranchesFromRepo(hostname,projectName);
       if (data) {
         const branchesFilter : Branch[] = [];
         data.map((item : ListBranchResponse) => branchesFilter.push({
@@ -36,6 +36,7 @@ export const SelectBranch = () => {
       }
     };
     getBranches();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api, projectName, setBranches]);
 
   React.useEffect(()=>{

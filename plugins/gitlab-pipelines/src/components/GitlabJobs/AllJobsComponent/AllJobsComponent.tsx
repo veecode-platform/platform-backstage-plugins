@@ -2,11 +2,9 @@ import React from 'react';
 import { ErrorBoundary, Progress, ResponseErrorPanel } from '@backstage/core-components';
 import { Box, Card, CardContent, CardHeader, CircularProgress, IconButton, Typography } from '@material-ui/core';
 import useAsync from 'react-use/lib/useAsync';
-import { MissingAnnotationEmptyState, useEntity } from '@backstage/plugin-catalog-react';
-import { Entity } from '@backstage/catalog-model';
+import { MissingAnnotationEmptyState } from '@backstage/plugin-catalog-react';
 import { SelectBranch } from '../../SelectBranch';
 import CachedIcon from '@material-ui/icons/Cached';
-import { useEntityAnnotations } from '../../../hooks';
 import { JobItem } from '../JobItem';
 import GitlabIcon from '../../../assets/gitlabIcon';
 import { useAllJobsComponentStyles } from './styles';
@@ -88,9 +86,7 @@ export const Cards : React.FC<JobItemProps> = (props) => {
 
 export const AllJobsComponent = () => {
 
-  const { entity } = useEntity();
-  const { jobsAnnotations } = useEntityAnnotations(entity as Entity);
-  const { branch, setJobsByAnnotation, jobsByAnnotation } = useGitlabPipelinesContext();
+  const { branch, jobsAnnotations, setJobsByAnnotation, jobsByAnnotation } = useGitlabPipelinesContext();
 
   const updateData = () => {
     if(jobsByAnnotation) setJobsByAnnotation(jobsByAnnotation);

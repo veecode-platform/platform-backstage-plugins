@@ -4,9 +4,6 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import CachedIcon from '@material-ui/icons/Cached';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { Box, Button, Tooltip } from '@material-ui/core';
-import { useEntity } from '@backstage/plugin-catalog-react';
-import { Entity } from '@backstage/catalog-model';
-import { useEntityAnnotations } from '../../../hooks';
 import { ModalComponent } from '../../ModalComponent/ModalComponent';
 import { GitlabPipelinesStatus } from '../../../utils/enums/GitlabPipelinesStatus';
 import { Pipeline } from '../../../utils/types';
@@ -17,8 +14,6 @@ import { PipelineActionsProps } from './types';
 
 export const PipelineActions : React.FC<PipelineActionsProps> = (props) => {
 
-  const { entity } = useEntity();  
-  const { projectName } = useEntityAnnotations(entity as Entity);
   const [showModal, setShowModal] = React.useState<boolean>(false);
   const { variablesParams, runNewPipeline, cancelPipeline , listAllPipelines, setPipelineListState} = useGitlabPipelinesContext();
   const classes = usePipelineActionsStyles();
@@ -29,19 +24,19 @@ export const PipelineActions : React.FC<PipelineActionsProps> = (props) => {
   const handleShowModal = () => setShowModal(!showModal);
 
   const updateData = async () => {
-    const data = await listAllPipelines(projectName);
+    const data = await listAllPipelines();
     setPipelineListState(data as Pipeline[]);
   }
 
   const handleStartPipeline = async () => {
     if (variablesParams) {
-      await runNewPipeline(projectName, variablesParams);
+      await runNewPipeline(variablesParams);
       await updateData();
     }
   }
 
   const handleStopPipeline = async () => {
-    await cancelPipeline(projectName);
+    await cancelPipeline();
     await updateData();
   }
 
