@@ -1,7 +1,20 @@
 import React from 'react'
-import { StatusAborted, StatusError, StatusOK, StatusPending, StatusRunning, StatusWarning } from '@backstage/core-components'
 import { GitlabPipelinesStatus } from '../../utils/enums/GitlabPipelinesStatus'
 import { PipelineStatusProps } from './types';
+import { RiErrorWarningFill } from 'react-icons/ri';
+import { PiRecordFill } from 'react-icons/pi';
+import { Loading } from './loading';
+import { FcOk } from 'react-icons/fc';
+import { TbCircleChevronsRight } from "react-icons/tb";
+import { CgCloseO } from "react-icons/cg";
+import { TbClockHour3 } from "react-icons/tb";
+
+const styles = {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '.7rem'
+}
 
 export const StatusComponent : React.FC<PipelineStatusProps> = (props) => {
 
@@ -16,57 +29,57 @@ export const StatusComponent : React.FC<PipelineStatusProps> = (props) => {
         case GitlabPipelinesStatus.scheduled:
         case GitlabPipelinesStatus.approvalPending:
             return (
-                <>
-                    <StatusPending /> {!icon && "Pending"}
-                </>
+                <div style={styles}>
+                    <TbClockHour3 size={22} color="#eab308"/> {!icon && "Pending"}
+                </div>
             );
         case GitlabPipelinesStatus.preparing:
             return (
-                <>
-                    <StatusWarning /> {!icon && "Please wait"}
-                </>
+                <div style={styles}>
+                    <RiErrorWarningFill size={20} color="orange" /> {!icon && "Please wait"}
+                </div>
             );
         case GitlabPipelinesStatus.failed:
         case GitlabPipelinesStatus.failedWithWarnings:
         case GitlabPipelinesStatus.approvalBlocked:
             return (
-                <>
-                    <StatusError /> {!icon && "Error"}
-                </>
+                <div style={styles}>
+                     <CgCloseO size={20} color="#E2524B"/> {!icon && "Error"}
+                </div>
             );
         case GitlabPipelinesStatus.canceled:
         case GitlabPipelinesStatus.skipped: 
         case GitlabPipelinesStatus.blocked:   
             return (
-                <>
-                    <StatusAborted /> {!icon && "Aborted"}
-                </>
+                <div style={styles}>
+                    <TbCircleChevronsRight size={20} color="#cdcdcd"/> {!icon && "Skipped"}
+                </div>
             );
         case GitlabPipelinesStatus.running:
             return (
-                <>
-                    <StatusRunning /> {!icon && "In progress"}
-                </>
+                <div style={styles}>
+                    <Loading/> {!icon && "In progress"}
+                </div>
             );
         case GitlabPipelinesStatus.created:
         case GitlabPipelinesStatus.manualyCreated:
             return (
-                <>
-                    <StatusOK /> {!icon && "Created"}
-                </>
+                <div style={styles}>
+                    <PiRecordFill size={22} color="#cdcdcd"/> {!icon && "Created"}
+                </div>
             );
         case GitlabPipelinesStatus.success:
         case GitlabPipelinesStatus.manual:
             return (
-                <>
-                    <StatusOK /> {!icon && "Success"}
-                </>
+                <div style={styles}>
+                    <FcOk size={20} /> {!icon && "Success"} 
+                </div>
             );
         default:
             return (
-                <>
-                    <StatusPending /> {!icon && "Pending"}
-                </>
+                <div style={styles}>
+                    <TbClockHour3 size={22} color="#eab308"/> {!icon && "Pending"}
+                </div>
             )
     }
 }
