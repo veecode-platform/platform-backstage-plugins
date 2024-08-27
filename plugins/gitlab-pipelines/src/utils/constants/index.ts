@@ -1,0 +1,1 @@
+export const GITLAB_PIPELINES_PROXY_URL = "/gitlab/api";
