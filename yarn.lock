@@ -3703,6 +3703,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@backstage/integration-react@npm:^1.1.30":
+  version: 1.1.30
+  resolution: "@backstage/integration-react@npm:1.1.30"
+  dependencies:
+    "@backstage/config": ^1.2.0
+    "@backstage/core-plugin-api": ^1.9.3
+    "@backstage/integration": ^1.14.0
+    "@material-ui/core": ^4.12.2
+    "@material-ui/icons": ^4.9.1
+    "@types/react": ^16.13.1 || ^17.0.0
+  peerDependencies:
+    react: ^16.13.1 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
+    react-router-dom: 6.0.0-beta.0 || ^6.3.0
+  checksum: cfee15603c8e609b1d4a8b7ea83e42ea1635b99aee1d5110a1c2361dcb976a84b6591e0b5d867a9c4004d27c163362b24f57686ce5652f697b5ba2ae780a628e
+  languageName: node
+  linkType: hard
+
 "@backstage/integration@npm:^1.12.0, @backstage/integration@npm:^1.13.0":
   version: 1.13.0
   resolution: "@backstage/integration@npm:1.13.0"
@@ -3717,6 +3735,23 @@ __metadata:
     lodash: ^4.17.21
     luxon: ^3.0.0
   checksum: 2b824261b0d30771e54515f8571c2af0b4c64f5cd3d1f990c234152b19e81d1e4ddbbbfae2a0b74f44abbfb67f52609c7eee9dc9fbb61d5f0076acaa80b3e670
+  languageName: node
+  linkType: hard
+
+"@backstage/integration@npm:^1.14.0":
+  version: 1.14.0
+  resolution: "@backstage/integration@npm:1.14.0"
+  dependencies:
+    "@azure/identity": ^4.0.0
+    "@backstage/config": ^1.2.0
+    "@backstage/errors": ^1.2.4
+    "@octokit/auth-app": ^4.0.0
+    "@octokit/rest": ^19.0.3
+    cross-fetch: ^4.0.0
+    git-url-parse: ^14.0.0
+    lodash: ^4.17.21
+    luxon: ^3.0.0
+  checksum: 3dc2272eda0205e880469aa2a68f390ba9f7a36b5ca41bc2bcb693c46fa7f99e057748c9aab1f88637dda3d8e2dec6b82ffab2aea6d3f12781c563502f0ed4d1
   languageName: node
   linkType: hard
 
@@ -13849,6 +13884,7 @@ __metadata:
     "@backstage/core-components": ^0.14.8
     "@backstage/core-plugin-api": ^1.9.3
     "@backstage/dev-utils": ^1.0.34
+    "@backstage/integration-react": ^1.1.30
     "@backstage/plugin-catalog-react": ^1.12.1
     "@backstage/test-utils": ^1.5.7
     "@backstage/theme": ^0.5.6
