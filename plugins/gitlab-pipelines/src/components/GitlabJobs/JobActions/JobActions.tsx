@@ -1,7 +1,6 @@
 import React from 'react'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import CachedIcon from '@material-ui/icons/Cached';
 import {Tooltip } from '@material-ui/core';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
@@ -112,8 +111,8 @@ export const JobActions : React.FC<JobActionsProps> = (props) => {
       {(status.toLocaleLowerCase() === GitlabPipelinesStatus.success) &&
         (
 
-          <Tooltip title="Run Again" placement="top">
-            <CachedIcon
+          <Tooltip title="Run" placement="top">
+            <PlayArrowIcon
               onClick={() => handleClickActions(status)}
             />
           </Tooltip>
