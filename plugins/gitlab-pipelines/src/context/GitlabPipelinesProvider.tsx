@@ -2,8 +2,8 @@ import React, { ReactNode } from 'react';
 import { useState } from "react";
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { GitlabPipelinesContext } from './GitlabPipelinesContext';
-import { Job, JobAnnotationProps, JobsVariablesAttributes, ListJobsResponse, Pipeline, VariablesParams } from '../../utils/types';
-import { gitlabPipelinesApiRef } from '../../api';
+import { Job, JobAnnotationProps, JobsVariablesAttributes, ListJobsResponse, Pipeline, VariablesParams } from '../utils/types';
+import { gitlabPipelinesApiRef } from '../api';
 
 interface GitlabPipelinesProviderProps {
   children: ReactNode;
@@ -354,3 +354,6 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     </GitlabPipelinesContext.Provider>
   );
 };
+
+
+export const useGitlabPipelinesContext = () => React.useContext(GitlabPipelinesContext);

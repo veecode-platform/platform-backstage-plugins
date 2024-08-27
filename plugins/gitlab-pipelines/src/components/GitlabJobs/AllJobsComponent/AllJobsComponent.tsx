@@ -1,86 +1,26 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react';
-import { ErrorBoundary, MissingAnnotationEmptyState, Progress, ResponseErrorPanel } from '@backstage/core-components';
-import { Box, Card, CardContent, CardHeader, CircularProgress, IconButton, Typography, makeStyles } from '@material-ui/core';
+import React from 'react';
+import { ErrorBoundary, Progress, ResponseErrorPanel } from '@backstage/core-components';
+import { Box, Card, CardContent, CardHeader, CircularProgress, IconButton, Typography } from '@material-ui/core';
 import useAsync from 'react-use/lib/useAsync';
-import { useEntity } from '@backstage/plugin-catalog-react';
+import { MissingAnnotationEmptyState, useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { SelectBranch } from '../../SelectBranch';
 import CachedIcon from '@material-ui/icons/Cached';
-import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
-import { JobAnnotationProps } from '../../../utils/types';
-import { GITLAB_JOBS_ANNOTATION, useEntityAnnotations } from '../../../hooks';
+import { useEntityAnnotations } from '../../../hooks';
 import { JobItem } from '../JobItem';
-import GitlabIcon from '../../assets/gitlabIcon';
+import GitlabIcon from '../../../assets/gitlabIcon';
+import { useAllJobsComponentStyles } from './styles';
+import { JobItemProps } from './types';
+import { useGitlabPipelinesContext } from '../../../context';
+import { GITLAB_JOBS_ANNOTATION } from '../../../utils/constants';
 
 
-const useStyles = makeStyles(theme => ({
-  title: {
-    paddingLeft: '1.5rem',
-    fontSize: '1.5rem',
-    display: 'flex',
-    alignItems: 'center'
-  },
-  options:{
-    padding: '0 0 1rem 0',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '1rem'
-  },
-  buttonRefresh:{
-    marginTop: '10%'
-  },
-  loadingComponent:{
-    width:'100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '.3rem 0'
-  },
-  item:{
-    maxWidth: '100% !important',
-    overflow: 'hidden',
-    background: 'red'
-  },
-  workflowsGroup: {
-    width: '95%',
-    margin: 'auto',
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    padding: '2rem 1rem',
-    gap: '1.5rem',
-    overflow: 'auto',
-    borderTop: `1px solid ${theme.palette.divider}`,
-    '&::-webkit-scrollbar': {
-      width: '10px',
-      height: '4px'
-    },
-    '&::-webkit-scrollbar-thumb': {
-      borderRadius: '50px',
-      background: theme.palette.grey[600],
+export const Cards : React.FC<JobItemProps> = (props) => {
 
-    },
-    '&::-webkit-scrollbar-track': {
-      background: 'transparent',
-      height: '2px'
-    }
-  },
-
-}));
-
-
-type JobItemProps = {
-  items: JobAnnotationProps[] | [],
-  updateData: ()=> void
-}
-
-export const Cards = ({ items, updateData }: JobItemProps) => {
-
-  const [loading, setLoading] = useState<boolean>(false);
-  const classes = useStyles();
-  const { branch } = useContext(GitlabPipelinesContext);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const classes = useAllJobsComponentStyles();
+  const { branch } = useGitlabPipelinesContext();
+  const { items, updateData } = props;
 
   const refresh = () => {
     setLoading(true);
@@ -150,15 +90,16 @@ export const AllJobsComponent = () => {
 
   const { entity } = useEntity();
   const { jobsAnnotations } = useEntityAnnotations(entity as Entity);
-  const { branch, setJobsByAnnotation, jobsByAnnotation } = useContext(GitlabPipelinesContext);
+  const { branch, setJobsByAnnotation, jobsByAnnotation } = useGitlabPipelinesContext();
 
   const updateData = () => {
     if(jobsByAnnotation) setJobsByAnnotation(jobsByAnnotation);
     else setJobsByAnnotation(jobsAnnotations);
   }
 
-  useEffect(() => {
+  React.useEffect(() => {
     updateData()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [branch]);
 
   const { loading, error } = useAsync(async (): Promise<void> => {

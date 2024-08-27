@@ -1,7 +1,7 @@
-import { Grid } from '@material-ui/core'
 import React from 'react'
-import { GitlabPipelinesProvider } from '../context/GitlabPipelinesProvider'
+import { Grid } from '@material-ui/core'
 import { AllJobsComponent } from './AllJobsComponent'
+import { GitlabPipelinesProvider } from '../../context'
 
 export const GitlabJobs = () => {
 

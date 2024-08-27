@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Job, JobAnnotationProps, JobsVariablesAttributes, Pipeline, VariablesParams } from "../../utils/types";
+import { Job, JobAnnotationProps, JobsVariablesAttributes, Pipeline, VariablesParams } from "../utils/types";
 
 
 export type GitlabPipelinesContextType = {

@@ -1,74 +1,28 @@
-import React, { useContext, useState } from 'react'
+import React from 'react'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import CachedIcon from '@material-ui/icons/Cached';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
-import { Box, Button, makeStyles, Tooltip } from '@material-ui/core';
+import { Box, Button, Tooltip } from '@material-ui/core';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotations } from '../../../hooks';
-import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
 import { ModalComponent } from '../../ModalComponent/ModalComponent';
 import { GitlabPipelinesStatus } from '../../../utils/enums/GitlabPipelinesStatus';
 import { Pipeline } from '../../../utils/types';
+import { useGitlabPipelinesContext } from '../../../context';
+import { usePipelineActionsStyles } from './styles';
+import { PipelineActionsProps } from './types';
 
-type PipelineActionsProps = {
-  status?: string
-}
 
-const useStyles = makeStyles(theme => (({
-  button: {
-    padding: '0 1.2rem',
-    background: theme.palette.info.main,
-    minHeight: '46px',
-    borderRadius: '5px',
-    fontSize: '.85rem',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '1rem',
-    color: '#F5F5F5',
-    cursor: 'pointer'
-  },
-  inProgress: {
-    animation: '$spin 2s linear infinite'
-  },
-  '@keyframes spin': {
-    '0%': {
-      transform: 'rotate(0deg)'
-    },
-    '100%': {
-      transform: 'rotate(360deg)'
-    }
-  },
-  boxInfo: {
-    padding: '1rem',
-    fontSize: '1rem',
-    borderRadius: '8px',
-    background: '#60a5fa40',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: '.5rem'
-  },
-  buttonDocs: {
-    alignSelf: 'flex-end',
-    background: '#f5f5f5',
-    color: '#151515',
-    fontSize: '10px',
-    '&:hover': {
-      background: '#f5f5f5'
-    }
-  }
-})));
-
-export const PipelineActions = ({ status }: PipelineActionsProps) => {
+export const PipelineActions : React.FC<PipelineActionsProps> = (props) => {
 
   const { entity } = useEntity();  
   const { projectName } = useEntityAnnotations(entity as Entity);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const { variablesParams, runNewPipeline, cancelPipeline , listAllPipelines, setPipelineListState} = useContext(GitlabPipelinesContext);
-  const classes = useStyles();
+  const [showModal, setShowModal] = React.useState<boolean>(false);
+  const { variablesParams, runNewPipeline, cancelPipeline , listAllPipelines, setPipelineListState} = useGitlabPipelinesContext();
+  const classes = usePipelineActionsStyles();
+  const { status } = props;
 
   if (!status) return null;
 

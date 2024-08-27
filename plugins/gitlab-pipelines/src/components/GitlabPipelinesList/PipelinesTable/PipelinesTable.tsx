@@ -1,88 +1,38 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Table, TableColumn,Progress,ResponseErrorPanel,Link,EmptyState,MissingAnnotationEmptyState} from '@backstage/core-components';
+import React from 'react';
+import { Table, TableColumn,Progress,ResponseErrorPanel,Link,EmptyState} from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
 import LanguageIcon from '@material-ui/icons/Language';
 import { Box, Button, Typography } from '@material-ui/core';
 import { SelectBranch } from '../../SelectBranch';
 import ErrorBoundary from '../../ErrorBoundary/ErrorBoundary';
-import { useEntity } from '@backstage/plugin-catalog-react';
+import { MissingAnnotationEmptyState, useEntity } from '@backstage/plugin-catalog-react';
 import { Entity } from '@backstage/catalog-model';
 import SyncIcon from '@material-ui/icons/Sync';
-import { GitlabPipelinesContext } from '../../context/GitlabPipelinesContext';
 import { truncateString } from '../../../utils/helpers';
 import { StatusComponent } from '../../StatusComponent';
 import { Pipeline } from '../../../utils/types';
 import { PipelineActions } from '../PipelineActions';
-import { GITLAB_ANNOTATION, useEntityAnnotations, isGitlabAvailable } from '../../../hooks';
+import {useEntityAnnotations, isGitlabAvailable } from '../../../hooks';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import duration from 'dayjs/plugin/duration';
-import GitlabIcon from '../../assets/gitlabIcon';
+import GitlabIcon from '../../../assets/gitlabIcon';
+import { useGitlabPipelinesContext } from '../../../context';
+import { usePipelinesTableStyles } from './styles';
+import { DenseTableProps } from './types';
+import { GITLAB_ANNOTATION } from '../../../utils/constants';
 
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
 
-
-const useStyles = makeStyles(theme => ({
-  title:{
-    paddingLeft: '2rem',
-    fontSize: '1.5rem'
-  },
-  options:{
-    position: 'absolute',
-    top: '0%',
-    right: '5%',
-    background: 'transparent',
-    borderRadius: '30px',
-    fontSize: '1rem',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '1rem',
-    color: theme.palette.border,
-  },
-  item: {
-    width: '90%',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '.8rem'
-  },
-  source: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '1rem'
-  },
-  clickable:{
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '90%',
-  },
-  action:{
-    height: "100%",
-    marginTop: "1.5rem",
-    display: "flex",
-    justifyContent: "center"
-  }
-}));
-
-type DenseTableProps = {
-  items: Pipeline[] | [];
-};
-
-export const DenseTable = ({ items }: DenseTableProps) => {
+export const DenseTable : React.FC<DenseTableProps> = (props) => {
   
   const { entity } = useEntity();
-  const [ loading, setLoading] = useState<boolean>(false);
+  const [ loading, setLoading] = React.useState<boolean>(false);
   const { projectName } = useEntityAnnotations(entity as Entity);
-  const { listAllPipelines, setPipelineListState } = useContext(GitlabPipelinesContext);
-  const classes = useStyles();
+  const { listAllPipelines, setPipelineListState } = useGitlabPipelinesContext();
+  const classes = usePipelinesTableStyles();
+  const { items } = props;
 
   const updateData = async ()=> {
     setLoading(true)
@@ -170,21 +120,22 @@ export const PipelinesTable = () => {
 
   const { entity } = useEntity();
   const { projectName } = useEntityAnnotations(entity as Entity);
-  const [ loadingState, setLoadingState ] = useState(true);
-  const { branch, listAllPipelines, pipelineListState} = useContext(GitlabPipelinesContext);
+  const [ loadingState, setLoadingState ] = React.useState(true);
+  const { branch, listAllPipelines, pipelineListState} = useGitlabPipelinesContext();
 
   const updateData = async ()=> {
     await listAllPipelines(projectName);
   }
 
-  useEffect(()=>{
+  React.useEffect(()=>{
     setTimeout(()=>{
       setLoadingState(false)
     },2000);
   },[])
 
-  useEffect(()=>{
+  React.useEffect(()=>{
     updateData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[branch]);
 
   

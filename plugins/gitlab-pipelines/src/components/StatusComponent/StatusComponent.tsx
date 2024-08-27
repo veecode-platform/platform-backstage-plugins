@@ -1,13 +1,11 @@
 import React from 'react'
 import { StatusAborted, StatusError, StatusOK, StatusPending, StatusRunning, StatusWarning } from '@backstage/core-components'
 import { GitlabPipelinesStatus } from '../../utils/enums/GitlabPipelinesStatus'
+import { PipelineStatusProps } from './types';
 
-type PipelineStatusProps = {
-    status?: string,
-    icon?: boolean
-}
+export const StatusComponent : React.FC<PipelineStatusProps> = (props) => {
 
-export const StatusComponent = ({ status, icon }: PipelineStatusProps) => {
+    const { status, icon } = props;
 
     if (!status) return null;
 

@@ -1,9 +1,7 @@
 import { Entity } from '@backstage/catalog-model';
 import { JobAnnotationProps } from '../utils/types';
 import { GitlabPipelinesStatus } from '../utils/enums/GitlabPipelinesStatus';
-
-export const GITLAB_ANNOTATION = 'gitlab.com/project-slug';
-export const GITLAB_JOBS_ANNOTATION = 'gitlab.com/jobs';
+import { GITLAB_ANNOTATION, GITLAB_JOBS_ANNOTATION } from '../utils/constants';
 
 export const useEntityAnnotations = (entity: Entity) => {
   const projectName =

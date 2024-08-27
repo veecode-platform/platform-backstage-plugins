@@ -1,48 +1,24 @@
-import React, { ReactNode, useContext, useState } from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { Box,makeStyles } from '@material-ui/core';
-import { GitlabPipelinesContext } from '../context/GitlabPipelinesContext';
+import { Box  } from '@material-ui/core';
 import { validateString } from '../../utils/validators';
 import TextFieldComponent from './TextFieldComponent/TextFieldComponent';
+import { useModalStyles } from './styles';
+import { useGitlabPipelinesContext } from '../../context';
+import { ModalComponentProps } from './types';
 
-type ModalComponentProps = {
-  open: boolean,
-  modalType: "Pipeline" | "Job",
-  title: string,
-  subtitle: ReactNode,
-  handleModal: () => void,
-  handleStartAction: () => Promise<void>
-}
 
-const useStyles = makeStyles((theme) => ({ 
-  modal: {
-    width: '100%',
-    padding: '4rem',
-    borderTop: `1px solid ${theme.palette.divider}`,
-    display: 'flex',
-    alignItems: 'stretch',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    gap: '1rem'
-  },
-  InputField:{
-    width:'100%'
-  },
-  footer: {
-    padding: '0 1.5rem 1.8rem 0'
-  }
-}));
+export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
 
-export const ModalComponent = ({ open, title, subtitle, handleModal, handleStartAction, modalType }: ModalComponentProps) => {
-
-  const [errorsState, setErrorsState] = useState<Record<string, boolean>>({});
-  const classes = useStyles();
-  const {jobParams, setJobParams, setVariablesParams } = useContext(GitlabPipelinesContext);
+  const [errorsState, setErrorsState] = React.useState<Record<string, boolean>>({});
+  const classes = useModalStyles();
+  const {jobParams, setJobParams, setVariablesParams } = useGitlabPipelinesContext();
+  const { open, title, subtitle, handleModal, handleStartAction, modalType } = props;
 
   const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) => {
     if (required) {

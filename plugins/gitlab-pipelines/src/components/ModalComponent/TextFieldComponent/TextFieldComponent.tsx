@@ -1,43 +1,17 @@
-import { Box, Container, TextField, makeStyles } from '@material-ui/core'
-import React, { useState } from 'react'
+import React from 'react';
+import { Box, Container, TextField } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
-import { VariablesParams } from '../../../utils/types';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& .MuiTextField-root': {
-            margin: theme.spacing(2),
-        }
-    },
-    field: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        minWidth: '100%',
-        marginBottom: '1rem',
-    },
-    input: {
-        minWidth: '45%',
-    }
-}))
-
-type InputFieldProps = {
-    key: string,
-    value: string
-}
+import { useTextFieldStyles } from './style';
+import { InputFieldProps, TextFieldProps } from './types';
 
 
-type TextFieldProps = {
-    setVariables: React.Dispatch<React.SetStateAction<VariablesParams[] | null>>,
-    setError: React.Dispatch<React.SetStateAction<Record<string, boolean>>>,
-    errors: Record<string, boolean>
-}
+const TextFieldComponent : React.FC<TextFieldProps> = (props) => {
 
-const TextFieldComponent = ({ setVariables, setError, errors }: TextFieldProps) => {
-
-    const classes = useStyles();
-    const [inputFields, setInputFields] = useState<InputFieldProps[]>([{ key: '', value: '' }]);
+    const classes = useTextFieldStyles();
+    const [inputFields, setInputFields] = React.useState<InputFieldProps[]>([{ key: '', value: '' }]);
+    const { setVariables, setError, errors } = props;
 
     const handleChangeInput = (index: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const values = [...inputFields];
