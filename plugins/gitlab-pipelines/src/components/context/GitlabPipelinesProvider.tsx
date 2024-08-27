@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 import { useState } from "react";
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
-import { gitlabPipelinesApiRef } from '../../api';
 import { GitlabPipelinesContext } from './GitlabPipelinesContext';
 import { Job, JobAnnotationProps, JobsVariablesAttributes, ListJobsResponse, Pipeline, VariablesParams } from '../../utils/types';
+import { gitlabPipelinesApiRef } from '../../api';
 
 interface GitlabPipelinesProviderProps {
   children: ReactNode;
