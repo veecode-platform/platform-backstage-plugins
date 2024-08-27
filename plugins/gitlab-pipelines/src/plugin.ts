@@ -1,4 +1,3 @@
-/* eslint-disable @backstage/no-undeclared-imports */
 import { createApiFactory, createComponentExtension, createPlugin, discoveryApiRef } from '@backstage/core-plugin-api';
 import { scmAuthApiRef } from '@backstage/integration-react';
 import { rootRouteRef } from './routes';
@@ -22,16 +21,6 @@ export const gitlabPipelinesPlugin = createPlugin({
     })
   ]
 });
-
-export const GitlabPipelinesOverview = gitlabPipelinesPlugin.provide(
-  createComponentExtension({
-    name: 'GitlabPipelinesOverview',
-    component: {
-      lazy: () =>
-        import('./components/GitlabPipelinesOverview').then(m => m.GitlabPipelinesOverview),
-    },
-  })
-);
 
 export const GitlabPipelineList = gitlabPipelinesPlugin.provide(
   createComponentExtension({
