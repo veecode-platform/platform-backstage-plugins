@@ -21,7 +21,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
   const [ inputWorkflow, setInputWorkflow ] = useState<object>({});
   const [errorsState, setErrorsState] = useState<Record<string, boolean>>({});
   const {modal,label,formControl,footer} = useModalStyles();
-  const { setInputs } = useGithuWorkflowsContext();
+  const { setInputParams } = useGithuWorkflowsContext();
 
   const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) : void => {
     if(required){
@@ -54,7 +54,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
   }
 
   const handleSetInputs = () => {
-    setInputs(inputWorkflow);
+    setInputParams(inputWorkflow);
     handleModal();
     if(!!handleStartWorkflow) handleStartWorkflow();
   }
