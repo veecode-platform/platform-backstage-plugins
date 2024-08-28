@@ -1,14 +1,9 @@
 import { ResourcesTableProps } from "../../types";
-
-
-type Action =
-  | { type: 'ADD_ROW'; payload: ResourcesTableProps }
-  | { type: 'REMOVE_ROW'; payload: string }
-  | { type: 'UPDATE_ROW'; payload: ResourcesTableProps };
+import { ResourcesTableActionType } from "./actions";
 
 export const initialResourcesTableState: ResourcesTableProps[] = [];
 
-export const resourcesTableReducer = (state: ResourcesTableProps[], action: Action): ResourcesTableProps[] => {
+export const resourcesTableReducer = (state: ResourcesTableProps[], action: ResourcesTableActionType): ResourcesTableProps[] => {
   switch (action.type) {
     case 'ADD_ROW':
       return [...state, action.payload];
