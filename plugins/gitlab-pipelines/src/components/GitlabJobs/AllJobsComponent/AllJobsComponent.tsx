@@ -11,6 +11,7 @@ import { useAllJobsComponentStyles } from './styles';
 import { JobItemProps } from './types';
 import { useGitlabPipelinesContext } from '../../../context';
 import { GITLAB_JOBS_ANNOTATION } from '../../../utils/constants';
+import { addJobsAnnotation } from '../../../context/state';
 
 
 export const Cards : React.FC<JobItemProps> = (props) => {
@@ -27,7 +28,6 @@ export const Cards : React.FC<JobItemProps> = (props) => {
       setLoading(false);
     }, 1500);
   }
-
 
   const TitleBar = (
     <>
@@ -86,11 +86,11 @@ export const Cards : React.FC<JobItemProps> = (props) => {
 
 export const AllJobsComponent = () => {
 
-  const { branch, jobsAnnotations, setJobsByAnnotation, jobsByAnnotation } = useGitlabPipelinesContext();
+  const { branch, jobsAnnotations, dispatchJobsByAnnotation, jobsByAnnotation } = useGitlabPipelinesContext();
 
   const updateData = () => {
-    if(jobsByAnnotation) setJobsByAnnotation(jobsByAnnotation);
-    else setJobsByAnnotation(jobsAnnotations);
+    if(jobsByAnnotation) dispatchJobsByAnnotation(addJobsAnnotation(jobsByAnnotation));
+    else dispatchJobsByAnnotation(addJobsAnnotation(jobsAnnotations!));
   }
 
   React.useEffect(() => {
