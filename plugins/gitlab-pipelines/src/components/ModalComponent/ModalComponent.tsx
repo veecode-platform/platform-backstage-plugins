@@ -11,13 +11,14 @@ import TextFieldComponent from './TextFieldComponent/TextFieldComponent';
 import { useModalStyles } from './styles';
 import { useGitlabPipelinesContext } from '../../context';
 import { ModalComponentProps } from './types';
+import { addJobParams } from '../../context/state';
 
 
 export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
 
   const [errorsState, setErrorsState] = React.useState<Record<string, boolean>>({});
   const classes = useModalStyles();
-  const {jobParams, setJobParams, setVariablesParams } = useGitlabPipelinesContext();
+  const {jobParams, dispatchJobParams, dispatchVariablesParams } = useGitlabPipelinesContext();
   const { open, title, subtitle, handleModal, handleStartAction, modalType } = props;
 
   const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) => {
@@ -30,17 +31,17 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
     if (event) {
       if(modalType === "Job"){
         if (event.target.name === "jobVariableKey") {
-          setJobParams({
+          dispatchJobParams(addJobParams({
             key: event.target.value as string,
             value: jobParams?.value ?? ""
-          });
+          }));
           setErrorsState({ ...errorsState, [event.target.name!]: false });
         }
         if (event.target.name === "jobVariableValue") {
-          setJobParams({
+          dispatchJobParams(addJobParams({
             key: jobParams?.key ?? "", 
             value: event.target.value as string
-          });
+          }));
           setErrorsState({ ...errorsState, [event.target.name!]: false });
         }
       }
@@ -68,7 +69,7 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
           {modalType === "Pipeline" && (
             <Box className={classes.InputField}>
               <TextFieldComponent
-               setVariables={setVariablesParams}
+               setVariables={dispatchVariablesParams}
                setError={setErrorsState}
                errors={errorsState}
               />

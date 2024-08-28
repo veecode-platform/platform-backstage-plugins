@@ -5,12 +5,13 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 import { useTextFieldStyles } from './style';
 import { InputFieldProps, TextFieldProps } from './types';
+import { addVariables } from '../../../context/state';
 
 
 const TextFieldComponent : React.FC<TextFieldProps> = (props) => {
-
-    const classes = useTextFieldStyles();
+    
     const [inputFields, setInputFields] = React.useState<InputFieldProps[]>([{ key: '', value: '' }]);
+    const classes = useTextFieldStyles();
     const { setVariables, setError, errors } = props;
 
     const handleChangeInput = (index: number, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -23,7 +24,7 @@ const TextFieldComponent : React.FC<TextFieldProps> = (props) => {
           setError({ ...errors, [`value_${index}`]: event.target.value === "" });
         }
         setInputFields(values);
-        setVariables(values);
+        setVariables(addVariables(values));
       };
 
     const handleAddFields = () => {

@@ -7,11 +7,12 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import { useGitlabPipelinesContext } from '../../../context';
 import { JobActionsProps } from './types';
 import { useJobActionsStyles } from './styles';
+import { addJobsAnnotation } from '../../../context/state';
 
 
 export const JobActions : React.FC<JobActionsProps> = (props) => {
 
-  const { runNewPipeline, cancelPipeline, jobsByAnnotation, setJobsByAnnotation } = useGitlabPipelinesContext();
+  const { runNewPipeline, cancelPipeline, jobsByAnnotation, dispatchJobsByAnnotation } = useGitlabPipelinesContext();
   const { inProgress } = useJobActionsStyles();
   const { id, variable, status } = props;
 
@@ -28,7 +29,7 @@ export const JobActions : React.FC<JobActionsProps> = (props) => {
           }
           return job;
         });
-        setJobsByAnnotation(updatedJobs);
+        dispatchJobsByAnnotation(addJobsAnnotation(updatedJobs));
       },15000)
   }
 
@@ -48,7 +49,7 @@ export const JobActions : React.FC<JobActionsProps> = (props) => {
         }
         return job;
       });
-      setJobsByAnnotation(updatedJobs);
+      dispatchJobsByAnnotation(addJobsAnnotation(updatedJobs));
       await updateData()
     }
   }
@@ -64,7 +65,7 @@ export const JobActions : React.FC<JobActionsProps> = (props) => {
       }
       return job;
     });
-    setJobsByAnnotation(updatedJobs); 
+    dispatchJobsByAnnotation(addJobsAnnotation(updatedJobs)); 
     // await updateData();
   };
 

@@ -10,12 +10,13 @@ import { Pipeline } from '../../../utils/types';
 import { useGitlabPipelinesContext } from '../../../context';
 import { usePipelineActionsStyles } from './styles';
 import { PipelineActionsProps } from './types';
+import { addPipelines } from '../../../context/state';
 
 
 export const PipelineActions : React.FC<PipelineActionsProps> = (props) => {
 
   const [showModal, setShowModal] = React.useState<boolean>(false);
-  const { variablesParams, runNewPipeline, cancelPipeline , listAllPipelines, setPipelineListState} = useGitlabPipelinesContext();
+  const { variablesParams, runNewPipeline, cancelPipeline , listAllPipelines, dispatchPipelines} = useGitlabPipelinesContext();
   const classes = usePipelineActionsStyles();
   const { status } = props;
 
@@ -25,7 +26,7 @@ export const PipelineActions : React.FC<PipelineActionsProps> = (props) => {
 
   const updateData = async () => {
     const data = await listAllPipelines();
-    setPipelineListState(data as Pipeline[]);
+    dispatchPipelines(addPipelines(data as Pipeline[]));
   }
 
   const handleStartPipeline = async () => {

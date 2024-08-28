@@ -21,6 +21,7 @@ import { useGitlabPipelinesContext } from '../../../context';
 import { usePipelinesTableStyles } from './styles';
 import { DenseTableProps } from './types';
 import { GITLAB_ANNOTATION } from '../../../utils/constants';
+import { addPipelines } from '../../../context/state';
 
 dayjs.extend(relativeTime);
 dayjs.extend(duration);
@@ -28,14 +29,14 @@ dayjs.extend(duration);
 export const DenseTable : React.FC<DenseTableProps> = (props) => {
   
   const [ loading, setLoading] = React.useState<boolean>(false);
-  const { listAllPipelines, setPipelineListState } = useGitlabPipelinesContext();
+  const { listAllPipelines, dispatchPipelines } = useGitlabPipelinesContext();
   const classes = usePipelinesTableStyles();
   const { items } = props;
 
   const updateData = async ()=> {
     setLoading(true)
     const data = await listAllPipelines();
-    setPipelineListState(data as Pipeline[]);
+    dispatchPipelines(addPipelines(data as Pipeline[]));
     setTimeout(()=> setLoading(false), 800)
   }
 
