@@ -1,6 +1,7 @@
 import { createContext } from "react";
-import { Job, JobAnnotationProps, JobsVariablesAttributes, Pipeline, VariablesParams } from "../utils/types";
+import { Job, JobAnnotationProps, JobVariablesAttributes, Pipeline, VariablesParams } from "../utils/types";
 import { Entity } from "@backstage/catalog-model";
+import { JobsActionType, JobsAnnotationActionType, JobVariablesActionType, LatestPipelinesActionType, PipelinesActionType, VariablesActionType } from "./state";
 
 
 export type GitlabPipelinesContextType = {
@@ -12,14 +13,14 @@ export type GitlabPipelinesContextType = {
   setBranchState: (branch: string) => void,
   listAllPipelines: () => Promise<Pipeline[] | null>,
   pipelineListState: Pipeline[] | null,
-  setPipelineListState: React.Dispatch<React.SetStateAction<Pipeline[] | null>>,
+  dispatchPipelines:  React.Dispatch<PipelinesActionType>,
   latestPipeline: () => Promise<Pipeline | null>,
   latestPipelineState: Pipeline | null,
-  setLatestPipelineState: React.Dispatch<React.SetStateAction<Pipeline | null>>,
+  dispachLatestPipeline: React.Dispatch<LatestPipelinesActionType>,
   triggerToken: string,
   setTriggerTokenState: (token: string) => void,
   variablesParams: VariablesParams[] | null,
-  setVariablesParams: React.Dispatch<React.SetStateAction<VariablesParams[] | null>>,
+  dispatchVariablesParams: React.Dispatch<VariablesActionType>,
   runNewPipeline: (variables: VariablesParams[]) => Promise<void>,
   runPipelineWithTrigger: (triggerToken: string) => Promise<void>,
   retryPipeline: () => Promise<void>,
@@ -27,12 +28,12 @@ export type GitlabPipelinesContextType = {
   allJobs:  (pipelineId: number) => Promise<Job[] | null>,
   jobsListState: Job[] | null,
   jobsByAnnotation: JobAnnotationProps[] | null,
-  setJobsByAnnotation: React.Dispatch<React.SetStateAction<JobAnnotationProps[] | null>>,
-  setJobsListState: React.Dispatch<React.SetStateAction<Job[] | null>>,
+  dispatchJobsByAnnotation: React.Dispatch<JobsAnnotationActionType>,
+  dispatchJobList: React.Dispatch<JobsActionType>,
   getSingleJob: (jobId: number) => Promise<Job | null>,
-  runJob: (jobId: number, params: JobsVariablesAttributes[]) => Promise<Job | null>,
-  jobParams: JobsVariablesAttributes | null,
-  setJobParams: React.Dispatch<React.SetStateAction<JobsVariablesAttributes | null>>,
+  runJob: (jobId: number, params: JobVariablesAttributes[]) => Promise<Job | null>,
+  jobParams: JobVariablesAttributes | null,
+  dispatchJobParams: React.Dispatch<JobVariablesActionType>,
   cancelJob: (jobId: number) => Promise<Job | null>,
   retryJob: (jobId: number) => Promise<Job | null>
 };

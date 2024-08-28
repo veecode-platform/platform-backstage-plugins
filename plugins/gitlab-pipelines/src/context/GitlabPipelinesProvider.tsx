@@ -1,28 +1,27 @@
 import React from 'react';
-import { useState } from "react";
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { GitlabPipelinesContext } from './GitlabPipelinesContext';
-import { Job, JobAnnotationProps, JobsVariablesAttributes, ListJobsResponse, Pipeline, VariablesParams } from '../utils/types';
+import { Job, JobVariablesAttributes, ListJobsResponse, Pipeline, VariablesParams } from '../utils/types';
 import { gitlabPipelinesApiRef } from '../api';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotations } from '../hooks';
 import { Entity } from '@backstage/catalog-model';
+import { addJobs, addLatestPipeline, addPipelines, initialJobsAnnotationState, initialJobsState, initialJobVariablesState, initialLatestPipelineState, initialPipelinesState, initialVariableParamsState, JobsAnnotationReducer, JobsReducer, JobVariablesReducer, LatestPipelineReducer, PipelinesReducer, VariablesParamsReducer } from './state';
 
 interface GitlabPipelinesProviderProps {
   children: React.ReactNode;
 }
 
-
 export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = ({ children }) => {
 
-  const [branch, setBranch] = useState<string>('');
-  const [pipelineListState, setPipelineListState] = useState<Pipeline[]|null>(null);
-  const [ latestPipelineState, setLatestPipelineState ] = useState<Pipeline|null>(null);
-  const [jobsListState, setJobsListState] = useState<Job[]|null>(null);
-  const [jobsByAnnotation, setJobsByAnnotation] = useState<JobAnnotationProps[]|null>(null);
-  const [triggerToken, setTriggerToken] = useState<string>('');
-  const [variablesParams, setVariablesParams] = useState<VariablesParams[]|null>(null);
-  const [jobParams, setJobParams] = useState<JobsVariablesAttributes|null>(null);
+  const [branch, setBranch] = React.useState<string>('');  
+  const [pipelineListState, dispatchPipelines] = React.useReducer(PipelinesReducer,initialPipelinesState);
+  const [latestPipelineState, dispachLatestPipeline] = React.useReducer(LatestPipelineReducer,initialLatestPipelineState);
+  const [jobsListState, dispatchJobList] = React.useReducer(JobsReducer,initialJobsState)
+  const [jobsByAnnotation, dispatchJobsByAnnotation] = React.useReducer(JobsAnnotationReducer,initialJobsAnnotationState);
+  const [triggerToken, setTriggerToken] = React.useState<string>('');
+  const [variablesParams, dispatchVariablesParams] = React.useReducer(VariablesParamsReducer,initialVariableParamsState);
+  const [jobParams, dispatchJobParams] = React.useReducer(JobVariablesReducer,initialJobVariablesState);
   const { entity } = useEntity();
   const { projectName,hostname,jobsAnnotations } = useEntityAnnotations(entity as Entity);
   const api = useApi(gitlabPipelinesApiRef);
@@ -54,7 +53,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
             name: p.name 
           };
         }));
-        setPipelineListState(newPipelineListState);
+        dispatchPipelines(addPipelines(newPipelineListState));
         return newPipelineListState;
       }
       return null;
@@ -80,7 +79,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
           webUrl: pipeline.web_url,
           name: pipeline.name 
         };
-        setLatestPipelineState(pipelineData);
+        dispachLatestPipeline(addLatestPipeline(pipelineData));
         return pipelineData;
       }
       return null;
@@ -95,18 +94,20 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     try{
       const response = await api.runNewPipeline(projectName, branch!, variables);
       if(response.status === "created"){
-        setLatestPipelineState({
-          id: response.id,
-          projectId: response.project_id,
-          sha: response.sha,
-          ref: response.ref,
-          status: response.status,
-          source: response.source,
-          createdAt: response.created_at,
-          updatedAt: response.updated_at, 
-          webUrl: response.web_url,
-          name: response.name 
-        });
+        dispachLatestPipeline(addLatestPipeline(
+          {
+            id: response.id,
+            projectId: response.project_id,
+            sha: response.sha,
+            ref: response.ref,
+            status: response.status,
+            source: response.source,
+            createdAt: response.created_at,
+            updatedAt: response.updated_at, 
+            webUrl: response.web_url,
+            name: response.name 
+          }
+        ));
         listAllPipelines();
       };
     }
@@ -119,7 +120,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     try{
       const response = await api.runNewPipelineWithTrigger(projectName, triggerTokenValue, branch!);
       if(response.status === "created"){
-        setLatestPipelineState({
+        dispachLatestPipeline(addLatestPipeline({
           id: response.id,
           projectId: response.project_id,
           sha: response.sha,
@@ -130,7 +131,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
           updatedAt: response.updated_at, 
           webUrl: response.web_url,
           name: response.name 
-        });
+        }));
         listAllPipelines();
       }
     }
@@ -143,7 +144,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     try{
       const response = await api.retryPipelineJobs(projectName, latestPipelineState?.id as number, branch!);
       if(response.id){
-        setLatestPipelineState({
+        dispachLatestPipeline(addLatestPipeline({
           id: response.id,
           projectId: response.project_id,
           sha: response.sha,
@@ -154,7 +155,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
           updatedAt: response.updated_at, 
           webUrl: response.web_url,
           name: response.name 
-        });
+        }));
         listAllPipelines();
       }
     }
@@ -167,7 +168,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     try{
       const response = await api.cancelPipelineJobs(projectName, Number(latestPipelineState?.id), branch!);
       if(response.id){
-        setLatestPipelineState({
+        dispachLatestPipeline(addLatestPipeline({
           id: response.id,
           projectId: response.project_id,
           sha: response.sha,
@@ -178,7 +179,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
           updatedAt: response.updated_at, 
           webUrl: response.web_url,
           name: response.name 
-        });
+        }));
         listAllPipelines();
       }
     }
@@ -208,7 +209,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
             });
           }
         });
-        setJobsListState(JobsList);
+        dispatchJobList(addJobs(JobsList));
         return JobsList;
       }
       return null
@@ -246,7 +247,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
     }
   }
 
-  const runJob = async (jobId: number, params: JobsVariablesAttributes[]) => {
+  const runJob = async (jobId: number, params: JobVariablesAttributes[]) => {
     try{
       const response = await api.runJob(projectName, jobId, params, branch!);
       if(response.id){
@@ -335,14 +336,14 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
         setBranchState,
         listAllPipelines,
         pipelineListState,
-        setPipelineListState,
+        dispatchPipelines,
         latestPipeline,
         latestPipelineState,
-        setLatestPipelineState,
+        dispachLatestPipeline,
         triggerToken,
         setTriggerTokenState,
         variablesParams,
-        setVariablesParams,
+        dispatchVariablesParams,
         runNewPipeline,
         runPipelineWithTrigger,
         retryPipeline,
@@ -350,11 +351,11 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
         allJobs,
         jobsListState,
         jobsByAnnotation,
-        setJobsByAnnotation,
-        setJobsListState,
+        dispatchJobsByAnnotation,
+        dispatchJobList,
         getSingleJob,
         jobParams,
-        setJobParams,
+        dispatchJobParams,
         runJob,
         cancelJob,
         retryJob
