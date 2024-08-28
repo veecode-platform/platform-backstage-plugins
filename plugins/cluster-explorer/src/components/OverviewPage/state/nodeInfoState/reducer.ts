@@ -1,12 +1,9 @@
 import { ClusterNodes } from "../../../../utils/types";
-
-type NodeInfoAction =
-| {type: 'ADD_NODE_INFO', payload: Partial<ClusterNodes>}
-| {type: 'REMOVE_NODE_INFO', payload: {}};
+import { NodeInfoActionType } from "./actions";
 
 export const initialNodeInfoState : Partial<ClusterNodes> = {};
 
-export const NodeInfoReducer = (state: Partial<ClusterNodes>, action: NodeInfoAction) : Partial<ClusterNodes> => {
+export const NodeInfoReducer = (state: Partial<ClusterNodes>, action: NodeInfoActionType) : Partial<ClusterNodes> => {
     switch (action.type){
         case 'ADD_NODE_INFO':
           return action.payload;

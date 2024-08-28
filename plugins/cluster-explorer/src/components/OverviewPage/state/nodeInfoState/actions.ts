@@ -6,7 +6,7 @@ export const addNodeInfo = (nodeInfo: Partial<ClusterNodes>) => ({
 }as const);
 
 export const removeNodeInfo = () => ({
-    type: 'ADD_NODE_INFO',
+    type: 'REMOVE_NODE_INFO',
     payload: {}
 }as const);
 
