@@ -1,4 +1,4 @@
-import { VariablesParams } from "../../../utils/types"
+import { VariablesActionType } from "../../../context/state";
 
 export interface InputFieldProps {
     key: string,
@@ -6,7 +6,7 @@ export interface InputFieldProps {
 }
 
 export interface TextFieldProps {
-    setVariables: React.Dispatch<React.SetStateAction<VariablesParams[] | null>>,
+    setVariables: React.Dispatch<VariablesActionType>,
     setError: React.Dispatch<React.SetStateAction<Record<string, boolean>>>,
     errors: Record<string, boolean>
 }
