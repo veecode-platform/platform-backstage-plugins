@@ -1,13 +1,9 @@
 import { InputFieldType } from "../../types";
-
-type InputFieldAction =
-|{type: 'ADD_INPUT_FIELDS', payload: InputFieldType[]}
-|{type: 'REMOVE_INPUT_FIELD', payload: string}
-|{type: 'UPDATE_INPUT_FIELD', payload: InputFieldType};
+import { FieldsActionType } from "./actions";
 
 export const initialInputFieldsState : InputFieldType[] = [];
 
-export const InputFieldsReducer = (state: InputFieldType[], action: InputFieldAction): InputFieldType[] => {
+export const InputFieldsReducer = (state: InputFieldType[], action: FieldsActionType): InputFieldType[] => {
     switch(action.type){
         case 'ADD_INPUT_FIELDS':
           return action.payload;

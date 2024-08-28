@@ -1,13 +1,9 @@
 import { PluginFieldsResponse } from "../../../../../utils/types";
-
-type FieldAction =
-|{type: 'ADD_FIELDS', payload: PluginFieldsResponse[]}
-|{type: 'REMOVE_FIELD', payload: string}
-|{type: 'UPDATE_FIELD', payload: PluginFieldsResponse};
+import { FieldsActionType } from "./actions";
 
 export const initialFieldsState : PluginFieldsResponse[] = [];
 
-export const FieldsReducer = (state: PluginFieldsResponse[], action: FieldAction): PluginFieldsResponse[] => {
+export const FieldsReducer = (state: PluginFieldsResponse[], action: FieldsActionType): PluginFieldsResponse[] => {
     switch(action.type){
         case 'ADD_FIELDS':
           return action.payload;
