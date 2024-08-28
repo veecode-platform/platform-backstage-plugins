@@ -1,14 +1,9 @@
 import { Branch } from "../../../../utils/types";
-
-
-type Action =
-| {type: 'ADD_BRANCHES'; payload: Branch[]}
-| {type: 'REMOVE_BRANCH'; payload: string}
-| {type: 'UPDATE_BRANCHES'; payload: Branch};
+import { BrancheActionType } from "./actions";
 
 export const initialBranchesState : Branch[] = [];
 
-export const branchesReducer = (state: Branch[], action: Action): Branch[] => {
+export const branchesReducer = (state: Branch[], action: BrancheActionType): Branch[] => {
     switch(action.type){
         case 'ADD_BRANCHES':
             return action.payload

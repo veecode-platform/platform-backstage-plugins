@@ -7,7 +7,7 @@ export const addJob = (job:Job) => ({
 
 export const removeJob = () => ({
     type: 'REMOVE_JOB',
-    payload: {}
+    payload: null
 });
 
 export type JobActionType = ReturnType<typeof addJob | typeof removeJob>

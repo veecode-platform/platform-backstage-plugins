@@ -1,10 +1,8 @@
-type InputsParamsAction = 
-| {type: 'ADD_INPUTS', payload: object}
-| {type: 'REMOVE_INPUTS', payload: {}};
+import { InputsParamsActionType } from "./actions";
 
 export const initialInputsParamsState : object = {};
 
-export const InputsParamsReducer = (state:object, action: InputsParamsAction) : object => {
+export const InputsParamsReducer = (state:object, action: InputsParamsActionType) : object => {
     switch (action.type) {
         case 'ADD_INPUTS':
           return action.payload;

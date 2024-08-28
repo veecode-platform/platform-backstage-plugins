@@ -7,7 +7,7 @@ export const addWorkflowRun = (workflowRun: WorkflowRun)=>({
 
 export const deleteWorkflowRun = ()=>({
     type: 'DELETE_WORKFLOW_RUN',
-    payload: {}
+    payload: null
 } as const)
 
 export type WorkflowRunActionType = ReturnType<typeof addWorkflowRun | typeof deleteWorkflowRun >

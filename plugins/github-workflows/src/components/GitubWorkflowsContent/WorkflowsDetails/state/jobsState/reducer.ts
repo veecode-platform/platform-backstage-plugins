@@ -1,13 +1,9 @@
 import { Job } from "../../../../../utils/types";
-
-type JobsAction = 
-|{type: 'ADD_JOBS', payload: Job[]}
-|{type: 'REMOVE_JOB', payload: number}
-|{type: 'UPDATE_JOB', payload: Job};
+import { JobsActionType } from "./actions";
 
 export const initialJobsState : Job[] = [];
 
-export const JobsReducer = (state:Job[],action:JobsAction) : Job[] => {
+export const JobsReducer = (state:Job[],action:JobsActionType) : Job[] => {
     switch (action.type) {
         case 'ADD_JOBS':
           return action.payload;       

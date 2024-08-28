@@ -1,13 +1,9 @@
+import { OptionsActionType } from "./actions";
 import { OptionProps } from "./types";
-
-type Action =
-| {type: 'ADD_OPTIONS', payload: OptionProps[]}
-| {type: 'REMOVE_OPTION', payload: string}
-| {type: 'UPDATE_OPTIONS', payload: OptionProps};
 
 export const initialOptionsState : OptionProps[] = [];
 
-export const optionsReducer = (state:OptionProps[], action: Action) : OptionProps[] => {
+export const optionsReducer = (state:OptionProps[], action: OptionsActionType) : OptionProps[] => {
     switch (action.type) {
         case 'ADD_OPTIONS':
          return action.payload;
