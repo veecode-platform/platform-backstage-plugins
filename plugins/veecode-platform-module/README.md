@@ -22,7 +22,7 @@ Such as new **kinds**, new **schemas** and a new **apiversion**.
 
 ```yaml
 cd packages/backend
-yarn add @veecode-platform/plugin-veecode-platform-common
+yarn add @veecode-platform/plugin-veecode-platform-module
 ```
 
 #### ⭐ Legacy Backend
@@ -31,7 +31,7 @@ Now, in the file `packages > backend > src > plugins > catalog.ts`:
 
 ```diff
 ...
-+ import { ClusterEntitiesProcessor, DatabaseEntitiesProcessor, EnvironmentEntitiesProcessor, VaultEntitiesProcessor } from '@veecode-platform/plugin-veecode-platform-common';
++ import { ClusterEntitiesProcessor, DatabaseEntitiesProcessor, EnvironmentEntitiesProcessor, VaultEntitiesProcessor } from '@veecode-platform/plugin-veecode-platform-module';
 ...
 
 export default async function createPlugin(
