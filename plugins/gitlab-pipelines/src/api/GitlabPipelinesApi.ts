@@ -1,5 +1,5 @@
 import { createApiRef } from "@backstage/core-plugin-api";
-import { JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse, VariablesParams } from "../utils/types";
+import { JobVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse, VariablesParams } from "../utils/types";
 
 export const gitlabPipelinesApiRef = createApiRef<GitlabPipelinesApi>({
     id: 'plugin.gitlabpipelines',
@@ -50,7 +50,7 @@ export interface GitlabPipelinesApi {
     /**
      *  run a single job
      */
-    runJob(gitlabReposlug: string, jobId: number, params: JobsVariablesAttributes[], branch: string): Promise<ListJobsResponse>;
+    runJob(gitlabReposlug: string, jobId: number, params: JobVariablesAttributes[], branch: string): Promise<ListJobsResponse>;
     /**
      *  cancel a single job
      */

@@ -2,7 +2,7 @@ import { DiscoveryApi } from "@backstage/core-plugin-api";
 import { ScmAuthApi } from "@backstage/integration-react";
 import { Options } from "./types";
 import { GITLAB_PIPELINES_PROXY_URL } from "../utils/constants";
-import { JobsVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse, VariablesParams } from "../utils/types";
+import { JobVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse, VariablesParams } from "../utils/types";
 import { GitlabPipelinesApi } from "./GitlabPipelinesApi";
 
 /**
@@ -133,7 +133,7 @@ class Client {
         return response
     }
 
-    async runJob(gitlabReposlug: string, jobId: number, params: JobsVariablesAttributes[], branch: string) {
+    async runJob(gitlabReposlug: string, jobId: number, params: JobVariablesAttributes[], branch: string) {
         const requestBody = {
             job_variables_attributes: params
         };
@@ -216,7 +216,7 @@ export class GitlabPipelinesApiClient implements GitlabPipelinesApi {
         return this.client.getSingleJob(gitlabReposlug, jobId, branch)
     }
 
-    async runJob(gitlabReposlug: string, jobId: number, params: JobsVariablesAttributes[], branch: string): Promise<ListJobsResponse> {
+    async runJob(gitlabReposlug: string, jobId: number, params: JobVariablesAttributes[], branch: string): Promise<ListJobsResponse> {
         return this.client.runJob(gitlabReposlug, jobId, params, branch)
     }
 
