@@ -6,7 +6,7 @@ import { gitlabPipelinesApiRef } from '../api';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotations } from '../hooks';
 import { Entity } from '@backstage/catalog-model';
-import { addJobs, addLatestPipeline, addPipelines, initialJobsAnnotationState, initialJobsState, initialJobVariablesState, initialLatestPipelineState, initialPipelinesState, initialVariableParamsState, JobsAnnotationReducer, JobsReducer, JobVariablesReducer, LatestPipelineReducer, PipelinesReducer, VariablesParamsReducer } from './state';
+import { addJobs, addLatestPipeline, addPipelines, initialJobsAnnotationState, initialJobsState, initialJobParamsState, initialLatestPipelineState, initialPipelinesState, initialVariableParamsState, JobsAnnotationReducer, JobsReducer, JobParamsReducer, LatestPipelineReducer, PipelinesReducer, VariablesParamsReducer } from './state';
 
 interface GitlabPipelinesProviderProps {
   children: React.ReactNode;
@@ -21,7 +21,7 @@ export const GitlabPipelinesProvider: React.FC<GitlabPipelinesProviderProps> = (
   const [jobsByAnnotation, dispatchJobsByAnnotation] = React.useReducer(JobsAnnotationReducer,initialJobsAnnotationState);
   const [triggerToken, setTriggerToken] = React.useState<string>('');
   const [variablesParams, dispatchVariablesParams] = React.useReducer(VariablesParamsReducer,initialVariableParamsState);
-  const [jobParams, dispatchJobParams] = React.useReducer(JobVariablesReducer,initialJobVariablesState);
+  const [jobParams, dispatchJobParams] = React.useReducer(JobParamsReducer,initialJobParamsState);
   const { entity } = useEntity();
   const { projectName,hostname,jobsAnnotations } = useEntityAnnotations(entity as Entity);
   const api = useApi(gitlabPipelinesApiRef);
