@@ -1,14 +1,14 @@
 import { JobVariablesAttributes } from "../../../utils/types";
 
-export const addJobVariables = (Jobvariables:JobVariablesAttributes) => ({
-    type: 'ADD_JOB_VARIABLES',
+export const addJobParams = (Jobvariables:JobVariablesAttributes) => ({
+    type: 'ADD_JOB_PARAMS',
     payload: Jobvariables
 } as const);
 
-export const removeJobVariables = ()=>({
-    type: 'REMOVE_JOB_VARIABLES',
+export const removeJobParams = ()=>({
+    type: 'REMOVE_JOB_PARAMS',
     payload: null
 } as const);
 
 
-export type JobVariablesActionType = ReturnType<typeof addJobVariables | typeof removeJobVariables>;
+export type JobVariablesActionType = ReturnType<typeof addJobParams | typeof removeJobParams>;
