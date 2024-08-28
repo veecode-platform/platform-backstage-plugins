@@ -129,7 +129,7 @@ export interface Job {
     runner: Runner | null
 }
 
-export interface JobsVariablesAttributes {
+export interface JobVariablesAttributes {
 key: string,
 value: string
 }
