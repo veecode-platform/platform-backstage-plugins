@@ -1,13 +1,9 @@
 import { JobAnnotationProps } from "../../../utils/types";
-
-type JobsAnnotationAction = 
-| {type: 'ADD_JOBS_ANNOTATION', payload: JobAnnotationProps[]}
-| {type: 'REMOVE_JOB_ANNOTATION', payload: string}
-| { type: 'UPDATE_JOB_ANNOTATION', payload: JobAnnotationProps};
+import { JobsAnnotationActionType } from "./actions";
 
 export const initialJobsAnnotationState : JobAnnotationProps[] = [];
 
-export const JobsAnnotationReducer = (state:JobAnnotationProps[],action: JobsAnnotationAction):JobAnnotationProps[] => {
+export const JobsAnnotationReducer = (state:JobAnnotationProps[],action: JobsAnnotationActionType):JobAnnotationProps[] => {
     switch (action.type) {
         case 'ADD_JOBS_ANNOTATION':
           return action.payload;

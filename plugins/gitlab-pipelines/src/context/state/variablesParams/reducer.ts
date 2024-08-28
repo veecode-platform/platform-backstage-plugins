@@ -1,13 +1,9 @@
 import { VariablesParams } from "../../../utils/types";
-
-type VariablesParamsAction = 
-| {type: 'ADD_VARIABLES', payload: VariablesParams[]}
-| {type: 'REMOVE_VARIABLE', payload: string}
-| { type: 'UPDATE_VARIABLE', payload: VariablesParams};
+import { VariablesActionType } from "./actions";
 
 export const initialVariableParamsState : VariablesParams[] = [];
 
-export const VariablesParamsReducer = (state:VariablesParams[],action: VariablesParamsAction):VariablesParams[] => {
+export const VariablesParamsReducer = (state:VariablesParams[],action: VariablesActionType):VariablesParams[] => {
     switch (action.type) {
         case 'ADD_VARIABLES':
           return action.payload;

@@ -1,13 +1,9 @@
 import { Pipeline } from "../../../utils/types";
-
-type PipelinesAction = 
-| {type: 'ADD_PIPELINES', payload: Pipeline[]}
-| {type: 'REMOVE_PIPELINE', payload: number}
-| { type: 'UPDATE_PIPELINE', payload: Pipeline};
+import { PipelinesActionType } from "./actions";
 
 export const initialPipelinesState : Pipeline[] = [];
 
-export const PipelinesReducer = (state:Pipeline[],action: PipelinesAction):Pipeline[] => {
+export const PipelinesReducer = (state:Pipeline[],action: PipelinesActionType):Pipeline[] => {
     switch (action.type) {
         case 'ADD_PIPELINES':
           return action.payload;
