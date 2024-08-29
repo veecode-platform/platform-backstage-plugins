@@ -1,32 +1,8 @@
-import { createApiRef, DiscoveryApi } from '@backstage/core-plugin-api';
-import { AssociatedPluginsResponse, CreatePlugin, PluginFieldsResponse, RoutesResponse, SchemaFields, ServiceInfoResponse, PluginPerCategory, Options, KongServiceManagerApi, CreateRoute, RouteResponse } from './utils/types';
-import { PluginsInfoData } from "../src/data/data"
-
-export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
-    id: 'plugin.kongservicemanager',
-});
-
-function getPluginFieldType(type: string) {
-    switch (type) {
-        case "string":
-            return "string"
-
-        case "number":
-        case "integer":
-            return "number"
-
-        case "boolean":
-            return "boolean"
-
-        case "array":
-            return "array"
-
-        case "record":
-            return "record"
-        default:
-            return "string"
-    }
-}
+import { DiscoveryApi } from "@backstage/core-plugin-api";
+import { KongServiceManagerApi, Options } from "./KongServiceManagerApi";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, PluginPerCategory, RouteResponse, RoutesResponse, SchemaFields, ServiceInfoResponse } from "../utils/types";
+import { PluginsInfoData } from "../data/data";
+import { getPluginFieldType } from "../utils/helpers/getPluginFieldType";
 
 class Client implements KongServiceManagerApi {
     private readonly discoveryApi: DiscoveryApi;
