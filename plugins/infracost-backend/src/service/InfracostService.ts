@@ -18,7 +18,7 @@ export class InfracostService {
         try {
             await axios.post(endpoint, estimate);
           } catch (error:any) {
-            console.log(
+            console.error(
               `There was an error trying persist Infracost Projects Estimate [${error}]`,
             );
           }
