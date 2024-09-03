@@ -16,8 +16,7 @@
     "pluginId": "infracost",
     "pluginPackages": [
       "@veecode-platform/backstage-plugin-infracost",
-      "@veecode-platform/backstage-plugin-infracost-backend",
-      "@veecode-platform/backstage-plugin-infracost-common"
+      "@veecode-platform/backstage-plugin-infracost-backend"
     ]
   },
   "sideEffects": false,
@@ -36,6 +35,7 @@
     "dist"
   ],
   "dependencies": {
+    "@backstage/plugin-permission-common": "^0.8.1",
     "@backstage/types": "^1.1.1"
   }
 }
