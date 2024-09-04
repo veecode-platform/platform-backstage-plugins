@@ -32,8 +32,8 @@ export async function createRouter(
   //   })
   // );
 
-  // Service
-  router.get('/service/:serviceName', serviceController.getServiceInfo as RequestHandler);
+  // Services
+  router.get('/services/:serviceName', serviceController.getServiceInfo as RequestHandler);
   // Plugins
   router.get('/plugins', pluginsController.getEnabledPlugins as RequestHandler);
   router.get('/plugins/fields', pluginsController.getPluginFields as RequestHandler);
