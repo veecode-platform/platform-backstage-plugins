@@ -33,5 +33,8 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "@backstage/plugin-permission-common": "^0.8.1"
+  }
 }
