@@ -7,7 +7,8 @@ export class PluginsController extends KongController implements IPluginsControl
   
   getEnabledPlugins = async (req: Request, res: Response) => {
     
-    const { instanceName ,serviceName } = req.body;
+    const { serviceName } = req.params;
+    const { instanceName } = req.body;
     const  search  = req.query.search as string;
 
     try {
@@ -59,7 +60,8 @@ export class PluginsController extends KongController implements IPluginsControl
 
   getAssociatedPlugins = async (req: Request, res: Response) => {
 
-    const { instanceName, serviceName } = req.body;
+    const { serviceName } = req.params;
+    const { instanceName } = req.body;
 
     try {
       const associatedPlugins =

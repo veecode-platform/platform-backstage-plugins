@@ -32,21 +32,18 @@ export async function createRouter(
   //   })
   // );
 
-  // Services
   router.get('/services/:serviceName', serviceController.getServiceInfo as RequestHandler);
-  // Plugins
-  router.get('/plugins', pluginsController.getEnabledPlugins as RequestHandler);
-  router.get('/plugins/fields', pluginsController.getPluginFields as RequestHandler);
-  router.get('/plugins/associated', pluginsController.getAssociatedPlugins as RequestHandler);
-  router.post('/plugins/:serviceName', pluginsController.addPluginToService as RequestHandler);
-  router.patch('/plugins/:serviceName', pluginsController.editServicePlugin as RequestHandler);
-  router.delete('/plugins/:serviceName', pluginsController.removeServicePlugin as RequestHandler);
-  // Routes
-  router.get('/routes', routesController.getRoutes as RequestHandler);
-  router.get('/routes/:routeId', routesController.routeById as RequestHandler);
-  router.post('/routes/:routeId', routesController.createRoute as RequestHandler);
-  router.patch('/routes/:routeId', routesController.editRoute as RequestHandler);
-  router.delete('/routes/:routeId', routesController.removeRoute as RequestHandler);
+  router.get('/services/:serviceName/plugins', pluginsController.getEnabledPlugins as RequestHandler);
+  router.get('/services/plugins/fields', pluginsController.getPluginFields as RequestHandler);
+  router.get('/services/:serviceName/plugins/associated', pluginsController.getAssociatedPlugins as RequestHandler);
+  router.post('/services/:serviceName/plugins', pluginsController.addPluginToService as RequestHandler);
+  router.patch('/services/:serviceName/plugins', pluginsController.editServicePlugin as RequestHandler);
+  router.delete('/services/:serviceName/plugins', pluginsController.removeServicePlugin as RequestHandler);
+  router.get('/services/:serviceName/routes', routesController.getRoutes as RequestHandler);
+  router.get('/services/:serviceName/routes/:routeId', routesController.routeById as RequestHandler);
+  router.post('/services/:serviceName/routes/:routeId', routesController.createRoute as RequestHandler);
+  router.patch('/services/:serviceName/routes/:routeId', routesController.editRoute as RequestHandler);
+  router.delete('/services/:serviceName/routes/:routeId', routesController.removeRoute as RequestHandler);
 
   router.get('/health', (_, response) => {
     logger.info('PONG!');
