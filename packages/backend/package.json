@@ -42,6 +42,7 @@
     "@immobiliarelabs/backstage-plugin-gitlab-backend": "^6.5.1",
     "@veecode-platform/backstage-plugin-infracost-backend": "^0.3.5",
     "@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions": "^0.3.17",
+    "@veecode-platform/plugin-kong-service-manager-backend": "workspace:^",
     "@veecode-platform/plugin-veecode-platform-common": "^0.3.17",
     "app": "link:../app",
     "better-sqlite3": "^9.4.3",

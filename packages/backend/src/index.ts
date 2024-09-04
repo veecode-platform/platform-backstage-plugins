@@ -27,6 +27,8 @@ import permission from './plugins/permission';
 import kubernetes from './plugins/kubernetes';
 // infracost
 import infracost from './plugins/infracost'
+// kong
+import kong from './plugins/kong';
 
 function makeCreateEnv(config: Config) {
   const root = getRootLogger();
@@ -85,7 +87,8 @@ async function main() {
   const kubernetesEnv = useHotMemoize(module, () => createEnv('kubernetes'));
   // infracost
   const infraconstEnv = useHotMemoize(module, () => createEnv('infracost'));
-
+ // kong
+  const kongEnv = useHotMemoize(module, () => createEnv('kong'));
 
   const apiRouter = Router();
   apiRouter.use('/auth', await auth(authEnv));
@@ -97,6 +100,7 @@ async function main() {
   apiRouter.use('/permission', await permission(permissionEnv));
   apiRouter.use('/kubernetes', await kubernetes(kubernetesEnv));
   apiRouter.use('/infracost', await infracost(infraconstEnv));
+  apiRouter.use('/kong',await kong(kongEnv))
 
   // Add backends ABOVE this line; this 404 handler is the catch-all fallback
   apiRouter.use(notFoundHandler());
