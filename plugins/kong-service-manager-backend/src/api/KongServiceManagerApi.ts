@@ -29,17 +29,17 @@ class Client implements KongServiceManagerApi {
 
     public async fetch <T = any>(input: string, host: string, token:string, init?: RequestInit): Promise<T> {
 
-        const defaultHeaders: RequestInit = {
-            headers: {
-                Authorization: `Basic ${token}`,
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            ...init
+        const defaultHeaders = {
+            Authorization: `Basic ${token}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
         };
 
 
-        const resp = await fetch(`${host}${input}`, defaultHeaders);
+        const resp = await fetch(`${host}${input}`, {
+            ...defaultHeaders,
+            ...init
+        });
 
         if (!resp.ok) {
             throw new Error(`[${resp.type}] Request for [${host}${input}] failed with ${resp.status} - ${resp.statusText}`);
