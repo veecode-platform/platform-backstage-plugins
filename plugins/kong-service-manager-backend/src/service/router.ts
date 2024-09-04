@@ -3,8 +3,8 @@ import express, { RequestHandler } from 'express';
 import Router from 'express-promise-router';
 import { KongServiceManagerOptions } from '../utils/types';
 import { KongServiceManagerApiClient } from '../api';
-// import { kongServiceManagerPermissions } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
-// import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
+import { kongServiceManagerPermissions } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
 import { RoutesController } from '../controllers/routesController';
 import { PluginsController } from '../controllers/pluginsController';
 import { ServiceController } from '../controllers/serviceController';
@@ -26,11 +26,11 @@ export async function createRouter(
   router.use(express.json());
   const assetsPath = resolvePath('/view/assets');
   router.use('/assets', express.static(assetsPath));
-  // router.use(
-  //   createPermissionIntegrationRouter({
-  //     permissions: kongServiceManagerPermissions
-  //   })
-  // );
+  router.use(
+    createPermissionIntegrationRouter({
+      permissions: kongServiceManagerPermissions
+    })
+  );
 
   router.get('/services/:serviceName', serviceController.getServiceInfo as RequestHandler);
   router.get('/services/:serviceName/plugins', pluginsController.getEnabledPlugins as RequestHandler);
