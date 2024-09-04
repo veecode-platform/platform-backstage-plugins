@@ -5,8 +5,8 @@ import express, { RequestHandler } from 'express';
 import Router from 'express-promise-router';
 import { InfracostStore } from '../database';
 import { InputError } from '@backstage/errors';
-import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
-import { InfracostPermissions } from '@veecode-platform/backstage-plugin-infracost-common';
+// import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
+// import { InfracostPermissions } from '@veecode-platform/backstage-plugin-infracost-common';
 
 export interface RouterOptions {
   logger: LoggerService;
@@ -29,11 +29,11 @@ export async function createRouter(
       extended: true,
     }),
   );
-  router.use(
-    createPermissionIntegrationRouter({
-      permissions: InfracostPermissions
-    })
-  );
+  // router.use(
+  //   createPermissionIntegrationRouter({
+  //     permissions: InfracostPermissions
+  //   })
+  // );
 
    /**
    * health check
