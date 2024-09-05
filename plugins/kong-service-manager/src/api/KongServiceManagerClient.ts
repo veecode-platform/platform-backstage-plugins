@@ -6,9 +6,7 @@ import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsRespo
  abstract class Client {
     protected config: ConfigApi;
     
-    constructor(opts: Options) {
-        this.config = opts.config as ConfigApi;
-    }
+    constructor(opts: Options) { this.config = opts.config as ConfigApi; }
 
     protected async fetch <T = any>(input: string, init?: RequestInit): Promise<T> {
 
@@ -30,7 +28,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
 
 
     async getServiceInfo(instanceName: string, serviceName:string): Promise<ServiceInfoResponse> {
-        const response = await this.fetch(`/${instanceName}/service/${serviceName}`)
+        const response = await this.fetch(`/${instanceName}/services/${serviceName}`)
         return response.service
     }
 
@@ -165,64 +163,3 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
     }
 
 }
-
-// export class KongServiceManagerApiClient implements KongServiceManagerApi {
-
-//     private readonly client: Client;
-
-//     constructor(opts: Options) {
-//         this.client = new Client(opts);
-//     }
-
-//     async getServiceInfo(instanceName:string, serviceName:string): Promise<ServiceInfoResponse> {
-//         return this.client.getServiceInfo(instanceName,serviceName)
-//     }
-
-//     async getEnabledPlugins(instanceName:string, serviceName:string, searchFilter:string): Promise<PluginPerCategory[]> {
-//         return this.client.getEnabledPlugins(instanceName,serviceName,searchFilter)
-//     }
-
-//     // async getEnabledPlugins(serviceName: string,instanceName:string): Promise<string[]> {
-//     //     return this.client.getEnabledPlugins(serviceName, instanceName)
-//     // }
-
-//     async getPluginFields(instanceName:string, pluginName: string): Promise<PluginFieldsResponse[]> {
-//         return this.client.getPluginFields(instanceName,pluginName)
-//     }
-
-//     async getServiceAssociatedPlugins(serviceName:string, instanceName:string ): Promise<AssociatedPluginsResponse[]> {
-//         return this.client.getServiceAssociatedPlugins(serviceName,instanceName)
-//     }
-
-//     async createServicePlugin(instanceName:string, serviceName: string, config: CreatePlugin ): Promise<any> {
-//         return this.client.createServicePlugin(instanceName,serviceName, config)
-//     }
-
-//     async editServicePlugin(instanceName:string, serviceName: string, pluginId: string, config: CreatePlugin): Promise<any> {
-//         return this.client.editServicePlugin(instanceName, serviceName, pluginId, config)
-//     }
-
-//     async removeServicePlugin(instanceName:string,serviceName: string, pluginId: string): Promise<any> {
-//         return this.client.removeServicePlugin(instanceName,serviceName, pluginId)
-//     }
-
-//     async getRoutesFromService(instanceName:string, serviceName: string): Promise<RoutesResponse[]> {
-//         return this.client.getRoutesFromService(instanceName,serviceName)
-//     }
-
-//     async getRouteFromService(instanceName:string, serviceName: string, routeId: string): Promise<any> {
-//         return this.client.getRouteFromService(instanceName, serviceName, routeId);
-//     }
-
-//     async createRouteFromService(instanceName:string, serviceName: string, config: CreateRoute): Promise<any> {
-//         return this.client.createRouteFromService(instanceName, serviceName, config)
-//     }
-
-//     async editRouteFromService(instanceName:string, serviceName: string, routeId: string, config: CreateRoute): Promise<any> {
-//         return this.client.editRouteFromService(instanceName, serviceName, routeId, config)
-//     }
-
-//     async removeRouteFromService(instanceName:string, serviceName: string, routeId: string): Promise<any> {
-//         return this.client.removeRouteFromService(instanceName, serviceName, routeId)
-//     }
-// }
