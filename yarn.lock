@@ -14152,7 +14152,7 @@ __metadata:
     "@sniptt/monads": ^0.5.10
     "@types/express": "*"
     "@types/supertest": ^2.0.8
-    "@veecode-platform/backstage-plugin-infracost-common": latest
+    "@veecode-platform/backstage-plugin-infracost-common": ^0.1.7
     axios: ^1.7.2
     express: ^4.17.1
     express-promise-router: ^4.1.0
@@ -14166,16 +14166,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-infracost-common@npm:latest":
-  version: 0.1.7
-  resolution: "@veecode-platform/backstage-plugin-infracost-common@npm:0.1.7"
-  dependencies:
-    "@backstage/types": ^1.1.1
-  checksum: 8f1e076c1a5d06cce6e69a46b997df125e12a48baa7c51f461a4601be0d758aab68404b5c72ea6e38b5c2c1c8c40191721ac2a63066f082165b3029548002ea3
-  languageName: node
-  linkType: hard
-
-"@veecode-platform/backstage-plugin-infracost-common@workspace:plugins/infracost-common":
+"@veecode-platform/backstage-plugin-infracost-common@^0.1.7, @veecode-platform/backstage-plugin-infracost-common@workspace:plugins/infracost-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-infracost-common@workspace:plugins/infracost-common"
   dependencies:
@@ -14184,6 +14175,15 @@ __metadata:
     "@backstage/types": ^1.1.1
   languageName: unknown
   linkType: soft
+
+"@veecode-platform/backstage-plugin-infracost-common@npm:latest":
+  version: 0.1.7
+  resolution: "@veecode-platform/backstage-plugin-infracost-common@npm:0.1.7"
+  dependencies:
+    "@backstage/types": ^1.1.1
+  checksum: 8f1e076c1a5d06cce6e69a46b997df125e12a48baa7c51f461a4601be0d758aab68404b5c72ea6e38b5c2c1c8c40191721ac2a63066f082165b3029548002ea3
+  languageName: node
+  linkType: hard
 
 "@veecode-platform/backstage-plugin-infracost@workspace:^, @veecode-platform/backstage-plugin-infracost@workspace:plugins/infracost":
   version: 0.0.0-use.local

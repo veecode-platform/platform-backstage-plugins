@@ -63,7 +63,7 @@
     "@backstage/types": "^1.1.1",
     "@sniptt/monads": "^0.5.10",
     "@types/express": "*",
-    "@veecode-platform/backstage-plugin-infracost-common": "latest",
+    "@veecode-platform/backstage-plugin-infracost-common": "^0.1.7",
     "axios": "^1.7.2",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
