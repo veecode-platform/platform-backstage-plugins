@@ -20,7 +20,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   const [configState, setConfigState ] = React.useState<any|null>(null);
   const [searchTerm, setSeachTerm] = React.useState<string>("");
   const { entity } = useEntity();
-  const { serviceName, workspace,kongInstances } = useEntityAnnotation(entity);
+  const { serviceName,kongInstances } = useEntityAnnotation(entity);
   const [instance, setInstance] = React.useState<string>(kongInstances ? kongInstances[0] : "");
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
@@ -52,8 +52,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   const listAllEnabledPlugins = async () => {
     try{
-        if(instance && serviceName && workspace){
-            const plugins = await api.getAllEnabledPlugins(workspace,serviceName,instance,searchTerm);
+        if(instance && serviceName){
+            const plugins = await api.getEnabledPlugins(instance,serviceName,searchTerm);
             if(plugins) {
               setPluginsPerCategory(plugins)
               return plugins
@@ -69,8 +69,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   const listAssociatedPlugins = async () =>{
     try{
-      if(instance && serviceName && workspace){
-        const plugins = await api.getServiceAssociatedPlugins(workspace,serviceName,instance);
+      if(instance && serviceName){
+        const plugins = await api.getServiceAssociatedPlugins(instance,serviceName);
         if (plugins !== null && plugins !== undefined) setAllAssociatedPlugins(plugins);
       }
     }
@@ -81,8 +81,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   const getServiceDetails = async () =>{
     try{ 
-      if(instance && serviceName && workspace){
-          const details = await api.getServiceInfo(workspace,serviceName, instance);
+      if(instance && serviceName){
+          const details = await api.getServiceInfo(instance,serviceName);
           if(details) return details;
         }
         return null;
@@ -94,8 +94,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   const getRoutesList = async () => {
     try{ 
-      if(instance && serviceName && workspace){
-        const routes = await api.getRoutesFromService(workspace,serviceName, instance);
+      if(instance && serviceName){
+        const routes = await api.getRoutesFromService(instance,serviceName);
         if(routes) return routes;
       }
       return null
@@ -105,10 +105,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  const getRoute = async (routeNameOrId: string) => {
+  const getRoute = async (routeId: string) => {
     try{ 
-      if(instance && serviceName && workspace){
-        const route = await api.getRouteFromService(workspace,serviceName,routeNameOrId,instance);
+      if(instance && serviceName){
+        const route = await api.getRouteFromService(instance,serviceName,routeId);
         if(route) return route;
       }
       return null
@@ -120,8 +120,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   const createRoute = async (config: CreateRoute) => {
     try {
-      if (instance && serviceName && workspace){
-        const response = await api.createRouteFromService(workspace, serviceName, config, instance);
+      if (instance && serviceName){
+        const response = await api.createRouteFromService(instance, serviceName, config);
         if (response) {
           return response;
         }
@@ -133,10 +133,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  const editRoute = async (routeNameOrId: string, config: CreateRoute) => {
+  const editRoute = async (routeId: string, config: CreateRoute) => {
     try {
-      if(instance && serviceName && workspace){
-        const response = await api.editRouteFromService(workspace, serviceName, routeNameOrId, config, instance);
+      if(instance && serviceName){
+        const response = await api.editRouteFromService(instance, serviceName, routeId, config);
         if(response) {
            await getRoutesList();
            return alertApi.post({
@@ -153,10 +153,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  const removeRoute = async (routeNameOrId: string) => {
+  const removeRoute = async (routeId: string) => {
     try{ 
-      if(instance && serviceName && workspace){
-        const response = await api.removeRouteFromService(workspace,serviceName,routeNameOrId,instance);
+      if(instance && serviceName){
+        const response = await api.removeRouteFromService(instance,serviceName,routeId);
         if(response && allAssociatedPlugins) {
           await getRoutesList();
           return alertApi.post({
@@ -175,8 +175,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   const getPluginFields = async (pluginName: string) => {
     try{ 
-      if(instance && workspace){
-        const fields = await api.getPluginFields(workspace, pluginName, instance);
+      if(instance){
+        const fields = await api.getPluginFields(instance, pluginName);
         if(fields) {
           return fields
         }
@@ -190,8 +190,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   const enablePlugin = async (config: CreatePlugin) => {
     try{ 
-      if(instance && serviceName && workspace){
-        const response = await api.createServicePlugin(workspace,serviceName, config,instance);
+      if(instance && serviceName){
+        const response = await api.createServicePlugin(instance,serviceName, config);
         if(response) {
            await listAssociatedPlugins();
            return alertApi.post({
@@ -210,8 +210,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   const editPlugin = async (pluginId: string,config: CreatePlugin) => {
     try{ 
-      if(instance && serviceName && workspace){
-        const response = await api.editServicePlugin(workspace,serviceName, pluginId, config, instance);
+      if(instance && serviceName){
+        const response = await api.editServicePlugin(instance,serviceName, pluginId, config);
         if(response) {
           await listAssociatedPlugins();
           return alertApi.post({
@@ -230,8 +230,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   const disablePlugin = async (pluginId: string) => {
     try{ 
-      if(instance && serviceName && workspace){
-        const response = await api.removeServicePlugin(workspace,serviceName, pluginId,instance);
+      if(instance && serviceName){
+        const response = await api.removeServicePlugin(instance,serviceName, pluginId);
         if(response && allAssociatedPlugins) {
           const newAssociatedPluginsData = allAssociatedPlugins.filter(p => p.id !== pluginId && p);
             setAllAssociatedPlugins(newAssociatedPluginsData);
