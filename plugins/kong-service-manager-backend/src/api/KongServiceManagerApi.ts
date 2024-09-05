@@ -17,18 +17,18 @@ import { KongConfig } from "../lib";
 import { PluginsInfoData } from "../data/data";
 import { IKongConfigOptions } from "../lib/types";
 
-
-class Client implements KongServiceManagerApi {
-    private readonly config: Config;
-    private readonly instanceConfig : KongConfig;
+abstract class Client {
+    protected config: Config;
+    protected instanceConfig : KongConfig;
 
     constructor(opts: KongServiceManagerOptions) {
         this.config = opts.config;
         this.instanceConfig = new KongConfig(this.config);
     }
 
-    public async fetch <T = any>(input: string, host: string, token:string, init?: RequestInit): Promise<T> {
+    protected async fetch <T = any>(input: string,instanceName:string, init?: RequestInit): Promise<T> {
 
+        const {host, token} = this.getKongConfig(instanceName);
         const defaultHeaders: RequestInit = {
             headers: {
                 Authorization: `Basic ${token}`,
@@ -48,14 +48,16 @@ class Client implements KongServiceManagerApi {
         return await resp.json();
     }
 
-    private getKongConfig(instanceName:string):IKongConfigOptions{
+    protected getKongConfig(instanceName:string):IKongConfigOptions{
         return this.instanceConfig.getInstance(instanceName)
     }
+}
 
+export class KongServiceManagerApiClient extends Client implements KongServiceManagerApi {
+    
     async getEnabledPlugins(instanceName:string,serviceIdOrName: string, searchFilter?:string): Promise<PluginPerCategory[]> {
    
-        const {host, token} = this.getKongConfig(instanceName);
-        const response = await this.fetch("/",host,token);     
+        const response = await this.fetch("/",instanceName);     
         const availablePluginsResponse = Object.keys(response.plugins.available_on_server);
         let availablePluginsList = availablePluginsResponse;
 
@@ -92,9 +94,9 @@ class Client implements KongServiceManagerApi {
 
     }
 
-    async getPluginSchema(host:string,workspace:string,token:string,pluginName: string): Promise<any> {
+    async getPluginSchema(instanceName:string,workspace:string,pluginName: string): Promise<any> {
 
-        const response = await this.fetch(`/${workspace}/schemas/plugins/${pluginName}`, host,token)
+        const response = await this.fetch(`/${workspace}/schemas/plugins/${pluginName}`, instanceName)
         const fieldsMap: Map<string, SchemaFields> = response.fields.reduce((map: { set: (arg0: string, arg1: any) => void; }, fieldObj: { [x: string]: any; }) => {
             const fieldName = Object.keys(fieldObj)[0];
             const fieldDetails = fieldObj[fieldName];
@@ -107,8 +109,8 @@ class Client implements KongServiceManagerApi {
 
     async getPluginFields(instanceName:string,pluginName: string): Promise<PluginFieldsResponse[]> {
 
-        const { workspace, host, token } = this.getKongConfig(instanceName);
-        const config = await this.getPluginSchema(host,workspace,token,pluginName)
+        const { workspace } = this.getKongConfig(instanceName);
+        const config = await this.getPluginSchema(instanceName,workspace,pluginName)
         if (!config) throw new Error("Impossible to find plugin config")
 
         const mapedFields: PluginFieldsResponse[] = config.fields.map((field: any) => {
@@ -142,8 +144,8 @@ class Client implements KongServiceManagerApi {
 
     async getServiceAssociatedPlugins(instanceName:string,serviceIdOrName: string): Promise<AssociatedPluginsResponse[]> {
 
-        const { workspace, host, token } = this.getKongConfig(instanceName);
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins`, host,token)
+        const { workspace } = this.getKongConfig(instanceName);
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins`, instanceName)
         const mapedPluginsData: AssociatedPluginsResponse[] = response.data.map((data: { name: any; id: any; tags: any; enabled: any; created_at: any; config: any; }) => {
             return {
                 name: data.name,
@@ -160,7 +162,7 @@ class Client implements KongServiceManagerApi {
 
     async createServicePlugin(instanceName:string,serviceIdOrName: string, config: CreatePlugin): Promise<any> {
 
-        const { workspace, host, token } = this.getKongConfig(instanceName);
+        const { workspace } = this.getKongConfig(instanceName);
         const body = {
             ...config,
             tags: ["devportal", "plugin-kong-service-manager"],
@@ -173,13 +175,13 @@ class Client implements KongServiceManagerApi {
             method: "POST",
             body: JSON.stringify(body)
         }
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins`, host,token, headers)
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins`, instanceName, headers)
         return response
     }
 
     async editServicePlugin(instanceName:string,serviceIdOrName: string, pluginId: string, config: CreatePlugin): Promise<any> {
 
-        const { workspace, host, token } = this.getKongConfig(instanceName);
+        const { workspace } = this.getKongConfig(instanceName);
         const body = {
             ...config,
             tags: ["devportal", "plugin-kong-service-manager"],
@@ -190,25 +192,25 @@ class Client implements KongServiceManagerApi {
             method: "PATCH",
             body: JSON.stringify(body)
         }
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins/${pluginId}`, host, token, headers)
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins/${pluginId}`, instanceName, headers)
         return response
 
     }
 
     async removeServicePlugin(instanceName:string,serviceIdOrName: string, pluginId: string): Promise<any> {
 
-        const { workspace, host, token } = this.getKongConfig(instanceName);
+        const { workspace } = this.getKongConfig(instanceName);
         const headers: RequestInit = {
             method: "DELETE",
         }
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins/${pluginId}`, host, token, headers)
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins/${pluginId}`, instanceName, headers)
         return response.message
     }
 
     async getRoutesFromService(instanceName:string, serviceIdOrName: string): Promise<RoutesResponse[]> {
 
-        const { workspace, host, token } = this.getKongConfig(instanceName);
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes`, host,token)
+        const { workspace } = this.getKongConfig(instanceName);
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes`, instanceName)
         const mapedRoutesResponse: RoutesResponse[] = response.data.map((route: { name: any; protocols: any; methods: any; tags: any; hosts: any; paths: any; }) => {
             return {
                 name: route.name,
@@ -225,8 +227,8 @@ class Client implements KongServiceManagerApi {
 
     async getRouteFromService(instanceName:string, serviceIdOrName: string, routeIdOrName: string): Promise<RouteResponse> {
 
-        const { workspace, host, token } = this.getKongConfig(instanceName);
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, host, token);
+        const { workspace } = this.getKongConfig(instanceName);
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, instanceName);
         const route: RouteResponse = {
             name: response.name,
             protocols: response.protocols,
@@ -251,99 +253,42 @@ class Client implements KongServiceManagerApi {
 
     async createRouteFromService(instanceName:string, serviceIdOrName: string, config: CreateRoute): Promise<any> {
 
-        const { workspace, host, token } = this.getKongConfig(instanceName);
+        const { workspace } = this.getKongConfig(instanceName);
         const body = { ...config }
         const headers: RequestInit = {
             method: "POST",
             body: JSON.stringify(body)
         }
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes`, host, token, headers)
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes`, instanceName, headers)
         return response
     }
 
     async editRouteFromService(instanceName:string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute): Promise<any> {
 
-        const { workspace, host, token } = this.getKongConfig(instanceName);
+        const { workspace } = this.getKongConfig(instanceName);
         const body = { ...config }
         const headers: RequestInit = {
             method: "PATCH",
             body: JSON.stringify(body)
         }
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, host, token, headers)
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, instanceName, headers)
         return response
     }
 
     async removeRouteFromService(instanceName:string, serviceIdOrName: string, routeIdOrName: string): Promise<any> {
         
-        const { workspace, host, token } = this.getKongConfig(instanceName);
+        const { workspace } = this.getKongConfig(instanceName);
         const headers: RequestInit = {
             method: "DELETE",
         }
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, host, token, headers)
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, instanceName, headers)
         return response.message
     }
 
     async getServiceInfo(instanceName:string,serviceIdOrName: string): Promise<ServiceInfoResponse> {
-        const { workspace, host, token } = this.getKongConfig(instanceName);
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}`, host, token)
+        const { workspace } = this.getKongConfig(instanceName);
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}`, instanceName)
         return response
     }
 
-}
-
-export class KongServiceManagerApiClient implements KongServiceManagerApi {
-
-    private readonly client: Client;
-
-    constructor(opts: KongServiceManagerOptions) {
-        this.client = new Client(opts);
-    }
-
-    async getEnabledPlugins(instanceName: string,serviceIdOrName: string,searchFilter: string = ''): Promise<PluginPerCategory[]> {
-        return this.client.getEnabledPlugins(instanceName,serviceIdOrName, searchFilter)
-    }
-
-    async getPluginFields(instanceName:string, pluginName: string): Promise<PluginFieldsResponse[]> {
-        return this.client.getPluginFields(instanceName,pluginName)
-    }
-
-    async getServiceAssociatedPlugins(instanceName:string,serviceIdOrName: string): Promise<AssociatedPluginsResponse[]> {
-        return this.client.getServiceAssociatedPlugins(instanceName,serviceIdOrName)
-    }
-
-    async createServicePlugin(instanceName:string,serviceIdOrName: string, config: CreatePlugin): Promise<any> {
-        return this.client.createServicePlugin(instanceName,serviceIdOrName, config)
-    }
-
-    async editServicePlugin(instanceName:string, serviceIdOrName: string, pluginId: string, config: CreatePlugin): Promise<any> {
-        return this.client.editServicePlugin( instanceName,serviceIdOrName, pluginId, config)
-    }
-
-    async removeServicePlugin(instanceName:string,serviceIdOrName: string, pluginId: string): Promise<any> {
-        return this.client.removeServicePlugin(instanceName,serviceIdOrName, pluginId)
-    }
-
-    async getRoutesFromService(instanceName:string, serviceIdOrName: string): Promise<RoutesResponse[]> {
-        return this.client.getRoutesFromService(instanceName,serviceIdOrName)
-    }
-
-    async getRouteFromService(instanceName:string, serviceIdOrName: string, routeIdOrName: string): Promise<any> {
-        return this.client.getRouteFromService(instanceName, serviceIdOrName, routeIdOrName)
-    }
-
-    async createRouteFromService(instanceName:string, serviceIdOrName: string, config: CreateRoute): Promise<any> {
-        return this.client.createRouteFromService(instanceName, serviceIdOrName, config)
-    }
-
-    async editRouteFromService(instanceName:string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute): Promise<any> {
-        return this.client.editRouteFromService(instanceName, serviceIdOrName, routeIdOrName, config)
-    }
-
-    async removeRouteFromService(instanceName:string, serviceIdOrName: string, routeIdOrName: string): Promise<any> {
-        return this.client.removeRouteFromService(instanceName, serviceIdOrName, routeIdOrName)
-    }
-
-    async getServiceInfo(instanceName:string,serviceIdOrName: string): Promise<ServiceInfoResponse> {
-        return this.client.getServiceInfo(instanceName,serviceIdOrName)
-    }
 }
