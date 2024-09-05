@@ -2,7 +2,7 @@
 
 ## Intro 💡
 
-The `Kong-service-manager-backend` plugin provides the backend for the [Kong Service Manager] plugin(https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/kong-service-manager),
+The `Kong-service-manager-backend` plugin provides the backend for the [Kong Service Manager plugin](https://github.com/veecode-platform/platform-backstage-plugins/tree/master/plugins/kong-service-manager),
 it provides endpoints to serve the service interface, the crud for handling plugins and the routes under the kong service.
 
 ## Pre-requisites
