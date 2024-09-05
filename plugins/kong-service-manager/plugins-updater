@@ -19,6 +19,10 @@ TAG_MAP = {
     "premium": "KONNECT PREMIUM",
     "enterprise": "ENTERPRISE"
 }
+
+# Categories to ignore from the Kong Hub
+IGNORE_CATEGORIES = ["third-party"]
+
 # Base URL of the Kong Hub
 BASE_URL = "https://docs.konghq.com/hub/"
 #get current file path
@@ -144,11 +148,14 @@ def fetch_page_data():
 def main():
     install_pre_requisites()
     # Create the download directory if it does not exist
+    #remove the directory if it exists
+    if os.path.exists(DOWNLOAD_DIR):
+        os.system(f"rm -rf {DOWNLOAD_DIR}/*")
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
     
     page = fetch_page_data()
 
-    categories=page.find_all('div', class_='page-hub--category')
+    categories = page.find_all('div', class_='page-hub--category', id=lambda value: value not in IGNORE_CATEGORIES)
     categories=get_categories(categories)
     images_ts_file_content=[]
     images_ts_file_export_content=[]
