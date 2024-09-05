@@ -1,10 +1,8 @@
-import { createApiRef } from "@backstage/core-plugin-api";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, PluginPerCategory, RouteResponse, RoutesResponse, ServiceInfoResponse } from "../utils/types";
-import { DiscoveryApi } from "@backstage/core-plugin-api";
+import { ConfigApi, createApiRef } from "@backstage/core-plugin-api";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, PluginPerCategory, RouteResponse, RoutesResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export type Options = {
-    discoveryApi: DiscoveryApi;
-    proxyPath?: string;
+    config: ConfigApi;
 };
 
 export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
@@ -12,31 +10,17 @@ export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
 });
 
 export interface KongServiceManagerApi {
-    getEnabledPlugins(proxyPath: string): Promise<string[]>;
-
-    getPluginFields(workspace:string,pluginName: string, proxyPath: string): Promise<PluginFieldsResponse[]>;
-
-    getServiceAssociatedPlugins(workspace:string,serviceIdOrName: string, proxyPath: string): Promise<AssociatedPluginsResponse[]>;
-
-    createServicePlugin(workspace:string, serviceIdOrName: string, config: CreatePlugin, proxyPath: string): Promise<any>;
-
-    editServicePlugin(workspace:string,serviceIdOrName: string, pluginId: string, config: CreatePlugin, proxyPath: string): Promise<any>;
-
-    removeServicePlugin(workspace:string,serviceIdOrName: string, pluginId: string, proxyPath: string): Promise<any>;
-
-    getRoutesFromService(workspace:string,serviceIdOrName: string, proxyPath: string): Promise<RoutesResponse[]>;
-
-    getRouteFromService(workspace: string, serviceName: string, routeNameOrId: string, instance: string): Promise<RouteResponse>;
-
-    createRouteFromService(workspace:string, serviceIdOrName: string, config: CreateRoute, proxyPath?: string | undefined ): Promise<any>;
-
-    editRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute, proxyPath?: string | undefined ): Promise<any>;
-
-    removeRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string | undefined ): Promise<any>;
-
-    getServiceInfo(workspace:string,serviceIdOrName: string, proxyPath: string): Promise<ServiceInfoResponse>;
-
-    getAllEnabledPlugins(workspace:string,serviceIdOrName: string, proxyPath: string, searchFilter?: string): Promise<PluginPerCategory[]>;
-
-
+    getServiceInfo(serviceName:string, instanceName:string): Promise<ServiceInfoResponse>;
+    getEnabledPlugins(serviceName:string, instanceName:string, searchFilter?: string): Promise<PluginPerCategory[]>;
+    // getEnabledPlugins(proxyPath: string): Promise<string[]>;
+    getPluginFields(instanceName:string,pluginName:string): Promise<PluginFieldsResponse[]>;
+    getServiceAssociatedPlugins(serviceName:string, instanceName:string): Promise<AssociatedPluginsResponse[]>;
+    createServicePlugin(serviceName: string, instanceName:string, config: CreatePlugin): Promise<any>;
+    editServicePlugin(serviceName:string, instanceName:string, pluginId: string, config: CreatePlugin): Promise<any>;
+    removeServicePlugin(serviceName:string, instanceName:string, pluginId: string): Promise<any>;
+    getRoutesFromService(serviceName:string, instanceName:string): Promise<RoutesResponse[]>;
+    getRouteFromService(serviceName:string, instanceName:string, routeNameOrId: string): Promise<RouteResponse>;
+    createRouteFromService(serviceName:string, instanceName:string, config: CreateRoute): Promise<any>;
+    editRouteFromService(serviceName:string, instanceName:string, routeIdOrName: string, config: CreateRoute): Promise<any>;
+    removeRouteFromService(serviceName:string, instanceName:string, routeIdOrName: string): Promise<any>;
 }

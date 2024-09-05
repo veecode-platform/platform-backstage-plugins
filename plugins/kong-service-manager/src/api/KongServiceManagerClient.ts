@@ -1,22 +1,20 @@
-import { DiscoveryApi } from "@backstage/core-plugin-api";
+import { ConfigApi } from "@backstage/core-plugin-api";
 import { KongServiceManagerApi, Options } from "./KongServiceManagerApi";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, PluginPerCategory, RouteResponse, RoutesResponse, SchemaFields, ServiceInfoResponse } from "../utils/types";
-import { PluginsInfoData } from "../data/data";
-import { getPluginFieldType } from "../utils/helpers/getPluginFieldType";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, PluginPerCategory, RouteResponse, RoutesResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+// import { PluginsInfoData } from "../data/data";
 
 class Client implements KongServiceManagerApi {
-    private readonly discoveryApi: DiscoveryApi;
-    private readonly proxyPath: string;
-    
 
+    private readonly config: ConfigApi;
+    
     constructor(opts: Options) {
-        this.discoveryApi = opts.discoveryApi;
-        this.proxyPath = opts.proxyPath as string;
+
+        this.config = opts.config as ConfigApi;
     }
 
-    public async fetch <T = any>(input: string, proxyPath?: string, init?: RequestInit): Promise<T> {
+    public async fetch <T = any>(input: string, init?: RequestInit): Promise<T> {
 
-        const apiUrl = await this.apiUrl(proxyPath);
+        const apiUrl = `${this.config.getString("backend.baseUrl")}/api/kong`;
 
         const resp = await fetch(`${apiUrl}${input}`, {
             ...init
@@ -26,234 +24,142 @@ class Client implements KongServiceManagerApi {
             throw new Error(`[${resp.type}] Request failed with ${resp.status} - ${resp.statusText}`);
         }
 
-        if (resp.status === 204) return { message: "deleted" } as any
         return await resp.json();
     }
 
-    async apiUrl(proxyPath?: string):Promise<string> {
-        const baseUrl = await this.discoveryApi.getBaseUrl("proxy")
-        return `${baseUrl}${proxyPath || this.proxyPath}`
+    async getServiceInfo(instanceName: string, serviceName:string): Promise<ServiceInfoResponse> {
+        const response = await this.fetch(`/${instanceName}/service/${serviceName}`)
+        return response.service
     }
 
-    async getEnabledPlugins(proxyPath?: string): Promise<string[]> {
-        const response = await this.fetch("/plugins/enabled", proxyPath)
-        return response.enabled_plugins
+    async getEnabledPlugins(instanceName:string, serviceName: string, searchFilter:string = ''): Promise<PluginPerCategory[]> {
+        const response = await this.fetch(`/${instanceName}/services/${serviceName}/plugins?search=${searchFilter}`)
+        return response.plugins
     }
 
-    async getAllEnabledPlugins(workspace:string,serviceIdOrName: string, proxyPath?: string, searchFilter?:string): Promise<PluginPerCategory[]> {
-        const response = await this.fetch("/", proxyPath);     
-        const availablePluginsResponse = Object.keys(response.plugins.available_on_server);
-        let availablePluginsList = availablePluginsResponse;
+    // async getAllEnabledPlugins(workspace:string,serviceIdOrName: string, proxyPath?: string, searchFilter?:string): Promise<PluginPerCategory[]> {
+    //     const response = await this.fetch("/", proxyPath);     
+    //     const availablePluginsResponse = Object.keys(response.plugins.available_on_server);
+    //     let availablePluginsList = availablePluginsResponse;
 
-        if (searchFilter !== "" && searchFilter) {
-            availablePluginsList = availablePluginsResponse.filter(plugin =>
-              plugin.toLowerCase().includes(searchFilter.toLowerCase())
-            );
-          }
+    //     if (searchFilter !== "" && searchFilter) {
+    //         availablePluginsList = availablePluginsResponse.filter(plugin =>
+    //           plugin.toLowerCase().includes(searchFilter.toLowerCase())
+    //         );
+    //       }
           
-        const associatedPluginsList = await this.getServiceAssociatedPlugins(workspace,serviceIdOrName, proxyPath)
+    //     const associatedPluginsList = await this.getServiceAssociatedPlugins(workspace,serviceIdOrName, proxyPath)
 
-        const mapedEnabledPluginsList = PluginsInfoData.categories.map((category) => {
+    //     const mapedEnabledPluginsList = PluginsInfoData.categories.map((category) => {
 
-            return {
-                category: category.category,
-                plugins: category.plugins.flatMap((categoryPlugin) => {
-                    const filteredPluginMatch = availablePluginsList.find((availablePlugin) => availablePlugin === categoryPlugin.slug)
-                    if (!filteredPluginMatch) return []
+    //         return {
+    //             category: category.category,
+    //             plugins: category.plugins.flatMap((categoryPlugin) => {
+    //                 const filteredPluginMatch = availablePluginsList.find((availablePlugin) => availablePlugin === categoryPlugin.slug)
+    //                 if (!filteredPluginMatch) return []
     
-                    const filteredAssocietedPluginMatch = associatedPluginsList.find((associatedPlugin) => associatedPlugin.name === categoryPlugin.slug)
-                    return {
-                        id: filteredAssocietedPluginMatch?.id ?? null,
-                        name: categoryPlugin.name,
-                        slug: categoryPlugin.slug,
-                        associated: filteredAssocietedPluginMatch?.enabled ?? false,
-                        image: categoryPlugin.image,
-                        tags: categoryPlugin.tags,
-                        description: categoryPlugin.description
-                    }
-                })
-            }
-        })
-        return mapedEnabledPluginsList
+    //                 const filteredAssocietedPluginMatch = associatedPluginsList.find((associatedPlugin) => associatedPlugin.name === categoryPlugin.slug)
+    //                 return {
+    //                     id: filteredAssocietedPluginMatch?.id ?? null,
+    //                     name: categoryPlugin.name,
+    //                     slug: categoryPlugin.slug,
+    //                     associated: filteredAssocietedPluginMatch?.enabled ?? false,
+    //                     image: categoryPlugin.image,
+    //                     tags: categoryPlugin.tags,
+    //                     description: categoryPlugin.description
+    //                 }
+    //             })
+    //         }
+    //     })
+    //     return mapedEnabledPluginsList
 
+    // }
+
+
+    async getPluginFields(instanceName:string, pluginName:string): Promise<PluginFieldsResponse[]> {
+        const response = await this.fetch(`/${instanceName}/services/plugins/${pluginName}/fields`)
+        return response.fields
     }
 
-    async getPluginSchema(workspace:string,pluginName: string, proxyPath?: string): Promise<any> {
-        const response = await this.fetch(`/${workspace}/schemas/plugins/${pluginName}`, proxyPath)
-
-        const fieldsMap: Map<string, SchemaFields> = response.fields.reduce((map: { set: (arg0: string, arg1: any) => void; }, fieldObj: { [x: string]: any; }) => {
-            const fieldName = Object.keys(fieldObj)[0];
-            const fieldDetails = fieldObj[fieldName];
-            map.set(fieldName, fieldDetails);
-            return map;
-        }, new Map<string, SchemaFields>());
-
-        return fieldsMap.get("config")
+    async getServiceAssociatedPlugins(instanceName:string,serviceName:string): Promise<AssociatedPluginsResponse[]> {
+        const response = await this.fetch(`/${instanceName}/services/${serviceName}/plugins/associated`)
+        return response.plugins
     }
 
-    async getPluginFields(workspace:string,pluginName: string, proxyPath?: string): Promise<PluginFieldsResponse[]> {
-        const config = await this.getPluginSchema(workspace,pluginName, proxyPath)
-        if (!config) throw new Error("Impossible to find plugin config")
-
-        const mapedFields: PluginFieldsResponse[] = config.fields.map((field: any) => {
-            const pluginFieldName = Object.keys(field)[0]
-            const pluginR: PluginFieldsResponse = {
-                name: pluginFieldName,
-                type: getPluginFieldType(field[pluginFieldName].type),
-                required: field[pluginFieldName].required || false,
-                defaultValue: field[pluginFieldName].default,
-                arrayType: field[pluginFieldName].elements?.type,
-                isMultipleArray: field[pluginFieldName].elements?.one_of ? true : false,
-                arrayOptions: field[pluginFieldName].elements?.one_of,
-            }
-            if (pluginR.arrayType === "record") {
-                const mapedRecordFields = field[pluginFieldName].elements?.fields.map((record: any) => {
-                    const recordName = Object.keys(record)[0]
-                    return {
-                        name: recordName,
-                        type: record[recordName].type,
-                        required: record[recordName].required,
-                        arrayOptions: record[recordName].one_of
-                    }
-                })
-                pluginR.recordFields = mapedRecordFields
-            }
-            return pluginR
-
-        })
-        return mapedFields
-    }
-
-    async getServiceAssociatedPlugins(workspace:string,serviceIdOrName: string, proxyPath?: string): Promise<AssociatedPluginsResponse[]> {
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins`, proxyPath)
-        const mapedPluginsData: AssociatedPluginsResponse[] = response.data.map((data: { name: any; id: any; tags: any; enabled: any; created_at: any; config: any; }) => {
-            return {
-                name: data.name,
-                id: data.id,
-                tags: data.tags,
-                enabled: data.enabled,
-                createdAt: data.created_at,
-                config: data.config
-            }
-        })
-        return mapedPluginsData
-
-    }
-
-    async createServicePlugin(workspace:string,serviceIdOrName: string, config: CreatePlugin, proxyPath?: string): Promise<any> {
+    async createServicePlugin(instanceName:string, serviceName:string, config: CreatePlugin): Promise<any> {
         const body = {
-            ...config,
-            tags: ["devportal", "plugin-kong-service-manager"],
-            protocols: ["https", "http"],
-            service: null,
-            consumer: null,
-            enabled: true
+            configs: config
         }
         const headers: RequestInit = {
             method: "POST",
             body: JSON.stringify(body)
         }
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins`, proxyPath, headers)
+        const response = await this.fetch(`/${instanceName}/services/${serviceName}/plugins`,headers)
         return response
     }
 
-    async editServicePlugin(workspace:string,serviceIdOrName: string, pluginId: string, config: CreatePlugin, proxyPath?: string): Promise<any> {
+    async editServicePlugin(instanceName:string,serviceName: string, pluginId: string, config: CreatePlugin): Promise<any> {
         const body = {
-            ...config,
-            tags: ["devportal", "plugin-kong-service-manager"],
-            protocols: ["https", "http"],
-            enabled: true
+            configs: config
         }
         const headers: RequestInit = {
             method: "PATCH",
             body: JSON.stringify(body)
         }
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins/${pluginId}`, proxyPath, headers)
+        const response = await this.fetch(`/${instanceName}/services/${serviceName}/plugins/${pluginId}`, headers)
         return response
 
     }
 
-    async removeServicePlugin(workspace:string,serviceIdOrName: string, pluginId: string, proxyPath?: string): Promise<any> {
+    async removeServicePlugin(instanceName:string,serviceName: string, pluginId: string): Promise<any> {
+
         const headers: RequestInit = {
             method: "DELETE",
         }
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins/${pluginId}`, proxyPath, headers)
+        const response = await this.fetch(`/${instanceName}/services/${serviceName}/plugins/${pluginId}`, headers)
         return response.message
     }
 
-    async getRoutesFromService(workspace:string, serviceIdOrName: string, proxyPath?: string): Promise<RoutesResponse[]> {
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes`, proxyPath)
-
-        const mapedRoutesResponse: RoutesResponse[] = response.data.map((route: { name: any; protocols: any; methods: any; tags: any; hosts: any; paths: any; }) => {
-            return {
-                name: route.name,
-                protocols: route.protocols,
-                methods: route.methods,
-                tags: route.tags,
-                hosts: route.hosts,
-                paths: route.paths
-            }
-        })
-
-        return mapedRoutesResponse
+    async getRoutesFromService(instanceName:string, serviceName: string): Promise<RoutesResponse[]> {  
+        const response = await this.fetch(`/${instanceName}/services/${serviceName}/routes`)
+        return response.routes
     }
 
-    async getRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string): Promise<RouteResponse> {
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, proxyPath)
-
-        const route: RouteResponse = {
-            name: response.name,
-            protocols: response.protocols,
-            methods: response.methods,
-            tags: response.tags,
-            hosts: response.hosts,
-            paths: response.paths,
-            snis: response.snis,
-            headers: response.headers,
-            sources: response.sources,
-            destinations: response.destinations,
-            https_redirect_status_code: response.https_redirect_status_code,
-            regex_priority: response.regex_priority,
-            strip_path: response.strip_path,
-            preserve_host: response.preserve_host,
-            request_buffering: response.request_buffering,
-            response_buffering: response.response_buffering,
-        }
-
-        return route;
+    async getRouteFromService(instanceName:string, serviceName: string, routeId: string): Promise<RouteResponse> {
+        const response = await this.fetch(`/${instanceName}/services/${serviceName}/routes/${routeId}`);
+        return response.route;
     }
 
-    async createRouteFromService(workspace:string, serviceIdOrName: string, config: CreateRoute, proxyPath?: string): Promise<any> {
-        const body = { ...config }
+    async createRouteFromService(instanceName:string, serviceName: string, config: CreateRoute): Promise<any> {
+        const body = {
+            ...config,
+         }
         const headers: RequestInit = {
             method: "POST",
             body: JSON.stringify(body)
         }
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes`, proxyPath, headers)
-        return response
+        const response = await this.fetch(`/${instanceName}/services/${serviceName}/routes`,headers)
+        return response.route
     }
 
-    async editRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute, proxyPath?: string): Promise<any> {
-        const body = { ...config }
+    async editRouteFromService(instanceName:string, serviceName: string, routeId: string, config: CreateRoute): Promise<any> {
+        const body = { 
+            ...config,
+         }
         const headers: RequestInit = {
             method: "PATCH",
             body: JSON.stringify(body)
         }
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, proxyPath, headers)
+        const response = await this.fetch(`/${instanceName}/services/${serviceName}/routes/${routeId}`,headers)
         return response
     }
 
-    async removeRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string): Promise<any> {
+    async removeRouteFromService(instanceName:string, serviceName: string, routeId: string): Promise<any> {
         const headers: RequestInit = {
             method: "DELETE",
         }
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, proxyPath, headers)
+        const response = await this.fetch(`/${instanceName}/services/${serviceName}/routes/${routeId}`, headers)
         return response.message
-    }
-
-    async getServiceInfo(workspace:string,serviceIdOrName: string, proxyPath?: string): Promise<ServiceInfoResponse> {
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}`, proxyPath)
-        return response
     }
 
 }
@@ -266,55 +172,55 @@ export class KongServiceManagerApiClient implements KongServiceManagerApi {
         this.client = new Client(opts);
     }
 
-    async getEnabledPlugins(proxyPath?: string | undefined): Promise<string[]> {
-        return this.client.getEnabledPlugins(proxyPath)
+    async getServiceInfo(instanceName:string, serviceName:string): Promise<ServiceInfoResponse> {
+        return this.client.getServiceInfo(instanceName,serviceName)
     }
 
-    async getPluginFields(workspace:string, pluginName: string, proxyPath?: string | undefined ): Promise<PluginFieldsResponse[]> {
-        return this.client.getPluginFields(workspace,pluginName, proxyPath)
+    async getEnabledPlugins(instanceName:string, serviceName:string, searchFilter:string): Promise<PluginPerCategory[]> {
+        return this.client.getEnabledPlugins(instanceName,serviceName,searchFilter)
     }
 
-    async getServiceAssociatedPlugins(workspace:string,serviceIdOrName: string, proxyPath?: string | undefined ): Promise<AssociatedPluginsResponse[]> {
-        return this.client.getServiceAssociatedPlugins(workspace,serviceIdOrName, proxyPath)
+    // async getEnabledPlugins(serviceName: string,instanceName:string): Promise<string[]> {
+    //     return this.client.getEnabledPlugins(serviceName, instanceName)
+    // }
+
+    async getPluginFields(instanceName:string, pluginName: string): Promise<PluginFieldsResponse[]> {
+        return this.client.getPluginFields(instanceName,pluginName)
     }
 
-    async createServicePlugin(workspace:string,serviceIdOrName: string, config: CreatePlugin, proxyPath?: string | undefined ): Promise<any> {
-        return this.client.createServicePlugin(workspace,serviceIdOrName, config, proxyPath)
+    async getServiceAssociatedPlugins(serviceName:string, instanceName:string ): Promise<AssociatedPluginsResponse[]> {
+        return this.client.getServiceAssociatedPlugins(serviceName,instanceName)
     }
 
-    async editServicePlugin(workspace:string, serviceIdOrName: string, pluginId: string, config: CreatePlugin, proxyPath?: string | undefined ): Promise<any> {
-        return this.client.editServicePlugin(workspace,serviceIdOrName, pluginId, config, proxyPath)
+    async createServicePlugin(instanceName:string, serviceName: string, config: CreatePlugin ): Promise<any> {
+        return this.client.createServicePlugin(instanceName,serviceName, config)
     }
 
-    async removeServicePlugin(workspace:string,serviceIdOrName: string, pluginId: string, proxyPath?: string | undefined ): Promise<any> {
-        return this.client.removeServicePlugin(workspace,serviceIdOrName, pluginId, proxyPath)
+    async editServicePlugin(instanceName:string, serviceName: string, pluginId: string, config: CreatePlugin): Promise<any> {
+        return this.client.editServicePlugin(instanceName, serviceName, pluginId, config)
     }
 
-    async getRoutesFromService(workspace:string, serviceIdOrName: string, proxyPath?: string | undefined ): Promise<RoutesResponse[]> {
-        return this.client.getRoutesFromService(workspace,serviceIdOrName, proxyPath)
+    async removeServicePlugin(instanceName:string,serviceName: string, pluginId: string): Promise<any> {
+        return this.client.removeServicePlugin(instanceName,serviceName, pluginId)
     }
 
-    async getRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string | undefined ): Promise<any> {
-        return this.client.getRouteFromService(workspace, serviceIdOrName, routeIdOrName, proxyPath)
+    async getRoutesFromService(instanceName:string, serviceName: string): Promise<RoutesResponse[]> {
+        return this.client.getRoutesFromService(instanceName,serviceName)
     }
 
-    async createRouteFromService(workspace:string, serviceIdOrName: string, config: CreateRoute, proxyPath?: string | undefined ): Promise<any> {
-        return this.client.createRouteFromService(workspace, serviceIdOrName, config, proxyPath)
+    async getRouteFromService(instanceName:string, serviceName: string, routeId: string): Promise<any> {
+        return this.client.getRouteFromService(instanceName, serviceName, routeId);
     }
 
-    async editRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute, proxyPath?: string | undefined ): Promise<any> {
-        return this.client.editRouteFromService(workspace, serviceIdOrName, routeIdOrName, config, proxyPath)
+    async createRouteFromService(instanceName:string, serviceName: string, config: CreateRoute): Promise<any> {
+        return this.client.createRouteFromService(instanceName, serviceName, config)
     }
 
-    async removeRouteFromService(workspace:string, serviceIdOrName: string, routeIdOrName: string, proxyPath?: string | undefined ): Promise<any> {
-        return this.client.removeRouteFromService(workspace, serviceIdOrName, routeIdOrName, proxyPath)
+    async editRouteFromService(instanceName:string, serviceName: string, routeId: string, config: CreateRoute): Promise<any> {
+        return this.client.editRouteFromService(instanceName, serviceName, routeId, config)
     }
 
-    async getServiceInfo(workspace:string,serviceIdOrName: string, proxyPath?: string | undefined ): Promise<ServiceInfoResponse> {
-        return this.client.getServiceInfo(workspace,serviceIdOrName, proxyPath)
-    }
-
-    async getAllEnabledPlugins(workspace:string,serviceIdOrName: string, proxyPath?: string | undefined , searchFilter?: string): Promise<PluginPerCategory[]> {
-        return this.client.getAllEnabledPlugins(workspace,serviceIdOrName, proxyPath, searchFilter)
+    async removeRouteFromService(instanceName:string, serviceName: string, routeId: string): Promise<any> {
+        return this.client.removeRouteFromService(instanceName, serviceName, routeId)
     }
 }
