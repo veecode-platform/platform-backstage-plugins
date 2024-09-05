@@ -7,8 +7,7 @@ export class ServiceController extends KongController implements IServiceControl
   
   getServiceInfo = async (req: Request, res: Response) => {
     
-    const { serviceName } = req.params;
-    const { instanceName } = req.body;
+    const { serviceName, instanceName } = req.params;
 
     try{ /** check response */
       const data = await this.kongServiceManagerApi

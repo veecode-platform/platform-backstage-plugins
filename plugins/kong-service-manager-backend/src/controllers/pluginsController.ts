@@ -7,8 +7,7 @@ export class PluginsController extends KongController implements IPluginsControl
   
   getEnabledPlugins = async (req: Request, res: Response) => {
     
-    const { serviceName } = req.params;
-    const { instanceName } = req.body;
+    const { instanceName, serviceName } = req.params;
     const  search  = req.query.search as string;
 
     try {
@@ -34,7 +33,7 @@ export class PluginsController extends KongController implements IPluginsControl
 
   getPluginFields = async (req: Request, res: Response) => {
 
-    const { instanceName, pluginName } = req.body;
+    const { instanceName, pluginName } = req.params;
 
     try {
       const pluginFields = await this.kongServiceManagerApi
@@ -60,8 +59,7 @@ export class PluginsController extends KongController implements IPluginsControl
 
   getAssociatedPlugins = async (req: Request, res: Response) => {
 
-    const { serviceName } = req.params;
-    const { instanceName } = req.body;
+    const { instanceName, serviceName } = req.params;
 
     try {
       const associatedPlugins =
@@ -88,8 +86,8 @@ export class PluginsController extends KongController implements IPluginsControl
 
   addPluginToService = async (req: Request, res: Response) => {
 
-    const { serviceName } = req.params;
-    const { instanceName, configs } = req.body;
+    const { instanceName,serviceName } = req.params;
+    const { configs } = req.body;
     
     try {
       /** CHECK */
@@ -115,8 +113,8 @@ export class PluginsController extends KongController implements IPluginsControl
 
   editServicePlugin = async (req: Request, res: Response) => {
 
-    const { serviceName } = req.params;
-    const { instanceName, pluginId, configs } = req.body;
+    const { instanceName, serviceName, pluginId } = req.params;
+    const { configs } = req.body;
 
     try {
       /** Check response */
@@ -143,8 +141,7 @@ export class PluginsController extends KongController implements IPluginsControl
 
   removeServicePlugin = async (req: Request, res: Response) => {
 
-    const { serviceName } = req.params;
-    const { instanceName, pluginId } = req.body;
+    const { instanceName, serviceName,pluginId } = req.params;
 
     try {
       const response = await this.kongServiceManagerApi
