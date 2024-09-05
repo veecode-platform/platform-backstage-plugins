@@ -14146,6 +14146,7 @@ __metadata:
     "@backstage/plugin-auth-node": ^0.4.16
     "@backstage/plugin-catalog-common": ^1.0.24
     "@backstage/plugin-catalog-node": ^1.12.4
+    "@backstage/plugin-permission-common": ^0.8.1
     "@backstage/plugin-permission-node": ^0.8.2
     "@backstage/types": ^1.1.1
     "@sniptt/monads": ^0.5.10
