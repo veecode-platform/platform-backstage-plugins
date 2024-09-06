@@ -7,15 +7,12 @@ export class PluginsController extends KongController implements IPluginsControl
   
   getEnabledPlugins = async (req: Request, res: Response) => {
     
-    const { instanceName, serviceName } = req.params;
-    const  search  = req.query.search as string;
+    const { instanceName } = req.params;
 
     try {
       const pluginList = await this.kongServiceManagerApi
       .getEnabledPlugins(
-        instanceName,
-        serviceName,
-        search
+        instanceName
       );
 
       res.status(200).json({
@@ -72,6 +69,7 @@ export class PluginsController extends KongController implements IPluginsControl
       res.status(200).json({
         plugins: associatedPlugins,
       });
+      
     } catch (err: any) {
       if (err.errors) {
         throw new InputError(
@@ -87,18 +85,18 @@ export class PluginsController extends KongController implements IPluginsControl
   addPluginToService = async (req: Request, res: Response) => {
 
     const { instanceName,serviceName } = req.params;
-    const { configs } = req.body;
+    const { config } = req.body;
     
     try {
-      /** CHECK */
       const response = await this.kongServiceManagerApi
       .createServicePlugin(
         instanceName,
         serviceName,
-        configs,
+        config,
       );
 
       res.status(201).json(response);
+
     } catch (err: any) {
       if (err.errors) {
         throw new InputError(
@@ -114,19 +112,19 @@ export class PluginsController extends KongController implements IPluginsControl
   editServicePlugin = async (req: Request, res: Response) => {
 
     const { instanceName, serviceName, pluginId } = req.params;
-    const { configs } = req.body;
+    const { config } = req.body;
 
     try {
-      /** Check response */
       const response = await this.kongServiceManagerApi
       .editServicePlugin(
         instanceName,
         serviceName,
         pluginId,
-        configs,
+        config,
       );
 
       res.status(200).send(response);
+
     } catch (err: any) {
       if (err.errors) {
         throw new InputError(
@@ -150,10 +148,8 @@ export class PluginsController extends KongController implements IPluginsControl
         serviceName,
         pluginId,
       );
+        res.status(204).json(response);
 
-      res.status(200).json({
-        message: response,
-      });
     } catch (err: any) {
       if (err.errors) {
         throw new InputError(

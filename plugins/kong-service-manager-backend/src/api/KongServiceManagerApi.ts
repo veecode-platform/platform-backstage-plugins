@@ -6,7 +6,6 @@ import {
     CreatePlugin, 
     CreateRoute, 
     PluginFieldsResponse, 
-    PluginPerCategory, 
     RouteResponse, 
     RoutesResponse, 
     SchemaFields, 
@@ -14,7 +13,6 @@ import {
 } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { getPluginFieldType } from "../utils/helpers/getPluginFieldType";
 import { KongConfig } from "../lib";
-import { PluginsInfoData } from "../data/data";
 import { IKongConfigOptions } from "../lib/types";
 
 abstract class Client {
@@ -44,7 +42,7 @@ abstract class Client {
         if (!resp.ok) {
             throw new Error(`[${resp.type}] Request for [${host}${input}] failed with ${resp.status} - ${resp.statusText}`);
         }
-
+        if (resp.status === 204) return { message: "deleted" } as any
         return await resp.json();
     }
 
@@ -54,44 +52,17 @@ abstract class Client {
 }
 
 export class KongServiceManagerApiClient extends Client implements KongServiceManagerApi {
-    
-    async getEnabledPlugins(instanceName:string,serviceIdOrName: string, searchFilter?:string): Promise<PluginPerCategory[]> {
-   
-        const response = await this.fetch("/",instanceName);     
-        const availablePluginsResponse = Object.keys(response.plugins.available_on_server);
-        let availablePluginsList = availablePluginsResponse;
+  
+    async getServiceInfo(instanceName:string,serviceIdOrName: string): Promise<ServiceInfoResponse> {
+        const { workspace } = this.getKongConfig(instanceName);
+        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}`, instanceName)
+        return response
+    }
 
-        if (searchFilter !== "" && searchFilter) {
-            availablePluginsList = availablePluginsResponse.filter(plugin =>
-              plugin.toLowerCase().includes(searchFilter.toLowerCase())
-            );
-          }
-          
-        const associatedPluginsList = await this.getServiceAssociatedPlugins(instanceName,serviceIdOrName)
-
-        const mapedEnabledPluginsList = PluginsInfoData.categories.map((category) => {
-
-            return {
-                category: category.category,
-                plugins: category.plugins.flatMap((categoryPlugin) => {
-                    const filteredPluginMatch = availablePluginsList.find((availablePlugin) => availablePlugin === categoryPlugin.slug)
-                    if (!filteredPluginMatch) return []
-    
-                    const filteredAssocietedPluginMatch = associatedPluginsList.find((associatedPlugin) => associatedPlugin.name === categoryPlugin.slug)
-                    return {
-                        id: filteredAssocietedPluginMatch?.id ?? null,
-                        name: categoryPlugin.name,
-                        slug: categoryPlugin.slug,
-                        associated: filteredAssocietedPluginMatch?.enabled ?? false,
-                        image: categoryPlugin.image,
-                        tags: categoryPlugin.tags,
-                        description: categoryPlugin.description
-                    }
-                })
-            }
-        })
-        return mapedEnabledPluginsList
-
+    async getEnabledPlugins(instanceName:string): Promise<string[]> {
+        const response = await this.fetch("/",instanceName);    
+        // const availablePluginsResponse = Object.keys(response.plugins.available_on_server);
+        return Object.keys(response.plugins.available_on_server);
     }
 
     async getPluginSchema(instanceName:string,workspace:string,pluginName: string): Promise<any> {
@@ -183,7 +154,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
 
         const { workspace } = this.getKongConfig(instanceName);
         const body = {
-            ...config,
+            config,
             tags: ["devportal", "plugin-kong-service-manager"],
             protocols: ["https", "http"],
             enabled: true
@@ -204,7 +175,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
             method: "DELETE",
         }
         const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/plugins/${pluginId}`, instanceName, headers)
-        return response.message
+        return response.message;
     }
 
     async getRoutesFromService(instanceName:string, serviceIdOrName: string): Promise<RoutesResponse[]> {
@@ -254,7 +225,9 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
     async createRouteFromService(instanceName:string, serviceIdOrName: string, config: CreateRoute): Promise<any> {
 
         const { workspace } = this.getKongConfig(instanceName);
-        const body = { ...config }
+        const body = { 
+            ...config 
+        };
         const headers: RequestInit = {
             method: "POST",
             body: JSON.stringify(body)
@@ -284,11 +257,4 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, instanceName, headers)
         return response.message
     }
-
-    async getServiceInfo(instanceName:string,serviceIdOrName: string): Promise<ServiceInfoResponse> {
-        const { workspace } = this.getKongConfig(instanceName);
-        const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}`, instanceName)
-        return response
-    }
-
 }
