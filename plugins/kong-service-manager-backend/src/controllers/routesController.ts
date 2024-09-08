@@ -66,7 +66,7 @@ export class RoutesController  extends KongController implements IRoutesControll
   createRoute = async(req:Request, res: Response) => {
 
     const { instanceName, serviceName } = req.params;
-    const { config } = req.body; 
+    const { config }  = req.body; 
 
     try{
       const routeCreated = await this.kongServiceManagerApi
