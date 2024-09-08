@@ -1,4 +1,4 @@
-import { RoutesResponse } from "../../../utils/types";
+import { RoutesResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export interface TableComponentProps {
     isLoading: boolean;

@@ -8,8 +8,8 @@ import dayjs from 'dayjs';
 import { SkeletonComponent } from './SkeletonComponent';
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
 import { useKongServiceManagerContext } from '../../context';
-import { ServiceInfoResponse } from '../../utils/types';
 import { useAboutStyles } from './styles';
+import { ServiceInfoResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 
 export const AboutPage = () => {

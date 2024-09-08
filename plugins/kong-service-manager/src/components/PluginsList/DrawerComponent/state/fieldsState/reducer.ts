@@ -1,4 +1,4 @@
-import { PluginFieldsResponse } from "../../../../../utils/types";
+import { PluginFieldsResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { FieldsActionType } from "./actions";
 
 export const initialFieldsState : PluginFieldsResponse[] = [];

@@ -1,7 +1,7 @@
 import { ConfigApi } from "@backstage/core-plugin-api";
 import { KongServiceManagerApi, Options } from "./KongServiceManagerApi";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, PluginPerCategory, RouteResponse, RoutesResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
-// import { PluginsInfoData } from "../data/data";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { PluginsInfoData } from "../data/data";
 
  abstract class Client {
     protected config: ConfigApi;
@@ -19,6 +19,7 @@ import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsRespo
         if (!resp.ok) {
             throw new Error(`[${resp.type}] Request failed with ${resp.status} - ${resp.statusText}`);
         }
+        if (resp.status === 204) return { message: "deleted" } as any
 
         return await resp.json();
     }
@@ -32,48 +33,44 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         return response.service
     }
 
-    async getEnabledPlugins(instanceName:string, serviceName: string, searchFilter:string = ''): Promise<PluginPerCategory[]> {
-        const response = await this.fetch(`/${instanceName}/services/${serviceName}/plugins?search=${searchFilter}`)
-        return response.plugins
-    }
+    async getEnabledPlugins(instanceName:string,serviceName: string, searchFilter?:string): Promise<PluginPerCategory[]> {
+        const response = await this.fetch(`/${instanceName}/plugins`);   
 
-    // async getAllEnabledPlugins(workspace:string,serviceIdOrName: string, proxyPath?: string, searchFilter?:string): Promise<PluginPerCategory[]> {
-    //     const response = await this.fetch("/", proxyPath);     
-    //     const availablePluginsResponse = Object.keys(response.plugins.available_on_server);
-    //     let availablePluginsList = availablePluginsResponse;
+        const availablePluginsResponse = response.plugins as string[];
+        let availablePluginsList = availablePluginsResponse;
 
-    //     if (searchFilter !== "" && searchFilter) {
-    //         availablePluginsList = availablePluginsResponse.filter(plugin =>
-    //           plugin.toLowerCase().includes(searchFilter.toLowerCase())
-    //         );
-    //       }
+        if (searchFilter !== "" && searchFilter) {
+            availablePluginsList = availablePluginsResponse.filter(plugin =>
+              plugin.toLowerCase().includes(searchFilter.toLowerCase())
+            );
+          }
           
-    //     const associatedPluginsList = await this.getServiceAssociatedPlugins(workspace,serviceIdOrName, proxyPath)
+        const associatedPluginsList = await this.getServiceAssociatedPlugins(instanceName,serviceName)
 
-    //     const mapedEnabledPluginsList = PluginsInfoData.categories.map((category) => {
+        const mapedEnabledPluginsList = PluginsInfoData.categories.map((category) => {
 
-    //         return {
-    //             category: category.category,
-    //             plugins: category.plugins.flatMap((categoryPlugin) => {
-    //                 const filteredPluginMatch = availablePluginsList.find((availablePlugin) => availablePlugin === categoryPlugin.slug)
-    //                 if (!filteredPluginMatch) return []
+            return {
+                category: category.category,
+                plugins: category.plugins.flatMap((categoryPlugin) => {
+                    const filteredPluginMatch = availablePluginsList.find((availablePlugin) => availablePlugin === categoryPlugin.slug)
+                    if (!filteredPluginMatch) return []
     
-    //                 const filteredAssocietedPluginMatch = associatedPluginsList.find((associatedPlugin) => associatedPlugin.name === categoryPlugin.slug)
-    //                 return {
-    //                     id: filteredAssocietedPluginMatch?.id ?? null,
-    //                     name: categoryPlugin.name,
-    //                     slug: categoryPlugin.slug,
-    //                     associated: filteredAssocietedPluginMatch?.enabled ?? false,
-    //                     image: categoryPlugin.image,
-    //                     tags: categoryPlugin.tags,
-    //                     description: categoryPlugin.description
-    //                 }
-    //             })
-    //         }
-    //     })
-    //     return mapedEnabledPluginsList
+                    const filteredAssocietedPluginMatch = associatedPluginsList.find((associatedPlugin) => associatedPlugin.name === categoryPlugin.slug)
+                    return {
+                        id: filteredAssocietedPluginMatch?.id ?? null,
+                        name: categoryPlugin.name,
+                        slug: categoryPlugin.slug,
+                        associated: filteredAssocietedPluginMatch?.enabled ?? false,
+                        image: categoryPlugin.image,
+                        tags: categoryPlugin.tags,
+                        description: categoryPlugin.description
+                    }
+                })
+            }
+        })
+        return mapedEnabledPluginsList
 
-    // }
+    }
 
 
     async getPluginFields(instanceName:string, pluginName:string): Promise<PluginFieldsResponse[]> {
@@ -88,11 +85,14 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
 
     async createServicePlugin(instanceName:string, serviceName:string, config: CreatePlugin): Promise<any> {
         const body = {
-            configs: config
+            config
         }
         const headers: RequestInit = {
-            method: "POST",
-            body: JSON.stringify(body)
+         method: "POST",
+         body: JSON.stringify(body),
+         headers: {
+            'Content-Type': 'application/json', 
+          }
         }
         const response = await this.fetch(`/${instanceName}/services/${serviceName}/plugins`,headers)
         return response
@@ -100,11 +100,14 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
 
     async editServicePlugin(instanceName:string,serviceName: string, pluginId: string, config: CreatePlugin): Promise<any> {
         const body = {
-            configs: config
+            ...config
         }
         const headers: RequestInit = {
-            method: "PATCH",
-            body: JSON.stringify(body)
+         method: "PATCH",
+         body: JSON.stringify(body),
+         headers: {
+             'Content-Type': 'application/json', 
+         }
         }
         const response = await this.fetch(`/${instanceName}/services/${serviceName}/plugins/${pluginId}`, headers)
         return response
@@ -120,7 +123,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         return response.message
     }
 
-    async getRoutesFromService(instanceName:string, serviceName: string): Promise<RoutesResponse[]> {  
+    async getRoutesFromService(instanceName:string, serviceName: string): Promise<RouteResponse[]> {  
         const response = await this.fetch(`/${instanceName}/services/${serviceName}/routes`)
         return response.routes
     }
@@ -132,11 +135,14 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
 
     async createRouteFromService(instanceName:string, serviceName: string, config: CreateRoute): Promise<any> {
         const body = {
-            ...config,
+            config,
          }
         const headers: RequestInit = {
-            method: "POST",
-            body: JSON.stringify(body)
+         method: "POST",
+         body: JSON.stringify(body),
+         headers: {
+             'Content-Type': 'application/json', 
+         }
         }
         const response = await this.fetch(`/${instanceName}/services/${serviceName}/routes`,headers)
         return response.route
@@ -144,11 +150,14 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
 
     async editRouteFromService(instanceName:string, serviceName: string, routeId: string, config: CreateRoute): Promise<any> {
         const body = { 
-            ...config,
+            config,
          }
         const headers: RequestInit = {
             method: "PATCH",
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json', 
+            }
         }
         const response = await this.fetch(`/${instanceName}/services/${serviceName}/routes/${routeId}`,headers)
         return response

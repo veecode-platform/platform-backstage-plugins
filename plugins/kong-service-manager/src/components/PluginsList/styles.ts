@@ -5,9 +5,10 @@ export const usePluginListStyles = makeStyles(theme=>({
        paddingTop: theme.spacing(4),
     },
     emptyContent:{
+     minWidth: '100%',
+     minHeight: '60vh',
      display: 'flex',
      alignItems: 'center',
      justifyContent: 'center',
-     minHeight: '60vh'
     }
  }));

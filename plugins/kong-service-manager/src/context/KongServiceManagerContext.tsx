@@ -1,5 +1,6 @@
 import { createContext } from "react";
-import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard, PluginFieldsResponse, RoutesResponse, ServiceInfoResponse, CreateRoute, RouteResponse } from "../utils/types";
+import {  PluginCard } from "../utils/types";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 
 export type KongServiceManagerContextType = {
@@ -7,7 +8,7 @@ export type KongServiceManagerContextType = {
     setInstanceState: (instanceState: string) => void;
     listAllEnabledPlugins: () => Promise<PluginPerCategory[] | null>;
     getServiceDetails: () => Promise<ServiceInfoResponse | null>;
-    getRoutesList: () => Promise<RoutesResponse[] | null>;
+    getRoutesList: () => Promise<RouteResponse[] | null>;
     listAssociatedPlugins: () => Promise<void>;
     allAssociatedPlugins: AssociatedPluginsResponse[] | null;
     associatedPluginsName: [] | string[];

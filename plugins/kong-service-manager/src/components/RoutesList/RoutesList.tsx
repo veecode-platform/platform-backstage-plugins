@@ -1,4 +1,3 @@
-/* eslint-disable @backstage/no-undeclared-imports */
 import React from 'react'
 import { BoxComponent, EmptyStateComponent } from '../shared'
 import { Box, Button } from '@material-ui/core';
@@ -6,9 +5,9 @@ import useAsync from 'react-use/lib/useAsync';
 import { TableComponent } from './TableComponent';
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
 import { useKongServiceManagerContext } from '../../context';
-import { RoutesResponse } from '../../utils/types';
 import { useRoutesListStyles } from './styles';
 import { ModalComponent } from './ModalComponent/ModalComponent';
+import { RouteResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 export const RoutesList = () => {
   const [showModal, setShowModal] = React.useState<boolean>(false);
@@ -18,15 +17,15 @@ export const RoutesList = () => {
   const { getRoutesList } = useKongServiceManagerContext();
   const { content } = useRoutesListStyles();
 
-  const fetchRoutes = async (): Promise<RoutesResponse[] | null> => {
-    const data = await getRoutesList();
+  const fetchRoutes = async (): Promise<RouteResponse[]> => {
+    const data = await getRoutesList() as RouteResponse[];
     return data;
   }
 
   const { loading, error, value: allRoutes } = useAsync(fetchRoutes, [refresh]);
 
-  const handleToggleModal = (route: any) => {
-    setRoute(route);
+  const handleToggleModal = (routeValue: RouteResponse | {}) => {
+    setRoute(routeValue);
     setShowModal(!showModal);
   }
 

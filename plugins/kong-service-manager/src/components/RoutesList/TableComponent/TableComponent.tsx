@@ -1,10 +1,7 @@
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import {
-  Table,
-  TableColumn} from '@backstage/core-components';
-import { RoutesResponse } from '../../../utils/types';
+import { Table,TableColumn} from '@backstage/core-components';
 import { Box, Fade, IconButton } from '@material-ui/core';
 import { HtmlTooltip } from '../../shared';
 import MoreIcon from '@material-ui/icons/More';
@@ -14,9 +11,7 @@ import { useKongServiceManagerContext } from '../../../context';
 import { ConfirmDeleteDialog } from '../ConfirmDeleteDialog/ConfirmDeleteDialog';
 import { TableComponentProps, TableData } from './types';
 import { useTableComponentStyle } from './styles';
-
-
-
+import { RoutesResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 
 export const TableComponent : React.FC<TableComponentProps> = (props) => {

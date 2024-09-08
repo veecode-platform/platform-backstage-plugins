@@ -2,9 +2,10 @@ import React from "react";
 import { alertApiRef, errorApiRef, useApi } from "@backstage/core-plugin-api";
 import { kongServiceManagerApiRef } from "../api";
 import { KongServiceManagerContext } from "./KongServiceManagerContext";
-import { AssociatedPluginsResponse, CreatePlugin, PluginPerCategory, PluginCard, CreateRoute } from "../utils/types";
+import { PluginCard } from "../utils/types";
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from "../hooks";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginPerCategory } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 interface KongServiceManagerProviderProps {
     children : React.ReactNode

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Box, Button, Checkbox, CircularProgress, Drawer, FormControl, FormControlLabel, IconButton, TextField, Typography } from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
-import { PluginFieldsResponse } from '../../../utils/types';
 import { EmptyStateComponent } from '../../shared';
 import { Progress } from '@backstage/core-components';
 import { useDrawerStyles } from './styles';
 import { IncrementalFields, RecordFields } from './FieldsCustom';
 import { useKongServiceManagerContext } from '../../../context';
 import { addFields, FieldsReducer, initialFieldsState } from './state';
+import { PluginFieldsResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 
 

@@ -1,4 +1,4 @@
-import { PluginFieldsResponse } from "../../../../../utils/types";
+import { PluginFieldsResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export const addFields = (fields:PluginFieldsResponse[])=>({
     type: 'ADD_FIELDS',

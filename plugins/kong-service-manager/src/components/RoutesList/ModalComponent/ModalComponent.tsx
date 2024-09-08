@@ -7,13 +7,13 @@ import { ModalComponentProps, InputChangeEvent, ItemsChangeEvent, SetState } fro
 import { MdClose, MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
 import StringInputList from '../StringInputList/StringInputList';
 import { useKongServiceManagerContext } from '../../../context';
-import { CreateRoute } from "../../../utils/types";
 import { convertToHeadersObject } from "../../../utils/helpers/convertoToHeadersObject";
 import { RedirectStatusCode } from "../../../utils/enums/KongRouteRedirectStatusCode";
 import { Protocols, ProtocolDescriptions } from '../../../utils/enums/KongRouteProtocols';
 import DynamicFields from "./DynamicFields";
 import { convertToArrayOfObjects, convertToObjArray } from "../../../utils/helpers/convertToArrayOfObjects";
 import { prepareDestinations, prepareSources } from "../../../utils/helpers/preparePayload";
+import { CreateRoute } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
 
