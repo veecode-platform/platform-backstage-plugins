@@ -86,7 +86,7 @@ export class PluginsController extends KongController implements IPluginsControl
 
     const { instanceName,serviceName } = req.params;
     const  { config }   = req.body;
-    
+
     try {
       const response = await this.kongServiceManagerApi
       .createServicePlugin(

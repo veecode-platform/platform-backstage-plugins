@@ -134,7 +134,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
 
         const { workspace } = this.getKongConfig(instanceName);
         const body = {
-            config
+            ...config
         }
         const headers: RequestInit = {
             method: "POST",
