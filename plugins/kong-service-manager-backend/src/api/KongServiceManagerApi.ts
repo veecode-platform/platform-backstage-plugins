@@ -7,7 +7,6 @@ import {
     CreateRoute, 
     PluginFieldsResponse, 
     RouteResponse, 
-    RoutesResponse, 
     SchemaFields, 
     ServiceInfoResponse 
 } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
@@ -135,12 +134,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
 
         const { workspace } = this.getKongConfig(instanceName);
         const body = {
-            ...config,
-            tags: ["devportal", "plugin-kong-service-manager"],
-            protocols: ["https", "http"],
-            service: null,
-            consumer: null,
-            enabled: true
+            config
         }
         const headers: RequestInit = {
             method: "POST",
@@ -178,22 +172,22 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         return response.message;
     }
 
-    async getRoutesFromService(instanceName:string, serviceIdOrName: string): Promise<RoutesResponse[]> {
+    async getRoutesFromService(instanceName:string, serviceIdOrName: string): Promise<RouteResponse[]> {
 
         const { workspace } = this.getKongConfig(instanceName);
         const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes`, instanceName)
-        const mapedRoutesResponse: RoutesResponse[] = response.data.map((route: { name: any; protocols: any; methods: any; tags: any; hosts: any; paths: any; }) => {
-            return {
-                name: route.name,
-                protocols: route.protocols,
-                methods: route.methods,
-                tags: route.tags,
-                hosts: route.hosts,
-                paths: route.paths
-            }
-        })
+        // const mapedRoutesResponse: RoutesResponse[] = response.data.map((route:RouteResponse) => {
+        //     return {
+        //         name: route.name,
+        //         protocols: route.protocols,
+        //         methods: route.methods,
+        //         tags: route.tags,
+        //         hosts: route.hosts,
+        //         paths: route.paths
+        //     }
+        // })
 
-        return mapedRoutesResponse
+        return response.data;
     }
 
     async getRouteFromService(instanceName:string, serviceIdOrName: string, routeIdOrName: string): Promise<RouteResponse> {
@@ -239,7 +233,9 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
     async editRouteFromService(instanceName:string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute): Promise<any> {
 
         const { workspace } = this.getKongConfig(instanceName);
-        const body = { ...config }
+        const body = { 
+            ...config 
+        }
         const headers: RequestInit = {
             method: "PATCH",
             body: JSON.stringify(body)

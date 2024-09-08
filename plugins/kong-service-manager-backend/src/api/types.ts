@@ -1,4 +1,4 @@
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, RouteResponse, RoutesResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export interface KongServiceManagerApi {
     getServiceInfo(instanceName: string, serviceIdOrName: string): Promise<ServiceInfoResponse>;
@@ -9,7 +9,7 @@ export interface KongServiceManagerApi {
     createServicePlugin(instanceName: string, serviceIdOrName: string, config: CreatePlugin): Promise<any>;
     editServicePlugin(instanceName: string, serviceIdOrName: string, pluginId: string, config: CreatePlugin): Promise<any>;
     removeServicePlugin(instanceName: string, serviceIdOrName: string, pluginId: string): Promise<any>;
-    getRoutesFromService(instanceName: string,serviceIdOrName: string): Promise<RoutesResponse[]>;
+    getRoutesFromService(instanceName: string,serviceIdOrName: string): Promise<RouteResponse[]>;
     getRouteFromService(instanceName: string, serviceName: string, routeNameOrId: string): Promise<RouteResponse>;
     createRouteFromService(instanceName: string, serviceIdOrName: string, config: CreateRoute): Promise<any>;
     editRouteFromService(instanceName: string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute): Promise<any>;
