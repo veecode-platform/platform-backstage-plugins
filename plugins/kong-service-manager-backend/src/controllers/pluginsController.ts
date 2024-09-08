@@ -85,7 +85,7 @@ export class PluginsController extends KongController implements IPluginsControl
   addPluginToService = async (req: Request, res: Response) => {
 
     const { instanceName,serviceName } = req.params;
-    const { config } = req.body;
+    const  { config }   = req.body;
     
     try {
       const response = await this.kongServiceManagerApi

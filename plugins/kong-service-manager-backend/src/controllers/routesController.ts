@@ -66,8 +66,7 @@ export class RoutesController  extends KongController implements IRoutesControll
   createRoute = async(req:Request, res: Response) => {
 
     const { instanceName, serviceName } = req.params;
-   // const { config } = req.body;  // if you don't need to send it as “config:{...}”
-    const  config  = req.body; 
+    const { config } = req.body; 
 
     try{
       const routeCreated = await this.kongServiceManagerApi
@@ -96,9 +95,9 @@ export class RoutesController  extends KongController implements IRoutesControll
   editRoute = async (req: Request,res: Response) => {
 
     const { instanceName,serviceName, routeId } = req.params;
-    const { config } = req.body;
+    const  { config }  = req.body;
 
-    try{  // check the response
+    try{ 
       const routeUpdated = await this.kongServiceManagerApi
       .editRouteFromService(
         instanceName,
@@ -127,7 +126,7 @@ export class RoutesController  extends KongController implements IRoutesControll
 
     const { instanceName, serviceName,routeId } = req.params;
    
-    try{ /** check response */
+    try{
       const response = await this.kongServiceManagerApi
       .removeRouteFromService(
         instanceName,
