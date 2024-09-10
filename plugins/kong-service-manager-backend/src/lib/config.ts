@@ -1,12 +1,20 @@
 import { Config } from '@backstage/config';
+import { LoggerService } from "@backstage/backend-plugin-api";
 import { IKongConfig, IKongConfigOptions } from './types';
 
 export class KongConfig implements IKongConfig {
   
-  constructor(private config: Config){}
+  constructor(
+    private config: Config,
+    private logger: LoggerService
+  ){}
   
   getConfig() : IKongConfigOptions[] {
-    return this.config.getConfig('kong').get('instances') as IKongConfigOptions[];
+    const kongConfig = this.config.getConfig('kong');
+    if(!kongConfig){
+      this.logger.error(`No configuration found for kong`)
+    }
+    return kongConfig.get('instances') as IKongConfigOptions[];
   };
 
   getInstance(instanceId: string): IKongConfigOptions {

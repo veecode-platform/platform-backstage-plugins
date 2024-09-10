@@ -11,7 +11,23 @@ export interface IKongConfig{
  */
 export interface IKongConfigOptions {
     id: string,
-    host: string,
+    apiBaseUrl: string,
     workspace: string,
-    token: string
+    auth: IKongAuth
   }
+
+/**
+ *  @public
+ */
+export interface IKongAuth{
+  kongAdmin?:string,
+  custom?: Required<Custom>
+}
+
+/**
+ *  @public
+ */
+export type Custom = {
+  header: string,
+  value: string
+}

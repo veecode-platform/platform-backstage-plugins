@@ -1,4 +1,5 @@
 import { Config } from "@backstage/config";
+import { LoggerService } from "@backstage/backend-plugin-api";
 import { KongServiceManagerApi } from "./types";
 import { KongServiceManagerOptions } from "../utils/types";
 import { 
@@ -12,34 +13,39 @@ import {
 } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { getPluginFieldType } from "../utils/helpers/getPluginFieldType";
 import { KongConfig } from "../lib";
-import { IKongConfigOptions } from "../lib/types";
+import { IKongAuth, IKongConfigOptions } from "../lib/types";
 
 abstract class Client {
     protected config: Config;
+    protected logger: LoggerService
     protected instanceConfig : KongConfig;
 
     constructor(opts: KongServiceManagerOptions) {
         this.config = opts.config;
-        this.instanceConfig = new KongConfig(this.config);
+        this.logger = opts.logger;
+        this.instanceConfig = new KongConfig(this.config, this.logger);
     }
 
     protected async fetch <T = any>(input: string,instanceName:string, init?: RequestInit): Promise<T> {
 
-        const {host, token} = this.getKongConfig(instanceName);
-        const defaultHeaders: RequestInit = {
+        const { apiBaseUrl, auth } = this.getKongConfig(instanceName);
+        const { kongAdmin, custom } = auth as IKongAuth;
+        const credentials = kongAdmin ? {'Kong-Admin-Token' : kongAdmin} : {[`${custom!.header}`] : custom!.value};
+
+        const defaultHeaders = {
             headers: {
-                Authorization: `Basic ${token}`,
+                ...credentials,
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
             ...init
-        };
+        } as RequestInit;
 
 
-        const resp = await fetch(`${host}${input}`, defaultHeaders);
+        const resp = await fetch(`${apiBaseUrl}${input}`, defaultHeaders);
 
         if (!resp.ok) {
-            throw new Error(`[${resp.type}] Request for [${host}${input}] failed with ${resp.status} - ${resp.statusText}`);
+            throw new Error(`[${resp.type}] Request for [${apiBaseUrl}${input}] failed with ${resp.status} - ${resp.statusText}`);
         }
         if (resp.status === 204) return { message: "deleted" } as any
         return await resp.json();
@@ -60,8 +66,8 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
 
     async getEnabledPlugins(instanceName:string): Promise<string[]> {
         const response = await this.fetch("/",instanceName);    
-        // const availablePluginsResponse = Object.keys(response.plugins.available_on_server);
-        return Object.keys(response.plugins.available_on_server);
+        const availablePluginsResponse = Object.keys(response.plugins.available_on_server);
+        return availablePluginsResponse;
     }
 
     async getPluginSchema(instanceName:string,workspace:string,pluginName: string): Promise<any> {
