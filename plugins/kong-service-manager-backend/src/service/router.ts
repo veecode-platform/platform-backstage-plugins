@@ -40,9 +40,7 @@ export async function createRouter(
   router.get('/:instanceName/plugins', pluginsController.getEnabledPlugins as RequestHandler); 
   router.get('/:instanceName/services/plugins/:pluginName/fields', pluginsController.getPluginFields as RequestHandler); 
   router.get('/:instanceName/services/:serviceName/plugins/associated', pluginsController.getAssociatedPlugins as RequestHandler); 
-  
   router.post('/:instanceName/services/:serviceName/plugins', pluginsController.addPluginToService as RequestHandler); 
-  
   router.patch('/:instanceName/services/:serviceName/plugins/:pluginId', pluginsController.editServicePlugin as RequestHandler);
   router.delete('/:instanceName/services/:serviceName/plugins/:pluginId', pluginsController.removeServicePlugin as RequestHandler); 
   router.get('/:instanceName/services/:serviceName/routes', routesController.getRoutes as RequestHandler);
