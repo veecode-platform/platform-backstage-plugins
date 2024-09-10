@@ -1,10 +1,16 @@
 export interface Config {
-    kong?: {
-        instances?: Array<{
-          id: string;
-          host: string;
-          workspace: string;
-          token?: string;
-          }>;
+  kong?: {
+      instances?: Array<{
+        id: string;
+        apiBaseUrl: string;
+        workspace: string;
+        auth:{
+          kongAdmin?: string,
+          custom?:{
+            header: string,
+            value: string
+          }
         }
+        }>;
+      }
 }
