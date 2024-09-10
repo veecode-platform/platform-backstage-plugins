@@ -62,10 +62,9 @@ import { ClusterInstructionsCard, ClusterOverviewPage, isClusterInstructionsAvai
 import { DatabaseOverview } from '@veecode-platform/plugin-database-explorer';
 import { RELATION_ENVIRONMENT_OF, RELATION_FROM_ENVIRONMENT } from '@veecode-platform/plugin-veecode-platform-common';
 // kong
-import { KongServiceManagerPage, isKongServiceManagerAvailable } from '@veecode-platform/plugin-kong-service-manager';
+import {  KongServiceManagerContent, isKongServiceManagerAvailable } from '@veecode-platform/plugin-kong-service-manager';
 import { KubernetesGptAnalyzerPage,KubernetesGptAnalyzerCard } from '@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer';
 import { InfracostOverviewPage, isInfracostAvailable } from '@veecode-platform/backstage-plugin-infracost';
-
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -215,7 +214,7 @@ const serviceEntityPage = (
     <EntityLayout.Route
       if={isKongServiceManagerAvailable}
       path="/kong-service-manager" title="Kong">
-      <KongServiceManagerPage/>
+      <KongServiceManagerContent/>
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/api" title="API">
@@ -265,7 +264,7 @@ const websiteEntityPage = (
     <EntityLayout.Route
       if={isKongServiceManagerAvailable}
       path="/kong-service-manager" title="Kong">
-      <KongServiceManagerPage/>
+      <KongServiceManagerContent/>
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/dependencies" title="Dependencies">
@@ -301,7 +300,7 @@ const defaultEntityPage = (
     <EntityLayout.Route
       if={isKongServiceManagerAvailable}
       path="/kong-service-manager" title="Kong">
-      <KongServiceManagerPage/>
+      <KongServiceManagerContent/>
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/docs" title="Docs">
