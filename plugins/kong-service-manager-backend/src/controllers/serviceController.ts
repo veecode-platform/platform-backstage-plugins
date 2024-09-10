@@ -9,7 +9,7 @@ export class ServiceController extends KongController implements IServiceControl
     
     const { serviceName, instanceName } = req.params;
 
-    try{ /** check response */
+    try{ 
       const data = await this.kongServiceManagerApi
       .getServiceInfo(
         instanceName, 
