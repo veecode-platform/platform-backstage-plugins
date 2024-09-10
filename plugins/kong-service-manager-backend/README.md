@@ -36,9 +36,13 @@ We start by configuring the kong in the file `app-config.yaml`, which is in the 
 kong:
   instances:
     - id: kong-instance01
-      host: ${ KONG_HOST ]
+      apiBaseUrl: ${ KONG_HOST ]
       workspace: ${ KONG_WORKSPACE }  # or "default"
-      token: ${ KONG_ACCESS_TOKEN }
+      auth:
+        kongAdmin: ${ KONG_ADMIN_TOKEN } # optional if the instance is enterprise
+        custom:  # optional if the kong is in community mode and depending on the authentication used
+          header: ${ KONG_HEADER }  # Ex: Authorization or key-auth
+          value: ${ KONG_AUTH } # Ex: Basic $your_token or how the token is added depending on the approach
    ```
 
 You also need to configure the `config.d.ts` file in the backend:
@@ -46,14 +50,20 @@ You also need to configure the `config.d.ts` file in the backend:
 
 ```ts
 export interface Config {
-    kong?: {
-        instances?: Array<{
-          id: string;
-          host: string;
-          workspace: string;
-          token?: string;
-          }>;
+  kong?: {
+      instances?: Array<{
+        id: string;
+        apiBaseUrl: string;
+        workspace: string;
+        auth:{
+          kongAdmin?: string,
+          custom?:{
+            header: string,
+            value: string
+          }
         }
+        }>;
+      }
 }
 ```
 
