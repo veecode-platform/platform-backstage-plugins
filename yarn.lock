@@ -14347,7 +14347,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-kong-service-manager-common@^0.2.17, @veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common":
+"@veecode-platform/backstage-plugin-kong-service-manager-common@^0.2.17, @veecode-platform/backstage-plugin-kong-service-manager-common@^0.2.18, @veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common"
   dependencies:
@@ -14568,7 +14568,7 @@ __metadata:
     "@backstage/plugin-permission-node": ^0.8.2
     "@types/express": "*"
     "@types/supertest": ^2.0.8
-    "@veecode-platform/backstage-plugin-kong-service-manager-common": ^0.2.17
+    "@veecode-platform/backstage-plugin-kong-service-manager-common": ^0.2.18
     express: ^4.17.1
     express-promise-router: ^4.1.0
     msw: ^2.3.1
