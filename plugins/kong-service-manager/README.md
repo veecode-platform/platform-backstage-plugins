@@ -44,11 +44,15 @@ In the `app-config.yaml` file, add the configuration:
 
 ```yaml
 kong:
-  instances:   // below this key, you can add as many instances as you need.
-    - id: kongInstance1 // Define a simple label, it will also be referenced in the catalog-info of the component that will use this resource.
-      host: ${KONG_HOST} 
-      workspace: ${KONG_WORKSPACE} // If you don't have a specific workspace, set it to “default”
-      token: ${KONG_ACCESS_TOKEN}
+  instances:
+    - id: kong-instance01
+      apiBaseUrl: ${ KONG_HOST ]
+      workspace: ${ KONG_WORKSPACE }  # or "default"
+      auth:
+        kongAdmin: ${ KONG_ADMIN_TOKEN } # optional if the instance is enterprise
+        custom:  # optional if the kong is in community mode and depending on the authentication used
+          header: ${ KONG_HEADER }  # Ex: Authorization or key-auth
+          value: ${ KONG_AUTH } # Ex: Basic $your_token or how the token is added depending on the approach
 ```
 
 **2- Annotations**
