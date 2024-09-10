@@ -8,6 +8,7 @@
 , "plugins/kong-service-manager/src/utils"  ],
   "exclude": ["node_modules"],
   "compilerOptions": {
+    "jsx": "react",
     "outDir": "dist-types",
     "rootDir": ".",
     "esModuleInterop": true,
