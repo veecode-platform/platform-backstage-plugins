@@ -64,7 +64,7 @@
     "@sniptt/monads": "^0.5.10",
     "@types/express": "*",
     "@veecode-platform/backstage-plugin-infracost-common": "^0.1.7",
-    "axios": "^1.7.2",
+    "axios": "^0.28.0",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
     "knex": "^3.1.0",
