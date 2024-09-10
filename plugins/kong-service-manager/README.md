@@ -89,7 +89,7 @@ To do this, we'll change the following file `packages > app > src > components >
 
 ```diff
 ... 
-+ import { KongServiceManagerPage, isKongServiceManagerAvailable } from '@veecode-platform/plugin-kong-service-manager';
++ import { KongServiceManagerContent, isKongServiceManagerAvailable } from '@veecode-platform/plugin-kong-service-manager';
 
 ...
 
@@ -106,7 +106,7 @@ const serviceEntityPage = (
 +    <EntityLayout.Route
 +      if={isKongServiceManagerAvailable}
 +      path="/kong-service-manager" title="Kong">
-+      <KongServiceManagerPage/>
++      <KongServiceManagerContent/>
 +    </EntityLayout.Route>
 
   </EntityLayout>
