@@ -41,6 +41,7 @@
     "@backstage/backend-common": "^0.23.3",
     "@backstage/backend-defaults": "^0.4.0",
     "@backstage/backend-plugin-api": "^0.7.0",
+    "@backstage/catalog-model": "^1.6.0",
     "@backstage/config": "^1.2.0",
     "@backstage/errors": "^1.2.4",
     "@backstage/plugin-permission-common": "^0.8.1",
