@@ -140,17 +140,17 @@ backend.start();
 
 | Method | Path                                        | Endpoint                                               |
 |--------|---------------------------------------------|--------------------------------------------------------|
-| Get    | /services/:serviceName                      | backendBaseUrl/api/kong/                               |
-| Get    | /services/:serviceName/plugins              | backendBaseUrl/api/kong/services/:serviceName/plugins  |
-| Get    | /services/plugins/fields                    | backendBaseUrl/api/kong/services/plugins/fields        |
-| Get    | /services/:serviceName/plugins/associated   | backendBaseUrl/api/kong/services/:serviceName/plugins/associated |
-| Post   | /services/:serviceName/plugins              | backendBaseUrl/api/kong/services/:serviceName/plugins  |
-| Patch  | /services/:serviceName/plugins              | backendBaseUrl/api/kong/services/:serviceName/plugins  |
-| Delete | /services/:serviceName/plugins              | backendBaseUrl/api/kong/services/:serviceName/plugins  |
-| Get    | /services/:serviceName/routes               | backendBaseUrl/api/kong/services/:serviceName/routes   |
-| Get    | /services/:serviceName/routes/:routeId      | backendBaseUrl/api/kong/services/:serviceName/routes/:routeId |
-| Post   | /services/:serviceName/routes/:routeId      | backendBaseUrl/api/kong/services/:serviceName/routes/:routeId |
-| Patch  | /services/:serviceName/routes/:routeId      | backendBaseUrl/api/kong/services/:serviceName/routes/:routeId |
-| Delete | /services/:serviceName/routes/:routeId      | backendBaseUrl/api/kong/services/:serviceName/routes/:routeId |
+| Get    | /:instanceName/services/:serviceName                      | backendBaseUrl/api/kong/:instance/services/:serviceName                               |
+| Get    | /:instanceName/plugins              | backendBaseUrl/api/kong/:instance/plugins  |
+| Get    | /:instanceName/services/plugins/fields                    | backendBaseUrl/api/kong/services/plugins/fields        |
+| Get    | /:instanceName/services/:serviceName/plugins/associated   | backendBaseUrl/api/kong/:instance/services/:serviceName/plugins/associated |
+| Post   | /:instanceName/services/:serviceName/plugins              | backendBaseUrl/api/kong/:instance/services/:serviceName/plugins  |
+| Patch  | /:instanceName/services/:serviceName/plugins/:pluginId              | backendBaseUrl/api/kong/:instance/services/:serviceName/plugins  |
+| Delete | /:instanceName/services/:serviceName/plugins/pluginId              | backendBaseUrl/api/kong/:instance/services/:serviceName/plugins  |
+| Get    | /:instanceName/services/:serviceName/routes               | backendBaseUrl/api/kong/:instance/services/:serviceName/routes   |
+| Get    | /:instanceName/services/:serviceName/routes/:routeId      | backendBaseUrl/api/kong/:instance/services/:serviceName/routes/:routeId |
+| Post   | /:instanceName/services/:serviceName/routes      | backendBaseUrl/api/kong/:instance/services/:serviceName/routes |  
+| Patch  | /:instanceName/services/:serviceName/routes/:routeId      | backendBaseUrl/api/kong/:instance/services/:serviceName/routes/:routeId |
+| Delete | /:instanceName/services/:serviceName/routes/:routeId      | backendBaseUrl/api/kong/:instanceservices/:serviceName/routes/:routeId |
 
 
