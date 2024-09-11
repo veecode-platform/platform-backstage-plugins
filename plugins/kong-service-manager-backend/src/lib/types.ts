@@ -2,8 +2,16 @@
 *  @public
 */
 export interface IKongConfig{
- getConfig: () => IKongConfigOptions[],
+ getConfig: () => FromConfig,
  getInstance: (instanceId:string) => IKongConfigOptions
+}
+
+/**
+ *  @public
+ */
+export interface FromConfig {
+  instances: IKongConfigOptions[],
+  backendBaseUrl: string
 }
 
 /**
