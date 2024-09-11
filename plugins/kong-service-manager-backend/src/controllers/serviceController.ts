@@ -5,8 +5,7 @@ import { InputError, stringifyError } from "@backstage/errors";
 
 export class ServiceController extends KongController implements IServiceController{
   
-  getServiceInfo = async (req: Request, res: Response) => {
-    
+  getServiceInfo = async (req: Request, res: Response) => {   
     const { serviceName, instanceName } = req.params;
 
     try{ 

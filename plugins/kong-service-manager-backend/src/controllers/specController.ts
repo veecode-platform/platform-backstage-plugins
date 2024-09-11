@@ -7,8 +7,7 @@ export class SpecController extends KongController implements ISpecController{
 
     getSpecsByEntity= async (req:Request, res:Response) => {
         const { kind, name } = req.params;
-        try{
-        
+        try{    
           const specs = await this.kongServiceManagerApi
           .getSpecsByEntity(
             kind,

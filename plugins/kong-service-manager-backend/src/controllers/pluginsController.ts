@@ -5,8 +5,7 @@ import { IPluginsController } from './types';
 
 export class PluginsController extends KongController implements IPluginsController {
   
-  getEnabledPlugins = async (req: Request, res: Response) => {
-    
+  getEnabledPlugins = async (req: Request, res: Response) => {    
     const { instanceName } = req.params;
 
     try {
@@ -29,7 +28,6 @@ export class PluginsController extends KongController implements IPluginsControl
   };
 
   getPluginFields = async (req: Request, res: Response) => {
-
     const { instanceName, pluginName } = req.params;
 
     try {
@@ -55,7 +53,6 @@ export class PluginsController extends KongController implements IPluginsControl
   };
 
   getAssociatedPlugins = async (req: Request, res: Response) => {
-
     const { instanceName, serviceName } = req.params;
 
     try {
@@ -83,7 +80,6 @@ export class PluginsController extends KongController implements IPluginsControl
   };
 
   addPluginToService = async (req: Request, res: Response) => {
-
     const { instanceName,serviceName } = req.params;
     const  { config }   = req.body;
 
@@ -110,7 +106,6 @@ export class PluginsController extends KongController implements IPluginsControl
   };
 
   editServicePlugin = async (req: Request, res: Response) => {
-
     const { instanceName, serviceName, pluginId } = req.params;
     const { config } = req.body;
 
@@ -138,7 +133,6 @@ export class PluginsController extends KongController implements IPluginsControl
   };
 
   removeServicePlugin = async (req: Request, res: Response) => {
-
     const { instanceName, serviceName,pluginId } = req.params;
 
     try {

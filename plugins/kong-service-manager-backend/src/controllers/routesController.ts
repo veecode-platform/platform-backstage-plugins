@@ -7,7 +7,7 @@ import { KongController } from './kongController';
 export class RoutesController  extends KongController implements IRoutesController{
   
   getRoutes = async (req:Request, res:Response) => {
-    
+
     const { instanceName, serviceName } = req.params;
 
       try{
@@ -34,7 +34,6 @@ export class RoutesController  extends KongController implements IRoutesControll
   }
 
   routeById = async(req: Request, res: Response) => {
-
     const { instanceName, serviceName,routeId } = req.params;
 
     try{
@@ -64,7 +63,6 @@ export class RoutesController  extends KongController implements IRoutesControll
   };
 
   createRoute = async(req:Request, res: Response) => {
-
     const { instanceName, serviceName } = req.params;
     const { config }  = req.body; 
 
@@ -93,7 +91,6 @@ export class RoutesController  extends KongController implements IRoutesControll
   }
 
   editRoute = async (req: Request,res: Response) => {
-
     const { instanceName,serviceName, routeId } = req.params;
     const  { config }  = req.body;
 
@@ -123,7 +120,6 @@ export class RoutesController  extends KongController implements IRoutesControll
   }
 
   removeRoute = async(req: Request,res: Response) => {
-
     const { instanceName, serviceName,routeId } = req.params;
    
     try{
