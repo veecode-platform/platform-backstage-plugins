@@ -132,4 +132,35 @@ export interface ServiceInfoResponse {
     ip: string;
     port: number;
   }
+  
+  export interface Spec {
+    metadata: IMetadata,
+    apiVersion: string,
+    kind: string,
+    spec: ISpec,
+    relations: IRelation[]
+  }
 
+  export interface IMetadata {
+  namespace: string,
+  annotations: { [key:string]: string },
+  name: string,
+  title: string,
+  publishedAt: Date,
+  description: string,
+  tags: string[],
+  uid: string,
+  etag: string
+}
+
+export interface ISpec {
+  type: string,
+  lifecycle: string,
+  owner: string,
+  definition: string
+}
+
+export interface IRelation {
+  type: string,
+  targetRef: string
+}
