@@ -1,6 +1,6 @@
 import { Config } from '@backstage/config';
 import { LoggerService } from "@backstage/backend-plugin-api";
-import { IKongConfig, IKongConfigOptions } from './types';
+import { FromConfig, IKongConfig, IKongConfigOptions } from './types';
 
 export class KongConfig implements IKongConfig {
   
@@ -9,16 +9,20 @@ export class KongConfig implements IKongConfig {
     private logger: LoggerService
   ){}
   
-  getConfig() : IKongConfigOptions[] {
+  getConfig() : FromConfig {
     const kongConfig = this.config.getConfig('kong');
+    const backendBaseUrl = this.config.getString("backend.baseUrl");
     if(!kongConfig){
       this.logger.error(`No configuration found for kong`)
     }
-    return kongConfig.get('instances') as IKongConfigOptions[];
+    return {
+      instances: kongConfig.get('instances') as IKongConfigOptions[],
+      backendBaseUrl
+    }
   };
 
   getInstance(instanceId: string): IKongConfigOptions {
-    const instances = this.getConfig();
+    const { instances } = this.getConfig();
     const instance = instances.filter(i => i.id === instanceId);
     return instance[0] ?? {};
   }
