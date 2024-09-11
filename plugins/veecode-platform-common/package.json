@@ -15,7 +15,8 @@
     "role": "common-library",
     "pluginId": "veecode-platform",
     "pluginPackages": [
-      "@veecode-platform/plugin-veecode-platform-common"
+      "@veecode-platform/plugin-veecode-platform-common",
+      "@veecode-platform/plugin-veecode-platform-module"
     ]
   },
   "sideEffects": false,
