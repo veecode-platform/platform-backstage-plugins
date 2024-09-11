@@ -1,11 +1,13 @@
 import { Config } from "@backstage/config";
 import { LoggerService } from "@backstage/backend-plugin-api";
-import { KongServiceManagerApi } from "./types";
+import { CatalogResponse, KongServiceManagerApi } from "./types";
 import { KongServiceManagerOptions } from "../utils/types";
 import { 
     AssociatedPluginsResponse, 
     CreatePlugin, 
     CreateRoute, 
+    IRelation, 
+    ISpec, 
     PluginFieldsResponse, 
     RouteResponse, 
     SchemaFields, 
@@ -14,6 +16,7 @@ import {
 import { getPluginFieldType } from "../utils/helpers/getPluginFieldType";
 import { KongConfig } from "../lib";
 import { IKongAuth, IKongConfigOptions } from "../lib/types";
+import { Entity } from "@backstage/catalog-model"
 
 abstract class Client {
     protected config: Config;
@@ -53,6 +56,40 @@ abstract class Client {
 
     protected getKongConfig(instanceName:string):IKongConfigOptions{
         return this.instanceConfig.getInstance(instanceName)
+    }
+
+    protected async getEntity(kind:string, entityName: string): Promise<Entity>{
+      const { backendBaseUrl } = this.instanceConfig.getConfig();
+      const response = await fetch(`${backendBaseUrl}/api/catalog/entities/by-query?filter=kind=${kind},metadata.name=${entityName}`);
+
+      if(!response.ok) throw new Error (`Failed to fetch entity: ${response.statusText}`);
+
+      const {items : entities } : CatalogResponse<Entity> = await response.json();
+
+      return entities[0] as Entity
+    }
+
+    protected async getSpec (specName:string): Promise<ISpec>{
+      const { backendBaseUrl } = this.instanceConfig.getConfig();
+      const response = await fetch(`${backendBaseUrl}/api/catalog/entities/by-query?filter=kind=api,metadata.name=${specName}`);
+    
+      if(!response.ok) throw new Error (`Failed to fetch spec: ${response.statusText}`);
+
+      const {items : specs } : CatalogResponse<ISpec> = await response.json();
+
+      return specs[0] as ISpec
+    }
+
+    protected async getSpecs(specs:string[]) : Promise<ISpec[]> {
+        
+      const specsResponse: ISpec[] = await Promise.all(
+          specs.map(async (spec) => { 
+            const specData = await this.getSpec(spec);
+            return specData as ISpec; 
+          })
+        );
+      
+        return specsResponse;
     }
 }
 
@@ -258,5 +295,33 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         }
         const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, instanceName, headers)
         return response.message
+    }
+
+    async getSpecsByEntity(kind: string, entityName: string): Promise<ISpec[]> {
+      const entity = await this.getEntity(kind,entityName);
+
+       try{
+
+          if (entity && entity.relations) {
+           const relations = entity.relations as IRelation[];
+   
+           const specs: string[] = [];
+   
+           relations.forEach(r => {
+             if (r.type === "providesApi") {
+               specs.push(r.targetRef.split("/")[1]);
+             }
+           });
+   
+           if (specs.length > 0) {
+             const specsResponse = await this.getSpecs(specs);
+             return specsResponse as ISpec[];
+           }
+          }
+         return [];
+
+        }catch(err:any){
+            throw new Error(`There was an error when trying to fetch the specs with the requested values. [${err}]`)
+        }
     }
 }

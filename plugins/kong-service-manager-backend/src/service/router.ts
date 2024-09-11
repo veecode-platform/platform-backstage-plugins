@@ -5,12 +5,7 @@ import { KongServiceManagerOptions } from '../utils/types';
 import { KongServiceManagerApiClient } from '../api';
 import { kongServiceManagerPermissions } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
-import { RoutesController } from '../controllers/routesController';
-import { PluginsController } from '../controllers/pluginsController';
-import { ServiceController } from '../controllers/serviceController';
-import path from 'path';
-import { resolvePackagePath } from '@backstage/backend-plugin-api';
-
+import { ServiceController, RoutesController, PluginsController, SpecController } from "../controllers"
 
 export async function createRouter(
   options: KongServiceManagerOptions,
@@ -22,13 +17,10 @@ export async function createRouter(
   const serviceController = new ServiceController(kongServiceManagerApi);
   const routesController = new RoutesController(kongServiceManagerApi);
   const pluginsController = new PluginsController(kongServiceManagerApi);
+  const specController = new SpecController(kongServiceManagerApi);
 
   const router = Router();
   router.use(express.json());
-
-  // static
-  const assetsPath = resolvePackagePath('@veecode-platform/plugin-kong-service-manager-backend');
-  router.use('/assets', express.static(path.join(assetsPath, '/view/assets')));
 
   router.use(
     createPermissionIntegrationRouter({
@@ -48,6 +40,7 @@ export async function createRouter(
   router.post('/:instanceName/services/:serviceName/routes', routesController.createRoute as RequestHandler);  
   router.patch('/:instanceName/services/:serviceName/routes/:routeId', routesController.editRoute as RequestHandler); 
   router.delete('/:instanceName/services/:serviceName/routes/:routeId', routesController.removeRoute as RequestHandler); 
+  router.get('/:kind/:name/specs', specController.getSpecsByEntity as RequestHandler)
 
   router.get('/health', (_, response) => {
     logger.info('PONG!');

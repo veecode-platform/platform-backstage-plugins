@@ -1,4 +1,4 @@
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, ISpec, PluginFieldsResponse, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export interface KongServiceManagerApi {
     getServiceInfo(instanceName: string, serviceIdOrName: string): Promise<ServiceInfoResponse>;
@@ -14,4 +14,11 @@ export interface KongServiceManagerApi {
     createRouteFromService(instanceName: string, serviceIdOrName: string, config: CreateRoute): Promise<any>;
     editRouteFromService(instanceName: string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute): Promise<any>;
     removeRouteFromService(instanceName: string, serviceIdOrName: string, routeIdOrName: string): Promise<any>;
+    getSpecsByEntity(kind:string, entityName: string):Promise<ISpec[]>;
+}
+
+export interface CatalogResponse<T> {
+    items: T[],
+    totalItems: number,
+    pageInfo: any
 }

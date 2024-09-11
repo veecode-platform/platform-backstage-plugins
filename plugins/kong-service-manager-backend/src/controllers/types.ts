@@ -20,3 +20,7 @@ export interface IPluginsController {
 export interface IServiceController {
     getServiceInfo: (req:Request, res: Response) => void;
 }
+
+export interface ISpecController {
+    getSpecsByEntity: (req:Request, res:Response) => void;
+}
