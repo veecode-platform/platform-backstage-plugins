@@ -18,7 +18,7 @@ export const KongServiceManagerHomepage = () => {
   console.warn(`
     The proxy will no longer be used for authentication and instance referencing, we have developed the backend plugin, 
     see the full documentation at 👉🏻 https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/kong-service-manager-backend/README.md
-    After following the documentation, now use the KongServiceManagerContent component
+    After following the documentation, now use the KongServiceManagerContent component, see the frontend plugin  👉🏻 https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/kong-service-manager/README.md
   `);
 
   useEffect(()=>{
