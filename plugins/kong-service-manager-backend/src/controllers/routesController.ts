@@ -7,7 +7,6 @@ import { KongController } from './kongController';
 export class RoutesController  extends KongController implements IRoutesController{
   
   getRoutes = async (req:Request, res:Response) => {
-
     const { instanceName, serviceName } = req.params;
 
       try{
