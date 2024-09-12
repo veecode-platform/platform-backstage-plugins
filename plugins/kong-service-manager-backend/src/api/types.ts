@@ -1,4 +1,5 @@
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, ISpec, PluginFieldsResponse, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { Entity } from "@backstage/catalog-model";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IPluginSpec, ISpec, PluginFieldsResponse, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export interface KongServiceManagerApi {
     getServiceInfo(instanceName: string, serviceIdOrName: string): Promise<ServiceInfoResponse>;
@@ -14,7 +15,13 @@ export interface KongServiceManagerApi {
     createRouteFromService(instanceName: string, serviceIdOrName: string, config: CreateRoute): Promise<any>;
     editRouteFromService(instanceName: string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute): Promise<any>;
     removeRouteFromService(instanceName: string, serviceIdOrName: string, routeIdOrName: string): Promise<any>;
-    getSpecsByEntity(kind:string, entityName: string):Promise<ISpec[]>;
+    getPluginsFromSpec(kind:string, entityName: string):Promise<IPluginSpec[]>;
+}
+
+export interface IHandlerCatalogEntity {
+    getEntity(kind:string, entityName:string) : Promise<Entity>,
+    getSpecs(specs:string[]):Promise<ISpec[]>,
+    getSpec(specName:string):Promise<ISpec>,
 }
 
 export interface CatalogResponse<T> {
