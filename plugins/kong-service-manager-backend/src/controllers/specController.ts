@@ -9,7 +9,7 @@ export class SpecController extends KongController implements ISpecController{
         const { kind, name } = req.params;
         try{    
           const specs = await this.kongServiceManagerApi
-          .getSpecsByEntity(
+          .getPluginsFromSpec(
             kind,
             name
           );
