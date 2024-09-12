@@ -133,11 +133,11 @@ export interface ServiceInfoResponse {
     port: number;
   }
   
-  export interface Spec {
+  export interface ISpec {
     metadata: IMetadata,
     apiVersion: string,
     kind: string,
-    spec: ISpec,
+    spec: ISpecType,
     relations: IRelation[]
   }
 
@@ -153,7 +153,7 @@ export interface ServiceInfoResponse {
   etag: string
 }
 
-export interface ISpec {
+export interface ISpecType {
   type: string,
   lifecycle: string,
   owner: string,
@@ -163,4 +163,17 @@ export interface ISpec {
 export interface IRelation {
   type: string,
   targetRef: string
+}
+
+export interface IKongPluginSpec {
+  name: string,
+  enable: boolean,
+  config: object
+}
+export interface IPluginSpec {
+  name: string,
+  description:string,
+  owner: string,
+  tags: string[],
+  plugins: IKongPluginSpec[]
 }
