@@ -1,13 +1,16 @@
 import { Config } from "@backstage/config";
 import { LoggerService } from "@backstage/backend-plugin-api";
-import { CatalogResponse, KongServiceManagerApi } from "./types";
+import { KongServiceManagerApi } from "./types";
 import { KongServiceManagerOptions } from "../utils/types";
 import { 
     AssociatedPluginsResponse, 
     CreatePlugin, 
     CreateRoute, 
+    IKongPluginSpec, 
+    IPluginSpec, 
     IRelation, 
     ISpec, 
+    ISpecType, 
     PluginFieldsResponse, 
     RouteResponse, 
     SchemaFields, 
@@ -16,17 +19,20 @@ import {
 import { getPluginFieldType } from "../utils/helpers/getPluginFieldType";
 import { KongConfig } from "../lib";
 import { IKongAuth, IKongConfigOptions } from "../lib/types";
-import { Entity } from "@backstage/catalog-model"
+import yaml from 'js-yaml';
+import { HandlerCatalogEntity } from "./handlerCatalogEntity";
 
 abstract class Client {
     protected config: Config;
     protected logger: LoggerService
     protected instanceConfig : KongConfig;
+    protected handlerEntity: HandlerCatalogEntity;
 
     constructor(opts: KongServiceManagerOptions) {
         this.config = opts.config;
         this.logger = opts.logger;
         this.instanceConfig = new KongConfig(this.config, this.logger);
+        this.handlerEntity = new HandlerCatalogEntity(this.instanceConfig.getConfig().backendBaseUrl)
     }
 
     protected async fetch <T = any>(input: string,instanceName:string, init?: RequestInit): Promise<T> {
@@ -56,40 +62,6 @@ abstract class Client {
 
     protected getKongConfig(instanceName:string):IKongConfigOptions{
         return this.instanceConfig.getInstance(instanceName)
-    }
-
-    protected async getEntity(kind:string, entityName: string): Promise<Entity>{
-      const { backendBaseUrl } = this.instanceConfig.getConfig();
-      const response = await fetch(`${backendBaseUrl}/api/catalog/entities/by-query?filter=kind=${kind},metadata.name=${entityName}`);
-
-      if(!response.ok) throw new Error (`Failed to fetch entity: ${response.statusText}`);
-
-      const {items : entities } : CatalogResponse<Entity> = await response.json();
-
-      return entities[0] as Entity
-    }
-
-    protected async getSpec (specName:string): Promise<ISpec>{
-      const { backendBaseUrl } = this.instanceConfig.getConfig();
-      const response = await fetch(`${backendBaseUrl}/api/catalog/entities/by-query?filter=kind=api,metadata.name=${specName}`);
-    
-      if(!response.ok) throw new Error (`Failed to fetch spec: ${response.statusText}`);
-
-      const {items : specs } : CatalogResponse<ISpec> = await response.json();
-
-      return specs[0] as ISpec
-    }
-
-    protected async getSpecs(specs:string[]) : Promise<ISpec[]> {
-        
-      const specsResponse: ISpec[] = await Promise.all(
-          specs.map(async (spec) => { 
-            const specData = await this.getSpec(spec);
-            return specData as ISpec; 
-          })
-        );
-      
-        return specsResponse;
     }
 }
 
@@ -298,7 +270,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
     }
 
     async getSpecsByEntity(kind: string, entityName: string): Promise<ISpec[]> {
-      const entity = await this.getEntity(kind,entityName);
+      const entity = await this.handlerEntity.getEntity(kind,entityName);
 
        try{
 
@@ -314,7 +286,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
            });
    
            if (specs.length > 0) {
-             const specsResponse = await this.getSpecs(specs);
+             const specsResponse = await this.handlerEntity.getSpecs(specs);
              return specsResponse as ISpec[];
            }
           }
@@ -324,4 +296,32 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
             throw new Error(`There was an error when trying to fetch the specs with the requested values. [${err}]`)
         }
     }
+
+
+    getPluginsBySpec(spec:ISpecType) : IKongPluginSpec[] {
+        const definition = spec.definition;
+        const parseDefinition = yaml.load(definition) as Record<string, any>;
+        const pluginsKong = Object.keys(parseDefinition)
+          .filter(key => key.startsWith('x-kong'))
+          .map(key => parseDefinition[key]);
+  
+        return pluginsKong as IKongPluginSpec[]
+      }
+
+    async getPluginsFromSpec(kind:string, entityName:string) : Promise<IPluginSpec[]>  {
+       const specsEntity = await this.getSpecsByEntity(kind, entityName);
+       
+       const pluginsFromSpec: IPluginSpec[] = await Promise.all(
+        specsEntity.map(async spec => ({
+            name: spec.metadata.name,
+            description: spec.metadata.description,
+            owner: spec.spec.owner,
+            tags: spec.metadata.tags ?? [],
+            plugins: this.getPluginsBySpec(spec.spec)
+        }))
+       )
+
+       return pluginsFromSpec as IPluginSpec[]
+    }
+
 }
