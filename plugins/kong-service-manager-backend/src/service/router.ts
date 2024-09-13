@@ -40,7 +40,8 @@ export async function createRouter(
   router.post('/:instanceName/services/:serviceName/routes', routesController.createRoute as RequestHandler);  
   router.patch('/:instanceName/services/:serviceName/routes/:routeId', routesController.editRoute as RequestHandler); 
   router.delete('/:instanceName/services/:serviceName/routes/:routeId', routesController.removeRoute as RequestHandler); 
-  router.get('/:kind/:name/specs', specController.getSpecsByEntity as RequestHandler)
+  router.get('/:kind/:entityName/specs', specController.getSpecsByEntity as RequestHandler)
+  router.patch('/apply/:specName', specController.updateSpec as RequestHandler)
 
   router.get('/health', (_, response) => {
     logger.info('PONG!');
