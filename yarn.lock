@@ -14572,6 +14572,7 @@ __metadata:
     "@veecode-platform/backstage-plugin-kong-service-manager-common": ^0.2.18
     express: ^4.17.1
     express-promise-router: ^4.1.0
+    git-url-parse: ^15.0.0
     js-yaml: ^4.1.0
     msw: ^2.3.1
     node-fetch: ^2.6.7
