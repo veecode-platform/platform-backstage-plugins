@@ -23,6 +23,7 @@ import { IKongAuth, IKongConfigOptions } from "../lib/types";
 import yaml from 'js-yaml';
 import { HandlerCatalogEntity } from "./handlerCatalogEntity";
 import { formatObject } from "../utils/helpers/formactObject";
+import { ANNOTATION_LOCATION } from "@backstage/catalog-model";
 
 abstract class Client {
     protected config: Config;
@@ -329,6 +330,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
     async applyPluginsToSpec(specName:string, plugins:IKongPluginSpec[]) : Promise<ISpec> {
         const specData = await this.handlerEntity.getSpec(specName);
         const definition = yaml.load(specData.spec.definition) as IDefinition; 
+        const location = specData.metadata.annotations?.[ANNOTATION_LOCATION];
 
         // delete kong's plugin (old state)
         for(const key in definition){
@@ -363,6 +365,8 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         const definitionToString = formatObject(definitionUpdated);
 
         specData.spec.definition = definitionToString;
+
+        console.log("LOCATIOON",location)
 
         return specData;
 
