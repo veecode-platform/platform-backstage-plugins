@@ -1,11 +1,12 @@
 import { Config } from "@backstage/config";
 import { LoggerService } from "@backstage/backend-plugin-api";
-import { KongServiceManagerApi } from "./types";
+import { IPluginsWithPrefix, KongServiceManagerApi } from "./types";
 import { KongServiceManagerOptions } from "../utils/types";
 import { 
     AssociatedPluginsResponse, 
     CreatePlugin, 
     CreateRoute, 
+    IDefinition, 
     IKongPluginSpec, 
     IPluginSpec, 
     IRelation, 
@@ -21,6 +22,7 @@ import { KongConfig } from "../lib";
 import { IKongAuth, IKongConfigOptions } from "../lib/types";
 import yaml from 'js-yaml';
 import { HandlerCatalogEntity } from "./handlerCatalogEntity";
+import { formatObject } from "../utils/helpers/formactObject";
 
 abstract class Client {
     protected config: Config;
@@ -322,6 +324,49 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
        )
 
        return pluginsFromSpec as IPluginSpec[]
+    }
+
+    async applyPluginsToSpec(specName:string, plugins:IKongPluginSpec[]) : Promise<ISpec> {
+        const specData = await this.handlerEntity.getSpec(specName);
+        const definition = yaml.load(specData.spec.definition) as IDefinition; 
+
+        // delete kong's plugin (old state)
+        for(const key in definition){
+            if(key.startsWith('x-kong')){
+                delete definition[key]
+            }
+        }
+        // map new plugins
+        const pluginsWithPrefix : IPluginsWithPrefix = {}; 
+        
+        plugins.map(plugin => {
+            const pluginName = `x-kong-${plugin.name}`;
+            const newData = {
+                name: pluginName,
+                enabled: plugin.enabled,
+                config: plugin.config
+            }
+          pluginsWithPrefix[`${pluginName}`] = newData;
+        });
+
+        const definitionUpdated = {
+            openapi: definition.openapi,
+            info: definition.info,
+            externalDocs: definition.externalDocs,
+            servers: definition.servers,
+            tags: definition.tags,
+            ...pluginsWithPrefix,
+            paths: definition.paths,
+            components: definition.components
+        };
+
+        const definitionToString = formatObject(definitionUpdated);
+
+        specData.spec.definition = definitionToString;
+
+        return specData;
+
+        // to do pullrequest services
     }
 
 }
