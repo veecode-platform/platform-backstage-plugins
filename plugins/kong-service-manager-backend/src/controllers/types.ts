@@ -23,4 +23,5 @@ export interface IServiceController {
 
 export interface ISpecController {
     getSpecsByEntity: (req:Request, res:Response) => void;
+    updateSpec: (req:Request, res:Response) => void;
 }
