@@ -1,0 +1,1 @@
+export { kongServiceManagerPlugin as default } from './kongServiceManagerPlugin';
