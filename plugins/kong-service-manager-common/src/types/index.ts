@@ -165,9 +165,66 @@ export interface IRelation {
   targetRef: string
 }
 
+export interface IDefinitionBase {
+  openapi: string,
+  info: IDefinitionInfo,
+  externalDocs?: IDefinitionExternalDocs,
+  servers: IDefinitionServer[],
+  tags?: IDefinitionTag[],
+  paths: IDefinitionPath[],
+  components?: IDefinitionComponent[],
+}
+export interface IDefinitionInfo {
+  title: string,
+  description: string,
+  termsOfService: string,
+  contact?: IDefinitionContact,
+  license?: IDefinitionLicense,
+  version: string
+}
+
+export interface IDefinitionContact {
+  email : string;
+}
+
+export interface IDefinitionLicense {
+  name : string;
+  url: string
+}
+
+export interface IDefinitionExternalDocs {
+  description: string,
+  url: string
+}
+
+export interface IDefinitionServer {
+  url : string
+}
+
+export interface IDefinitionTag {
+  name: string,
+  description: string,
+  externalDocs: IDefinitionExternalDocs
+}
+
+export interface IDefinitionPath {
+  [key:string]:{
+    [key:string]: object
+  }
+}
+
+export interface IDefinitionComponent {
+  schemas: {
+    Address: object
+  }
+}
+
+export type IDefinition = IDefinitionBase & {
+  [key: string]: IKongPluginSpec | any;
+};
 export interface IKongPluginSpec {
   name: string,
-  enable: boolean,
+  enabled: boolean,
   config: object
 }
 export interface IPluginSpec {
