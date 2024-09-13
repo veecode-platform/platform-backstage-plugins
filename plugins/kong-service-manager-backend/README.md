@@ -118,7 +118,7 @@ In `packages > backend > src > index.ts`:
 ```diff
 
 import { createBackend } from '@backstage/backend-defaults';
-+ import { kongServiceManagerPlugin } from '@veecode-platform/backstage-plugin-infracost-backend';
++ import { kongServiceManagerPlugin } from '@veecode-platform/plugin-kong-service-manager-backend';
 
 const backend = createBackend();
 
