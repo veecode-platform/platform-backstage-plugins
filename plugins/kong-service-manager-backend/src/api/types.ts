@@ -1,4 +1,6 @@
+import { AuthService, HttpAuthService } from "@backstage/backend-plugin-api";
 import { Entity } from "@backstage/catalog-model";
+import { JsonValue } from "@backstage/types";
 import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, IPluginSpec, ISpec, PluginFieldsResponse, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export interface KongServiceManagerApi {
@@ -16,14 +18,17 @@ export interface KongServiceManagerApi {
     editRouteFromService(instanceName: string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute): Promise<any>;
     removeRouteFromService(instanceName: string, serviceIdOrName: string, routeIdOrName: string): Promise<any>;
     getPluginsFromSpec(kind:string, entityName: string):Promise<IPluginSpec[]>;
-    applyPluginsToSpec(specName: string, plugins: IKongPluginSpec[]): Promise<ISpec>
+    applyPluginsToSpec(specName: string, plugins: IKongPluginSpec[]): Promise<Entity>
 }
 
 export interface IHandlerCatalogEntity {
     getEntity(kind:string, entityName:string) : Promise<Entity>,
     getSpecs(specs:string[]):Promise<ISpec[]>,
-    getSpec(specName:string):Promise<ISpec>,
 }
+
+export type JsonObject = {
+    [key in string]?: JsonValue;
+};
 
 export interface CatalogResponse<T> {
     items: T[],
@@ -33,4 +38,10 @@ export interface CatalogResponse<T> {
 
 export interface IPluginsWithPrefix {
     [key:string]: IKongPluginSpec;
+}
+
+export type AuthAdapters = {
+    auth: AuthService;
+} & {
+    httpAuth: HttpAuthService;
 }
