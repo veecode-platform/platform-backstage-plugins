@@ -11,7 +11,7 @@ export async function createRouter(
   options: KongServiceManagerOptions,
 ): Promise<express.Router> {
   const { logger, config } = options;
-  
+
   const kongServiceManagerApi = new KongServiceManagerApiClient(options);
 
   const serviceController = new ServiceController(kongServiceManagerApi);
