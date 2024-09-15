@@ -1,43 +1,74 @@
 import { Entity } from "@backstage/catalog-model";
-import { CatalogResponse, IHandlerCatalogEntity } from "./types";
+import { AuthAdapters, IHandlerCatalogEntity } from "./types";
+import { CatalogApi } from '@backstage/catalog-client';
+import { NotFoundError } from "@backstage/errors";
 import { ISpec } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export class HandlerCatalogEntity implements IHandlerCatalogEntity {
 
     constructor(
-        private backendBaseUrl :string,
+        private catalog : CatalogApi,
+        private authAdapters : AuthAdapters
     ){}
 
-    async getEntity(kind:string, entityName: string): Promise<Entity>{
-        const response = await fetch(`${this.backendBaseUrl}/api/catalog/entities/by-query?filter=kind=${kind},metadata.name=${entityName}`);
-  
-        if(!response.ok) throw new Error (`Failed to fetch entity: ${response.statusText}`);
-  
-        const {items : entities } : CatalogResponse<Entity> = await response.json();
-  
-        return entities[0] as Entity
+    private async getToken(): Promise<string> {
+      const { auth } = this.authAdapters;
+      const { token } = await auth.getPluginRequestToken({
+        onBehalfOf: await auth.getOwnServiceCredentials(),
+        targetPluginId: 'catalog'
+      });
+      return token
+    }
+
+    async getEntity(kind:string, entityName:string) : Promise<Entity>{
+      const token = await this.getToken(); 
+      const response = await this.catalog.getEntities(
+        { filter: {kind, 'metadata.name': entityName}},
+        { token },
+      );
+
+      if (!response) {
+        throw new NotFoundError(
+          `No ${kind} entity named "${entityName}"`,
+        );
       }
+      return response.items[0];    
+    }
 
     async getSpecs(specs:string[]) : Promise<ISpec[]> {
         
-      const specsResponse: ISpec[] = await Promise.all(
+      const specsData = await Promise.all(
           specs.map(async (spec) => { 
-            const specData = await this.getSpec(spec);
-            return specData as ISpec; 
+            const specData = await this.getEntity('Api',spec);
+            return {
+              metadata:{
+                namespace: specData.metadata.namespace ?? 'default',
+                annotations: specData.metadata.annotations ?? {},
+                name: specData.metadata.name,
+                title: specData.metadata.name,
+                publishedAt: new Date(specData.metadata.publishedAt as string) ?? Date.now(),
+                description: specData.metadata.description ?? '',
+                tags: specData.metadata.tags ?? [],
+                uid: specData.metadata.uid,
+                etag: specData.metadata.etag ?? ''
+              },
+              apiVersion: specData.apiVersion,
+              kind: specData.kind,
+              spec: {
+                type: specData.spec!.type,
+                lifecycle: specData.spec!.lifecycle,
+                owner: specData.spec!.owner,
+                definition: specData.spec!.definition
+              },
+              relations: specData.relations!.map(rel => ({
+                type: rel.type,
+                targetRef: rel.targetRef
+              }))
+            }; 
           })
         );
       
-        return specsResponse;
+        return specsData as ISpec[];
     }
-  
-    async getSpec (specName:string): Promise<ISpec>{
-      const response = await fetch(`${this.backendBaseUrl}/api/catalog/entities/by-query?filter=kind=api,metadata.name=${specName}`);
     
-      if(!response.ok) throw new Error (`Failed to fetch spec: ${response.statusText}`);
-
-      const {items : specs } : CatalogResponse<ISpec> = await response.json();
-
-      return specs[0] as ISpec
-    }
-  
 }
