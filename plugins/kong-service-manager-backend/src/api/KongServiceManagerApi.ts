@@ -1,6 +1,6 @@
 import { Config } from "@backstage/config";
 import { LoggerService } from "@backstage/backend-plugin-api";
-import { IPluginsWithPrefix, KongServiceManagerApi } from "./types";
+import { AuthAdapters, IPluginsWithPrefix, KongServiceManagerApi } from "./types";
 import { KongServiceManagerOptions } from "../utils/types";
 import { 
     AssociatedPluginsResponse, 
@@ -23,19 +23,25 @@ import { IKongAuth, IKongConfigOptions } from "../lib/types";
 import yaml from 'js-yaml';
 import { HandlerCatalogEntity } from "./handlerCatalogEntity";
 import { formatObject } from "../utils/helpers/formactObject";
-import { ANNOTATION_LOCATION } from "@backstage/catalog-model";
+import { ANNOTATION_LOCATION, Entity } from "@backstage/catalog-model";
+import { CatalogClient } from "@backstage/catalog-client";
+import { createLegacyAuthAdapters } from "@backstage/backend-common";
 
 abstract class Client {
     protected config: Config;
     protected logger: LoggerService
     protected instanceConfig : KongConfig;
+    protected authAdapters: AuthAdapters;
     protected handlerEntity: HandlerCatalogEntity;
 
     constructor(opts: KongServiceManagerOptions) {
         this.config = opts.config;
         this.logger = opts.logger;
         this.instanceConfig = new KongConfig(this.config, this.logger);
-        this.handlerEntity = new HandlerCatalogEntity(this.instanceConfig.getConfig().backendBaseUrl)
+        this.authAdapters = createLegacyAuthAdapters(opts);
+        this.handlerEntity = new HandlerCatalogEntity(
+            new CatalogClient({discoveryApi: opts.discovery}),
+            this.authAdapters)
     }
 
     protected async fetch <T = any>(input: string,instanceName:string, init?: RequestInit): Promise<T> {
@@ -290,7 +296,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
    
            if (specs.length > 0) {
              const specsResponse = await this.handlerEntity.getSpecs(specs);
-             return specsResponse as ISpec[];
+             return specsResponse;
            }
           }
          return [];
@@ -314,7 +320,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
     async getPluginsFromSpec(kind:string, entityName:string) : Promise<IPluginSpec[]>  {
        const specsEntity = await this.getSpecsByEntity(kind, entityName);
        
-       const pluginsFromSpec: IPluginSpec[] = await Promise.all(
+       const pluginsFromSpec = await Promise.all(
         specsEntity.map(async spec => ({
             name: spec.metadata.name,
             description: spec.metadata.description,
@@ -327,9 +333,9 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
        return pluginsFromSpec as IPluginSpec[]
     }
 
-    async applyPluginsToSpec(specName:string, plugins:IKongPluginSpec[]) : Promise<ISpec> {
-        const specData = await this.handlerEntity.getSpec(specName);
-        const definition = yaml.load(specData.spec.definition) as IDefinition; 
+    async applyPluginsToSpec(specName:string, plugins:IKongPluginSpec[]) : Promise<Entity> {
+        const specData = await this.handlerEntity.getEntity('Api',specName);
+        const definition = yaml.load(specData.spec!.definition as string) as IDefinition; 
         const location = specData.metadata.annotations?.[ANNOTATION_LOCATION];
 
         // delete kong's plugin (old state)
@@ -364,9 +370,9 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
 
         const definitionToString = formatObject(definitionUpdated);
 
-        specData.spec.definition = definitionToString;
+        specData.spec!.definition = definitionToString;
 
-        console.log("LOCATIOON",location)
+        console.log("LOCATIOON",location);
 
         return specData;
 
