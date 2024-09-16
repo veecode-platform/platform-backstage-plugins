@@ -1,6 +1,6 @@
 import { ConfigApi } from "@backstage/core-plugin-api";
 import { KongServiceManagerApi, Options } from "./KongServiceManagerApi";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, ISpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { PluginsInfoData } from "../data/data";
 
  abstract class Client {
@@ -169,6 +169,11 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         }
         const response = await this.fetch(`/${instanceName}/services/${serviceName}/routes/${routeId}`, headers)
         return response.message
+    }
+
+    async getSpecs(kind:string,entityName:string) : Promise<ISpec[]>{
+        const response = await this.fetch(`/${kind}/${entityName}/specs`);
+        return response.specs as ISpec[];
     }
 
 }

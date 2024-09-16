@@ -1,5 +1,5 @@
 import { ConfigApi, createApiRef } from "@backstage/core-plugin-api";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, ISpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export type Options = {
     config: ConfigApi;
@@ -22,4 +22,5 @@ export interface KongServiceManagerApi {
     createRouteFromService(serviceName:string, instanceName:string, config: CreateRoute): Promise<any>;
     editRouteFromService(serviceName:string, instanceName:string, routeIdOrName: string, config: CreateRoute): Promise<any>;
     removeRouteFromService(serviceName:string, instanceName:string, routeIdOrName: string): Promise<any>;
+    getSpecs(kind: string, entityName: string): Promise<ISpec[]>;
 }
