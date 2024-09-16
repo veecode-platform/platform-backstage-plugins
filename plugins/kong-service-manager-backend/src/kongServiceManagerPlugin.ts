@@ -31,7 +31,9 @@ export const kongServiceManagerPlugin = createBackendPlugin({
         auth,
         httpAuth
       }) {
-        httpRouter.use(
+        if(config.has('kong'))
+        {
+          httpRouter.use(
           await createRouter({
             logger,
             permissions,
@@ -40,11 +42,16 @@ export const kongServiceManagerPlugin = createBackendPlugin({
             auth,
             httpAuth
           }),
-        );
-        httpRouter.addAuthPolicy({
-          path: '/health',
-          allow: 'unauthenticated',
-        });
+          );
+          httpRouter.addAuthPolicy({
+            path: '/health',
+            allow: 'unauthenticated',
+          });
+        }else{
+          logger.warn(
+            'Failed to initialize Kong service manager backend: valid kong config is missing',
+          );
+        }
       },
     });
   },
