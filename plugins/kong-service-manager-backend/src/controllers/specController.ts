@@ -38,7 +38,7 @@ export class SpecController extends KongController implements ISpecController{
       
       try{ 
         const response = await this.kongServiceManagerApi
-        .applyPluginsToSpec(
+        .addPluginsToSpec(
           specName,
            plugins
           );
