@@ -1,7 +1,7 @@
 import { AuthService, HttpAuthService } from "@backstage/backend-plugin-api";
 import { Entity } from "@backstage/catalog-model";
 import { JsonValue } from "@backstage/types";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, IPluginSpec, ISpec, PluginFieldsResponse, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IDefinition, IKongPluginSpec, IPluginSpec, ISpec, PluginFieldsResponse, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export interface KongServiceManagerApi {
     getServiceInfo(instanceName: string, serviceIdOrName: string): Promise<ServiceInfoResponse>;
@@ -18,7 +18,7 @@ export interface KongServiceManagerApi {
     editRouteFromService(instanceName: string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute): Promise<any>;
     removeRouteFromService(instanceName: string, serviceIdOrName: string, routeIdOrName: string): Promise<any>;
     getPluginsFromSpec(kind:string, entityName: string):Promise<IPluginSpec[]>;
-    applyPluginsToSpec(specName: string, plugins: IKongPluginSpec[]): Promise<Entity>
+    addPluginsToSpec(specName: string,plugins: IKongPluginSpec[]): Promise<IDefinition>
 }
 
 export interface IHandlerCatalogEntity {
@@ -44,4 +44,8 @@ export type AuthAdapters = {
     auth: AuthService;
 } & {
     httpAuth: HttpAuthService;
+}
+
+export interface IPullRequestManager {
+ createPullRequest(location:string,title:string,message:string,content:any) : Promise<string|null>
 }
