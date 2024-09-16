@@ -41,7 +41,7 @@ export async function createRouter(
   router.patch('/:instanceName/services/:serviceName/routes/:routeId', routesController.editRoute as RequestHandler); 
   router.delete('/:instanceName/services/:serviceName/routes/:routeId', routesController.removeRoute as RequestHandler); 
   router.get('/:kind/:entityName/specs', specController.getSpecsByEntity as RequestHandler)
-  router.patch('/apply/:specName', specController.updateSpec as RequestHandler)
+  router.post('/add-plugins/:specName', specController.updateSpec as RequestHandler)
 
   router.get('/health', (_, response) => {
     logger.info('PONG!');
