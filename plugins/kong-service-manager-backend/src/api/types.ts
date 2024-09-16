@@ -17,13 +17,13 @@ export interface KongServiceManagerApi {
     createRouteFromService(instanceName: string, serviceIdOrName: string, config: CreateRoute): Promise<any>;
     editRouteFromService(instanceName: string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute): Promise<any>;
     removeRouteFromService(instanceName: string, serviceIdOrName: string, routeIdOrName: string): Promise<any>;
-    getPluginsFromSpec(kind:string, entityName: string):Promise<IPluginSpec[]>;
-    addPluginsToSpec(specName: string,plugins: IKongPluginSpec[]): Promise<IDefinition>
 }
 
 export interface IHandlerCatalogEntity {
     getEntity(kind:string, entityName:string) : Promise<Entity>,
     getSpecs(specs:string[]):Promise<ISpec[]>,
+    getPluginsFromSpec(kind:string, entityName: string):Promise<IPluginSpec[]>;
+    addPluginsToSpec(specName: string,plugins: IKongPluginSpec[]): Promise<IDefinition>
 }
 
 export type JsonObject = {
