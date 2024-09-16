@@ -14,7 +14,7 @@ export class SpecController implements ISpecController{
 
         try{    
           const specs = await this.handlerCatalogEntityApi
-          .getPluginsFromSpec(
+          .getSpecsByEntity(
             kind,
             entityName
           );
