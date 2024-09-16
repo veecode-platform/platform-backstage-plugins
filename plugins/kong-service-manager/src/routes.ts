@@ -27,3 +27,9 @@ export const addPluginRouteRef = createSubRouteRef({
   parent: kongServiceRouteRef,
   path: '/add-plugin'
 })
+
+export const sepcsListRouteRef = createSubRouteRef({
+  id: 'all-specs',
+  parent: kongServiceRouteRef,
+  path: '/all-specs'
+});

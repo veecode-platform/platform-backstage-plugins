@@ -2,6 +2,7 @@ import { createApiFactory, createPlugin, discoveryApiRef, createRoutableExtensio
 import { addPluginRouteRef, pluginsListRouteRef, removePluginRouteRef, kongServiceRouteRef, routesListRouteRef } from './@deprecated/src/routes';
 import { KongServiceManagerApiClient, kongServiceManagerApiRef } from './api';
 import { KongServiceManagerApiClientDeprecated, kongServiceManagerApiDeprecatedRef } from './@deprecated/src/api';
+import { sepcsListRouteRef } from './routes';
 
 
 export const kongServiceManagerPlugin = createPlugin({
@@ -11,7 +12,8 @@ export const kongServiceManagerPlugin = createPlugin({
     routesList: routesListRouteRef,
     pluginsList: pluginsListRouteRef,
     removePlugin: removePluginRouteRef,
-    addPlugin: addPluginRouteRef
+    addPlugin: addPluginRouteRef,
+    allSpecs: sepcsListRouteRef
   },
   apis: [
     createApiFactory({
