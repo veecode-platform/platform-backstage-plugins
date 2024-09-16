@@ -1,0 +1,1 @@
+export { SpecCard } from './SpecCard';

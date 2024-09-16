@@ -18,7 +18,8 @@ export const usePluginsCardsStyles = makeStyles( theme => ({
       gap: theme.spacing(4),
       borderRadius: '8px',
       border: `1px solid ${theme.palette.action.focus}`,
-      minHeight: '100%'
+      minHeight: '100%',
+      boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
      },
      cardHeader:{
       width:'100%',
