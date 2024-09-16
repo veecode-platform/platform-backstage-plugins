@@ -7,6 +7,7 @@ import { PluginsList } from '../PluginsList';
 import { KongServiceManagerProvider } from '../../context';
 import {RoutesList} from '../RoutesList';
 import { useHomepageStyles } from './styles';
+import { SpecList } from '../SpecList';
 
 
 export const KongServiceManagerHomepage = () => {
@@ -31,6 +32,7 @@ export const KongServiceManagerHomepage = () => {
               <Route path="" element={<AboutPage />} />
               <Route path="all-routes" element={<RoutesList />} />
               <Route path="all-plugins" element={<PluginsList />} />
+              <Route path="all-specs" element={<SpecList/>}/>
             </Routes>
           </Grid>
         </Grid>
