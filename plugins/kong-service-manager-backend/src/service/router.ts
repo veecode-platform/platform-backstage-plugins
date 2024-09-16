@@ -6,6 +6,7 @@ import { KongServiceManagerApiClient } from '../api';
 import { kongServiceManagerPermissions } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
 import { ServiceController, RoutesController, PluginsController, SpecController } from "../controllers"
+import { HandlerCatalogEntity } from '../api/handlerCatalogEntity';
 
 export async function createRouter(
   options: KongServiceManagerOptions,
@@ -13,11 +14,12 @@ export async function createRouter(
   const { logger, config } = options;
 
   const kongServiceManagerApi = new KongServiceManagerApiClient(options);
+  const handlerCatalogEntityApi = new HandlerCatalogEntity(options);
 
   const serviceController = new ServiceController(kongServiceManagerApi);
   const routesController = new RoutesController(kongServiceManagerApi);
   const pluginsController = new PluginsController(kongServiceManagerApi);
-  const specController = new SpecController(kongServiceManagerApi);
+  const specController = new SpecController(handlerCatalogEntityApi);
 
   const router = Router();
   router.use(express.json());
