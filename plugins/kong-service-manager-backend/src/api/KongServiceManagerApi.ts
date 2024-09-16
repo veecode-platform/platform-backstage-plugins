@@ -1,49 +1,23 @@
-import { Config } from "@backstage/config";
-import { LoggerService } from "@backstage/backend-plugin-api";
-import { AuthAdapters, IPluginsWithPrefix, KongServiceManagerApi } from "./types";
-import { KongServiceManagerOptions } from "../utils/types";
+import { KongServiceManagerApi } from "./types";
 import { 
     AssociatedPluginsResponse, 
     CreatePlugin, 
     CreateRoute, 
-    IDefinition, 
-    IKongPluginSpec, 
-    IPluginSpec, 
-    IRelation, 
-    ISpec, 
-    ISpecType, 
     PluginFieldsResponse, 
     RouteResponse, 
     SchemaFields, 
     ServiceInfoResponse 
 } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { getPluginFieldType } from "../utils/helpers/getPluginFieldType";
-import { KongConfig } from "../lib";
-import { IKongAuth, IKongConfigOptions } from "../lib/types";
-import yaml from 'js-yaml';
-import { HandlerCatalogEntity } from "./handlerCatalogEntity";
-import { CatalogClient } from "@backstage/catalog-client";
-import { createLegacyAuthAdapters } from "@backstage/backend-common";
+import { IKongAuth } from "../lib/types";
+import { Client } from "./client";
 
-abstract class Client {
-    protected config: Config;
-    protected logger: LoggerService
-    protected instanceConfig : KongConfig;
-    protected authAdapters: AuthAdapters;
-    protected handlerEntity: HandlerCatalogEntity;
 
-    constructor(opts: KongServiceManagerOptions) {
-        this.config = opts.config;
-        this.logger = opts.logger;
-        this.instanceConfig = new KongConfig(this.config, this.logger);
-        this.authAdapters = createLegacyAuthAdapters(opts);
-        this.handlerEntity = new HandlerCatalogEntity(
-            new CatalogClient({discoveryApi: opts.discovery}),
-            this.authAdapters);
-        
-    }
 
-    protected async fetch <T = any>(input: string,instanceName:string, init?: RequestInit): Promise<T> {
+export class KongServiceManagerApiClient extends Client implements KongServiceManagerApi {
+
+
+    private async fetch <T = any>(input: string,instanceName:string, init?: RequestInit): Promise<T> {
 
         const { apiBaseUrl, auth } = this.getKongConfig(instanceName);
         const { kongAdmin, custom } = auth as IKongAuth;
@@ -67,13 +41,6 @@ abstract class Client {
         if (resp.status === 204) return { message: "deleted" } as any
         return await resp.json();
     }
-
-    protected getKongConfig(instanceName:string):IKongConfigOptions{
-        return this.instanceConfig.getInstance(instanceName)
-    }
-}
-
-export class KongServiceManagerApiClient extends Client implements KongServiceManagerApi {
   
     async getServiceInfo(instanceName:string,serviceIdOrName: string): Promise<ServiceInfoResponse> {
         const { workspace } = this.getKongConfig(instanceName);
@@ -264,98 +231,6 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         }
         const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, instanceName, headers)
         return response.message
-    }
-
-    async getSpecsByEntity(kind: string, entityName: string): Promise<ISpec[]> {
-      const entity = await this.handlerEntity.getEntity(kind,entityName);
-
-       try{
-
-          if (entity && entity.relations) {
-           const relations = entity.relations as IRelation[];
-   
-           const specs: string[] = [];
-   
-           relations.forEach(r => {
-             if (r.type === "providesApi") {
-               specs.push(r.targetRef.split("/")[1]);
-             }
-           });
-   
-           if (specs.length > 0) {
-             const specsResponse = await this.handlerEntity.getSpecs(specs);
-             return specsResponse;
-           }
-          }
-         return [];
-
-        }catch(err:any){
-            throw new Error(`There was an error when trying to fetch the specs with the requested values. [${err}]`)
-        }
-    }
-
-
-    getPluginsBySpec(spec:ISpecType) : IKongPluginSpec[] {
-        const definition = spec.definition;
-        const parseDefinition = yaml.load(definition) as Record<string, any>;
-        const pluginsKong = Object.keys(parseDefinition)
-          .filter(key => key.startsWith('x-kong'))
-          .map(key => parseDefinition[key]);
-  
-        return pluginsKong as IKongPluginSpec[]
-      }
-
-    async getPluginsFromSpec(kind:string, entityName:string) : Promise<IPluginSpec[]>  {
-       const specsEntity = await this.getSpecsByEntity(kind, entityName);
-       
-       const pluginsFromSpec = await Promise.all(
-        specsEntity.map(async spec => ({
-            name: spec.metadata.name,
-            description: spec.metadata.description,
-            owner: spec.spec.owner,
-            tags: spec.metadata.tags ?? [],
-            plugins: this.getPluginsBySpec(spec.spec)
-        }))
-       )
-
-       return pluginsFromSpec as IPluginSpec[]
-    }
-
-    async addPluginsToSpec(specName:string, plugins:IKongPluginSpec[]) : Promise<IDefinition> {
-        const specData = await this.handlerEntity.getEntity('Api',specName);
-        const definition = yaml.load(specData.spec!.definition as string) as IDefinition; 
-
-        // delete kong's plugin (old state)
-        for(const key in definition){
-            if(key.startsWith('x-kong')){
-                delete definition[key]
-            }
-        }
-        // map new plugins
-        const pluginsWithPrefix : IPluginsWithPrefix = {}; 
-        
-        plugins.map(plugin => {
-            const pluginName = `x-kong-${plugin.name}`;
-            const newData = {
-                name: pluginName,
-                enabled: plugin.enabled,
-                config: plugin.config
-            }
-          pluginsWithPrefix[`${pluginName}`] = newData;
-        });
-
-        const definitionUpdated = {
-            openapi: definition.openapi,
-            info: definition.info,
-            externalDocs: definition.externalDocs,
-            servers: definition.servers,
-            tags: definition.tags,
-            ...pluginsWithPrefix,
-            paths: definition.paths,
-            components: definition.components
-        };
-
-        return definitionUpdated as IDefinition
     }
 
 }
