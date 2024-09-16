@@ -21,4 +21,4 @@ export const kongServiceManagerDeletePermission = createPermission({
 });
 
 
-export const kongServiceManagerPermissions = [kongServiceManagerReadPermission, kongServiceManagerCreatePermission, kongServiceManagerUpdatePermission, kongServiceManagerDeletePermission]
+export const kongServiceManagerPermissions = { kongServiceManagerReadPermission, kongServiceManagerCreatePermission, kongServiceManagerUpdatePermission, kongServiceManagerDeletePermission }
