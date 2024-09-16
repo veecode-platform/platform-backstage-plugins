@@ -1,15 +1,19 @@
 import { Request, Response } from "express";
-import { KongController } from "./kongController";
 import { ISpecController } from "./types";
 import { InputError, stringifyError } from "@backstage/errors";
+import { HandlerCatalogEntity } from "../api/handlerCatalogEntity";
 
-export class SpecController extends KongController implements ISpecController{
+export class SpecController implements ISpecController{
+
+   constructor(
+    private handlerCatalogEntityApi : HandlerCatalogEntity
+   ){}
 
     getSpecsByEntity= async (req:Request, res:Response) => {
         const { kind, entityName } = req.params;
 
         try{    
-          const specs = await this.kongServiceManagerApi
+          const specs = await this.handlerCatalogEntityApi
           .getPluginsFromSpec(
             kind,
             entityName
@@ -37,7 +41,7 @@ export class SpecController extends KongController implements ISpecController{
       const { plugins } = req.body;
       
       try{ 
-        const response = await this.kongServiceManagerApi
+        const response = await this.handlerCatalogEntityApi
         .addPluginsToSpec(
           specName,
            plugins
