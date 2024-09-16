@@ -16,6 +16,10 @@ const MenuOptionsItems = [
         label: 'Plugins',
         link: 'all-plugins'
     },
+    {
+       label: 'Specs',
+       link: 'all-specs'
+    }
 ]
 
 
