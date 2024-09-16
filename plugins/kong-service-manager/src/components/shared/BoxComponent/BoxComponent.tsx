@@ -7,7 +7,7 @@ import { useBoxComponentStyles } from './styles';
 
 export const BoxComponent = ({title, searchBar, children, button }:BoxComponentProps) => {
 
-  const { container,toolbar, titlebar, search, buttonToolbar } = useBoxComponentStyles();
+  const { container,toolbar, titlebar, search, buttonToolbar, content } = useBoxComponentStyles();
 
   return (
     <Box className={container}>
@@ -17,7 +17,9 @@ export const BoxComponent = ({title, searchBar, children, button }:BoxComponentP
       {button && (<div className={buttonToolbar}>{button}</div>)}
       <SelectInstance/>
     </Toolbar>
-      {children}
+    <Box className={content}>
+    {children}
+    </Box>  
   </Box>
   )
 }

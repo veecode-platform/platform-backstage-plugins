@@ -2,7 +2,9 @@ import { makeStyles } from "@material-ui/core";
 
 export const usePluginsCardsStyles = makeStyles( theme => ({
     content:{
-      minHeight: '60vh'
+      minHeight: '60vh',
+      backgroundColor: `${theme.palette.background.default}85`,
+      borderRadius: '5px'
      },
      categoryLabel:{
         marginTop: theme.spacing(3),
@@ -12,6 +14,7 @@ export const usePluginsCardsStyles = makeStyles( theme => ({
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
+      backgroundColor: '#1E1E1E05',
       gap: theme.spacing(4),
       borderRadius: '8px',
       border: `1px solid ${theme.palette.action.focus}`,
@@ -44,8 +47,14 @@ export const usePluginsCardsStyles = makeStyles( theme => ({
      },
      button:{
       border: `1px solid ${theme.palette.primary.main}`,
-      width: '380px',
-      padding: theme.spacing(1)
+      width: '100%',
+      padding: '.5rem 9rem',
+      marginBottom: '.5rem',
+      '&:hover':{
+        background: theme.palette.primary.main,
+        transition: 'all .5s ease-in-out',
+        color: theme.palette.background.default
+      }
      },
      spinner:{
       color: theme.palette.text.primary,

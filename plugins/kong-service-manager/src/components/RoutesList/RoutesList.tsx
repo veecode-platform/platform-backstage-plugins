@@ -15,7 +15,7 @@ export const RoutesList = () => {
   const [route, setRoute] = React.useState<any>();
 
   const { getRoutesList } = useKongServiceManagerContext();
-  const { content } = useRoutesListStyles();
+  const { content, button } = useRoutesListStyles();
 
   const fetchRoutes = async (): Promise<RouteResponse[]> => {
     const data = await getRoutesList() as RouteResponse[];
@@ -36,7 +36,7 @@ export const RoutesList = () => {
       <BoxComponent
         title="All Routes"
         button={
-          <Button variant="contained" style={{height: '46px', marginBottom: '-.5rem'}} color="primary" onClick={() => handleToggleModal({})}>
+          <Button variant="contained" color="primary" className={button} onClick={() => handleToggleModal({})}>
             Create
           </Button>}
       >

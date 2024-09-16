@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core";
 
 export const useAboutStyles = makeStyles(theme=>({
     listComponent:{
-      background: theme.palette.background.default,
+      backgroundColor: '#1E1E1E05',
       height: '100%',
       minHeight: '65vh',
       margin:'.5rem',
@@ -10,7 +10,7 @@ export const useAboutStyles = makeStyles(theme=>({
     listItemWrapper:{
       width: '100%',
       '&:nth-child(even)':{
-        background: theme.palette.background.paper
+        background: theme.palette.background.default
       }
     },
     listItem:{

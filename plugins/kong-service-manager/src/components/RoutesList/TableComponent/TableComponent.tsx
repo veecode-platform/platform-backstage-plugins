@@ -10,7 +10,7 @@ import Edit from '@material-ui/icons/Edit';
 import { useKongServiceManagerContext } from '../../../context';
 import { ConfirmDeleteDialog } from '../ConfirmDeleteDialog/ConfirmDeleteDialog';
 import { TableComponentProps, TableData } from './types';
-import { useTableComponentStyle } from './styles';
+import { tableStyle, useTableComponentStyle } from './styles';
 import { RoutesResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 
@@ -192,7 +192,7 @@ export const TableComponent : React.FC<TableComponentProps> = (props) => {
           data={generateData(dataProps)}
           columns={columns}
           title=""
-          style={{marginTop: '-2rem', width: '100%', height:'100%'}}
+          style={tableStyle}
         />
         <ConfirmDeleteDialog show={showDialog} handleClose={handleCloseDialog} handleSubmit={handleRemoveRoute}/>
       </>
