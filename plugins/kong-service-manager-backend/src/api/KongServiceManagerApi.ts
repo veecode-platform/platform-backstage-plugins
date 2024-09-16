@@ -22,8 +22,6 @@ import { KongConfig } from "../lib";
 import { IKongAuth, IKongConfigOptions } from "../lib/types";
 import yaml from 'js-yaml';
 import { HandlerCatalogEntity } from "./handlerCatalogEntity";
-import { formatObject } from "../utils/helpers/formactObject";
-import { ANNOTATION_LOCATION, Entity } from "@backstage/catalog-model";
 import { CatalogClient } from "@backstage/catalog-client";
 import { createLegacyAuthAdapters } from "@backstage/backend-common";
 
@@ -41,7 +39,8 @@ abstract class Client {
         this.authAdapters = createLegacyAuthAdapters(opts);
         this.handlerEntity = new HandlerCatalogEntity(
             new CatalogClient({discoveryApi: opts.discovery}),
-            this.authAdapters)
+            this.authAdapters);
+        
     }
 
     protected async fetch <T = any>(input: string,instanceName:string, init?: RequestInit): Promise<T> {
@@ -200,17 +199,6 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
 
         const { workspace } = this.getKongConfig(instanceName);
         const response = await this.fetch(`/${workspace}/services/${serviceIdOrName}/routes`, instanceName)
-        // const mapedRoutesResponse: RoutesResponse[] = response.data.map((route:RouteResponse) => {
-        //     return {
-        //         name: route.name,
-        //         protocols: route.protocols,
-        //         methods: route.methods,
-        //         tags: route.tags,
-        //         hosts: route.hosts,
-        //         paths: route.paths
-        //     }
-        // })
-
         return response.data;
     }
 
@@ -333,10 +321,9 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
        return pluginsFromSpec as IPluginSpec[]
     }
 
-    async applyPluginsToSpec(specName:string, plugins:IKongPluginSpec[]) : Promise<Entity> {
+    async addPluginsToSpec(specName:string, plugins:IKongPluginSpec[]) : Promise<IDefinition> {
         const specData = await this.handlerEntity.getEntity('Api',specName);
         const definition = yaml.load(specData.spec!.definition as string) as IDefinition; 
-        const location = specData.metadata.annotations?.[ANNOTATION_LOCATION];
 
         // delete kong's plugin (old state)
         for(const key in definition){
@@ -368,15 +355,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
             components: definition.components
         };
 
-        const definitionToString = formatObject(definitionUpdated);
-
-        specData.spec!.definition = definitionToString;
-
-        console.log("LOCATIOON",location);
-
-        return specData;
-
-        // to do pullrequest services
+        return definitionUpdated as IDefinition
     }
 
 }
