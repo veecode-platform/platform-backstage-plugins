@@ -251,6 +251,20 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
+  const getSpecs = async() => {
+    try{
+      if(entity){
+        const response = await api.getSpecs(entity.kind, entity.metadata.name);
+        if(response) return response;
+      }
+      return null
+    }
+    catch(e:any){
+      errorApi.post(e);
+      return null
+    }
+  }
+
   React.useEffect(()=>{
     if(allAssociatedPlugins){
       getAssociatedPuginsName(allAssociatedPlugins);
@@ -298,7 +312,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         createRoute,
         editRoute,
         removeRoute,
-        getRoute
+        getRoute,
+        getSpecs
       }}
     >
       {children}
