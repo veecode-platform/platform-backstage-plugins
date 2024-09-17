@@ -19,11 +19,11 @@ export const SpecList = () => {
 
   const {loading, error, value: allspecs } = useAsync(fetchSpecs,[])
 
-  if(loading) <h1>Carregando</h1>
+  if(loading) <h1>Carregando</h1>  // TO DO
 
-  if(error) <h1>Error</h1>
+  if(error) <h1>Error</h1>  // TO DO
 
-  if(allspecs && allspecs.length === 0) <h1>Nada pra mostrar</h1>
+  if(allspecs && allspecs.length === 0) <h1>Nada pra mostrar</h1> // TO DO
 
   return (
     <ErrorBoundary>
