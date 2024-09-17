@@ -5,9 +5,9 @@ export const useSearchBarStyles = makeStyles(theme =>
       search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: alpha(theme.palette.common.black, 0.08),
         '&:hover': {
-          backgroundColor: alpha(theme.palette.common.black, 0.08),
+          backgroundColor: theme.palette.background.default,
         },
         marginLeft: 0,
         width: '100%',
