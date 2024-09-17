@@ -1,11 +1,10 @@
 import { AuthService, HttpAuthService } from "@backstage/backend-plugin-api";
 import { Entity } from "@backstage/catalog-model";
 import { JsonValue } from "@backstage/types";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IDefinition, IKongPluginSpec, IPluginSpec, ISpec, PluginFieldsResponse, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IDefinition, IKongPluginSpec, ISpec, PluginFieldsResponse, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export interface KongServiceManagerApi {
     getServiceInfo(instanceName: string, serviceIdOrName: string): Promise<ServiceInfoResponse>;
-   // getEnabledPlugins(instanceName: string,serviceIdOrName: string, searchFilter?: string): Promise<PluginPerCategory[]>; 
     getEnabledPlugins(instanceName: string): Promise<string[]>;
     getPluginFields(instanceName: string, pluginName: string): Promise<PluginFieldsResponse[]>;
     getServiceAssociatedPlugins(instanceName: string, serviceIdOrName: string): Promise<AssociatedPluginsResponse[]>;
@@ -22,7 +21,7 @@ export interface KongServiceManagerApi {
 export interface IHandlerCatalogEntity {
     getEntity(kind:string, entityName:string) : Promise<Entity>,
     getSpecs(specs:string[]):Promise<ISpec[]>,
-    getPluginsFromSpec(kind:string, entityName: string):Promise<IPluginSpec[]>;
+    getPluginsFromSpec(entityName:string) : Promise<IKongPluginSpec[]>,
     addPluginsToSpec(specName: string,plugins: IKongPluginSpec[]): Promise<IDefinition>
 }
 
