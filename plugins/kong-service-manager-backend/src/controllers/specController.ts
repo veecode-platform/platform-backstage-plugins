@@ -36,6 +36,32 @@ export class SpecController implements ISpecController{
         }
     }
 
+    getPluginsFromSpec = async (req:Request,res:Response) => {
+      const { entityName } = req.params;
+
+      try{    
+        const plugins = await this.handlerCatalogEntityApi
+        .getPluginsFromSpec(
+          entityName
+        );
+
+        res
+        .status(200)
+        .json({
+          plugins
+         })
+      }
+      catch(err:any){
+          if (err.errors) {
+              throw new InputError(
+                `Unable to info spec plugins:
+                 ${stringifyError(err.errors)}`,
+              );
+            }
+            throw err;  
+      }
+    }
+
     updateSpec = async (req:Request, res:Response) => {
       const { specName } = req.params;
       const { plugins } = req.body;
