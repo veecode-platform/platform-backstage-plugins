@@ -2,7 +2,7 @@ import { Entity } from "@backstage/catalog-model";
 import { AuthAdapters, IHandlerCatalogEntity, IPluginsWithPrefix } from "./types";
 import { CatalogClient } from '@backstage/catalog-client';
 import { NotFoundError } from "@backstage/errors";
-import { IDefinition, IKongPluginSpec, IPluginSpec, IRelation, ISpec, ISpecType } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { IDefinition, IKongPluginSpec, IRelation, ISpec } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { Client } from "./client";
 import { createLegacyAuthAdapters } from "@backstage/backend-common";
 import { KongServiceManagerOptions } from "../utils/types";
@@ -79,6 +79,37 @@ export class HandlerCatalogEntity extends Client implements IHandlerCatalogEntit
         return specsData as ISpec[];
     }
 
+    async getSpec(entityName: string): Promise<ISpec> {
+      const specData = await this.getEntity('Api', entityName);
+    
+      return {
+        metadata: {
+          namespace: specData.metadata.namespace ?? 'default',
+          annotations: specData.metadata.annotations ?? {},
+          name: specData.metadata.name,
+          title: specData.metadata.name,
+          publishedAt: new Date(specData.metadata.publishedAt as string) ?? Date.now(),
+          description: specData.metadata.description ?? '',
+          tags: specData.metadata.tags ?? [],
+          uid: specData.metadata.uid as string,
+          etag: specData.metadata.etag ?? ''
+        },
+        apiVersion: specData.apiVersion,
+        kind: specData.kind,
+        spec: {
+          type: specData.spec?.type as string,
+          lifecycle: specData.spec!.lifecycle as string,
+          owner: specData.spec!.owner as string, 
+          definition: specData.spec!.definition as string
+        },
+        relations: specData.relations?.map(rel => ({
+          type: rel.type,
+          targetRef: rel.targetRef
+        })) ?? []
+      };
+    }
+    
+
     async getSpecsByEntity(kind: string, entityName: string): Promise<ISpec[]> {
       const entity = await this.getEntity(kind,entityName);
 
@@ -107,8 +138,9 @@ export class HandlerCatalogEntity extends Client implements IHandlerCatalogEntit
         }
     }
 
-    getPluginsBySpec(spec:ISpecType) : IKongPluginSpec[] {
-        const definition = spec.definition;
+    async getPluginsFromSpec(entityName:string) : Promise<IKongPluginSpec[]> {
+        const spec = await this.getSpec(entityName);
+        const definition = spec.spec.definition;
         const parseDefinition = yaml.load(definition) as Record<string, any>;
         const pluginsKong = Object.keys(parseDefinition)
           .filter(key => key.startsWith('x-kong'))
@@ -116,22 +148,6 @@ export class HandlerCatalogEntity extends Client implements IHandlerCatalogEntit
   
         return pluginsKong as IKongPluginSpec[]
       }
-
-    async getPluginsFromSpec(kind:string, entityName:string) : Promise<IPluginSpec[]>  {
-       const specsEntity = await this.getSpecsByEntity(kind, entityName);
-       
-       const pluginsFromSpec = await Promise.all(
-        specsEntity.map(async spec => ({
-            name: spec.metadata.name,
-            description: spec.metadata.description,
-            owner: spec.spec.owner,
-            tags: spec.metadata.tags ?? [],
-            plugins: this.getPluginsBySpec(spec.spec)
-        }))
-       )
-
-       return pluginsFromSpec as IPluginSpec[]
-    }
 
     async addPluginsToSpec(specName:string, plugins:IKongPluginSpec[]) : Promise<IDefinition> {
         const specData = await this.getEntity('Api',specName);
