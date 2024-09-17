@@ -16,7 +16,6 @@ export const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.action.hover,
     },
-    // hide last border
     '&:last-child td, &:last-child th': {
       border: 0,
     },
@@ -27,6 +26,17 @@ export const usePluginsTableStyles = makeStyles(theme => ({
         marginTop: '1rem',
         borderRadius: '5px',
         minHeight: '50vh',
+        position:  'relative'
+    },
+    iconAndName:{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      gap: '1rem',
+      padding: '0 .5rem',
+      '& img':{
+        width: '40px'
+      }
     },
     button:{
         padding: '.8rem 2.5rem',
@@ -46,8 +56,8 @@ export const usePluginsTableStyles = makeStyles(theme => ({
      backgroundColor: theme.palette.background.default,
      color: theme.palette.text.primary,
      '&:hover':{
-        backgroundColor: theme.palette.success.main,
-        color: theme.palette.text.primary,
+        backgroundColor: theme.palette.linkHover,
+        color: theme.palette.background.default,
     }
     },
     remove:{
@@ -70,5 +80,10 @@ export const usePluginsTableStyles = makeStyles(theme => ({
     footer:{
         background: theme.palette.background.default,
         marginTop: '2rem'
+    },
+    fixedToBottom: {
+     position: 'absolute',
+     bottom: '0',
+     right: '0'
     }
 }))
