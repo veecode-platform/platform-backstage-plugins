@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import {  PluginCard } from "../utils/types";
+import {  PluginCard, PluginForSpec } from "../utils/types";
 import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, ISpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 
@@ -29,7 +29,8 @@ export type KongServiceManagerContextType = {
     editRoute: (routeNameOrId: string, config: CreateRoute) => Promise<void | null>;
     removeRoute: (routeNameOrId: string) => Promise<void | null>;
     getRoute:  (routeNameOrId: string) => Promise<RouteResponse | null>;
-    getSpecs: () => Promise<ISpec[] | null >
+    getSpecs: () => Promise<ISpec[] | null >;
+    listAllPluginsForSpec: (specName: string) => Promise<PluginForSpec[]>
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!);
