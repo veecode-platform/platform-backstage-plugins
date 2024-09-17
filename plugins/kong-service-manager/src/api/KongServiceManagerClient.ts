@@ -1,6 +1,6 @@
 import { ConfigApi } from "@backstage/core-plugin-api";
 import { KongServiceManagerApi, Options } from "./KongServiceManagerApi";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, ISpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, ISpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { PluginsInfoData } from "../data/data";
 
  abstract class Client {
@@ -174,6 +174,16 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
     async getSpecs(kind:string,entityName:string) : Promise<ISpec[]>{
         const response = await this.fetch(`/${kind}/${entityName}/specs`);
         return response.specs as ISpec[];
+    }
+
+    async getPluginsFromSpec(entityName:string):Promise<IKongPluginSpec[]>{
+        const response = await this.fetch(`/spec/${entityName}/plugins`);
+        return response.plugins as IKongPluginSpec[]
+    }
+
+
+    async applyPluginsToSpec(){
+        // pegar os plugins e suas configs e enviar para o endpoint q retornará o definition como objeto, entao esse objeto vai ter que ser transformado em yaml e submetido para pull request
     }
 
 }
