@@ -4,10 +4,15 @@ import { SelectInstance } from '../../SelectInstance';
 import { SearchBar } from '../SearchBar';
 import { BoxComponentProps } from './types';
 import { useBoxComponentStyles } from './styles';
+import { MdOutlineClose } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom';
 
-export const BoxComponent = ({title, searchBar, children, button }:BoxComponentProps) => {
+export const BoxComponent = ({title, searchBar, children, button, noSelectInstance, goBack }:BoxComponentProps) => {
 
-  const { container,toolbar, titlebar, search, buttonToolbar, content } = useBoxComponentStyles();
+  const navigate = useNavigate();
+  const { container,toolbar, titlebar, search, buttonToolbar, content,closeButton } = useBoxComponentStyles();
+
+  const handleGoBack = () => navigate(-1);
 
   return (
     <Box className={container}>
@@ -15,7 +20,8 @@ export const BoxComponent = ({title, searchBar, children, button }:BoxComponentP
       <Typography variant="h6" className={titlebar}>{title}</Typography>
       {searchBar && (<div className={search}><SearchBar/></div>)}
       {button && (<div className={buttonToolbar}>{button}</div>)}
-      <SelectInstance/>
+      {!noSelectInstance && <SelectInstance/>}
+      {goBack && <div className={closeButton}><MdOutlineClose size={32} onClick={handleGoBack}/></div>}
     </Toolbar>
     <Box className={content}>
     {children}

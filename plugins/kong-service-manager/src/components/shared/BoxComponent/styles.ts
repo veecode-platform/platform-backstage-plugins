@@ -14,7 +14,7 @@ export const useBoxComponentStyles = makeStyles(theme=>({
       alignItems: 'center',
       justifyContent: 'center',
       position: 'relative',
-      backgroundColor: theme.palette.background.default,
+      backgroundColor: theme.palette.background.paper,
       borderTopLeftRadius: '10px',
       borderTopRightRadius: '10px',
       borderBottom: `1px solid  ${theme.palette.grey[700]}`,
@@ -47,5 +47,14 @@ export const useBoxComponentStyles = makeStyles(theme=>({
     content:{
       minWidth: '100%',
       height: '100%'
+    },
+    closeButton:{
+      cursor: 'pointer',
+      padding: '2rem 0 1rem 0',
+      '&:hover':{
+        color: theme.palette.link,
+        transform: 'scale(1.15)',
+        transition: 'all .5s ease-in-out'
+      }
     }
   }));

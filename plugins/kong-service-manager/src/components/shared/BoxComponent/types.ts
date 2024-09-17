@@ -4,5 +4,7 @@ export interface BoxComponentProps {
     title: string,
     searchBar?: boolean,
     children: ReactNode | React.JSX.Element,
-    button?: ReactNode
+    button?: ReactNode,
+    noSelectInstance?: boolean,
+    goBack?: boolean
 }
