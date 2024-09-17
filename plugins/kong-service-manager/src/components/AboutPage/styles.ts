@@ -9,7 +9,7 @@ export const useAboutStyles = makeStyles(theme=>({
     },
     listItemWrapper:{
       width: '100%',
-      '&:nth-child(even)':{
+      '&:nth-child(odd)':{
         background: theme.palette.background.default
       }
     },
