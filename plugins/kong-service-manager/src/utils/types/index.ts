@@ -28,3 +28,12 @@
     port: number;
   }
 
+export interface PluginForSpec {
+  image: string,
+  name: string,
+  slug: string,
+  description: string,
+  config: any
+  enabledToSpec: boolean,
+}
+
