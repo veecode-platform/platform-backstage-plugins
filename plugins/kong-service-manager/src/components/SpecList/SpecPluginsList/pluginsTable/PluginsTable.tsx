@@ -8,46 +8,43 @@ import { StyledTableCell, StyledTableRow, usePluginsTableStyles } from './styles
 import Button from '@mui/material/Button';
 import { IoMdAdd, IoMdRemove } from 'react-icons/io';
 import TableFooter from '@mui/material/TableFooter';
+import { PluginsTableProps } from './types';
+import { useKongServiceManagerContext } from '../../../../context';
+import { PluginForSpec } from '../../../../utils/types';
+import useAsync from 'react-use/esm/useAsync';
 
 
-// mock
-function createData(
+const createData = (
   name: string,
+  image: string,
   description: string,
-  action: React.ReactNode,
-) {
-  return { name, description, action };
+  config : any,
+  enableToSpec: boolean,
+)  => {
+  return { name, image, description, config, enableToSpec };
 }
 
-
-
-export const PluginsTable = () => {
+export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
   
-  const { root,button, apply, remove, submit, footer } = usePluginsTableStyles();
+  const { specName } = props;
+  const { root,iconAndName, button, apply, remove, submit, footer, fixedToBottom } = usePluginsTableStyles();
+  const { listAllPluginsForSpec } = useKongServiceManagerContext();
 
-  const rows = [
-    createData('Key Auth', 'Add key authentication to your Services', <><Button className={`${button} ${apply}`}> <IoMdAdd size={20}/> <span>Apply in Spec</span></Button></>),
-    createData('Rate Limiting', 'Rate limit how many HTTP requests can be made in a period of time', <> <Button className={`${button} ${remove}`}> <IoMdRemove size={20} /> <span>Remove From spec</span></Button></>),
-    createData('Key Auth', 'Add key authentication to your Services', <><Button className={`${button} ${apply}`}> <IoMdAdd size={20}/> <span>Apply in Spec</span></Button></>),
-    createData('Rate Limiting', 'Rate limit how many HTTP requests can be made in a period of time', <> <Button className={`${button} ${remove}`}> <IoMdRemove size={20} /> <span>Remove From spec</span></Button></>),
-    createData('Key Auth', 'Add key authentication to your Services', <><Button className={`${button} ${apply}`}> <IoMdAdd size={20}/> <span>Apply in Spec</span></Button></>),
-    createData('Rate Limiting', 'Rate limit how many HTTP requests can be made in a period of time', <> <Button className={`${button} ${remove}`}> <IoMdRemove size={20} /> <span>Remove From spec</span></Button></>),
-    createData('Key Auth', 'Add key authentication to your Services', <><Button className={`${button} ${apply}`}> <IoMdAdd size={20}/> <span>Apply in Spec</span></Button></>),
-    createData('Rate Limiting', 'Rate limit how many HTTP requests can be made in a period of time', <> <Button className={`${button} ${remove}`}> <IoMdRemove size={20} /> <span>Remove From spec</span></Button></>),
-    createData('Key Auth', 'Add key authentication to your Services', <><Button className={`${button} ${apply}`}> <IoMdAdd size={20}/> <span>Apply in Spec</span></Button></>),
-    createData('Rate Limiting', 'Rate limit how many HTTP requests can be made in a period of time', <> <Button className={`${button} ${remove}`}> <IoMdRemove size={20} /> <span>Remove From spec</span></Button></>),
-    createData('Key Auth', 'Add key authentication to your Services', <><Button className={`${button} ${apply}`}> <IoMdAdd size={20}/> <span>Apply in Spec</span></Button></>),
-    createData('Rate Limiting', 'Rate limit how many HTTP requests can be made in a period of time', <> <Button className={`${button} ${remove}`}> <IoMdRemove size={20} /> <span>Remove From spec</span></Button></>),
-    createData('Key Auth', 'Add key authentication to your Services', <><Button className={`${button} ${apply}`}> <IoMdAdd size={20}/> <span>Apply in Spec</span></Button></>),
-    createData('Rate Limiting', 'Rate limit how many HTTP requests can be made in a period of time', <> <Button className={`${button} ${remove}`}> <IoMdRemove size={20} /> <span>Remove From spec</span></Button></>),
-    createData('Key Auth', 'Add key authentication to your Services', <><Button className={`${button} ${apply}`}> <IoMdAdd size={20}/> <span>Apply in Spec</span></Button></>),
-    createData('Rate Limiting', 'Rate limit how many HTTP requests can be made in a period of time', <> <Button className={`${button} ${remove}`}> <IoMdRemove size={20} /> <span>Remove From spec</span></Button></>),
-    createData('Key Auth', 'Add key authentication to your Services', <><Button className={`${button} ${apply}`}> <IoMdAdd size={20}/> <span>Apply in Spec</span></Button></>),
-  ];
+  
+  const fetchData = async (): Promise<PluginForSpec[]> => {
+    const data = await listAllPluginsForSpec(specName) as PluginForSpec[];
+    return data;
+  };
+
+  const {loading, error, value: allPlugins } = useAsync(fetchData,[]) // to do
+
+  const rows = allPlugins ? allPlugins.map(
+    plugin => createData(plugin.name, plugin.image,plugin.description, plugin.config, plugin.enabledToSpec)
+  ) : []
 
   return (
-    <TableContainer className={root}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+    <TableContainer className={root} >
+      <Table sx={{ minWidth: 700 }} aria-label="plugins table" >
         <TableHead>
           <TableRow>
             <StyledTableCell>Plugin</StyledTableCell>
@@ -59,14 +56,20 @@ export const PluginsTable = () => {
           {rows.map((row) => (
             <StyledTableRow key={row.name}>
               <StyledTableCell component="th" scope="row">
-                {row.name}
+               <div className={iconAndName}> <img src={row.image} alt={row.name}/> {row.name}</div>
               </StyledTableCell>
               <StyledTableCell align="center">{row.description}</StyledTableCell>
-              <StyledTableCell align="center">{row.action}</StyledTableCell>
+              <StyledTableCell align="center">
+                {
+                 row.enableToSpec ? 
+                  <Button className={`${button} ${remove}`}> <IoMdRemove size={20}/> Remove from Spec </Button>
+                  : <Button className={`${button} ${apply}`}> <IoMdAdd size={20}/> Apply to Spec </Button> 
+                 }
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
-        <TableFooter className={footer}>
+        <TableFooter className={`${footer} ${rows.length <= 3 && fixedToBottom}`}>
             <StyledTableRow>
               <StyledTableCell colSpan={3} align="center">
                 <Button className={`${button} ${submit}`}>Apply</Button>
