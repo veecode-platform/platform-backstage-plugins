@@ -265,6 +265,69 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
+  const getPluginsInSpecs = async(specName:string) => {
+    try{
+      if(specName){
+        const response = await api.getPluginsFromSpec(specName);
+        if(response) return response;
+      }
+      return null
+    }
+    catch(e:any){
+      errorApi.post(e);
+      return null
+    }
+  }
+
+  const getConfig = (pluginName:string) => {
+    if(allAssociatedPlugins){
+      const config = allAssociatedPlugins.find( associatedPlugin => associatedPlugin.name === pluginName && associatedPlugin.config);
+     
+      if(config){
+        const filteredConfig = Object.fromEntries(
+          Object.entries(config.config).filter(([_, value]) => value !== null)
+        );
+        
+        return {...config, filteredConfig}
+      }
+
+    }
+    return {}
+  }
+
+   const listAllPluginsForSpec =  async (specName:string) => {
+      
+        const pluginsInSpec = await getPluginsInSpecs(specName);
+        
+        if(allAssociatedPlugins && pluginsPerCategory && pluginsInSpec){
+
+          const pluginsList = pluginsPerCategory.flatMap(category=>
+            category.plugins
+            .filter((plugin) => plugin.associated)
+            .map((plugin) => ({
+              image: plugin.image,
+              name: plugin.name,
+              slug: plugin.slug,
+              description: plugin.description,
+              config: getConfig(plugin.name), 
+              enabledToSpec: false,
+            }))
+        );
+
+        pluginsList.forEach((plugin) => {
+          const isInSpec = pluginsInSpec.some((specPlugin) => specPlugin.name === plugin.name);
+          plugin.enabledToSpec = isInSpec ? true : false;
+        }); 
+        
+        return pluginsList
+
+        }
+
+        return []
+      
+    }
+
+
   React.useEffect(()=>{
     if(allAssociatedPlugins){
       getAssociatedPuginsName(allAssociatedPlugins);
@@ -313,7 +376,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         editRoute,
         removeRoute,
         getRoute,
-        getSpecs
+        getSpecs,
+        listAllPluginsForSpec
       }}
     >
       {children}
