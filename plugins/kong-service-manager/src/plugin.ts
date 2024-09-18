@@ -1,4 +1,4 @@
-import { createApiFactory, createPlugin, discoveryApiRef, createRoutableExtension, configApiRef } from '@backstage/core-plugin-api';
+import { createApiFactory, createPlugin, discoveryApiRef, createRoutableExtension, configApiRef, fetchApiRef } from '@backstage/core-plugin-api';
 import { addPluginRouteRef, pluginsListRouteRef, removePluginRouteRef, kongServiceRouteRef, routesListRouteRef } from './@deprecated/src/routes';
 import { KongServiceManagerApiClient, kongServiceManagerApiRef } from './api';
 import { KongServiceManagerApiClientDeprecated, kongServiceManagerApiDeprecatedRef } from './@deprecated/src/api';
@@ -25,10 +25,11 @@ export const kongServiceManagerPlugin = createPlugin({
     }),
     createApiFactory({
       api: kongServiceManagerApiRef,
-      deps: { config: configApiRef },
-      factory: ({config}) => {
+      deps: { config: configApiRef, fetchApi: fetchApiRef },
+      factory: ({config, fetchApi}) => {
         return new KongServiceManagerApiClient({
-          config
+          config,
+          fetchApi
         })
       }
     })
