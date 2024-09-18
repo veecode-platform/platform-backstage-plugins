@@ -19,13 +19,11 @@ import schema from '../schema/kinds/Database.v1alpha1.schema.json';
 import { ajvCompiledJsonSchemaValidator } from './util';
 
 /**
- * Backstage catalog Database kind Entity. Represents a single, individual piece of software.
+ * Adds support for @veecode specific entity kind: cluster to the catalog.
  *
- * @remarks
- *
- * See {@link https://backstage.io/docs/features/software-catalog/system-model}
- *
- * @public
+ * @deprecated
+ * 
+ *  use @veecode-platform-module plugin , see in https://github.com/veecode-platform/platform-backstage-plugins/tree/develop/plugins/veecode-platform-module
  */
 export interface DatabaseEntityV1alpha1 extends Entity {
   apiVersion: 'veecode.backstage.io/v1alpha1' | 'backstage.io/v1alpha1' | 'backstage.io/v1beta1';

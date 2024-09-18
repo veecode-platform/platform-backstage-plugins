@@ -1,8 +1,9 @@
-import { ConfigApi, createApiRef } from "@backstage/core-plugin-api";
+import { ConfigApi, createApiRef, FetchApi } from "@backstage/core-plugin-api";
 import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, ISpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export type Options = {
     config: ConfigApi;
+    fetchApi: FetchApi
 };
 
 export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
