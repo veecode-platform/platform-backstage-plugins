@@ -10,7 +10,7 @@ export type KongServiceManagerContextType = {
     getServiceDetails: () => Promise<ServiceInfoResponse | null>;
     getRoutesList: () => Promise<RouteResponse[] | null>;
     listAssociatedPlugins: () => Promise<void>;
-    allAssociatedPlugins: AssociatedPluginsResponse[] | null;
+    allAssociatedPluginsState: AssociatedPluginsResponse[] | null;
     associatedPluginsName: [] | string[];
     getPluginFields: (pluginName: string) => Promise<PluginFieldsResponse[] | null>;
     enablePlugin: (config: CreatePlugin) => Promise<void | null>;
@@ -18,9 +18,9 @@ export type KongServiceManagerContextType = {
     handleToggleDrawer: () => void;
     openDrawer: boolean;
     setPluginState: (data: PluginCard) => void;
-    selectedPlugin: PluginCard | null;
+    selectedPluginState: PluginCard | null;
     editPlugin: (pluginId: string,config: CreatePlugin) => Promise<void | null>;
-    pluginsPerCategory: [] | PluginPerCategory[],
+    pluginsPerCategoryState: [] | PluginPerCategory[],
     configState: any;
     setConfigState: React.Dispatch<any>;
     setSearchState: (search: string) => void;

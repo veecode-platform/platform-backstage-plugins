@@ -5,11 +5,11 @@ import { PluginPerCategory } from '@veecode-platform/backstage-plugin-kong-servi
 
 export const AllPlugins = () => {
 
-  const { pluginsPerCategory } = useKongServiceManagerContext();
+  const { pluginsPerCategoryState } = useKongServiceManagerContext();
 
   return (
     <>
-      { pluginsPerCategory.map( 
+      { pluginsPerCategoryState.map( 
         (category:PluginPerCategory) => 
           category.plugins.length >= 1 ? 
           <CategoryComponent label={category.category} plugins={category.plugins} key={category.category}/> 

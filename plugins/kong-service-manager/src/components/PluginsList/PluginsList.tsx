@@ -10,7 +10,7 @@ import { Box } from '@material-ui/core';
 
 export const PluginsList = () => {
 
-  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPlugins, pluginsPerCategory} = useKongServiceManagerContext();
+  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPluginsState, pluginsPerCategoryState} = useKongServiceManagerContext();
   const { wrapper, emptyContent } = usePluginListStyles();
 
   const getPluginsEnabled = async () => {
@@ -29,7 +29,7 @@ export const PluginsList = () => {
   React.useEffect(()=>{
     getPluginsEnabled();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[allAssociatedPlugins]);
+  },[allAssociatedPluginsState]);
 
   if (loading) return <Progress />;
 
@@ -41,10 +41,10 @@ export const PluginsList = () => {
         <Box className={wrapper}>
           <TabbedCard title="">
             <CardTab label="All Plugins">
-              {pluginsPerCategory && pluginsPerCategory.length >=1 ? <PluginsCards /> : <div className={emptyContent}> No data to display ...</div>}
+              {pluginsPerCategoryState && pluginsPerCategoryState.length >=1 ? <PluginsCards /> : <div className={emptyContent}> No data to display ...</div>}
             </CardTab>
             <CardTab label="Associated Plugins">
-              {allAssociatedPlugins && allAssociatedPlugins.length >= 1 ? (<PluginsCards filterByAssociated />) 
+              {allAssociatedPluginsState && allAssociatedPluginsState.length >= 1 ? (<PluginsCards filterByAssociated />) 
               : <div className={emptyContent}> No data to display ...</div>}
             </CardTab>
           </TabbedCard>

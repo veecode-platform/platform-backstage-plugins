@@ -5,7 +5,8 @@ import { KongServiceManagerContext } from "./KongServiceManagerContext";
 import { PluginCard } from "../utils/types";
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from "../hooks";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginPerCategory } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { addPluginsAssociated, addPluginsPerCategory, addSelectedPlugin, AssociatedPluginsReducer, initialAssociatedPluginsState, initialPluginsPerCategoryState, initialSelectedPluginState, PluginsPerCategoryReducer, removePluginAssociated, SelectedPluginReducer } from "./state";
 
 interface KongServiceManagerProviderProps {
     children : React.ReactNode
@@ -13,12 +14,12 @@ interface KongServiceManagerProviderProps {
 
 export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProps> = ({children}) => {
 
-  const [allAssociatedPlugins, setAllAssociatedPlugins] = React.useState<AssociatedPluginsResponse[]|null>(null);
+  const [allAssociatedPluginsState, associatedPluginsDispatch ] = React.useReducer(AssociatedPluginsReducer, initialAssociatedPluginsState);
   const [openDrawer, setOpenDrawer] = React.useState<boolean>(false);
-  const [selectedPlugin, setSelectedPlugin] = React.useState<PluginCard|null>(null);
-  const [ associatedPluginsName, setAssociatedPluginsName] = React.useState<string[]|[]>([]);
-  const [pluginsPerCategory, setPluginsPerCategory] = React.useState<PluginPerCategory[]|[]>([]); 
-  const [configState, setConfigState ] = React.useState<any|null>(null);
+  const [selectedPluginState, selectedPluginDispatch ] = React.useReducer(SelectedPluginReducer, initialSelectedPluginState);
+  const [ associatedPluginsName, setAssociatedPluginsName] = React.useState<string[]|[]>([]); 
+  const [pluginsPerCategoryState, pluginsPerCategoryDispatch ] = React.useReducer(PluginsPerCategoryReducer, initialPluginsPerCategoryState);
+  const [configState, setConfigState ] = React.useState<any|null>(null); 
   const [searchTerm, setSeachTerm] = React.useState<string>("");
   const { entity } = useEntity();
   const { serviceName,kongInstances } = useEntityAnnotation(entity);
@@ -41,7 +42,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     setOpenDrawer(!openDrawer);
   }
 
-  const setPluginState = (data: PluginCard ) => setSelectedPlugin(data);
+  const setPluginState = (data: PluginCard ) => selectedPluginDispatch(addSelectedPlugin(data));
 
   const getAssociatedPuginsName = ( pluginsParams : AssociatedPluginsResponse[] ) => {
     const newData : string[] = []
@@ -56,7 +57,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         if(instance && serviceName){
             const plugins = await api.getEnabledPlugins(instance,serviceName,searchTerm);
             if(plugins) {
-              setPluginsPerCategory(plugins)
+              pluginsPerCategoryDispatch(addPluginsPerCategory(plugins))
               return plugins
             }
           }
@@ -72,7 +73,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     try{
       if(instance && serviceName){
         const plugins = await api.getServiceAssociatedPlugins(instance,serviceName);
-        if (plugins !== null && plugins !== undefined) setAllAssociatedPlugins(plugins);
+        if (plugins !== null && plugins !== undefined) associatedPluginsDispatch(addPluginsAssociated(plugins));
       }
     }
     catch(e:any){
@@ -158,7 +159,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     try{ 
       if(instance && serviceName){
         const response = await api.removeRouteFromService(instance,serviceName,routeId);
-        if(response && allAssociatedPlugins) {
+        if(response && allAssociatedPluginsState) {
           await getRoutesList();
           return alertApi.post({
             message: 'Route successfully delete!',
@@ -233,9 +234,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     try{ 
       if(instance && serviceName){
         const response = await api.removeServicePlugin(instance,serviceName, pluginId);
-        if(response && allAssociatedPlugins) {
-          const newAssociatedPluginsData = allAssociatedPlugins.filter(p => p.id !== pluginId && p);
-            setAllAssociatedPlugins(newAssociatedPluginsData);
+        if(response && allAssociatedPluginsState) {
+          // const newAssociatedPluginsData = allAssociatedPluginsState.filter(p => p.id !== pluginId && p);
+            associatedPluginsDispatch(removePluginAssociated(pluginId))
+           // setAllAssociatedPlugins(newAssociatedPluginsData);
             await listAllEnabledPlugins();
             return alertApi.post({
                 message: 'Plugin successfully disabled',
@@ -280,8 +282,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   }
 
   const getConfig = (pluginName:string) => {
-    if(allAssociatedPlugins){
-      const config = allAssociatedPlugins.find( associatedPlugin => associatedPlugin.name === pluginName && associatedPlugin.config);
+    if(allAssociatedPluginsState){
+      const config = allAssociatedPluginsState.find( associatedPlugin => associatedPlugin.name === pluginName && associatedPlugin.config);
      
       if(config){
         const filteredConfig = Object.fromEntries(
@@ -299,9 +301,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
       
         const pluginsInSpec = await getPluginsInSpecs(specName);
         
-        if(allAssociatedPlugins && pluginsPerCategory && pluginsInSpec){
+        if(allAssociatedPluginsState && pluginsPerCategoryState && pluginsInSpec){
 
-          const pluginsList = pluginsPerCategory.flatMap(category=>
+          const pluginsList = pluginsPerCategoryState.flatMap(category=>
             category.plugins
             .filter((plugin) => plugin.associated)
             .map((plugin) => ({
@@ -329,10 +331,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
 
   React.useEffect(()=>{
-    if(allAssociatedPlugins){
-      getAssociatedPuginsName(allAssociatedPlugins);
+    if(allAssociatedPluginsState){
+      getAssociatedPuginsName(allAssociatedPluginsState);
     }
-  },[allAssociatedPlugins]);
+  },[allAssociatedPluginsState]);
 
   React.useEffect(()=>{
    if(serviceName) listAllEnabledPlugins()
@@ -357,7 +359,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         getServiceDetails,
         getRoutesList,
         listAssociatedPlugins,
-        allAssociatedPlugins,
+        allAssociatedPluginsState,
         associatedPluginsName,
         getPluginFields,
         enablePlugin,
@@ -365,9 +367,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         handleToggleDrawer,
         openDrawer,
         setPluginState,
-        selectedPlugin,
+        selectedPluginState,
         editPlugin,
-        pluginsPerCategory,
+        pluginsPerCategoryState,
         configState,
         setConfigState,
         setSearchState,

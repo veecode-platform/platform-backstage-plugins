@@ -5,11 +5,11 @@ import { PluginCard } from '../../../../utils/types';
 
 export const AssociatedPlugins = () => { 
 
-  const { pluginsPerCategory } = useKongServiceManagerContext()
+  const { pluginsPerCategoryState } = useKongServiceManagerContext()
   return (
     <>
       { 
-        pluginsPerCategory.map( category => 
+        pluginsPerCategoryState.map( category => 
             {
               const associatedPlugins:any[] = [];
               category.plugins.forEach((plugin:PluginCard) => { if (plugin.associated) associatedPlugins.push(plugin)})

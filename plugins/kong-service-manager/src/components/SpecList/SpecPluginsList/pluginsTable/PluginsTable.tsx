@@ -36,7 +36,7 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
     return data;
   };
 
-  const {loading, error, value: allPlugins } = useAsync(fetchData,[]) // to do
+  const { /* loading, error,*/ value: allPlugins } = useAsync(fetchData,[]) // to do
 
   const rows = allPlugins ? allPlugins.map(
     plugin => createData(plugin.name, plugin.image,plugin.description, plugin.config, plugin.enabledToSpec)

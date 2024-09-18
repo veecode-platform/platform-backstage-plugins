@@ -17,7 +17,7 @@ export const DrawerComponent = () => {
   const [processingData, setProcessingData] = React.useState<boolean>(false);
   const [ fieldsState, fieldsDispatch ] = React.useReducer(FieldsReducer, initialFieldsState);
   const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction, spinner} = useDrawerStyles();
-  const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPlugin, allAssociatedPlugins, setConfigState, configState} = useKongServiceManagerContext();
+  const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPluginState, allAssociatedPluginsState, setConfigState, configState} = useKongServiceManagerContext();
 
   const handleChangeInput = (key: string, value: string | boolean | string[] | number) => {
     if(value!==""){
@@ -33,11 +33,11 @@ export const DrawerComponent = () => {
 
 
   const handleEnablePlugin = async () => {
-    if (selectedPlugin && allAssociatedPlugins && configState) {
+    if (selectedPluginState && allAssociatedPluginsState && configState) {
       setProcessingData(true);
       const config = {
         config: configState,
-        name: selectedPlugin.slug
+        name: selectedPluginState.slug
       } 
       await enablePlugin(config);
       setProcessingData(false)  
@@ -46,12 +46,12 @@ export const DrawerComponent = () => {
   };
 
   const handleEditAction = async () => { 
-    if (selectedPlugin && selectedPlugin.id && allAssociatedPlugins && configState) {
+    if (selectedPluginState && selectedPluginState.id && allAssociatedPluginsState && configState) {
       setProcessingData(true);
-      const id = selectedPlugin.id;
+      const id = selectedPluginState.id;
       const config = {
         config: configState,
-        name: selectedPlugin.slug
+        name: selectedPluginState.slug
       } 
       await editPlugin(id,config);
       setProcessingData(false)  
@@ -65,9 +65,9 @@ export const DrawerComponent = () => {
     if (fields) {
       let fieldsData: PluginFieldsResponse[] = [];
     
-      if (selectedPlugin?.associated && allAssociatedPlugins) {
-        allAssociatedPlugins.forEach((plugin) => {
-          if (plugin.name === selectedPlugin.slug) {
+      if (selectedPluginState?.associated && allAssociatedPluginsState) {
+        allAssociatedPluginsState.forEach((plugin) => {
+          if (plugin.name === selectedPluginState.slug) {
             const config = plugin.config;
             const updateFields: PluginFieldsResponse[] = [];          
             fields.forEach((field) => {    
@@ -101,15 +101,15 @@ export const DrawerComponent = () => {
   };
 
   React.useEffect(()=>{
-   if(selectedPlugin) {
-    handlePluginFields(selectedPlugin.slug as string);
+   if(selectedPluginState) {
+    handlePluginFields(selectedPluginState.slug as string);
   }
    setLoading(true);
    setTimeout(()=>{
     setLoading(false)
    },1000)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[selectedPlugin]);
+  },[selectedPluginState]);
 
   return (
     <Drawer
@@ -123,11 +123,11 @@ export const DrawerComponent = () => {
       <div className={header}>
         <div className={titleBar}>
           <img
-            src={selectedPlugin?.image}
-            alt={selectedPlugin?.description}
+            src={selectedPluginState?.image}
+            alt={selectedPluginState?.description}
             className={pluginIcon}
           />
-          <Typography variant="h5">{selectedPlugin?.name} Plugin</Typography>
+          <Typography variant="h5">{selectedPluginState?.name} Plugin</Typography>
         </div>
         <IconButton
           key="dismiss"
@@ -253,7 +253,7 @@ export const DrawerComponent = () => {
       </Box>
       <div>
         <>
-          {selectedPlugin && selectedPlugin.associated ? (
+          {selectedPluginState && selectedPluginState.associated ? (
             <Button
               variant="contained"
               color="primary"
