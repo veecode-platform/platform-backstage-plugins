@@ -3,7 +3,7 @@ import {
   createApiFactory,
   createPlugin,
   createRoutableExtension,
-  identityApiRef,
+  fetchApiRef,
 } from '@backstage/core-plugin-api';
 
 import { rootRouteRef } from './routes';
@@ -14,9 +14,9 @@ export const infracostPlugin = createPlugin({
   apis: [
     createApiFactory({
       api: infracostApiRef,
-      deps: { configApi: configApiRef, identityApi: identityApiRef},
-      factory: ({ configApi, identityApi}) =>
-        new InfracostClient({ configApi, identityApi}),
+      deps: { configApi: configApiRef, fetchApi: fetchApiRef},
+      factory: ({ configApi, fetchApi}) =>
+        new InfracostClient({ configApi, fetchApi}),
     }),
   ],
   routes: {
