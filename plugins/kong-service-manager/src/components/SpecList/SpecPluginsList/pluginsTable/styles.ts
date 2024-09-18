@@ -70,11 +70,16 @@ export const usePluginsTableStyles = makeStyles(theme => ({
     },
     submit:{
         marginRight:'4.5rem',
-        backgroundColor: theme.palette.navigation.color,
+        backgroundColor: theme.palette.link,
         color: theme.palette.background.default,
         '&:hover':{
             backgroundColor: theme.palette.linkHover,
             color: theme.palette.background.default,
+        },
+        '&:disabled': {
+          backgroundColor: theme.palette.action.disabledBackground,
+          color: theme.palette.action.disabled,
+          cursor: 'not-allowed'
         }
     },
     footer:{
