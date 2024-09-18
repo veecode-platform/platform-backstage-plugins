@@ -6,7 +6,7 @@ import { PluginCard } from "../utils/types";
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from "../hooks";
 import { AssociatedPluginsResponse, CreatePlugin, CreateRoute } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
-import { addPluginsAssociated, addPluginsPerCategory, addSelectedPlugin, AssociatedPluginsReducer, initialAssociatedPluginsState, initialPluginsPerCategoryState, initialSelectedPluginState, PluginsPerCategoryReducer, removePluginAssociated, SelectedPluginReducer } from "./state";
+import { addPluginsAssociated, addPluginsPerCategory, addSelectedPlugin, AssociatedPluginsReducer, initialAssociatedPluginsState, initialPluginsPerCategoryState, initialPluginsToSpecState, initialSelectedPluginState, PluginsPerCategoryReducer, PluginsToSpecReducer, removePluginAssociated, SelectedPluginReducer } from "./state";
 
 interface KongServiceManagerProviderProps {
     children : React.ReactNode
@@ -24,6 +24,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   const { entity } = useEntity();
   const { serviceName,kongInstances } = useEntityAnnotation(entity);
   const [instance, setInstance] = React.useState<string>(kongInstances ? kongInstances[0] : "");
+  const [ pluginsToSpecState, pluginsToSpecDispatch ] = React.useReducer(PluginsToSpecReducer,initialPluginsToSpecState);
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
   const alertApi = useApi(alertApiRef);
@@ -321,12 +322,11 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
           plugin.enabledToSpec = isInSpec ? true : false;
         }); 
         
-        return pluginsList
+        return pluginsList;
 
-        }
+        }   
 
         return []
-      
     }
 
 
@@ -379,7 +379,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         removeRoute,
         getRoute,
         getSpecs,
-        listAllPluginsForSpec
+        listAllPluginsForSpec,
+        pluginsToSpecState,
+        pluginsToSpecDispatch,
       }}
     >
       {children}
