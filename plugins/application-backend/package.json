@@ -38,7 +38,7 @@
     "@keycloak/keycloak-admin-client": "18.0.2",
     "@types/express": "*",
     "@veecode-platform/plugin-application-common": "^0.1.86",
-    "axios": "0.27.0",
+    "axios": "0.28.0",
     "class-validator": "^0.14.0",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
