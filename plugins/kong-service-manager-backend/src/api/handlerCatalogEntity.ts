@@ -163,7 +163,7 @@ export class HandlerCatalogEntity extends Client implements IHandlerCatalogEntit
         const pluginsWithPrefix : IPluginsWithPrefix = {}; 
         
         plugins.map(plugin => {
-            const pluginName = `x-kong-${plugin.name}`;
+            const pluginName = `x-kong-${plugin.name.replace(" ","-").toLowerCase()}`;
             const newData = {
                 name: pluginName,
                 enabled: plugin.enabled,
