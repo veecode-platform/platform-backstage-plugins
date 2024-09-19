@@ -5,8 +5,8 @@ import { KongServiceManagerContext } from "./KongServiceManagerContext";
 import { PluginCard } from "../utils/types";
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from "../hooks";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
-import { addPluginsAssociated, addPluginsPerCategory, addSelectedPlugin, AssociatedPluginsReducer, initialAssociatedPluginsState, initialPluginsPerCategoryState, initialPluginsToSpecState, initialSelectedPluginState, PluginsPerCategoryReducer, PluginsToSpecReducer, removePluginAssociated, SelectedPluginReducer } from "./state";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { addPluginsAssociated, addPluginsPerCategory, addSelectedPlugin, AssociatedPluginsReducer, initialAssociatedPluginsState, initialPluginsPerCategoryState, initialPluginsToSpecState, initialSelectedPluginState, initialSelectedSpecState, PluginsPerCategoryReducer, PluginsToSpecReducer, removePluginAssociated, SelectedPluginReducer, SelectedSpecReducer } from "./state";
 
 interface KongServiceManagerProviderProps {
     children : React.ReactNode
@@ -24,6 +24,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   const { entity } = useEntity();
   const { serviceName,kongInstances } = useEntityAnnotation(entity);
   const [instance, setInstance] = React.useState<string>(kongInstances ? kongInstances[0] : "");
+  const [selectedSpecState, selectedSpecDispatch] = React.useReducer(SelectedSpecReducer, initialSelectedSpecState);
   const [ pluginsToSpecState, pluginsToSpecDispatch ] = React.useReducer(PluginsToSpecReducer,initialPluginsToSpecState);
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
@@ -329,6 +330,17 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         return []
     }
 
+    const applyKongPluginsToSpec = async (specName:string,title:string,message:string,location:string,plugins:IKongPluginSpec[]) => {
+      try{
+        const response = await api.applyPluginsToSpec(specName, title,message,location,plugins);
+        return response
+      }
+      catch(e:any){
+        errorApi.post(e);
+        return null
+      }
+    }
+
 
   React.useEffect(()=>{
     if(allAssociatedPluginsState){
@@ -379,9 +391,12 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         removeRoute,
         getRoute,
         getSpecs,
+        selectedSpecState,
+        selectedSpecDispatch,
         listAllPluginsForSpec,
         pluginsToSpecState,
         pluginsToSpecDispatch,
+        applyKongPluginsToSpec
       }}
     >
       {children}
