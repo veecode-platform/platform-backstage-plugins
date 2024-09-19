@@ -1,9 +1,13 @@
 import { ConfigApi, createApiRef, FetchApi } from "@backstage/core-plugin-api";
+import { ScmAuthApi, ScmIntegrationsApi } from "@backstage/integration-react";
 import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, ISpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { PullRequestResponse } from "../utils/types";
 
 export type Options = {
     config: ConfigApi;
-    fetchApi: FetchApi
+    fetchApi: FetchApi,
+    scmAuthApi: ScmAuthApi,
+    scmIntegrationsApi: ScmIntegrationsApi
 };
 
 export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
@@ -24,5 +28,6 @@ export interface KongServiceManagerApi {
     editRouteFromService(serviceName:string, instanceName:string, routeIdOrName: string, config: CreateRoute): Promise<any>;
     removeRouteFromService(serviceName:string, instanceName:string, routeIdOrName: string): Promise<any>;
     getSpecs(kind: string, entityName: string): Promise<ISpec[]>;
-    getPluginsFromSpec(entityName: string): Promise<IKongPluginSpec[]>
+    getPluginsFromSpec(entityName: string): Promise<IKongPluginSpec[]>;
+    applyPluginsToSpec(specName: string, title: string, message: string, location: string, plugins: IKongPluginSpec[]): Promise<PullRequestResponse>
 }
