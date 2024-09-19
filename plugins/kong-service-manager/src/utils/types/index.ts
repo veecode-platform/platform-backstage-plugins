@@ -37,3 +37,8 @@ export interface PluginForSpec {
   enabledToSpec: boolean,
 }
 
+
+export interface PullRequestResponse {
+  link: string;
+  message: string;
+}
