@@ -1,6 +1,6 @@
 import { ConfigApi } from "@backstage/core-plugin-api";
 import { ScmAuthApi } from "@backstage/integration-react";
-import { extractGitHubInfo } from "../../utils/helpers/githubExctractInfo";
+import { extractGitHubInfo } from "../../utils/helpers/extractGithubInfo";
 import { readGithubIntegrationConfigs } from "@backstage/integration";
 import { Octokit } from "@octokit/rest";
 import { formatHttpErrorMessage } from "../../utils/helpers/formatHttpErrorMessage";
