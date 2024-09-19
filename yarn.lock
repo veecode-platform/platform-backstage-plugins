@@ -15404,7 +15404,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/plugin-veecode-platform-module@workspace:plugins/veecode-platform-module":
+"@veecode-platform/plugin-veecode-platform-module@workspace:^, @veecode-platform/plugin-veecode-platform-module@workspace:plugins/veecode-platform-module":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/plugin-veecode-platform-module@workspace:plugins/veecode-platform-module"
   dependencies:
@@ -16993,6 +16993,7 @@ __metadata:
     "@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions": "workspace:^"
     "@veecode-platform/plugin-kong-service-manager-backend": "workspace:^"
     "@veecode-platform/plugin-veecode-platform-common": "workspace:^"
+    "@veecode-platform/plugin-veecode-platform-module": "workspace:^"
     app: "link:../app"
     better-sqlite3: ^11.3.0
     dockerode: ^4.0.2
