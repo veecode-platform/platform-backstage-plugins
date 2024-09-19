@@ -201,15 +201,9 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
              'Content-Type': 'application/json', 
          }
         }
+        
         const response = await this.fetch(`/add-plugins/${specName}`,headers);
-
-        // eslint-disable-next-line no-console
-        console.log('SPEC IN OBJECT',response)
-
         const fileContent = formatObject(response.spec);
-
-        // eslint-disable-next-line no-console
-        console.log('FILE CONTENT >> ',fileContent)
         
         return this.pullRequestManager.createPullRequest(
             location,
