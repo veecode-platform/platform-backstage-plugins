@@ -29,12 +29,12 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@backstage/backend-common": "^0.24.1",
+    "@backstage/backend-common": "^0.25.0",
     "@backstage/config": "^1.2.0",
     "@backstage/errors": "^1.2.4",
-    "@backstage/plugin-auth-node": "^0.5.1",
+    "@backstage/plugin-auth-node": "^0.5.2",
     "@backstage/plugin-permission-common": "^0.8.1",
-    "@backstage/plugin-permission-node": "^0.8.2",
+    "@backstage/plugin-permission-node": "^0.8.3",
     "@keycloak/keycloak-admin-client": "18.0.2",
     "@types/express": "*",
     "@veecode-platform/plugin-application-common": "^0.1.86",
@@ -52,7 +52,7 @@
     "yn": "^4.0.0"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.27.0",
+    "@backstage/cli": "^0.27.1",
     "@types/jest": "^29.2.5",
     "@types/pg": "^8.6.6",
     "@types/supertest": "^2.0.8",
