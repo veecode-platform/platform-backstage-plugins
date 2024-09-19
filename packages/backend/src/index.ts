@@ -1,4 +1,6 @@
 import { createBackend } from '@backstage/backend-defaults';
+import { catalogModuleVeeCodeProcessor } from '@veecode-platform/plugin-veecode-platform-module/alpha';
+import {catalogModuleInfracostProcessor, infracostPlugin} from '@veecode-platform/backstage-plugin-infracost-backend/alpha';
 
 const backend = createBackend();
 
@@ -9,6 +11,10 @@ backend.add(import('@backstage/plugin-app-backend/alpha'));
 backend.add(import('@backstage/plugin-catalog-backend/alpha'));
 backend.add(import('@backstage/plugin-catalog-backend-module-scaffolder-entity-model'));
 backend.add(import('@backstage/plugin-catalog-backend-module-github/alpha'));
+backend.add(catalogModuleVeeCodeProcessor);
+
+backend.add(catalogModuleInfracostProcessor);
+backend.add(infracostPlugin);
 
 backend.add(import('@janus-idp/backstage-plugin-keycloak-backend/alpha'));
 

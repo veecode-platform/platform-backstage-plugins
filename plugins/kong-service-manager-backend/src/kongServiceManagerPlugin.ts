@@ -7,10 +7,10 @@ import { createRouter } from './service/router';
 /**
  * kongServiceManagerPlugin backend plugin
  *
- * @alpha
+ * @public
  */
 export const kongServiceManagerPlugin = createBackendPlugin({
-  pluginId: 'kong-service-manager',
+  pluginId: 'kong',
   register(env) {
     env.registerInit({
       deps: {

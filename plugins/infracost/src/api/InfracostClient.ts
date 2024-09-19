@@ -1,28 +1,25 @@
-import { ConfigApi,IdentityApi } from '@backstage/core-plugin-api';
+import { ConfigApi,FetchApi } from '@backstage/core-plugin-api';
 import { InfracostApi } from './InfracostApi';
 import { InfracostEstimate } from '@veecode-platform/backstage-plugin-infracost-common';
 import { ResponseError } from '@backstage/errors';
 
 export class InfracostClient implements InfracostApi {
   private readonly configApi: ConfigApi;
-  private readonly identityApi: IdentityApi;
+  private readonly fetchApi: FetchApi;
 
   public constructor(options: {
     configApi: ConfigApi;
-    identityApi: IdentityApi;
+    fetchApi: FetchApi;
   }) {
     this.configApi = options.configApi;
-    this.identityApi = options.identityApi;
+    this.fetchApi = options.fetchApi;
   }
 
   private async fetch<T>(path: string): Promise<T> {
 
       const baseUrl = `${this.configApi.getString("backend.baseUrl")}/api/infracost/`;
       const url = new URL(path, baseUrl);
-      const { token } = await this.identityApi.getCredentials();
-      const response = await fetch(url.toString(), {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      const response = await this.fetchApi.fetch(url.toString());
 
     if(!response.ok){
        throw await ResponseError.fromResponse(response);

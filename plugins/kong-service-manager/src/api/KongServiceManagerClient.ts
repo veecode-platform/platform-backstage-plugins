@@ -1,18 +1,22 @@
-import { ConfigApi } from "@backstage/core-plugin-api";
+import { ConfigApi, FetchApi } from "@backstage/core-plugin-api";
 import { KongServiceManagerApi, Options } from "./KongServiceManagerApi";
 import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { PluginsInfoData } from "../data/data";
 
  abstract class Client {
-    protected config: ConfigApi;
+    protected readonly config: ConfigApi;
+    private readonly fetchApi: FetchApi;
     
-    constructor(opts: Options) { this.config = opts.config as ConfigApi; }
+    constructor(opts: Options) { 
+        this.config = opts.config as ConfigApi; 
+        this.fetchApi = opts.fetchApi as FetchApi;
+    }
 
     protected async fetch <T = any>(input: string, init?: RequestInit): Promise<T> {
 
         const apiUrl = `${this.config.getString("backend.baseUrl")}/api/kong`;
 
-        const resp = await fetch(`${apiUrl}${input}`, {
+        const resp = await this.fetchApi.fetch(`${apiUrl}${input}`, {
             ...init
         });
 
