@@ -7,7 +7,7 @@ import { checkGitProvider } from '../../../utils/helpers/checkGitProvider';
 import { useParams } from 'react-router-dom';
 import { Box, TextField } from '@material-ui/core';
 import { Content } from '@backstage/core-components';
-import { extractGitHubInfo } from '../../../utils/helpers/githubExctractInfo';
+import { extractGitHubInfo } from '../../../utils/helpers/extractGithubInfo';
 import { useNavigate } from 'react-router-dom';
 
 export const PullRequest = () => {
