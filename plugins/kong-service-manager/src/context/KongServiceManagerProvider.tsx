@@ -237,9 +237,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
       if(instance && serviceName){
         const response = await api.removeServicePlugin(instance,serviceName, pluginId);
         if(response && allAssociatedPluginsState) {
-          // const newAssociatedPluginsData = allAssociatedPluginsState.filter(p => p.id !== pluginId && p);
             associatedPluginsDispatch(removePluginAssociated(pluginId))
-           // setAllAssociatedPlugins(newAssociatedPluginsData);
             await listAllEnabledPlugins();
             return alertApi.post({
                 message: 'Plugin successfully disabled',

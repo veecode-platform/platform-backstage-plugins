@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import {  PluginCard, PluginForSpec } from "../utils/types";
+import {  PluginCard, PluginForSpec, PullRequestResponse } from "../utils/types";
 import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, ISpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import {  PluginsToSpecActionType, SelectedSpecActionType } from "./state";
 
@@ -35,7 +35,8 @@ export type KongServiceManagerContextType = {
     selectedSpecDispatch: React.Dispatch<SelectedSpecActionType>;
     listAllPluginsForSpec: (specName: string) => Promise<PluginForSpec[]>;
     pluginsToSpecState: IKongPluginSpec[];
-    pluginsToSpecDispatch: React.Dispatch<PluginsToSpecActionType>
+    pluginsToSpecDispatch: React.Dispatch<PluginsToSpecActionType>;
+    applyKongPluginsToSpec: (specName: string, title: string, message: string, location: string, plugins: IKongPluginSpec[]) => Promise<PullRequestResponse | null>
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!);
