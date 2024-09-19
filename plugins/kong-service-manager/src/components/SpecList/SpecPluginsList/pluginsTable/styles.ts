@@ -38,20 +38,6 @@ export const usePluginsTableStyles = makeStyles(theme => ({
         width: '40px'
       }
     },
-    button:{
-        padding: '.8rem 2.5rem',
-        margin: 'auto',
-        outline: 'none',
-        borderRadius: '5px',
-        cursor: 'pointer',
-        width: '244px',
-        fontSize: '12px',
-        fontWeight: 'bold',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        transition: 'all .5s ease-in-out',
-    },
     apply:{
      backgroundColor: theme.palette.background.default,
      color: theme.palette.text.primary,
