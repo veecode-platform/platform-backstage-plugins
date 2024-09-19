@@ -2,14 +2,18 @@ import { ConfigApi, FetchApi } from "@backstage/core-plugin-api";
 import { KongServiceManagerApi, Options } from "./KongServiceManagerApi";
 import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, ISpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { PluginsInfoData } from "../data/data";
+import { PullRequestManager } from "./pullRequestManager";
+import { formatObject } from "../utils/helpers/formactObject";
 
  abstract class Client {
     protected readonly config: ConfigApi;
     private readonly fetchApi: FetchApi;
+    pullRequestManager: PullRequestManager;
     
     constructor(opts: Options) { 
         this.config = opts.config as ConfigApi; 
         this.fetchApi = opts.fetchApi as FetchApi;
+        this.pullRequestManager = new PullRequestManager(opts.scmAuthApi,opts.config)
     }
 
     protected async fetch <T = any>(input: string, init?: RequestInit): Promise<T> {
@@ -186,8 +190,26 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
     }
 
 
-    async applyPluginsToSpec(){
-        // pegar os plugins e suas configs e enviar para o endpoint q retornará o definition como objeto, entao esse objeto vai ter que ser transformado em yaml e submetido para pull request
+    async applyPluginsToSpec(specName:string, title: string, message: string,location: string, plugins: IKongPluginSpec[]){
+        const body = {
+            plugins,
+         }
+        const headers: RequestInit = {
+         method: "POST",
+         body: JSON.stringify(body),
+         headers: {
+             'Content-Type': 'application/json', 
+         }
+        }
+        const response = await this.fetch(`/add-plugins/${specName}`,headers)
+        const fileContent = formatObject(response.spec);
+        
+        return this.pullRequestManager.createPullRequest(
+            location,
+            fileContent,
+            title,
+            message
+        )
     }
 
 }
