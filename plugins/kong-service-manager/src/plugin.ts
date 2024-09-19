@@ -3,6 +3,7 @@ import { addPluginRouteRef, pluginsListRouteRef, removePluginRouteRef, kongServi
 import { KongServiceManagerApiClient, kongServiceManagerApiRef } from './api';
 import { KongServiceManagerApiClientDeprecated, kongServiceManagerApiDeprecatedRef } from './@deprecated/src/api';
 import { sepcsListRouteRef } from './routes';
+import { scmAuthApiRef, scmIntegrationsApiRef } from '@backstage/integration-react';
 
 
 export const kongServiceManagerPlugin = createPlugin({
@@ -27,11 +28,13 @@ export const kongServiceManagerPlugin = createPlugin({
     }),
     createApiFactory({
       api: kongServiceManagerApiRef,
-      deps: { config: configApiRef, fetchApi: fetchApiRef },
-      factory: ({config, fetchApi}) => {
+      deps: { config: configApiRef, fetchApi: fetchApiRef, scmAuthApi: scmAuthApiRef, scmIntegrationsApi: scmIntegrationsApiRef },
+      factory: ({config, fetchApi, scmAuthApi, scmIntegrationsApi}) => {
         return new KongServiceManagerApiClient({
           config,
-          fetchApi
+          fetchApi,
+          scmAuthApi,
+          scmIntegrationsApi
         })
       }
     })
