@@ -8,8 +8,15 @@ import { Link } from '@backstage/core-components';
 
 export const SpecCard : React.FC<SpecCardProps> = (props) => {
   
-    const { title, description, owner, tags } = props;
+    const { title, description, owner, tags,setSpec } = props;
     const { root, cardHeader, cardBody, cardFooter } = useSpecCardStyles();
+
+    React.useEffect(()=>{
+        if(title){
+            setSpec(title)
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
 
     return (
     <Box className={root}>
