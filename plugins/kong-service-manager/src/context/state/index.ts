@@ -2,7 +2,9 @@ export * from './allAssociatedPluginsState/actions';
 export * from './allAssociatedPluginsState/reducer';
 export * from './pluginsPerCategoryState/actions';
 export * from './pluginsPerCategoryState/reducer';
-export * from './selectPluginState/actions';
-export * from './selectPluginState/reducer';
+export * from './selectedPluginState/actions';
+export * from './selectedPluginState/reducer';
 export * from './pluginsToSpecState/actions';
 export * from './pluginsToSpecState/reducer';
+export * from './selectedSpecState/actions';
+export * from './selectedSpecState/reducer'
