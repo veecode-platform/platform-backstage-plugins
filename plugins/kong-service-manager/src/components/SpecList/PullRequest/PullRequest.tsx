@@ -11,7 +11,7 @@ import { extractGitHubInfo } from '../../../utils/helpers/extractGithubInfo';
 import { useNavigate } from 'react-router-dom';
 
 export const PullRequest = () => {
-  // url:https://github.com/veecode-homolog/app-spec-demo-mr/tree/main/.platform/spec-api.yaml
+  
   const [title, setTitle] = React.useState<string>('');
   const [message, setMessage] = React.useState<string>('');
   const { specName } = useParams();
