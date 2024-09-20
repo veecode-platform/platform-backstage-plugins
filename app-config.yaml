@@ -12,9 +12,13 @@ backend:
   # Used for enabling authentication, secret is shared by all backend plugins
   # See https://backstage.io/docs/auth/service-to-service-auth for
   # information on the format
-  # auth:
-  #   keys:
-  #     - secret: ${BACKEND_AUTH_SECRET_KEY}
+  auth:
+    externalAccess:
+      - type: static
+        options:
+          token: ${BACKEND_AUTH_SECRET_KEY}
+          subject: backend-secret
+
   baseUrl: http://localhost:7007
   listen:
     port: 7007
@@ -105,12 +109,23 @@ techdocs:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
 auth:
+  session:
+    secret: ${AUTH_SESSION_SECRET}
   environment: development
   providers: 
     github:
       development:
         clientId: ${AUTH_GITHUB_CLIENT_ID}
         clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+    oidc:
+      development:
+        metadataUrl: ${AUTH_OIDC_METADATA_URL}
+        clientId: ${AUTH_OIDC_CLIENT_ID}
+        clientSecret: ${AUTH_OIDC_CLIENT_SECRET}
+        prompt: auto
+        signIn:
+          resolvers:
+            - resolver: emailLocalPartMatchingUserEntityName
 
 scaffolder:
   github:
