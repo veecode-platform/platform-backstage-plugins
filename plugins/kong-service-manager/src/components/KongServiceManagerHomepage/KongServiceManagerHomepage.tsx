@@ -9,8 +9,6 @@ import {RoutesList} from '../RoutesList';
 import { useHomepageStyles } from './styles';
 import { SpecList } from '../SpecList';
 import { SpecPluginsList } from '../SpecList/SpecPluginsList';
-import { PullRequest } from '../SpecList/PullRequest';
-
 
 export const KongServiceManagerHomepage = () => {
 
@@ -36,7 +34,6 @@ export const KongServiceManagerHomepage = () => {
               <Route path="all-plugins" element={<PluginsList />} />
               <Route path="all-specs" element={<SpecList/>}/>
               <Route path="all-specs/:specName" element={<SpecPluginsList/>}/>
-              <Route path="all-specs/:specName/create-pull-request" element={<PullRequest/>} />
             </Routes>
           </Grid>
         </Grid>
