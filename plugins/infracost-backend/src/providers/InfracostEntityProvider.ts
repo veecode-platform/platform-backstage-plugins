@@ -1,5 +1,5 @@
 import { EntityProvider, EntityProviderConnection } from '@backstage/plugin-catalog-node';
-import { CacheService, LoggerService, SchedulerServiceTaskRunner } from '@backstage/backend-plugin-api';
+import { CacheService, LoggerService, SchedulerServiceTaskRunner, AuthService } from '@backstage/backend-plugin-api';
 import { Config } from '@backstage/config';
 import { InfracostProviderConfig, readProviderConfigs } from '../lib/config';
 import * as uuid from 'uuid';
@@ -23,7 +23,8 @@ export class InfracostEntityProvider implements EntityProvider {
                 id: providerConfig.id,
                 provider: providerConfig,
                 logger: options.logger,
-                cache: options.cache
+                cache: options.cache,
+                auth: options.auth
             });
 
             if(taskRunner !== 'manual') provider.schedule(taskRunner);
@@ -38,6 +39,7 @@ export class InfracostEntityProvider implements EntityProvider {
           provider: InfracostProviderConfig;
           logger: LoggerService;
           cache: CacheService;
+          auth: AuthService;
         },
       ) {
         this.infracostService = new InfracostService()
@@ -58,7 +60,11 @@ export class InfracostEntityProvider implements EntityProvider {
       }
       const logger = options?.logger ?? this.options.logger;
       const baseUrl = this.options.provider.baseUrl;
-      const entities = await this.infracostService.getAllInfracostProjectsEstimate(`${baseUrl}/api/infracost`);
+      const { token } = await this.options.auth.getPluginRequestToken({
+        onBehalfOf: await this.options.auth.getOwnServiceCredentials(),
+        targetPluginId: 'infracost', 
+      });
+      const entities = await this.infracostService.getAllInfracostProjectsEstimate(`${baseUrl}/api/infracost`, token);
 
       const { markReadComplete } = trackProgress(logger);
       const { markProcessComplete } = markReadComplete({entities})
