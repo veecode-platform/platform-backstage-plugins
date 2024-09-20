@@ -14,8 +14,8 @@ import { PluginForSpec } from '../../../../utils/types';
 import useAsync from 'react-use/esm/useAsync';
 import { addPluginsToSpec } from '../../../../context/state';
 import { IKongPluginSpec } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
-import { useNavigate } from 'react-router-dom';
 import { ButtonComponent } from '../../../shared';
+import { PullRequestModal } from '../../PullRequesModal';
 
 
 const createData = (
@@ -31,10 +31,10 @@ const createData = (
 export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
   
   const [pluginsSpecListState, pluginsSpecListDispatch] = React.useReducer(PluginsSpecListReducer,initialPluginsSpecListState);
+  const [showModal, setShowModal] = React.useState<boolean>(false);
   const { specName } = props;
   const { root,iconAndName, apply, remove, submit, footer, fixedToBottom } = usePluginsTableStyles();
   const { listAllPluginsForSpec, pluginsToSpecState, pluginsToSpecDispatch } = useKongServiceManagerContext();
-  const navigate = useNavigate();
 
   const handleAction = (pluginName:string) => {
     const plugin = pluginsSpecListState.filter(p => p.name === pluginName)[0];
@@ -59,9 +59,12 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
     plugin => createData(plugin.name, plugin.image,plugin.description, plugin.config, plugin.enabledToSpec)
   ) : [];
 
+  const handleToggleModal = () => setShowModal(!showModal);
+
   const handleApplyChanges = () => {
-    navigate('create-pull-request')
+    handleToggleModal()
   }
+
 
   React.useEffect(()=>{
      if(allPlugins){
@@ -86,52 +89,56 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[pluginsSpecListState]);
 
-  React.useEffect(()=>{
-    // eslint-disable-next-line no-console
-    console.log("APPLY >>> ",pluginsToSpecState)
-  },[pluginsToSpecState])
 
   return (
-    <TableContainer className={root} >
-      <Table sx={{ minWidth: 700 }} aria-label="plugins table" >
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Plugin</StyledTableCell>
-            <StyledTableCell align="center">Description</StyledTableCell>
-            <StyledTableCell align="center">Action</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-               <div className={iconAndName}> <img src={row.image} alt={row.name}/> {row.name}</div>
-              </StyledTableCell>
-              <StyledTableCell align="center">{row.description}</StyledTableCell>
-              <StyledTableCell align="center">
-                  <ButtonComponent 
-                     handleClick={()=> handleAction(row.name)} 
-                     classes={row.enableToSpec ? remove: apply}> 
-                     {row.enableToSpec ? (<><IoMdRemove size={20}/> Remove from Spec</>): (<><IoMdAdd size={20}/> Apply to Spec</>)}
-                  </ButtonComponent>
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-        <TableFooter className={`${footer} ${rows.length <= 3 && fixedToBottom}`}>
-            <StyledTableRow>
-              <StyledTableCell colSpan={3} align="center">         
-                 <ButtonComponent 
-                   isDisabled={pluginsToSpecState.length <= 0} 
-                   classes={submit} 
-                   handleClick={handleApplyChanges}>
-                    Apply
-                 </ButtonComponent>
-              </StyledTableCell>
-            </StyledTableRow>
-        </TableFooter>
-      </Table>
-
-    </TableContainer>
+      <>
+        <TableContainer className={root} >
+          <Table sx={{ minWidth: 700 }} aria-label="plugins table" >
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Plugin</StyledTableCell>
+                <StyledTableCell align="center">Description</StyledTableCell>
+                <StyledTableCell align="center">Action</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <StyledTableRow key={row.name}>
+                  <StyledTableCell component="th" scope="row">
+                  <div className={iconAndName}> <img src={row.image} alt={row.name}/> {row.name}</div>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{row.description}</StyledTableCell>
+                  <StyledTableCell align="center">
+                      <ButtonComponent 
+                        handleClick={()=> handleAction(row.name)} 
+                        classes={row.enableToSpec ? remove: apply}> 
+                        {row.enableToSpec ? (<><IoMdRemove size={20}/> Remove from Spec</>): (<><IoMdAdd size={20}/> Apply to Spec</>)}
+                      </ButtonComponent>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+            <TableFooter className={`${footer} ${rows.length <= 3 && fixedToBottom}`}>
+                <StyledTableRow>
+                  <StyledTableCell colSpan={3} align="center">         
+                    <ButtonComponent 
+                      isDisabled={pluginsToSpecState.length <= 0} 
+                      classes={submit} 
+                      handleClick={handleApplyChanges}>
+                        Apply
+                    </ButtonComponent>
+                  </StyledTableCell>
+                </StyledTableRow>
+            </TableFooter>
+          </Table>
+        </TableContainer>
+        {showModal && (
+          <PullRequestModal
+            specName={specName}
+            show={showModal}
+            handleCloseModal={handleToggleModal}
+           />
+        )}
+      </>
   );
 }
