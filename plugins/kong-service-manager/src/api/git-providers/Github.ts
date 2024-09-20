@@ -5,6 +5,7 @@ import { readGithubIntegrationConfigs } from "@backstage/integration";
 import { Octokit } from "@octokit/rest";
 import { formatHttpErrorMessage } from "../../utils/helpers/formatHttpErrorMessage";
 import { Base64 } from 'js-base64';
+import { generateBranchName } from "../../utils/helpers/generateBranchName";
 
 export class GithubManager {
     constructor(
@@ -20,6 +21,7 @@ export class GithubManager {
             repoWrite: true,
           },
         });
+
         const configs = readGithubIntegrationConfigs(
           this.configApi.getOptionalConfigArray('integrations.github') ?? [],
         );
@@ -27,12 +29,12 @@ export class GithubManager {
         const baseUrl = githubIntegrationConfig?.apiBaseUrl;
         return new Octokit({ auth: token, baseUrl });
     
-      }
+     }
 
     async createPullRequest(location:string, fileContent:string, title: string, message: string){
         const {host, owner, repo, file} = extractGitHubInfo(location);
         const octokit = await this.getOctokit(host);
-        const branchName = title.replace(" ","-");
+        const branchName = generateBranchName(title);
 
         const repoData = await octokit.repos.get({
             owner,
@@ -42,19 +44,19 @@ export class GithubManager {
         });
 
         const parentRef = await octokit.git.getRef({
-            owner,
-            repo,
-            ref: `heads/${repoData}.data.default_branch`
-        }).catch(e=>{
-            throw new Error(
-                formatHttpErrorMessage("Couldn't fetch default branch data", e),
-              );
+          owner,
+          repo,
+          ref: `heads/${repoData.data.default_branch}` 
+        }).catch(e => {
+          throw new Error(
+            formatHttpErrorMessage("Couldn't fetch default branch data", e),
+          );
         });
 
         await octokit.git.createRef({
             owner,
             repo,
-            ref: `refs:/heads/${branchName}`,
+            ref: `refs/heads/${branchName}`,
             sha: parentRef.data.object.sha
         }).catch(e => {
             throw new Error (
@@ -65,13 +67,36 @@ export class GithubManager {
             )
         });
 
+         let fileSha: string | undefined = undefined;
+         try {
+             const { data } = await octokit.repos.getContent({
+                 owner,
+                 repo,
+                 path: file,
+                 ref: branchName
+             });
+             if (!Array.isArray(data) && data.sha) {
+                 fileSha = data.sha;
+             }
+         } catch (e:any) {
+             if (e.status !== 404) {
+                 throw new Error(
+                     formatHttpErrorMessage(
+                         `Couldn't fetch existing file ${file} in the repo`,
+                         e,
+                     ),
+                 );
+             }
+         }
+
         await octokit.repos.createOrUpdateFileContents({
             owner,
             repo,
             path: file,
             message: title,
             content: Base64.encode(fileContent),
-            branch: branchName
+            branch: branchName,
+            sha: fileSha
         }).catch(e=>{
             throw new Error(
                 formatHttpErrorMessage(
@@ -99,6 +124,7 @@ export class GithubManager {
 
 
         return {
+            status: pullRequestResponse.status,
             link: pullRequestResponse.data.html_url,
             message: 'Pull request Created!'
         }
