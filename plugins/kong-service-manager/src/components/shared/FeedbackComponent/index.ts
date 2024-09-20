@@ -1,0 +1,1 @@
+export { FeedbackComponent } from './FeedbackComponent'
