@@ -16997,7 +16997,7 @@ __metadata:
     app: "link:../app"
     better-sqlite3: ^11.3.0
     dockerode: ^4.0.2
-    express: ^4.21.0
+    express: ^4.20.0
     express-promise-router: ^4.1.1
     jose: ^5.9.2
     pg: ^8.13.0
@@ -21848,7 +21848,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"express@npm:^4.21.0":
+"express@npm:^4.20.0":
   version: 4.21.0
   resolution: "express@npm:4.21.0"
   dependencies:
