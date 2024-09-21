@@ -31,7 +31,7 @@ export const SpecCard : React.FC<SpecCardProps> = (props) => {
             <div><FaUser /> {owner}</div>
             <div>
                 {tags.map(tag => 
-                    <Chip label={tag}/>
+                    <Chip label={tag} key={tag}/>
                 )}
             </div>
         </div>
