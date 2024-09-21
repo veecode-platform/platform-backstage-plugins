@@ -1,13 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  Fade,
-  Modal,
-  Paper,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
+import {Box,CircularProgress,Fade,Modal,Paper,TextField,Tooltip,Typography} from '@material-ui/core';
 import React from 'react';
 import { PullRequestModalProps } from './types';
 import { usePullRequestStyles } from './styles';
@@ -20,6 +11,7 @@ import { useKongServiceManagerContext } from '../../../context';
 import { extractGitHubInfo } from '../../../utils/helpers/extractGithubInfo';
 import { FeedbackComponent } from '../../shared/FeedbackComponent';
 import { addPullRequestResponse, initialPullRequestResponseState, PullRequestResponseReducer } from './state';
+import { extractGitLabInfo } from '../../../utils/helpers/extractGitlabInfo';
 
 export const PullRequestModal: React.FC<PullRequestModalProps> = props => {
   const [title, setTitle] = React.useState<string>('');
@@ -41,6 +33,10 @@ export const PullRequestModal: React.FC<PullRequestModalProps> = props => {
       case 'Github': {
         const { file } = extractGitHubInfo(location);
         return setTitle(`Update to ${file}`);
+      }
+      case 'Gitlab': {
+        const { filePath } = extractGitLabInfo(location);
+        return setTitle(`Update to ${filePath.split("/")[1]}`);
       }
       default:
         return null;
