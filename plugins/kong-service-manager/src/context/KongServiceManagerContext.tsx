@@ -36,7 +36,7 @@ export type KongServiceManagerContextType = {
     listAllPluginsForSpec: (specName: string) => Promise<PluginForSpec[]>;
     pluginsToSpecState: IKongPluginSpec[];
     pluginsToSpecDispatch: React.Dispatch<PluginsToSpecActionType>;
-    applyKongPluginsToSpec: (specName: string, title: string, message: string, location: string, plugins: IKongPluginSpec[]) => Promise<PullRequestResponse | null>
+    applyKongPluginsToSpec: (specName: string, title: string, message: string, location: string, plugins: IKongPluginSpec[]) => Promise<PullRequestResponse>
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!);

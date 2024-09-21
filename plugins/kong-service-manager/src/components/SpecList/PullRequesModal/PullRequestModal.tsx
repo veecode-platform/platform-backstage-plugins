@@ -58,7 +58,7 @@ export const PullRequestModal: React.FC<PullRequestModalProps> = props => {
         pluginsToSpecState,
       );
 
-      if (response && response.status === 201) {
+      if (response) {
         pullRequestResponseDispatch(addPullRequestResponse({
           status: response.status === 201 ? 'success':'error',
           message: response.message,
@@ -68,8 +68,9 @@ export const PullRequestModal: React.FC<PullRequestModalProps> = props => {
         setTimeout(()=>{
           setShowFeedback(false);
           handleCloseModal()
-        },2500);
+        },3000);
       }
+
     }
   };
 

@@ -40,6 +40,6 @@ export interface PluginForSpec {
 
 export interface PullRequestResponse {
   status: number;
-  link: string;
+  link?: string;
   message: string;
 }

@@ -335,7 +335,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
       }
       catch(e:any){
         errorApi.post(e);
-        return null
+        return {
+            status: 400,
+            message: 'Pull Request aborted'
+        }
       }
     }
 
