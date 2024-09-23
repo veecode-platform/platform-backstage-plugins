@@ -8,10 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { checkGitProvider } from '../../../utils/helpers/checkGitProvider';
 import { ANNOTATION_LOCATION } from '@backstage/catalog-model';
 import { useKongServiceManagerContext } from '../../../context';
-import { extractGitHubInfo } from '../../../utils/helpers/extractGithubInfo';
 import { FeedbackComponent } from '../../shared/FeedbackComponent';
 import { addPullRequestResponse, initialPullRequestResponseState, PullRequestResponseReducer } from './state';
-import { extractGitLabInfo } from '../../../utils/helpers/extractGitlabInfo';
 
 export const PullRequestModal: React.FC<PullRequestModalProps> = props => {
   const [title, setTitle] = React.useState<string>('');
@@ -19,39 +17,24 @@ export const PullRequestModal: React.FC<PullRequestModalProps> = props => {
   const [ showFeedback, setShowFeedback ] = React.useState<boolean>(false); // false
   const [ pullRequestResponseState, pullRequestResponseDispatch ] = React.useReducer(PullRequestResponseReducer,initialPullRequestResponseState);
   const [ processingData, setProcessingData ] = React.useState<boolean>(false);
-  const { specName, show, handleCloseModal } = props;
+  const { show, handleCloseModal } = props;
   const { modalOnBlur,modalContent,modalBody,container,titleBar,titleContent,modalHeader,closeModal,content,pullRequestCard,input,footer,spinner,cancel,submit } = usePullRequestStyles();
   const navigate = useNavigate();
-  const { selectedSpecState, pluginsToSpecState, applyKongPluginsToSpec } = useKongServiceManagerContext();
-  const location = selectedSpecState?.metadata.annotations?.[
+  const { entity, kongSpecs, pluginsToSpecState, applyKongPluginsToSpec } = useKongServiceManagerContext();
+  const location = entity?.metadata.annotations?.[
     ANNOTATION_LOCATION
   ] as string;
   const provider = checkGitProvider(location!);
-
-  const writeTitle = () => {
-    switch (provider) {
-      case 'Github': {
-        const { file } = extractGitHubInfo(location);
-        return setTitle(`Update to ${file}`);
-      }
-      case 'Gitlab': {
-        const { filePath } = extractGitLabInfo(location);
-        return setTitle(`Update to ${filePath.split("/")[1]}`);
-      }
-      default:
-        return null;
-    }
-  };
 
   const goBack = () => {
     navigate(-1);
   };
 
   const preparatePullRequest = async () => {
-    if (pluginsToSpecState) {
+    if (pluginsToSpecState && kongSpecs) {
       setProcessingData(true)
       const response = await applyKongPluginsToSpec(
-        specName as string,
+        kongSpecs[0] as string,
         title,
         message,
         location,
@@ -76,10 +59,10 @@ export const PullRequestModal: React.FC<PullRequestModalProps> = props => {
 
   React.useEffect(() => {
     if (provider) {
-      writeTitle();
+     setTitle(`Update to ${kongSpecs![0] as string}`)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [provider]);
+  }, [kongSpecs]);
 
   React.useEffect(() => {
     if (pluginsToSpecState.length > 0) {
