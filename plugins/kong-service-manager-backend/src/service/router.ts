@@ -5,8 +5,7 @@ import { KongServiceManagerOptions } from '../utils/types';
 import { KongServiceManagerApiClient } from '../api';
 import { kongServiceManagerPermissions } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
-import { ServiceController, RoutesController, PluginsController, SpecController } from "../controllers"
-import { HandlerCatalogEntity } from '../api/handlerCatalogEntity';
+import { ServiceController, RoutesController, PluginsController } from "../controllers"
 
 export async function createRouter(
   options: KongServiceManagerOptions,
@@ -14,12 +13,10 @@ export async function createRouter(
   const { logger, config } = options;
 
   const kongServiceManagerApi = new KongServiceManagerApiClient(options);
-  const handlerCatalogEntityApi = new HandlerCatalogEntity(options);
 
   const serviceController = new ServiceController(kongServiceManagerApi);
   const routesController = new RoutesController(kongServiceManagerApi);
   const pluginsController = new PluginsController(kongServiceManagerApi);
-  const specController = new SpecController(handlerCatalogEntityApi);
 
   const router = Router();
   router.use(express.json());
@@ -42,9 +39,6 @@ export async function createRouter(
   router.post('/:instanceName/services/:serviceName/routes', routesController.createRoute as RequestHandler);  
   router.patch('/:instanceName/services/:serviceName/routes/:routeId', routesController.editRoute as RequestHandler); 
   router.delete('/:instanceName/services/:serviceName/routes/:routeId', routesController.removeRoute as RequestHandler); 
-  router.get('/:kind/:entityName/specs', specController.getSpecsByEntity as RequestHandler);
-  router.get('/spec/:entityName/plugins', specController.getPluginsFromSpec as RequestHandler);
-  router.post('/add-plugins/:specName', specController.updateSpec as RequestHandler);
 
   router.get('/health', (_, response) => {
     logger.info('PONG!');

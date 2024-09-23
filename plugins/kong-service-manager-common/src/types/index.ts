@@ -234,3 +234,7 @@ export interface IPluginSpec {
   tags: string[],
   plugins: IKongPluginSpec[]
 }
+
+export interface IPluginsWithPrefix {
+  [key:string]: IKongPluginSpec;
+}
