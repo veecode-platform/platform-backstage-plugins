@@ -49,7 +49,7 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
   };
 
   const fetchData = async (): Promise<PluginForSpec[]> => {
-    const data = await listAllPluginsForSpec(specName) as PluginForSpec[];
+    const data = await listAllPluginsForSpec() as PluginForSpec[];
     return data
   };
 
