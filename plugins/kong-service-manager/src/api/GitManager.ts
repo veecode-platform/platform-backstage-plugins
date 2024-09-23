@@ -4,7 +4,7 @@ import { GithubManager } from "./git-providers/Github";
 import { ConfigApi } from "@backstage/core-plugin-api";
 import { GitLabManager } from "./git-providers/Gitlab";
 
-export class PullRequestManager {
+export class GitManager {
   
     private readonly githubManager : GithubManager;
     protected readonly gitlabManager : GitLabManager;
@@ -17,7 +17,26 @@ export class PullRequestManager {
         this.gitlabManager = new GitLabManager(this.scmAuthApi, this.configApi)
     }
 
+    async getContentSpec(
+        location:string,
+        filePath:string[],
+    ){
+        const  url = parseGitUrl(location); 
+
+        switch(true){
+            case url.includes('github'): {
+               return this.githubManager.getContent(url,filePath);
+            }
+            case url.includes('gitlab'): {
+                return this.gitlabManager.getContent(url,filePath);
+             }
+            default:
+              throw new Error('Git provider error: unimplemented!');
+        }
+    }
+
     async createPullRequest(
+        filePath:string,
         location: string,
         fileContent: string,
         title: string,
@@ -27,13 +46,13 @@ export class PullRequestManager {
 
         switch(true){
             case url.includes('github'): {
-               return this.githubManager.createPullRequest(url,fileContent,title,message);
+               return this.githubManager.createPullRequest(filePath,url,fileContent,title,message);
             }
             case url.includes('gitlab'): {
-                return this.gitlabManager.createPullRequest(url,fileContent,title,message);
+                return this.gitlabManager.createPullRequest(filePath,url,fileContent,title,message);
              }
             default:
-              throw new Error('unimplemented!');
+              throw new Error('Git provider error: unimplemented!');
         }
 
         
