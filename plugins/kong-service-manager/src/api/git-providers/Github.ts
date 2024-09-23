@@ -6,6 +6,8 @@ import { Octokit } from "@octokit/rest";
 import { formatHttpErrorMessage } from "../../utils/helpers/formatHttpErrorMessage";
 import { Base64 } from 'js-base64';
 import { generateBranchName } from "../../utils/helpers/generateBranchName";
+import { GithubFileResponse } from "../../utils/types";
+import YAML from "js-yaml"
 
 export class GithubManager {
     constructor(
@@ -30,9 +32,32 @@ export class GithubManager {
         return new Octokit({ auth: token, baseUrl });
     
      }
+    
+    async getContent(location:string,filePath:string[]){
+        const {host, owner, repo, branch } = extractGitHubInfo(location);
+        const octokit = await this.getOctokit(host);
 
-    async createPullRequest(location:string, fileContent:string, title: string, message: string){
-        const {host, owner, repo, file} = extractGitHubInfo(location);
+        const specs = Promise.all(filePath.map(async (file:string) => {
+            const response = await octokit.repos.getContent({
+                owner,
+                repo,
+                path: file,
+                branch
+            });
+    
+            const data : GithubFileResponse = response.data as GithubFileResponse;
+            const yamlContent = YAML.load(
+                Buffer.from(data.content,'base64').toString('utf-8')
+            ) as any;
+
+            return yamlContent
+        }))
+        
+        return specs
+    }
+
+    async createPullRequest(filePath:string,location:string, fileContent:string, title: string, message: string){
+        const {host, owner, repo } = extractGitHubInfo(location);
         const octokit = await this.getOctokit(host);
         const branchName = generateBranchName(title);
 
@@ -72,7 +97,7 @@ export class GithubManager {
              const { data } = await octokit.repos.getContent({
                  owner,
                  repo,
-                 path: file,
+                 path: filePath,
                  ref: branchName
              });
              if (!Array.isArray(data) && data.sha) {
@@ -82,7 +107,7 @@ export class GithubManager {
              if (e.status !== 404) {
                  throw new Error(
                      formatHttpErrorMessage(
-                         `Couldn't fetch existing file ${file} in the repo`,
+                         `Couldn't fetch existing file ${filePath} in the repo`,
                          e,
                      ),
                  );
@@ -92,7 +117,7 @@ export class GithubManager {
         await octokit.repos.createOrUpdateFileContents({
             owner,
             repo,
-            path: file,
+            path: filePath,
             message: title,
             content: Base64.encode(fileContent),
             branch: branchName,
@@ -100,7 +125,7 @@ export class GithubManager {
         }).catch(e=>{
             throw new Error(
                 formatHttpErrorMessage(
-                  `Couldn't create a commit with ${file} file added`,
+                  `Couldn't create a commit with ${filePath} file added`,
                   e,
                 ),
               );  
