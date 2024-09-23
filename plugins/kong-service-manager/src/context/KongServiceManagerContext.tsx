@@ -1,11 +1,14 @@
 import { createContext } from "react";
 import {  PluginCard, PluginForSpec, PullRequestResponse } from "../utils/types";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, ISpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IDefinition, IKongPluginSpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import {  PluginsToSpecActionType, SelectedSpecActionType } from "./state";
+import { Entity } from "@backstage/catalog-model";
 
 
 export type KongServiceManagerContextType = {
+    entity: Entity;
     instance: string;
+    kongSpecs: string[] | null | undefined,
     setInstanceState: (instanceState: string) => void;
     listAllEnabledPlugins: () => Promise<PluginPerCategory[] | null>;
     getServiceDetails: () => Promise<ServiceInfoResponse | null>;
@@ -30,13 +33,13 @@ export type KongServiceManagerContextType = {
     editRoute: (routeNameOrId: string, config: CreateRoute) => Promise<void | null>;
     removeRoute: (routeNameOrId: string) => Promise<void | null>;
     getRoute:  (routeNameOrId: string) => Promise<RouteResponse | null>;
-    getSpecs: () => Promise<ISpec[] | null >;
-    selectedSpecState: ISpec | null;
+    getSpecs: () => Promise<IDefinition[] | null >;
+    selectedSpecState: IDefinition | null;
     selectedSpecDispatch: React.Dispatch<SelectedSpecActionType>;
-    listAllPluginsForSpec: (specName: string) => Promise<PluginForSpec[]>;
+    listAllPluginsForSpec: () => Promise<PluginForSpec[]>;
     pluginsToSpecState: IKongPluginSpec[];
     pluginsToSpecDispatch: React.Dispatch<PluginsToSpecActionType>;
-    applyKongPluginsToSpec: (specName: string, title: string, message: string, location: string, plugins: IKongPluginSpec[]) => Promise<PullRequestResponse>
+    applyKongPluginsToSpec: (specName:string,title: string, message: string, location: string, plugins: IKongPluginSpec[]) => Promise<PullRequestResponse>
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!);

@@ -5,8 +5,10 @@ import { KongServiceManagerContext } from "./KongServiceManagerContext";
 import { PluginCard } from "../utils/types";
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { useEntityAnnotation } from "../hooks";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, IPluginsWithPrefix } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { addPluginsAssociated, addPluginsPerCategory, addSelectedPlugin, AssociatedPluginsReducer, initialAssociatedPluginsState, initialPluginsPerCategoryState, initialPluginsToSpecState, initialSelectedPluginState, initialSelectedSpecState, PluginsPerCategoryReducer, PluginsToSpecReducer, removePluginAssociated, SelectedPluginReducer, SelectedSpecReducer } from "./state";
+import { ANNOTATION_LOCATION } from "@backstage/catalog-model";
+import { formatObject } from "../utils/helpers/formactObject";
 
 interface KongServiceManagerProviderProps {
     children : React.ReactNode
@@ -22,9 +24,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   const [configState, setConfigState ] = React.useState<any|null>(null); 
   const [searchTerm, setSeachTerm] = React.useState<string>("");
   const { entity } = useEntity();
-  const { serviceName,kongInstances } = useEntityAnnotation(entity);
+  const { serviceName,kongInstances, kongSpecs } = useEntityAnnotation(entity);
   const [instance, setInstance] = React.useState<string>(kongInstances ? kongInstances[0] : "");
-  const [selectedSpecState, selectedSpecDispatch] = React.useReducer(SelectedSpecReducer, initialSelectedSpecState);
+  const [ selectedSpecState, selectedSpecDispatch] = React.useReducer(SelectedSpecReducer, initialSelectedSpecState);
   const [ pluginsToSpecState, pluginsToSpecDispatch ] = React.useReducer(PluginsToSpecReducer,initialPluginsToSpecState);
   const api = useApi(kongServiceManagerApiRef);
   const errorApi = useApi(errorApiRef);
@@ -255,8 +257,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   const getSpecs = async() => {
     try{
-      if(entity){
-        const response = await api.getSpecs(entity.kind, entity.metadata.name);
+      if(kongSpecs && entity){
+        const response = await api.getAllSpecs(entity.metadata?.annotations?.[ANNOTATION_LOCATION] as string,kongSpecs);
         if(response) return response;
       }
       return null
@@ -267,19 +269,6 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   }
 
-  const getPluginsInSpecs = async(specName:string) => {
-    try{
-      if(specName){
-        const response = await api.getPluginsFromSpec(specName);
-        if(response) return response;
-      }
-      return null
-    }
-    catch(e:any){
-      errorApi.post(e);
-      return null
-    }
-  }
 
   const getConfig = (pluginName:string) => {
     if(allAssociatedPluginsState){
@@ -297,10 +286,13 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     return {}
   }
 
-   const listAllPluginsForSpec =  async (specName:string) => {
+   const listAllPluginsForSpec =  async () => {
       
-        const pluginsInSpec = await getPluginsInSpecs(specName);
-        
+       if(selectedSpecState){
+        const pluginsInSpec =  Object.keys(selectedSpecState)
+        .filter(key => key.startsWith('x-kong'))
+        .map(key => selectedSpecState[key]);
+
         if(allAssociatedPluginsState && pluginsPerCategoryState && pluginsInSpec){
 
           const pluginsList = pluginsPerCategoryState.flatMap(category=>
@@ -324,14 +316,56 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         return pluginsList;
 
         }   
+       }
 
         return []
     }
 
     const applyKongPluginsToSpec = async (specName:string,title:string,message:string,location:string,plugins:IKongPluginSpec[]) => {
       try{
-        const response = await api.applyPluginsToSpec(specName, title,message,location,plugins);
-        return response
+        if(selectedSpecState){
+
+        // delete kong's plugin (old state)
+        for(const key in selectedSpecState){
+          if(key.startsWith('x-kong')){
+              delete selectedSpecState[key]
+          }
+      }
+
+      // map new plugins
+      const pluginsWithPrefix : IPluginsWithPrefix = {}; 
+      
+      plugins.map(plugin => {
+          const pluginName = `x-kong-${plugin.name.replace(" ","-").toLowerCase()}`;
+          const newData = {
+              name: pluginName,
+              enabled: plugin.enabled,
+              config: plugin.config
+          }
+        pluginsWithPrefix[`${pluginName}`] = newData;
+      });
+
+      const definitionUpdated = {
+          openapi: selectedSpecState.openapi,
+          info: selectedSpecState.info,
+          externalDocs: selectedSpecState.externalDocs,
+          servers: selectedSpecState.servers,
+          tags: selectedSpecState.tags,
+          ...pluginsWithPrefix,
+          paths: selectedSpecState.paths,
+          components: selectedSpecState.components
+      };
+
+      const fileContent = formatObject(definitionUpdated);
+
+      const response = await api.applyPluginsToSpec(specName,location,fileContent,title,message);
+      return response 
+
+        }
+        return {
+          status: 400,
+          message: 'Pull Request aborted'
+      }
       }
       catch(e:any){
         errorApi.post(e);
@@ -366,7 +400,9 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   return (
     <KongServiceManagerContext.Provider
       value={{
+        entity,
         instance,
+        kongSpecs,
         setInstanceState,
         listAllEnabledPlugins,
         getServiceDetails,
