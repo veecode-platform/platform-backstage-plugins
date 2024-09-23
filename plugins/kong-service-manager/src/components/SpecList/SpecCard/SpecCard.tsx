@@ -1,14 +1,14 @@
 import React from 'react'
 import { SpecCardProps } from './types'
 import { useSpecCardStyles } from './styles';
-import { Box, Chip, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { MdOpenInNew } from 'react-icons/md';
 import { FaUser } from 'react-icons/fa6';
 import { Link } from '@backstage/core-components';
 
 export const SpecCard : React.FC<SpecCardProps> = (props) => {
   
-    const { title, description, owner, tags,setSpec } = props;
+    const { title, description, owner, setSpec } = props;
     const { root, cardHeader, cardBody, cardFooter } = useSpecCardStyles();
 
     React.useEffect(()=>{
@@ -28,12 +28,7 @@ export const SpecCard : React.FC<SpecCardProps> = (props) => {
             <Typography variant="body1">{description.length <= 3 ? 'No description...' : description}</Typography>
         </div>
         <div className={cardFooter}>
-            <div><FaUser /> {owner}</div>
-            <div>
-                {tags.map(tag => 
-                    <Chip label={tag} key={tag}/>
-                )}
-            </div>
+            <div><FaUser /> {owner.split("/")[1]}</div>
         </div>
     </Box>
   )
