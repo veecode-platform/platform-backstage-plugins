@@ -2,7 +2,7 @@ import React from 'react'
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary'
 import { BoxComponent } from '../shared'
 import { useKongServiceManagerContext } from '../../context'
-import { ISpec } from '@veecode-platform/backstage-plugin-kong-service-manager-common'
+import { IDefinition } from '@veecode-platform/backstage-plugin-kong-service-manager-common'
 import useAsync from 'react-use/esm/useAsync'
 import { SpecCard } from './SpecCard'
 import { useSpecListStyles } from './styles'
@@ -11,11 +11,11 @@ import { addSelectedSpec } from '../../context/state'
 export const SpecList = () => {
   
   const [ selectedSpec, setSelectedSpec ] = React.useState<string>('');
-  const { getSpecs, selectedSpecDispatch } = useKongServiceManagerContext();
+  const { entity, getSpecs, selectedSpecDispatch } = useKongServiceManagerContext();
   const { content } = useSpecListStyles();
 
-  const fetchSpecs = async (): Promise<ISpec[]> => {
-    const data = await getSpecs() as ISpec[];
+  const fetchSpecs = async (): Promise<IDefinition[]> => {
+    const data = await getSpecs() as IDefinition[]
     return data;
   };
 
@@ -23,7 +23,7 @@ export const SpecList = () => {
 
   React.useEffect(()=>{
     if(selectedSpec !== '' && allspecs){
-      const specData = allspecs.filter(spec => spec.metadata.name === selectedSpec)[0];
+      const specData = allspecs.filter(spec => spec.info.title === selectedSpec)[0];
       selectedSpecDispatch(addSelectedSpec(specData));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -42,11 +42,10 @@ export const SpecList = () => {
           {allspecs?.map(spec => 
             (
               <SpecCard
-                key={spec.metadata.uid}
-                title={spec.metadata.name}
-                description={spec.metadata.description}
-                owner={spec.spec.owner}
-                tags={spec.metadata.tags} 
+                key={spec.info.title}
+                title={spec.info.title}
+                description={spec.info.description}
+                owner={entity.spec?.owner as string}
                 setSpec={setSelectedSpec}           
             />
             )
