@@ -5,6 +5,7 @@ import { formatHttpErrorMessage } from "../../utils/helpers/formatHttpErrorMessa
 import { Base64 } from 'js-base64';
 import { extractGitLabInfo } from "../../utils/helpers/extractGitlabInfo";
 import { generateBranchName } from "../../utils/helpers/generateBranchName";
+import YAML from "js-yaml"
 
 export class GitLabManager {
   constructor(
@@ -55,8 +56,35 @@ export class GitLabManager {
     return response.json();
   }
 
-  async createPullRequest(location: string, fileContent: string, title: string, message: string) {
-    const { host, group, repo, filePath } = extractGitLabInfo(location);  
+  async getContent(location: string, filePath: string[]) {
+    const { host, group, repo, branch } = extractGitLabInfo(location);
+    const token = await this.getToken(host);
+    const baseUrl = await this.getApiBaseUrl(host);
+
+    const specs = await Promise.all(filePath.map(async(file:string)=> {
+      const fileUrl = `${baseUrl}/projects/${encodeURIComponent(`${group}/${repo}`)}/repository/files/${encodeURIComponent(file)}?ref=${branch}`; 
+      const fileResponse = await this.fetchFromGitLab(fileUrl, token).catch(e => {
+        if (e.status === 404) {
+          throw new Error(formatHttpErrorMessage(`File not found: ${filePath}`, e));
+        }
+        throw e;
+      });
+  
+      const decodedContent = Base64.decode(fileResponse.content);
+      return YAML.load(decodedContent);
+    }))
+
+    return specs
+    
+}
+
+  async createPullRequest(
+    filePath:string,
+    location: string, 
+    fileContent: string, 
+    title: string,
+    message: string) {
+    const { host, group, repo } = extractGitLabInfo(location);  
     const token = await this.getToken(host);
     const baseUrl = await this.getApiBaseUrl(host);
     const branchName = generateBranchName(title);
