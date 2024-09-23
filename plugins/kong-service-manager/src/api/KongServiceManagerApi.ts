@@ -28,6 +28,7 @@ export interface KongServiceManagerApi {
     editRouteFromService(serviceName:string, instanceName:string, routeIdOrName: string, config: CreateRoute): Promise<any>;
     removeRouteFromService(serviceName:string, instanceName:string, routeIdOrName: string): Promise<any>;
     getSpecs(kind: string, entityName: string): Promise<ISpec[]>;
+    getAllSpecs(location: string, filePath: string[]): Promise<any[]>;
     getPluginsFromSpec(entityName: string): Promise<IKongPluginSpec[]>;
-    applyPluginsToSpec(specName: string, title: string, message: string, location: string, plugins: IKongPluginSpec[]): Promise<PullRequestResponse>
+    applyPluginsToSpec(specName:string,location: string, fileContent:string, title: string, message: string): Promise<PullRequestResponse>
 }
