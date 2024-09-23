@@ -2,18 +2,17 @@ import { ConfigApi, FetchApi } from "@backstage/core-plugin-api";
 import { KongServiceManagerApi, Options } from "./KongServiceManagerApi";
 import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, ISpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { PluginsInfoData } from "../data/data";
-import { PullRequestManager } from "./pullRequestManager";
-import { formatObject } from "../utils/helpers/formactObject";
+import { GitManager } from "./GitManager";
 
  abstract class Client {
     protected readonly config: ConfigApi;
     private readonly fetchApi: FetchApi;
-    pullRequestManager: PullRequestManager;
+    gitManager: GitManager;
     
     constructor(opts: Options) { 
         this.config = opts.config as ConfigApi; 
         this.fetchApi = opts.fetchApi as FetchApi;
-        this.pullRequestManager = new PullRequestManager(opts.scmAuthApi,opts.config)
+        this.gitManager = new GitManager(opts.scmAuthApi,opts.config)
     }
 
     protected async fetch <T = any>(input: string, init?: RequestInit): Promise<T> {
@@ -184,28 +183,20 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         return response.specs as ISpec[];
     }
 
+    async getAllSpecs(location:string, filePath:string[]){
+       return this.gitManager.getContentSpec(location,filePath);
+    }
+
     async getPluginsFromSpec(entityName:string):Promise<IKongPluginSpec[]>{
         const response = await this.fetch(`/spec/${entityName}/plugins`);
         return response.plugins as IKongPluginSpec[]
     }
 
 
-    async applyPluginsToSpec(specName:string, title: string, message: string,location: string, plugins: IKongPluginSpec[]){
-        const body = {
-            plugins,
-         }
-        const headers: RequestInit = {
-         method: "POST",
-         body: JSON.stringify(body),
-         headers: {
-             'Content-Type': 'application/json', 
-         }
-        }
-        
-        const response = await this.fetch(`/add-plugins/${specName}`,headers);
-        const fileContent = formatObject(response.spec);
-        
-        return this.pullRequestManager.createPullRequest(
+    async applyPluginsToSpec(specName:string,location: string, fileContent:string, title: string, message: string){
+
+        return this.gitManager.createPullRequest(
+            specName,
             location,
             fileContent,
             title,
