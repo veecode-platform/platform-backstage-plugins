@@ -1,6 +1,6 @@
-import { ISpec } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { IDefinition } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
-export const addSelectedSpec = (spec:ISpec)=>({
+export const addSelectedSpec = (spec:IDefinition)=>({
     type: 'ADD_SPEC',
     payload: spec
 } as const);

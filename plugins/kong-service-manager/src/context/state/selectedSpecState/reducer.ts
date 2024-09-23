@@ -1,9 +1,9 @@
-import { ISpec } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { IDefinition } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { SelectedSpecActionType } from "./actions";
 
-export const initialSelectedSpecState : ISpec | null = null;
+export const initialSelectedSpecState : IDefinition | null = null;
 
-export const SelectedSpecReducer = (state: ISpec | null , action: SelectedSpecActionType) : ISpec | null => {
+export const SelectedSpecReducer = (state: IDefinition | null , action: SelectedSpecActionType) : IDefinition | null => {
     switch (action.type) {
         case 'ADD_SPEC':
             return action.payload;
