@@ -287,8 +287,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   }
 
    const listAllPluginsForSpec =  async () => {
-      
-       if(selectedSpecState){
+       if(!selectedSpecState) return [];
+
         const pluginsInSpec =  Object.keys(selectedSpecState)
         .filter(key => key.startsWith('x-kong'))
         .map(key => selectedSpecState[key]);
@@ -304,21 +304,16 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
               slug: plugin.slug,
               description: plugin.description,
               config: getConfig(plugin.name), 
-              enabledToSpec: false,
+              enabledToSpec: !!pluginsInSpec.find((p) => p.name === `x-kong-${plugin.slug}`),
             }))
         );
 
-        pluginsList.forEach((plugin) => {
-          const isInSpec = pluginsInSpec.some((specPlugin) => specPlugin.name === plugin.name);
-          plugin.enabledToSpec = isInSpec ? true : false;
-        }); 
-        
         return pluginsList;
 
         }   
-       }
 
         return []
+       
     }
 
     const applyKongPluginsToSpec = async (specName:string,title:string,message:string,location:string,plugins:IKongPluginSpec[]) => {
