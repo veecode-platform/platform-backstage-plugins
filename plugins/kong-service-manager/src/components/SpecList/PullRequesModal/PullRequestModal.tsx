@@ -46,7 +46,6 @@ export const PullRequestModal: React.FC<PullRequestModalProps> = props => {
           status: response.status === 201 ? 'success':'error',
           message: response.message,
         }));
-        setProcessingData(false)
         setShowFeedback(true);
         setTimeout(()=>{
           setShowFeedback(false);
