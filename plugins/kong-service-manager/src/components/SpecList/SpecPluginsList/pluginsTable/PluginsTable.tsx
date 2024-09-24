@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -74,7 +75,7 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
       if (enabledPlugins.length !== pluginsToSpecState.length) return true;
   
       const hasDifference = enabledPlugins.some(plugin => 
-        !pluginsToSpecState.some(p => p.name === plugin.name && p.enabled === plugin.enabledToSpec)
+        !pluginsToSpecState.some(p => p.name === plugin.slug && p.enabled === plugin.enabledToSpec)
       );
 
       return hasDifference;
@@ -95,7 +96,7 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
       pluginsSpecListState.map(plugin => {
         if(plugin.enabledToSpec){
           pluginsListToSpec.push({
-            name: plugin.name,
+            name: plugin.slug,   // the slug as name
             enabled: plugin.enabledToSpec,
             config: plugin.config
           })
