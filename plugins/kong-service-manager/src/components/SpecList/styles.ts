@@ -13,5 +13,9 @@ export const useSpecListStyles = makeStyles(theme => ({
         justifyContent: 'flex-start',
         flexDirection: 'column',
         gap: '2rem'
+    },
+    noSpec: {
+        width: '100%',
+        padding: '2rem'
     }
 }))

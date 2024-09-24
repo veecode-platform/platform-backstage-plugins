@@ -1,25 +1,46 @@
 import React from 'react'
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary'
-import { BoxComponent } from '../shared'
+import { BoxComponent, LoadingComponent, MissingAnnotation } from '../shared'
 import { useKongServiceManagerContext } from '../../context'
 import { IDefinition } from '@veecode-platform/backstage-plugin-kong-service-manager-common'
 import useAsync from 'react-use/esm/useAsync'
 import { SpecCard } from './SpecCard'
 import { useSpecListStyles } from './styles'
 import { addSelectedSpec } from '../../context/state'
+import { isKongManagerSpecAvailable } from '../../hooks'
+import { SpecListProps } from './types'
+import { Typography } from '@material-ui/core'
+
+
+const SpecListWrapper : React.FC<SpecListProps> = (props) => {
+  
+  const { children } = props;
+  const { content } = useSpecListStyles();
+
+  return (
+    <ErrorBoundary>
+      <BoxComponent title="All Specs">
+        <div className={content}>
+          {children}
+        </div>
+      </BoxComponent>
+    </ErrorBoundary>
+  )
+}
+
 
 export const SpecList = () => {
   
   const [ selectedSpec, setSelectedSpec ] = React.useState<string>('');
   const { entity, getSpecs, selectedSpecDispatch } = useKongServiceManagerContext();
-  const { content } = useSpecListStyles();
+  const { noSpec } = useSpecListStyles();
 
   const fetchSpecs = async (): Promise<IDefinition[]> => {
-    const data = await getSpecs() as IDefinition[]
-    return data;
+    const data = await getSpecs();
+    return data as IDefinition[];
   };
 
-  const {loading, error, value: allspecs } = useAsync(fetchSpecs,[]);
+  const {loading, value: allspecs } = useAsync(fetchSpecs,[]);
 
   React.useEffect(()=>{
     if(selectedSpec !== '' && allspecs){
@@ -28,30 +49,39 @@ export const SpecList = () => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[selectedSpec])
-  
-  if(loading) <h1>Carregando</h1>  // TO DO
 
-  if(error) <h1>Error</h1>  // TO DO
+  if (loading) (<SpecListWrapper> 
+    <LoadingComponent/> 
+  </SpecListWrapper>);
 
-  if(allspecs && allspecs.length === 0) <h1>Nada pra mostrar</h1> // TO DO
+  if (!isKongManagerSpecAvailable) (
+  <SpecListWrapper> 
+    <MissingAnnotation annotation="kong-manager/spec"/> 
+  </SpecListWrapper>);
+
+  if(allspecs && allspecs.length === 0)(
+    <SpecListWrapper>
+      <div className={noSpec}>
+        <Typography variant="body1">No spec found...</Typography>
+      </div>
+    </SpecListWrapper>
+  )
 
   return (
-    <ErrorBoundary>
-      <BoxComponent title="All Specs">
-        <div className={content}>
-          {allspecs?.map(spec => 
-            (
-              <SpecCard
-                key={spec.info.title}
-                title={spec.info.title}
-                description={spec.info.description}
-                owner={entity.spec?.owner as string}
-                setSpec={setSelectedSpec}           
-            />
-            )
-          )}
-        </div>
-      </BoxComponent>
-    </ErrorBoundary>
+    <SpecListWrapper>
+      {allspecs && allspecs.map(spec => 
+        (
+          <SpecCard
+            key={spec.info.title}
+            title={spec.info.title}
+            description={spec.info.description}
+            owner={entity.spec?.owner as string}
+            setSpec={setSelectedSpec}           
+        />
+        )
+      )}
+    </SpecListWrapper>
   )
 }
+
+
