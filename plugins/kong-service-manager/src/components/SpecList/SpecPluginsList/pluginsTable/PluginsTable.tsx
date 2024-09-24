@@ -32,6 +32,7 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
   
   const [pluginsSpecListState, pluginsSpecListDispatch] = React.useReducer(PluginsSpecListReducer,initialPluginsSpecListState);
   const [showModal, setShowModal] = React.useState<boolean>(false);
+  const [ hasChange, setHasChange ] = React.useState<boolean>(false);
   const { specName } = props;
   const { root,iconAndName, apply, remove, submit, footer, fixedToBottom } = usePluginsTableStyles();
   const { listAllPluginsForSpec, pluginsToSpecState, pluginsToSpecDispatch } = useKongServiceManagerContext();
@@ -66,10 +67,26 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
   }
 
 
+  const checkChanges = (): boolean => {
+    if (allPlugins && pluginsToSpecState) {
+      const enabledPlugins = allPlugins.filter(p => p.enabledToSpec);
+      
+      if (enabledPlugins.length !== pluginsToSpecState.length) return true;
+  
+      const hasDifference = enabledPlugins.some(plugin => 
+        !pluginsToSpecState.some(p => p.name === plugin.name && p.enabled === plugin.enabledToSpec)
+      );
+
+      return hasDifference;
+    }
+    return false;
+  };
+
   React.useEffect(()=>{
      if(allPlugins){
       pluginsSpecListDispatch(addPluginsToList(allPlugins))
      }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[allPlugins]);
 
   React.useEffect(()=>{
@@ -88,6 +105,12 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[pluginsSpecListState]);
+
+  React.useEffect(()=>{
+    const changes = checkChanges();
+    setHasChange(changes)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[allPlugins,pluginsToSpecState])
 
 
   return (
@@ -122,7 +145,7 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
                 <StyledTableRow>
                   <StyledTableCell colSpan={3} align="center">         
                     <ButtonComponent 
-                      isDisabled={pluginsToSpecState.length <= 0} 
+                      isDisabled={!hasChange} 
                       classes={submit} 
                       handleClick={handleApplyChanges}>
                         Apply
