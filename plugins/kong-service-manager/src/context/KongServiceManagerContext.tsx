@@ -13,7 +13,7 @@ export type KongServiceManagerContextType = {
     listAllEnabledPlugins: () => Promise<PluginPerCategory[] | null>;
     getServiceDetails: () => Promise<ServiceInfoResponse | null>;
     getRoutesList: () => Promise<RouteResponse[] | null>;
-    listAssociatedPlugins: () => Promise<void>;
+    listAssociatedPlugins: () => Promise<AssociatedPluginsResponse[]>;
     allAssociatedPluginsState: AssociatedPluginsResponse[] | null;
     associatedPluginsName: [] | string[];
     getPluginFields: (pluginName: string) => Promise<PluginFieldsResponse[] | null>;

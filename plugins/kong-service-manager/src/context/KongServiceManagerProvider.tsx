@@ -78,11 +78,16 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     try{
       if(instance && serviceName){
         const plugins = await api.getServiceAssociatedPlugins(instance,serviceName);
-        if (plugins !== null && plugins !== undefined) associatedPluginsDispatch(addPluginsAssociated(plugins));
+        if (plugins !== null && plugins !== undefined) {
+          associatedPluginsDispatch(addPluginsAssociated(plugins));
+          return plugins
+        }
       }
+      return []
     }
     catch(e:any){
         errorApi.post(e);
+        return []
     }
   }
 
@@ -271,16 +276,17 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   }
 
 
-  const getConfig = (pluginName: string) => {
-    if (allAssociatedPluginsState) {
-      const data = allAssociatedPluginsState.find(
+  const getConfig =  async (pluginName: string) => {
+    const asociatedPlugins = await listAssociatedPlugins();
+
+    if (asociatedPlugins) {
+      const data = asociatedPlugins.find(
         associatedPlugin => associatedPlugin.name === pluginName && associatedPlugin.config
       );
   
       if (data) {
-        const info = removePropsNull(data);
         const filteredConfig = removePropsNull(data.config)
-        return { ...info, config: filteredConfig };
+        return {...filteredConfig };
       }
     }
     return {};
@@ -293,26 +299,23 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         .filter(key => key.startsWith('x-kong'))
         .map(key => selectedSpecState[key]);
 
-        if(allAssociatedPluginsState && pluginsPerCategoryState && pluginsInSpec && allAssociatedPluginsState){
-          const pluginsList = pluginsPerCategoryState.flatMap(category=>
+        if(allAssociatedPluginsState && pluginsPerCategoryState && pluginsInSpec){
+          const pluginsList = await Promise.all(pluginsPerCategoryState.flatMap(category=>
             category.plugins
             .filter((plugin) => plugin.associated)
-            .map((plugin) => ({
+            .map(async (plugin) => ({
               image: plugin.image,
               name: plugin.name,
               slug: plugin.slug,
               description: plugin.description,
-              config: getConfig(plugin.slug), 
-              enabledToSpec: !!pluginsInSpec.find((p) => p.name === `x-kong-${plugin.slug}`),
+              config: await getConfig(plugin.slug), 
+              enabledToSpec: !!pluginsInSpec.find((p) => p.name === plugin.slug),
             }))
-        );
-        
+        ))
         return pluginsList;
 
         }   
-
-        return []
-       
+        return []      
     }
 
     const applyKongPluginsToSpec = async (specName:string,title:string,message:string,location:string,plugins:IKongPluginSpec[]) => {
@@ -330,13 +333,13 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
       const pluginsWithPrefix : IPluginsWithPrefix = {}; 
       
       plugins.map(plugin => {
-          const pluginName = `x-kong-${plugin.name.replace(" ","-").toLowerCase()}`;
+          const pluginKey = `x-kong-${plugin.name.replace(" ","-").toLowerCase()}`;
           const newData = {
-              name: pluginName,
+              name: plugin.name,
               enabled: plugin.enabled,
               config: plugin.config
           }
-        pluginsWithPrefix[`${pluginName}`] = newData;
+        pluginsWithPrefix[`${pluginKey}`] = newData;
       });
 
       const definitionUpdated = {
@@ -389,7 +392,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
       getRoutesList();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[instance])
+  },[instance]);
+
 
   return (
     <KongServiceManagerContext.Provider
