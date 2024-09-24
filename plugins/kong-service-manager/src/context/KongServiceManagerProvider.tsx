@@ -9,6 +9,7 @@ import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, 
 import { addPluginsAssociated, addPluginsPerCategory, addSelectedPlugin, AssociatedPluginsReducer, initialAssociatedPluginsState, initialPluginsPerCategoryState, initialPluginsToSpecState, initialSelectedPluginState, initialSelectedSpecState, PluginsPerCategoryReducer, PluginsToSpecReducer, removePluginAssociated, SelectedPluginReducer, SelectedSpecReducer } from "./state";
 import { ANNOTATION_LOCATION } from "@backstage/catalog-model";
 import { formatObject } from "../utils/helpers/formactObject";
+import { removePropsNull } from "../utils/helpers/removePropsNull";
 
 interface KongServiceManagerProviderProps {
     children : React.ReactNode
@@ -270,21 +271,20 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   }
 
 
-  const getConfig = (pluginName:string) => {
-    if(allAssociatedPluginsState){
-      const config = allAssociatedPluginsState.find( associatedPlugin => associatedPlugin.name === pluginName && associatedPlugin.config);
-     
-      if(config){
-        const filteredConfig = Object.fromEntries(
-          Object.entries(config.config).filter(([_, value]) => value !== null)
-        );
-        
-        return {...config, filteredConfig}
+  const getConfig = (pluginName: string) => {
+    if (allAssociatedPluginsState) {
+      const data = allAssociatedPluginsState.find(
+        associatedPlugin => associatedPlugin.name === pluginName && associatedPlugin.config
+      );
+  
+      if (data) {
+        const info = removePropsNull(data);
+        const filteredConfig = removePropsNull(data.config)
+        return { ...info, config: filteredConfig };
       }
-
     }
-    return {}
-  }
+    return {};
+  };
 
    const listAllPluginsForSpec =  async () => {
        if(!selectedSpecState) return [];
@@ -293,8 +293,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         .filter(key => key.startsWith('x-kong'))
         .map(key => selectedSpecState[key]);
 
-        if(allAssociatedPluginsState && pluginsPerCategoryState && pluginsInSpec){
-
+        if(allAssociatedPluginsState && pluginsPerCategoryState && pluginsInSpec && allAssociatedPluginsState){
           const pluginsList = pluginsPerCategoryState.flatMap(category=>
             category.plugins
             .filter((plugin) => plugin.associated)
@@ -303,11 +302,11 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
               name: plugin.name,
               slug: plugin.slug,
               description: plugin.description,
-              config: getConfig(plugin.name), 
+              config: getConfig(plugin.slug), 
               enabledToSpec: !!pluginsInSpec.find((p) => p.name === `x-kong-${plugin.slug}`),
             }))
         );
-
+        
         return pluginsList;
 
         }   
