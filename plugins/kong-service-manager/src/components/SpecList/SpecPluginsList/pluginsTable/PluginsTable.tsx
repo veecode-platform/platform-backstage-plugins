@@ -15,7 +15,7 @@ import { PluginForSpec } from '../../../../utils/types';
 import useAsync from 'react-use/esm/useAsync';
 import { addPluginsToSpec } from '../../../../context/state';
 import { IKongPluginSpec } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
-import { ButtonComponent } from '../../../shared';
+import { ButtonComponent, LoadingComponent } from '../../../shared';
 import { PullRequestModal } from '../../PullRequesModal';
 
 
@@ -55,7 +55,7 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
     return data
   };
 
-  const { /* loading, error ,*/ value: allPlugins} = useAsync(fetchData,[specName]) // to do
+  const {  loading, value: allPlugins} = useAsync(fetchData,[specName])
 
   const rows = ( pluginsSpecListState  && pluginsSpecListState.length > 0 ) ? pluginsSpecListState.map(
     plugin => createData(plugin.name, plugin.image,plugin.description, plugin.config, plugin.enabledToSpec)
@@ -126,21 +126,23 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <StyledTableRow key={row.name}>
-                  <StyledTableCell component="th" scope="row">
-                  <div className={iconAndName}> <img src={row.image} alt={row.name}/> {row.name}</div>
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{row.description}</StyledTableCell>
-                  <StyledTableCell align="center">
-                      <ButtonComponent 
-                        handleClick={()=> handleAction(row.name)} 
-                        classes={row.enableToSpec ? remove: apply}> 
-                        {row.enableToSpec ? (<><IoMdRemove size={20}/> Remove from Spec</>): (<><IoMdAdd size={20}/> Apply to Spec</>)}
-                      </ButtonComponent>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
+              { loading ? <LoadingComponent/> : <> {
+                rows.map((row) => (
+                  <StyledTableRow key={row.name}>
+                    <StyledTableCell component="th" scope="row">
+                    <div className={iconAndName}> <img src={row.image} alt={row.name}/> {row.name}</div>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">{row.description}</StyledTableCell>
+                    <StyledTableCell align="center">
+                        <ButtonComponent 
+                          handleClick={()=> handleAction(row.name)} 
+                          classes={row.enableToSpec ? remove: apply}> 
+                          {row.enableToSpec ? (<><IoMdRemove size={20}/> Remove from Spec</>): (<><IoMdAdd size={20}/> Apply to Spec</>)}
+                        </ButtonComponent>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))
+              }</>}
             </TableBody>
             <TableFooter className={`${footer} ${rows.length <= 3 && fixedToBottom}`}>
                 <StyledTableRow>
