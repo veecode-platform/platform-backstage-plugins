@@ -2,6 +2,7 @@ import React from 'react';
 import { List, ListItem, ListItemText } from '@material-ui/core'
 import { NavLink } from 'react-router-dom';
 import { useMenuOptionsStyles } from './styles';
+import { MenuOptionsProps } from './types';
 
 const MenuOptionsItems = [
     {
@@ -23,19 +24,26 @@ const MenuOptionsItems = [
 ]
 
 
-export const MenuOptions = () => {
+export const MenuOptions  : React.FC<MenuOptionsProps> = (props) => {
   
   const [activeLink, setActiveLink] = React.useState('');
   const classes = useMenuOptionsStyles();
+  const { isSpecAvailable } = props;
 
   return (
     <List className={classes.listComponent}>
       {MenuOptionsItems.map(i => (
-        <NavLink key={i.label} to={i.link} className={`${classes.link} ${activeLink === i.link ? classes.activeLink : ''}`}>
-          <ListItem className={classes.listItem} onClick={()=>setActiveLink(i.link)}>
-            <ListItemText>{i.label}</ListItemText>
-          </ListItem>
-        </NavLink>
+        <>
+        { 
+           !isSpecAvailable && i.label === "Specs" ? null 
+           : (
+              <NavLink key={i.label} to={i.link} className={`${classes.link} ${activeLink === i.link ? classes.activeLink : ''}`}>
+                <ListItem className={classes.listItem} onClick={()=>setActiveLink(i.link)}>
+                  <ListItemText>{i.label}</ListItemText>
+                </ListItem>
+               </NavLink>)
+        } 
+        </>
       ))}
     </List>
   );
