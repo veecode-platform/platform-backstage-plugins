@@ -54,7 +54,7 @@ export const SpecList = () => {
     <LoadingComponent/> 
   </SpecListWrapper>);
 
-  if (!isKongManagerSpecAvailable) (
+  if (isKongManagerSpecAvailable(entity)) (
   <SpecListWrapper> 
     <MissingAnnotation annotation="kong-manager/spec"/> 
   </SpecListWrapper>);
