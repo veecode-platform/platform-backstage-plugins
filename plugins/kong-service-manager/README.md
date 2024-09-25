@@ -186,6 +186,8 @@ From then on, the plugin will already be configured in your service:
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/0a4f68c3-cb68-4106-9991-427b40f4ec0b)
 
 
+
+
 ### 👉 Specs:
 
 Finally
