@@ -5,53 +5,54 @@ import AddIcon from '@material-ui/icons/Add';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
-import { IncrementalFields } from '../incrementalFields/IncrementalFields';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import SaveIcon from '@material-ui/icons/Save';
 import ClearIcon from '@material-ui/icons/Clear';
+import { SelectComponent } from '../../../../shared';
 import { transformToSelectOptions } from '../../../../../utils/helpers/transformToSelectOptions';
-import {SelectComponent } from '../../../../shared'
-import { RecordFieldsProps, RecordStateType } from './types';
-import { addInputFields, addItem, addRecordState, initialInputFieldsState, initialNewItemState, initialRecordFieldState, initialRecordState, InputFieldsReducer, NewItemReducer, RecordFieldReducer, RecordReducer, removeItem, removeRecordState, updateRecordFieldState } from './state';
+import { IncrementalFields } from '../incrementalFields/IncrementalFields';
+import { RecordFieldsProps, RecordFieldsType, RecordStateType } from './types';
 
-
+  
   export const RecordFields : React.FC<RecordFieldsProps> = (props) => {
 
-    const [inputFieldsState, inputFieldsDispatch] = React.useReducer(InputFieldsReducer, initialInputFieldsState);
-    const [recordFieldsState, recordFieldsDispatch] = React.useReducer(RecordFieldReducer, initialRecordFieldState)
-    const [recordState, recordStateDispatch] = React.useReducer(RecordReducer, initialRecordState);
-    const [ newItemState, newItemDispatch ] = React.useReducer(NewItemReducer, initialNewItemState);
+    const [inputFields, setInputFields] = React.useState<any[]>([]);
+    const [recordFieldsState, setRecordFieldsState] = React.useState<RecordFieldsType|null>(null);
+    const [recordState, setRecordState] = React.useState<RecordStateType|null>(null);
+    const [newItem, setNewItem] = React.useState<any>({});
     const [tagsState, setTagsState] = React.useState<string[]>([]);
-    const {inputName, defaultValues,recordFields,setConfig} = props;
     const { box, newField,labelAndField, heading, input, addField,defaultField,field,accordion,accordionSummary,accordionContent, combobox, label,tags, buttonsGroup} = useStyles();
-
-
-    const handleAddFields = () => {
-      const newFields = [...inputFieldsState, { name: "New Item"}];
-      inputFieldsDispatch(addInputFields(newFields))
-    }
+    const { inputName, defaultValues,recordFields,setConfig } = props;
+ 
+    const handleAddFields = () => setInputFields([...inputFields, {
+      name: "New Item"
+    }]);
   
     const handleRemoveFields = (index: number) => {
-      const values = [...inputFieldsState];
+      const values = [...inputFields];
       values.splice(index, 1);
-      inputFieldsDispatch(addInputFields(values));
-      newItemDispatch(removeItem());
+      setInputFields(values);
+      setNewItem({})
     };
 
     const submitDataToConfig = (key: string, index: number) => {
-      if (newItemState) {
-        const updatedItems = { [key]: [...(recordState?.[key] || [])] }; 
-        updatedItems[key].push(newItemState);
-        recordStateDispatch(addRecordState(updatedItems as RecordStateType));
-        handleRemoveFields(index);
-        newItemDispatch(removeItem());
+      if (newItem) {
+        setRecordState((prevRecordState) => {
+          const updatedItems = { [key]: [...(prevRecordState?.[key] || [])] };  
+          updatedItems[key].push(newItem);
+          handleRemoveFields(index);
+          return updatedItems;
+        });
+        setNewItem({});
       }
     };
 
     const handleAddItem = (key: string, value: string | number | string[]) => {
       if (value !== "") {
-        const newItemData = {...newItemState,  [key]: value,}
-        newItemDispatch(addItem(newItemData))
+        setNewItem((prevItem: any) => ({
+          ...prevItem,
+          [key]: value,
+        }));
       }
     };
 
@@ -59,45 +60,83 @@ import { addInputFields, addItem, addRecordState, initialInputFieldsState, initi
       if (recordState && recordState[inputName][index]) {
         const updatedItems = [...recordState[inputName]];
         updatedItems[index] = { ...updatedItems[index], [key]: value };
-        recordStateDispatch(addRecordState({...recordState, [inputName]: updatedItems }));
+  
+        setRecordState((prevrecordState) => ({
+          ...prevrecordState,
+          [inputName]: updatedItems,
+        }));
       }
     };
 
     const handleDeleteItems = (index:number) => {
       if(recordState){
-        const updateItem = recordState[inputName].filter(
-          (_, i) => i !== index
-        );
-        recordStateDispatch(addRecordState({...recordState, [inputName]: updateItem }));
+        setRecordState((prevrecordState) => {
+          const updateItem = prevrecordState![inputName].filter(
+            (_, i) => i !== index
+          );
+          return {
+            ...prevrecordState,
+            [inputName]: updateItem,
+          };
+        });
       }
      
     }
 
-    React.useEffect(() => {
-      if (recordFields) {
-        recordFields.forEach(r => {
+    React.useEffect(()=>{
+      if(recordFields){
+        recordFields.map(r => {
           switch (r.name) {
             case 'name':
-            case 'stat_type':
-            case 'consumer_identifier':
-            case 'value': {
-              const value = r.arrayOptions !== undefined ? r.arrayOptions : [];
-              recordFieldsDispatch(updateRecordFieldState(r.name, value));
+              setRecordFieldsState((prevConfigState : any) => {
+                const updatedState = {
+                  ...prevConfigState,
+                  [r.name]: r.arrayOptions !== undefined ? r.arrayOptions : [],
+                };
+                return updatedState;
+               });
               break;
-            }
+            case 'stat_type':
+              setRecordFieldsState((prevConfigState : any) => {
+                const updatedState = {
+                  ...prevConfigState,
+                  [r.name]:  r.arrayOptions !== undefined ? r.arrayOptions : [],
+                };
+                return updatedState;
+               });
+              break;
+            case 'consumer_identifier':
+              setRecordFieldsState((prevConfigState : any) => {
+                const updatedState = {
+                  ...prevConfigState,
+                  [r.name]:  r.arrayOptions !== undefined ? r.arrayOptions : [],
+                };
+                return updatedState;
+               });
+              break;
+            case 'value':
+                setRecordFieldsState((prevConfigState : any) => {
+                  const updatedState = {
+                    ...prevConfigState,
+                    [r.name]: r.arrayOptions !== undefined ? r.arrayOptions : [],
+                  };
+                  return updatedState;
+                 });
+                break;
             default:
-              return;
+              return ;
           }
-        });
+         
+        })
       }
-    }, [recordFields]);
+    },[recordFields]);
 
     React.useEffect(() => {
       if (defaultValues && defaultValues !== undefined) {
         const recordData: RecordStateType = { [inputName]: [...defaultValues] };
-        recordStateDispatch(addRecordState(recordData));
+        setRecordState(recordData);
       }
-      else recordStateDispatch(removeRecordState())
+      else setRecordState(null)
     }, [defaultValues, inputName]);
 
     React.useEffect(()=>{
@@ -112,6 +151,7 @@ import { addInputFields, addItem, addRecordState, initialInputFieldsState, initi
      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[recordState]);
+ 
 
     return (
       <Box className={box}>
@@ -137,7 +177,7 @@ import { addInputFields, addItem, addRecordState, initialInputFieldsState, initi
                 <AccordionDetails className={accordionContent}>
                   {item.name && (
                       <>
-                     { recordFieldsState && recordFieldsState.name && recordFieldsState.name.length > 0 ? 
+                      { (recordFieldsState && recordFieldsState.name.length > 0) ?
                         (<div className={combobox}>
                           <SelectComponent
                             onChange={event => { handleEditItems('name', event as string, index as number)}}
@@ -321,7 +361,7 @@ import { addInputFields, addItem, addRecordState, initialInputFieldsState, initi
             </div>
           ))}
 
-        {inputFieldsState.map((inputField, index) => (
+        {inputFields.map((inputField, index) => (
           <div key={index} className={newField}>
             <div className={labelAndField}>
               <span>{inputField.name}</span>
@@ -339,7 +379,7 @@ import { addInputFields, addItem, addRecordState, initialInputFieldsState, initi
                             onChange={event =>
                               handleAddItem(r.name as string, event as string)
                             }
-                            selected={newItemState![r.name] ?? r.arrayOptions[0]}
+                            selected={newItem[r.name] ?? r.arrayOptions[0]}
                             placeholder="Select the option"
                             label={r.name}
                             items={transformToSelectOptions(r.arrayOptions)}
@@ -356,7 +396,7 @@ import { addInputFields, addItem, addRecordState, initialInputFieldsState, initi
                                 name={r.name}
                                 label=""
                                 variant="outlined"
-                                value={newItemState![r.name]}
+                                value={newItem[r.name]}
                                 defaultValue={r.defaultValue !== undefined ? r.defaultValue : ''}
                                 key={r.name}
                                 onChange={event =>
@@ -402,7 +442,7 @@ import { addInputFields, addItem, addRecordState, initialInputFieldsState, initi
                       name={r.name}
                       label=""
                       variant="outlined"
-                      value={newItemState![r.name]}
+                      value={newItem[r.name]}
                       defaultValue={r.defaultValue !== undefined ? r.defaultValue : ''}
                       key={r.name}
                       onChange={event =>
@@ -420,7 +460,7 @@ import { addInputFields, addItem, addRecordState, initialInputFieldsState, initi
                 );
               })}
             </div>
-            {inputFieldsState.length >= 1 && (
+            {inputFields.length >= 1 && (
               <div className={buttonsGroup}>
                 <IconButton
                   onClick={() => submitDataToConfig(inputName,index)}
@@ -441,7 +481,7 @@ import { addInputFields, addItem, addRecordState, initialInputFieldsState, initi
 
         <Button
           className={addField}
-          disabled={inputFieldsState.length >= 1}
+          disabled={inputFields.length >= 1}
           onClick={() => handleAddFields()}
         >
           <AddIcon /> New Item
