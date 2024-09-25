@@ -63,6 +63,7 @@ The other annotation will be **`kong-manager/instance`**, which will receive the
 
 And finally, the annotation **kong-manager/spec**, where the open-api file that will serve as the spec for the project will be listed, it should be in root and by convention can be called `openapi-swagger.yaml`. Remember that this annotation is optional if you want to list the kongs specs in the Backstage component and assign plugins already associated with the service to the related spec.
 
+
 Here's an example:
 
 ```diff
@@ -192,6 +193,11 @@ Finally
 - List of all specs available  ✅
 - The spec will list the plugins that are associated with the service ✅
 - In the list of plugins, we can enable and remove them from the spec via a pull request to the repository ✅
+
+> ℹ️ To use the spec manipulation functionality, you'll need to configure the integration and authentication of the chosen git provider (**At this point Gitlab or Github**).
+> See how to add authentication [here](https://backstage.io/docs/auth/) and integration by clicking [here](https://backstage.io/docs/integrations/)
+
+<br>
 
 ![image](https://github.com/user-attachments/assets/11a66892-f11b-4964-a933-845a33aefe58)
 
