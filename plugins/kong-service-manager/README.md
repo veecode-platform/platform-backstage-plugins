@@ -57,8 +57,11 @@ kong:
 
 **2- Annotations**
 
- The Plugin recognizes 2 annotations for its operation, the first being **`kong-manager/service-name`**, which will identify the service that will be used as a parameter. In this annotation, you can enter the name of the service or its id, preferably the name. It is also important to note that each `catalog-info.yaml` can only receive one service.
-The other annotation will be **`kong-manager/instance`**, which will receive the instances on which kong will make the calls, it can receive more than one item, properly separated by commas and without spaces. It is important to note that the instances must be configured in `app-config.yaml`, as described in the previous section; if they have not been configured correctly, the calls will not be answered.
+ The plug-in recognizes 3 annotations for its operation, the first being **`kong-manager/service-name`**, which will identify the service that will be used as a parameter. In this annotation, you can enter the name of the service or its id, preferably the name. It is also important to note that each `catalog-info.yaml` can only receive one service.
+ 
+The other annotation will be **`kong-manager/instance`**, which will receive the instances on which kong will make calls, and can receive more than one item, properly separated by commas and without spaces. It is important to note that the instances must be configured in `app-config.yaml`, as described in the previous section; if they have not been configured correctly, the calls will not be answered.
+
+And finally, the annotation **kong-manager/spec**, where the open-api file that will serve as the spec for the project will be listed, it should be in root and by convention can be called `openapi-swagger.yaml`. Remember that this annotation is optional if you want to list the kongs specs in the Backstage component and assign plugins already associated with the service to the related spec.
 
 Here's an example:
 
@@ -73,6 +76,7 @@ metadata:
     backstage.io/techdocs-ref: dir:.
 +    kong-manager/service-name: nameservice_test_A01
 +    kong-manager/instance: kongInstance1,kongInstance2
++    kong-manager/spec : openapi-swagger.yaml  #optional
    
 spec:
   type: service
@@ -154,7 +158,7 @@ You can also create new routes with the “create” button:
 
 ### 👉 All Plugins:
 
-Finally, we have the list of plugins:
+The list of plugins:
 
 - List of all plugins eligible for your Kong instance;  ✅
 - Installing / Removing and Editing a plugin at your Service; ✅
@@ -181,6 +185,21 @@ From then on, the plugin will already be configured in your service:
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/0a4f68c3-cb68-4106-9991-427b40f4ec0b)
 
 
+### 👉 Specs:
+
+Finally
+
+- List of all specs available  ✅
+- The spec will list the plugins that are associated with the service ✅
+- In the list of plugins, we can enable and remove them from the spec via a pull request to the repository ✅
+
+![image](https://github.com/user-attachments/assets/11a66892-f11b-4964-a933-845a33aefe58)
+
+![image](https://github.com/user-attachments/assets/6b7e9db7-86e6-40a2-88ce-594b48f911ca)
+
+![image](https://github.com/user-attachments/assets/f5f6ec66-bf2d-4698-8f2f-f0b43b387b40)
+
+![image](https://github.com/user-attachments/assets/6fc8eb9b-94c1-4fee-8b85-7d3336883718)
 
 ---
 
