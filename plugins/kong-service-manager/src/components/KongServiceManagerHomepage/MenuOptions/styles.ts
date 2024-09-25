@@ -28,6 +28,9 @@ export const useMenuOptionsStyles = makeStyles(theme => ({
        borderRadius: '3px',
        position: 'absolute',
        left: 0,
+       [theme.breakpoints.down('md')]: {
+        backgroundColor: 'transparent'
+       },
      },
     },
     listItem: {
@@ -40,7 +43,13 @@ export const useMenuOptionsStyles = makeStyles(theme => ({
          background: '#CDCDCD90',
      },
      [theme.breakpoints.down('md')]: {
-       minWidth: '200px',
-      }
+       minWidth: '165px',
+      },
+      [theme.breakpoints.down('sm')]: {
+        minWidth: '100px',
+       },
+      [theme.breakpoints.down('xs')]: {
+        minWidth: '115px',
+       }
     }
  }));

@@ -28,7 +28,7 @@ export const AboutPage = () => {
     <BoxComponent title="Configuration">
       <List className={listComponent}>
         <SkeletonComponent />
-      </List>{' '}
+      </List>
     </BoxComponent>
   );
 

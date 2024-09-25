@@ -7,6 +7,9 @@ export const useBoxComponentStyles = makeStyles(theme=>({
       '-webkit-backdrop-filter': 'blur(13.5px)',
       border: `1px solid ${theme.palette.grey[700]}`,
       borderRadius: '10px',
+      [theme.breakpoints.down('xs')]: {    
+        overflow: 'auto'
+      }
     },
     toolbar:{
       paddingBottom: theme.spacing(2),
@@ -37,7 +40,10 @@ export const useBoxComponentStyles = makeStyles(theme=>({
     },
     search:{
       position: 'absolute',
-      top: '2.5rem'
+      top: '2.5rem',
+      [theme.breakpoints.down('xs')]: {    
+        display: 'none'
+      }
     },
     buttonToolbar:{
       padding: '0 1em',
@@ -46,7 +52,13 @@ export const useBoxComponentStyles = makeStyles(theme=>({
     },
     content:{
       minWidth: '100%',
-      height: '100%'
+      height: '100%',
+      [theme.breakpoints.down('md')]: {    
+        minWidth: '70vw',
+       },
+       [theme.breakpoints.down('xs')]: {    
+        minWidth: '80vw',
+       }
     },
     closeButton:{
       cursor: 'pointer',
