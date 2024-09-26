@@ -1,5 +1,5 @@
 import { createContext} from "react";
-import { Job, WorkflowResultsProps, WorkflowRun } from "../utils/types";
+import { Job, WorkflowAnnotation, WorkflowResultsProps, WorkflowRun } from "../utils/types";
 import { RestEndpointMethodTypes } from "@octokit/rest";
 import { Entity } from "@backstage/catalog-model";
 import { WorkflowActionType } from "./state";
@@ -11,7 +11,7 @@ export type GithubWorkflowsContextType = {
   entity: Entity,
   projectName: string,
   hostname: string,
-  workflowsByAnnotation: string[] | null,
+  workflowsByAnnotation: WorkflowAnnotation[] | null,
   branch: string | null,
   setBranchState: (branch: string) => void,
   inputsParamsState: object,
