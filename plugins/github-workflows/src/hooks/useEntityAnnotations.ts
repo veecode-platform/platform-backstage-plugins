@@ -1,6 +1,7 @@
 import { ANNOTATION_LOCATION, ANNOTATION_SOURCE_LOCATION, Entity } from '@backstage/catalog-model';
 import { GITHUB_ANNOTATION, WORKFLOW_ANNOTATION } from '../utils/constants/annotations';
 import gitUrlParse from 'git-url-parse';
+import { transformWorkflows } from '../utils/helpers/transformWorkflows';
 
 export const useEntityAnnotations = (entity: Entity) => {
 
@@ -25,7 +26,7 @@ export const useEntityAnnotations = (entity: Entity) => {
       };
     }
 
-  const workflowsByAnnotation = workflowsList.includes(',') ? workflowsList.split(/\s*,\s*/g) : [workflowsList];
+  const workflowsByAnnotation = transformWorkflows(workflowsList as string)
   
   return {
     projectName,
