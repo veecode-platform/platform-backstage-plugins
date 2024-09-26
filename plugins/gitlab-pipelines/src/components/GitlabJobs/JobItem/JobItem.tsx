@@ -9,7 +9,7 @@ import { JobProps } from './types';
 
 export const JobItem : React.FC<JobProps>= (props) => {
 
-  const { id, name, variable, status} = props;
+  const { id, name, variable, tooltip, status} = props;
   const classes = useJobItemStyles();
 
   return (
@@ -21,7 +21,7 @@ export const JobItem : React.FC<JobProps>= (props) => {
         icon
       />
 
-      <Tooltip title={name} placement="top">
+      <Tooltip title={tooltip as string} placement="top">
         <Typography
           className={classes.name}
         >
