@@ -72,6 +72,7 @@ export const Cards : React.FC<JobItemProps> = (props) => {
                           key={item.id}
                           name={item.label}
                           variable={item.var}
+                          tooltip={item.tooltip}
                           status={item.status}
                         />)
                       )
