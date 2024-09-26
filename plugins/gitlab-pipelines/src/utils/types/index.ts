@@ -207,6 +207,7 @@ export interface Runner {
 export interface JobAnnotationProps {
     id: string,
     label: string,
+    tooltip: string,
     var: string,
     status: GitlabPipelinesStatus
   }
