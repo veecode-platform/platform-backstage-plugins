@@ -4,6 +4,6 @@ export interface JobProps {
     id: string,
     name: string,
     variable: string,
-    tooltip?:string,
+    tooltip:string,
     status: GitlabPipelinesStatus
   }
