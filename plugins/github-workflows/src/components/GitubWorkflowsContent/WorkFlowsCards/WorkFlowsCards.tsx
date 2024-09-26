@@ -75,6 +75,7 @@ const WorkFlowCard : React.FC<CardsProps> = (props) => {
                         workflowName={item.name as string}
                         parameters={item.parameters}
                         lastRunId={item.lastRunId?.toString()}
+                        path={item.path as string}
                       />)
                     )
                   )
