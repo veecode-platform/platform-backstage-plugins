@@ -355,6 +355,46 @@ spec:
   owner: admin
 ```
 
+In the way mentioned above, the card component that will be generated will receive the defined label, take on the variable related to it and the card's tooltip will by default be the same as the content of the label assigned to it. But there is also a custom way of adding this annotation, giving the option of also customizing the tooltip message which can help with the usability of this component, see:
+
+```diff
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "Test"
+  description: "gitlab test"
+  annotations:
+    gitlab.com/project-slug: repo/test
+    backstage.io/techdocs-ref: dir:.
+-    gitlab.com/jobs: 'Deploy:DEFAULT_JOB,Start:START_JOB,Stop:STOP_JOB'
++    gitlab.com/jobs: |
++      [
++         {
++            "label":"Deploy",
++            "var":"DEPLOY_JOB",
++            "tooltip":"Deploy application"
++          },
++          {
++            "label":"Start",
++            "var":"START_JOB",
++            "tooltip":"Start the instance"
++         },
++          {
++            "label":"Stop",
++            "var":"STOP_JOB",
++            "tooltip":"Stop the instance"
++          }
++      ]
+
+spec:
+  type: service
+  lifecycle: experimental
+  owner: admin
+```
+Both forms work with the plugin, the second being a customized form that opens up the possibility of including instructions for use in the tooltip, which enriches the UX.
+
+
+
 
 To add it to our backstage component, we need to go back to `packages/app/src/components/catalog/EntityPage.tsx` and add the following code:
 
