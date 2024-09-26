@@ -20,7 +20,7 @@ export const WorkFlowActions: React.FC<WorkFlowActionsProps> = (props) => {
   const { cardsView, workflowsByAnnotation,inputsParamsState, allWorkflowsState, dispatchWorkflows, handleStartWorkflowRun, handleStopWorkflowRun, listAllWorkflows } = useGithuWorkflowsContext();
   const { buttonWait, waitResponse, inProgress } = useWorkflowActionsStyles();
   const errorApi = useApi(errorApiRef);
-  const filters = workflowsByAnnotation ? workflowsByAnnotation : [];
+  const filters = workflowsByAnnotation ? workflowsByAnnotation.flatMap(w => w.workflow) : [];
   const { workflowId, status, conclusion, parameters } = props;
 
   const handleShowModal = React.useCallback(() => {
