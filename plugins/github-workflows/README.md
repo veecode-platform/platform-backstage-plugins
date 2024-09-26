@@ -245,16 +245,13 @@ metadata:
   annotations:
     github.com/project-slug: owner/repo
     backstage.io/techdocs-ref: dir:.
-+   github.com/workflows: fileName.yaml
++   github.com/workflows: fileName.yml
    
 spec:
   type: website
   lifecycle: experimental
   owner: default
 ```
-
-
-
 
 The composition of the **annotation** works like this:
 
@@ -280,8 +277,48 @@ The functionality is identical to the workflow listing component, with the main 
 ![image5](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/39ff37fa-6ca6-4a8e-9f23-499353801b53)
 
 
+The above approach guarantees the rendering of a card with a button to trigger the workflow provided in the component overview. There is also the possibility of customizing the card's label and the tooltip message that appears when you hover the mouse over the card, adding it via annotation:
+
+```diff
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "Example Component"
+  description: "An example Backstage Components"
+  links:
+    - title: Website
+      url: http://backstage.io
+    - title: Documentation
+      url: https://backstage.io/docs
+    - title: Storybook
+      url: https://backstage.io/storybook
+    - title: Discord Chat
+      url: https://discord.com/invite/EBHEGzX
+  annotations:
+    github.com/project-slug: owner/repo
+    backstage.io/techdocs-ref: dir:.
+-   github.com/workflows: fileName.yml
++   github.com/workflows: |
++      [
++        {
++          "workflow": "fileName.yml",
++          "label": "Start",
++          "tooltip": "click here and start the workflow process"
++        }
++      ]
+   
+spec:
+  type: website
+  lifecycle: experimental
+  owner: default
+```
 
 
+> ℹ️ This way we can add a personalized label to the card and also a more detailed message when hovering over the card. Remember that both approaches are valid and if no custom information is added, the default behavior is for the card label to be the name defined in the workflow header and the tooltip will also receive this name from the workflow.
+
+
+
+<br>
 
 
 To use the `cards view` variant, simply add the `cards` property to our `GithubWorkflowsContent` component:
