@@ -1,10 +1,11 @@
 import { WorkflowDispatchParameters } from "../../../../utils/types"
 
-export type WorkFlowItemProps = {
+export interface WorkFlowItemProps {
     id: number,
     workflowName: string,
     conclusion?: string,
     status?: string,
     parameters?: WorkflowDispatchParameters[] | [],
-    lastRunId?: string
+    lastRunId?: string,
+    path?:string
   }
