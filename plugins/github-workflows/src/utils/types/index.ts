@@ -1,4 +1,11 @@
 /** @public */
+export interface WorkflowAnnotation {
+  workflow: string;
+  label?: string;
+  tooltip?: string;
+}
+
+/** @public */
 export interface Workflow {
     id: number;
     nodeId: string;
