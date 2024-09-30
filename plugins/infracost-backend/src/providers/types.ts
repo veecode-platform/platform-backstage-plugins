@@ -1,4 +1,4 @@
-import { CacheService, DatabaseService, LoggerService, SchedulerService, SchedulerServiceTaskRunner } from '@backstage/backend-plugin-api';
+import { CacheService, DatabaseService, LoggerService, SchedulerService, SchedulerServiceTaskRunner, AuthService } from '@backstage/backend-plugin-api';
 
 export interface InfracostEntityProviderOptions {
     /**
@@ -34,5 +34,6 @@ export interface InfracostEntityProviderOptions {
      * The PluginDatabaseManager to use
      */
     database: DatabaseService;
+    auth: AuthService;
   }
   

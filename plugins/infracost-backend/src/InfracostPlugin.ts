@@ -10,28 +10,32 @@ import { DatabaseInfracostStore } from "./database";
 
 
 export const infracostPlugin = createBackendPlugin({
-    pluginId: 'infracost',
-    register(env) {
-      env.registerInit({
-        deps: {
-          httpRouter: coreServices.httpRouter,
-          logger: coreServices.logger,
-          database: coreServices.database,
-          config: coreServices.rootConfig
-        },
-        async init({ httpRouter, logger,database,config }) {
-            const db = await DatabaseInfracostStore.create({
-                database: database,
-                logger
-              });
-            httpRouter.use(
-                await createRouter({
-                  logger,
-                  database: db,
-                  config,
-                }),
-              );
-        },
-      });
-    },
-  });
+  pluginId: 'infracost',
+  register(env) {
+    env.registerInit({
+      deps: {
+        httpRouter: coreServices.httpRouter,
+        logger: coreServices.logger,
+        database: coreServices.database,
+        config: coreServices.rootConfig,
+        auth: coreServices.auth,
+        httpAuth: coreServices.httpAuth
+      },
+      async init({ httpRouter, logger, database, config, auth, httpAuth }) {
+        const db = await DatabaseInfracostStore.create({
+          database: database,
+          logger
+        });
+        httpRouter.use(
+          await createRouter({
+            logger,
+            database: db,
+            config,
+            auth,
+            httpAuth
+          }),
+        );
+      },
+    });
+  },
+});
