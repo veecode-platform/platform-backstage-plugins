@@ -20,6 +20,8 @@ backend.add(import('@janus-idp/backstage-plugin-keycloak-backend/alpha'));
 
 backend.add(import('@backstage/plugin-auth-backend'));
 backend.add(import('@backstage/plugin-auth-backend-module-oidc-provider'))
+backend.add(import('@backstage/plugin-auth-backend-module-github-provider')); 
+backend.add(import('@backstage/plugin-auth-backend-module-gitlab-provider'));
 
 
 backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
