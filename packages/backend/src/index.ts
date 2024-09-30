@@ -1,6 +1,8 @@
 import { createBackend } from '@backstage/backend-defaults';
 import { catalogModuleVeeCodeProcessor } from '@veecode-platform/plugin-veecode-platform-module/alpha';
 import {catalogModuleInfracostProcessor, infracostPlugin} from '@veecode-platform/backstage-plugin-infracost-backend/alpha';
+import { customGithubAuthProvider } from './modules/auth/githubCustomResolver';
+import { customGitlabAuthProvider } from './modules/auth/gitlabCustomResolver';
 
 const backend = createBackend();
 
@@ -20,8 +22,12 @@ backend.add(import('@janus-idp/backstage-plugin-keycloak-backend/alpha'));
 
 backend.add(import('@backstage/plugin-auth-backend'));
 backend.add(import('@backstage/plugin-auth-backend-module-oidc-provider'))
-backend.add(import('@backstage/plugin-auth-backend-module-github-provider')); 
-backend.add(import('@backstage/plugin-auth-backend-module-gitlab-provider'));
+// backend.add(import('@backstage/plugin-auth-backend-module-github-provider')); 
+// backend.add(import('@backstage/plugin-auth-backend-module-gitlab-provider'));
+backend.add(customGithubAuthProvider)
+backend.add(customGitlabAuthProvider)
+
+backend.add(import('@veecode-platform/plugin-kong-service-manager-backend'));
 
 
 backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
