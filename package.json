@@ -22,7 +22,8 @@
     "lint:all": "backstage-cli repo lint",
     "prettier:check": "prettier --check .",
     "new": "backstage-cli new --scope internal",
-    "clear-deps": "find .  -path ./.docker-data -prune -o -name node_modules -type d -exec rm -rf '{}' +"
+    "clear-deps": "find .  -path ./.docker-data -prune -o -name node_modules -type d -exec rm -rf '{}' +",
+    "dnpm": "dnpm"
   },
   "workspaces": {
     "packages": [
@@ -35,6 +36,7 @@
     "@spotify/prettier-config": "^12.0.0",
     "@types/pluralize": "^0.0.33",
     "concurrently": "^6.0.0",
+    "dpdm": "^3.14.0",
     "lerna": "^8.1.2",
     "node-gyp": "^9.0.0",
     "prettier": "^2.3.2",
