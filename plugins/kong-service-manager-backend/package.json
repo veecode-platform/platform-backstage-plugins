@@ -48,7 +48,7 @@
     "@backstage/plugin-permission-common": "^0.8.1",
     "@backstage/plugin-permission-node": "^0.8.3",
     "@backstage/types": "^1.1.1",
-    "@veecode-platform/backstage-plugin-kong-service-manager-common": "^0.2.19",
+    "@veecode-platform/backstage-plugin-kong-service-manager-common": "^0.3.0",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
     "git-url-parse": "^15.0.0",
