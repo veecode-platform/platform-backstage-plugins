@@ -28,6 +28,7 @@ export async function createRouter(
   router.use(express.json());
   router.use(
     express.urlencoded({
+      limit: '5mb',
       extended: true,
     }),
   );
