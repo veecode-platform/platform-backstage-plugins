@@ -8,7 +8,7 @@ export const Chart : React.FC<ChartProps> = (props) => {
  const [ isHidden, setIsHidden ] = React.useState<boolean>(false);
  const { items } = props;
  const chartItems = (items.length === 0) ? [{id: 0, label: 'Costs are based on usage*', value: 0.001, color:'grey'}] : items;
- const size = {height: 450}
+ const size = {height: 1000}
 
  const handleResize = () => {
   if(window && window.innerWidth < 950) setIsHidden(true);
@@ -38,13 +38,15 @@ export const Chart : React.FC<ChartProps> = (props) => {
           legend: {
             hidden: isHidden,
             direction: 'row',
-            position: { vertical: 'bottom', horizontal: 'middle' },
-            padding: 0,
+            position: { vertical: 'bottom', horizontal: 'left' },
+            padding: 5,
             labelStyle:{
-              fontSize: 14
+              fontSize: 10
             },
-            itemMarkWidth: 11,
-            itemMarkHeight: 10,
+            itemMarkWidth: 10,
+            itemMarkHeight: 2,
+            markGap: 3,
+            itemGap: 1,
           },
         }}
         margin={{ top: 100, bottom: 100, left: 100, right: 100 }}
