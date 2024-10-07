@@ -14886,7 +14886,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-infracost-backend@workspace:^, @veecode-platform/backstage-plugin-infracost-backend@workspace:plugins/infracost-backend":
+"@veecode-platform/backstage-plugin-infracost-backend@workspace:0.4.0, @veecode-platform/backstage-plugin-infracost-backend@workspace:plugins/infracost-backend":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-infracost-backend@workspace:plugins/infracost-backend"
   dependencies:
@@ -16943,7 +16943,7 @@ __metadata:
     "@types/express": ^4.17.6
     "@types/express-serve-static-core": ^4.17.5
     "@types/luxon": ^2.0.4
-    "@veecode-platform/backstage-plugin-infracost-backend": "workspace:^"
+    "@veecode-platform/backstage-plugin-infracost-backend": "workspace:0.4.0"
     "@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions": "workspace:^"
     "@veecode-platform/plugin-kong-service-manager-backend": "workspace:^"
     "@veecode-platform/plugin-veecode-platform-common": "workspace:^"

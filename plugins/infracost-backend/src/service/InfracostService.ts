@@ -19,6 +19,7 @@ export class InfracostService {
   }
 
   async saveInfracostProjectsEstimate(endpoint: string, estimate: InfracostEstimate, token?: string): Promise<void> {
+    console.log(endpoint);
     try {
       await axios.post(endpoint, estimate, {
         headers: {
@@ -27,7 +28,7 @@ export class InfracostService {
       });
     } catch (error: any) {
       console.error(
-        `There was an error trying persist Infracost Projects Estimate [${error}]`,
+        `ooops.....There was an error trying persist Infracost Projects Estimate [${error}]`,
       );
     }
   }
