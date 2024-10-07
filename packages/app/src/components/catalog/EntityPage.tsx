@@ -254,9 +254,6 @@ const websiteEntityPage = (
     <EntityLayout.Route path="/ci-cd" title="CI/CD">
       {cicdContent}
     </EntityLayout.Route>
-    <EntityLayout.Route if={isInfracostAvailable} path="/infracost" title="Infracost">
-      <InfracostOverviewPage/>
-    </EntityLayout.Route>
 
     {/* <EntityLayout.Route
       if={isGithubAvailable}

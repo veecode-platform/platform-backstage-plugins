@@ -24,9 +24,11 @@ export async function createRouter(
 
   const { logger, database, config } = options;
   const router = Router();
-  router.use(express.json({ limit: '50mb' }));
+
+  router.use(express.json());
   router.use(
     express.urlencoded({
+      limit: '5mb',
       extended: true,
     }),
   );
