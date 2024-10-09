@@ -40,6 +40,7 @@
     "lerna": "^8.1.2",
     "node-gyp": "^9.0.0",
     "prettier": "^2.3.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "~5.0.0"
   },
   "resolutions": {
@@ -57,7 +58,7 @@
       "prettier --write"
     ]
   },
-  "packageManager": "yarn@3.6.3",
+  "packageManager": "yarn@4.5.0",
   "dependencies": {
     "@backstage/plugin-catalog-backend-module-scaffolder-entity-model": "^0.2.0",
     "jose": "^5.2.3",

@@ -12,5 +12,8 @@
     "outDir": "dist-types",
     "rootDir": ".",
     "esModuleInterop": true,
-  }
+    "paths": {
+      "@kong-assets/*": ["./plugins/kong-service-manager/src/assets/*"]
+    },
+  },
 }
