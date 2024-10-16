@@ -51,7 +51,7 @@ export const ResourcesComponent : React.FC<ResourcesComponentProps> = (props) =>
           <BiExpand size="22" color="#B1B1B190" onClick={handleToggleModal}/>
         </div>
         <div className={chartStyles}>
-          <Chart items={chartState} />
+          <Chart items={chartState} overview/>
         </div>
         <div className={tableStyles}>
           <Table labels={labelProps} data={tableState} />
