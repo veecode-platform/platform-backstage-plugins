@@ -7,6 +7,7 @@ import { InfracostStore } from '../database';
 import { InputError } from '@backstage/errors';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
 import { infracostPermissions } from '@veecode-platform/backstage-plugin-infracost-common';
+import compression from 'compression';
 
 export interface RouterOptions {
   logger: LoggerService;
@@ -25,7 +26,17 @@ export async function createRouter(
   const { logger, database, config } = options;
   const router = Router();
 
-  router.use(express.json());
+  router.use(
+      compression({
+        threshold: 1024, 
+        filter: (req, res) => {
+          if (req.headers['x-no-compression']) return false;
+          return compression.filter(req, res);
+        },
+      }),
+    );
+
+  router.use(express.json({ limit: "50mb" }));
   router.use(
     express.urlencoded({
       extended: true,
