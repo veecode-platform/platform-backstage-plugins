@@ -4,14 +4,23 @@ import Edit from '@material-ui/icons/Edit';
 import { usePluginsCardsStyles } from '../styles';
 import { useKongServiceManagerContext } from '../../../../context';
 import { CardComponentProps } from './types';
+import useAsync from 'react-use/esm/useAsync';
 
 
-export const CardComponent : React.FC<CardComponentProps> = (props) => {
+export const CardComponent : React.FC<CardComponentProps> = (props) => { 
   
   const [processingData, setProcessingData] = React.useState<boolean>(false);
   const { handleToggleDrawer, setPluginState, disablePlugin } = useKongServiceManagerContext();
   const {card, cardHeader, cardTitle, cardIcon,description, button,spinner} = usePluginsCardsStyles();
   const {data} = props;
+
+  const {value, loading, error} = useAsync(async () => {
+    const response = await import(`../../../../assets/plugins/${data.image}`) 
+    return response.default
+  })
+  if(loading) return <></>
+  if(error) return <></>
+  
 
   const handlePluginEnable = async () => {
     if(data){
@@ -58,7 +67,7 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
         }
       />
       <CardMedia>
-        <img src={`${data.image}`} alt="" className={cardIcon} />
+        <img src={value} alt="picture" className={cardIcon} />
       </CardMedia>
       <CardContent className={description}>{data.description}</CardContent>
       <CardActions>
