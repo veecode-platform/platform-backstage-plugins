@@ -1,4 +1,5 @@
 export type ChartProps = {
+    overview?:boolean;
     items: ChartItem[]
 }
 

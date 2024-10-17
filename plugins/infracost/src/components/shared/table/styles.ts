@@ -7,8 +7,11 @@ export const useTableStyles = makeStyles(theme => ({
         border: `1px solid ${theme.palette.grey[700]}`,
         display: 'flex',
         alignItems: 'space-between',
-        justifyContent: 'center',
-        flexDirection: 'column'
+        justifyContent: 'flex-start',
+        flexDirection: 'column',
+        maxHeight: '500px',
+        overflowY:"auto",
+        position: "relative"
     },
     header:{
         backgroundColor: theme.palette.background.default,
@@ -21,12 +24,13 @@ export const useTableStyles = makeStyles(theme => ({
     th:{
         width: '100%',
         textAlign: 'center',
-        padding: '1rem',
+        padding: '1rem'
     },
     tbody:{
         borderRadius: '0 0 5px 5px',
     },
     tr:{
+        width: '100%',
         textAlign: 'center',
         padding: '1rem',
         display: 'flex',
@@ -38,7 +42,15 @@ export const useTableStyles = makeStyles(theme => ({
     },
     cell:{
         width: '100%',
-        textAlign: 'center',
         padding: '.5rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    cellContent:{
+        maxWidth: '250px',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
     }
 }));
