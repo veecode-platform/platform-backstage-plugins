@@ -13731,6 +13731,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/compression@npm:^1.7.5":
+  version: 1.7.5
+  resolution: "@types/compression@npm:1.7.5"
+  dependencies:
+    "@types/express": "npm:*"
+  checksum: 10/9d65485bfb8e20035dedbbbebea06ea0c0554ac7bedb11ec3f2c6582cb082d121a10a03b4803b56315ae31705043eddf97eaf49c3dad6f9e39f7875b27c8feb4
+  languageName: node
+  linkType: hard
+
 "@types/connect-history-api-fallback@npm:^1.5.4":
   version: 1.5.4
   resolution: "@types/connect-history-api-fallback@npm:1.5.4"
@@ -15256,6 +15265,7 @@ __metadata:
     "@backstage/plugin-permission-node": "npm:^0.8.4"
     "@backstage/types": "npm:^1.1.1"
     "@sniptt/monads": "npm:^0.5.10"
+    "@types/compression": "npm:^1.7.5"
     "@types/express": "npm:*"
     "@types/supertest": "npm:^2.0.8"
     "@veecode-platform/backstage-plugin-infracost-common": "npm:^0.1.8"
