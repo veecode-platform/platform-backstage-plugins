@@ -42,7 +42,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         return await resp.json();
     }
 
-    validateWorkspace (instanceName: string) {
+    validateWorkspace (instanceName: string) : string {
         const { workspace } = this.getKongConfig(instanceName);
         if(workspace) return `/${workspace}`;
         return ""
