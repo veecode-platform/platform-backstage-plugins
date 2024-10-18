@@ -15345,7 +15345,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@veecode-platform/backstage-plugin-kong-service-manager-common@npm:^0.3.0, @veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common":
+"@veecode-platform/backstage-plugin-kong-service-manager-common@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@veecode-platform/backstage-plugin-kong-service-manager-common@npm:0.3.0"
+  dependencies:
+    "@backstage/plugin-permission-common": "npm:^0.8.1"
+  checksum: 10/45ed7952f1f51329cbe6556c58589bbd40a23d22daf23e0ef0bac79a017696ca1e46dd430d0cb34e59c81c3b46e14a62d6d86fdf4ecf668e317adfb3dfb0d885
+  languageName: node
+  linkType: hard
+
+"@veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common"
   dependencies:
