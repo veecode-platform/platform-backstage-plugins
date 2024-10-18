@@ -76,8 +76,8 @@ export const kongServiceManagerReadPluginsAssociatedForRoutePermission = createP
     attributes: { action: 'read'}
 })
 
-export const kongServiceManagerUpdatePluginAssociatedOnTheRoutePermission = createPermission({
-    name: 'kong.service.manager.update.plugin.associated.on.the.route',
+export const kongServiceManagerUpdatePluginOnTheRoutePermission = createPermission({
+    name: 'kong.service.manager.update.plugin.on.the.route',
     attributes: { action: 'update'}
 })
 
@@ -117,7 +117,7 @@ export const kongServiceManagerPermissions = {
     kongServiceManagerReadPluginsAvailableForRoutePermission,
     kongServiceManagerApplyPluginsAvailableToRoutePermission,
     kongServiceManagerReadPluginsAssociatedForRoutePermission,
-    kongServiceManagerUpdatePluginAssociatedOnTheRoutePermission,
+    kongServiceManagerUpdatePluginOnTheRoutePermission,
     kongServiceManagerDisablePluginFromRoutePermission,
     kongServiceManagerReadSpecsPermission,
     kongServiceManagerUpdateSpecPermission
