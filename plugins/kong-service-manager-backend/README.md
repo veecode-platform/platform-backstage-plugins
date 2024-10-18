@@ -37,7 +37,7 @@ kong:
   instances:
     - id: kong-instance01
       apiBaseUrl: ${ KONG_HOST ]
-      workspace: ${ KONG_WORKSPACE }  # or "default"
+      workspace: ${ KONG_WORKSPACE }  # Optional Only if your version is enterprise
       auth:
         kongAdmin: ${ KONG_ADMIN_TOKEN } # optional if the instance is enterprise
         custom:  # optional if the kong is in community mode and depending on the authentication used
@@ -54,7 +54,7 @@ export interface Config {
       instances?: Array<{
         id: string;
         apiBaseUrl: string;
-        workspace: string;
+        workspace?: string;
         auth:{
           kongAdmin?: string,
           custom?:{
