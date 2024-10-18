@@ -1,10 +1,10 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React from 'react';
 import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, IconButton, Typography } from '@material-ui/core';
 import Edit from '@material-ui/icons/Edit';
 import { usePluginsCardsStyles } from '../styles';
 import { useKongServiceManagerContext } from '../../../../context';
 import { CardComponentProps } from './types';
-import useAsync from 'react-use/esm/useAsync';
 
 
 export const CardComponent : React.FC<CardComponentProps> = (props) => { 
@@ -13,14 +13,7 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
   const { handleToggleDrawer, setPluginState, disablePlugin } = useKongServiceManagerContext();
   const {card, cardHeader, cardTitle, cardIcon,description, button,spinner} = usePluginsCardsStyles();
   const {data} = props;
-
-  const {value, loading, error} = useAsync(async () => {
-    const response = await import(`../../../../assets/plugins/${data.image}`) 
-    return response.default
-  })
-  if(loading) return <></>
-  if(error) return <></>
-  
+ 
 
   const handlePluginEnable = async () => {
     if(data){
@@ -67,7 +60,7 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
         }
       />
       <CardMedia>
-        <img src={value} alt="picture" className={cardIcon} />
+        <img src={data.image} alt="picture" className={cardIcon} />
       </CardMedia>
       <CardContent className={description}>{data.description}</CardContent>
       <CardActions>
