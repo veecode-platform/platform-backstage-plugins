@@ -15586,6 +15586,7 @@ __metadata:
     "@backstage/integration": "npm:^1.15.1"
     "@backstage/integration-react": "npm:^1.2.0"
     "@backstage/plugin-catalog-react": "npm:^1.14.0"
+    "@backstage/plugin-permission-react": "npm:^0.4.27"
     "@backstage/test-utils": "npm:^1.7.0"
     "@backstage/theme": "npm:^0.6.0"
     "@material-ui/core": "npm:^4.12.4"
