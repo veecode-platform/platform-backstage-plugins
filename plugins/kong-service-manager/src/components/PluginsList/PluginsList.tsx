@@ -7,6 +7,8 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
 import { useKongServiceManagerContext } from '../../context';
 import { usePluginListStyles } from './styles';
 import { Box } from '@material-ui/core';
+import { RequirePermission } from '@backstage/plugin-permission-react';
+import { kongServiceManagerReadPluginsAssociatedPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 export const PluginsList = () => {
 
@@ -43,10 +45,12 @@ export const PluginsList = () => {
             <CardTab label="All Plugins">
               {pluginsPerCategoryState && pluginsPerCategoryState.length >=1 ? <PluginsCards /> : <div className={emptyContent}> No data to display ...</div>}
             </CardTab>
-            <CardTab label="Associated Plugins">
-              {allAssociatedPluginsState && allAssociatedPluginsState.length >= 1 ? (<PluginsCards filterByAssociated />) 
-              : <div className={emptyContent}> No data to display ...</div>}
-            </CardTab>
+            <RequirePermission permission={kongServiceManagerReadPluginsAssociatedPermission}>
+              <CardTab label="Associated Plugins">
+                {allAssociatedPluginsState && allAssociatedPluginsState.length >= 1 ? (<PluginsCards filterByAssociated />) 
+                : <div className={emptyContent}> No data to display ...</div>}
+              </CardTab>
+            </RequirePermission>
           </TabbedCard>
         </Box>
       </BoxComponent>
