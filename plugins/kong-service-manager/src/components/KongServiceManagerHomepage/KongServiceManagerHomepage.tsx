@@ -11,6 +11,8 @@ import { SpecList } from '../SpecList';
 import { SpecPluginsList } from '../SpecList/SpecPluginsList';
 import { isKongManagerSpecAvailable } from '../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';
+import { RequirePermission } from '@backstage/plugin-permission-react';
+import { kongServiceManagerReadPluginsAvailablePermission, kongServiceManagerReadRoutesPermission, kongServiceManagerReadServicePermission, kongServiceManagerReadSpecsPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 export const KongServiceManagerHomepage = () => {
 
@@ -33,17 +35,31 @@ export const KongServiceManagerHomepage = () => {
           </Grid>
           <Grid item lg={10}>
             <Routes>
-              <Route path="" element={<AboutPage />} />
-              <Route path="all-routes" element={<RoutesList />} />
-              <Route path="all-plugins" element={<PluginsList />} />
+              <Route path="" element={
+                 <RequirePermission permission={kongServiceManagerReadServicePermission}>
+                   <AboutPage />
+                </RequirePermission>
+              } />
+              <Route path="all-routes" element={
+                <RequirePermission permission={kongServiceManagerReadRoutesPermission}>
+                <RoutesList />
+                </RequirePermission>
+                } />
+              <Route path="all-plugins" element={
+                <RequirePermission permission={kongServiceManagerReadPluginsAvailablePermission}>
+                 <PluginsList />
+                </RequirePermission>
+                } />
               <Route
                 path="all-specs/*"
                 element={
                   specListAvailable ? (
-                    <Routes>
-                      <Route path="" element={<SpecList />} />
-                      <Route path=":specName" element={<SpecPluginsList />} />
-                    </Routes>
+                    <RequirePermission permission={kongServiceManagerReadSpecsPermission}>
+                      <Routes>
+                        <Route path="" element={<SpecList />} />
+                        <Route path=":specName" element={<SpecPluginsList />} />
+                      </Routes>
+                    </RequirePermission>
                   ) : (
                     <Navigate to="/" />
                   )
