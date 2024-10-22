@@ -11,16 +11,23 @@ import { useKongServiceManagerContext } from '../../../context';
 import { ConfirmDeleteDialog } from '../ConfirmDeleteDialog/ConfirmDeleteDialog';
 import { TableComponentProps, TableData } from './types';
 import { tableStyle, useTableComponentStyle } from './styles';
-import { RoutesResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { kongServiceManagerDeleteRoutePermission, kongServiceManagerUpdateRoutePermission, RoutesResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { usePermission } from '@backstage/plugin-permission-react';
 
 
 export const TableComponent : React.FC<TableComponentProps> = (props) => {
 
-  const [showDialog, setShowDialog] = React.useState<boolean>(false)
-  const [routeId, setRouteId] = React.useState<string>()
+  const [showDialog, setShowDialog] = React.useState<boolean>(false);
+  const [routeId, setRouteId] = React.useState<string>();
   const { removeRoute } = useKongServiceManagerContext();
   const {tooltipContent, tags, actions} = useTableComponentStyle();
   const {isLoading,dataProps, handleEditModal, refreshList} = props;
+  const { loading: loadingUpdateRoutePermission, allowed: canUpdateRoute } = usePermission({
+    permission: kongServiceManagerUpdateRoutePermission,
+  });
+  const { loading: loadingDeleteRoutePermission, allowed: canDeleteRoute } = usePermission({
+    permission: kongServiceManagerDeleteRoutePermission,
+  });
 
 
   const handleOpenDialog = (routeIdParams: string) => {
@@ -171,12 +178,24 @@ export const TableComponent : React.FC<TableComponentProps> = (props) => {
       highlight: true,
       render: (row: Partial<TableData>) => (
         <div className={actions}>
-          <IconButton aria-label="Edit" title="Edit Route" onClick={() => handleEditModal?.(row)}>
+           {!loadingUpdateRoutePermission && (
+           <IconButton 
+             aria-label="Edit" 
+             title="Edit Route" 
+             onClick={() => handleEditModal?.(row)}
+             disabled={!canUpdateRoute}
+             >
             <Edit/>
-          </IconButton>
-          <IconButton aria-label="Delete" title="Delete Route" onClick={() => handleOpenDialog(row.id as string) }>
+          </IconButton>)}
+          {!loadingDeleteRoutePermission && (
+          <IconButton 
+           aria-label="Delete" 
+           title="Delete Route" 
+           onClick={() => handleOpenDialog(row.id as string) }
+           disabled={!canDeleteRoute}
+           >
             <DeleteIcon />
-          </IconButton>
+          </IconButton>)}
         </div>
       ),
       align: 'center',
