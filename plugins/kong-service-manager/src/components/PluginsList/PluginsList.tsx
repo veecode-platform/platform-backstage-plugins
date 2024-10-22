@@ -7,13 +7,16 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
 import { useKongServiceManagerContext } from '../../context';
 import { usePluginListStyles } from './styles';
 import { Box } from '@material-ui/core';
-import { RequirePermission } from '@backstage/plugin-permission-react';
 import { kongServiceManagerReadPluginsAssociatedPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { usePermission } from '@backstage/plugin-permission-react';
 
 export const PluginsList = () => {
 
   const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPluginsState, pluginsPerCategoryState} = useKongServiceManagerContext();
   const { wrapper, emptyContent } = usePluginListStyles();
+  const { loading: loadingReadAssociatedPluginsPermission, allowed: canReadAssociatedPlugins } = usePermission({
+    permission: kongServiceManagerReadPluginsAssociatedPermission,
+  });
 
   const getPluginsEnabled = async () => {
     await listAllEnabledPlugins();
@@ -45,12 +48,15 @@ export const PluginsList = () => {
             <CardTab label="All Plugins">
               {pluginsPerCategoryState && pluginsPerCategoryState.length >=1 ? <PluginsCards /> : <div className={emptyContent}> No data to display ...</div>}
             </CardTab>
-            <RequirePermission permission={kongServiceManagerReadPluginsAssociatedPermission}>
-              <CardTab label="Associated Plugins">
+            <>
+            {!loadingReadAssociatedPluginsPermission && ( 
+              <CardTab 
+               disabled={canReadAssociatedPlugins} 
+               label="Associated Plugins">
                 {allAssociatedPluginsState && allAssociatedPluginsState.length >= 1 ? (<PluginsCards filterByAssociated />) 
                 : <div className={emptyContent}> No data to display ...</div>}
-              </CardTab>
-            </RequirePermission>
+              </CardTab>)}
+              </>
           </TabbedCard>
         </Box>
       </BoxComponent>
