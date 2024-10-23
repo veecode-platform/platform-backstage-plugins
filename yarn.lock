@@ -15336,7 +15336,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-kong-service-manager-common@npm:^0.4.1, @veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common":
+"@veecode-platform/backstage-plugin-kong-service-manager-common@npm:^0.4.1, @veecode-platform/backstage-plugin-kong-service-manager-common@workspace:^, @veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common"
   dependencies:
@@ -17322,6 +17322,7 @@ __metadata:
     "@types/express-serve-static-core": "npm:^4.17.5"
     "@types/luxon": "npm:^2.0.4"
     "@veecode-platform/backstage-plugin-infracost-backend": "npm:0.4.0"
+    "@veecode-platform/backstage-plugin-kong-service-manager-common": "workspace:^"
     "@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions": "workspace:^"
     "@veecode-platform/plugin-kong-service-manager-backend": "workspace:^"
     "@veecode-platform/plugin-veecode-platform-common": "workspace:^"
