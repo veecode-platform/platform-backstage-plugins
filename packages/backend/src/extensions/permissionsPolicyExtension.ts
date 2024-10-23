@@ -4,7 +4,7 @@ import { AuthorizeResult, isPermission, PolicyDecision } from "@backstage/plugin
 import type { PermissionPolicy, PolicyQuery, PolicyQueryUser } from "@backstage/plugin-permission-node";
 import { policyExtensionPoint } from '@backstage/plugin-permission-node/alpha';
 import {
-  kongServiceManagerReadPluginsAssociatedPermission,
+ //  kongServiceManagerReadPluginsAssociatedPermission,
   kongServiceManagerCreateRoutePermission} from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 // const kongPermissions = [
@@ -39,12 +39,12 @@ class PermissionModule implements PermissionPolicy {
             }
         }         
         
-        if(isPermission(request.permission, kongServiceManagerReadPluginsAssociatedPermission)){
-          //  if(kongPermissions.includes(request.permission.name)){
-              return {
-                  result: AuthorizeResult.ALLOW
-              }
-          } 
+        // if(isPermission(request.permission, kongServiceManagerReadPluginsAssociatedPermission)){
+        //   //  if(kongPermissions.includes(request.permission.name)){
+        //       return {
+        //           result: AuthorizeResult.ALLOW
+        //       }
+        //   } 
 
         return {
             result: AuthorizeResult.ALLOW
