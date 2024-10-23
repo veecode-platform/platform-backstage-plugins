@@ -3,7 +3,7 @@ import { catalogModuleVeeCodeProcessor } from '@veecode-platform/plugin-veecode-
 import {catalogModuleInfracostProcessor, infracostPlugin} from '@veecode-platform/backstage-plugin-infracost-backend/alpha';
 import { customGithubAuthProvider } from './modules/auth/githubCustomResolver';
 import { customGitlabAuthProvider } from './modules/auth/gitlabCustomResolver';
-//import  kongServiceManagerPlugin  from '@veecode-platform/plugin-kong-service-manager-backend';
+// import  kongServiceManagerPlugin  from '@veecode-platform/plugin-kong-service-manager-backend';
 
 const backend = createBackend();
 
@@ -29,7 +29,7 @@ backend.add(customGithubAuthProvider)
 backend.add(customGitlabAuthProvider)
 
 backend.add(import('@veecode-platform/plugin-kong-service-manager-backend'));
-//backend.add(kongServiceManagerPlugin);
+// backend.add(kongServiceManagerPlugin);
 
 
 backend.add(import('@backstage/plugin-scaffolder-backend/alpha'));
