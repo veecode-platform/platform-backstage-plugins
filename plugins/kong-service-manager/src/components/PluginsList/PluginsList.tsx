@@ -48,13 +48,13 @@ export const PluginsList = () => {
             <CardTab label="All Plugins">
               {pluginsPerCategoryState && pluginsPerCategoryState.length >=1 ? <PluginsCards /> : <div className={emptyContent}> No data to display ...</div>}
             </CardTab>
-            {loadingReadAssociatedPluginsPermission ? <></> : ( 
+            
               <CardTab 
                disabled={!canReadAssociatedPlugins}
                label="Associated Plugins">
-                {allAssociatedPluginsState && allAssociatedPluginsState.length >= 1 ? (<PluginsCards filterByAssociated />) 
+                { !loadingReadAssociatedPluginsPermission &&  allAssociatedPluginsState && allAssociatedPluginsState.length >= 1 ? (<PluginsCards filterByAssociated />) 
                 : <div className={emptyContent}> No data to display ...</div>}
-              </CardTab>)}
+              </CardTab>
           </TabbedCard>
         </Box>
       </BoxComponent>
