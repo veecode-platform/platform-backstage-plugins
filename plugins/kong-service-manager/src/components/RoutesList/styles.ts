@@ -16,6 +16,10 @@ export const useRoutesListStyles = makeStyles(theme =>({
     padding: '.5rem 1rem',
     '&:hover':{
       transition: 'all .5s ease-in-out',
+    },
+    '&:disabled':{
+      border: 'none',
+      cursor: 'not-allowed !important'
     }
    }
 }))

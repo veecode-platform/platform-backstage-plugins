@@ -11,6 +11,8 @@ import { SpecList } from '../SpecList';
 import { SpecPluginsList } from '../SpecList/SpecPluginsList';
 import { isKongManagerSpecAvailable } from '../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';
+import { RequirePermission } from '@backstage/plugin-permission-react';
+import { kongReadPluginsAvailableServicePermission, kongReadRoutesPermission, kongReadServicePermission, kongReadSpecsPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 export const KongServiceManagerHomepage = () => {
 
@@ -33,17 +35,31 @@ export const KongServiceManagerHomepage = () => {
           </Grid>
           <Grid item lg={10}>
             <Routes>
-              <Route path="" element={<AboutPage />} />
-              <Route path="all-routes" element={<RoutesList />} />
-              <Route path="all-plugins" element={<PluginsList />} />
+              <Route path="" element={
+                 <RequirePermission permission={kongReadServicePermission}>
+                   <AboutPage />
+                </RequirePermission>
+              } />
+              <Route path="all-routes" element={
+                <RequirePermission permission={kongReadRoutesPermission}>
+                <RoutesList />
+                </RequirePermission>
+                } />
+              <Route path="all-plugins" element={
+                <RequirePermission permission={kongReadPluginsAvailableServicePermission}>
+                 <PluginsList />
+                </RequirePermission>
+                } />
               <Route
                 path="all-specs/*"
                 element={
                   specListAvailable ? (
-                    <Routes>
-                      <Route path="" element={<SpecList />} />
-                      <Route path=":specName" element={<SpecPluginsList />} />
-                    </Routes>
+                    <RequirePermission permission={kongReadSpecsPermission}>
+                      <Routes>
+                        <Route path="" element={<SpecList />} />
+                        <Route path=":specName" element={<SpecPluginsList />} />
+                      </Routes>
+                    </RequirePermission>
                   ) : (
                     <Navigate to="/" />
                   )

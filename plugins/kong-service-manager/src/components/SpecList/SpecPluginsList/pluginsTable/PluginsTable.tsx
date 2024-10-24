@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,9 +13,10 @@ import { addPluginsToList, initialPluginsSpecListState, PluginsSpecListReducer, 
 import { PluginForSpec } from '../../../../utils/types';
 import useAsync from 'react-use/esm/useAsync';
 import { addPluginsToSpec } from '../../../../context/state';
-import { IKongPluginSpec } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { IKongPluginSpec, kongUpdateSpecPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import { ButtonComponent, LoadingComponent } from '../../../shared';
 import { PullRequestModal } from '../../PullRequesModal';
+import { usePermission } from '@backstage/plugin-permission-react';
 
 
 const createData = (
@@ -37,6 +37,9 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
   const { specName } = props;
   const { root,iconAndName, apply, remove, submit, footer, fixedToBottom } = usePluginsTableStyles();
   const { listAllPluginsForSpec, pluginsToSpecState, pluginsToSpecDispatch } = useKongServiceManagerContext();
+  const { loading: loadingUpdateSpecPermission, allowed: canUpdateSpec } = usePermission({
+    permission: kongUpdateSpecPermission,
+  });
 
   const handleAction = (pluginName:string) => {
     const plugin = pluginsSpecListState.filter(p => p.name === pluginName)[0];
@@ -134,11 +137,14 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
                     </StyledTableCell>
                     <StyledTableCell align="center">{row.description}</StyledTableCell>
                     <StyledTableCell align="center">
+                    {!loadingUpdateSpecPermission && (  
                         <ButtonComponent 
                           handleClick={()=> handleAction(row.name)} 
+                          isDisabled={!canUpdateSpec}
                           classes={row.enableToSpec ? remove: apply}> 
                           {row.enableToSpec ? (<><IoMdRemove size={20}/> Remove from Spec</>): (<><IoMdAdd size={20}/> Apply to Spec</>)}
                         </ButtonComponent>
+                      )}
                     </StyledTableCell>
                   </StyledTableRow>
                 ))
@@ -146,13 +152,14 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
             </TableBody>
             <TableFooter className={`${footer} ${rows.length <= 3 && fixedToBottom}`}>
                 <StyledTableRow>
-                  <StyledTableCell colSpan={3} align="center">         
+                  <StyledTableCell colSpan={3} align="center">  
+                  {!loadingUpdateSpecPermission && (       
                     <ButtonComponent 
-                      isDisabled={!hasChange} 
+                      isDisabled={!hasChange && !canUpdateSpec} 
                       classes={submit} 
                       handleClick={handleApplyChanges}>
                         Apply
-                    </ButtonComponent>
+                    </ButtonComponent>)}
                   </StyledTableCell>
                 </StyledTableRow>
             </TableFooter>

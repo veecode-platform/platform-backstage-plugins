@@ -7571,9 +7571,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@immobiliarelabs/backstage-plugin-gitlab-backend@npm:^6.6.0":
-  version: 6.6.0
-  resolution: "@immobiliarelabs/backstage-plugin-gitlab-backend@npm:6.6.0"
+"@immobiliarelabs/backstage-plugin-gitlab-backend@npm:^6.7.0":
+  version: 6.7.0
+  resolution: "@immobiliarelabs/backstage-plugin-gitlab-backend@npm:6.7.0"
   dependencies:
     "@backstage/backend-common": "npm:^0.23.3"
     "@backstage/backend-plugin-api": "npm:^0.7.0"
@@ -7585,7 +7585,7 @@ __metadata:
     http-proxy-middleware: "npm:^2.0.6"
     winston: "npm:^3.2.1"
     yn: "npm:^4.0.0"
-  checksum: 10/cf240fc8774745422722806433ae7bc8ca9dfa4b0dae95cead687e9801312447be0624c3bc7d5613f4eae3e716888fd0b7546b0ef861cadad3b52e95bbf8000a
+  checksum: 10/af8eb4674e18c24c61636d7e8fdd84cb274d629bf0d3ddc3c676c7f95a36bf02f2035b17af4f85512d2c5aebd2585285bfdf582f026e76fb85621720199ce9cf
   languageName: node
   linkType: hard
 
@@ -15336,16 +15336,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-kong-service-manager-common@npm:^0.3.0":
-  version: 0.3.0
-  resolution: "@veecode-platform/backstage-plugin-kong-service-manager-common@npm:0.3.0"
-  dependencies:
-    "@backstage/plugin-permission-common": "npm:^0.8.1"
-  checksum: 10/45ed7952f1f51329cbe6556c58589bbd40a23d22daf23e0ef0bac79a017696ca1e46dd430d0cb34e59c81c3b46e14a62d6d86fdf4ecf668e317adfb3dfb0d885
-  languageName: node
-  linkType: hard
-
-"@veecode-platform/backstage-plugin-kong-service-manager-common@npm:^0.4.1, @veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common":
+"@veecode-platform/backstage-plugin-kong-service-manager-common@npm:^0.4.1, @veecode-platform/backstage-plugin-kong-service-manager-common@workspace:^, @veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common"
   dependencies:
@@ -15569,7 +15560,7 @@ __metadata:
     "@backstage/types": "npm:^1.1.1"
     "@types/express": "npm:*"
     "@types/supertest": "npm:^2.0.8"
-    "@veecode-platform/backstage-plugin-kong-service-manager-common": "npm:^0.3.0"
+    "@veecode-platform/backstage-plugin-kong-service-manager-common": "npm:^0.4.1"
     express: "npm:^4.17.1"
     express-promise-router: "npm:^4.1.0"
     git-url-parse: "npm:^15.0.0"
@@ -15595,6 +15586,7 @@ __metadata:
     "@backstage/integration": "npm:^1.15.1"
     "@backstage/integration-react": "npm:^1.2.0"
     "@backstage/plugin-catalog-react": "npm:^1.14.0"
+    "@backstage/plugin-permission-react": "npm:^0.4.27"
     "@backstage/test-utils": "npm:^1.7.0"
     "@backstage/theme": "npm:^0.6.0"
     "@material-ui/core": "npm:^4.12.4"
@@ -17322,7 +17314,7 @@ __metadata:
     "@backstage/plugin-search-backend-module-pg": "npm:^0.5.36"
     "@backstage/plugin-search-backend-node": "npm:^1.3.3"
     "@backstage/plugin-techdocs-backend": "npm:^1.11.0"
-    "@immobiliarelabs/backstage-plugin-gitlab-backend": "npm:^6.6.0"
+    "@immobiliarelabs/backstage-plugin-gitlab-backend": "npm:^6.7.0"
     "@janus-idp/backstage-plugin-keycloak-backend": "npm:^1.14.0"
     "@types/cookie-parser": "npm:^1.4.6"
     "@types/dockerode": "npm:^3.3.0"
@@ -17330,6 +17322,7 @@ __metadata:
     "@types/express-serve-static-core": "npm:^4.17.5"
     "@types/luxon": "npm:^2.0.4"
     "@veecode-platform/backstage-plugin-infracost-backend": "npm:0.4.0"
+    "@veecode-platform/backstage-plugin-kong-service-manager-common": "workspace:^"
     "@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions": "workspace:^"
     "@veecode-platform/plugin-kong-service-manager-backend": "workspace:^"
     "@veecode-platform/plugin-veecode-platform-common": "workspace:^"

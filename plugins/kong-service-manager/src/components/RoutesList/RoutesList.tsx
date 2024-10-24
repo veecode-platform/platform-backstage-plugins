@@ -7,12 +7,16 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
 import { useKongServiceManagerContext } from '../../context';
 import { useRoutesListStyles } from './styles';
 import { ModalComponent } from './ModalComponent/ModalComponent';
-import { RouteResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { kongCreateRoutePermission, RouteResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { usePermission } from '@backstage/plugin-permission-react';
 
 export const RoutesList = () => {
   const [showModal, setShowModal] = React.useState<boolean>(false);
   const [refresh, setRefresh] = React.useState(false);
   const [route, setRoute] = React.useState<any>();
+  const { loading: loadingCreateRoutePermission, allowed: canAddRoute } = usePermission({
+    permission: kongCreateRoutePermission,
+  });
 
   const { getRoutesList } = useKongServiceManagerContext();
   const { content, button } = useRoutesListStyles();
@@ -36,9 +40,19 @@ export const RoutesList = () => {
       <BoxComponent
         title="All Routes"
         button={
-          <Button variant="contained" color="primary" className={button} onClick={() => handleToggleModal({})}>
+          <>
+          {!loadingCreateRoutePermission && (
+            <Button 
+               variant="contained" 
+               disabled={!canAddRoute}
+               color="primary" 
+               className={button} 
+               onClick={() => handleToggleModal({})}>
             Create
-          </Button>}
+          </Button>)
+          }
+          </>
+          }
       >
         <Box className={content}>
           <TableComponent

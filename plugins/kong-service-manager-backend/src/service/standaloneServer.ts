@@ -2,7 +2,9 @@ import { Server } from 'http';
 import { Logger } from 'winston';
 import { createRouter } from './router';
 import { HostDiscovery } from '@backstage/backend-defaults/discovery';
-import { createServiceBuilder, loadBackendConfig } from '@backstage/backend-common';
+import { createLegacyAuthAdapters, createServiceBuilder, loadBackendConfig, ServerTokenManager, } from '@backstage/backend-common';
+import { ServerPermissionClient } from '@backstage/plugin-permission-node';
+import { AuthService, HttpAuthService } from '@backstage/backend-plugin-api';
 
 
 export interface ServerOptions {
@@ -21,12 +23,28 @@ export async function startStandaloneServer(
 
     const config = await loadBackendConfig({ logger, argv: process.argv });
     const discovery =  HostDiscovery.fromConfig(config);
+    const tokenManager = ServerTokenManager.fromConfig(config, { logger });
+    const permissions = ServerPermissionClient.fromConfig(config, {
+        discovery,
+        tokenManager,
+      });
+    const { httpAuth,auth } = createLegacyAuthAdapters<
+      any,
+      { httpAuth: HttpAuthService, auth: AuthService }
+    >({
+      tokenManager,
+      discovery,
+    });
+
     logger.debug('Starting application server...');
 
     const router = await createRouter({
         logger,
+        permissions,
         discovery,
-        config
+        config,
+        auth,
+        httpAuth,
     });
     
     let service = createServiceBuilder(module)

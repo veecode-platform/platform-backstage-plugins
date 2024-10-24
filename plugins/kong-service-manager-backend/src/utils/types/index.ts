@@ -1,6 +1,5 @@
-import { AuthService, DiscoveryService, HttpAuthService, LoggerService } from "@backstage/backend-plugin-api";
+import { AuthService, DiscoveryService, HttpAuthService, LoggerService, PermissionsService } from "@backstage/backend-plugin-api";
 import { Config } from "@backstage/config";
-import {PermissionEvaluator} from '@backstage/plugin-permission-common';
 
 /**
  *  @public
@@ -8,9 +7,9 @@ import {PermissionEvaluator} from '@backstage/plugin-permission-common';
 
 export interface KongServiceManagerOptions {
   logger: LoggerService;
-  permissions?:  PermissionEvaluator;
+  permissions:  PermissionsService;
   discovery: DiscoveryService,
   config: Config;
-  auth?: AuthService;
-  httpAuth?: HttpAuthService;
+  auth: AuthService;
+  httpAuth: HttpAuthService;
 }

@@ -153,3 +153,32 @@ backend.start();
 | Delete | /:instanceName/services/:serviceName/routes/:routeId      | backendBaseUrl/api/kong/:instanceservices/:serviceName/routes/:routeId |
 
 
+
+---
+
+
+## Permissions
+
+**See 👉**[Kong Service Manager Common](https://github.com/veecode-platform/platform-backstage-plugins/blob/kong-feature-permission/plugins/kong-service-manager-common/README.md)
+
+This plugin provides the following permissions:
+
+- `kongReadServicePermission` 👉 Allows service information to be read,
+- `kongReadPluginsAvailableServicePermission` 👉 Allows you to read the plugins available for the service,
+- `kongReadRoutesPermission` 👉 Allows you to read all service routes,
+- `kongApplyPluginServicePermission` 👉 Allows you to apply a plugin to the service,
+- `kongUpdatePluginServicePermission` 👉 Allows you to edit a plugin already installed in the service,
+- `kongDisablePluginServicePermission` 👉 Allows you to disable a service plugin,
+- `kongCreateRoutePermission` 👉 Allows you to create a route for the service,
+- `kongUpdateRoutePermission` 👉 Allows you to edit an existing route in the service,
+- `kongDeleteRoutePermission` 👉 Allows you to remove an existing route from the service,
+- `kongServiceManagerReadPluginsAvailableForRoutePermission` 👉 Reads all the plugins available for the route,
+- `kongServiceManagerApplyPluginsAvailableToRoutePermission` 👉 Enable a plugin for a route,
+- `kongServiceManagerReadPluginsAssociatedForRoutePermission` 👉 Reads all the plugins associated with the route,
+- `kongServiceManagerUpdatePluginOnTheRoutePermission` 👉 Allows you to edit a plugin applied to a route,
+- `kongServiceManagerDisablePluginFromRoutePermission` 👉 Allows you to remove a plugin from a route,
+- `kongServiceManagerReadSpecsPermission` 👉 It allows you to read the specs of the source code, if they are properly pointed out,
+- `kongServiceManagerUpdateSpecPermission` 👉 Allows project specs to be updated.
+
+
+> 🚨 View Backstage docs to learn how to set up your instance of Backstage to use these permissions.

@@ -1,4 +1,4 @@
-import { createApiFactory, createComponentExtension, createPlugin, discoveryApiRef } from '@backstage/core-plugin-api';
+import { createApiFactory, createComponentExtension, createPlugin, discoveryApiRef, fetchApiRef } from '@backstage/core-plugin-api';
 import { scmAuthApiRef } from '@backstage/integration-react';
 import { rootRouteRef } from './routes';
 import { GitlabPipelinesApiClient, gitlabPipelinesApiRef } from './api';
@@ -11,11 +11,12 @@ export const gitlabPipelinesPlugin = createPlugin({
   apis: [
     createApiFactory({
       api: gitlabPipelinesApiRef,
-      deps: { discoveryApi: discoveryApiRef, scmAuthApi: scmAuthApiRef},
-      factory: ({discoveryApi, scmAuthApi}) => {
+      deps: { discoveryApi: discoveryApiRef, scmAuthApi: scmAuthApiRef, fetchApi: fetchApiRef},
+      factory: ({discoveryApi, scmAuthApi, fetchApi}) => {
         return new GitlabPipelinesApiClient({
           discoveryApi: discoveryApi,
           scmAuthApi: scmAuthApi,
+          fetchApi: fetchApi
         })
       }
     })

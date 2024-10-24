@@ -5,6 +5,8 @@ import Edit from '@material-ui/icons/Edit';
 import { usePluginsCardsStyles } from '../styles';
 import { useKongServiceManagerContext } from '../../../../context';
 import { CardComponentProps } from './types';
+import { usePermission } from '@backstage/plugin-permission-react';
+import { kongApplyPluginServicePermission, kongDisablePluginServicePermission, kongUpdatePluginServicePermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 
 export const CardComponent : React.FC<CardComponentProps> = (props) => { 
@@ -13,6 +15,16 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
   const { handleToggleDrawer, setPluginState, disablePlugin } = useKongServiceManagerContext();
   const {card, cardHeader, cardTitle, cardIcon,description, button,spinner} = usePluginsCardsStyles();
   const {data} = props;
+  // permissions
+  const { loading: loadingApplyPluginPermission, allowed: canApplyPlugin } = usePermission({
+    permission: kongApplyPluginServicePermission,
+  });
+  const { loading: loadingUpdatePluginPermission, allowed: canUpdatePlugin } = usePermission({
+    permission: kongUpdatePluginServicePermission,
+  });
+  const { loading: loadingDeletePluginPermission, allowed: canDeletePlugin } = usePermission({
+    permission: kongDisablePluginServicePermission,
+  });
  
 
   const handlePluginEnable = async () => {
@@ -45,9 +57,16 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
         action={
           <>
             {data.associated ? (
-              <IconButton aria-label="settings" title="Edit Plugin" onClick={handleEditAction}>
-                <Edit />
-              </IconButton>
+              <>
+              {!loadingUpdatePluginPermission && (
+                <IconButton 
+                  aria-label="settings" 
+                  title="Edit Plugin" 
+                  disabled={!canUpdatePlugin}
+                  onClick={handleEditAction}>
+                  <Edit />
+                </IconButton>)}
+              </>
             ) : (
               <></>
             )}
@@ -66,31 +85,38 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
       <CardActions>
         <>
           {data.associated ? (
-            <Button
-              color="primary"
-              variant="contained"
-              className={button}
-              onClick={handlePluginRemove}
-              disabled={processingData}
-            >
-              {processingData ? (
-                <>
-                  Disabling...
-                  <CircularProgress className={spinner} size={20} />
-                </>
-              ) : (
-                <>Disable</>
-              )}
-            </Button>
+            <>
+            {!loadingDeletePluginPermission && (
+              <Button
+                color="primary"
+                variant="contained"
+                className={button}
+                onClick={handlePluginRemove}
+                disabled={processingData || !canDeletePlugin}
+              >
+                {processingData ? (
+                  <>
+                    Disabling...
+                    <CircularProgress className={spinner} size={20} />
+                  </>
+                ) : (
+                  <>Disable</>
+                )}
+              </Button>)}
+            </>
           ) : (
-            <Button
-              color="primary"
-              variant="outlined"
-              className={button}
-              onClick={handlePluginEnable}
-            >
-              Enable
-            </Button>
+            <>
+            {!loadingApplyPluginPermission && (
+              <Button
+                color="primary"
+                variant="outlined"
+                className={button}
+                onClick={handlePluginEnable}
+                disabled={!canApplyPlugin}
+              >
+                Enable
+              </Button>)}
+            </>
           )}
         </>
       </CardActions>

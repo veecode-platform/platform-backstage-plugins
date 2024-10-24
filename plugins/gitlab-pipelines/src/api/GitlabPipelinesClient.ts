@@ -1,4 +1,4 @@
-import { DiscoveryApi } from "@backstage/core-plugin-api";
+import { DiscoveryApi, FetchApi } from "@backstage/core-plugin-api";
 import { ScmAuthApi } from "@backstage/integration-react";
 import { Options } from "./types";
 import { GITLAB_PIPELINES_PROXY_URL } from "../utils/constants";
@@ -16,11 +16,13 @@ class Client {
     private readonly discoveryApi: DiscoveryApi;
     private readonly proxyPath: string;
     private readonly scmAuthApi: ScmAuthApi;
+    private readonly fetchApi: FetchApi;
 
     constructor(opts: Options) {
         this.discoveryApi = opts.discoveryApi;
         this.scmAuthApi = opts.scmAuthApi;
         this.proxyPath = opts.proxyPath ?? GITLAB_PIPELINES_PROXY_URL
+        this.fetchApi = opts.fetchApi
     }
 
     public async fetch<T = any>(input: string, gitlabReposlug: string, init?: RequestInit): Promise<T> {
@@ -32,12 +34,14 @@ class Client {
                }
            }
         })
-        const apiUrl = await this.apiUrl(gitlabReposlug);
 
-       const resp = await fetch(`${apiUrl}${input}`, {
+       const apiUrl = await this.apiUrl(gitlabReposlug);
+
+       const resp = await this.fetchApi.fetch(`${apiUrl}${input}`, {
            ...init,
            headers: {
-              Authorization: `Bearer ${token}`}
+              Authorization: `Bearer ${token}`
+            }
        });
 
         if (!resp.ok) {

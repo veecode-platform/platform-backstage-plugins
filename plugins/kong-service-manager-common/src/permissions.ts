@@ -5,38 +5,33 @@ import { createPermission } from '@backstage/plugin-permission-common';
  * @public
  */
 
-export const kongServiceManagerReadServicePermission = createPermission({
-    name: 'kong.service.manager.read.service',
+export const kongReadServicePermission = createPermission({
+    name: 'kong.read.service',
     attributes: { action: 'read'}
 })
 
-export const kongServiceManagerReadPluginsAvailablePermission = createPermission({
-    name: 'kong.service.manager.read.plugins.available',
+export const kongReadPluginsAvailableServicePermission = createPermission({
+    name: 'kong.read.plugins.available.service',
     attributes: { action: 'read'}
 })
 
-export const kongServiceManagerReadPluginsAssociatedPermission = createPermission({
-    name: 'kong.service.manager.read.plugins.associated',
+export const kongReadRoutesPermission = createPermission({
+    name: 'kong.read.routes',
     attributes: { action: 'read'}
 })
 
-export const kongServiceManagerReadRoutesPermission = createPermission({
-    name: 'kong.service.manager.read.routes',
-    attributes: { action: 'read'}
-})
-
-export const kongServiceManagerApplyPluginToServicePermission = createPermission({
-    name: 'kong.service.manager.apply.plugins.to.service',
+export const kongApplyPluginServicePermission = createPermission({
+    name: 'kong.apply.plugins.service',
     attributes: { action: 'create'}
 })
 
-export const kongServiceManagerUpdatePluginOnTheServicePermission = createPermission({
-    name: 'kong.service.manager.update.plugin.on.the.service',
+export const kongUpdatePluginServicePermission = createPermission({
+    name: 'kong.update.plugin.service',
     attributes: { action: 'update'}
 })
 
-export const kongServiceManagerDisablePluginFromServicePermission = createPermission({
-    name: 'kong.service.manager.disable.plugin.from.service',
+export const kongDisablePluginServicePermission = createPermission({
+    name: 'kong.disable.plugin.service',
     attributes: { action: 'delete'}
 })
 
@@ -46,43 +41,43 @@ export const kongServiceManagerDisablePluginFromServicePermission = createPermis
  * @public
  */
 
-export const kongServiceManagerCreateRoutePermission = createPermission({
-    name: 'kong.service.manager.create.route',
+export const kongCreateRoutePermission = createPermission({
+    name: 'kong.create.route',
     attributes: { action: 'create'}
 })
 
-export const kongServiceManagerUpdateRoutePermission = createPermission({
-    name: 'kong.service.manager.update.route',
+export const kongUpdateRoutePermission = createPermission({
+    name: 'kong.update.route',
     attributes: { action: 'update'}
 })
 
-export const kongServiceManagerDeleteRoutePermission = createPermission({
-    name: 'kong.service.manager.delete.route',
+export const kongDeleteRoutePermission = createPermission({
+    name: 'kong.delete.route',
     attributes: { action: 'delete' }
 })
 
-export const kongServiceManagerReadPluginsAvailableForRoutePermission = createPermission({
-    name: 'kong.service.manager.read.plugins.available.for.route',
+export const kongReadPluginsAvailableRoutePermission = createPermission({
+    name: 'kong.read.plugins.available.route',
     attributes: { action: 'read'}
 })
 
-export const kongServiceManagerApplyPluginsAvailableToRoutePermission = createPermission({
-    name: 'kong.service.manager.apply.plugins.available.to.route',
+export const kongApplyPluginsAvailableRoutePermission = createPermission({
+    name: 'kong.apply.plugins.available.route',
     attributes: { action: 'create'}
 })
 
-export const kongServiceManagerReadPluginsAssociatedForRoutePermission = createPermission({
-    name: 'kong.service.manager.read.plugins.associated.for.route',
+export const kongReadPluginsAssociatedRoutePermission = createPermission({
+    name: 'kong.read.plugins.associated.route',
     attributes: { action: 'read'}
 })
 
-export const kongServiceManagerUpdatePluginOnTheRoutePermission = createPermission({
-    name: 'kong.service.manager.update.plugin.on.the.route',
+export const kongUpdatePluginRoutePermission = createPermission({
+    name: 'kong.update.plugin.route',
     attributes: { action: 'update'}
 })
 
-export const kongServiceManagerDisablePluginFromRoutePermission = createPermission({
-    name: 'kong.service.manager.disable.plugin.from.route',
+export const kongDisablePluginRoutePermission = createPermission({
+    name: 'kong.disable.plugin.route',
     attributes: { action: 'delete'}
 })
 
@@ -92,33 +87,32 @@ export const kongServiceManagerDisablePluginFromRoutePermission = createPermissi
  *  @public
 */
 
-export const kongServiceManagerReadSpecsPermission = createPermission({
-    name: 'kong.service.manager.read.specs',
+export const kongReadSpecsPermission = createPermission({
+    name: 'kong.read.specs',
     attributes: { action: 'read'}
 })
 
-export const kongServiceManagerUpdateSpecPermission = createPermission({
-    name: 'kong.service.manager.update.spec',
+export const kongUpdateSpecPermission = createPermission({
+    name: 'kong.update.spec',
     attributes: { action: 'update'}
 })
 
 
 export const kongServiceManagerPermissions = {
-    kongServiceManagerReadServicePermission,
-    kongServiceManagerReadPluginsAvailablePermission,
-    kongServiceManagerReadPluginsAssociatedPermission,
-    kongServiceManagerReadRoutesPermission,
-    kongServiceManagerApplyPluginToServicePermission,
-    kongServiceManagerUpdatePluginOnTheServicePermission,
-    kongServiceManagerDisablePluginFromServicePermission,
-    kongServiceManagerCreateRoutePermission,
-    kongServiceManagerUpdateRoutePermission,
-    kongServiceManagerDeleteRoutePermission,
-    kongServiceManagerReadPluginsAvailableForRoutePermission,
-    kongServiceManagerApplyPluginsAvailableToRoutePermission,
-    kongServiceManagerReadPluginsAssociatedForRoutePermission,
-    kongServiceManagerUpdatePluginOnTheRoutePermission,
-    kongServiceManagerDisablePluginFromRoutePermission,
-    kongServiceManagerReadSpecsPermission,
-    kongServiceManagerUpdateSpecPermission
+    kongReadServicePermission,
+    kongReadPluginsAvailableServicePermission,
+    kongReadRoutesPermission,
+    kongApplyPluginServicePermission,
+    kongUpdatePluginServicePermission,
+    kongDisablePluginServicePermission,
+    kongCreateRoutePermission,
+    kongUpdateRoutePermission,
+    kongDeleteRoutePermission,
+    kongReadPluginsAvailableRoutePermission,
+    kongApplyPluginsAvailableRoutePermission,
+    kongReadPluginsAssociatedRoutePermission,
+    kongUpdatePluginRoutePermission,
+    kongDisablePluginRoutePermission,
+    kongReadSpecsPermission,
+    kongUpdateSpecPermission
 }
