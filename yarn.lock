@@ -15336,12 +15336,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-kong-service-manager-common@npm:^0.2.19":
-  version: 0.2.19
-  resolution: "@veecode-platform/backstage-plugin-kong-service-manager-common@npm:0.2.19"
+"@veecode-platform/backstage-plugin-kong-service-manager-common@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "@veecode-platform/backstage-plugin-kong-service-manager-common@npm:0.3.0"
   dependencies:
     "@backstage/plugin-permission-common": "npm:^0.8.1"
-  checksum: 10/349c200d8e7c55c6e4c153b0483bc60987a8f2ec296a703e1409880c20fefa95de11df10d8f4a917ce42faf491e90a6dfb5b01b78c4a72854c14ae1a670ef0b7
+  checksum: 10/45ed7952f1f51329cbe6556c58589bbd40a23d22daf23e0ef0bac79a017696ca1e46dd430d0cb34e59c81c3b46e14a62d6d86fdf4ecf668e317adfb3dfb0d885
   languageName: node
   linkType: hard
 
@@ -15569,7 +15569,7 @@ __metadata:
     "@backstage/types": "npm:^1.1.1"
     "@types/express": "npm:*"
     "@types/supertest": "npm:^2.0.8"
-    "@veecode-platform/backstage-plugin-kong-service-manager-common": "npm:^0.2.19"
+    "@veecode-platform/backstage-plugin-kong-service-manager-common": "npm:^0.3.0"
     express: "npm:^4.17.1"
     express-promise-router: "npm:^4.1.0"
     git-url-parse: "npm:^15.0.0"
