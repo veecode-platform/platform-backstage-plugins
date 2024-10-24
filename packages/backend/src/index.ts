@@ -5,6 +5,10 @@ import { customGithubAuthProvider } from './modules/auth/githubCustomResolver';
 import { customGitlabAuthProvider } from './modules/auth/gitlabCustomResolver';
 // import  kongServiceManagerPlugin  from '@veecode-platform/plugin-kong-service-manager-backend';
 import PermissionTest from "./extensions/permissionsPolicyExtension";
+import {
+    gitlabPlugin,
+    catalogPluginGitlabFillerProcessorModule,
+} from '@immobiliarelabs/backstage-plugin-gitlab-backend';
 
 const backend = createBackend();
 
@@ -44,6 +48,12 @@ backend.add(import('@backstage/plugin-permission-backend/alpha'));
 //   import('@backstage/plugin-permission-backend-module-allow-all-policy'),
 // );
 backend.add(PermissionTest)
+
+// gitlab immobiliareLabs
+backend.add(gitlabPlugin);
+backend.add(catalogPluginGitlabFillerProcessorModule);
+
+
 
 backend.add(import('@backstage/plugin-techdocs-backend/alpha'));
 
