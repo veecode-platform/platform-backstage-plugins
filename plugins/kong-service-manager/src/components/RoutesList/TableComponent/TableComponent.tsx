@@ -11,7 +11,7 @@ import { useKongServiceManagerContext } from '../../../context';
 import { ConfirmDeleteDialog } from '../ConfirmDeleteDialog/ConfirmDeleteDialog';
 import { TableComponentProps, TableData } from './types';
 import { tableStyle, useTableComponentStyle } from './styles';
-import { kongServiceManagerDeleteRoutePermission, kongServiceManagerUpdateRoutePermission, RoutesResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { kongDeleteRoutePermission, kongUpdateRoutePermission, RoutesResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import { usePermission } from '@backstage/plugin-permission-react';
 
 
@@ -23,10 +23,10 @@ export const TableComponent : React.FC<TableComponentProps> = (props) => {
   const {tooltipContent, tags, actions} = useTableComponentStyle();
   const {isLoading,dataProps, handleEditModal, refreshList} = props;
   const { loading: loadingUpdateRoutePermission, allowed: canUpdateRoute } = usePermission({
-    permission: kongServiceManagerUpdateRoutePermission,
+    permission: kongUpdateRoutePermission,
   });
   const { loading: loadingDeleteRoutePermission, allowed: canDeleteRoute } = usePermission({
-    permission: kongServiceManagerDeleteRoutePermission,
+    permission: kongDeleteRoutePermission,
   });
 
 

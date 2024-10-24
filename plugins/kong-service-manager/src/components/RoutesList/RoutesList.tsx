@@ -7,7 +7,7 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
 import { useKongServiceManagerContext } from '../../context';
 import { useRoutesListStyles } from './styles';
 import { ModalComponent } from './ModalComponent/ModalComponent';
-import { kongServiceManagerCreateRoutePermission, RouteResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { kongCreateRoutePermission, RouteResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import { usePermission } from '@backstage/plugin-permission-react';
 
 export const RoutesList = () => {
@@ -15,7 +15,7 @@ export const RoutesList = () => {
   const [refresh, setRefresh] = React.useState(false);
   const [route, setRoute] = React.useState<any>();
   const { loading: loadingCreateRoutePermission, allowed: canAddRoute } = usePermission({
-    permission: kongServiceManagerCreateRoutePermission,
+    permission: kongCreateRoutePermission,
   });
 
   const { getRoutesList } = useKongServiceManagerContext();

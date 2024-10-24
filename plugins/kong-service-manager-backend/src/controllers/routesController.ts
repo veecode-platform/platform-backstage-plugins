@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { InputError, NotAllowedError, stringifyError } from '@backstage/errors';
 import { IRoutesController } from './types';
 import { KongController } from './kongController';
-import { kongServiceManagerCreateRoutePermission, kongServiceManagerDeleteRoutePermission, kongServiceManagerReadRoutesPermission, kongServiceManagerUpdateRoutePermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { kongCreateRoutePermission, kongDeleteRoutePermission, kongReadRoutesPermission, kongUpdateRoutePermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 
 export class RoutesController  extends KongController implements IRoutesController{
@@ -10,7 +10,7 @@ export class RoutesController  extends KongController implements IRoutesControll
   getRoutes = async (req:Request, res:Response) => {
     const { instanceName, serviceName } = req.params;
 
-    if (!(await this.isRequestAuthorized(req, kongServiceManagerReadRoutesPermission))) {
+    if (!(await this.isRequestAuthorized(req, kongReadRoutesPermission))) {
       throw new NotAllowedError('Unauthorized');
     }
 
@@ -40,7 +40,7 @@ export class RoutesController  extends KongController implements IRoutesControll
   routeById = async(req: Request, res: Response) => {
     const { instanceName, serviceName,routeId } = req.params;
 
-    if (!(await this.isRequestAuthorized(req, kongServiceManagerReadRoutesPermission))) {
+    if (!(await this.isRequestAuthorized(req, kongReadRoutesPermission))) {
       throw new NotAllowedError('Unauthorized');
     }
 
@@ -74,7 +74,7 @@ export class RoutesController  extends KongController implements IRoutesControll
     const { instanceName, serviceName } = req.params;
     const { config }  = req.body; 
 
-    if (!(await this.isRequestAuthorized(req, kongServiceManagerCreateRoutePermission ))) {
+    if (!(await this.isRequestAuthorized(req, kongCreateRoutePermission ))) {
       throw new NotAllowedError('Unauthorized');
     }
 
@@ -106,7 +106,7 @@ export class RoutesController  extends KongController implements IRoutesControll
     const { instanceName,serviceName, routeId } = req.params;
     const  { config }  = req.body;
 
-    if (!(await this.isRequestAuthorized(req, kongServiceManagerUpdateRoutePermission ))) {
+    if (!(await this.isRequestAuthorized(req, kongUpdateRoutePermission ))) {
       throw new NotAllowedError('Unauthorized');
     }
 
@@ -138,7 +138,7 @@ export class RoutesController  extends KongController implements IRoutesControll
   removeRoute = async(req: Request,res: Response) => {
     const { instanceName, serviceName,routeId } = req.params;
 
-    if (!(await this.isRequestAuthorized(req, kongServiceManagerDeleteRoutePermission ))) {
+    if (!(await this.isRequestAuthorized(req, kongDeleteRoutePermission ))) {
       throw new NotAllowedError('Unauthorized');
     }
    

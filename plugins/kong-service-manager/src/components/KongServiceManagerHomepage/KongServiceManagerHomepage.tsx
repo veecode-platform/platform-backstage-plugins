@@ -12,7 +12,7 @@ import { SpecPluginsList } from '../SpecList/SpecPluginsList';
 import { isKongManagerSpecAvailable } from '../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { RequirePermission } from '@backstage/plugin-permission-react';
-import { kongServiceManagerReadPluginsAvailablePermission, kongServiceManagerReadRoutesPermission, kongServiceManagerReadServicePermission, kongServiceManagerReadSpecsPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { kongReadPluginsAvailableServicePermission, kongReadRoutesPermission, kongReadServicePermission, kongReadSpecsPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 export const KongServiceManagerHomepage = () => {
 
@@ -36,17 +36,17 @@ export const KongServiceManagerHomepage = () => {
           <Grid item lg={10}>
             <Routes>
               <Route path="" element={
-                 <RequirePermission permission={kongServiceManagerReadServicePermission}>
+                 <RequirePermission permission={kongReadServicePermission}>
                    <AboutPage />
                 </RequirePermission>
               } />
               <Route path="all-routes" element={
-                <RequirePermission permission={kongServiceManagerReadRoutesPermission}>
+                <RequirePermission permission={kongReadRoutesPermission}>
                 <RoutesList />
                 </RequirePermission>
                 } />
               <Route path="all-plugins" element={
-                <RequirePermission permission={kongServiceManagerReadPluginsAvailablePermission}>
+                <RequirePermission permission={kongReadPluginsAvailableServicePermission}>
                  <PluginsList />
                 </RequirePermission>
                 } />
@@ -54,7 +54,7 @@ export const KongServiceManagerHomepage = () => {
                 path="all-specs/*"
                 element={
                   specListAvailable ? (
-                    <RequirePermission permission={kongServiceManagerReadSpecsPermission}>
+                    <RequirePermission permission={kongReadSpecsPermission}>
                       <Routes>
                         <Route path="" element={<SpecList />} />
                         <Route path=":specName" element={<SpecPluginsList />} />

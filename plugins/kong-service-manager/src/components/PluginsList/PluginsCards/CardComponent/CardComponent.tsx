@@ -6,7 +6,7 @@ import { usePluginsCardsStyles } from '../styles';
 import { useKongServiceManagerContext } from '../../../../context';
 import { CardComponentProps } from './types';
 import { usePermission } from '@backstage/plugin-permission-react';
-import { kongServiceManagerApplyPluginToServicePermission, kongServiceManagerDisablePluginFromServicePermission, kongServiceManagerUpdatePluginOnTheServicePermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { kongApplyPluginServicePermission, kongDisablePluginServicePermission, kongUpdatePluginServicePermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 
 export const CardComponent : React.FC<CardComponentProps> = (props) => { 
@@ -17,13 +17,13 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
   const {data} = props;
   // permissions
   const { loading: loadingApplyPluginPermission, allowed: canApplyPlugin } = usePermission({
-    permission: kongServiceManagerApplyPluginToServicePermission,
+    permission: kongApplyPluginServicePermission,
   });
   const { loading: loadingUpdatePluginPermission, allowed: canUpdatePlugin } = usePermission({
-    permission: kongServiceManagerUpdatePluginOnTheServicePermission,
+    permission: kongUpdatePluginServicePermission,
   });
   const { loading: loadingDeletePluginPermission, allowed: canDeletePlugin } = usePermission({
-    permission: kongServiceManagerDisablePluginFromServicePermission,
+    permission: kongDisablePluginServicePermission,
   });
  
 

@@ -13,7 +13,7 @@ import { addPluginsToList, initialPluginsSpecListState, PluginsSpecListReducer, 
 import { PluginForSpec } from '../../../../utils/types';
 import useAsync from 'react-use/esm/useAsync';
 import { addPluginsToSpec } from '../../../../context/state';
-import { IKongPluginSpec, kongServiceManagerUpdateSpecPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { IKongPluginSpec, kongUpdateSpecPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import { ButtonComponent, LoadingComponent } from '../../../shared';
 import { PullRequestModal } from '../../PullRequesModal';
 import { usePermission } from '@backstage/plugin-permission-react';
@@ -38,7 +38,7 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
   const { root,iconAndName, apply, remove, submit, footer, fixedToBottom } = usePluginsTableStyles();
   const { listAllPluginsForSpec, pluginsToSpecState, pluginsToSpecDispatch } = useKongServiceManagerContext();
   const { loading: loadingUpdateSpecPermission, allowed: canUpdateSpec } = usePermission({
-    permission: kongServiceManagerUpdateSpecPermission,
+    permission: kongUpdateSpecPermission,
   });
 
   const handleAction = (pluginName:string) => {

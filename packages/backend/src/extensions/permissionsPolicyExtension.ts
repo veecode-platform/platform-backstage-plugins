@@ -4,20 +4,20 @@ import { AuthorizeResult, isPermission, PolicyDecision } from "@backstage/plugin
 import type { PermissionPolicy, PolicyQuery, PolicyQueryUser } from "@backstage/plugin-permission-node";
 import { policyExtensionPoint } from '@backstage/plugin-permission-node/alpha';
 import {
- //  kongServiceManagerReadPluginsAssociatedPermission,
-  kongServiceManagerCreateRoutePermission} from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+  kongCreateRoutePermission,
+  kongApplyPluginServicePermission
+} from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 // const kongPermissions = [
-//   kongServiceManagerReadServicePermission.name,
-//   kongServiceManagerReadPluginsAvailablePermission.name,
-//   kongServiceManagerReadPluginsAssociatedPermission.name,
-//   kongServiceManagerReadRoutesPermission.name,
-//   kongServiceManagerApplyPluginToServicePermission.name,
-//   kongServiceManagerUpdatePluginOnTheServicePermission.name,
-//   kongServiceManagerDisablePluginFromServicePermission.name,
-//   kongServiceManagerCreateRoutePermission.name,
-//   kongServiceManagerUpdateRoutePermission.name,
-//   kongServiceManagerDeleteRoutePermission.name,
+//   kongReadServicePermission.name,
+//   kongReadPluginsAvailableServicePermission.name,
+//   kongReadRoutesPermission.name,
+//   kongApplyPluginServicePermission.name,
+//   kongUpdatePluginServicePermission.name,
+//   kongDisablePluginServicePermission.name,
+//   kongCreateRoutePermission.name,
+//   kongUpdateRoutePermission.name,
+//   kongDeleteRoutePermission.name,
 //   kongServiceManagerReadPluginsAvailableForRoutePermission.name,
 //   kongServiceManagerApplyPluginsAvailableToRoutePermission.name,
 //   kongServiceManagerReadPluginsAssociatedForRoutePermission.name,
@@ -32,19 +32,19 @@ class PermissionModule implements PermissionPolicy {
         request: PolicyQuery,
         _user?: PolicyQueryUser
     ):Promise<PolicyDecision>{
-        if(isPermission(request.permission, kongServiceManagerCreateRoutePermission)){
+        if(isPermission(request.permission, kongCreateRoutePermission)){
         //  if(kongPermissions.includes(request.permission.name)){
             return {
                 result: AuthorizeResult.DENY
             }
         }         
         
-        // if(isPermission(request.permission, kongServiceManagerReadPluginsAssociatedPermission)){
-        //   //  if(kongPermissions.includes(request.permission.name)){
-        //       return {
-        //           result: AuthorizeResult.ALLOW
-        //       }
-        //   } 
+        if(isPermission(request.permission, kongApplyPluginServicePermission)){
+          //  if(kongPermissions.includes(request.permission.name)){
+              return {
+                  result: AuthorizeResult.DENY
+              }
+          } 
 
         return {
             result: AuthorizeResult.ALLOW
