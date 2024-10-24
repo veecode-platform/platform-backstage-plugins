@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React from 'react';
 import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, CircularProgress, IconButton, Typography } from '@material-ui/core';
 import Edit from '@material-ui/icons/Edit';
@@ -6,12 +7,13 @@ import { useKongServiceManagerContext } from '../../../../context';
 import { CardComponentProps } from './types';
 
 
-export const CardComponent : React.FC<CardComponentProps> = (props) => {
+export const CardComponent : React.FC<CardComponentProps> = (props) => { 
   
   const [processingData, setProcessingData] = React.useState<boolean>(false);
   const { handleToggleDrawer, setPluginState, disablePlugin } = useKongServiceManagerContext();
   const {card, cardHeader, cardTitle, cardIcon,description, button,spinner} = usePluginsCardsStyles();
   const {data} = props;
+ 
 
   const handlePluginEnable = async () => {
     if(data){
@@ -58,7 +60,7 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
         }
       />
       <CardMedia>
-        <img src={`${data.image}`} alt="" className={cardIcon} />
+        <img src={data.image} alt="picture" className={cardIcon} />
       </CardMedia>
       <CardContent className={description}>{data.description}</CardContent>
       <CardActions>

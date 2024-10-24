@@ -1,7 +1,7 @@
 {
   "name": "@veecode-platform/backstage-plugin-kong-service-manager-common",
   "description": "Common functionalities for the kong-service-manager plugin",
-  "version": "0.3.0",
+  "version": "0.4.1",
   "exports": {
     ".": "./src/index.ts",
     "./package.json": "./package.json"
@@ -38,7 +38,7 @@
     "postpack": "backstage-cli package postpack"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.27.1"
+    "@backstage/cli": "^0.28.0"
   },
   "files": [
     "dist"

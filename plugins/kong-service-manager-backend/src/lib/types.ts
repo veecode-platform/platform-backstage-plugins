@@ -20,7 +20,7 @@ export interface FromConfig {
 export interface IKongConfigOptions {
     id: string,
     apiBaseUrl: string,
-    workspace: string,
+    workspace?: string,
     auth: IKongAuth
   }
 

@@ -8,8 +8,7 @@ import { transformLabel } from '../../../utils/helpers/transformLabel';
 export const Table =  <T extends TableData>(props: TableProps<T>) => {
 
   const {labels, data } = props;
-  const { root, header, th, tbody, tr, cell } = useTableStyles();
-
+  const { root, header, th, tbody, tr, cell, cellContent } = useTableStyles();
 
   return (
     <table className={root}>
@@ -17,7 +16,9 @@ export const Table =  <T extends TableData>(props: TableProps<T>) => {
            {labels.map( label => (
              <th 
                className={th} 
-               id={label}>
+               id={label}
+               key={label}
+               >
                <Typography variant="caption">{transformLabel(label)}</Typography>
              </th>
            ))}
@@ -26,7 +27,9 @@ export const Table =  <T extends TableData>(props: TableProps<T>) => {
           {data.map((row) => (
             <tr className={tr} key={row.id}>
                 {Object.values(row).map( value => (
-                    <td className={cell} key={value}>{value}</td>
+                    <td className={cell} key={value}>
+                      <p title={value} className={cellContent}>{value}</p>
+                    </td>
                 ))}
             </tr>
           ))}

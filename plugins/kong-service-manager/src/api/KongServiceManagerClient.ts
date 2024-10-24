@@ -1,6 +1,6 @@
 import { ConfigApi, FetchApi } from "@backstage/core-plugin-api";
 import { KongServiceManagerApi, Options } from "./KongServiceManagerApi";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, ISpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, ISpec, PluginCard, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { PluginsInfoData } from "../data/data";
 import { GitManager } from "./GitManager";
 
@@ -39,46 +39,51 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         const response = await this.fetch(`/${instanceName}/services/${serviceName}`)
         return response.service
     }
-
-    async getEnabledPlugins(instanceName:string,serviceName: string, searchFilter?:string): Promise<PluginPerCategory[]> {
-        const response = await this.fetch(`/${instanceName}/plugins`);   
-
-        const availablePluginsResponse = response.plugins as string[];
-        let availablePluginsList = availablePluginsResponse;
-
-        if (searchFilter !== "" && searchFilter) {
-            availablePluginsList = availablePluginsResponse.filter(plugin =>
-              plugin.toLowerCase().includes(searchFilter.toLowerCase())
-            );
-          }
-          
-        const associatedPluginsList = await this.getServiceAssociatedPlugins(instanceName,serviceName)
-
-        const mapedEnabledPluginsList = PluginsInfoData.categories.map((category) => {
-
-            return {
-                category: category.category,
-                plugins: category.plugins.flatMap((categoryPlugin) => {
-                    const filteredPluginMatch = availablePluginsList.find((availablePlugin) => availablePlugin === categoryPlugin.slug)
-                    if (!filteredPluginMatch) return []
-    
-                    const filteredAssocietedPluginMatch = associatedPluginsList.find((associatedPlugin) => associatedPlugin.name === categoryPlugin.slug)
-                    return {
-                        id: filteredAssocietedPluginMatch?.id ?? null,
-                        name: categoryPlugin.name,
-                        slug: categoryPlugin.slug,
-                        associated: filteredAssocietedPluginMatch?.enabled ?? false,
-                        image: categoryPlugin.image,
-                        tags: categoryPlugin.tags,
-                        description: categoryPlugin.description
-                    }
-                })
-            }
-        })
-        return mapedEnabledPluginsList
-
+    async getImagePayload (pluginName:string) {
+    const response = await import(`../assets/plugins/${pluginName}`) 
+    return response.default
     }
 
+    async getEnabledPlugins(instanceName: string, serviceName: string, searchFilter?: string): Promise<PluginPerCategory[]> {
+        const response = await this.fetch(`/${instanceName}/plugins`);
+        const availablePluginsResponse = response.plugins as string[];
+        let availablePluginsList = availablePluginsResponse;
+    
+        if (searchFilter !== "" && searchFilter) {
+            availablePluginsList = availablePluginsResponse.filter(plugin =>
+                plugin.toLowerCase().includes(searchFilter.toLowerCase())
+            );
+        }
+    
+        const associatedPluginsList = await this.getServiceAssociatedPlugins(instanceName, serviceName);
+    
+        const mapedEnabledPluginsList = await Promise.all(PluginsInfoData.categories.map(async (category) => {
+            const plugins = await Promise.all(category.plugins.map(async (categoryPlugin) => {
+                const filteredPluginMatch = availablePluginsList.find((availablePlugin) => availablePlugin === categoryPlugin.slug);
+                if (!filteredPluginMatch) return null; 
+    
+                const filteredAssocietedPluginMatch = associatedPluginsList.find((associatedPlugin) => associatedPlugin.name === categoryPlugin.slug);
+                return {
+                    id: filteredAssocietedPluginMatch?.id ?? null,
+                    name: categoryPlugin.name,
+                    slug: categoryPlugin.slug,
+                    associated: filteredAssocietedPluginMatch?.enabled ?? false,
+                    image: await this.getImagePayload(categoryPlugin.image),
+                    tags: categoryPlugin.tags,
+                    description: categoryPlugin.description
+                };
+            }));
+    
+ 
+            return {
+                category: category.category,
+                plugins: plugins.filter((plugin) => plugin !== null) as PluginCard[], 
+            };
+        }));
+    
+        return mapedEnabledPluginsList;
+    }
+    
 
     async getPluginFields(instanceName:string, pluginName:string): Promise<PluginFieldsResponse[]> {
         const response = await this.fetch(`/${instanceName}/services/plugins/${pluginName}/fields`)

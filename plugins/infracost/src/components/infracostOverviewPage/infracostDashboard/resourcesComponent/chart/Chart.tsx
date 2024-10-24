@@ -1,31 +1,35 @@
-import React from 'react'
-import { ChartProps } from './types'
+import React from 'react';
+import { ChartProps } from './types';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { Box } from '@material-ui/core';
+import { BiShow } from "react-icons/bi";
+import { GoEyeClosed } from "react-icons/go";
+import { useChartStyles } from './styles'; 
 
-export const Chart : React.FC<ChartProps> = (props) => {
+export const Chart: React.FC<ChartProps> = (props) => {
+  const { items, overview } = props;
+  const [isLegendVisible, setIsLegendVisible] = React.useState<boolean>(overview  ? false : true);
+  const { root, btn ,blur} = useChartStyles();
 
- const [ isHidden, setIsHidden ] = React.useState<boolean>(false);
- const { items } = props;
- const chartItems = (items.length === 0) ? [{id: 0, label: 'Costs are based on usage*', value: 0.001, color:'grey'}] : items;
- const size = {height: 450}
+  const chartItems =
+    items.length === 0
+      ? [{ id: 0, label: 'Costs are based on usage*', value: 0.001, color: 'grey' }]
+      : items;
 
- const handleResize = () => {
-  if(window && window.innerWidth < 950) setIsHidden(true);
-  else setIsHidden(false);
- }
-
- React.useEffect(()=>{
-  window.addEventListener('resize', handleResize);
-  handleResize();
-  // clean up state
-  return () => {
-    window.removeEventListener('resize',handleResize)
-  }
- },[])
+  const toggleLegend = () => {
+    setIsLegendVisible((prev) => !prev);
+  };
 
   return (
-    <Box sx={{ width: '100%', height: '100%' }}>
+    <Box className={`${root} ${isLegendVisible ? blur : null}`}>
+      <button
+        onClick={toggleLegend}
+        className={btn}
+        title={isLegendVisible ? "Hide Legends" : "Show Legends"}
+      >
+        {isLegendVisible ? <BiShow /> : <GoEyeClosed />}
+      </button>
+
       <PieChart
         series={[
           {
@@ -36,20 +40,20 @@ export const Chart : React.FC<ChartProps> = (props) => {
         ]}
         slotProps={{
           legend: {
-            hidden: isHidden,
-            direction: 'row',
+            hidden: !isLegendVisible, 
+            direction: 'column',
             position: { vertical: 'bottom', horizontal: 'middle' },
             padding: 0,
-            labelStyle:{
-              fontSize: 14
+            labelStyle: {
+              fontSize: '12px',
             },
             itemMarkWidth: 11,
             itemMarkHeight: 10,
           },
         }}
-        margin={{ top: 100, bottom: 100, left: 100, right: 100 }}
-        {...size}
-      />
+        margin={{ top: 50, bottom: 50, left: 50, right: 50 }}
+        height={500}
+      />      
     </Box>
   );
-}
+};
