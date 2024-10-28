@@ -56,7 +56,8 @@ The following steps must be followed to ensure that the plugin works correctly.
 > Make sure you have an gitlab auth provider in your devportal. See how [Add Gitlab Auth Provider 📃](https://backstage.io/docs/auth/gitlab/provider).
 
 <br>
-3- **Proxy Settings**:
+
+3- **Proxy Config** :
 
 Still in `app-config.yaml`...
 
