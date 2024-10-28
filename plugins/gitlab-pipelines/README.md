@@ -54,54 +54,6 @@ The following steps must be followed to ensure that the plugin works correctly.
 
 > ℹ️ Make sure you have an gitlab auth provider in your devportal. See how [Add Gitlab Auth Provider 📃](https://backstage.io/docs/auth/gitlab/provider).
 
-...
-
-export default async function createPlugin(
-  env: PluginEnvironment,
-): Promise<Router> {
-  return await createRouter({
-    logger: env.logger,
-    config: env.config,
-    database: env.database,
-    discovery: env.discovery,
-    tokenManager: env.tokenManager,
-    providerFactories: {
-      ...defaultAuthProviderFactories,
-     
-+      gitlab: providers.gitlab.create({
-+        signIn: {
-+          async resolver({ result: { fullProfile } },
-+          ctx) {
-+            const userId = fullProfile.id;
-+            const userName = fullProfile.displayName
-+            if (!userId) {
-+              throw new Error(
-+                `Gitlab user profile does not contain
-+                  a userId`,
-+              );
-+            }
-+
-+            const userEntityRef = stringifyEntityRef({
-+              kind: 'User',
-+              name: userName,
-+            });
-+            
-+            return ctx.issueToken({
-+              claims: {
-+                sub: userEntityRef,
-+                ent: [userEntityRef],
-+              },
-+            });
-+            
-+          },
-+        },
-+      }),
-    },
-  });
-}
-
-```
-
 
 3- **Proxy Settings**:
 
