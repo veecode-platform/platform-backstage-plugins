@@ -47,12 +47,13 @@ The following steps must be followed to ensure that the plugin works correctly.
 
 1- **Gitlab integration**:
 
-> ℹ️ Configure gitlab integration, see how [Add Gitlab Integration 📃](https://backstage.io/docs/integrations/gitlab/locations).
+> Configure gitlab integration, see how [Add Gitlab Integration 📃](https://backstage.io/docs/integrations/gitlab/locations).
 
+<br/>
 
 2- **Gitlab auth provider**:
 
-> ℹ️ Make sure you have an gitlab auth provider in your devportal. See how [Add Gitlab Auth Provider 📃](https://backstage.io/docs/auth/gitlab/provider).
+> Make sure you have an gitlab auth provider in your devportal. See how [Add Gitlab Auth Provider 📃](https://backstage.io/docs/auth/gitlab/provider).
 
 
 3- **Proxy Settings**:
