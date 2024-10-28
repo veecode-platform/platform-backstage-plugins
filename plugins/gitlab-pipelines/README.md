@@ -79,7 +79,7 @@ proxy:
 
 
 
-4- Setting up your GitlabCi
+4- **Setting up your GitlabCi**
 
 To trigger the pipeline, either completely or by individual jobs, we have chosen to instantiate a new pipeline so that everything is always in the latest build version, rather than adding manual jobs that would invoke states from pipelines that have already been run.
 We therefore need to pay attention to how we configure our `.gitlab_ci.yml`;
@@ -140,7 +140,7 @@ For specific jobs, we will define variables for each one, according to their nee
 <br><br>
 
 
-5- To ensure that the plugin components are rendered, we need to check that the `catalog-info.yaml` of the backstage component has the following annotation: `gitlab.com/project-slug`:
+5- **To ensure that the plugin components are rendered, we need to check that the `catalog-info.yaml` of the backstage component has the following annotation: `gitlab.com/project-slug`**:
 
 ```diff
 apiVersion: backstage.io/v1alpha1
