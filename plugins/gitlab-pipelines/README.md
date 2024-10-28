@@ -45,35 +45,15 @@ The following steps must be followed to ensure that the plugin works correctly.
 
 <br>
 
+1- **Gitlab integration**:
 
-1- **Gitlab auth provider**:
+> ℹ️ Configure gitlab integration, see how [Add Gitlab Integration 📃](https://backstage.io/docs/integrations/gitlab/locations).
 
-> ℹ️ Make sure you have an gitlab auth provider in your devportal. See how [Add Gitlab Auth Provider 📃](https://backstage.io/docs/auth/gitlab/provider)
 
-As we saw in the link above, the backstage allows you to add authentication by creating an app and adding some information. However, we need to add a few more details:
+2- **Gitlab auth provider**:
 
-In the `packages > app > src > identiyProviders.ts` file.
+> ℹ️ Make sure you have an gitlab auth provider in your devportal. See how [Add Gitlab Auth Provider 📃](https://backstage.io/docs/auth/gitlab/provider).
 
-```diff
-import {
-+   gitlabAuthApiRef
-  } from '@backstage/core-plugin-api';
-
-  
-  export const providers = [
-+    {
-+      id: 'gitlab-auth-provider',
-+      title: 'Gitlab',
-+      message: 'Sign in using Gitlab',
-+      apiRef: gitlabAuthApiRef,
-+      enableExperimentalRedirectFlow: true
-+    }
-  ];
-  ```
-
-In the `packages > backend > src > plugins > auth.ts` file.
-
-```diff
 ...
 
 export default async function createPlugin(
@@ -122,32 +102,8 @@ export default async function createPlugin(
 
 ```
 
-In the `app-config.yaml` file:
 
-
-```yaml
-# add gitlab integration
-integrations:
-  gitlab:
-    - host: gitlab.com #or gitlab.company.com (depending on your gitlab instance)
-      token: ${GITLAB_TOKEN}
-      apiBaseUrl: https://gitlab.company.com/api/v4 #Only if the gitlab instance is self-hosted
-...
-# add gitlab auth
-auth:
-  environment: development
-  providers:
-    gitlab:
-      development:
-        clientId: ${AUTH_GITLAB_CLIENT_ID}
-        clientSecret: ${AUTH_GITLAB_CLIENT_SECRET}
-        audience: ${AUTH_GITLAB_AUDIENCE} #or https://gitlab.company.com (depending on your gitlab instance)
-        #callbackUrl: http://localhost:7007/api/auth/gitlab/handler/frame #optional
-```
-
-> ℹ️ Remember to set the `${AUTH_GITLAB_CLIENT_ID}` variable with your Gitlab App Client Id and `${AUTH_GITLAB_CLIENT_SECRET}` with the Gitlab App Client Secret value. The `${AUTH_GITLAB_AUDIENCE}` would normally be the url of the deployed gitlab, defaulting to `https://gitlab.com`.
-
-2- **Proxy Settings**:
+3- **Proxy Settings**:
 
 Still in `app-config.yaml`...
 
@@ -156,7 +112,7 @@ proxy:
   endpoints:
     '/gitlab/api':
       target: https://gitlab.com/api/v4  #or https://gitlab.company.com/api/v4 (According to the version of your instance)
-      credentials: require
+      credentials: dangerously-allow-unauthenticated      
       allowedHeaders: ['Authorization', 'Content-Type']
       headers:
         Accept: application/json 
@@ -169,7 +125,7 @@ proxy:
 
 
 
-3- Setting up your GitlabCi
+4- Setting up your GitlabCi
 
 To trigger the pipeline, either completely or by individual jobs, we have chosen to instantiate a new pipeline so that everything is always in the latest build version, rather than adding manual jobs that would invoke states from pipelines that have already been run.
 We therefore need to pay attention to how we configure our `.gitlab_ci.yml`;
@@ -230,7 +186,7 @@ For specific jobs, we will define variables for each one, according to their nee
 <br><br>
 
 
-4- To ensure that the plugin components are rendered, we need to check that the `catalog-info.yaml` of the backstage component has the following annotation: `gitlab.com/project-slug`:
+5- To ensure that the plugin components are rendered, we need to check that the `catalog-info.yaml` of the backstage component has the following annotation: `gitlab.com/project-slug`:
 
 ```diff
 apiVersion: backstage.io/v1alpha1

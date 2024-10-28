@@ -1,5 +1,4 @@
-import { DiscoveryApi, FetchApi } from "@backstage/core-plugin-api";
-import { ScmAuthApi } from "@backstage/integration-react";
+import { DiscoveryApi, FetchApi, OAuthApi } from "@backstage/core-plugin-api";
 import { Options } from "./types";
 import { GITLAB_PIPELINES_PROXY_URL } from "../utils/constants";
 import { JobVariablesAttributes, ListBranchResponse, ListJobsResponse, PipelineListResponse, PipelineResponse, VariablesParams } from "../utils/types";
@@ -15,32 +14,28 @@ import { GitlabPipelinesApi } from "./GitlabPipelinesApi";
 class Client {
     private readonly discoveryApi: DiscoveryApi;
     private readonly proxyPath: string;
-    private readonly scmAuthApi: ScmAuthApi;
     private readonly fetchApi: FetchApi;
+    private readonly gitlabAuthApi: OAuthApi;
 
     constructor(opts: Options) {
         this.discoveryApi = opts.discoveryApi;
-        this.scmAuthApi = opts.scmAuthApi;
-        this.proxyPath = opts.proxyPath ?? GITLAB_PIPELINES_PROXY_URL
-        this.fetchApi = opts.fetchApi
+        this.proxyPath = opts.proxyPath ?? GITLAB_PIPELINES_PROXY_URL;
+        this.fetchApi = opts.fetchApi;
+        this.gitlabAuthApi = opts.gitlabAuthApi;
     }
 
     public async fetch<T = any>(input: string, gitlabReposlug: string, init?: RequestInit): Promise<T> {
-        const { token } = await this.scmAuthApi.getCredentials({
-           url: `https://gitlab.com`,
-           additionalScope:{
-               customScopes:{
-                   gitlab: ['read_user', 'api', 'read_api', 'read_repository']
-               }
-           }
-        })
+
+        const token = await this.gitlabAuthApi.getAccessToken([
+            'read_user', 'api', 'read_api', 'read_repository'
+        ]);
 
        const apiUrl = await this.apiUrl(gitlabReposlug);
 
        const resp = await this.fetchApi.fetch(`${apiUrl}${input}`, {
            ...init,
            headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
             }
        });
 

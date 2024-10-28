@@ -1,12 +1,11 @@
-import { DiscoveryApi, FetchApi } from "@backstage/core-plugin-api";
-import { ScmAuthApi } from "@backstage/integration-react";
+import { DiscoveryApi, FetchApi, OAuthApi } from "@backstage/core-plugin-api";
 
 export type Options = {
     discoveryApi: DiscoveryApi;
-    scmAuthApi: ScmAuthApi;
     /**
     * Path to use for requests via the proxy, defaults to /gitlab/api
     */
     proxyPath?: string;
-    fetchApi: FetchApi
+    fetchApi: FetchApi;
+    gitlabAuthApi: OAuthApi,
 };
