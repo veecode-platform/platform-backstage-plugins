@@ -1,6 +1,6 @@
 {
   "name": "@veecode-platform/plugin-kong-service-manager-backend",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "exports": {
     ".": "./src/index.ts",
     "./package.json": "./package.json"
@@ -48,7 +48,7 @@
     "@backstage/plugin-permission-common": "^0.8.1",
     "@backstage/plugin-permission-node": "^0.8.4",
     "@backstage/types": "^1.1.1",
-    "@veecode-platform/backstage-plugin-kong-service-manager-common": "^0.4.1",
+    "@veecode-platform/backstage-plugin-kong-service-manager-common": "^0.4.2",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
     "git-url-parse": "^15.0.0",
