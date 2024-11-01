@@ -33,17 +33,17 @@ export const MenuOptions  : React.FC<MenuOptionsProps> = (props) => {
   return (
     <List className={classes.listComponent}>
       {MenuOptionsItems.map(i => (
-        <>
+        <div key={i.label}>
         { 
            !isSpecAvailable && i.label === "Specs" ? null 
            : (
-              <NavLink key={i.label} to={i.link} className={`${classes.link} ${activeLink === i.link ? classes.activeLink : ''}`}>
+              <NavLink to={i.link} className={`${classes.link} ${activeLink === i.link ? classes.activeLink : ''}`}>
                 <ListItem className={classes.listItem} onClick={()=>setActiveLink(i.link)}>
                   <ListItemText>{i.label}</ListItemText>
                 </ListItem>
                </NavLink>)
         } 
-        </>
+        </div>
       ))}
     </List>
   );
