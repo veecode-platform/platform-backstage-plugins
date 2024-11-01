@@ -31,7 +31,7 @@ export const SelectInstance = () => {
           <Select
             onChange={handleSelectChange}
             label=""
-            selected={instance !== "" ? instance : (kongInstances && kongInstances[0])}
+            selected={instance !== "" ? instance : (kongInstances! && kongInstances[0])}
             items={ kongInstances ? transformToSelectOptions(kongInstances as string[]) : []}
           />
         </div>
