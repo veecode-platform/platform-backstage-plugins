@@ -7,27 +7,30 @@ export const useEntityAnnotation = (entity: Entity) => {
     const kongInstance = entity.metadata.annotations?.[KONG_SERVICE_INSTANCE_ANNOTATION] ?? null;
     const kongSpec = entity.metadata.annotations?.[KONG_SERVICE_SPEC_ANNOTATION];
 
-    if (!kongInstance) {
-        return {
-          serviceName,
-          kongInstance: null,
-        };
-      }
 
-    if (!kongSpec) {
-     return {
-         serviceName,
-         kongInstance,
-         kongSpecs: null
-    };
+    const kongInstances = () => {
+      if(kongInstance){
+        if(kongInstance.includes(',')){
+          return kongInstance.split(/\s*,\s*/g);
+        }
+        return [kongInstance]
+      }
+      return null;
     }
 
-    const kongInstances = kongInstance?.includes(',') ? kongInstance.split(/\s*,\s*/g) : [kongInstance];
-    const kongSpecs = kongSpec?.includes(',') ? kongSpec.split(/\s*,\s*/g) : [kongSpec];
+    const kongSpecs = () => {
+      if(kongSpec){
+        if(kongSpec.includes(',')){
+          return kongSpec.split(/\s*,\s*/g)
+        }
+        return [kongSpec];
+      }
+      return null
+    }
 
     return {
         serviceName,
-        kongInstances,
-        kongSpecs
+        kongInstances: kongInstances(),
+        kongSpecs: kongSpecs()
     }
 }
