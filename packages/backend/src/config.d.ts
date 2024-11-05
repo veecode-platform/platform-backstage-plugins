@@ -12,5 +12,12 @@ export interface Config {
             }
           }
           }>;
-        }
+        },
+    openAi: {
+        apiBaseUrl: string;
+        apiKey: string;
+        assistant: string;
+        model: string;
+        instructions: string;
+    }
 }

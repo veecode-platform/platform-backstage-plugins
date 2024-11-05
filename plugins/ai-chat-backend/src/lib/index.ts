@@ -1,0 +1,1 @@
+export { OpenAIConfig } from "./config"

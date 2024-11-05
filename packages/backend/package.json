@@ -23,6 +23,7 @@
     "@backstage/catalog-model": "^1.7.0",
     "@backstage/config": "^1.2.0",
     "@backstage/integration": "^1.15.1",
+    "@backstage/plugin-ai-chat-backend": "workspace:^",
     "@backstage/plugin-app-backend": "^0.3.76",
     "@backstage/plugin-auth-backend": "^0.23.1",
     "@backstage/plugin-auth-backend-module-github-provider": "^0.2.1",

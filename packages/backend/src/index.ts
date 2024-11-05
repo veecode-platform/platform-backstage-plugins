@@ -57,5 +57,6 @@ backend.add(catalogPluginGitlabFillerProcessorModule);
 
 backend.add(import('@backstage/plugin-techdocs-backend/alpha'));
 
+backend.add(import('@backstage/plugin-ai-chat-backend'));
 backend.start();
 
