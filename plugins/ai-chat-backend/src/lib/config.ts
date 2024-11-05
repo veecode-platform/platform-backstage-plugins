@@ -3,13 +3,6 @@ import type { IOpenAIConfig } from './types';
 import type { LoggerService } from '@backstage/backend-plugin-api';
 import { OpenAIProviderConfig } from '../utils/types';
 
-/**
- * The configuration parameters.
- *
- * @public
- */
-
-
 export class OpenAIConfig implements IOpenAIConfig {
     constructor(
         private config: Config,
@@ -17,10 +10,10 @@ export class OpenAIConfig implements IOpenAIConfig {
     ){}
 
     getConfig() : OpenAIProviderConfig{
-        const openAIConfig = this.config.getConfig('openai');
+        const openAIConfig = this.config.get('openai');
         if(!openAIConfig) {
             this.logger.error("Not configuration found for openAI")
         }
-        return openAIConfig;
+        return openAIConfig as OpenAIProviderConfig;
     }
 }

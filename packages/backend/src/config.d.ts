@@ -13,7 +13,7 @@ export interface Config {
           }
           }>;
         },
-    openAi: {
+    openAi?: {
         apiBaseUrl: string;
         apiKey: string;
         assistant: string;
