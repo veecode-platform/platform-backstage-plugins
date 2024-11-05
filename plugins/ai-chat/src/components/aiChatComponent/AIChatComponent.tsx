@@ -1,18 +1,3 @@
-/*
- * Copyright 2024 The Backstage Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   Typography,
@@ -23,7 +8,6 @@ import {
   Tooltip,
   Paper,
 } from '@material-ui/core';
-import { makeStyles, Theme } from '@material-ui/core/styles';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -34,131 +18,16 @@ import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { useApi, errorApiRef, configApiRef } from '@backstage/core-plugin-api';
+import { useAiChatComponentStyles } from './styles';
+import { DirectoryEditor, DirectoryEditorFile, Message } from './types';
 
-interface DirectoryEditorFile {
-  path: string;
-  content: string;
-}
 
-interface DirectoryEditor {
-  files: DirectoryEditorFile[];
-}
-
-const useStyles = makeStyles((theme: Theme) => ({
-  chatContainer: {
-    position: 'fixed',
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
-    width: '300px',
-    height: '48px',
-    backgroundColor: theme.palette.background.paper,
-    transition: 'all 0.3s ease-in-out',
-    zIndex: 1000,
-    borderRadius: theme.shape.borderRadius,
-    display: 'flex',
-    flexDirection: 'column',
-    boxShadow: theme.shadows[3],
-    overflow: 'hidden',
-  },
-  chatExpanded: {
-    width: '400px',
-    height: '600px',
-  },
-  chatFullscreen: {
-    width: '80%',
-    height: '80%',
-    maxWidth: '1200px',
-    maxHeight: '800px',
-  },
-  chatHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: theme.spacing(1, 2),
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-  },
-  headerActions: {
-    display: 'flex',
-    gap: theme.spacing(1),
-  },
-  chatContent: {
-    flexGrow: 1,
-    overflowY: 'auto',
-    padding: theme.spacing(2),
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  chatInput: {
-    display: 'flex',
-    padding: theme.spacing(2),
-    borderTop: `1px solid ${theme.palette.divider}`,
-  },
-  chatTextField: {
-    flex: 1,
-    marginRight: theme.spacing(1),
-  },
-  messageContainer: {
-    display: 'flex',
-    marginBottom: theme.spacing(2),
-    padding: theme.spacing(1),
-    maxWidth: '80%',
-  },
-  userMessage: {
-    alignSelf: 'flex-end',
-    backgroundColor: theme.palette.primary.light,
-    color: theme.palette.primary.contrastText,
-  },
-  aiMessage: {
-    alignSelf: 'flex-start',
-    backgroundColor: theme.palette.grey[100],
-    color: theme.palette.common.black,
-  },
-  messageContent: {
-    display: 'flex',
-    flexDirection: 'column',
-    color: theme.palette.common.black,
-  },
-  codeBlock: {
-    position: 'relative',
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-  copyButton: {
-    position: 'absolute',
-    top: theme.spacing(1),
-    right: theme.spacing(1),
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    color: theme.palette.common.black,
-    '&:hover': {
-      backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    },
-  },
-  avatar: {
-    width: 32,
-    height: 32,
-    marginRight: theme.spacing(1),
-  },
-  closeButton: {
-    padding: 0,
-    color: theme.palette.primary.contrastText,
-  },
-  sendButton: {
-    padding: theme.spacing(1),
-  },
-}));
-
-interface Message {
-  text: string;
-  sender: 'user' | 'ai';
-  isCode?: boolean;
-}
 
 export const AIChatComponent: React.FC<{
   containerStyle?: React.CSSProperties;
   directoryEditor: DirectoryEditor;
 }> = ({ containerStyle, directoryEditor }) => {
-  const classes = useStyles();
+  const classes = useAiChatComponentStyles();
   const [isOpen, setIsOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -225,9 +94,9 @@ export const AIChatComponent: React.FC<{
 
         const data = await response.json();
         return data.content;
-      } catch (error) {
+      } catch (error:any) {
         errorApi.post(new Error(`Erro ao processar solicitação: ${error}`));
-        return `Desculpe, ocorreu um erro ao processar sua solicitação: ${error.message}`;
+        return `Desculpe, ocorreu um erro ao processar sua solicitação: ${error}`;
       } finally {
         setIsLoading(false);
       }

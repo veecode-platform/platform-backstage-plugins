@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 export { aiChatPlugin, AiChatPage } from './plugin';
-export { AIChatComponent } from './components/AIChatComponent';
+export { AIChatComponent } from './components/aiChatComponent/AIChatComponent';
