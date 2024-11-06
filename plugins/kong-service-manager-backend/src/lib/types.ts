@@ -21,7 +21,7 @@ export interface IKongConfigOptions {
     id: string,
     apiBaseUrl: string,
     workspace?: string,
-    auth: IKongAuth
+    auth?: IKongAuth
   }
 
 /**

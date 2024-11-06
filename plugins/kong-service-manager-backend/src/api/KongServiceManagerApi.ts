@@ -9,7 +9,7 @@ import {
     ServiceInfoResponse 
 } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { getPluginFieldType } from "../utils/helpers/getPluginFieldType";
-import { IKongAuth } from "../lib/types";
+//import { IKongAuth } from "../lib/types";
 import { Client } from "./client";
 
 
@@ -20,27 +20,17 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
     private async fetch <T = any>(input: string,instanceName:string, init?: RequestInit): Promise<T> {
 
         const { apiBaseUrl, auth } = this.getKongConfig(instanceName);
-        let credentials = {};
-        
-        if(auth){
-            const { kongAdmin, custom } = auth as IKongAuth;
-            if (kongAdmin) {
-                credentials = { 'Kong-Admin-Token': auth.kongAdmin };
-            } else if (custom) {
-                credentials = { [custom.header]: custom.value };
-            }
-        }
 
-        const defaultHeaders = {
+        const defaultHeaders: RequestInit = {
             headers: {
-                ...credentials,
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                ...(auth?.kongAdmin && { 'Kong-Admin-Token': auth.kongAdmin }),
+                ...(auth?.custom && { [auth.custom.header]: auth.custom.value }),
             },
             ...init
-        } as RequestInit;
-
-
+        };
+        
         const resp = await fetch(`${apiBaseUrl}${input}`, defaultHeaders);
 
         if (!resp.ok) {
