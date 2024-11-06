@@ -9,6 +9,7 @@ import {
     gitlabPlugin,
     catalogPluginGitlabFillerProcessorModule,
 } from '@immobiliarelabs/backstage-plugin-gitlab-backend';
+import { scaffolderModuleCustomExtensions } from './extensions/scaffolder/ScaffolderExtension';
 
 const backend = createBackend();
 
@@ -47,6 +48,10 @@ backend.add(import('@backstage/plugin-permission-backend/alpha'));
 // backend.add(
 //   import('@backstage/plugin-permission-backend-module-allow-all-policy'),
 // );
+
+backend.add(scaffolderModuleCustomExtensions);
+
+
 backend.add(PermissionTest)
 
 // gitlab immobiliareLabs

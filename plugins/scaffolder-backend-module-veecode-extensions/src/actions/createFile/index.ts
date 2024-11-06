@@ -19,7 +19,8 @@ import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { resolveSafeChildPath } from '@backstage/backend-common';
 import fs from 'fs-extra';
 import { InputError } from '@backstage/errors';
-import { decodeBase64 } from './utils';
+import { decodeBase64 } from '../utils/decodeBase64';
+
 
 export function createFileAction() {
   return createTemplateAction<{

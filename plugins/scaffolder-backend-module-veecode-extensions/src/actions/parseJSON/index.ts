@@ -1,4 +1,3 @@
-/* eslint-disable @backstage/no-undeclared-imports */
 /*
  * Copyright 2022 Larder Software Limited
  *
@@ -34,7 +33,7 @@ export function parseJsonAction() {
         properties: {
           resource: {
             title: 'Indicate the object you want to parse',
-            description: 'Lembre-se que este precisa estar transformado em string',
+            description: 'Remember that it must be transformed into a string',
             type: 'string',
           }
         },
