@@ -1,6 +1,6 @@
 import { createTemplateAction } from '@backstage/plugin-scaffolder-node';
 import { InputError } from '@backstage/errors';
-import { encodeToBase64 } from '../utils/encodeToBase64';
+import { encodeToBase64 } from '../../utils/encodeToBase64';
 
 export function toBase64Action() {
   return createTemplateAction<{
