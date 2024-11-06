@@ -27,6 +27,7 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import LockIcon from '@material-ui/icons/Lock';
+import { BsStars } from 'react-icons/bs';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -72,6 +73,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={LockIcon} to="vault-explorer" text="Vault"/>
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
+        <SidebarItem icon={BsStars} to="ai-chat" text="Assistant AI" />
         {/* End global nav */}
         <SidebarDivider />
         <SidebarScrollWrapper>

@@ -27,7 +27,7 @@ export const AIChatComponent: React.FC<{
   containerStyle?: React.CSSProperties;
   directoryEditor: DirectoryEditor;
 }> = ({ containerStyle, directoryEditor }) => {
-  const classes = useAiChatComponentStyles();
+ 
   const [isOpen, setIsOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -37,6 +37,7 @@ export const AIChatComponent: React.FC<{
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const errorApi = useApi(errorApiRef);
   const configApi = useApi(configApiRef);
+  const classes = useAiChatComponentStyles();
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
