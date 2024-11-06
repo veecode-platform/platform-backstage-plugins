@@ -20,29 +20,17 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
     private async fetch <T = any>(input: string,instanceName:string, init?: RequestInit): Promise<T> {
 
         const { apiBaseUrl, auth } = this.getKongConfig(instanceName);
-        let credentials = {};
 
-        if(auth){
-            const { kongAdmin, custom } = auth;
-            if (kongAdmin) {
-                credentials = { 'Kong-Admin-Token': kongAdmin };
-            }
-            if (custom) {
-                credentials = { [custom.header]: custom.value };
-            }
-
-        }
-
-        const defaultHeaders = {
+        const defaultHeaders: RequestInit = {
             headers: {
-                ...credentials,
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                ...(auth?.kongAdmin && { 'Kong-Admin-Token': auth.kongAdmin }),
+                ...(auth?.custom && { [auth.custom.header]: auth.custom.value }),
             },
             ...init
-        } as RequestInit;
-
-
+        };
+        
         const resp = await fetch(`${apiBaseUrl}${input}`, defaultHeaders);
 
         if (!resp.ok) {

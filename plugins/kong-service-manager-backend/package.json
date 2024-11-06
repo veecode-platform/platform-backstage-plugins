@@ -1,6 +1,6 @@
 {
   "name": "@veecode-platform/plugin-kong-service-manager-backend",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "exports": {
     ".": "./src/index.ts",
     "./package.json": "./package.json"
