@@ -243,7 +243,7 @@ steps:
             values:
               componentId: ${{ parameters.componentId }}
               description: ${{ parameters.description }}
-              secretInBase64: ${{ steps.toBase64.output.result.base64result}}
+              secretInBase64: ${{ steps.toBase64.output.result}}
   ...
 ```
 ---
