@@ -21,7 +21,13 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
 
         const { apiBaseUrl, auth } = this.getKongConfig(instanceName);
         const { kongAdmin, custom } = auth as IKongAuth;
-        const credentials = kongAdmin ? {'Kong-Admin-Token' : kongAdmin} : ({[`${custom!.header}`] : custom!.value} ?? {});
+        let credentials = {};
+        
+        if (kongAdmin) {
+            credentials = { 'Kong-Admin-Token': kongAdmin };
+        } else if (custom) {
+            credentials = { [custom.header]: custom.value };
+        }
 
         const defaultHeaders = {
             headers: {
