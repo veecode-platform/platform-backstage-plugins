@@ -14,6 +14,10 @@ export interface KongServiceManagerApi {
     createRouteFromService(instanceName: string, serviceIdOrName: string, config: CreateRoute): Promise<any>;
     editRouteFromService(instanceName: string, serviceIdOrName: string, routeIdOrName: string, config: CreateRoute): Promise<any>;
     removeRouteFromService(instanceName: string, serviceIdOrName: string, routeIdOrName: string): Promise<any>;
+    getRouteAssociatedPlugins(instanceName: string, routeId: string): Promise<AssociatedPluginsResponse[]>;
+    createRoutePlugin(instanceName: string, routeIdOrName: string, config: CreatePlugin): Promise<any>;
+    editRoutePlugin(instanceName: string, routeIdOrName: string, pluginId: string, config: CreatePlugin): Promise<any>;
+    removeRoutePlugin(instanceName: string, routeIdOrName: string, pluginId: string): Promise<any>
 }
 
 export type JsonObject = {

@@ -9,7 +9,6 @@ import {
     ServiceInfoResponse 
 } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { getPluginFieldType } from "../utils/helpers/getPluginFieldType";
-//import { IKongAuth } from "../lib/types";
 import { Client } from "./client";
 
 
@@ -234,6 +233,67 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         }
         const response = await this.fetch(`${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, instanceName, headers)
         return response.message
+    }
+
+    async getRouteAssociatedPlugins(instanceName:string,routeId: string): Promise<AssociatedPluginsResponse[]> {
+
+        const  workspace  = this.validateWorkspace(instanceName);;
+        const response = await this.fetch(`${workspace}/routes/${routeId}/plugins`, instanceName)
+        const mapedPluginsData: AssociatedPluginsResponse[] = response.data.map((data: { name: any; id: any; tags: any; enabled: any; created_at: any; config: any; }) => {
+            return {
+                name: data.name,
+                id: data.id,
+                tags: data.tags,
+                enabled: data.enabled,
+                createdAt: data.created_at,
+                config: data.config
+            }
+        })
+        return mapedPluginsData
+
+    }
+
+
+    async createRoutePlugin(instanceName:string,routeIdOrName: string, config: CreatePlugin): Promise<any> {
+
+        const  workspace  = this.validateWorkspace(instanceName);
+        const body = {
+            ...config
+        }
+        const headers: RequestInit = {
+            method: "POST",
+            body: JSON.stringify(body)
+        }
+        const response = await this.fetch(`${workspace}/routes/${routeIdOrName}/plugins`, instanceName, headers)
+        return response
+    }
+
+    async editRoutePlugin(instanceName:string,routeIdOrName: string, pluginId: string, config: CreatePlugin): Promise<any> {
+
+        const  workspace  = this.validateWorkspace(instanceName);
+        const body = {
+            config,
+            tags: ["devportal", "plugin-kong-service-manager"],
+            protocols: ["https", "http"],
+            enabled: true
+        }
+        const headers: RequestInit = {
+            method: "PATCH",
+            body: JSON.stringify(body)
+        }
+        const response = await this.fetch(`${workspace}/routes/${routeIdOrName}/plugins/${pluginId}`, instanceName, headers)
+        return response
+
+    }
+
+    async removeRoutePlugin(instanceName:string,routeIdOrName: string, pluginId: string): Promise<any> {
+
+        const  workspace  = this.validateWorkspace(instanceName);
+        const headers: RequestInit = {
+            method: "DELETE",
+        }
+        const response = await this.fetch(`${workspace}/routes/${routeIdOrName}/plugins/${pluginId}`, instanceName, headers)
+        return response.message;
     }
 
 }

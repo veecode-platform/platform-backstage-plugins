@@ -2,14 +2,14 @@ import { Request, Response } from "express";
 import { KongController } from "./kongController";
 import { IServiceController } from "./types";
 import { InputError, NotAllowedError, stringifyError } from "@backstage/errors";
-import { kongApplyPluginServicePermission, kongDisablePluginServicePermission, kongReadPluginsAvailableServicePermission, kongReadServicePermission, kongUpdatePluginServicePermission } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { kongApplyPluginToServicePermission, kongDisableServicePluginPermission, kongServiceReadPermission, kongUpdateServicePluginPermission } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 export class ServiceController extends KongController implements IServiceController{
   
   getServiceInfo = async (req: Request, res: Response) => {   
     const { serviceName, instanceName } = req.params;
 
-    if (!(await this.isRequestAuthorized(req, kongReadServicePermission))) {
+    if (!(await this.isRequestAuthorized(req, kongServiceReadPermission))) {
       throw new NotAllowedError('Unauthorized');
     }
 
@@ -35,62 +35,7 @@ export class ServiceController extends KongController implements IServiceControl
       throw err;
     }
   }
-
-  getEnabledPlugins = async (req: Request, res: Response) => {    
-    const { instanceName } = req.params;
-
-    if (!(await this.isRequestAuthorized(req, kongReadPluginsAvailableServicePermission))) {
-      throw new NotAllowedError('Unauthorized');
-    }
-
-    try {
-      const pluginList = await this.kongServiceManagerApi
-      .getEnabledPlugins(
-        instanceName
-      );
-
-      res.status(200).json({
-        plugins: pluginList,
-      });
-    } catch (err: any) {
-      if (err.errors) {
-        throw new InputError(
-          `Unable to fetch enabled plugins: ${stringifyError(err.errors)}`,
-        );
-      }
-      throw err;
-    }
-  };
-
-  getPluginFields = async (req: Request, res: Response) => {
-    const { instanceName, pluginName } = req.params;
-
-    if (!(await this.isRequestAuthorized(req, kongReadPluginsAvailableServicePermission))) {
-      throw new NotAllowedError('Unauthorized');
-    }
-
-    try {
-      const pluginFields = await this.kongServiceManagerApi
-      .getPluginFields(
-        instanceName,
-        pluginName,
-      );
-
-      res.status(200).json({
-        fields: pluginFields,
-      });
-    } catch (err: any) {
-      if (err.errors) {
-        throw new InputError(
-          `Unable to fetch enabled plugin field for ${pluginName}: ${stringifyError(
-            err.errors,
-          )}`,
-        );
-      }
-      throw err;
-    }
-  };
-
+ 
   getAssociatedPlugins = async (req: Request, res: Response) => {
     const { instanceName, serviceName } = req.params;
 
@@ -122,7 +67,7 @@ export class ServiceController extends KongController implements IServiceControl
     const { instanceName,serviceName } = req.params;
     const  { config }   = req.body;
 
-    if (!(await this.isRequestAuthorized(req, kongApplyPluginServicePermission ))) {
+    if (!(await this.isRequestAuthorized(req, kongApplyPluginToServicePermission ))) {
       throw new NotAllowedError('Unauthorized');
     }
 
@@ -152,7 +97,7 @@ export class ServiceController extends KongController implements IServiceControl
     const { instanceName, serviceName, pluginId } = req.params;
     const { config } = req.body;
 
-    if (!(await this.isRequestAuthorized(req, kongUpdatePluginServicePermission ))) {
+    if (!(await this.isRequestAuthorized(req, kongUpdateServicePluginPermission ))) {
       throw new NotAllowedError('Unauthorized');
     }
 
@@ -183,7 +128,7 @@ export class ServiceController extends KongController implements IServiceControl
   removeServicePlugin = async (req: Request, res: Response) => {
     const { instanceName, serviceName,pluginId } = req.params;
 
-    if (!(await this.isRequestAuthorized(req, kongDisablePluginServicePermission ))) {
+    if (!(await this.isRequestAuthorized(req, kongDisableServicePluginPermission ))) {
       throw new NotAllowedError('Unauthorized');
     }
 
