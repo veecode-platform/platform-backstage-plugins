@@ -51,7 +51,7 @@
     "@material-ui/lab": "^4.0.0-alpha.61",
     "@mui/material": "^6.1.2",
     "@octokit/rest": "^21.0.2",
-    "@veecode-platform/backstage-plugin-kong-service-manager-common": "^0.4.2",
+    "@veecode-platform/backstage-plugin-kong-service-manager-common": "^0.5.0",
     "dayjs": "^1.11.10",
     "js-base64": "^3.7.7",
     "js-yaml": "^4.1.0",
