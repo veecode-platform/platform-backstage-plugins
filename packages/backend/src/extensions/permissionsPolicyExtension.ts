@@ -4,42 +4,24 @@ import { AuthorizeResult, isPermission, PolicyDecision } from "@backstage/plugin
 import type { PermissionPolicy, PolicyQuery, PolicyQueryUser } from "@backstage/plugin-permission-node";
 import { policyExtensionPoint } from '@backstage/plugin-permission-node/alpha';
 import {
-  kongCreateRoutePermission,
-  kongApplyPluginServicePermission
+  kongRouteCreatePermission,
+  kongApplyPluginToRoutePermission
 } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
-// const kongPermissions = [
-//   kongReadServicePermission.name,
-//   kongReadPluginsAvailableServicePermission.name,
-//   kongReadRoutesPermission.name,
-//   kongApplyPluginServicePermission.name,
-//   kongUpdatePluginServicePermission.name,
-//   kongDisablePluginServicePermission.name,
-//   kongCreateRoutePermission.name,
-//   kongUpdateRoutePermission.name,
-//   kongDeleteRoutePermission.name,
-//   kongServiceManagerReadPluginsAvailableForRoutePermission.name,
-//   kongServiceManagerApplyPluginsAvailableToRoutePermission.name,
-//   kongServiceManagerReadPluginsAssociatedForRoutePermission.name,
-//   kongServiceManagerUpdatePluginOnTheRoutePermission.name,
-//   kongServiceManagerDisablePluginFromRoutePermission.name,
-//   kongServiceManagerReadSpecsPermission.name,
-//   kongServiceManagerUpdateSpecPermission.name
-// ]
 
 class PermissionModule implements PermissionPolicy {
     async handle(
         request: PolicyQuery,
         _user?: PolicyQueryUser
     ):Promise<PolicyDecision>{
-        if(isPermission(request.permission, kongCreateRoutePermission)){
+        if(isPermission(request.permission, kongRouteCreatePermission)){
         //  if(kongPermissions.includes(request.permission.name)){
             return {
                 result: AuthorizeResult.DENY
             }
         }         
         
-        if(isPermission(request.permission, kongApplyPluginServicePermission)){
+        if(isPermission(request.permission, kongApplyPluginToRoutePermission)){
           //  if(kongPermissions.includes(request.permission.name)){
               return {
                   result: AuthorizeResult.DENY
