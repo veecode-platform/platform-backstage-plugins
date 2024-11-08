@@ -12,7 +12,7 @@ import { SpecPluginsList } from '../SpecList/SpecPluginsList';
 import { isKongManagerSpecAvailable } from '../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { RequirePermission } from '@backstage/plugin-permission-react';
-import { kongReadPluginsAvailableServicePermission, kongReadRoutesPermission, kongReadServicePermission, kongReadSpecsPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { kongReadAvailablePluginsPermission, kongRoutesReadPermission, kongServiceReadPermission, kongReadSpecsPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 export const KongServiceManagerHomepage = () => {
 
@@ -36,17 +36,17 @@ export const KongServiceManagerHomepage = () => {
           <Grid item lg={10}>
             <Routes>
               <Route path="" element={
-                 <RequirePermission permission={kongReadServicePermission}>
+                 <RequirePermission permission={kongServiceReadPermission}>
                    <AboutPage />
                 </RequirePermission>
               } />
               <Route path="all-routes" element={
-                <RequirePermission permission={kongReadRoutesPermission}>
+                <RequirePermission permission={kongRoutesReadPermission}>
                 <RoutesList />
                 </RequirePermission>
                 } />
               <Route path="all-plugins" element={
-                <RequirePermission permission={kongReadPluginsAvailableServicePermission}>
+                <RequirePermission permission={kongReadAvailablePluginsPermission}>
                  <PluginsList />
                 </RequirePermission>
                 } />
