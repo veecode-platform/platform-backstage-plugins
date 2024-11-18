@@ -44,7 +44,7 @@ yarn add --cwd packages/backend @veecode-platform/backstage-plugin-veecode-assis
 This plugin provides the following permissions:
 
 - `veecodeAssistantAIReadPermission` 👉 Permission to make the plugin visible and access it.
-- `veecodeAssistantAIAutoScaffReadPermission` 👉 Permission to make the template generation feature visible.
+- `veecodeAssistantAIScaffolderReadPermission` 👉 Permission to make the template generation feature visible.
 - `veecodeAssistantAIAnalyzerReadPermission` 👉 Permission to make the local repository analysis feature visible.
 
 

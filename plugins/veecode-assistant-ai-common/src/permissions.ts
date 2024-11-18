@@ -11,8 +11,8 @@ export const veecodeAssistantAIReadPermission = createPermission({
 });
 
 
-export const veecodeAssistantAIAutoScaffReadPermission = createPermission({
-    name: 'assistant.ai.auto.scaff.read',
+export const veecodeAssistantAIScaffolderReadPermission = createPermission({
+    name: 'assistant.ai.scaffolder.read',
     attributes: { action: 'read'}
 });
 
