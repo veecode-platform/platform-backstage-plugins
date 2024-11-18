@@ -12,5 +12,22 @@ export interface Config {
             }
           }
           }>;
+        };
+    veecodeAssistantAI?:{
+      openai?: {
+        apiBaseUrl: string;
+        apiKey: string;
+        assistant: string;
+        model: string;
+        instructions: string;
+        timeout?:string;
+        dataset?: {
+          model?: string;
+          references?: Array<{
+            id: string;
+            source: string;
+            }>;
         }
+      }
+    }
 }
