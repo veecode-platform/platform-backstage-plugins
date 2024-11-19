@@ -1,14 +1,14 @@
-import { HttpAuthService, PermissionsService } from "@backstage/backend-plugin-api";
 import { AuthorizeResult, BasicPermission } from "@backstage/plugin-permission-common";
 import { OpenAIApi } from "../api";
-import { Request } from "express";
+import type { HttpAuthService, PermissionsService } from "@backstage/backend-plugin-api";
+import type { Request } from "express";
 
 
 export abstract class AssistantAIController {
     constructor(
         protected openAIApi: OpenAIApi,
         protected httpAuth: HttpAuthService,
-        protected permissions: PermissionsService
+        protected permissions: PermissionsService,
     ){}
 
     async isRequestAuthorized(req:Request, permission: BasicPermission): Promise<boolean>{

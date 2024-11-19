@@ -5,8 +5,8 @@ import { OpenAIProviderConfig } from '../utils/types';
 
 export class VeecodeAssistantAIConfig implements VeecodeAIConfig {
     constructor(
-        readonly config: Config,
-        readonly logger: LoggerService
+        protected config: Config,
+        protected logger: LoggerService
     ){}
 
     getOpenAIConfig() : OpenAIProviderConfig{

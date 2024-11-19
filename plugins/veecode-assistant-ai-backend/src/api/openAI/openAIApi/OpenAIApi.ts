@@ -4,26 +4,39 @@ import { AssistantAI } from "../assistantAI";
 import { OpenAIClient } from "../openAIClient"
 import { ThreadsManager } from "../threadsManager";
 import { IOpenAIApi } from "../types";
+import { VectorStoreManager } from "../vectorStoreManager";
 
-export class OpenAIApi extends OpenAIClient implements  IOpenAIApi{
+export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
 
+  private vectorStoreManager: VectorStoreManager;
   private assistantAI: AssistantAI;
   private threadsManager: ThreadsManager;
 
   constructor(config: Config, logger: LoggerService) {
     super(config, logger);
+    this.vectorStoreManager = new VectorStoreManager(config, logger);
     this.assistantAI = new AssistantAI(config, logger)
     this.threadsManager = new ThreadsManager(config, logger);
   }
 
-  async getAssistant(vectorStoreId: string) {
+  async createVectorStore(name:string){
+      const vectorStore = await this.vectorStoreManager.createVector(name);
+      return vectorStore;
+  }
+
+  async updateVectorStore(vectorStoreId:string,files: File[]){
+    await this.vectorStoreManager.uploadFiles(vectorStoreId, files as File[]);
+  }
+
+  async initializeAssistant(vectorStoreId: string, useDataset?:boolean) {
     try {
       this.logger.info("Check Assistant Available...");
-      const { assistantName } = this.getOpenAIConfig();
+      const { assistantName, instructions, model, dataset } = this.getOpenAIConfig();
       const assistants = await this.client.beta.assistants.list();
       const existingAssistant = assistantName ? assistants.data.find((a: any) => a.name === assistantName) : false;
+      const modelUses = (useDataset && dataset) ? dataset.model : model;
 
-      if (!existingAssistant) return this.assistantAI.initializeAssistant(vectorStoreId);
+      if (!existingAssistant) return this.assistantAI.initializeAssistant(vectorStoreId,assistantName,instructions,modelUses);
 
       this.logger.info(`Assistant found: ${existingAssistant.id}`);
       return existingAssistant.id;
@@ -33,10 +46,10 @@ export class OpenAIApi extends OpenAIClient implements  IOpenAIApi{
     }
   }
 
-  async startChat(vectorStoreId: string) {
+  async startChat(vectorStoreId: string, useDataset?:boolean) {
     try {
       this.logger.info('starting chat...');
-      const assistant = await this.getAssistant(vectorStoreId);
+      const assistant = await this.initializeAssistant(vectorStoreId,useDataset);
       const thread = await this.threadsManager.createThread();
       this.logger.info(`Thread Created: ${thread.id}`);
       return { threadId: thread.id, assistantId: assistant };
@@ -45,21 +58,19 @@ export class OpenAIApi extends OpenAIClient implements  IOpenAIApi{
     }
   }
 
-  async executeAndCreateRun(vectorStoreId: string, threadId: string, template: string) {
-    // TODO check template
-    const assistantId = await this.getAssistant(vectorStoreId);
-    const run = await this.threadsManager.executeAndCreateRun(threadId, assistantId, template)
+  async executeAndCreateRun(assistantId: string, threadId: string, template: string) {
+    const run = await this.threadsManager.executeAndCreateRun(threadId, assistantId, template ?? null)
     return run;
   }
 
-  async getChat(vectoreStoreId: string, threadId: string, message: string, templateContent: string) {
+  async getChat(assistantId: string, threadId: string, message: string, template?: string) {
     try {
 
       // Add Message to Thread
       await this.threadsManager.addMessageToThread(threadId, message);
 
       // execute and create a run
-      const run = await this.executeAndCreateRun(vectoreStoreId, threadId, templateContent);
+      const run = await this.executeAndCreateRun(assistantId,threadId, template!); // TODO check template conditional params
 
       // await completion of the run
       let runValidate = await this.threadsManager.checkRunStatus(threadId, run.id);
@@ -78,6 +89,16 @@ export class OpenAIApi extends OpenAIClient implements  IOpenAIApi{
     } catch (error: any) {
       throw new Error(`Erro to get chat:  ${error}`);
     }
+  }
+
+  async clearHistory(vectorStoreId:string,assistantId:string, threadId:string){
+    this.logger.info('clearing History...');
+    // delete vectorStore
+    await this.vectorStoreManager.deleteVectorStore(vectorStoreId);
+    // delete threads
+    await this.threadsManager.deleteThread(threadId);
+    // delete assistant
+    await this.assistantAI.deleteAssistant(assistantId);
   }
 
 }

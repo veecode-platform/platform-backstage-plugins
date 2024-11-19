@@ -1,9 +1,11 @@
+import type { AssistantDeleted } from 'openai/resources/beta/assistants';
 import type {
   MessageContent,
   MessagesPage,
 } from 'openai/resources/beta/threads/messages';
 import type { Run } from 'openai/resources/beta/threads/runs/runs';
-import type { Thread } from 'openai/resources/beta/threads/threads';
+import type { Thread, ThreadDeleted } from 'openai/resources/beta/threads/threads';
+import type { VectorStoreDeleted } from 'openai/resources/beta/vector-stores/vector-stores';
 
 /**
  * @public
@@ -11,14 +13,10 @@ import type { Thread } from 'openai/resources/beta/threads/threads';
  */
 
 export interface IAssistantAI {
-  initializeAssistant(vectorStoreId: string): Promise<string>;
-  evaluateCodeBestPractices(): Promise<void>;
-  checkTestCoverage(): Promise<void>;
-  generateTests(): Promise<void>;
-  generateDockerFile(): Promise<void>;
-  checkVulnerabilities(): Promise<void>;
-  generateCICD(): Promise<void>;
-  freeChat(question: string): Promise<void>;
+  initializeAssistant(vectorStoreId: string, assistantName: string, model: string, instructions: string): Promise<string>;
+  deleteAssistant(assistantId: string): Promise<AssistantDeleted & {
+    _request_id?: string | null;
+}>
 }
 
 /**
@@ -36,14 +34,17 @@ export interface IChatFactory {
  */
 
 export interface IOpenAIApi {
-  getAssistant(vectorStoreId: string): Promise<string>;
-  startChat(vectorStoreId: string): Promise<ThreadCreatedResponse>;
+  createVectorStore(name: string): Promise<string>;
+  updateVectorStore(vectorStoreId: string, files: File[]): Promise<void>;
+  initializeAssistant(vectorStoreId: string,useDataset?:boolean): Promise<string>;
+  startChat(vectorStoreId: string,useDataset?:boolean): Promise<ThreadCreatedResponse>;
   getChat(
     vectoreStoreId: string,
     threadId: string,
     message: string,
     template: string,
   ): Promise<MessageContent[]>;
+  clearHistory(vectoreStoreId:string,assistantId: string, threadId: string): Promise<void>
 }
 
 export type ThreadCreatedResponse = {
@@ -81,6 +82,9 @@ export interface IThreadsManager {
     }
   >;
   listMessages(threadId: string): Promise<MessagesPage>;
+  deleteThread(threadId: string): Promise<ThreadDeleted & {
+    _request_id?: string | null;
+}>
 }
 
 /**
@@ -90,5 +94,8 @@ export interface IThreadsManager {
 
 export interface IVectorStoreManager {
    createVector(name: string): Promise<string>;
-   uploadFiles(vectorStoreId: string, files: File[]): Promise<void>
+   uploadFiles(vectorStoreId: string, files: File[]): Promise<void>;
+   deleteVectorStore(vectoreStoreId: string): Promise<VectorStoreDeleted & {
+    _request_id?: string | null;
+}>
 }

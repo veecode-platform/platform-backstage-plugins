@@ -1,25 +1,11 @@
-import { ChatFactory } from "../chatFactory";
 import { OpenAIClient } from "../openAIClient";
-import type { Config } from '@backstage/config';
-import type { LoggerService } from "@backstage/backend-plugin-api";
-import { chatEnum } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common"
 import { IAssistantAI } from "../types";
 
 export class AssistantAI extends OpenAIClient implements IAssistantAI {
 
-  private chatOpenAI: ChatFactory;
-
-  constructor(config:Config, logger: LoggerService){
-    super(config, logger);
-    this.chatOpenAI = new ChatFactory(config, logger);
-  }
-
-    async initializeAssistant(vectorStoreId: string){
+    async initializeAssistant(vectorStoreId: string, assistantName: string, instructions: string,model: string,){
         try{
            this.logger.info("Initializing assistant...");
-
-           const { assistantName, instructions, model } = this.getOpenAIConfig();
-
            const assistant = await this.client.beta.assistants.create({
             name: assistantName,
             instructions: instructions,
@@ -44,31 +30,14 @@ export class AssistantAI extends OpenAIClient implements IAssistantAI {
         }
     }
 
-    async evaluateCodeBestPractices() {
-      await this.chatOpenAI.createChat(chatEnum.evaluateCode);
-    }
-  
-    async checkTestCoverage() {
-      await this.chatOpenAI.createChat(chatEnum.checkTest);
-    }
-  
-    async generateTests() {
-      await this.chatOpenAI.createChat(chatEnum.generateTests);
-    }
-  
-    async generateDockerFile() {
-      await this.chatOpenAI.createChat(chatEnum.generateDockerFile);
-    }
-  
-    async checkVulnerabilities() {
-      await this.chatOpenAI.createChat(chatEnum.checkVulnerabilities);
-    }
-  
-    async generateCICD() {
-      await this.chatOpenAI.createChat(chatEnum.generateCICD);
-    }
-  
-    async freeChat(question: string) {
-      await this.chatOpenAI.createChat(question);
+    async deleteAssistant(assistantId:string){
+      try{
+        const response = await this.client.beta.assistants.del(assistantId);
+        this.logger.info(`Assistant Deleted, ID: ${assistantId}`);
+        return response
+      }
+      catch(error: any){
+        throw new Error(`Erro to delete assistant:  ${error}`);
+      }
     }
 }

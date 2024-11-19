@@ -26,17 +26,20 @@ export class ThreadsManager extends OpenAIClient implements IThreadsManager {
 
     async executeAndCreateRun(threadId: string, assistantId: string, template: string) {
         try {
-            const run = await this.client.beta.threads.runs.create(
-                threadId,
-                {
-                    assistant_id: assistantId,
-                    instructions: `
+            const instructions = template ? {
+                instructions: `
                         You are an expert assistant in Spotify Backstage. 
                         You have access to the content of the current template, 
                         which is available as additional context. 
                         Use this information to provide more accurate and relevant answers. 
                         Template content:\n\n${template}
                     `,
+            } : {};
+            const run = await this.client.beta.threads.runs.create(
+                threadId,
+                {
+                    assistant_id: assistantId,
+                    ...instructions
                 }
             );
             return run;
@@ -65,6 +68,15 @@ export class ThreadsManager extends OpenAIClient implements IThreadsManager {
             return messages;
         } catch (error: any) {
             throw new Error(`Erro to message list in thread [thread_id: ${threadId}] :  ${error}`);
+        }
+    }
+
+    async deleteThread(threadId:string){
+        try{
+            const response =  await this.client.beta.threads.del(threadId);
+            return response;
+        }catch (error: any) {
+            throw new Error(`Erro to delete thread [thread_id: ${threadId}] :  ${error}`);
         }
     }
 }
