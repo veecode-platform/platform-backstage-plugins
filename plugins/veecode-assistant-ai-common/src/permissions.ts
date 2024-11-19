@@ -20,3 +20,9 @@ export const veecodeAssistantAIAnalyzerReadPermission = createPermission({
     name: 'assistant.ai.analyzer.read',
     attributes: { action: 'read'}
 });
+
+export const veecodeAssistantAIPermissions = {
+    veecodeAssistantAIReadPermission,
+    veecodeAssistantAIScaffolderReadPermission,
+    veecodeAssistantAIAnalyzerReadPermission
+}
