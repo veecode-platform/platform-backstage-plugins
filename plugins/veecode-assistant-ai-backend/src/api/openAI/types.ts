@@ -1,11 +1,12 @@
 import type { AssistantDeleted } from 'openai/resources/beta/assistants';
 import type {
-  MessageContent,
+  Message,
   MessagesPage,
 } from 'openai/resources/beta/threads/messages';
 import type { Run } from 'openai/resources/beta/threads/runs/runs';
 import type { Thread, ThreadDeleted } from 'openai/resources/beta/threads/threads';
 import type { VectorStoreDeleted } from 'openai/resources/beta/vector-stores/vector-stores';
+import { FileContent } from '../../utils/types';
 
 /**
  * @public
@@ -43,7 +44,10 @@ export interface IOpenAIApi {
     threadId: string,
     message: string,
     template: string,
-  ): Promise<MessageContent[]>;
+  ): Promise<{
+    messages: Message[];
+    generatedFiles: FileContent[];
+}>;
   clearHistory(vectoreStoreId:string,assistantId: string, threadId: string): Promise<void>
 }
 
