@@ -3,6 +3,7 @@ import {
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
 import { createRouter } from './services/router';
+import { githubAuthApiRef } from '@backstage/core-plugin-api';
 
 /**
  * veecodeAssistantAiPlugin backend plugin
@@ -29,9 +30,9 @@ export const veecodeAssistantAiPlugin = createBackendPlugin({
         httpRouter,
         permissions,
         discovery,
-        config
+        config,
       }) {
-        if(config.has('openai'))
+        if(config.has('veecodeAssistantAI'))
           {
             httpRouter.use(
             await createRouter({
