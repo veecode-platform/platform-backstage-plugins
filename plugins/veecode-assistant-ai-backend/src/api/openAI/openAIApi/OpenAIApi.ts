@@ -5,6 +5,7 @@ import { OpenAIClient } from "../openAIClient"
 import { ThreadsManager } from "../threadsManager";
 import { IOpenAIApi } from "../types";
 import { VectorStoreManager } from "../vectorStoreManager";
+import { extractFilesFromMessage } from "../../../utils/helpers/extractFilesFromMessage";
 
 export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
 
@@ -83,8 +84,15 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
       // Get the latest messages
       const latestMessage = await this.threadsManager.listMessages(threadId);
 
-      // TO DO check message
-      return latestMessage.data[0].content;
+      // TODO check message
+      // return latestMessage.data[0].content;
+
+      // Process messages to extract generated files
+      const generatedFiles = latestMessage.data
+      .map((msg: any) => extractFilesFromMessage(msg.content))
+      .flat();
+
+    return { messages: latestMessage.data, generatedFiles };
 
     } catch (error: any) {
       throw new Error(`Erro to get chat:  ${error}`);
