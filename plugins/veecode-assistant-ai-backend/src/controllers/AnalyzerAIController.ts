@@ -6,9 +6,17 @@ import { IAnalyzerAIControler } from './types';
 
 export class AnalyzerAIController extends AssistantAIController implements IAnalyzerAIControler{
 
-  async uploadFiles (req: Request, res: Response) {
 
-    const { repoName, files } = req.body;
+  private returnToken(req:Request){
+    return this.getToken(req);
+  }
+  
+
+  async downloadFiles (req: Request, res: Response) {
+
+    const { repoName, location } = req.body;
+    const token = this.returnToken(req);
+    const gitManager = this.gitProviderManager(token)
 
     if (
       !(await this.isRequestAuthorized(
@@ -21,6 +29,8 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
 
     try {
       const vectorStoreId = await this.openAIApi.createVectorStore(repoName);
+
+      const files = await gitManager.downloadRepoFiles(location) as File[]
 
       if(!files || files.length === 0){
         res.status(400).json({error: "No files uploaded"})
@@ -60,11 +70,14 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
     try {
       const { threadId, assistantId } = await this.openAIApi.startChat(vectorStoreId);
     
-      const response = await this.openAIApi.getChat(assistantId, threadId, message)
+      const response = await this.openAIApi.getChat(assistantId, threadId, message);
+
+      const generatedFiles = response.generatedFiles || [];
 
       res.status(200).json({
         message: "Analysis completed",
-        data: response
+        data: response,
+        generatedFiles
       });
     } catch (err: any) {
       if (err.errors) {
