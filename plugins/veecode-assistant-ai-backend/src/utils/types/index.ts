@@ -32,3 +32,7 @@ export interface OpenAIOptions {
   }
  
   
+  export interface FileContent {
+    name: string;
+    content: string;
+  }

@@ -7,15 +7,14 @@ import { AnalyzerAIController, ScaffolderAIController } from '../controllers';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
 import { veecodeAssistantAIPermissions } from '@veecode-platform/backstage-plugin-veecode-assistant-ai-common';
 
-
 export async function createRouter(
   options: OpenAIOptions,
 ): Promise<express.Router> {
-  const { logger, config } = options;
+  const { logger, config, httpAuth, permissions } = options;
   
-  const openAIApi = new OpenAIApi(options.config,options.logger);
-  const analyzerAIController = new AnalyzerAIController(openAIApi, options.httpAuth, options.permissions);
-  const scaffolderAIController = new ScaffolderAIController(openAIApi, options.httpAuth, options.permissions);
+  const openAIApi = new OpenAIApi(config,logger);
+  const analyzerAIController = new AnalyzerAIController(openAIApi, httpAuth, permissions,config,logger);
+  const scaffolderAIController = new ScaffolderAIController(openAIApi, httpAuth, permissions,config,logger);
   
   const router = Router();
   router.use(express.json());
@@ -26,7 +25,7 @@ export async function createRouter(
     })
   );
 
-  router.post("/upload-repo", analyzerAIController.uploadFiles as RequestHandler);
+  router.post("/submit-repo", analyzerAIController.downloadFiles as RequestHandler);
   router.post("/chat-analyze-repo", analyzerAIController.analyzeAndStartChat as RequestHandler);
   router.delete("/chat-analyze", analyzerAIController.deleteChat as RequestHandler);
   router.post("/upload-template", scaffolderAIController.uploadTemplateFiles as RequestHandler);
