@@ -3,8 +3,6 @@ import {
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
 import { createRouter } from './services/router';
-import { githubAuthApiRef } from '@backstage/core-plugin-api';
-
 /**
  * veecodeAssistantAiPlugin backend plugin
  *
