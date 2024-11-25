@@ -212,7 +212,9 @@ class Client {
   }
 
   async listWorkflowsDispatchParameters(hostname:string, githubRepoSlug:string, filePath: string, branch:string):Promise<WorkflowDispatchParameters[]>{
-    const yamlContent = await this.getFileContentFromPath(hostname, githubRepoSlug, filePath, branch);
+      
+    const dynamicWorkflow = filePath.startsWith("dynamic/");
+    const yamlContent = dynamicWorkflow ? [] : await this.getFileContentFromPath(hostname, githubRepoSlug, filePath, branch);
     if (!yamlContent.on?.workflow_dispatch?.inputs) return [];
     const inputs = yamlContent.on.workflow_dispatch?.inputs;
 
@@ -260,6 +262,7 @@ class Client {
               status: StatusWorkflowEnum.completed,
               conclusion: StatusWorkflowEnum.failure,
             };
+
         return {
           workflow: {
             id: workflow.id,
@@ -270,7 +273,10 @@ class Client {
             createdAt: workflow.created_at,
             updatedAt: workflow.updated_at,
           },
-          latestRun: latestWorkflowRunData,
+          latestRun: {
+            ...latestWorkflowRunData,
+            status: workflow.path.startsWith("dynamic/") ? StatusWorkflowEnum.actionRequired : latestWorkflowRunData.status,
+          },
           parameters: dispatchParameters,
         };
       }),
