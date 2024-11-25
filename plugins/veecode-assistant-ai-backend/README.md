@@ -237,6 +237,7 @@ rds = { instance_class = "db.t3.small" deletion_protection = false multi_az = fa
 **output**:
 Of course! Here is a complete Backstage template based on the configuration provided for your RDS module:
 
+```yaml
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
@@ -406,7 +407,8 @@ spec:
             password:
               title: "Password"
               type: string
-              default: "password_secreto"
+              default: "password_secret"
+```
               
 -if you replace the passwords, check the actual ones and adjust the settings as necessary for your environment.
 
