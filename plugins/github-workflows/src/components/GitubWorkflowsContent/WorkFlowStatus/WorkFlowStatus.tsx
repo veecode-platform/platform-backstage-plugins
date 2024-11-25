@@ -31,13 +31,18 @@ export const WorkFlowStatus : React.FC<WorkFlowStatusProps> = (props) => {
                     <Queued/> {!icon && "Queued"}
                 </div>
             );
-        case StatusWorkflowEnum.actionRequired:
         case StatusWorkflowEnum.neutral:
         case StatusWorkflowEnum.stale:
         case StatusWorkflowEnum.requested:
             return (
                 <div style={styles}>
                     <RiErrorWarningFill size={20} color="orange" /> {!icon && "Please wait"}
+                </div>
+            );
+        case StatusWorkflowEnum.actionRequired:
+            return (
+                <div style={styles}>
+                    <RiErrorWarningFill size={20} color="orange" /> {!icon && "Workflow dynamic"}
                 </div>
             );
         case StatusWorkflowEnum.failure:
