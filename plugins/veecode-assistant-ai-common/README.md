@@ -1,7 +1,7 @@
 # VeeCode Assistant AI Common
 
 
-<!-- This plugin provides typing and permissions for the  [Kong Service Manager](https://platform.vee.codes/plugin/kong-service-manager/)  & [Kong Service Manager Backend](https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/kong-service-manager-backend/README.md). -->
+This plugin provides typing and permissions for the  [VeeCode Assistant AI](https://platform.vee.codes/plugin/veecode-assistant-ai/)  & [VeeCode Assistant AI Backend](https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/veecode-assistant-ai-backend/README.md).
 
 
 ### Our community
