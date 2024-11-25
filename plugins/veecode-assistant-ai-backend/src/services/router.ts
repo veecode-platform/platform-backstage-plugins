@@ -1,14 +1,14 @@
 import { MiddlewareFactory } from '@backstage/backend-defaults/rootHttpRouter';
 import express, { RequestHandler } from 'express';
 import Router from 'express-promise-router';
-import { OpenAIOptions } from '../utils/types';
+import { AssistantAIOptions } from '../utils/types';
 import { OpenAIApi } from '../api';
 import { AnalyzerAIController, ScaffolderAIController } from '../controllers';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
 import { veecodeAssistantAIPermissions } from '@veecode-platform/backstage-plugin-veecode-assistant-ai-common';
 
 export async function createRouter(
-  options: OpenAIOptions,
+  options: AssistantAIOptions,
 ): Promise<express.Router> {
   const { logger, config, httpAuth, permissions } = options;
   
@@ -27,7 +27,7 @@ export async function createRouter(
 
   router.post("/submit-repo", analyzerAIController.downloadFiles as RequestHandler);
   router.post("/chat-analyze-repo", analyzerAIController.analyzeAndStartChat as RequestHandler);
-  router.delete("/chat-analyze", analyzerAIController.deleteChat as RequestHandler);
+  router.delete("/chat-analyze-repo", analyzerAIController.deleteChat as RequestHandler);
   router.post("/upload-template", scaffolderAIController.uploadTemplateFiles as RequestHandler);
   router.post("/chat-template", scaffolderAIController.startChat as RequestHandler);
   router.delete("/chat-template", scaffolderAIController.deleteChat as RequestHandler);
