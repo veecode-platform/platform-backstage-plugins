@@ -8,8 +8,9 @@ import { Base64 } from 'js-base64';
 import { generateBranchName } from "../../../utils/helpers/generateBranchName";
 import type { Readable } from "stream";
 import { extractFilesFromArchive } from "../../../utils/helpers/extractFilesFromArchive";
+import { IGithubManager } from "./types";
 
-export class GithubManager {
+export class GithubManager implements IGithubManager {
 
   private readonly token: string;
     
@@ -29,7 +30,7 @@ export class GithubManager {
         const githubIntegrationConfig = configs.find(v => v.host === hostname);
         const baseUrl = githubIntegrationConfig?.apiBaseUrl;
         return new Octokit({ auth: this.token, baseUrl });
-    
+
      }
 
     async getFilesFromRepo(url:string){

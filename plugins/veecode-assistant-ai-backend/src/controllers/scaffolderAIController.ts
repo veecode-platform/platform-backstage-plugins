@@ -2,8 +2,9 @@ import { Request, Response } from 'express';
 import { AssistantAIController } from './AssistantAIController';
 import { veecodeAssistantAIScaffolderReadPermission } from '@veecode-platform/backstage-plugin-veecode-assistant-ai-common';
 import { InputError, NotAllowedError, stringifyError } from '@backstage/errors';
+import { IScaffolderAIControler } from './types';
 
-export class ScaffolderAIController extends AssistantAIController {
+export class ScaffolderAIController extends AssistantAIController implements IScaffolderAIControler{
 
   async uploadTemplateFiles (req: Request, res: Response) {
 

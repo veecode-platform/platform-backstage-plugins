@@ -49,7 +49,7 @@ export class GitManager {
                return this.githubManager.createPullRequest(files,url,title,message);
             }
             case url.includes('gitlab'): {
-                return this.gitlabManager.createPullRequest(files,url,title,message);
+                return this.gitlabManager.createMergeRequest(files,url,title,message);
              }
             default:
               throw new Error('Git provider error: unimplemented!');

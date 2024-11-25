@@ -7,11 +7,12 @@ import { extractGitLabInfo } from "../../../utils/helpers/extractGitlabInfo";
 import { extractFilesFromArchive } from "../../../utils/helpers/extractFilesFromArchive";
 import { generateBranchName } from "../../../utils/helpers/generateBranchName";
 import { Base64 } from "js-base64";
+import { IGitlabManager } from "./types";
+import { readGitLabIntegrationConfigs } from "@backstage/integration/index";
 
-export class GitlabManager {
+export class GitlabManager implements IGitlabManager {
 
     private readonly token: string;
-    private readonly gitlabApi: InstanceType<typeof Gitlab>;
 
     constructor(
         private config: Config,
@@ -19,21 +20,26 @@ export class GitlabManager {
         token: string
     ) {
         this.token = token;
-        const host = this.config.getOptionalString("integrations.gitlab.host") || "https://gitlab.com";
-        this.gitlabApi = new Gitlab({
-            host,
-            token: this.token,
-        });
+    }
+
+    private async getGitlabApi(hostname: string = 'gitlab.com'){
+        const configs = readGitLabIntegrationConfigs(
+            this.config.getOptionalConfigArray('integrations.gitlab') ?? [],
+          );
+          const gitlabIntegrationConfig = configs.find(v => v.host === hostname);
+          const baseUrl = gitlabIntegrationConfig?.apiBaseUrl;
+          return new Gitlab({ host:baseUrl, token: this.token }); // TODO check baseurl or host
     }
 
     async getFilesFromRepo(url: string) {
         this.logger.info("Downloading files from Gitlab repository");
-        const { group, repo, branch } = extractGitLabInfo(url);
+        const { host, group, repo, branch } = extractGitLabInfo(url);
 
         const projectId = encodeURIComponent(`${group}/${repo}`);
 
         try {
-            const archive = await this.gitlabApi.Repositories.showArchive(projectId, { sha: branch });
+            const gitlabApi = await this.getGitlabApi(host);
+            const archive = await gitlabApi.Repositories.showArchive(projectId, { sha: branch });
 
             if (!archive) {
                 throw new Error("Failed to download the archive from the repository")
@@ -45,21 +51,22 @@ export class GitlabManager {
         }
     }
 
-    async createPullRequest(
+    async createMergeRequest(
         files: FileContent[],
         url: string,
         title: string,
         message: string) {
 
-        const { group, repo } = extractGitLabInfo(url);
+        const { host, group, repo } = extractGitLabInfo(url);
 
+        const gitlabApi = await this.getGitlabApi(host);
         const projectId = encodeURIComponent(`${group}/${repo}`);
         const branchName = generateBranchName(title);
         const baseBranch = "main";
 
         try {
             // create branch
-            await this.gitlabApi.Branches.create(projectId, branchName, baseBranch);
+            await gitlabApi.Branches.create(projectId, branchName, baseBranch);
 
             // Add files to the branch
             for (const file of files) {
@@ -68,7 +75,7 @@ export class GitlabManager {
                 let fileExists = false;
 
                 try {
-                    await this.gitlabApi.RepositoryFiles.show(projectId, name, branchName);
+                    await gitlabApi.RepositoryFiles.show(projectId, name, branchName);
                     fileExists = true;
                 } catch (error: any) {
                     if (error.response?.status !== 404) {
@@ -78,7 +85,7 @@ export class GitlabManager {
 
                 if (fileExists) {
                     // Update existing file
-                    await this.gitlabApi.RepositoryFiles.edit(
+                    await gitlabApi.RepositoryFiles.edit(
                         projectId,
                         name,
                         branchName,
@@ -87,7 +94,7 @@ export class GitlabManager {
                     );
                 } else {
                     // Create new file
-                    await this.gitlabApi.RepositoryFiles.create(
+                    await gitlabApi.RepositoryFiles.create(
                         projectId,
                         name,
                         branchName,
@@ -99,7 +106,7 @@ export class GitlabManager {
 
             // Create merge request
             this.logger.info(`Creating merge request for branch ${branchName}...`);
-            const mergeRequest = await this.gitlabApi.MergeRequests.create(
+            const mergeRequest = await gitlabApi.MergeRequests.create(
                 projectId,
                 branchName,
                 baseBranch,
@@ -111,7 +118,7 @@ export class GitlabManager {
 
             return {
                 status: "success",
-                link: mergeRequest.web_url,
+                link: mergeRequest.web_url as string,
                 message: "Merge request created successfuly!"
             }
         } catch (error: any) {

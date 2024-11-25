@@ -21,7 +21,7 @@ export interface IDataSetReference {
   source: string
 }
 
-export interface OpenAIOptions {
+export interface AssistantAIOptions {
     logger: LoggerService;
     auth: AuthService;
     httpAuth: HttpAuthService;
