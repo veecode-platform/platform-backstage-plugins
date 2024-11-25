@@ -2,13 +2,13 @@
 
 ## Intro 💡
 
-O VeeCode Assistant AI Backend é um plugin que provisiona a comunicação com as APIS dos motores de IA, processando os dados, criando vetores e gerenciando chats e os disponibiliza para o plugin de front `veecode-assistant-ai`.
-Como primeira entrega apenas uma engine está disponível, a **openAI**.
+VeeCode Assistant AI Backend is a plugin that provisions communication with the APIS of the AI engines, processing the data, creating vectors and managing chats and makes them available to the front-end plugin `veecode-assistant-ai`.
+As a first delivery only one engine is available, the **openAI**.
 
 ## Pre-requisites
 
 - Get an updated version of Backstage.
-- Ter um token da openai
+- Have an openai token.
   
 
 ## Installation 🔧
@@ -38,13 +38,13 @@ veecodeAssistantAI:
   openai:
     apiBaseUrl: https://api.openai.com/v1
     apiKey: ${OPENAI_API_KEY}
-    assistantName: VeeCode Platform AI #por padrão temos o VeeCode Platform AI
-    model: gpt-4o #O modelo desejado, para melhores resultados utilize o gpt-4o >
-    instructions: 'Você é um assistente especializado na plataforma VeeCode.' #Campo de instruções para a assitente, por padrão defina o básico
+    assistantName: VeeCode Platform AI #by default we have VeeCode Platform AI
+    model: gpt-4o #The desired model, for best results use gpt-4o >
+    instructions: 'You are an assistant specialized in the VeeCode platform and Backstage.' #Instructions field for the assistant, by default set to basic
     timeout: 600 #optional
-    dataset:    # Essa chave é opcional, apenas no caso do uso do componenente para geração de templates
-      model: ft:gpt-4o-2024-08-06:vertigo:platform:A1vY9cad  # o modelo deve ser treinado
-      references:  # Referencias são modelos de template pré criados, seguindo a stack desejada, são referenciados através de seu location (explicaremos melhor abaixo)
+    dataset:    # This key is optional, only if you use the component to generate templates
+      model: ft:gpt-4o-2024-08-06:xxxxxxxxxxxx  # the model must be trained
+      references:  # References are pre-created template models, following the desired stack, which are referenced through their location (we'll explain more below).
         - id: Terraform Project             
           source: https://xxxxxxxxxxxxx
         - id: Springboot
@@ -153,15 +153,15 @@ backend.start();
 
 <br>
 
-## Para treinar seu modelo e utilizar o módulo de criação de template com IA:
+## To train your model and use the template creation module with AI:
 
-Para fazer isso, nesse exemplo criamos este conjunto de dados de treinamento para ajustar a IA.
+To do this, in this example we created this training data set to tune the AI.
 
-**IA usada**: OpenAI
-**Modelo base** ': gpt4o
-**Conjunto de dados**: https://gist.github.com/caiolombello/209ef48d1a0e8b0ba76ad83be6fb013f
+**AI used**: OpenAI
+**Base model** ': gpt4o
+**Data set**: https://gist.github.com/caiolombello/209ef48d1a0e8b0ba76ad83be6fb013f
 
-### Prompt do sistema de IA:
+### AI system prompt:
 
 You are a wizard specialized in writing Backstage templates and configuring `catalog-info.yaml` files. When answering questions or providing code examples, please follow these guidelines: 
 
@@ -205,25 +205,25 @@ enumNames:
 - No
 - Yes
 default: false
-Diretrizes de resposta
-Listar todas as propriedades necessárias : incluir todas as propriedades e especificações necessárias para um catalog-info.yamlarquivo válido.
+Response guidelines
+List all necessary properties : include all the properties and specifications needed for a `catalog-info.yaml` valid file.
 
-Destaque possíveis personalizações : explique claramente como e onde o usuário pode personalizar o modelo, destacando parâmetros específicos.
+Highlight possible customizations: clearly explain how and where the user can customize the template, highlighting specific parameters.
 
-Mantenha uma estrutura clara : organize as respostas claramente para que sejam mais fáceis de entender e implementar pelos usuários.
+Maintain a clear structure: organize answers clearly so that they are easier for users to understand and implement.
 
-Seja completo e preciso : todas as instruções devem ser completas e precisas, evitando suposições sobre o conhecimento do usuário.
+Be complete and precise: all instructions must be complete and precise, avoiding assumptions about the user's knowledge.
 
 ## My test:
 
-Input:
-Gere um modelo para este módulo:
+**Input**:
+Generate a template for this module:
 
-rds = { instance_class = "db.t3.small" deletion_protection = false multi_az = false availability_zone = "us-east-1a" db = { engine = "postgres" engine_version = "14.4" family = "postgres14" name = "postgres" } storage = { type = "gp2" allocated = 5 max_allocated = 100 encrypted = true } backup = { retention_period = 30 window = "04:00-06:00" } maintenance = { window = "tue:02:00-tue:04:00" auto_minor_version_upgrade = true } } credentials = { username = "postgres" password = "password_secreto" }
+rds = { instance_class = "db.t3.small" deletion_protection = false multi_az = false availability_zone = "us-east-1a" db = { engine = "postgres" engine_version = "14.4" family = "postgres14" name = "postgres" } storage = { type = "gp2" allocated = 5 max_allocated = 100 encrypted = true } backup = { retention_period = 30 window = "04:00-06:00" } maintenance = { window = "tue:02:00-tue:04:00" auto_minor_version_upgrade = true } } credentials = { username = "postgres" password = "password_secret" }
 
 
-output:
-Claro! Aqui está um modelo Backstage completo baseado na configuração fornecida para o seu módulo RDS:
+**output**:
+Of course! Here is a complete Backstage template based on the configuration provided for your RDS module:
 
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
@@ -396,10 +396,10 @@ spec:
               type: string
               default: "password_secreto"
               
--se de substituir as senhas, verifique os reais e ajuste as configurações conforme necessário para o seu ambiente.
+-if you replace the passwords, check the actual ones and adjust the settings as necessary for your environment.
 
 
-## Após treinar e criar seu modelo, então voce pode o referenciar no `app-config.yaml`:
+## After training and creating your model, you can then reference it in the `app-config.yaml`:
 
 ```yaml
 veecodeAssistantAI:
@@ -423,12 +423,11 @@ veecodeAssistantAI:
 
 ## Referencias
 
-As referencias que irão enriquecer ainda mais seu prompt na esperança de retornar um template mais justo ao que se espera, deve seguir um modelo bem simples:
-- **id**: Se refere ao nome da stack referenciada, por exemplo "EKS Provision";
-  **source**: Se refere a um repositorio remoto que irá fornecer um código de modelo para o template seguir, assim conseguimos manter um padrão de acordo com suas necessidades em tempo de desenvolvimento.
+The references that will further enrich your prompt in the hope of returning a template that is fairer to what is expected, should follow a very simple model:
+- **id**: This refers to the name of the referenced stack, for example "EKS Provision";
+**source**: Refers to a remote repository that will provide template code for the template to follow, so we can maintain a standard according to your needs at development time.
 
-  Veja um exemplo de modelo de referencia aqui[link].
-  https://gitlab.vertigo-devops.com/vertigobr/ia/autoskaff/-/tree/main/reference
+[See an example of a reference template here.See an example of a reference template here](https://gitlab.vertigo-devops.com/vertigobr/ia/autoskaff/-/tree/main/reference)
 
 ## Routes
 
