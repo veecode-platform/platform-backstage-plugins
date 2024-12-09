@@ -12,6 +12,7 @@ export const ResourcePickerFieldSchema = makeFieldSchemaFromZod(
     z.object({
         catalogFilter: z.object({
             kind: z.array(z.string()).optional().describe('List of key-value filter expression for entities'),
+            allowedResources: z.array(z.string().optional().describe('List of allowed resources')),
             type: z.string().optional().describe('List of type filter expression for entities')
         }),
     })

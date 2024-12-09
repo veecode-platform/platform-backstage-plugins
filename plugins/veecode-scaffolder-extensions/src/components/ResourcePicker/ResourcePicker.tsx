@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @backstage/no-undeclared-imports */
 import React, { useCallback, useEffect, useState } from 'react';
 import { ResourcePickerProps } from "./schema";
 import { Box, Button, Divider, FormControl, FormHelperText, TextField, Typography } from '@material-ui/core';
@@ -20,6 +18,7 @@ export type Annotations ={
 export type EntityResourceProps = {
   name: string;
   type: string;
+  lifecycle: string;
   [key:string]: Object
 }
 
@@ -45,22 +44,25 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
             return {
               name: i.metadata.name,
               type: i.spec!.type as string,
+              lifecycle: i.spec!.lifecycle as string,
               ...(i.metadata.environment as Object),
             };
           }
-          return { name: i.metadata.name, type: i.spec!.type as string, };
+          return { name: i.metadata.name, type: i.spec!.type as string, lifecycle: i.spec!.lifecycle as string };
         });
         setEntities(prevState => [...prevState, ...updateEntities]);
-      } else {
+      }
+      else {
         const updateEntities = items.map(i => {
           if (i.metadata.environment) {
             return {
               name: i.metadata.name,
               type: i.spec!.type as string,
+              lifecycle: i.spec!.lifecycle as string,
               ...(i.metadata.environment as Object),
             };
           }
-          return { name: i.metadata.name, type: i.spec!.type as string, };
+          return { name: i.metadata.name, type: i.spec!.type as string, lifecycle: i.spec!.lifecycle as string};
         });
         setEntities(prevState => [...prevState, ...updateEntities]);
       }
@@ -96,6 +98,7 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
       onChange(entities[0])
       setEntitySelected(entities[0])
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [entities]);
 
   useEffect(()=>{
@@ -172,7 +175,7 @@ export const ResourcePicker = (props: ResourcePickerProps) => {
 }
 
 export function resolveCatalogFilter(uiSchema:ResourcePickerProps['uiSchema']) {
-    const type = uiSchema['ui:options']?.catalogFilter?.type;
-    const catalogFilter = {kind: uiSchema['ui:options']?.catalogFilter?.kind};
-    return [catalogFilter,type]
+    const type = uiSchema['ui:options']?.catalogFilter?.type;   
+    const catalogFilter = {kind: uiSchema['ui:options']?.catalogFilter?.kind, 'metadata.name': uiSchema['ui:options']?.catalogFilter?.allowedResources};
+    return [catalogFilter, type]
 }
