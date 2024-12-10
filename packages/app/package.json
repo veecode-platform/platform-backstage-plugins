@@ -51,6 +51,7 @@
     "@veecode-platform/backstage-plugin-gitlab-pipelines": "workspace:^",
     "@veecode-platform/backstage-plugin-infracost": "workspace:^",
     "@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer": "workspace:^",
+    "@veecode-platform/backstage-plugin-veecode-assistant-ai": "^0.1.0",
     "@veecode-platform/plugin-kong-service-manager": "workspace:^",
     "@veecode-platform/plugin-kubernetes": "0.11.13-next.2",
     "@veecode-platform/plugin-kubernetes-react": "0.4.2-next.1",
