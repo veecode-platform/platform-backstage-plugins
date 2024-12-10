@@ -1,15 +1,19 @@
 import { OpenAI } from "openai";
-import type { LoggerService } from "@backstage/backend-plugin-api";
-import type { Config } from "@backstage/config";
+import { LoggerService } from "@backstage/backend-plugin-api";
+import { ConfigApi } from "@backstage/core-plugin-api";
 import { VeecodeAssistantAIConfig } from "../../../lib";
 
-export abstract class OpenAIClient extends VeecodeAssistantAIConfig{
+export abstract class OpenAIClient {
+    protected OpenAIConfig : VeecodeAssistantAIConfig;
     protected client : OpenAI;
 
-    constructor(config:Config, logger:LoggerService){
-        super(config, logger);
+    constructor(
+        protected readonly config: ConfigApi, 
+        protected readonly logger: LoggerService,  
+     ){
+        this.OpenAIConfig = new VeecodeAssistantAIConfig(this.config, this.logger);
         this.client = new OpenAI({
-            apiKey: this.getOpenAIConfig().apiKey,
+            apiKey: this.OpenAIConfig.getOpenAIConfig().apiKey,
             timeout: 600,
           });
     }
