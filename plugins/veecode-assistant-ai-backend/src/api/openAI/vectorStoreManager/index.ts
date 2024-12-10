@@ -39,6 +39,11 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
           }),
         ),
       );
+
+      return {
+        status: "ok",
+        message: "Vector store successfully created!"
+      }
     } catch (error: any) {
       throw new Error(
         `Erro to upload vectorStore ID ${vectorStoreId}:  ${error}`,
@@ -50,7 +55,10 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
     try {
       const response = await this.client.beta.vectorStores.del(vectorStoreId);
       this.logger.info(`VectorStore deleted, ID: ${vectorStoreId}`);
-      return response;
+      return {
+        status: "ok",
+        ...response
+      };
     } catch (error: any) {
       throw new Error(
         `Erro to delete vectorStore ID ${vectorStoreId}:  ${error}`,
