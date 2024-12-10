@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AssistantAIController } from './AssistantAIController';
-import { veecodeAssistantAIScaffolderReadPermission } from '@veecode-platform/backstage-plugin-veecode-assistant-ai-common';
+import { veecodeAssistantAIScaffolderReadPermission} from '@veecode-platform/backstage-plugin-veecode-assistant-ai-common';
 import { InputError, NotAllowedError, stringifyError } from '@backstage/errors';
 import { IScaffolderAIControler } from './types';
 
@@ -8,7 +8,8 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
 
   async uploadTemplateFiles (req: Request, res: Response) {
 
-    const { templateName, files } = req.body;
+    const { engine, templateName, files } = req.body;
+    const veecodeAssistantAI = this.veeCodeAssistantAI(engine);
 
     if (
       !(await this.isRequestAuthorized(
@@ -20,17 +21,16 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
     }
 
     try {
-      const vectorStoreId = await this.openAIApi.createVectorStore(templateName);
-
+    
       if(!files || files.length === 0){
         res.status(400).json({error: "No files uploaded"})
       }
 
-      await this.openAIApi.updateVectorStore(vectorStoreId, files);
+      const response = await veecodeAssistantAI.submitDataToVectorStore(templateName, files);
 
       res.status(200).json({
-        message: "Upload Success",
-        vectorStoreId,
+        message: response.message,
+        vectorStoreId: response.vectorStoreId,
       })
     } catch (err: any) {
       if (err.errors) {
@@ -47,7 +47,8 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
 
   async startChat (req: Request, res: Response) {
 
-    const { vectorStoreId, message, template, useDataset } = req.body;
+    const { engine, vectorStoreId, prompt, template, useDataset } = req.body;
+    const veecodeAssistantAI = this.veeCodeAssistantAI(engine);
 
     if (
       !(await this.isRequestAuthorized(
@@ -59,9 +60,8 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
     }
 
     try {
-      const { threadId, assistantId } = await this.openAIApi.startChat(vectorStoreId,useDataset);
-    
-      const response = await this.openAIApi.getChat(assistantId, threadId, message, template)
+
+      const response = await veecodeAssistantAI.chat(vectorStoreId,prompt, template, useDataset)
 
       res.status(200).json({
         message: "Analysis completed",
@@ -81,7 +81,8 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
 
   async deleteChat (req: Request, res: Response) {
 
-    const { vectorStoreId, assistantId, threadId } = req.body
+    const { engine,vectorStoreId, assistantId, threadId } = req.body;
+    const veecodeAssistantAI = this.veeCodeAssistantAI(engine);
 
     if (
       !(await this.isRequestAuthorized(
@@ -95,9 +96,9 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
     // TODO Check response
 
      try{
-       await this.openAIApi.clearHistory(vectorStoreId, assistantId, threadId)
+       const response = await veecodeAssistantAI.clearHistory(vectorStoreId, assistantId, threadId)
        res.status(200).json({
-        message: "History deleted!",
+        message: response.message,
       });
       }
       catch(err:any){
@@ -109,4 +110,6 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
         throw err;
       }
   };
+
+  // TODO -- next feature: publish template in git provider
 }
