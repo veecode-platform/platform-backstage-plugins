@@ -7,7 +7,8 @@ import { Request, Response } from 'express';
 export interface IAnalyzerAIControler{
     donwloadRepoAndCreateVectorStore(req: Request, res: Response): Promise<void>;
     analyzeAndStartChat(req: Request, res: Response): Promise<void>;
-    deleteChat(req: Request, res: Response): Promise<void>
+    deleteChat(req: Request, res: Response): Promise<void>;
+    saveChangesInRepository(req: Request, res: Response): Promise<void>
 }
 
 /**
