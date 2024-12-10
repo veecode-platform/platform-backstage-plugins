@@ -74,7 +74,10 @@ export class ThreadsManager extends OpenAIClient implements IThreadsManager {
     async deleteThread(threadId:string){
         try{
             const response =  await this.client.beta.threads.del(threadId);
-            return response;
+            return {
+                status: "ok",
+                ...response
+            };
         }catch (error: any) {
             throw new Error(`Erro to delete thread [thread_id: ${threadId}] :  ${error}`);
         }
