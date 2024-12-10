@@ -7,6 +7,7 @@ import type { Run } from 'openai/resources/beta/threads/runs/runs';
 import type { Thread, ThreadDeleted } from 'openai/resources/beta/threads/threads';
 import type { VectorStoreDeleted } from 'openai/resources/beta/vector-stores/vector-stores';
 import { FileContent } from '../../utils/types';
+import { DefaultResponse } from '@veecode-platform/backstage-plugin-veecode-assistant-ai-common';
 
 /**
  * @public
@@ -35,9 +36,6 @@ export interface IChatFactory {
  */
 
 export interface IOpenAIApi {
-  createVectorStore(name: string): Promise<string>;
-  updateVectorStore(vectorStoreId: string, files: File[]): Promise<void>;
-  initializeAssistant(vectorStoreId: string,useDataset?:boolean): Promise<string>;
   startChat(vectorStoreId: string,useDataset?:boolean): Promise<ThreadCreatedResponse>;
   getChat(
     vectoreStoreId: string,
@@ -48,7 +46,7 @@ export interface IOpenAIApi {
     messages: Message[];
     generatedFiles: FileContent[];
 }>;
-  clearHistory(vectoreStoreId:string,assistantId: string, threadId: string): Promise<void>
+  clearHistory(vectoreStoreId:string,assistantId: string, threadId: string): Promise<DefaultResponse>
 }
 
 export type ThreadCreatedResponse = {
@@ -98,7 +96,7 @@ export interface IThreadsManager {
 
 export interface IVectorStoreManager {
    createVector(name: string): Promise<string>;
-   uploadFiles(vectorStoreId: string, files: File[]): Promise<void>;
+   uploadFiles(vectorStoreId: string, files: File[]): Promise<DefaultResponse>;
    deleteVectorStore(vectoreStoreId: string): Promise<VectorStoreDeleted & {
     _request_id?: string | null;
 }>
