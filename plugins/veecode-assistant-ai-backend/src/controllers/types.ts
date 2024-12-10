@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
  *  AnalyzerAIController
  */
 export interface IAnalyzerAIControler{
-    downloadFiles(req: Request, res: Response): Promise<void>;
+    donwloadRepoAndCreateVectorStore(req: Request, res: Response): Promise<void>;
     analyzeAndStartChat(req: Request, res: Response): Promise<void>;
     deleteChat(req: Request, res: Response): Promise<void>
 }
