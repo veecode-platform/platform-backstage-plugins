@@ -31,6 +31,7 @@
     "dist"
   ],
   "dependencies": {
-    "@backstage/plugin-permission-common": "^0.8.1"
+    "@backstage/plugin-permission-common": "^0.8.1",
+    "openai": "^4.72.0"
   }
 }

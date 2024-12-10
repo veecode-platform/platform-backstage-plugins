@@ -21,8 +21,20 @@ export const veecodeAssistantAIAnalyzerReadPermission = createPermission({
     attributes: { action: 'read'}
 });
 
+export const veeCodeAssistantAIAnalyzerSaveChangesInRepo = createPermission({
+    name: 'assistant.ai.analyzer.save.changes',
+    attributes: { action: 'update' }
+});
+
+export const veeCodeAssistantAIScaffolderSaveTemplate = createPermission({
+    name: 'assistant.ai.scaffolder.save.template',
+    attributes: { action: 'create' }
+})
+
 export const veecodeAssistantAIPermissions = {
     veecodeAssistantAIReadPermission,
     veecodeAssistantAIScaffolderReadPermission,
-    veecodeAssistantAIAnalyzerReadPermission
+    veecodeAssistantAIAnalyzerReadPermission,
+    veeCodeAssistantAIAnalyzerSaveChangesInRepo,
+    veeCodeAssistantAIScaffolderSaveTemplate
 }
