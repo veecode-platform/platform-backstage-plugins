@@ -14,25 +14,25 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
   private threadsManager: ThreadsManager;
 
   constructor(config: Config, logger: LoggerService) {
-    super(config, logger);
+    super(config,logger);
     this.vectorStoreManager = new VectorStoreManager(config, logger);
     this.assistantAI = new AssistantAI(config, logger)
     this.threadsManager = new ThreadsManager(config, logger);
   }
 
-  async createVectorStore(name:string){
-      const vectorStore = await this.vectorStoreManager.createVector(name);
-      return vectorStore;
-  }
-
-  async updateVectorStore(vectorStoreId:string,files: File[]){
-    await this.vectorStoreManager.uploadFiles(vectorStoreId, files as File[]);
+  async submitDataToVectorStore(repoName:string, files:File[]){
+    const vectorStoreId = await this.vectorStoreManager.createVector(repoName);
+    const response = await this.vectorStoreManager.uploadFiles(vectorStoreId, files as File[]);
+    return {
+      ...response,
+      vectorStoreId
+    }
   }
 
   async initializeAssistant(vectorStoreId: string, useDataset?:boolean) {
     try {
       this.logger.info("Check Assistant Available...");
-      const { assistantName, instructions, model, dataset } = this.getOpenAIConfig();
+      const { assistantName, instructions, model, dataset } = this.OpenAIConfig.getOpenAIConfig();
       const assistants = await this.client.beta.assistants.list();
       const existingAssistant = assistantName ? assistants.data.find((a: any) => a.name === assistantName) : false;
       const modelUses = (useDataset && dataset) ? dataset.model : model;
@@ -102,11 +102,23 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
   async clearHistory(vectorStoreId:string,assistantId:string, threadId:string){
     this.logger.info('clearing History...');
     // delete vectorStore
-    await this.vectorStoreManager.deleteVectorStore(vectorStoreId);
+    const deleteVectorStore = await this.vectorStoreManager.deleteVectorStore(vectorStoreId);
     // delete threads
-    await this.threadsManager.deleteThread(threadId);
+    const deleteThread = await this.threadsManager.deleteThread(threadId);
     // delete assistant
-    await this.assistantAI.deleteAssistant(assistantId);
+    const deleteAssistant = await this.assistantAI.deleteAssistant(assistantId);
+
+    if(deleteVectorStore.status === "ok" && deleteThread.status === "ok" && deleteAssistant.status === "ok"){
+      return {
+        status: "ok",
+        message: "History successfully cleared!"
+      }
+    }
+
+    return{
+      status: "failed",
+      message: "Failed to delete history!"
+    }
   }
 
 }
