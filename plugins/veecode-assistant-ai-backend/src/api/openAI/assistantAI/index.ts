@@ -34,7 +34,10 @@ export class AssistantAI extends OpenAIClient implements IAssistantAI {
       try{
         const response = await this.client.beta.assistants.del(assistantId);
         this.logger.info(`Assistant Deleted, ID: ${assistantId}`);
-        return response
+        return {
+          status: "ok",
+          ...response
+        }
       }
       catch(error: any){
         throw new Error(`Erro to delete assistant:  ${error}`);
