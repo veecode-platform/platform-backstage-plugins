@@ -12,11 +12,11 @@ export const veecodeAssistantAiPlugin = createPlugin({
   },
 });
 
-export const VeecodeAssistantAiPage = veecodeAssistantAiPlugin.provide(
+export const AssistantAIContent = veecodeAssistantAiPlugin.provide(
   createRoutableExtension({
-    name: 'VeecodeAssistantAiPage',
+    name: 'AssistantAIContent',
     component: () =>
-      import('./components/ExampleComponent').then(m => m.ExampleComponent),
+      import('./components/assistantAIContent').then(m => m.AssistantAIContent),
     mountPoint: rootRouteRef,
   }),
 );
