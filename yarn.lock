@@ -16283,6 +16283,7 @@ __metadata:
   dependencies:
     "@backstage/cli": "npm:^0.28.0"
     "@backstage/plugin-permission-common": "npm:^0.8.1"
+    openai: "npm:^4.72.0"
   languageName: unknown
   linkType: soft
 
@@ -16304,8 +16305,11 @@ __metadata:
     "@testing-library/jest-dom": "npm:^6.0.0"
     "@testing-library/react": "npm:^14.0.0"
     "@testing-library/user-event": "npm:^14.0.0"
+    "@types/react-icons": "npm:^3.0.0"
+    "@veecode-platform/backstage-plugin-veecode-assistant-ai-common": "npm:^0.1.0"
     msw: "npm:^1.0.0"
     react: "npm:^16.13.1 || ^17.0.0 || ^18.0.0"
+    react-icons: "npm:^5.4.0"
     react-use: "npm:^17.2.4"
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
@@ -33725,6 +33729,15 @@ __metadata:
   peerDependencies:
     react: "*"
   checksum: 10/7f315d2a5e0eee7fefe01eac5cbe818b9592d88964f6c99ba454539a78cd2efd4430152e88113585c5a54bca6a5e1e7e7978df9cf69a03d8479a8d3d106a027c
+  languageName: node
+  linkType: hard
+
+"react-icons@npm:^5.4.0":
+  version: 5.4.0
+  resolution: "react-icons@npm:5.4.0"
+  peerDependencies:
+    react: "*"
+  checksum: 10/c900d475c64852b316d16bdc1a436c93e18e0ffb321ebc43a1d8741191baba736e0ef4c6d871399056832b69413cd13b56ae6a18eaa5ad17041df805d803651c
   languageName: node
   linkType: hard
 
