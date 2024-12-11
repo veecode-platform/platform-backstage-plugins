@@ -1,1 +1,2 @@
-export { veecodeAssistantAiPlugin, VeecodeAssistantAiPage } from './plugin';
+export { veecodeAssistantAiPlugin } from './plugin';
+export { AssistantAIContent } from './plugin';
