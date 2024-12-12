@@ -4,9 +4,11 @@ export const useAssistantAIStyles = makeStyles(theme=>({
     assistant:{
         width: '80px',
         height: '80px',
-        backgroundColor: '#00000055',
+        backgroundColor: '#091d292d',
+        backdropFilter: 'blur(13.5px)',
+        '-webkit-backdrop-filter': 'blur(13.5px)',
+        border: '1px solid rgba(255, 255, 255, 0.18)',
         padding: '1.5rem',
-        border: `solid 2px #87F3CF`,
         borderRadius: '50px',
         position: 'absolute',
         bottom: '5%',
@@ -22,7 +24,6 @@ export const useAssistantAIStyles = makeStyles(theme=>({
         '&:hover':{
             width: '280px',
             transition: 'all .5s ease-in-out',
-            border: `solid 2px ${theme.palette.border}`,
             borderRadius: '50px 0 50px 50px',
             '& img':{
                 animation: '$opacity 2s ease-in'
