@@ -1,6 +1,10 @@
 export const themeVariables = {
     colors:{
-        main: "#00F6BD"
+        main: "#00F6BD",
+        grey: "#B6B6B6",
+        black: "#151515",
+        white: "#FAFAFA",
+        red: "red"
     },
     blur:{
         dark: '#00000070'
