@@ -5,7 +5,6 @@ export const useContentLayoutStyles = makeStyles({
     root:{
         width: '100%',
         height: '100%',
-        minHeight: '65vh',
         backgroundColor: themeVariables.background.main,
         borderRadius: '8px',
         border: `1px solid ${themeVariables.border.main}`,
@@ -20,7 +19,7 @@ export const useContentLayoutStyles = makeStyles({
         borderBottom: `1px solid ${themeVariables.border}`,
         position: 'relative'
     },
-    title:{
+    titleContent:{
         borderLeft: `3px solid ${themeVariables.colors.main}`,
         padding: '0 1rem'
     },
@@ -29,8 +28,10 @@ export const useContentLayoutStyles = makeStyles({
     },
     body:{
         padding: '1rem 2rem',
+        minHeight: '70vh',
         display: 'flex',
         alignItems: 'center',
+        backgroundColor: themeVariables.background.dark,
         justifyContent: 'center'
     }
 })
