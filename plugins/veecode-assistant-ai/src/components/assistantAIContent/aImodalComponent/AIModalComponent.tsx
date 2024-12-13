@@ -3,7 +3,8 @@ import { useAIModalComponentStyles } from "./styles";
 import { AIModalComponentProps } from "./types";
 import { Box, Fade, Modal, Tooltip } from '@material-ui/core';
 import { MdClose } from "react-icons/md";
-import { ContentLayout, LoadingProgress } from "../../shared";
+import { LoadingProgress } from "../../shared";
+import { AIContent } from "./aIContent/AIContent";
 
 export const AIModalComponent : React.FC<AIModalComponentProps> = (props) => {
     
@@ -40,9 +41,11 @@ export const AIModalComponent : React.FC<AIModalComponentProps> = (props) => {
                  <div className={loadingContainer}>
                    <LoadingProgress/>
                  </div>
-                : <ContentLayout>
-                   Hello World
-                </ContentLayout>
+                : <AIContent
+                    engine="openAI"       // TODO remove mock
+                    repoName="asdasd"
+                    location="ahufudfhsufhdsu"
+                  />
               }
             </div>
           </Box>
