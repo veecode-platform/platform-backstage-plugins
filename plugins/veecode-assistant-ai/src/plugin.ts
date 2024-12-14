@@ -20,3 +20,12 @@ export const AssistantAIContent = veecodeAssistantAiPlugin.provide(
     mountPoint: rootRouteRef,
   }),
 );
+
+export const AIOptions = veecodeAssistantAiPlugin.provide(
+  createRoutableExtension({
+    name: 'AIOptions',
+    component: () =>
+      import('./components/assistantAIContent/aImodalComponent/aIContent/aiOptions').then(m => m.AIOptions),
+    mountPoint: rootRouteRef,
+  })
+)

@@ -3,9 +3,11 @@ import { Button, ChatBubble } from "../../../../shared";
 import { Typography } from "@material-ui/core";
 import { useAIChatStyles } from "./styles";
 import type { AIChatProps } from "./types";
+import { useVeecodeAssistantAIContext } from "../../../../../context/veecodeAssistantAIProvider";
 
 export const AIChat : React.FC<AIChatProps> = (props) => {
 
+    const { handleChat } = useVeecodeAssistantAIContext();
     const {} = props;
     const { root, footer, buttonGroup } = useAIChatStyles();
 
@@ -23,7 +25,7 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
              </div>
           </ChatBubble>
           <div className={buttonGroup}>
-            <Button variant="secondary">New Analysis</Button>
+            <Button variant="secondary" onClick={handleChat}> New Analysis </Button>
             <Button variant="danger">Exit</Button>
           </div>
         </div>

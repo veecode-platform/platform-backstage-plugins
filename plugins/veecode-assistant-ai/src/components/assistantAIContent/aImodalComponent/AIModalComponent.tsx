@@ -5,19 +5,24 @@ import { Box, Fade, Modal, Tooltip } from '@material-ui/core';
 import { MdClose } from "react-icons/md";
 import { LoadingProgress } from "../../shared";
 import { AIContent } from "./aIContent/AIContent";
+import { useEntity } from "@backstage/plugin-catalog-react";
+import { useEntityAnnotation } from "../../../hooks/useEntityAnnotation";
 
 export const AIModalComponent : React.FC<AIModalComponentProps> = (props) => {
     
     const [ loadingState, setLoadingState ] = React.useState<boolean>(true);
     const { show, toggleDialog } = props;
     const { modalOnBlur,modalContent,modalHeader,closeModal,modalBody,loadingContainer } = useAIModalComponentStyles();
+    const { entity } = useEntity();
+    const { location, projectName, engine } = useEntityAnnotation(entity);
 
     React.useEffect(()=>{
-        setTimeout(()=>{setLoadingState(false)},1000)
+        setTimeout(()=>{setLoadingState(false)},1000); 
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       },[])
 
     return (
-        <Modal
+      <Modal
         open={show}
         onClose={toggleDialog}
         aria-labelledby="modal-modal-job-details"
@@ -41,11 +46,11 @@ export const AIModalComponent : React.FC<AIModalComponentProps> = (props) => {
                  <div className={loadingContainer}>
                    <LoadingProgress/>
                  </div>
-                : <AIContent
-                    engine="openAI"       // TODO remove mock
-                    repoName="asdasd"
-                    location="ahufudfhsufhdsu"
-                  />
+                : <AIContent 
+                    engine={engine!}
+                    location={location!}
+                    projectName={projectName!}
+                   />
               }
             </div>
           </Box>

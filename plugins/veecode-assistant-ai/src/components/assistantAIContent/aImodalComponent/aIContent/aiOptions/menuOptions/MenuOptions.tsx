@@ -2,15 +2,13 @@ import React from "react";
 import type { MenuOptionsProps } from "./types";
 import { useMenuOptionsStyles } from "./styles";
 import { Box } from "@material-ui/core";
-import { useNavigate } from "react-router-dom";
+import { useVeecodeAssistantAIContext } from "../../../../../../context/veecodeAssistantAIProvider";
 
 export const MenuOptions : React.FC<MenuOptionsProps> = (props) => {
 
     const { options } = props;
     const { list,listItem } = useMenuOptionsStyles();
-    const navigate = useNavigate();
-
-    const handleNavigate = () => navigate("ai-chat");
+    const { handleChat } = useVeecodeAssistantAIContext();
 
     return (
      <Box className={list}>
@@ -19,11 +17,11 @@ export const MenuOptions : React.FC<MenuOptionsProps> = (props) => {
            (<div 
               key={option.id} 
               className={listItem} 
-              onClick={handleNavigate}
+              onClick={handleChat}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") handleNavigate();
+                if (e.key === "Enter" || e.key === " ") handleChat();
               }}
               aria-label={`Navigate to ${option.label}`}
               >

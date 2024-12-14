@@ -3,8 +3,7 @@ import { Box, Typography } from "@material-ui/core";
 import { useAssistantAIStyles } from "./styles";
 import StarsIcon from "../../assets/stars.png"
 import { AIModalComponent } from "./aImodalComponent";
-import { Link } from 'react-router-dom'
-
+import { VeecodeAssistantAIProvider } from "../../context/veecodeAssistantAIProvider";
 
 export const AssistantAIContent = () => {
 
@@ -14,19 +13,17 @@ export const AssistantAIContent = () => {
     const handleDialog = () => setShowDialog(!showDialog);
 
     return (
-        <>
-          { showDialog && (
+        <VeecodeAssistantAIProvider>
+        { showDialog && (
             <AIModalComponent
-            show={showDialog}
-            toggleDialog={handleDialog}
-           />
+              show={showDialog}
+              toggleDialog={handleDialog}
+              />
           )}
-          <Link to="ai-options" onClick={handleDialog}>
-            <Box className={assistant}>
+            <Box className={assistant} onClick={handleDialog}>
               <span><Typography variant="body1">Analyze your code with AI</Typography></span>
               <img src={StarsIcon} alt="" className={icon}/>
             </Box>
-          </Link>
-        </>
+        </VeecodeAssistantAIProvider>
     )
 }
