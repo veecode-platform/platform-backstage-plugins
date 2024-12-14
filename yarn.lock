@@ -16291,12 +16291,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-veecode-assistant-ai@workspace:plugins/veecode-assistant-ai"
   dependencies:
+    "@backstage/catalog-model": "npm:^1.7.1"
     "@backstage/cli": "npm:^0.28.0"
     "@backstage/core-app-api": "npm:^1.15.1"
     "@backstage/core-components": "npm:^0.15.1"
     "@backstage/core-plugin-api": "npm:^1.9.4"
     "@backstage/dev-utils": "npm:^1.1.2"
     "@backstage/errors": "npm:^1.2.5"
+    "@backstage/plugin-catalog-react": "npm:^1.14.2"
     "@backstage/test-utils": "npm:^1.7.0"
     "@backstage/theme": "npm:^0.6.0"
     "@material-ui/core": "npm:^4.9.13"
@@ -35026,6 +35028,7 @@ __metadata:
   dependencies:
     "@backstage/cli": "npm:^0.28.0"
     "@backstage/plugin-catalog-backend-module-scaffolder-entity-model": "npm:^0.2.1"
+    "@backstage/plugin-catalog-react": "npm:^1.14.2"
     "@spotify/prettier-config": "npm:^12.0.0"
     "@types/pluralize": "npm:^0.0.33"
     concurrently: "npm:^6.0.0"
