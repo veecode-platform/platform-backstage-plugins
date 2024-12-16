@@ -1,4 +1,5 @@
 export interface ChatBubbleProps {
     robot?:boolean,
-    children: React.ReactNode
+    children: React.ReactNode,
+    loading?: boolean
 }
