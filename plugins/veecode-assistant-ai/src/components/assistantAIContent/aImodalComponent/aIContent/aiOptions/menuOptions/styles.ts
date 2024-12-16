@@ -22,8 +22,15 @@ export const useMenuOptionsStyles = makeStyles({
         transition: 'all .5s ease-in-out',
         '&:hover':{
             borderLeft: `3px solid ${themeVariables.colors.main}`,
-            backgroundColor: themeVariables.background.secondary,
+            backgroundColor: themeVariables.list.hover,
             transition: 'all .5s ease-in'
         }
+    },
+    loadingWrapper:{
+        width: '100%',
+        maxHeight: '300px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })
