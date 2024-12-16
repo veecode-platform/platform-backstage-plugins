@@ -1,5 +1,5 @@
 import React from "react";
-import { EntityAnnotationType } from "../utils/types";
+import { EntityAnnotationType, submitRepoAndCreateVectorStoreResponse } from "../utils/types";
 import { EntityInfoActionType } from "./state";
 
 export type VeecodeAssistantAIContextType = {
@@ -12,7 +12,8 @@ export type VeecodeAssistantAIContextType = {
     showChat: boolean;
     handleChat: () => void;
     entityInfoState: EntityAnnotationType | null;
-    entityInfoDispatch: React.Dispatch<EntityInfoActionType>
+    entityInfoDispatch: React.Dispatch<EntityInfoActionType>;
+    submitRepoAndCreateVectorStore: (engine: string, repoName: string, location: string) => Promise<submitRepoAndCreateVectorStoreResponse | null>
 }
 
 export const VeeCodeAssistantAIContext = React.createContext<VeecodeAssistantAIContextType>(null!)
