@@ -1,33 +1,40 @@
 import { makeStyles } from "@material-ui/core";
 import { themeVariables } from "../../../utils/constants/theme";
 
-export const useChatBubbleStyles = makeStyles(theme => ({
+export const useChatBubbleStyles = makeStyles({
     root:{
-        backgroundColor: themeVariables.background.dark,
-        border: `1px solid ${themeVariables.border.main}`,
-        boderRadius: '10px',
-        padding: '3rem',
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        gap: '2rem'
+        gap: '1rem',
+    },
+    loadingContent:{
+        marginTop: '-1.5rem',
+        marginLeft: '-.8rem'
+    },
+    bubble:{
+        border: `1px solid ${themeVariables.border.main}`,
+        boderRadius: '20px',
+        padding: '3rem',
+        backgroundColor: themeVariables.background.main
     },
     aiBubble:{
-        borderRadius: '0px 10px 10px 10px'
+        borderRadius: '0px 20px 20px 20px'
     },
     avatar:{
         width: '60px',
-        height: '50px',
+        height: '60px',
         borderRadius: '50%',
         padding: '.2rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'flex-start',
-        backgroundColor: theme.palette.background.default
+        backgroundColor: themeVariables.colors.black,
+        border: `1px solid ${themeVariables.border.main}`,
     },
     avatarImg:{
-        width: '100%',
+        width: '75%',
         objectFit: 'cover'
     },
     content:{
@@ -37,4 +44,4 @@ export const useChatBubbleStyles = makeStyles(theme => ({
         justifyContent: 'flex-start',
         flexDirection: 'column',
     }
-}))
+})
