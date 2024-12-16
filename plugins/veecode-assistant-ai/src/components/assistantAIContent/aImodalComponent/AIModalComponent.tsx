@@ -50,6 +50,7 @@ export const AIModalComponent : React.FC<AIModalComponentProps> = (props) => {
                     engine={engine!}
                     location={location!}
                     projectName={projectName!}
+                    toggleDialog={toggleDialog}
                    />
               }
             </div>
