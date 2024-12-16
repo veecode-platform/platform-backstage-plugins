@@ -3,3 +3,7 @@ export type EntityAnnotationType = {
     location: string,
     projectName: string
 }
+
+export interface submitRepoAndCreateVectorStoreResponse {
+    vectorStoreId: string
+}
