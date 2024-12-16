@@ -1,5 +1,6 @@
 export interface AIContentProps {
  engine: string,
  location: string,
- projectName: string
+ projectName: string,
+ toggleDialog: () => void
 }
