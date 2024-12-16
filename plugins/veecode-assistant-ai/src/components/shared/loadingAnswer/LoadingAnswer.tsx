@@ -1,6 +1,6 @@
 import React from "react";
 import Lottie from "react-lottie";
-import animationData from '../../../assets/lotties/typing-animation.json'
+import animationData from '../../../assets/lotties/typing.json'
 import { useLoadingAnswerStyles } from "./styles";
 
 export const LoadingAnswer = () => {
