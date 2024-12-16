@@ -6686,6 +6686,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@camwiegert/typical@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "@camwiegert/typical@npm:0.1.1"
+  checksum: 10/66a9969c37b8e0ed57a974e1e807758c28a3e971edc5281726a1a0d11a4ffbc0478b8bd09987e2119332b711ef2a63f603ef396bb430c42b0209ae15cb747639
+  languageName: node
+  linkType: hard
+
 "@changesets/types@npm:^4.0.1":
   version: 4.1.0
   resolution: "@changesets/types@npm:4.1.0"
@@ -15346,6 +15353,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-typical@npm:^0":
+  version: 0.1.2
+  resolution: "@types/react-typical@npm:0.1.2"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10/8c80253cd19903a7f9450d091c01c4befbd8f11bb8acc87193fa4094a05db0fcdc7b94e2b649a1283cc729dee143a8f25ad2f25ae3db044710679312e8baa3bc
+  languageName: node
+  linkType: hard
+
 "@types/react@npm:^18":
   version: 18.3.11
   resolution: "@types/react@npm:18.3.11"
@@ -16309,11 +16325,13 @@ __metadata:
     "@testing-library/user-event": "npm:^14.0.0"
     "@types/react-icons": "npm:^3.0.0"
     "@types/react-lottie": "npm:^1"
+    "@types/react-typical": "npm:^0"
     "@veecode-platform/backstage-plugin-veecode-assistant-ai-common": "npm:^0.1.0"
     msw: "npm:^1.0.0"
     react: "npm:^16.13.1 || ^17.0.0 || ^18.0.0"
     react-icons: "npm:^5.4.0"
     react-lottie: "npm:^1.2.10"
+    react-typical: "npm:^0.1.3"
     react-use: "npm:^17.2.4"
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
@@ -34058,6 +34076,19 @@ __metadata:
     react: ">=16.6.0"
     react-dom: ">=16.6.0"
   checksum: 10/ca32d3fd2168c976c5d90a317f25d5f5cd723608b415fb3b9006f9d793c8965c619562d0884503a3e44e4b06efbca4fdd1520f30e58ca3e00a0890e637d55419
+  languageName: node
+  linkType: hard
+
+"react-typical@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "react-typical@npm:0.1.3"
+  dependencies:
+    "@camwiegert/typical": "npm:^0.1.1"
+  peerDependencies:
+    prop-types: ^15.5.4
+    react: ^15.0.0 || ^16.0.0
+    react-dom: ^15.0.0 || ^16.0.0
+  checksum: 10/3d39d50bc96a19373526a2a58ac8ea4c6bd31ebf8f0b7e3dd4bd39f412aa90497c928f90fa872685b02db35d954269090741e1176e25e0bd67f2272a2d2adb69
   languageName: node
   linkType: hard
 
