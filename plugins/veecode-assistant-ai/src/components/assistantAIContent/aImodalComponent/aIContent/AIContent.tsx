@@ -8,7 +8,7 @@ import { AIChat } from "./aiChat";
 
 export const AIContent : React.FC<AIContentProps> = (props) => {
 
-    const { engine, location, projectName } = props; 
+    const { engine, location, projectName,toggleDialog } = props; 
     const { entityInfoDispatch, showChat } = useVeecodeAssistantAIContext();
 
     React.useEffect(()=>{
@@ -26,7 +26,7 @@ export const AIContent : React.FC<AIContentProps> = (props) => {
            <ContentLayout
            title="Analyzer Source"
            >
-            { showChat ? <AIChat/> : <AIOptions/>}
+            { showChat ? <AIChat closeModal={toggleDialog} /> : <AIOptions/>}
           </ContentLayout>
     )
 }
