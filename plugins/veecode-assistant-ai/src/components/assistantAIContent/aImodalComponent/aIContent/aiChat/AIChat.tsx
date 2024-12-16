@@ -7,27 +7,44 @@ import { useVeecodeAssistantAIContext } from "../../../../../context/veecodeAssi
 
 export const AIChat : React.FC<AIChatProps> = (props) => {
 
+    const [ loading, setLoading ] = React.useState<boolean>(false);  // TODO Loading > Remove useState and apply useAsync
     const { handleChat } = useVeecodeAssistantAIContext();
-    const {} = props;
+    const { closeModal } = props;
     const { root, footer, buttonGroup } = useAIChatStyles();
+
+    const clearHistoryAndExit = () => {
+      closeModal();
+      handleChat();
+    };
+
+    React.useEffect(()=>{
+      setLoading(true);
+      setTimeout(()=>{
+        setLoading(false)
+      },4000)
+    },[])
 
     return(
         <div className={root}>
-          <ChatBubble robot>
-             <Typography variant="body1">
-              This Message will be generate for openAI.
-             </Typography>
-             <div className={footer}>
-               <Typography variant="body1">
-                Do you want to commit the changes to your repository?
-               </Typography>
-               <Button variant="primary">Create Pull Request</Button>
-             </div>
+          <ChatBubble robot loading={loading}>
+            <>
+              <Typography variant="body1">
+                This Message will be generate for openAI.
+              </Typography>
+              <div className={footer}>
+                <Typography variant="body1">
+                  Do you want to commit the changes to your repository?
+                </Typography>
+                <Button variant="primary">Create Pull Request</Button>
+              </div>
+            </>
           </ChatBubble>
-          <div className={buttonGroup}>
-            <Button variant="secondary" onClick={handleChat}> New Analysis </Button>
-            <Button variant="danger">Exit</Button>
-          </div>
+         {loading ? null : (
+           <div className={buttonGroup}>
+           <Button variant="secondary" onClick={handleChat}> New Analysis </Button>
+           <Button variant="danger" onClick={ clearHistoryAndExit }>Exit</Button>
+         </div>
+         )}
         </div>
     )
 }
