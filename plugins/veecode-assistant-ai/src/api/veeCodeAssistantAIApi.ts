@@ -9,5 +9,5 @@ export interface VeeCodeAssistantAIApi {
     submitRepo(engine: string | undefined, repoName: string, location: string): Promise<SubmitRepoResponse>,
     getChat(engine: string | undefined, vectorStoreId: string, prompt: string): Promise<InitializeAssistantAIResponse>,
     clearHistory(engine: string | undefined, vectorStoreId: string, assistantId: string, threadId: string): Promise<clearHistoryResponse>,
-    createPullRequest(files: FileContent[], location: string): Promise<SubmitRepoResponse>
+    createPullRequest(files: FileContent[], engine: string, vectorStoreId: string, location: string): Promise<SubmitRepoResponse>
 }
