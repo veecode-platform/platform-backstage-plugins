@@ -30,10 +30,11 @@ export const useAIModalComponentStyles = makeStyles(theme=>({
        },
        closeModal:{
         cursor: 'pointer',
-        color: theme.palette.link,
-        transition: 'all .5s ease-in-out',
+        color: themeVariables.colors.main,
+        transition: 'all .5s ease-in',
         '&:hover':{
-            color: theme.palette.linkHover
+            transition: 'all .5s ease-in-out',
+            transform: 'scale(1.1)'
         }
        },
        modalBody:{
@@ -44,6 +45,7 @@ export const useAIModalComponentStyles = makeStyles(theme=>({
         justifyContent: 'center',
         flexDirection: 'column',
         gap: '3.5rem',
+        color: themeVariables.colors.white
        },
        loadingContainer:{
         width: '100%',
