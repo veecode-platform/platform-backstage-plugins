@@ -1,8 +1,8 @@
 import { createApiRef } from "@backstage/core-plugin-api";
 import { clearHistoryResponse, FileContent, InitializeAssistantAIResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 
-export const veeCodeAssistantAIApiRef = createApiRef<VeeCodeAssistantAIApi>({
-    id: 'plugin.veecode.asistant.ai.service'
+export const veecodeAssistantAIApiRef = createApiRef<VeeCodeAssistantAIApi>({
+    id: 'plugin.veecodeassistantai'
 });
 
 export interface VeeCodeAssistantAIApi {
