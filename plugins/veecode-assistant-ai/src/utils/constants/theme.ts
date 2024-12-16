@@ -3,8 +3,9 @@ export const themeVariables = {
         main: "#00F6BD",
         grey: "#B6B6B6",
         black: "#151515",
+        dark: "#00000067",
         white: "#FAFAFA",
-        red: "red"
+        red: "red",
     },
     blur:{
         dark: '#00000070'
@@ -18,6 +19,7 @@ export const themeVariables = {
         main: '#B5B5B530'
     },
     list:{
-        background: "#161616"
+        background: "#0F0F0F",
+        hover: "#00000087"
     }
 }
