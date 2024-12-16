@@ -27,10 +27,10 @@ export const useContentLayoutStyles = makeStyles({
         width: '220px'
     },
     body:{
-        padding: '1rem 2rem',
+        padding: '2.5rem 2rem',
         minHeight: '70vh',
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         backgroundColor: themeVariables.background.dark,
         justifyContent: 'center'
     }
