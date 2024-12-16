@@ -1,6 +1,7 @@
 import React from "react";
-import { EntityAnnotationType, submitRepoAndCreateVectorStoreResponse } from "../utils/types";
+import { EntityAnnotationType } from "../utils/types";
 import { EntityInfoActionType } from "./state";
+import { FileContent, InitializeAssistantAIResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 
 export type VeecodeAssistantAIContextType = {
     vectorStoreId: string | null;
@@ -13,7 +14,11 @@ export type VeecodeAssistantAIContextType = {
     handleChat: () => void;
     entityInfoState: EntityAnnotationType | null;
     entityInfoDispatch: React.Dispatch<EntityInfoActionType>;
-    submitRepoAndCreateVectorStore: (engine: string, repoName: string, location: string) => Promise<submitRepoAndCreateVectorStoreResponse | null>
+    submitRepoAndCreateVectorStore: () => Promise<void>;
+    chat: (prompt: string) => Promise<InitializeAssistantAIResponse | null>;
+    analyzeChangesAndSubmitToRepository: (files: FileContent[]) => Promise<SubmitRepoResponse | null>,
+    clearHistory: () => Promise<void>
+    
 }
 
 export const VeeCodeAssistantAIContext = React.createContext<VeecodeAssistantAIContextType>(null!)

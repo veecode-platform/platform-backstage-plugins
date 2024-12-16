@@ -3,6 +3,7 @@ import { VeeCodeAssistantAIContext } from "./veecodeAssistantAIContext";
 import { EntityInfoReducer, initialEntityInfoState } from "./state";
 import { errorApiRef, useApi,alertApiRef } from '@backstage/core-plugin-api';
 import { veecodeAssistantAIApiRef } from "../api/veeCodeAssistantAIApi";
+import { FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 
 interface VeecodeAssistantAIProviderProps {
     children: React.ReactNode
@@ -23,21 +24,75 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
         setShowChat(!showChat)
       };
 
-    const submitRepoAndCreateVectorStore =  async (engine:string,repoName:string,location:string) => {
+    const submitRepoAndCreateVectorStore =  async () => {
         try{
-            const response = await api.submitRepo(engine,repoName,location)
+            if(entityInfoState){
+                const {engine, projectName, location} = entityInfoState;
+                const response = await api.submitRepo(engine,projectName,location);
+                setVectorStoreId(response.vectorStoreId);
             AlertApi.post({
                 message: response.message,
                 severity: 'success',
                 display: 'transient',
               });
-            return {
-                vectorStoreId: response.vectorStoreId
             }
         }
         catch(error:any){
             errorApi.post(error);
+        }
+    }
+
+    const chat = async (prompt: string) => {
+        try{
+            if(vectorStoreId && entityInfoState){
+              const { engine } = entityInfoState;
+              const response = await api.getChat(engine,vectorStoreId,prompt);
+              setAssistantId(response.assistantId);
+              setThreadId(response.threadId);
+              return response
+            }
             return null
+        }
+        catch(error:any){
+            errorApi.post(error);
+            return null
+        }
+    }
+
+    const analyzeChangesAndSubmitToRepository = async(files:FileContent[])=>{
+        try{
+            if(vectorStoreId && entityInfoState){
+                const { engine, location } = entityInfoState;
+                const response = await api.createPullRequest(files,engine, vectorStoreId, location);
+                AlertApi.post({
+                    message: response.message,
+                    severity: 'success',
+                    display: 'transient',
+                  });
+                return response
+            }
+            return null
+        }
+        catch(error:any){
+            errorApi.post(error);
+            return null
+        }
+    }
+
+    const clearHistory = async ()=> {
+        try{
+            if(vectorStoreId && assistantId && threadId && entityInfoState){
+                const { engine } = entityInfoState;
+                const response = await api.clearHistory(engine,vectorStoreId, assistantId, threadId);
+                AlertApi.post({
+                    message: response.message,
+                    severity: 'success',
+                    display: 'transient',
+                  });
+            }
+        }
+        catch(error:any){
+            errorApi.post(error);
         }
     }
 
@@ -54,7 +109,10 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
             handleChat,
             entityInfoState,
             entityInfoDispatch,
-            submitRepoAndCreateVectorStore       
+            submitRepoAndCreateVectorStore,
+            chat,
+            analyzeChangesAndSubmitToRepository,
+            clearHistory    
          }}
         >
             {children}
