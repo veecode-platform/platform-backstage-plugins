@@ -7,6 +7,6 @@ export const useAIOptionsStyles = makeStyles({
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'center',
-        flexDirection: 'column'
-    },
+        flexDirection: 'column',
+    }
 })
