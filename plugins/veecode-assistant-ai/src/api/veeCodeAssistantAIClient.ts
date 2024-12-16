@@ -93,13 +93,31 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
   return response;  
  };
 
- async createPullRequest(files: FileContent[], location: string){
+ async generateTitleAndMessageForPullRequest(engine: string = "openAI",vectorStoreId: string){
+   const promptTitle = `Based on the changes you've made, create a title for the pull request that will be submitted to the repository`;
+   const promptMessage = 'Based on the changes made, create a message to serve as a description of the pull request that will be submitted to the repository.' 
+
+   const [responseTitle, responseMessage] = await Promise.all([
+      this.getChat(engine, vectorStoreId, promptTitle),
+      this.getChat(engine, vectorStoreId, promptMessage),
+    ]);
+
+   return {
+      title: responseTitle.data.messages[0],
+      message: responseMessage.data.messages[0]
+   }
+ }
+
+ async createPullRequest(files: FileContent[], engine:string, vectorStoreId: string, location: string){
    
   const token = (await this.getGitAuthProvider()).getAccessToken(location);
+  const { title, message } = await this.generateTitleAndMessageForPullRequest(engine, vectorStoreId)
 
    const body = {
       files,
-      location
+      location,
+      title,
+      message
      };
 
     const headers: RequestInit = {
