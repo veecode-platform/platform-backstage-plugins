@@ -2,13 +2,13 @@ import type { LoggerService } from "@backstage/backend-plugin-api";
 import type { Config } from "@backstage/config";
 import { parseGitUrl } from "../../../utils/helpers/parseGitUrl";
 import { GithubManager } from "../github";
-import { GitlabManager } from "../gitlab";
+// import { GitlabManager } from "../gitlab";
 import { FileContent } from "../../../utils/types";
 
 export class GitManager {
 
     private readonly githubManager : GithubManager;
-    private readonly gitlabManager : GitlabManager;
+   // private readonly gitlabManager : GitlabManager;
     private readonly token: string;
     
     constructor(
@@ -18,7 +18,7 @@ export class GitManager {
     ){
         this.token = token;    
         this.githubManager = new GithubManager(this.config, this.logger, this.token);
-        this.gitlabManager = new GitlabManager(this.config, this.logger, this.token);
+        // this.gitlabManager = new GitlabManager(this.config, this.logger, this.token);
     }
 
 
@@ -28,9 +28,9 @@ export class GitManager {
             case url.includes('github'): {
                return this.githubManager.getFilesFromRepo(url);
             }
-            case url.includes('gitlab'): {
-                return this.gitlabManager.getFilesFromRepo(url);
-             }
+            // case url.includes('gitlab'): {
+            //     return this.gitlabManager.getFilesFromRepo(url);
+            //  }
             default:
               throw new Error('Git provider error: unimplemented!');
         }
@@ -48,9 +48,9 @@ export class GitManager {
             case url.includes('github'): {
                return this.githubManager.createPullRequest(files,url,title,message);
             }
-            case url.includes('gitlab'): {
-                return this.gitlabManager.createMergeRequest(files,url,title,message);
-             }
+            // case url.includes('gitlab'): {
+            //     return this.gitlabManager.createMergeRequest(files,url,title,message);
+            //  }
             default:
               throw new Error('Git provider error: unimplemented!');
         }
