@@ -1,6 +1,5 @@
 import type { LoggerService } from "@backstage/backend-plugin-api";
 import type { Config } from "@backstage/config";
-import { Octokit } from "octokit";
 import { readGithubIntegrationConfigs } from "@backstage/integration";
 import { extractGitHubInfo } from "../../../utils/helpers/extractGithubInfo"
 import { formatHttpErrorMessage } from "../../../utils/helpers/formatHttpErrorMessage";
@@ -22,8 +21,9 @@ export class GithubManager implements IGithubManager {
       this.token = token;
     }
 
-    private async getOctokit(hostname: string = 'github.com'):Promise<Octokit>{
+    private async getOctokit(hostname: string = 'github.com'){
 
+        const Octokit = require('octokit');
         const configs = readGithubIntegrationConfigs(
           this.config.getOptionalConfigArray('integrations.github') ?? [],
         );
