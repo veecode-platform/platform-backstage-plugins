@@ -1,19 +1,18 @@
 export function extractGitHubInfo(url: string) {
-  const regex = /https:\/\/([^\/]+)\/([^\/]+)\/([^\/]+)\/tree\/([^\/]+)(?:\/(.*))?\/([^\/]+)$/;
+  const regex =
+    /^https:\/\/([^\/]+)\/([^\/]+)\/([^\/]+)\/tree\/([^\/]+)(?:\/.*)?$/;
   const match = url.match(regex);
 
   if (!match) {
-    throw new Error("Invalid URL ;@");
+    throw new Error("Invalid GitHub URL.");
   }
 
-  const [_, host, owner, repo, branch, path, file] = match;
+  const [_, host, owner, repo, branch] = match;
 
   return {
     host,
     owner,
     repo,
     branch,
-    path: path || "",
-    file,
   };
 }
