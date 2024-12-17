@@ -24,7 +24,7 @@ export const useChatBubbleStyles = makeStyles({
     avatar:{
         width: '60px',
         height: '60px',
-        borderRadius: '50%',
+        borderRadius: '50px',
         padding: '.2rem',
         display: 'flex',
         alignItems: 'center',

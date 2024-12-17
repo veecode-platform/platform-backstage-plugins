@@ -46,12 +46,5 @@ export const useAIModalComponentStyles = makeStyles(theme=>({
         flexDirection: 'column',
         gap: '3.5rem',
         color: themeVariables.colors.white
-       },
-       loadingContainer:{
-        width: '100%',
-        marginTop: '5rem',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
        }
 }))
