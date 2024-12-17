@@ -34,7 +34,8 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
 
  async submitRepo(engine:string = "openAI",repoName:string, location:string) : Promise<SubmitRepoResponse> {
 
-  const token = (await this.getGitAuthProvider()).getAccessToken(location);
+  const token = await (await this.getGitAuthProvider()).getAccessToken(location);
+
   const body = {
     engine,
     repoName,
@@ -48,6 +49,7 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
         Authorization: `Bearer ${token}`
       }
     }
+   
   const response = await this.fetch<SubmitRepoResponse>("/submit-repo", headers);
   return response;
  }
