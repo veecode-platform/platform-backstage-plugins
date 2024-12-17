@@ -1,11 +1,11 @@
 import React from 'react';
 import { createDevApp } from '@backstage/dev-utils';
-import { veecodeAssistantAiPlugin, VeecodeAssistantAiPage } from '../src/plugin';
+import { AssistantAIContent, veecodeAssistantAiPlugin } from '../src/plugin';
 
 createDevApp()
   .registerPlugin(veecodeAssistantAiPlugin)
   .addPage({
-    element: <VeecodeAssistantAiPage />,
+    element: <AssistantAIContent />,
     title: 'Root Page',
     path: '/veecode-assistant-ai',
   })
