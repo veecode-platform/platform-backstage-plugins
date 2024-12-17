@@ -13,7 +13,8 @@ export const themeVariables = {
     background:{
         main: '#151515',
         secondary: '#424242',
-        dark: '#0F0F0F'
+        dark: '#0F0F0F',
+        danger: '#FF000015'
     },
     border:{
         main: '#B5B5B530'

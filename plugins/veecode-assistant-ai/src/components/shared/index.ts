@@ -6,3 +6,4 @@ export { ChatBubble } from './chatBubble';
 export { Button } from './button';
 export { TypingAnimation } from './typingAnimation/TypingAnimation';
 export { LoadingAnswer } from './loadingAnswer/LoadingAnswer';
+export { AlertBox } from './alertBox/AlertBox';

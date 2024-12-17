@@ -27,18 +27,18 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
     const submitRepoAndCreateVectorStore =  async () => {
         try{
             if(entityInfoState){
-                const {engine, projectName, location} = entityInfoState;
-                const response = await api.submitRepo(engine,projectName,location);
-                setVectorStoreId(response.vectorStoreId);
-            AlertApi.post({
+             const {engine, projectName, location} = entityInfoState;
+             const response = await api.submitRepo(engine,projectName,location);
+             setVectorStoreId(response.vectorStoreId);
+             AlertApi.post({
                 message: response.message,
                 severity: 'success',
                 display: 'transient',
               });
             }
         }
-        catch(error:any){
-            errorApi.post(error);
+        catch(error:any){ 
+            throw new Error(error);
         }
     }
 
