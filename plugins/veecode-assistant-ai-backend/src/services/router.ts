@@ -23,10 +23,9 @@ export async function createRouter(
     })
   );
 
-  router.post("/submit-repo", analyzerAIController.donwloadRepoAndCreateVectorStore as RequestHandler);
+  router.post("/submit-repo", analyzerAIController.createVectorStore as RequestHandler);
   router.post("/chat-analyze-repo", analyzerAIController.analyzeAndStartChat as RequestHandler);
   router.delete("/chat-analyze-repo", analyzerAIController.deleteChat as RequestHandler);
-  router.post("/save-changes", analyzerAIController.saveChangesInRepository as RequestHandler);
   router.post("/upload-template", scaffolderAIController.uploadTemplateFiles as RequestHandler);
   router.post("/chat-template", scaffolderAIController.startChat as RequestHandler);
   router.delete("/chat-template", scaffolderAIController.deleteChat as RequestHandler);

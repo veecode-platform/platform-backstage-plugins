@@ -1,21 +1,29 @@
 import { Request, Response } from 'express';
 import { AssistantAIController } from './AssistantAIController';
-import { AnalyzeAndStartChatParams, DeleteChatParams, DonwloadRepoAndCreateVectorStoreParams, SaveChangesInRepository, veecodeAssistantAIAnalyzerReadPermission, veeCodeAssistantAIAnalyzerSaveChangesInRepo } from '@veecode-platform/backstage-plugin-veecode-assistant-ai-common';
+import { AnalyzeAndStartChatParams, DeleteChatParams, DonwloadRepoAndCreateVectorStoreParams, veecodeAssistantAIAnalyzerReadPermission } from '@veecode-platform/backstage-plugin-veecode-assistant-ai-common';
 import { InputError, NotAllowedError, stringifyError } from '@backstage/errors';
 import { IAnalyzerAIControler } from './types';
+import { VeeCodeAssistantAIClient } from "../api/client";
+import type { Config } from "@backstage/config";
+import { HttpAuthService, LoggerService, PermissionsService } from '@backstage/backend-plugin-api';
 
 export class AnalyzerAIController extends AssistantAIController implements IAnalyzerAIControler{
 
-  private returnToken(req:Request){
-    return this.getToken(req);
+  private veeCodeAssistantAI: VeeCodeAssistantAIClient;
+
+  constructor(
+    protected httpAuth: HttpAuthService,
+    protected permissions: PermissionsService,
+    protected config: Config,
+    protected logger: LoggerService,
+  ){
+    super(httpAuth,permissions,config,logger);
+    this.veeCodeAssistantAI = new VeeCodeAssistantAIClient(this.config, this.logger)
   }
   
-  async donwloadRepoAndCreateVectorStore (req: Request, res: Response) {
+  async createVectorStore (req: Request, res: Response) {
 
-    const { engine, repoName, location } = req.body as DonwloadRepoAndCreateVectorStoreParams;
-    const token = this.returnToken(req);
-    const gitManager = this.gitProviderManager(token);
-    const veecodeAssistantAI = this.veeCodeAssistantAI(engine);
+    const { engine, repoName, files } = req.body as DonwloadRepoAndCreateVectorStoreParams;
 
     if (
       !(await this.isRequestAuthorized(
@@ -28,13 +36,11 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
 
     try {
   
-      const files = await gitManager.downloadRepoFiles(location) as File[]
-
       if(!files || files.length === 0){
         res.status(400).json({error: "No files uploaded"})
       }
 
-      const response = await veecodeAssistantAI.submitDataToVectorStore(repoName, files);
+      const response = await this.veeCodeAssistantAI.submitDataToVectorStore(engine,repoName, files);
 
         res.status(200).json({
         message: response.message,
@@ -55,7 +61,6 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
   async analyzeAndStartChat (req: Request, res: Response) {
 
     const {engine, vectorStoreId, prompt} = req.body as AnalyzeAndStartChatParams;
-    const veecodeAssistantAI = this.veeCodeAssistantAI(engine);
 
     if (
       !(await this.isRequestAuthorized(
@@ -68,7 +73,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
 
     try {
 
-      const response = await veecodeAssistantAI.chat(vectorStoreId, prompt);
+      const response = await this.veeCodeAssistantAI.chat(engine,vectorStoreId, prompt);
 
       res.status(200).json({
         assistantId: response.assistantId,
@@ -92,7 +97,6 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
   async deleteChat (req: Request, res: Response) {
 
     const { engine, vectorStoreId, assistantId, threadId } = req.body as DeleteChatParams;
-    const veecodeAssistantAI = this.veeCodeAssistantAI(engine);
 
     if (
       !(await this.isRequestAuthorized(
@@ -106,7 +110,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
     // TODO Check response
 
      try{
-       const response = await veecodeAssistantAI.clearHistory(vectorStoreId, assistantId, threadId)
+       const response = await this.veeCodeAssistantAI.clearHistory(engine,vectorStoreId, assistantId, threadId)
        res.status(200).json({
         status: response.status,
         message: response.message,
@@ -121,41 +125,4 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
         throw err;
       }
   };
-
-  async saveChangesInRepository(req:Request, res:Response){
-
-    // TODO title e message deixar para IA fazer
-    const { files, location, title, message } = req.body as SaveChangesInRepository;
-    const token = this.returnToken(req);
-    const gitManager = this.gitProviderManager(token);
-
-    if (
-      !(await this.isRequestAuthorized(
-        req,
-        veeCodeAssistantAIAnalyzerSaveChangesInRepo,
-      ))
-    ) {
-      throw new NotAllowedError('Unauthorized');
-    }
-
-    try {
-  
-      const response = await gitManager.createPullRequest(files,location,title,message)
-
-        res.status(200).json({
-        message: response.message,
-        link : response.link,
-      })
-    } catch (err: any) {
-      if (err.errors) {
-        throw new InputError(
-          `Error during save the changes: ${stringifyError(
-            err.errors,
-          )}`,
-        );
-      }
-      throw err;
-    }
-
-  }
 }

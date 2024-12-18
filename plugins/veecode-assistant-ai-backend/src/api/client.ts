@@ -8,18 +8,16 @@ import { IVeeCodeAssistantAIClient } from "./types";
 export class VeeCodeAssistantAIClient implements IVeeCodeAssistantAIClient {
     private config: Config;
     private logger: LoggerService;
-    private engine : string;
     private openAIApi: OpenAIApi;
    
-    constructor(config:Config, logger:LoggerService, engine: string){
+    constructor(config:Config, logger:LoggerService){
         this.config = config;
         this.logger = logger;
-        this.engine = engine;
         this.openAIApi = new OpenAIApi(this.config, this.logger)
     }
 
-    async submitDataToVectorStore (repoName:string, files:File[]){
-      switch(this.engine){
+    async submitDataToVectorStore (engine: string, repoName:string, files:File[]){
+      switch(engine){
         case EngineEnum.openAI:
             return await this.openAIApi.submitDataToVectorStore(repoName,files);
         default:
@@ -27,8 +25,8 @@ export class VeeCodeAssistantAIClient implements IVeeCodeAssistantAIClient {
       }
     }
 
-    async chat (vectorStoreId: string, prompt: string,template?:string, useDataset?:boolean){
-        switch(this.engine){
+    async chat (engine:string, vectorStoreId: string, prompt: string,template?:string, useDataset?:boolean){
+        switch(engine){
             case EngineEnum.openAI:
                 {
                     const { threadId, assistantId } = await this.openAIApi.startChat(vectorStoreId,useDataset);
@@ -45,8 +43,15 @@ export class VeeCodeAssistantAIClient implements IVeeCodeAssistantAIClient {
         }
     }
 
-    async clearHistory (vectorStoreId: string, assistantId: string, threadId: string){
-        const response = await this.openAIApi.clearHistory(vectorStoreId, assistantId, threadId);
-        return response
+    async clearHistory (engine:string,vectorStoreId: string, assistantId: string, threadId: string){
+        switch(engine){
+            case EngineEnum.openAI:
+                {
+                    const response = await this.openAIApi.clearHistory(vectorStoreId, assistantId, threadId);
+                    return response
+                }
+            default:
+                throw new Error("No engine found");
+        }
     }
 }

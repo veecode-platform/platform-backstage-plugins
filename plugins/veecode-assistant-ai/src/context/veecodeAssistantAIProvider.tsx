@@ -24,11 +24,26 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
         setShowChat(!showChat)
       };
 
-    const submitRepoAndCreateVectorStore =  async () => {
+    const downloadRepoFiles = async (location:string) => {
+        try{
+            const response = await api.downloadRepoFiles(location);
+            AlertApi.post({
+                message: 'File download successful',
+                severity: 'success',
+                display: 'transient',
+              });
+            return response
+        }
+        catch(error:any){ 
+            throw new Error(error);
+        }
+    }
+
+    const submitRepoAndCreateVectorStore =  async (files: File[]) => {
         try{
             if(entityInfoState){
-             const {engine, projectName, location} = entityInfoState;
-             const response = await api.submitRepo(engine,projectName,location);
+             const {engine, projectName } = entityInfoState;
+             const response = await api.submitRepo(engine, files, projectName);
              setVectorStoreId(response.vectorStoreId);
              AlertApi.post({
                 message: response.message,
@@ -65,7 +80,7 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
                 const { engine, location } = entityInfoState;
                 const response = await api.createPullRequest(files,engine, vectorStoreId, location);
                 AlertApi.post({
-                    message: response.message,
+                    message: 'Pull request created!',
                     severity: 'success',
                     display: 'transient',
                   });
@@ -109,6 +124,7 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
             handleChat,
             entityInfoState,
             entityInfoDispatch,
+            downloadRepoFiles,
             submitRepoAndCreateVectorStore,
             chat,
             analyzeChangesAndSubmitToRepository,

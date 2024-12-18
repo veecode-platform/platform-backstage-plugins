@@ -20,7 +20,7 @@ export interface IChat {
 export interface DonwloadRepoAndCreateVectorStoreParams {
   engine: string,
   repoName: string,
-  location: string
+  files: File[]
 }
 
 export interface AnalyzeAndStartChatParams {

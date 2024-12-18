@@ -2,8 +2,6 @@ import {
   createApiFactory,
   configApiRef,
   fetchApiRef,
-  githubAuthApiRef,
-  gitlabAuthApiRef,
   createPlugin,
   createRoutableExtension,
 } from '@backstage/core-plugin-api';
@@ -11,6 +9,7 @@ import {
 import { rootRouteRef } from './routes';
 import { veecodeAssistantAIApiRef } from './api/veeCodeAssistantAIApi';
 import { VeeCodeAssistantAIClient } from './api';
+import { scmAuthApiRef } from '@backstage/integration-react';
 
 export const veecodeAssistantAiPlugin = createPlugin({
   id: 'veecode-assistant-ai',
@@ -20,13 +19,12 @@ export const veecodeAssistantAiPlugin = createPlugin({
   apis:[
     createApiFactory({
       api: veecodeAssistantAIApiRef,
-      deps: { config: configApiRef, fetchApi: fetchApiRef, githubAuthApi: githubAuthApiRef, gitlabAuthApi: gitlabAuthApiRef },
-      factory: ({config, fetchApi, githubAuthApi, gitlabAuthApi}) => {
+      deps: { config: configApiRef, fetchApi: fetchApiRef, scmAuthApi: scmAuthApiRef },
+      factory: ({config, fetchApi, scmAuthApi}) => {
         return new VeeCodeAssistantAIClient(
           config,
           fetchApi,
-          githubAuthApi,
-          gitlabAuthApi
+          scmAuthApi
         )
       }
     })
