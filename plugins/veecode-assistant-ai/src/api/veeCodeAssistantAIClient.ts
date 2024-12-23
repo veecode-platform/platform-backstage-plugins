@@ -1,7 +1,7 @@
 import { ConfigApi, FetchApi } from "@backstage/core-plugin-api";
 import { VeeCodeAssistantAIApi } from "./veeCodeAssistantAIApi";
 import { ResponseError } from '@backstage/errors';
-import { clearHistoryResponse, FileContent, InitializeAssistantAIResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { ClearHistoryResponse, FileContent, GitCloneResponse, InitializeAssistantAIResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 import { GitManager } from "./gitManager";
 import { ScmAuthApi } from "@backstage/integration-react/index";
 
@@ -32,11 +32,37 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
     return response.json() as Promise<T>
  };
 
- async downloadRepoFiles (location:string){
-  const response = await this.gitmanager.downloadRepoFiles(location);
-  return response
- }
 
+ async cloneRepo (localPath: string, repoUrl: string, branch: string) {
+  const body = {
+    localPath,
+    repoUrl,
+    branch
+   };
+
+   const headers: RequestInit = {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: {
+       'Content-Type': 'application/json',
+     }
+   }
+
+  const response = await this.fetch<GitCloneResponse>("/clone-repository", headers);
+  return response
+}
+
+async getFiles(localPath: string){
+  const response = await this.fetch<File[]>(`get-files/${localPath}`);
+  return response
+}
+
+async downloadRepoFiles(location:string) {
+  const { localPath, repoUrl, branch } = await this.gitmanager.returnRepoInfo(location);
+  await this.cloneRepo(localPath,repoUrl, branch);
+  const response = await this.getFiles(localPath); 
+  return response
+}
 
  async submitRepo(engine:string = "openAI", files: File[], repoName:string) : Promise<SubmitRepoResponse> {
 
@@ -83,7 +109,7 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
 
  // private async getChat(threadId:string){}
 
- async clearHistory(engine: string = "openAI", vectorStoreId: string, assistantId: string, threadId: string):Promise<clearHistoryResponse>{
+ async clearHistory(engine: string = "openAI", vectorStoreId: string, assistantId: string, threadId: string):Promise<ClearHistoryResponse>{
   const body = {
     engine,
     vectorStoreId,
@@ -97,7 +123,7 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
         'Content-Type': 'application/json'
       }
     }
-  const response = await this.fetch<clearHistoryResponse>("/chat-analyze-repo", headers);
+  const response = await this.fetch<ClearHistoryResponse>("/chat-analyze-repo", headers);
   return response;  
  };
 
