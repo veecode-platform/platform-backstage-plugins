@@ -10,14 +10,14 @@ import useAsync from "react-use/esm/useAsync";
 
 export const AIContent : React.FC<AIContentProps> = (props) => {
 
-   // const [ loadingState, setLoadingState ] = React.useState<boolean>(false);
-    const [ repoFiles, setRepoFiles ] = React.useState<File[]>([]);
+    const [ loadingState, setLoadingState ] = React.useState<boolean>(false);
     const { engine, location, projectName,toggleDialog } = props; 
     const { entityInfoDispatch, entityInfoState, showChat } = useVeecodeAssistantAIContext();
-    const { loadingContainer } = useAIContentStyles();
-    const { downloadRepoFiles, submitRepoAndCreateVectorStore } = useVeecodeAssistantAIContext();
+    const { content } = useAIContentStyles();
+    const { submitRepoAndCreateVectorStore } = useVeecodeAssistantAIContext();
 
     React.useEffect(()=>{
+      setLoadingState(true);
       if(engine && location && projectName){
           entityInfoDispatch(saveEntityInfo({
             engine,
@@ -25,30 +25,21 @@ export const AIContent : React.FC<AIContentProps> = (props) => {
             projectName
           }));
       }
+      setLoadingState(false)
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[engine,location,projectName]);
 
-    const { loading: loadingState, error: ErrorLoading } = useAsync(async () => {
-     const response = await downloadRepoFiles(location);
-     setRepoFiles(response)
-    },[])
 
-
-    const { loading, error } = useAsync(async () => {
-     if(repoFiles.length >= 1){
-      // await submitRepoAndCreateVectorStore(repoFiles);
-      // eslint-disable-next-line no-console
-      console.log(repoFiles)
-     }
+    const { loading, error } = useAsync(async()=>{
+      await submitRepoAndCreateVectorStore()
     },[entityInfoState])
 
+
     if(loadingState) return (
-      <div className={loadingContainer}>
+      <div className={content}>
         <LoadingProgress/>
       </div>
     )
-
-    if(ErrorLoading) return <h1>Houve um erro</h1> // TODO
 
     return ( 
           <ContentLayout

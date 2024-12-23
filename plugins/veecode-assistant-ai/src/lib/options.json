@@ -1,27 +1,37 @@
 [
     {
         "id": "01",
-        "label": "Evaluate code and check best practices",
-        "prompt": "Evaluate code and check best practices"
+        "label": "Modernize with containerization and microservices",
+        "prompt": "Analyze the legacy application to identify opportunities for modernization through containerization, transitioning to a microservices architecture, and aligning with Cloud Native principles."
     },
     {
         "id": "02",
-        "label": "Evaluate test coverage",
-        "prompt": "Evaluate test coverage"
+        "label": "Implement observability and monitoring",
+        "prompt": "Propose and generate configurations to introduce observability practices, including structured logging, metrics collection, distributed tracing, and real-time monitoring for enhanced operational insights."
     },
     {
         "id": "03",
-        "label": "Generate test",
-        "prompt": "Generate test"
+        "label": "Validate and improve test coverage",
+        "prompt": "Evaluate the application's current test suite, identify gaps in test coverage, and suggest or generate additional tests to ensure comprehensive validation of functionality and edge cases."
     },
     {
         "id": "04",
-        "label": "Generate DockerFile",
-        "prompt": "Generate DockerFile"
+        "label": "Modernize dependencies and security standards",
+        "prompt": "Analyze dependencies and frameworks, recommending updates to ensure compatibility with modern standards, apply critical security patches, and improve overall stability and performance."
     },
     {
         "id": "05",
-        "label": "Generate CI/CD File",
-        "prompt": "Generate CI/CD File"
+        "label": "Optimize performance with modern tools",
+        "prompt": "Identify performance bottlenecks and recommend modern tools, utility libraries, and architectural patterns to enhance responsiveness, scalability, and efficiency."
+    },
+    {
+        "id": "06",
+        "label": "Adopt DevOps and Cloud Native infrastructure",
+        "prompt": "Suggest strategies for adopting DevOps practices and building a Cloud Native infrastructure, including CI/CD pipelines, container orchestration, Infrastructure as Code (IaC), and scalable cloud deployments."
+    },
+    {
+        "id": "07",
+        "label": "Standardize and align with modern best practices",
+        "prompt": "Provide recommendations to refactor and standardize the application codebase, adhering to modern development practices, clean code principles, and consistent style guides."
     }
 ]

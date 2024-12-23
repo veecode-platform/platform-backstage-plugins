@@ -1,5 +1,8 @@
+import { recreateFileStructure } from '../../../utils/helpers/recreateFileStructure';
 import { OpenAIClient } from '../openAIClient';
 import { IVectorStoreManager } from '../types';
+import fs from 'fs';
+import path from 'path';
 
 export class VectorStoreManager extends OpenAIClient implements IVectorStoreManager{
 
@@ -18,12 +21,41 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
   }
 
   async uploadFiles(vectorStoreId: string, files: File[]) {
+    const basePath = './output';
+  
     try {
-      /**
-       * file map
-       */
+      // Passo 1: Recriar a estrutura de pastas localmente
+      await recreateFileStructure(files, basePath);
+  
+      // Passo 2: Ler os arquivos recriados para enviá-los ao VectorStore
+      const readFilesFromDirectory = async (dir: string): Promise<File[]> => {
+        const entries = await fs.promises.readdir(dir, { withFileTypes: true });
+        const allFiles: File[] = [];
+  
+        for (const entry of entries) {
+          const fullPath = path.join(dir, entry.name);
+          if (entry.isDirectory()) {
+            // Recurse para subdiretórios
+            const nestedFiles = await readFilesFromDirectory(fullPath);
+            allFiles.push(...nestedFiles);
+          } else {
+            // Ler o conteúdo do arquivo e criar um objeto File
+            const content = await fs.promises.readFile(fullPath);
+            const file = new File([content], path.relative(basePath, fullPath), {
+              type: 'text/plain',
+            });
+            allFiles.push(file);
+          }
+        }
+  
+        return allFiles;
+      };
+  
+      const preparedFiles = await readFilesFromDirectory(basePath);
+  
+      // Passo 3: Enviar os arquivos para o VectorStore
       const fileIds = await Promise.all(
-        files.map(async file => {
+        preparedFiles.map(async file => {
           const uploadFile = await this.client.files.create({
             file,
             purpose: 'assistants',
@@ -31,7 +63,7 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
           return uploadFile.id;
         }),
       );
-
+  
       await Promise.all(
         fileIds.map(fileId =>
           this.client.beta.vectorStores.files.create(vectorStoreId, {
@@ -39,17 +71,19 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
           }),
         ),
       );
-
+  
       return {
-        status: "ok",
-        message: "Vector store successfully created!"
-      }
-    } catch (error: any) {
-      throw new Error(
-        `Erro to upload vectorStore ID ${vectorStoreId}:  ${error}`,
-      );
+        status: 'ok',
+        message: 'Vector store successfully created!',
+      };
+    } catch (error) {
+      throw new Error(`Erro ao enviar arquivos para o VectorStore ID ${vectorStoreId}: ${error}`);
+    } finally {
+      // Limpar o diretório após o uso
+      await fs.promises.rm(basePath, { recursive: true, force: true });
     }
   }
+  
 
   async deleteVectorStore(vectorStoreId: string) {
     try {

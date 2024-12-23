@@ -3,7 +3,7 @@ import { useAIModalComponentStyles } from "./styles";
 import { AIModalComponentProps } from "./types";
 import { Box, Fade, Modal, Tooltip } from '@material-ui/core';
 import { MdClose } from "react-icons/md";
-import { AIContent } from "./aIContent/AIContent";
+import { AIContent } from "./aIContent";
 import { useEntity } from "@backstage/plugin-catalog-react";
 import { useEntityAnnotation } from "../../../hooks/useEntityAnnotation";
 

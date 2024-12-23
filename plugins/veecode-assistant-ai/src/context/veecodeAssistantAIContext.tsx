@@ -14,8 +14,7 @@ export type VeecodeAssistantAIContextType = {
     handleChat: () => void;
     entityInfoState: EntityAnnotationType | null;
     entityInfoDispatch: React.Dispatch<EntityInfoActionType>;
-    downloadRepoFiles: (location: string) => Promise<File[]>;
-    submitRepoAndCreateVectorStore: (files:File[]) => Promise<void>;
+    submitRepoAndCreateVectorStore: () => Promise<void>;
     chat: (prompt: string) => Promise<InitializeAssistantAIResponse | null>;
     analyzeChangesAndSubmitToRepository:  (files: FileContent[]) => Promise<void | null>,
     clearHistory: () => Promise<void>

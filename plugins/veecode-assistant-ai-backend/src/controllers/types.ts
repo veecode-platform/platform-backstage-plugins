@@ -19,3 +19,13 @@ export interface IScaffolderAIControler{
     startChat(req: Request, res: Response): Promise<void>;
     deleteChat(req: Request, res: Response): Promise<void>
 }
+
+/**
+ * @public
+ *  GitController
+ */
+
+export interface IGitController {
+    clone(req: Request, res: Response): Promise<void>,
+    getFiles(req: Request, res: Response): Promise<void>
+}

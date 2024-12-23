@@ -43,6 +43,16 @@ export interface SaveChangesInRepository {
   message: string
 }
 
+export interface CloneRepositoryParams {
+  localPath: string,
+  repoUrl: string,
+  branch: string
+}
+
+export interface ReturnFromLocalPathParams {
+  localPath: string
+}
+
 
 
 /**
@@ -82,6 +92,15 @@ export interface InitializeAssistantAIResponse {
   threadId: string
 }
 
-export interface clearHistoryResponse{
+export interface ClearHistoryResponse{
   message: string
+}
+
+export interface GitCloneResponse{
+  message: string,
+  data: string
+}
+
+export interface GetFilesResponse  {
+  [fileName: string]: string;
 }

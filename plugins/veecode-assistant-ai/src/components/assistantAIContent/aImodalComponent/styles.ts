@@ -45,6 +45,9 @@ export const useAIModalComponentStyles = makeStyles(theme=>({
         justifyContent: 'center',
         flexDirection: 'column',
         gap: '3.5rem',
-        color: themeVariables.colors.white
+        color: themeVariables.colors.white,
+        [theme.breakpoints.down('md')]: {
+            width: '95%'
+        }
        }
 }))

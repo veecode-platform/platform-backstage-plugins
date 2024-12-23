@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 import yauzl from 'yauzl';
 import { Readable } from 'stream';
 
