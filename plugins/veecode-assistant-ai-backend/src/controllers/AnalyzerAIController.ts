@@ -20,8 +20,8 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
     super(httpAuth,permissions,config,logger);
     this.veeCodeAssistantAI = new VeeCodeAssistantAIClient(this.config, this.logger)
   }
-  
-  async createVectorStore (req: Request, res: Response) {
+ 
+  createVectorStore = async (req: Request, res: Response) => {
 
     const { engine, repoName, files } = req.body as DonwloadRepoAndCreateVectorStoreParams;
 
@@ -58,7 +58,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
     }
   };
 
-  async analyzeAndStartChat (req: Request, res: Response) {
+  analyzeAndStartChat = async (req: Request, res: Response) => {
 
     const {engine, vectorStoreId, prompt} = req.body as AnalyzeAndStartChatParams;
 
@@ -94,7 +94,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
     }
   };
 
-  async deleteChat (req: Request, res: Response) {
+  deleteChat = async (req: Request, res: Response) => {
 
     const { engine, vectorStoreId, assistantId, threadId } = req.body as DeleteChatParams;
 
