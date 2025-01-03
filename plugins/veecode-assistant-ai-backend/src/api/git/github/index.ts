@@ -5,9 +5,8 @@ import { extractGitHubInfo } from "../../../utils/helpers/extractGithubInfo"
 import { formatHttpErrorMessage } from "../../../utils/helpers/formatHttpErrorMessage";
 import { Base64 } from 'js-base64';
 import { generateBranchName } from "../../../utils/helpers/generateBranchName";
-import type { Readable } from "stream";
-import { extractFilesFromArchive } from "../../../utils/helpers/extractFilesFromArchive";
 import { IGithubManager } from "./types";
+import { FileContent, PullRequestResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 
 export class GithubManager implements IGithubManager {
 
@@ -33,33 +32,21 @@ export class GithubManager implements IGithubManager {
 
      }
 
-    async getFilesFromRepo(url:string){
-        this.logger.info("Get Files from github repository...")
-        try{
-        const {host, owner, repo, branch} = extractGitHubInfo(url);
-        const octokit = await this.getOctokit(host);
 
-        // Download the ZIP file from the repository
-        const response = octokit.rest.repos.downloadArchive({
-            owner,
-            repo,
-            ref: branch,
-            archive_format: 'zipball' // TODO check
-          });
+    async returnRepoInfo (url:string) {
+      const { host, owner, repo, branch } = extractGitHubInfo(url);
+      const repoUrl = `https://${host}/${owner}/${repo}.git`
+      const localPath = `./temp-${repo}`;
 
-        if (!response.data) {
-          throw new Error('Failed to download the ZIP file from the repository.');
-         }
-
-        // Convert the response stream into a buffer
-        return await extractFilesFromArchive(response.data as unknown as Readable);
-
-        }catch(error:any){
-            throw new Error(`Erro to download files:  ${error}`);
-        }
+      return {
+        localPath,
+        repoUrl,
+        branch
+      }
     }
+
     async createPullRequest(
-      files: {name: string, content: string}[],
+      files: FileContent[],
       location:string,
       title: string, 
       message: string
@@ -67,6 +54,8 @@ export class GithubManager implements IGithubManager {
         const {host, owner, repo } = extractGitHubInfo(location);
         const octokit = await this.getOctokit(host);
         const branchName = generateBranchName(title);
+
+        this.logger.info("Creating Pull Request...")
 
         const repoData = await octokit.repos.get({
             owner,
@@ -100,7 +89,7 @@ export class GithubManager implements IGithubManager {
         });
 
         for (const file of files) {
-          const filePath = file.name;
+          const filePath = file.relativePath;
           const fileContent = file.content;
       
           let fileSha: string | undefined = undefined;
@@ -164,7 +153,7 @@ export class GithubManager implements IGithubManager {
             status: pullRequestResponse.status,
             link: pullRequestResponse.data.html_url,
             message: 'Pull request created successfully!'
-        }
+        } as PullRequestResponse
 
     }
 }
