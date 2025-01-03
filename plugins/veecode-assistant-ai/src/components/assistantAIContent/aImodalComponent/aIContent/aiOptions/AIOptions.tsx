@@ -15,11 +15,6 @@ export const AIOptions : React.FC<AIOptionsProps> = (props) => {
       setTypingComplete(true);
     };
 
-    React.useEffect(()=>{
-      // eslint-disable-next-line no-console
-      console.log("AQUI O ERRO >>>", error)
-    },[error])
-
     return(
         <div className={root}>
           <ChatBubble robot loading={loading} error={error}>
