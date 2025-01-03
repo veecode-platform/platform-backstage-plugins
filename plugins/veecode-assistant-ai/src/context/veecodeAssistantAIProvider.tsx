@@ -24,11 +24,46 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
         setShowChat(!showChat)
       };
 
-    const submitRepoAndCreateVectorStore =  async () => {
+    const getFilesFromRepo = async () => {
         try{
             if(entityInfoState){
-             const {engine, projectName, location} = entityInfoState;
-             const files = await api.downloadRepoFiles(location);
+              const { location } = entityInfoState;
+              const files = await api.getRepoFiles(location);
+              return files
+            }
+            return null
+        }
+        catch(error:any){ 
+            throw new Error(error);
+        }
+    }
+
+    const createVectorStore =  async (files: File[]) => {
+        try{
+            if(entityInfoState && files){
+            // const {engine, projectName } = entityInfoState;
+            //  const response = await api.submitRepo(engine, files, projectName);
+            //  setVectorStoreId(response.vectorStoreId);
+             AlertApi.post({
+                message: 'response.message',
+                severity: 'success',
+                display: 'transient',
+              });
+            }
+        }
+        catch(error:any){ 
+            throw new Error(error);
+        }
+    }
+
+
+    const getFilesFromRepoAndCreateVectorStore =  async () => {
+        try{
+            if(entityInfoState){
+             const {engine, projectName, location } = entityInfoState;
+             const files = await api.getRepoFiles(location);
+             // eslint-disable-next-line no-console
+             console.log("OLHA AS FUCKING FILES >>>>>>>>>>>>>", files)
              const response = await api.submitRepo(engine, files, projectName);
              setVectorStoreId(response.vectorStoreId);
              AlertApi.post({
@@ -36,7 +71,9 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
                 severity: 'success',
                 display: 'transient',
               });
+              return response
             }
+            return null
         }
         catch(error:any){ 
             throw new Error(error);
@@ -64,7 +101,7 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
         try{
             if(vectorStoreId && entityInfoState){
                 const { engine, location } = entityInfoState;
-                const response = await api.createPullRequest(files,engine, vectorStoreId, location);
+                const response = await api.saveChangesInRepository(files,engine, vectorStoreId, location);
                 AlertApi.post({
                     message: 'Pull request created!',
                     severity: 'success',
@@ -110,7 +147,9 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
             handleChat,
             entityInfoState,
             entityInfoDispatch,
-            submitRepoAndCreateVectorStore,
+            getFilesFromRepo,
+            createVectorStore,
+            getFilesFromRepoAndCreateVectorStore,
             chat,
             analyzeChangesAndSubmitToRepository,
             clearHistory    
