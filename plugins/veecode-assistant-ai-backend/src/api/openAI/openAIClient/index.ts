@@ -14,7 +14,7 @@ export abstract class OpenAIClient {
         this.OpenAIConfig = new VeecodeAssistantAIConfig(this.config, this.logger);
         this.client = new OpenAI({
             apiKey: this.OpenAIConfig.getOpenAIConfig().apiKey,
-            timeout: 600,
+            timeout: 6000,
           });
     }
 }
