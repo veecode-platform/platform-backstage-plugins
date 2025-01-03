@@ -1,7 +1,8 @@
 import { Message } from "openai/resources/beta/threads/messages";
 
 export type FileContent = {
-  name: string;
+  name: string,
+  relativePath?: string;
   content: string;
 }
 
@@ -44,9 +45,7 @@ export interface SaveChangesInRepository {
 }
 
 export interface CloneRepositoryParams {
-  localPath: string,
-  repoUrl: string,
-  branch: string
+  location: string
 }
 
 export interface ReturnFromLocalPathParams {
@@ -97,8 +96,9 @@ export interface ClearHistoryResponse{
 }
 
 export interface GitCloneResponse{
-  message: string,
-  data: string
+  status: string;
+  localPath: string;
+  data: File[];
 }
 
 export interface GetFilesResponse  {
