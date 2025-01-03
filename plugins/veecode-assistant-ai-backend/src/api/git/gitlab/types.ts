@@ -1,7 +1,13 @@
-import { PullRequestResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
-import { FileContent } from "../../../utils/types";
+import { FileContent, PullRequestResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 
+/**
+ *  @public
+ */
 export interface IGitlabManager {
-    getFilesFromRepo(url: string): Promise<File[]>,
+    returnRepoInfo(url: string): Promise<{
+        localPath: string;
+        repoUrl: string;
+        branch: string;
+    }>,
     createMergeRequest(files: FileContent[], url: string, title: string, message: string): Promise<PullRequestResponse>
 }
