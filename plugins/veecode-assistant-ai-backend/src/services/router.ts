@@ -6,6 +6,7 @@ import { AnalyzerAIController, ScaffolderAIController } from '../controllers';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
 import { veecodeAssistantAIPermissions } from '@veecode-platform/backstage-plugin-veecode-assistant-ai-common';
 import { GitController } from '../controllers/GitController';
+import compression from 'compression';
 
 export async function createRouter(
   options: AssistantAIOptions,
@@ -17,7 +18,19 @@ export async function createRouter(
   const gitController = new GitController(httpAuth, permissions,config,logger);
 
   const router = Router();
-  router.use(express.json());
+
+  router.use(
+    compression({
+      threshold: 1024, 
+      filter: (req, res) => {
+        if (req.headers['x-no-compression']) return false;
+        return compression.filter(req, res);
+      },
+    }),
+  );
+
+  router.use(express.json({ limit: '50mb' }));
+  router.use(express.urlencoded({ limit: '50mb', extended: true }));
 
   router.use(
     createPermissionIntegrationRouter({
