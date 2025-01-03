@@ -19,71 +19,7 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
       throw new Error(`Erro to create vectorStore:  ${error}`);
     }
   }
-
-  // async uploadFiles(vectorStoreId: string, files: File[]) {
-  //   const basePath = './output';
   
-  //   try {
-  //     // Passo 1: Recriar a estrutura de pastas localmente
-  //     await recreateFileStructure(files, basePath);
-  
-  //     // Passo 2: Ler os arquivos recriados para enviá-los ao VectorStore
-  //     const readFilesFromDirectory = async (dir: string): Promise<File[]> => {
-  //       const entries = await fs.promises.readdir(dir, { withFileTypes: true });
-  //       const allFiles: File[] = [];
-  
-  //       for (const entry of entries) {
-  //         const fullPath = path.join(dir, entry.name);
-  //         if (entry.isDirectory()) {
-  //           // Recurse para subdiretórios
-  //           const nestedFiles = await readFilesFromDirectory(fullPath);
-  //           allFiles.push(...nestedFiles);
-  //         } else {
-  //           // Ler o conteúdo do arquivo e criar um objeto File
-  //           const content = await fs.promises.readFile(fullPath);
-  //           const file = new File([content], path.relative(basePath, fullPath), {
-  //             type: 'text/plain',
-  //           });
-  //           allFiles.push(file);
-  //         }
-  //       }
-  
-  //       return allFiles;
-  //     };
-  
-  //     const preparedFiles = await readFilesFromDirectory(basePath);
-  
-  //     // Passo 3: Enviar os arquivos para o VectorStore
-  //     const fileIds = await Promise.all(
-  //       preparedFiles.map(async file => {
-  //         const uploadFile = await this.client.files.create({
-  //           file,
-  //           purpose: 'assistants',
-  //         });
-  //         return uploadFile.id;
-  //       }),
-  //     );
-  
-  //     await Promise.all(
-  //       fileIds.map(fileId =>
-  //         this.client.beta.vectorStores.files.create(vectorStoreId, {
-  //           file_id: fileId,
-  //         }),
-  //       ),
-  //     );
-  
-  //     return {
-  //       status: 'ok',
-  //       message: 'Vector store successfully created!',
-  //     };
-  //   } catch (error) {
-  //     throw new Error(`Erro ao enviar arquivos para o VectorStore ID ${vectorStoreId}: ${error}`);
-  //   } finally {
-  //     // Limpar o diretório após o uso
-  //     await fs.promises.rm(basePath, { recursive: true, force: true });
-  //   }
-  // }
-
   async uploadFiles(vectorStoreId: string, files: File[]) {
     const basePath = './output';
     const CHUNK_SIZE = 10; // Número máximo de arquivos por lote
