@@ -1,22 +1,19 @@
-import { ConfigApi, FetchApi } from "@backstage/core-plugin-api";
+import { ConfigApi, FetchApi,OAuthApi } from "@backstage/core-plugin-api";
 import { VeeCodeAssistantAIApi } from "./veeCodeAssistantAIApi";
 import { ResponseError } from '@backstage/errors';
-import { ClearHistoryResponse, FileContent, GitCloneResponse, InitializeAssistantAIResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
-import { GitManager } from "./gitManager";
-import { ScmAuthApi } from "@backstage/integration-react/index";
+import { ClearHistoryResponse, FileContent, GitCloneResponse, InitializeAssistantAIResponse, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { GitAuthManager } from "./git/gitAuthManager";
 
 
 export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
 
- gitmanager: GitManager;
-
  constructor(
     private readonly configApi : ConfigApi,
     private readonly fetchApi: FetchApi,
-    private readonly scmAuthApi: ScmAuthApi
- ){
-   this.gitmanager = new GitManager(this.scmAuthApi, this.configApi)
- }
+    private readonly githubAuthApi : OAuthApi,
+    private readonly gitlabAuthApi : OAuthApi
+
+ ){}
 
  private async fetch<T>(input: string, init?:RequestInit): Promise<T>{
 
@@ -32,19 +29,24 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
     return response.json() as Promise<T>
  };
 
+ private async getGitAuthProvider(){
+  return new GitAuthManager(this.githubAuthApi, this.gitlabAuthApi)
+}
 
- async cloneRepo (localPath: string, repoUrl: string, branch: string) {
+ async cloneRepo (location:string) {
   const body = {
-    localPath,
-    repoUrl,
-    branch
+    location
    };
+
+   const gitAuthProvider = await this.getGitAuthProvider();
+   const token = await gitAuthProvider.getAccessToken(location);
 
    const headers: RequestInit = {
     method: "POST",
     body: JSON.stringify(body),
     headers: {
        'Content-Type': 'application/json',
+       Authorization: `Bearer ${token}`
      }
    }
 
@@ -52,17 +54,15 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
   return response
 }
 
-async getFiles(localPath: string){
-  const response = await this.fetch<File[]>(`get-files/${localPath}`);
-  return response
-}
 
-async downloadRepoFiles(location:string) {
-  const { localPath, repoUrl, branch } = await this.gitmanager.returnRepoInfo(location);
-  await this.cloneRepo(localPath,repoUrl, branch);
-  const response = await this.getFiles(localPath); 
-  return response
-}
+ async getRepoFiles(location: string){
+  const response = await this.cloneRepo(location);
+  if(response){
+    const { data } = response;
+    return data
+  }
+  return []
+ }
 
  async submitRepo(engine:string = "openAI", files: File[], repoName:string) : Promise<SubmitRepoResponse> {
 
@@ -143,14 +143,29 @@ async downloadRepoFiles(location:string) {
    }
  }
 
- async createPullRequest(files: FileContent[], engine:string, vectorStoreId: string, location: string){  
+ async saveChangesInRepository(files: FileContent[], engine:string = "openAI", vectorStoreId: string, location: string){  
  
    const { title, message } = await this.generateTitleAndMessageForPullRequest(engine, vectorStoreId)
-   await this.gitmanager.createPullRequest(
-      files,
-      location,
-      title,
-      message)
+   const gitAuthProvider = await this.getGitAuthProvider();
+   const token = await gitAuthProvider.getAccessToken(location);
+   
+   const body = {
+    files,
+    location,
+    title,
+    message  
+   };
+  const headers: RequestInit = {
+     method: "DELETE",
+     body: JSON.stringify(body),
+     headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+  const response = await this.fetch<PullRequestResponse>("/save-changes", headers);
+  return response;  
  };
 
 }
