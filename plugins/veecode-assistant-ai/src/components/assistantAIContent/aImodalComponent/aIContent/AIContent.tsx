@@ -14,7 +14,7 @@ export const AIContent : React.FC<AIContentProps> = (props) => {
     const { engine, location, projectName,toggleDialog } = props; 
     const { entityInfoDispatch, entityInfoState, showChat } = useVeecodeAssistantAIContext();
     const { content } = useAIContentStyles();
-    const { submitRepoAndCreateVectorStore } = useVeecodeAssistantAIContext();
+    const { getFilesFromRepoAndCreateVectorStore } = useVeecodeAssistantAIContext();
 
     React.useEffect(()=>{
       setLoadingState(true);
@@ -30,9 +30,18 @@ export const AIContent : React.FC<AIContentProps> = (props) => {
     },[engine,location,projectName]);
 
 
-    const { loading, error } = useAsync(async()=>{
-      await submitRepoAndCreateVectorStore()
-    },[entityInfoState])
+    const { value: vectorStoreId, loading, error } = useAsync(async()=>{
+      const response = await getFilesFromRepoAndCreateVectorStore();
+      return response
+    },[entityInfoState]);
+
+
+    React.useEffect(()=>{
+      if(vectorStoreId){
+        // eslint-disable-next-line no-console
+        console.log(vectorStoreId)
+      }
+    },[vectorStoreId])
 
 
     if(loadingState) return (
@@ -49,7 +58,7 @@ export const AIContent : React.FC<AIContentProps> = (props) => {
              <AIChat closeModal={toggleDialog} /> 
              : (
               <AIOptions 
-                loading={loading}
+                loading={loading || !vectorStoreId?.vectorStoreId && !error}
                 error={error}
                 />
              )}
