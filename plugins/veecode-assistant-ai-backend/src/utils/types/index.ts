@@ -31,8 +31,3 @@ export interface AssistantAIOptions {
     config: Config;
   }
  
-  
-  export interface FileContent {
-    name: string;
-    content: string;
-  }
