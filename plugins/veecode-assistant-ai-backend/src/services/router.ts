@@ -14,7 +14,7 @@ export async function createRouter(
 
   const analyzerAIController = new AnalyzerAIController(httpAuth, permissions,config,logger);
   const scaffolderAIController = new ScaffolderAIController(httpAuth, permissions,config,logger);
-  const gitController = new GitController(logger);
+  const gitController = new GitController(httpAuth, permissions,config,logger);
 
   const router = Router();
   router.use(express.json());
@@ -29,7 +29,8 @@ export async function createRouter(
   router.post("/chat-analyze-repo", analyzerAIController.analyzeAndStartChat as RequestHandler);
   router.delete("/chat-analyze-repo", analyzerAIController.deleteChat as RequestHandler);
   router.post("/clone-repository", gitController.clone as RequestHandler);
-  router.get("/get-files/:localPath", gitController.getFiles as RequestHandler);
+ // router.get("/get-files/:localPath", gitController.getFiles as RequestHandler);
+  router.post("/save-changes", gitController.submitChangesToRepository as RequestHandler);
   router.post("/upload-template", scaffolderAIController.uploadTemplateFiles as RequestHandler);
   router.post("/chat-template", scaffolderAIController.startChat as RequestHandler);
   router.delete("/chat-template", scaffolderAIController.deleteChat as RequestHandler);
