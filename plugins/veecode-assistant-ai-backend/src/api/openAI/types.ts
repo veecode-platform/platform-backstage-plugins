@@ -6,8 +6,7 @@ import type {
 import type { Run } from 'openai/resources/beta/threads/runs/runs';
 import type { Thread, ThreadDeleted } from 'openai/resources/beta/threads/threads';
 import type { VectorStoreDeleted } from 'openai/resources/beta/vector-stores/vector-stores';
-import { FileContent } from '../../utils/types';
-import { DefaultResponse } from '@veecode-platform/backstage-plugin-veecode-assistant-ai-common';
+import { DefaultResponse, FileContent } from '@veecode-platform/backstage-plugin-veecode-assistant-ai-common';
 
 /**
  * @public
