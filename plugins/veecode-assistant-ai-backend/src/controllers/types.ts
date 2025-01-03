@@ -27,5 +27,5 @@ export interface IScaffolderAIControler{
 
 export interface IGitController {
     clone(req: Request, res: Response): Promise<void>,
-    getFiles(req: Request, res: Response): Promise<void>
+    // getFiles(req: Request, res: Response): Promise<void>
 }
