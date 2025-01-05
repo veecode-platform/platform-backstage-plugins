@@ -1,7 +1,7 @@
 import { ConfigApi, FetchApi,OAuthApi } from "@backstage/core-plugin-api";
 import { VeeCodeAssistantAIApi } from "./veeCodeAssistantAIApi";
 import { ResponseError } from '@backstage/errors';
-import { ClearHistoryResponse, FileContent, GitCloneResponse, InitializeAssistantAIResponse, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { ClearHistoryResponse, FileContent, InitializeAssistantAIResponse, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 import { GitAuthManager } from "./git/gitAuthManager";
 
 
@@ -50,21 +50,14 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
      }
    }
 
-  const response = await this.fetch<GitCloneResponse>("/clone-repository", headers);
-  return response
+  const response = await this.fetch<any>("/clone-repository", headers);
+  return response.data
 }
 
+ async submitRepo(engine:string = "openAI", files: FileContent[], repoName:string) : Promise<SubmitRepoResponse> {
 
- async getRepoFiles(location: string){
-  const response = await this.cloneRepo(location);
-  if(response){
-    const { data } = response;
-    return data
-  }
-  return []
- }
-
- async submitRepo(engine:string = "openAI", files: File[], repoName:string) : Promise<SubmitRepoResponse> {
+  // eslint-disable-next-line no-console
+  console.log("ESTOU RECEBENDO AQUI OS FILES PARA MANDAR PARA O BACKEND >>>", files)
 
   const body = {
     engine,
