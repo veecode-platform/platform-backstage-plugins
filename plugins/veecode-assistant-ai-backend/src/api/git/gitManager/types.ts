@@ -1,4 +1,4 @@
-import { GitCloneResponse, PullRequestResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { PullRequestResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 import { FileContent } from "openai/resources";
 
 export interface IGitManager {
@@ -7,7 +7,7 @@ export interface IGitManager {
         repoUrl: string;
         branch: string;
     }>,
-    cloneRepo(token: string, localPath: string, repoUrl: string, branch: string): Promise<GitCloneResponse>;
+    cloneRepo(token: string, localPath: string, repoUrl: string, branch: string): Promise<FileContent[]>;
     // returnFilesFromLocalPath(localPath: string): Promise<File[]>;
     createPullRequest(files: FileContent[], location: string, title: string, message: string): Promise<PullRequestResponse> 
 }
