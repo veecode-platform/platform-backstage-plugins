@@ -24,8 +24,6 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
   createVectorStore = async (req: Request, res: Response) => {
 
     const { engine, repoName, files } = req.body as DonwloadRepoAndCreateVectorStoreParams;
-    
-    this.logger.info(`ENTRANDO NO CREATE VECTOR STORE NO CONTROLLER >>>> ${engine}, ${repoName} EEEE ${files}`)
 
     if (
       !(await this.isRequestAuthorized(
