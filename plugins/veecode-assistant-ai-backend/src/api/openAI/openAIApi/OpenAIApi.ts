@@ -6,6 +6,7 @@ import { ThreadsManager } from "../threadsManager";
 import { IOpenAIApi } from "../types";
 import { VectorStoreManager } from "../vectorStoreManager";
 import { extractFilesFromMessage } from "../../../utils/helpers/extractFilesFromMessage";
+import { FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 
 export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
 
@@ -20,9 +21,10 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
     this.threadsManager = new ThreadsManager(config, logger);
   }
 
-  async submitDataToVectorStore(repoName:string, files:File[]){
+  async submitDataToVectorStore(repoName:string, files:FileContent[]){
+    this.logger.info(`Entrei aqui no método submitDataToVectorStore ${files} << FILES`)
     const vectorStoreId = await this.vectorStoreManager.createVector(repoName);
-    const response = await this.vectorStoreManager.uploadFiles(vectorStoreId, files as File[]);
+    const response = await this.vectorStoreManager.uploadFiles(vectorStoreId, files);
     return {
       ...response,
       vectorStoreId
