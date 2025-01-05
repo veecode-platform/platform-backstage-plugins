@@ -49,7 +49,16 @@ export class GitManager /* implements IGitManager */  {
           this.logger.info("Initializing the repository clone process...");
         // Check if the folder exists and remove it if necessary
           if (fs.existsSync(localPath)) {
-            this.logger.info(`Removing existing directory: ${localPath}`);
+            // this.logger.info(`Removing existing directory: ${localPath}`);
+            // await this.removeTemporaryPath(localPath);
+            this.logger.info(`Directory exists: ${localPath}`);
+            const files = await this.returnFilesFromLocalPath(localPath);
+            if(files.length > 0){
+              this.logger.info(`Directory contain files, return existing files`);
+              return files
+            }
+        
+            this.logger.info(`Directory is empty, removing it.`);
             await this.removeTemporaryPath(localPath);
         }
         // Configure the authorization header
@@ -69,28 +78,26 @@ export class GitManager /* implements IGitManager */  {
         // Remove the authorization header
           await git.raw(['config', '--unset', 'http.extraHeader']);
 
-          return {
-            status: 'ok',
-            localPath,
-            data: files
-          };
+          return files
         } catch (error) {
           this.logger.error(`Error when cloning repository ${error}`);
           throw new Error(`Error when cloning repository:  ${error}`);
         }
       }
-    
-    async returnFilesFromLocalPath(localPath: string) {
+
+    async returnFilesFromLocalPath(localPath: string): Promise<FileContent[]> {
       this.logger.info("Recovering cloned files...");
-    
+      
       if (!fs.existsSync(localPath)) {
         this.logger.error(`Directory not found: ${localPath}`);
         throw new Error(`Error: Directory not found: ${localPath}`);
       }
     
       try {
-        const files: Array<{ relativePath: string; name: string; content: string }> = [];
-    
+        const files: FileContent[] = [];
+        const notAllowedFiles = ["webp", "ico", "mp4", "png", "jpg", "jpeg", "gif", "bmp", "svg", "avi", "mov", "mp3", "wav", "ogg"];
+        const notAllowedFilenames = ["yarn.lock", "package-lock.json"];
+
         const readDirectory = async (dir: string) => {
           const entries = await fs.promises.readdir(dir, { withFileTypes: true });
     
@@ -106,11 +113,21 @@ export class GitManager /* implements IGitManager */  {
               // Recurse para subdiretórios
               await readDirectory(fullPath);
             } else {
+              const extension = path.extname(entry.name).toLowerCase().replace(".", ""); // Remove o ponto inicial
+
+              if (notAllowedFiles.includes(extension) || notAllowedFilenames.includes(entry.name)) {
+                this.logger.info(`Ignoring file: ${entry.name}`);
+                continue;
+              }
               // Ler o conteúdo do arquivo
               const content = await fs.promises.readFile(fullPath, 'utf-8');
               const relativePath = path.relative(localPath, fullPath);
-              const name = path.basename(fullPath);
-              files.push({ relativePath, name, content });
+              files.push({
+                name: entry.name,
+                relativePath,
+                content,
+                type: 'text/plain', // Defina o tipo, se necessário
+              });
             }
           }
         };
