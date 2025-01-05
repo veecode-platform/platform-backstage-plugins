@@ -24,44 +24,11 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
         setShowChat(!showChat)
       };
 
-    const getFilesFromRepo = async () => {
-        try{
-            if(entityInfoState){
-              const { location } = entityInfoState;
-              const files = await api.getRepoFiles(location);
-              return files
-            }
-            return null
-        }
-        catch(error:any){ 
-            throw new Error(error);
-        }
-    }
-
-    const createVectorStore =  async (files: File[]) => {
-        try{
-            if(entityInfoState && files){
-            // const {engine, projectName } = entityInfoState;
-            //  const response = await api.submitRepo(engine, files, projectName);
-            //  setVectorStoreId(response.vectorStoreId);
-             AlertApi.post({
-                message: 'response.message',
-                severity: 'success',
-                display: 'transient',
-              });
-            }
-        }
-        catch(error:any){ 
-            throw new Error(error);
-        }
-    }
-
-
     const getFilesFromRepoAndCreateVectorStore =  async () => {
         try{
             if(entityInfoState){
              const {engine, projectName, location } = entityInfoState;
-             const files = await api.getRepoFiles(location);
+             const files = await api.cloneRepo(location);
              // eslint-disable-next-line no-console
              console.log("OLHA AS FUCKING FILES >>>>>>>>>>>>>", files)
              const response = await api.submitRepo(engine, files, projectName);
@@ -147,8 +114,8 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
             handleChat,
             entityInfoState,
             entityInfoDispatch,
-            getFilesFromRepo,
-            createVectorStore,
+            // getFilesFromRepo,
+            // createVectorStore,
             getFilesFromRepoAndCreateVectorStore,
             chat,
             analyzeChangesAndSubmitToRepository,
