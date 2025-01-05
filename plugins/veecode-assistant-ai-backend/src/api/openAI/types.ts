@@ -95,7 +95,7 @@ export interface IThreadsManager {
 
 export interface IVectorStoreManager {
    createVector(name: string): Promise<string>;
-   uploadFiles(vectorStoreId: string, files: File[]): Promise<DefaultResponse>;
+   uploadFiles(vectorStoreId: string, files: FileContent[]): Promise<DefaultResponse>;
    deleteVectorStore(vectoreStoreId: string): Promise<VectorStoreDeleted & {
     _request_id?: string | null;
 }>
