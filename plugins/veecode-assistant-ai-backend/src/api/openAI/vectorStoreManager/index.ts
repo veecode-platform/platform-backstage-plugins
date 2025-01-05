@@ -1,3 +1,4 @@
+import { FileContent } from '@veecode-platform/backstage-plugin-veecode-assistant-ai-common';
 import { recreateFileStructure } from '../../../utils/helpers/recreateFileStructure';
 import { OpenAIClient } from '../openAIClient';
 import { IVectorStoreManager } from '../types';
@@ -20,36 +21,45 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
     }
   }
   
-  async uploadFiles(vectorStoreId: string, files: File[]) {
+  async uploadFiles(vectorStoreId: string, files: FileContent[]) {
     const basePath = './output';
-    const CHUNK_SIZE = 10; // Número máximo de arquivos por lote
-    
+    const CHUNK_SIZE = 10;
+
+    this.logger.info(`cheguei aqui filo dela putana >>>>>>>>> ******, ${files}`)
+  
+    if (!Array.isArray(files)) {
+      throw new Error(`'files' must be an array. Received: ${typeof files}`);
+    }
+    if (files.length === 0) {
+      throw new Error("No files to upload");
+    }
+  
     try {
-      // Passo 1: Recriar a estrutura de pastas localmente
+      // Recria a estrutura de arquivos local
       await recreateFileStructure(files, basePath);
   
-      // Passo 2: Ler os arquivos recriados
+      // Lê os arquivos recriados
       const preparedFiles = await this.readFilesFromDirectory(basePath);
   
-      // Passo 3: Dividir em chunks
+      // Divide em chunks
       const chunks = [];
       for (let i = 0; i < preparedFiles.length; i += CHUNK_SIZE) {
         chunks.push(preparedFiles.slice(i, i + CHUNK_SIZE));
       }
   
-      // Passo 4: Enviar cada chunk separadamente
+      // Processa cada chunk
       for (const chunk of chunks) {
         const fileIds = await Promise.all(
-          chunk.map(async file => {
+          chunk.map(async (file) => {
             const uploadFile = await this.client.files.create({
               file,
               purpose: 'assistants',
             });
             return uploadFile.id;
-          }),
+          })
         );
   
-        // Associar os arquivos ao VectorStore
+        // Associa os arquivos ao VectorStore
         await Promise.all(
           fileIds.map(fileId =>
             this.client.beta.vectorStores.files.create(vectorStoreId, {
@@ -63,8 +73,8 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
         status: 'ok',
         message: 'Vector store successfully created!',
       };
-    } catch (error) {
-      throw new Error(`Erro ao enviar arquivos para o VectorStore ID ${vectorStoreId}: ${error}`);
+    } catch (error:any) {
+      throw new Error(`Erro ao enviar arquivos para o VectorStore ID ${vectorStoreId}: ${error.message}`);
     } finally {
       await fs.promises.rm(basePath, { recursive: true, force: true });
     }
