@@ -1,7 +1,7 @@
 import type { LoggerService } from "@backstage/backend-plugin-api";
 import type { Config } from "@backstage/config";
 import { OpenAIApi } from "./openAI/openAIApi/OpenAIApi";
-import { EngineEnum } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { EngineEnum, FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 import { IVeeCodeAssistantAIClient } from "./types";
 
 
@@ -16,7 +16,7 @@ export class VeeCodeAssistantAIClient implements IVeeCodeAssistantAIClient {
         this.openAIApi = new OpenAIApi(this.config, this.logger)
     }
 
-    async submitDataToVectorStore (engine: string, repoName:string, files:File[]){
+    async submitDataToVectorStore (engine: string, repoName:string, files:FileContent[]){
       switch(engine){
         case EngineEnum.openAI:
             return await this.openAIApi.submitDataToVectorStore(repoName,files);
