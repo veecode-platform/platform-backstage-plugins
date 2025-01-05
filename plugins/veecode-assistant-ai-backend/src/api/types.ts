@@ -1,7 +1,7 @@
-import { DefaultResponse, IChat } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { DefaultResponse, FileContent, IChat } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 
 export interface IVeeCodeAssistantAIClient{
-    submitDataToVectorStore(engine:string, repoName: string, files: File[]): Promise<{
+    submitDataToVectorStore(engine:string, repoName: string, files: FileContent[]): Promise<{
         vectorStoreId: string;
         status: string;
         message: string;
