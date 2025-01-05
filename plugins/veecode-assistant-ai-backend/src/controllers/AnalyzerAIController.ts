@@ -24,6 +24,8 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
   createVectorStore = async (req: Request, res: Response) => {
 
     const { engine, repoName, files } = req.body as DonwloadRepoAndCreateVectorStoreParams;
+    
+    this.logger.info(`ENTRANDO NO CREATE VECTOR STORE NO CONTROLLER >>>> ${engine}, ${repoName} EEEE ${files}`)
 
     if (
       !(await this.isRequestAuthorized(
@@ -36,7 +38,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
 
     try {
   
-      if(!files || files.length === 0){
+      if(!files || files.length === 0 || !Array.isArray(files)){
         res.status(400).json({error: "No files uploaded"})
       }
 
