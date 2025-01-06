@@ -15091,7 +15091,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-yaml@npm:^4.0.1":
+"@types/js-yaml@npm:^4, @types/js-yaml@npm:^4.0.1":
   version: 4.0.9
   resolution: "@types/js-yaml@npm:4.0.9"
   checksum: 10/a0ce595db8a987904badd21fc50f9f444cb73069f4b95a76cc222e0a17b3ff180669059c763ec314bc4c3ce284379177a9da80e83c5f650c6c1310cafbfaa8e6
@@ -15198,6 +15198,13 @@ __metadata:
   version: 1.1.4
   resolution: "@types/methods@npm:1.1.4"
   checksum: 10/ad2a7178486f2fd167750f3eb920ab032a947ff2e26f55c86670a6038632d790b46f52e5b6ead5823f1e53fc68028f1e9ddd15cfead7903e04517c88debd72b1
+  languageName: node
+  linkType: hard
+
+"@types/mime-types@npm:^2":
+  version: 2.1.4
+  resolution: "@types/mime-types@npm:2.1.4"
+  checksum: 10/f8c521c54ee0c0b9f90a65356a80b1413ed27ccdc94f5c7ebb3de5d63cedb559cd2610ea55b4100805c7349606a920d96e54f2d16b2f0afa6b7cd5253967ccc9
   languageName: node
   linkType: hard
 
@@ -16417,14 +16424,18 @@ __metadata:
     "@gitbeaker/rest": "npm:^41.2.0"
     "@types/compression": "npm:^1"
     "@types/express": "npm:*"
+    "@types/js-yaml": "npm:^4"
+    "@types/mime-types": "npm:^2"
     "@types/supertest": "npm:^2.0.8"
     "@veecode-platform/backstage-plugin-veecode-assistant-ai-common": "npm:^0.1.0"
     compression: "npm:^1.7.5"
     express: "npm:^4.17.1"
     express-promise-router: "npm:^4.1.0"
     js-base64: "npm:^3.7.7"
+    js-yaml: "npm:^4.1.0"
+    mime-types: "npm:^2.1.35"
     octokit: "npm:^4.0.2"
-    openai: "npm:^4.72.0"
+    openai: "npm:^4.77.3"
     p-limit: "npm:^6.2.0"
     simple-git: "npm:^3.27.0"
     supertest: "npm:^7.0.0"
@@ -29837,7 +29848,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mime-types@npm:^2.1.12, mime-types@npm:^2.1.18, mime-types@npm:^2.1.27, mime-types@npm:^2.1.31, mime-types@npm:~2.1.17, mime-types@npm:~2.1.19, mime-types@npm:~2.1.24, mime-types@npm:~2.1.34":
+"mime-types@npm:^2.1.12, mime-types@npm:^2.1.18, mime-types@npm:^2.1.27, mime-types@npm:^2.1.31, mime-types@npm:^2.1.35, mime-types@npm:~2.1.17, mime-types@npm:~2.1.19, mime-types@npm:~2.1.24, mime-types@npm:~2.1.34":
   version: 2.1.35
   resolution: "mime-types@npm:2.1.35"
   dependencies:
@@ -31489,6 +31500,28 @@ __metadata:
   bin:
     openai: bin/cli
   checksum: 10/692b6e331191fca38b38dae4b7993919f7397558dfe55bfec782c24da81b58035a22e46b1bd2815e1717e4d926b5d85a1fbd03c4431106aa2504fd153751f7f9
+  languageName: node
+  linkType: hard
+
+"openai@npm:^4.77.3":
+  version: 4.77.3
+  resolution: "openai@npm:4.77.3"
+  dependencies:
+    "@types/node": "npm:^18.11.18"
+    "@types/node-fetch": "npm:^2.6.4"
+    abort-controller: "npm:^3.0.0"
+    agentkeepalive: "npm:^4.2.1"
+    form-data-encoder: "npm:1.7.2"
+    formdata-node: "npm:^4.3.2"
+    node-fetch: "npm:^2.6.7"
+  peerDependencies:
+    zod: ^3.23.8
+  peerDependenciesMeta:
+    zod:
+      optional: true
+  bin:
+    openai: bin/cli
+  checksum: 10/0d89f1305356c0d7e174491d1d77621ce83bfc8650f0b4bc64b9a6831eb3a800342a8d6c420080d20e78cba74f34cfb6734a89334a16faef9deb7b79e81eb572
   languageName: node
   linkType: hard
 
