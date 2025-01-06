@@ -7,6 +7,7 @@ import { FileContent } from "@veecode-platform/backstage-plugin-veecode-assistan
 import simpleGit from 'simple-git';
 import fs from 'fs';
 import path from 'path';
+import mime from 'mime-types';
 // import { IGitManager } from "./types";
 
 export class GitManager /* implements IGitManager */  {
@@ -87,7 +88,7 @@ export class GitManager /* implements IGitManager */  {
 
     async returnFilesFromLocalPath(localPath: string): Promise<FileContent[]> {
       this.logger.info("Recovering cloned files...");
-      
+    
       if (!fs.existsSync(localPath)) {
         this.logger.error(`Directory not found: ${localPath}`);
         throw new Error(`Error: Directory not found: ${localPath}`);
@@ -95,9 +96,15 @@ export class GitManager /* implements IGitManager */  {
     
       try {
         const files: FileContent[] = [];
+        const allowedForApi = [
+          "c", "cpp", "css", "csv", "doc", "docx", "gif", "go", "html",
+          "java", "jpeg", "jpg", "js", "json", "md", "pdf", "php", "pkl",
+          "png", "pptx", "py", "rb", "tar", "tex", "ts", "txt", "webp",
+          "xlsx", "xml", "zip"
+        ];
         const notAllowedFiles = ["webp", "ico", "mp4", "png", "jpg", "jpeg", "gif", "bmp", "svg", "avi", "mov", "mp3", "wav", "ogg"];
-        const notAllowedFilenames = ["yarn.lock", "package-lock.json"];
-
+        const notAllowedFilenames = ["yarn.lock", "package-lock.json", ".editorconfig", ".eslintignore", ".gitignore"];
+    
         const readDirectory = async (dir: string) => {
           const entries = await fs.promises.readdir(dir, { withFileTypes: true });
     
@@ -114,20 +121,45 @@ export class GitManager /* implements IGitManager */  {
               await readDirectory(fullPath);
             } else {
               const extension = path.extname(entry.name).toLowerCase().replace(".", ""); // Remove o ponto inicial
-
+    
+              // Ignorar arquivos não permitidos e certos nomes
               if (notAllowedFiles.includes(extension) || notAllowedFilenames.includes(entry.name)) {
                 this.logger.info(`Ignoring file: ${entry.name}`);
                 continue;
               }
-              // Ler o conteúdo do arquivo
-              const content = await fs.promises.readFile(fullPath, 'utf-8');
+    
+              const mimeType = mime.lookup(entry.name) || 
+                              (extension === 'ts' || extension === 'tsx' ? 'application/typescript' : 'application/octet-stream');
               const relativePath = path.relative(localPath, fullPath);
-              files.push({
-                name: entry.name,
-                relativePath,
-                content,
-                type: 'text/plain', // Defina o tipo, se necessário
-              });
+              const isAllowed = allowedForApi.includes(extension);
+    
+              // Ler o conteúdo do arquivo e converter, se necessário
+              let content: string;
+              try {
+                content = await fs.promises.readFile(fullPath, "utf-8");
+              } catch (error) {
+                this.logger.error(`Error reading file: ${entry.name}. Skipping.`);
+                continue;
+              }
+    
+              // Converter arquivos não permitidos em txt
+              if (!isAllowed) {
+                files.push({
+                  name: `${path.basename(entry.name, path.extname(entry.name))}.txt`,
+                  relativePath: `${path.dirname(relativePath)}/${path.basename(entry.name, path.extname(entry.name))}.txt`,
+                  content,
+                  type: "text/plain",
+                  originalFormat: extension, // Preservar formato original
+                });
+                this.logger.info(`Converted file: ${entry.name} -> .txt`);
+              } else {
+                files.push({
+                  name: entry.name,
+                  relativePath,
+                  content,
+                  type: mimeType,
+                });
+              }
             }
           }
         };
@@ -139,7 +171,6 @@ export class GitManager /* implements IGitManager */  {
         throw new Error(`Error when returning files: ${error}`);
       }
     }
-    
 
     async createPullRequest(
         files: FileContent[],
