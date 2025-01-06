@@ -4,7 +4,8 @@ export type FileContent = {
   name: string,
   relativePath?: string;
   content: string;
-  type?:string
+  type?:string;
+  originalFormat?:string
 }
 
 export interface IChat {
