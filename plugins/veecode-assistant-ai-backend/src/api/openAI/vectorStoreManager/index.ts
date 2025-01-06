@@ -5,8 +5,7 @@ import { IVectorStoreManager } from '../types';
 import fs from 'fs';
 import path from 'path';
 
-export class VectorStoreManager extends OpenAIClient implements IVectorStoreManager{
-
+export class VectorStoreManager extends OpenAIClient implements IVectorStoreManager {
   async createVector(name: string) {
     try {
       this.logger.info('Creating vectorStore...');
@@ -17,36 +16,40 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
       this.logger.info(`New vectorStore Created: ${vectorStore.id}`);
       return vectorStore.id;
     } catch (error: any) {
-      throw new Error(`Erro to create vectorStore:  ${error}`);
+      throw new Error(`Error creating vectorStore: ${error.message}`);
     }
   }
-  
+
   async uploadFiles(vectorStoreId: string, files: FileContent[]) {
     const basePath = './output';
     const CHUNK_SIZE = 10;
 
-    this.logger.info(`cheguei aqui filo dela putana >>>>>>>>> ******, ${files}`)
-  
     if (!Array.isArray(files)) {
       throw new Error(`'files' must be an array. Received: ${typeof files}`);
     }
     if (files.length === 0) {
       throw new Error("No files to upload");
     }
-  
+
     try {
-      // Recria a estrutura de arquivos local
-      await recreateFileStructure(files, basePath);
-  
+      // Filtra arquivos vazios antes de recriar a estrutura
+      const nonEmptyFiles = files.filter(file => file.content.trim().length > 0);
+      if (nonEmptyFiles.length === 0) {
+        throw new Error("All files are empty and cannot be uploaded");
+      }
+
+      // Recria a estrutura dos arquivos no diretório local
+      await recreateFileStructure(nonEmptyFiles, basePath);
+
       // Lê os arquivos recriados
       const preparedFiles = await this.readFilesFromDirectory(basePath);
-  
-      // Divide em chunks
+
+      // Divide os arquivos em chunks
       const chunks = [];
       for (let i = 0; i < preparedFiles.length; i += CHUNK_SIZE) {
         chunks.push(preparedFiles.slice(i, i + CHUNK_SIZE));
       }
-  
+
       // Processa cada chunk
       for (const chunk of chunks) {
         const fileIds = await Promise.all(
@@ -58,32 +61,52 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
             return uploadFile.id;
           })
         );
-  
-        // Associa os arquivos ao VectorStore
-        await Promise.all(
-          fileIds.map(fileId =>
-            this.client.beta.vectorStores.files.create(vectorStoreId, {
-              file_id: fileId,
-            }),
-          ),
-        );
+
+        // Realiza o upload com tentativas
+        await this.uploadWithRetries(vectorStoreId, fileIds, 5);
       }
-  
+
       return {
         status: 'ok',
         message: 'Vector store successfully created!',
       };
-    } catch (error:any) {
-      throw new Error(`Erro ao enviar arquivos para o VectorStore ID ${vectorStoreId}: ${error.message}`);
+    } catch (error: any) {
+      throw new Error(`Error while uploading files to VectorStore ID ${vectorStoreId}: ${error.message}`);
     } finally {
       await fs.promises.rm(basePath, { recursive: true, force: true });
     }
   }
-  
+
+  private async uploadWithRetries(vectorStoreId: string, fileIds: string[], maxRetries: number) {
+    for (let retry = 0; retry < maxRetries; retry++) {
+      try {
+        await Promise.all(
+          fileIds.map((fileId) =>
+            this.client.beta.vectorStores.files.create(vectorStoreId, {
+              file_id: fileId,
+            })
+          )
+        );
+        return; // Upload bem-sucedido, sai do loop
+      } catch (error: any) {
+        if (error.status === 409) {
+          this.logger.warn(
+            `Conflict detected for VectorStore ${vectorStoreId} while uploading chunk. Retrying... (${retry + 1}/${maxRetries})`
+          );
+          await new Promise((resolve) => setTimeout(resolve, 2000 * (retry + 1))); // Delay progressivo
+        } else {
+          throw error; // Erro não relacionado a conflito
+        }
+      }
+    }
+
+    throw new Error(`Failed to upload chunk after ${maxRetries} retries due to conflicts.`);
+  }
+
   private async readFilesFromDirectory(dir: string): Promise<File[]> {
     const entries = await fs.promises.readdir(dir, { withFileTypes: true });
     const allFiles: File[] = [];
-  
+
     for (const entry of entries) {
       const fullPath = path.join(dir, entry.name);
       if (entry.isDirectory()) {
@@ -91,29 +114,30 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
         allFiles.push(...nestedFiles);
       } else {
         const content = await fs.promises.readFile(fullPath);
-        const file = new File([content], path.relative(dir, fullPath), {
-          type: 'text/plain',
-        });
-        allFiles.push(file);
+        if (content.length > 0) {
+          const file = new File([content], path.relative(dir, fullPath), {
+            type: 'text/plain',
+          });
+          allFiles.push(file);
+        } else {
+          this.logger.warn(`File is empty and will be skipped: ${entry.name}`);
+        }
       }
     }
-  
+
     return allFiles;
   }
-  
 
   async deleteVectorStore(vectorStoreId: string) {
     try {
       const response = await this.client.beta.vectorStores.del(vectorStoreId);
       this.logger.info(`VectorStore deleted, ID: ${vectorStoreId}`);
       return {
-        status: "ok",
-        ...response
+        status: 'ok',
+        ...response,
       };
     } catch (error: any) {
-      throw new Error(
-        `Erro to delete vectorStore ID ${vectorStoreId}:  ${error}`,
-      );
+      throw new Error(`Error deleting VectorStore ID ${vectorStoreId}: ${error.message}`);
     }
   }
 }
