@@ -16,6 +16,7 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
     const [ threadId, setThreadId ] = React.useState<string|null>(null);
     const [ showChat, setShowChat ] = React.useState<boolean>(false);
     const [ projectStructure, setProjectStructure] = React.useState<string|null>(null);
+    const [ promptValue, setPromptValue ] = React.useState<string|null>(null);
     const [ entityInfoState, entityInfoDispatch ] = React.useReducer(EntityInfoReducer, initialEntityInfoState);
     const api = useApi(veecodeAssistantAIApiRef);
     const errorApi = useApi(errorApiRef);
@@ -56,7 +57,9 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
               const response = await api.getChat(engine,vectorStoreId,prompt,projectName, projectStructure);
               setAssistantId(response.assistantId);
               setThreadId(response.threadId);
-              return response
+              return {
+                analysis: response.message
+              }
             }
             return null
         }
@@ -120,6 +123,8 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
             // createVectorStore,
             getFilesFromRepoAndCreateVectorStore,
             chat,
+            setPromptValue,
+            promptValue,
             analyzeChangesAndSubmitToRepository,
             clearHistory    
          }}
