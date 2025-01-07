@@ -4,11 +4,11 @@ import { Typography } from "@material-ui/core";
 import { useAIChatStyles } from "./styles";
 import type { AIChatProps } from "./types";
 import { useVeecodeAssistantAIContext } from "../../../../../context/veecodeAssistantAIProvider";
+import useAsync from "react-use/esm/useAsync";
 
 export const AIChat : React.FC<AIChatProps> = (props) => {
 
-    const [ loading, setLoading ] = React.useState<boolean>(false);  // TODO Loading > Remove useState and apply useAsync
-    const { handleChat } = useVeecodeAssistantAIContext();
+    const { handleChat, chat, promptValue } = useVeecodeAssistantAIContext();
     const { closeModal } = props;
     const { root, footer, buttonGroup } = useAIChatStyles();
 
@@ -17,19 +17,24 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
       handleChat();
     };
 
-    React.useEffect(()=>{
-      setLoading(true);
-      setTimeout(()=>{
-        setLoading(false)
-      },4000)
-    },[])
+    const { value: analysisText, loading, /* error */ } = useAsync(async()=>{
+      
+       if(promptValue){
+        const response = await chat(promptValue);
+        return response?.analysis
+       }
+
+       return 'The code could not be analyzed, please try again...'
+    
+      
+    },[promptValue])
 
     return(
         <div className={root}>
           <ChatBubble robot loading={loading}>
             <>
               <Typography variant="body1">
-                This Message will be generate for openAI.
+                {analysisText}
               </Typography>
               <div className={footer}>
                 <Typography variant="body1">
