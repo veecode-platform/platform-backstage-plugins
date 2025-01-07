@@ -8,7 +8,16 @@ export const MenuOptions : React.FC<MenuOptionsProps> = (props) => {
   
     const { options } = props;
     const { list,listItem } = useMenuOptionsStyles();
-    const { handleChat } = useVeecodeAssistantAIContext();
+    const { handleChat, chat } = useVeecodeAssistantAIContext();
+
+    const handleStartChat = async (prompt:string)=>{
+      const response = await chat(prompt);
+      if(response){
+        handleChat();
+      }
+      // eslint-disable-next-line no-console
+      console.log(response)
+    }
 
     return (
      <Box className={list}>       
@@ -18,11 +27,11 @@ export const MenuOptions : React.FC<MenuOptionsProps> = (props) => {
              (<div 
                 key={option.id} 
                 className={listItem} 
-                onClick={handleChat}
+                onClick={() => handleStartChat(option.prompt)}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") handleChat();
+                  if (e.key === "Enter" || e.key === " ") handleStartChat(option.prompt);
                 }}
                 aria-label={`Navigate to ${option.label}`}
                 >
