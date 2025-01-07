@@ -14,7 +14,7 @@ import { DefaultResponse, FileContent } from '@veecode-platform/backstage-plugin
  */
 
 export interface IAssistantAI {
-  initializeAssistant(vectorStoreId: string, assistantName: string, model: string, instructions: string): Promise<string>;
+  initializeAssistant(vectorStoreId: string, model: string, repoName:string, repoStructure: string): Promise<string>;
   deleteAssistant(assistantId: string): Promise<AssistantDeleted & {
     _request_id?: string | null;
 }>
@@ -35,11 +35,13 @@ export interface IChatFactory {
  */
 
 export interface IOpenAIApi {
-  startChat(vectorStoreId: string,useDataset?:boolean): Promise<ThreadCreatedResponse>;
+  startChat(vectorStoreId: string,repoName:string, repoStructure: string,useDataset?:boolean): Promise<ThreadCreatedResponse>;
   getChat(
     vectoreStoreId: string,
     threadId: string,
     message: string,
+    repoName:string,
+    repoStructure: string,
     template: string,
   ): Promise<{
     messages: Message[];
