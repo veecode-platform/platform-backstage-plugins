@@ -7,7 +7,6 @@ import { AssistantAIController } from "./AssistantAIController";
 export class GitController extends AssistantAIController implements IGitController {
 
     returnToken = (req:Request) => {
-      this.logger.info(`Dentro do RETURN TOKEN NO GITCONTROLLER >>>>>>> ${req.headers.authorization}`)
       return this.getToken(req);
     }
 
