@@ -8,15 +8,11 @@ export const MenuOptions : React.FC<MenuOptionsProps> = (props) => {
   
     const { options } = props;
     const { list,listItem } = useMenuOptionsStyles();
-    const { handleChat, chat } = useVeecodeAssistantAIContext();
+    const { handleChat, setPromptValue } = useVeecodeAssistantAIContext();
 
-    const handleStartChat = async (prompt:string)=>{
-      const response = await chat(prompt);
-      if(response){
-        handleChat();
-      }
-      // eslint-disable-next-line no-console
-      console.log(response)
+    const handleStartChat = (prompt:string)=>{
+      setPromptValue(prompt);
+     handleChat()
     }
 
     return (
