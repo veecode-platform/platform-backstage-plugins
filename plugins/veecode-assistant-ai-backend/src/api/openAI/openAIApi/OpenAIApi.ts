@@ -103,16 +103,26 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
         // Combina arquivos extraídos e processados
         const allFiles = [...generatedFiles, ...processedFiles];
 
-        // Retorna mensagens e arquivos gerados
+        // Filtra mensagens para obter a análise
+        const analysisText = latestMessages.data
+            .filter((msg: any) => msg.role === "assistant")
+            .map((msg: any) => {
+                const contentBlock = msg.content?.find((content: any) => content.type === "text");
+                return contentBlock?.text?.value || null;
+            })
+            .filter((text: string | null) => text !== null)
+            .join("\n\n");
+
+        // Retorna mensagens completas e arquivos gerados
         return {
-            messages: latestMessages.data,
+            analysis: analysisText || "Analysis not available.",
             generatedFiles: allFiles,
+            messages: latestMessages.data,
         };
     } catch (error: any) {
         throw new Error(`Erro ao obter o chat: ${error}`);
     }
-}
-
+  }
 
   async clearHistory(vectorStoreId:string,assistantId:string, threadId:string){
     this.logger.info('clearing History...');
