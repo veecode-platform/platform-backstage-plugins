@@ -34,6 +34,7 @@ export class VeeCodeAssistantAIClient implements IVeeCodeAssistantAIClient {
                     return {
                         threadId,
                         assistantId,
+                        analysis: response.analysis,
                         messages: response.messages,
                         generatedFiles: response.generatedFiles
                     };
