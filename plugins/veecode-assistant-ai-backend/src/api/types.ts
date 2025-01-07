@@ -6,7 +6,7 @@ export interface IVeeCodeAssistantAIClient{
         status: string;
         message: string;
     }>,
-    chat(engine:string, vectorStoreId: string, prompt: string): Promise<IChat>,
+    chat(engine:string, vectorStoreId: string, prompt: string, repoName:string, repoStructure:string): Promise<IChat>,
     clearHistory(engine:string,vectorStoreId: string, assistantId: string, threadId: string): Promise<DefaultResponse>
 };
 
