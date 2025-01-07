@@ -44,6 +44,7 @@ export interface IOpenAIApi {
     repoStructure: string,
     template: string,
   ): Promise<{
+    analysis: string,
     messages: Message[];
     generatedFiles: FileContent[];
 }>;
