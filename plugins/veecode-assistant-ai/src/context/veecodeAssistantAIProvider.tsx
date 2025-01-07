@@ -15,6 +15,7 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
     const [ assistantId, setAssistantId ] = React.useState<string|null>(null);
     const [ threadId, setThreadId ] = React.useState<string|null>(null);
     const [ showChat, setShowChat ] = React.useState<boolean>(false);
+    const [ projectStructure, setProjectStructure] = React.useState<string|null>(null);
     const [ entityInfoState, entityInfoDispatch ] = React.useReducer(EntityInfoReducer, initialEntityInfoState);
     const api = useApi(veecodeAssistantAIApiRef);
     const errorApi = useApi(errorApiRef);
@@ -28,11 +29,12 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
         try{
             if(entityInfoState){
              const {engine, projectName, location } = entityInfoState;
-             const files = await api.cloneRepo(location);
+             const { files, structure } = await api.cloneRepo(location);
              // eslint-disable-next-line no-console
              console.log("OLHA AS FUCKING FILES >>>>>>>>>>>>>", files)
              const response = await api.submitRepo(engine, files, projectName);
              setVectorStoreId(response.vectorStoreId);
+             setProjectStructure(structure);
              AlertApi.post({
                 message: response.message,
                 severity: 'success',
@@ -49,9 +51,9 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
 
     const chat = async (prompt: string) => {
         try{
-            if(vectorStoreId && entityInfoState){
-              const { engine } = entityInfoState;
-              const response = await api.getChat(engine,vectorStoreId,prompt);
+            if(vectorStoreId && entityInfoState && projectStructure){
+              const { projectName,engine } = entityInfoState;
+              const response = await api.getChat(engine,vectorStoreId,prompt,projectName, projectStructure);
               setAssistantId(response.assistantId);
               setThreadId(response.threadId);
               return response
