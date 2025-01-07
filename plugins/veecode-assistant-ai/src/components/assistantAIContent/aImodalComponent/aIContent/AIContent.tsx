@@ -36,14 +36,6 @@ export const AIContent : React.FC<AIContentProps> = (props) => {
     },[entityInfoState]);
 
 
-    React.useEffect(()=>{
-      if(vectorStoreId){
-        // eslint-disable-next-line no-console
-        console.log(vectorStoreId)
-      }
-    },[vectorStoreId])
-
-
     if(loadingState) return (
       <div className={content}>
         <LoadingProgress/>
