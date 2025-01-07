@@ -25,11 +25,11 @@ export class VeeCodeAssistantAIClient implements IVeeCodeAssistantAIClient {
       }
     }
 
-    async chat (engine:string, vectorStoreId: string, prompt: string,template?:string, useDataset?:boolean){
+    async chat (engine:string, vectorStoreId: string, prompt: string,repoName:string, repoStructure:string,template?:string, useDataset?:boolean){
         switch(engine){
             case EngineEnum.openAI:
                 {
-                    const { threadId, assistantId } = await this.openAIApi.startChat(vectorStoreId,useDataset);
+                    const { threadId, assistantId } = await this.openAIApi.startChat(vectorStoreId,repoName, repoStructure,useDataset);
                     const response = await this.openAIApi.getChat(assistantId, threadId, prompt,template);
                     return {
                         threadId,
