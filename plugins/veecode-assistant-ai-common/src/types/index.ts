@@ -8,6 +8,10 @@ export type FileContent = {
   originalFormat?:string
 }
 
+export interface IRepository{
+  files: FileContent[],
+  structure: string
+}
 export interface IChat {
   threadId: string;
   assistantId: string;
@@ -29,7 +33,9 @@ export interface DonwloadRepoAndCreateVectorStoreParams {
 export interface AnalyzeAndStartChatParams {
   engine: string,
   vectorStoreId: string,
-  prompt: string
+  prompt: string,
+  repoName: string,
+  repoStructure: string
 }
 
 export interface DeleteChatParams {
@@ -95,12 +101,6 @@ export interface InitializeAssistantAIResponse {
 
 export interface ClearHistoryResponse{
   message: string
-}
-
-export interface GitCloneResponse{
-  status: string;
-  localPath: string;
-  data: File[];
 }
 
 export interface GetFilesResponse  {

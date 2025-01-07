@@ -60,7 +60,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
 
   analyzeAndStartChat = async (req: Request, res: Response) => {
 
-    const {engine, vectorStoreId, prompt} = req.body as AnalyzeAndStartChatParams;
+    const {engine, vectorStoreId, prompt, repoName, repoStructure } = req.body as AnalyzeAndStartChatParams;
 
     if (
       !(await this.isRequestAuthorized(
@@ -73,7 +73,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
 
     try {
 
-      const response = await this.veeCodeAssistantAI.chat(engine,vectorStoreId, prompt);
+      const response = await this.veeCodeAssistantAI.chat(engine,vectorStoreId, prompt, repoName, repoStructure);
 
       res.status(200).json({
         assistantId: response.assistantId,

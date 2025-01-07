@@ -31,15 +31,15 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
     }
   }
 
-  async initializeAssistant(vectorStoreId: string, useDataset?:boolean) {
+  async initializeAssistant(vectorStoreId: string, repoName:string, repoStructure:string, useDataset?:boolean) {
     try {
       this.logger.info("Check Assistant Available...");
-      const { assistantName, instructions, model, dataset } = this.OpenAIConfig.getOpenAIConfig();
+      const { model, dataset } = this.OpenAIConfig.getOpenAIConfig();
       const assistants = await this.client.beta.assistants.list();
-      const existingAssistant = assistantName ? assistants.data.find((a: any) => a.name === assistantName) : false;
+      const existingAssistant = repoName ? assistants.data.find((a: any) => a.name === repoName) : false;
       const modelUses = (useDataset && dataset) ? dataset.model : model;
 
-      if (!existingAssistant) return this.assistantAI.initializeAssistant(vectorStoreId,assistantName,instructions,modelUses);
+      if (!existingAssistant) return this.assistantAI.initializeAssistant(vectorStoreId,repoName,repoStructure,modelUses);
 
       this.logger.info(`Assistant found: ${existingAssistant.id}`);
       return existingAssistant.id;
@@ -49,10 +49,10 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
     }
   }
 
-  async startChat(vectorStoreId: string, useDataset?:boolean) {
+  async startChat(vectorStoreId: string, repoName:string, repoStructure:string, useDataset?:boolean) {
     try {
       this.logger.info('starting chat...');
-      const assistant = await this.initializeAssistant(vectorStoreId,useDataset);
+      const assistant = await this.initializeAssistant(vectorStoreId,repoName, repoStructure, useDataset);
       const thread = await this.threadsManager.createThread();
       this.logger.info(`Thread Created: ${thread.id}`);
       return { threadId: thread.id, assistantId: assistant };
@@ -68,38 +68,51 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
 
   async getChat(assistantId: string, threadId: string, message: string, template?: string) {
     try {
+        // Adiciona a mensagem ao thread
+        await this.threadsManager.addMessageToThread(threadId, message);
 
-      // Add Message to Thread
-      await this.threadsManager.addMessageToThread(threadId, message);
+        // Executa e cria o run
+        const run = await this.executeAndCreateRun(assistantId, threadId, template!);
 
-      // execute and create a run
-      const run = await this.executeAndCreateRun(assistantId,threadId, template!); // TODO check template conditional params
+        // Aguarda a conclusão do run
+        let runValidate = await this.threadsManager.checkRunStatus(threadId, run.id);
+        while (runValidate.status !== 'completed') {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            runValidate = await this.threadsManager.checkRunStatus(threadId, run.id);
+        }
 
-      // await completion of the run
-      let runValidate = await this.threadsManager.checkRunStatus(threadId, run.id);
+        // Recupera as mensagens mais recentes
+        const latestMessages = await this.threadsManager.listMessages(threadId);
 
-      while (runValidate.status !== 'completed') {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        runValidate = await this.threadsManager.checkRunStatus(threadId, run.id);
-      };
+        // Extrai arquivos gerados a partir das mensagens
+        const generatedFiles: FileContent[] = latestMessages.data
+            .flatMap((msg: any) => extractFilesFromMessage(msg.content));
 
-      // Get the latest messages
-      const latestMessage = await this.threadsManager.listMessages(threadId);
+        // Verifica se há mensagens com metadados de execução do Code Interpreter
+        const processedFiles: FileContent[] = latestMessages.data.flatMap((msg: any) => {
+            if (msg.attachments && msg.attachments.length > 0) {
+                return msg.attachments.map((attachment: any) => ({
+                    name: attachment.filename,
+                    content: attachment.content, // Conteúdo do arquivo gerado
+                    type: attachment.mime_type, // Tipo MIME do arquivo gerado
+                }));
+            }
+            return [];
+        });
 
-      // TODO check message
-      // return latestMessage.data[0].content;
+        // Combina arquivos extraídos e processados
+        const allFiles = [...generatedFiles, ...processedFiles];
 
-      // Process messages to extract generated files
-      const generatedFiles = latestMessage.data
-      .map((msg: any) => extractFilesFromMessage(msg.content))
-      .flat();
-
-    return { messages: latestMessage.data, generatedFiles };
-
+        // Retorna mensagens e arquivos gerados
+        return {
+            messages: latestMessages.data,
+            generatedFiles: allFiles,
+        };
     } catch (error: any) {
-      throw new Error(`Erro to get chat:  ${error}`);
+        throw new Error(`Erro ao obter o chat: ${error}`);
     }
-  }
+}
+
 
   async clearHistory(vectorStoreId:string,assistantId:string, threadId:string){
     this.logger.info('clearing History...');

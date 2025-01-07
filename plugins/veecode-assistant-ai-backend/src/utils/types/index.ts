@@ -4,9 +4,7 @@ import type { Config } from "@backstage/config";
 export interface OpenAIProviderConfig {
     apiBaseUrl: string;
     apiKey: string;
-    assistantName: string;
     model: string;
-    instructions: string;
     timeout?: string;
     dataset?: IDataset
 }
