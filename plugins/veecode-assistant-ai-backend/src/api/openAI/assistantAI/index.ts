@@ -1,16 +1,31 @@
 import { OpenAIClient } from "../openAIClient";
-import { IAssistantAI } from "../types";
+import type { IAssistantAI } from "../types";
+
 
 export class AssistantAI extends OpenAIClient implements IAssistantAI {
 
-    async initializeAssistant(vectorStoreId: string, assistantName: string, instructions: string,model: string,){
+    async initializeAssistant(vectorStoreId: string, repoName: string, repoStructure: string,model: string,){
         try{
            this.logger.info("Initializing assistant...");
+
            const assistant = await this.client.beta.assistants.create({
-            name: assistantName,
-            instructions: instructions,
+            name: repoName,
+            instructions: `You are equipped to automatically analyze the files available in your file search system.
+              You leverage this capability to generate Dockerfiles, Terraform, Pipelines, Helm charts, Docker Compose files, and Kubernetes manifests directly from the analyzed codebases.
+              Below is the current directory structure available for analysis:
+              Directory structure of ${repoName}:
+              ${repoStructure}
+              You provide tailored recommendations on suitable metrics and code restructuring for refactoring, 
+              enhancing both quality and performance. You are designed to ensure that applications comply 
+              with the latest cloud-native standards and are optimized for maximum security and effectiveness.
+              You focus on delivering direct and practical solutions without unnecessary explanations, 
+              utilizing your file search capabilities to access and analyze uploaded files.
+            `,
             model: model,
-            tools: [{ type: "file_search" }],
+            tools: [
+              { type: "file_search" },
+              { type: "code_interpreter" }
+            ],
           });
       
           if (vectorStoreId) {
