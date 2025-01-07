@@ -104,7 +104,7 @@ export class GitManager /* implements IGitManager */  {
           "xlsx", "xml", "zip"
       ];
       const notAllowedFiles = ["webp", "ico", "mp4", "png", "jpg", "jpeg", "gif", "bmp", "svg", "avi", "mov", "mp3", "wav", "ogg"];
-      const notAllowedFilenames = ["yarn.lock", "package-lock.json", ".editorconfig", ".eslintignore", ".gitignore"];
+      const notAllowedFilenames = ["yarn.lock", "package-lock.json"];
   
       const readDirectory = async (dir: string, parentTree: Record<string, any>) => {
           const entries = await fs.promises.readdir(dir, { withFileTypes: true });
@@ -141,22 +141,22 @@ export class GitManager /* implements IGitManager */  {
                   }
   
                   if (!isAllowed) {
-                      files.push({
-                          name: `${path.basename(entry.name, path.extname(entry.name))}.txt`,
-                          relativePath: `${path.dirname(relativePath)}/${path.basename(entry.name, path.extname(entry.name))}.txt`,
-                          content,
-                          type: "text/plain",
-                          originalFormat: extension,
-                      });
-                      this.logger.info(`Converted file: ${entry.name} -> .txt`);
-                  } else {
-                      files.push({
-                          name: entry.name,
-                          relativePath,
-                          content,
-                          type: mimeType,
-                      });
-                  }
+                    files.push({
+                        name: `${entry.name}.txt`, // Mantém a extensão original e adiciona .txt
+                        relativePath: `${path.dirname(relativePath)}/${entry.name}.txt`,
+                        content,
+                        type: "text/plain",
+                        originalFormat: extension,
+                    });
+                    this.logger.info(`Converted file: ${entry.name} -> ${entry.name}.txt`);
+                } else {
+                    files.push({
+                        name: entry.name,
+                        relativePath,
+                        content,
+                        type: mimeType,
+                    });
+                }
   
                   // Adiciona arquivo ao diretório no formato de árvore
                   parentTree[entry.name] = null; // Arquivos são folhas
