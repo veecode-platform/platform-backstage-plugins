@@ -59,9 +59,6 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
 
  async submitRepo(engine:string = "openAI", files: FileContent[], repoName:string) : Promise<SubmitRepoResponse> {
 
-  // eslint-disable-next-line no-console
-  console.log("ESTOU RECEBENDO AQUI OS FILES PARA MANDAR PARA O BACKEND >>>", files)
-
   const body = {
     engine,
     repoName,
