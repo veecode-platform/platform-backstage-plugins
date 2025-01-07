@@ -1,7 +1,7 @@
 import { ConfigApi, FetchApi,OAuthApi } from "@backstage/core-plugin-api";
 import { VeeCodeAssistantAIApi } from "./veeCodeAssistantAIApi";
 import { ResponseError } from '@backstage/errors';
-import { ClearHistoryResponse, FileContent, InitializeAssistantAIResponse, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { ClearHistoryResponse, FileContent, InitializeAssistantAIResponse, IRepository, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 import { GitAuthManager } from "./git/gitAuthManager";
 
 
@@ -51,7 +51,10 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
    }
 
   const response = await this.fetch<any>("/clone-repository", headers);
-  return response.data
+  return {
+    files: response.data.files,
+    structure: response.data.structure
+  } as IRepository
 }
 
  async submitRepo(engine:string = "openAI", files: FileContent[], repoName:string) : Promise<SubmitRepoResponse> {
@@ -76,11 +79,13 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
   return response;
  }
 
- async createAssistant(engine: string = "openAI",vectorStoreId:string, prompt: string){
+ async createAssistant(engine: string = "openAI",vectorStoreId:string, prompt: string, repoName?:string, repoStructure?:string){
     const body = {
         engine,
         vectorStoreId,
-        prompt 
+        prompt,
+        repoName,
+        repoStructure
        };
       const headers: RequestInit = {
          method: "POST",
@@ -93,8 +98,8 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
       return response;
  }
 
- async getChat(engine: string = "openAI",vectorStoreId: string, prompt: string):Promise<InitializeAssistantAIResponse>{
-    const response = await this.createAssistant(engine,vectorStoreId,prompt)
+ async getChat(engine: string = "openAI",vectorStoreId: string, prompt: string, repoName?:string, repoStructure?:string):Promise<InitializeAssistantAIResponse>{
+    const response = await this.createAssistant(engine,vectorStoreId,prompt, repoName, repoStructure)
     return response
  };
 
