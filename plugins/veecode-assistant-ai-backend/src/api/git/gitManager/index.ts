@@ -3,7 +3,7 @@ import type { Config } from "@backstage/config";
 import { parseGitUrl } from "../../../utils/helpers/parseGitUrl";
 import { GithubManager } from "../github";
 import { GitlabManager } from "../gitlab";
-import { FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { FileContent, IRepository } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 import simpleGit from 'simple-git';
 import fs from 'fs';
 import path from 'path';
@@ -53,10 +53,10 @@ export class GitManager /* implements IGitManager */  {
             // this.logger.info(`Removing existing directory: ${localPath}`);
             // await this.removeTemporaryPath(localPath);
             this.logger.info(`Directory exists: ${localPath}`);
-            const files = await this.returnFilesFromLocalPath(localPath);
-            if(files.length > 0){
+            const response = await this.returnFilesFromLocalPath(localPath);
+            if(response.files.length > 0){
               this.logger.info(`Directory contain files, return existing files`);
-              return files
+              return response
             }
         
             this.logger.info(`Directory is empty, removing it.`);
@@ -74,103 +74,103 @@ export class GitManager /* implements IGitManager */  {
           }
 
         // return the files from the temporary folder
-         const files = await this.returnFilesFromLocalPath(localPath)
+         const response = await this.returnFilesFromLocalPath(localPath)
 
         // Remove the authorization header
           await git.raw(['config', '--unset', 'http.extraHeader']);
 
-          return files
+          return response;
         } catch (error) {
           this.logger.error(`Error when cloning repository ${error}`);
           throw new Error(`Error when cloning repository:  ${error}`);
         }
       }
 
-    async returnFilesFromLocalPath(localPath: string): Promise<FileContent[]> {
+    async returnFilesFromLocalPath(localPath: string): Promise<IRepository> {
       this.logger.info("Recovering cloned files...");
-    
+  
       if (!fs.existsSync(localPath)) {
-        this.logger.error(`Directory not found: ${localPath}`);
-        throw new Error(`Error: Directory not found: ${localPath}`);
+          this.logger.error(`Directory not found: ${localPath}`);
+          throw new Error(`Error: Directory not found: ${localPath}`);
       }
-    
-      try {
-        const files: FileContent[] = [];
-        const allowedForApi = [
+  
+      const files: FileContent[] = [];
+      const tree: Record<string, any> = {}; // Estrutura para armazenar o diretório
+  
+      const allowedForApi = [
           "c", "cpp", "css", "csv", "doc", "docx", "gif", "go", "html",
           "java", "jpeg", "jpg", "js", "json", "md", "pdf", "php", "pkl",
           "png", "pptx", "py", "rb", "tar", "tex", "ts", "txt", "webp",
           "xlsx", "xml", "zip"
-        ];
-        const notAllowedFiles = ["webp", "ico", "mp4", "png", "jpg", "jpeg", "gif", "bmp", "svg", "avi", "mov", "mp3", "wav", "ogg"];
-        const notAllowedFilenames = ["yarn.lock", "package-lock.json", ".editorconfig", ".eslintignore", ".gitignore"];
-    
-        const readDirectory = async (dir: string) => {
+      ];
+      const notAllowedFiles = ["webp", "ico", "mp4", "png", "jpg", "jpeg", "gif", "bmp", "svg", "avi", "mov", "mp3", "wav", "ogg"];
+      const notAllowedFilenames = ["yarn.lock", "package-lock.json", ".editorconfig", ".eslintignore", ".gitignore"];
+  
+      const readDirectory = async (dir: string, parentTree: Record<string, any>) => {
           const entries = await fs.promises.readdir(dir, { withFileTypes: true });
-    
+  
           for (const entry of entries) {
-            const fullPath = path.join(dir, entry.name);
-    
-            // Ignorar o diretório .git
-            if (entry.name === ".git") {
-              continue;
-            }
-    
-            if (entry.isDirectory()) {
-              // Recurse para subdiretórios
-              await readDirectory(fullPath);
-            } else {
-              const extension = path.extname(entry.name).toLowerCase().replace(".", ""); // Remove o ponto inicial
-    
-              // Ignorar arquivos não permitidos e certos nomes
-              if (notAllowedFiles.includes(extension) || notAllowedFilenames.includes(entry.name)) {
-                this.logger.info(`Ignoring file: ${entry.name}`);
-                continue;
-              }
-    
-              const mimeType = mime.lookup(entry.name) || 
-                              (extension === 'ts' || extension === 'tsx' ? 'application/typescript' : 'application/octet-stream');
-              const relativePath = path.relative(localPath, fullPath);
-              const isAllowed = allowedForApi.includes(extension);
-    
-              // Ler o conteúdo do arquivo e converter, se necessário
-              let content: string;
-              try {
-                content = await fs.promises.readFile(fullPath, "utf-8");
-              } catch (error) {
-                this.logger.error(`Error reading file: ${entry.name}. Skipping.`);
-                continue;
-              }
-    
-              // Converter arquivos não permitidos em txt
-              if (!isAllowed) {
-                files.push({
-                  name: `${path.basename(entry.name, path.extname(entry.name))}.txt`,
-                  relativePath: `${path.dirname(relativePath)}/${path.basename(entry.name, path.extname(entry.name))}.txt`,
-                  content,
-                  type: "text/plain",
-                  originalFormat: extension, // Preservar formato original
-                });
-                this.logger.info(`Converted file: ${entry.name} -> .txt`);
+              const fullPath = path.join(dir, entry.name);
+  
+              // Ignorar o diretório .git
+              if (entry.name === ".git") continue;
+  
+              if (entry.isDirectory()) {
+                  parentTree[entry.name] = {};
+                  await readDirectory(fullPath, parentTree[entry.name]);
               } else {
-                files.push({
-                  name: entry.name,
-                  relativePath,
-                  content,
-                  type: mimeType,
-                });
+                  const extension = path.extname(entry.name).toLowerCase().replace(".", "");
+  
+                  // Ignorar arquivos não permitidos e certos nomes
+                  if (notAllowedFiles.includes(extension) || notAllowedFilenames.includes(entry.name)) {
+                      this.logger.info(`Ignoring file: ${entry.name}`);
+                      continue;
+                  }
+  
+                  const mimeType = mime.lookup(entry.name) || 
+                                  (extension === 'ts' || extension === 'tsx' ? 'application/typescript' : 'application/octet-stream');
+                  const relativePath = path.relative(localPath, fullPath);
+                  const isAllowed = allowedForApi.includes(extension);
+  
+                  let content: string;
+                  try {
+                      content = await fs.promises.readFile(fullPath, "utf-8");
+                  } catch (error) {
+                      this.logger.error(`Error reading file: ${entry.name}. Skipping.`);
+                      continue;
+                  }
+  
+                  if (!isAllowed) {
+                      files.push({
+                          name: `${path.basename(entry.name, path.extname(entry.name))}.txt`,
+                          relativePath: `${path.dirname(relativePath)}/${path.basename(entry.name, path.extname(entry.name))}.txt`,
+                          content,
+                          type: "text/plain",
+                          originalFormat: extension,
+                      });
+                      this.logger.info(`Converted file: ${entry.name} -> .txt`);
+                  } else {
+                      files.push({
+                          name: entry.name,
+                          relativePath,
+                          content,
+                          type: mimeType,
+                      });
+                  }
+  
+                  // Adiciona arquivo ao diretório no formato de árvore
+                  parentTree[entry.name] = null; // Arquivos são folhas
               }
-            }
           }
-        };
-    
-        await readDirectory(localPath);
-    
-        return files;
-      } catch (error) {
-        throw new Error(`Error when returning files: ${error}`);
-      }
-    }
+      };
+  
+      await readDirectory(localPath, tree);
+  
+      // Converte a árvore em formato de string para as instruções
+      const structure = JSON.stringify(tree, null, 4).replace(/"/g, "");
+  
+      return { files, structure };
+  }
 
     async createPullRequest(
         files: FileContent[],
