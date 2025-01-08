@@ -31,8 +31,6 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
             if(entityInfoState){
              const {engine, projectName, location } = entityInfoState;
              const { files, structure } = await api.cloneRepo(location);
-             // eslint-disable-next-line no-console
-             console.log("OLHA AS FUCKING FILES >>>>>>>>>>>>>", files)
              const response = await api.submitRepo(engine, files, projectName);
              setVectorStoreId(response.vectorStoreId);
              setProjectStructure(structure);
