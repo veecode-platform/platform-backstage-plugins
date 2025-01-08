@@ -8,7 +8,23 @@ export const useMarkdowRendererStyles = makeStyles({
     maxHeight: "48vh",
     color: themeVariables.colors.white,
     paddingBottom: "2rem",
-    overflowY: "scroll",
-    fontSize: '1rem'
+    overflowY: "auto",
+    fontSize: '1rem',
+    /* scrollbar */
+    "&::-webkit-scrollbar": {
+      width: "6px",
+      backgroundColor: themeVariables.background.dark,
+    },
+    "&::-webkit-scrollbar-track": {
+      boxShadow: `inset 0 0 5px ${themeVariables.blur.dark}15`,
+      borderRadius: "10px",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      background: themeVariables.border.main,
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+      backgroundColor: themeVariables.background.secondary,
+      cursor: 'pointer'
+    },
   }
 });

@@ -10,7 +10,7 @@ export const CodeBlockComponent : React.FC<CodeBlockProps> = ({ children, langua
        style={
          { 
             backgroundColor: themeVariables.codeBlock.dark,
-            maxWidth: '50vw',
+            maxWidth: '45vw',
             padding: '1rem',
             overflowX: 'auto'
           }

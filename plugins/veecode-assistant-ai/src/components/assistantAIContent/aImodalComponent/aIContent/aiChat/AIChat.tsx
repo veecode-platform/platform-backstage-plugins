@@ -37,11 +37,11 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
                 <MarkdownRenderer markdown={chatResponse?.analysisText!} />
                 {(chatResponse && chatResponse.files.length > 0) && (
                   <div className={footer}>
-                  <Typography variant="body1">
-                    Do you want to commit the changes to your repository?
-                  </Typography>
-                  <Button variant="primary">Create Pull Request</Button>
-                </div>
+                    <Typography variant="body1">
+                      Do you want to commit the changes to your repository?
+                    </Typography>
+                    <Button variant="primary">Create Pull Request</Button>
+                  </div>
                 )}
             </ChatBubble>
           </div>
