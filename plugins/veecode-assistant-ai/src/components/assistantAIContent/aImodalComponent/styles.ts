@@ -40,7 +40,7 @@ export const useAIModalComponentStyles = makeStyles(theme=>({
        modalBody:{
         width: '85%',
         margin: 'auto',
-        marginTop: '-1rem',
+        marginTop: '-1.5rem',
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'center',
