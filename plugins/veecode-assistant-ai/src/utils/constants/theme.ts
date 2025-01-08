@@ -16,6 +16,9 @@ export const themeVariables = {
         dark: '#0F0F0F',
         danger: '#FF000025'
     },
+    codeBlock:{
+        dark: '#0C0D16'
+    },
     border:{
         main: '#B5B5B530'
     },

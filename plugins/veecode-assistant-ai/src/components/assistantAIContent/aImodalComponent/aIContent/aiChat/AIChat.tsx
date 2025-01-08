@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, ChatBubble } from "../../../../shared";
+import { Button, ChatBubble, MarkdownRenderer } from "../../../../shared";
 import { Typography } from "@material-ui/core";
 import { useAIChatStyles } from "./styles";
 import type { AIChatProps } from "./types";
@@ -10,7 +10,7 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
 
     const { handleChat, chat, promptValue } = useVeecodeAssistantAIContext();
     const { closeModal } = props;
-    const { root, footer, buttonGroup } = useAIChatStyles();
+    const { root, chatContent, footer, buttonGroup } = useAIChatStyles();
 
     const clearHistoryAndExit = () => {
       closeModal();
@@ -31,19 +31,19 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
 
     return(
         <div className={root}>
-          <ChatBubble robot loading={loading}>
-            <>
-              <Typography variant="body1">
-                {analysisText}
-              </Typography>
-              <div className={footer}>
-                <Typography variant="body1">
-                  Do you want to commit the changes to your repository?
-                </Typography>
-                <Button variant="primary">Create Pull Request</Button>
-              </div>
-            </>
-          </ChatBubble>
+          <div className={chatContent}>
+            <ChatBubble robot loading={loading}>
+              <>
+                <MarkdownRenderer markdown={analysisText!} />
+                <div className={footer}>
+                  <Typography variant="body1">
+                    Do you want to commit the changes to your repository?
+                  </Typography>
+                  <Button variant="primary">Create Pull Request</Button>
+                </div>
+              </>
+            </ChatBubble>
+          </div>
          {loading ? null : (
            <div className={buttonGroup}>
            <Button variant="secondary" onClick={handleChat}> New Analysis </Button>

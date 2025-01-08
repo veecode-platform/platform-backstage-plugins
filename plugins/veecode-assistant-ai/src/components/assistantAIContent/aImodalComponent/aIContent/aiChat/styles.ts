@@ -6,8 +6,10 @@ export const useAIChatStyles = makeStyles({
         height: '100%',
         display: 'flex',
         alignItems: 'flex-start',
-        justifyContent: 'center',
-        flexDirection: 'column'
+        justifyContent: 'space-between'
+    },
+    chatContent:{
+      flex:'4',
     },
     footer:{
        display: "flex",
@@ -18,12 +20,15 @@ export const useAIChatStyles = makeStyles({
        padding: '1rem 0'
     },
     buttonGroup:{
+        flex: '1',
         width: "100%",
+        height: "100%",
+        minHeight: "60vh",
         marginTop: '3rem',
         display: "flex",
         alignItems: "flex-end",
         justifyContent: "center",
         flexDirection:"column",
-        gap: '.8rem',
+        gap: '.8rem'
     }
 })
