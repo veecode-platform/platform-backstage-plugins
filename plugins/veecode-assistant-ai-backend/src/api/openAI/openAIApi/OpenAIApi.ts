@@ -88,22 +88,7 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
         const generatedFiles: FileContent[] = latestMessages.data
             .flatMap((msg: any) => extractFilesFromMessage(msg.content));
 
-        // Verifica se há mensagens com metadados de execução do Code Interpreter
-        const processedFiles: FileContent[] = latestMessages.data.flatMap((msg: any) => {
-            if (msg.attachments && msg.attachments.length > 0) {
-                return msg.attachments.map((attachment: any) => ({
-                    name: attachment.filename,
-                    content: attachment.content, // Conteúdo do arquivo gerado
-                    type: attachment.mime_type, // Tipo MIME do arquivo gerado
-                }));
-            }
-            return [];
-        });
-
-        // Combina arquivos extraídos e processados
-        const allFiles = [...generatedFiles, ...processedFiles];
-
-        // Filtra mensagens para obter a análise
+        // Verifica mensagens para análise
         const analysisText = latestMessages.data
             .filter((msg: any) => msg.role === "assistant")
             .map((msg: any) => {
@@ -113,16 +98,17 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
             .filter((text: string | null) => text !== null)
             .join("\n\n");
 
-        // Retorna mensagens completas e arquivos gerados
+        // Retorna o resultado processado
         return {
             analysis: analysisText || "Analysis not available.",
-            generatedFiles: allFiles,
+            generatedFiles: generatedFiles,
             messages: latestMessages.data,
         };
     } catch (error: any) {
         throw new Error(`Erro ao obter o chat: ${error}`);
     }
-  }
+}
+
 
   async clearHistory(vectorStoreId:string,assistantId:string, threadId:string){
     this.logger.info('clearing History...');
