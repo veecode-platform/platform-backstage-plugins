@@ -9,6 +9,10 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# temp
+output*/
+temp*/
+
 # Coverage directory generated when running tests with coverage
 coverage
 
