@@ -16,7 +16,7 @@ export class AssistantAI extends OpenAIClient implements IAssistantAI {
             tools: [
               { type: "file_search" },
               { type: "code_interpreter" }
-            ],
+            ]
           });
       
           if (vectorStoreId) {
