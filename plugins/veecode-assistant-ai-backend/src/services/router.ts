@@ -42,7 +42,6 @@ export async function createRouter(
   router.post("/chat-analyze-repo", analyzerAIController.analyzeAndStartChat as RequestHandler);
   router.delete("/chat-analyze-repo", analyzerAIController.deleteChat as RequestHandler);
   router.post("/clone-repository", gitController.clone as RequestHandler);
- // router.get("/get-files/:localPath", gitController.getFiles as RequestHandler);
   router.post("/save-changes", gitController.submitChangesToRepository as RequestHandler);
   router.post("/upload-template", scaffolderAIController.uploadTemplateFiles as RequestHandler);
   router.post("/chat-template", scaffolderAIController.startChat as RequestHandler);

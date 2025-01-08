@@ -32,25 +32,25 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
     }
 
     try {
-      // Filtra arquivos vazios antes de recriar a estrutura
+      // Filters empty files before recreating the structure
       const nonEmptyFiles = files.filter(file => file.content.trim().length > 0);
       if (nonEmptyFiles.length === 0) {
         throw new Error("All files are empty and cannot be uploaded");
       }
 
-      // Recria a estrutura dos arquivos no diretório local
+      // Recreate the file structure in the local directory
       await recreateFileStructure(nonEmptyFiles, basePath);
 
-      // Lê os arquivos recriados
+       // Read the recreated files
       const preparedFiles = await this.readFilesFromDirectory(basePath);
 
-      // Divide os arquivos em chunks
+      // Split files into chunks
       const chunks = [];
       for (let i = 0; i < preparedFiles.length; i += CHUNK_SIZE) {
         chunks.push(preparedFiles.slice(i, i + CHUNK_SIZE));
       }
 
-      // Processa cada chunk
+     // Process each chunk
       for (const chunk of chunks) {
         const fileIds = await Promise.all(
           chunk.map(async (file) => {
@@ -62,7 +62,7 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
           })
         );
 
-        // Realiza o upload com tentativas
+        // Upload with attempts
         await this.uploadWithRetries(vectorStoreId, fileIds, 5);
       }
 
@@ -87,15 +87,15 @@ export class VectorStoreManager extends OpenAIClient implements IVectorStoreMana
             })
           )
         );
-        return; // Upload bem-sucedido, sai do loop
+        return; // Upload successful, exit loop
       } catch (error: any) {
         if (error.status === 409) {
           this.logger.warn(
             `Conflict detected for VectorStore ${vectorStoreId} while uploading chunk. Retrying... (${retry + 1}/${maxRetries})`
           );
-          await new Promise((resolve) => setTimeout(resolve, 2000 * (retry + 1))); // Delay progressivo
+          await new Promise((resolve) => setTimeout(resolve, 2000 * (retry + 1))); // Delay
         } else {
-          throw error; // Erro não relacionado a conflito
+          throw error; // Error not related to conflict
         }
       }
     }

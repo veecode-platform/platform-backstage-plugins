@@ -68,27 +68,27 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
 
   async getChat(assistantId: string, threadId: string, message: string, template?: string) {
     try {
-        // Adiciona a mensagem ao thread
+        // Add the message to the thread
         await this.threadsManager.addMessageToThread(threadId, message);
 
-        // Executa e cria o run
+         // Execute and create the run
         const run = await this.executeAndCreateRun(assistantId, threadId, template!);
 
-        // Aguarda a conclusão do run
+        // Wait for the run to finish
         let runValidate = await this.threadsManager.checkRunStatus(threadId, run.id);
         while (runValidate.status !== 'completed') {
             await new Promise(resolve => setTimeout(resolve, 1000));
             runValidate = await this.threadsManager.checkRunStatus(threadId, run.id);
         }
 
-        // Recupera as mensagens mais recentes
+       // Retrieves the most recent messages
         const latestMessages = await this.threadsManager.listMessages(threadId);
 
-        // Extrai arquivos gerados a partir das mensagens
+         // Extracts files generated from messages
         const generatedFiles: FileContent[] = latestMessages.data
             .flatMap((msg: any) => extractFilesFromMessage(msg.content));
 
-        // Verifica mensagens para análise
+        // Check messages for analysis
         const analysisText = latestMessages.data
             .filter((msg: any) => msg.role === "assistant")
             .map((msg: any) => {
@@ -98,7 +98,7 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
             .filter((text: string | null) => text !== null)
             .join("\n\n");
 
-        // Retorna o resultado processado
+        // Returns the processed result
         return {
             analysis: analysisText || "Analysis not available.",
             generatedFiles: generatedFiles,

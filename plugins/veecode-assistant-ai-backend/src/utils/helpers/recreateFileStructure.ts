@@ -3,19 +3,19 @@ import fs from 'fs';
 import path from 'path';
 
 /**
- * Recria a estrutura de arquivos localmente com base no `relativePath`.
- * @param files - Array de objetos File com o metadado `relativePath`.
- * @param basePath - Diretório base onde os arquivos serão recriados.
+ * Recreates the file structure locally based on the `relativePath`.
+ * @param files - Array of File objects with the `relativePath` metadata.
+ * @param basePath - Base directory where the files will be recreated.
  */
 export async function recreateFileStructure(files: FileContent[], basePath: string) {
   for (const file of files) {
-    const relativePath = (file as any).relativePath; // Obtém o caminho original
+    const relativePath = (file as any).relativePath; // Get the original path
     const fullPath = path.join(basePath, relativePath);
 
-    // Cria os diretórios, se necessário
+    // Create directories, if necessary
     await fs.promises.mkdir(path.dirname(fullPath), { recursive: true });
 
-    // Salva o conteúdo do arquivo no diretório local
+    // Saves the contents of the file in the local directory
     const content = file.content;
     await fs.promises.writeFile(fullPath, content, 'utf-8');
   }
