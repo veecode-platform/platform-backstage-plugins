@@ -22,7 +22,6 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
   }
 
   async submitDataToVectorStore(repoName:string, files:FileContent[]){
-    this.logger.info(`Entrei aqui no método submitDataToVectorStore ${files} << FILES`)
     const vectorStoreId = await this.vectorStoreManager.createVector(repoName);
     const response = await this.vectorStoreManager.uploadFiles(vectorStoreId, files);
     return {
