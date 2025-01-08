@@ -11,7 +11,8 @@ export const CodeBlockComponent : React.FC<CodeBlockProps> = ({ children, langua
          { 
             backgroundColor: themeVariables.codeBlock.dark,
             maxWidth: '50vw',
-            padding: '1rem'
+            padding: '1rem',
+            overflowX: 'auto'
           }
         }>
         <CodeBlock.LineContent>

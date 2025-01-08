@@ -1,4 +1,3 @@
-
 export interface ChatBubbleWrapperProps {
     children: React.ReactNode,
     robot?: boolean

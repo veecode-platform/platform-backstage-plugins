@@ -7,7 +7,7 @@ import { AIOptionsProps } from "./type";
 
 export const AIOptions : React.FC<AIOptionsProps> = (props) => {
    
-    const { loading,error } = props;
+    const { loading, error } = props;
     const [ typingComplete, setTypingComplete ] = React.useState<boolean>(false);
     const { root } = useAIOptionsStyles();
 

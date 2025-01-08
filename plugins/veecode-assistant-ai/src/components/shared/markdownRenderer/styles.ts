@@ -9,6 +9,6 @@ export const useMarkdowRendererStyles = makeStyles({
     color: themeVariables.colors.white,
     paddingBottom: "2rem",
     overflowY: "scroll",
-    borderBottom: `1px solid ${themeVariables.border.main}`
+    fontSize: '1rem'
   }
 });

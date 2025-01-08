@@ -17,7 +17,8 @@ export type VeecodeAssistantAIContextType = {
     getFilesFromRepoAndCreateVectorStore: () => Promise<SubmitRepoResponse | null>;
     chat: (prompt: string) => Promise<{
         analysis: string;
-    } | null>;
+        files: FileContent[];
+    } | null>
     setPromptValue: React.Dispatch<React.SetStateAction<string | null>>;
     promptValue: string | null;
     analyzeChangesAndSubmitToRepository: (files: FileContent[]) => Promise<PullRequestResponse | null>,

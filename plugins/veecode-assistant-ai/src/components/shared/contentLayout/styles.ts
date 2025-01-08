@@ -28,10 +28,13 @@ export const useContentLayoutStyles = makeStyles({
     },
     body:{
         padding: '2.5rem 2rem',
-        minHeight: '70vh',
+        height:'77vh',
         display: 'flex',
         alignItems: 'flex-start',
+        justifyContent: 'flex-start',
         backgroundColor: themeVariables.background.dark,
-        justifyContent: 'center'
+        overflowY: 'auto',
+        borderBottomLeftRadius: '10px',
+        borderBottomRightRadius: '10px'
     }
 })

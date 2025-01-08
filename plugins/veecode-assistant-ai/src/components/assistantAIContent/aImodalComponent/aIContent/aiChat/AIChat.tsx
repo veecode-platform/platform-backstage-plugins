@@ -17,38 +17,38 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
       handleChat();
     };
 
-    const { value: analysisText, loading, /* error */ } = useAsync(async()=>{
-      
-       if(promptValue){
-        const response = await chat(promptValue);
-        return response?.analysis
-       }
+    const { value: chatResponse, loading, /* error */ } = useAsync(async()=>{  
+        const response = await chat(promptValue!);
+        return {
+          analysisText: response?.analysis ?? 'The code could not be analyzed, please try again...',
+          files: response?.files ?? []
+        } 
+    },[promptValue]);
 
-       return 'The code could not be analyzed, please try again...'
-    
-      
-    },[promptValue])
+    React.useEffect(()=>{
+      // eslint-disable-next-line no-console
+      console.log(chatResponse)
+    },[chatResponse])
 
     return(
         <div className={root}>
           <div className={chatContent}>
             <ChatBubble robot loading={loading}>
-              <>
-                <MarkdownRenderer markdown={analysisText!} />
-                <div className={footer}>
+                <MarkdownRenderer markdown={chatResponse?.analysisText!} />
+                {(chatResponse && chatResponse.files.length > 0) && (
+                  <div className={footer}>
                   <Typography variant="body1">
                     Do you want to commit the changes to your repository?
                   </Typography>
                   <Button variant="primary">Create Pull Request</Button>
                 </div>
-              </>
+                )}
             </ChatBubble>
           </div>
-         {loading ? null : (
-           <div className={buttonGroup}>
-           <Button variant="secondary" onClick={handleChat}> New Analysis </Button>
-           <Button variant="danger" onClick={ clearHistoryAndExit }>Exit</Button>
-         </div>
+         {( loading) ? null : (<div className={buttonGroup}>
+            <Button variant="secondary" onClick={handleChat}> New Analysis </Button>
+            <Button variant="danger" onClick={ clearHistoryAndExit }>Exit</Button>
+          </div>
          )}
         </div>
     )

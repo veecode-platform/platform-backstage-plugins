@@ -58,7 +58,8 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
               // eslint-disable-next-line no-console
               console.log("AI RAPAZEADA O RESPONSE DO CHAT >>>>",response)
               return {
-                analysis: response.message
+                analysis: response.message,
+                files: response.data.generatedFiles
               }
             }
             return null

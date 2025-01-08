@@ -42,6 +42,6 @@ export const useChatBubbleStyles = makeStyles({
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        flexDirection: 'column',
+        flexDirection: 'column'
     }
 })
