@@ -25,8 +25,8 @@ export abstract class AssistantAIController {
         return token          
     } 
 
-    protected gitProviderManager(token: string){
-        return new GitManager(this.config, this.logger, token);
+    protected gitManager(){
+        return new GitManager(this.logger);
     }
 
 
