@@ -1,4 +1,4 @@
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>{
     variant: "primary" | "secondary" | "danger" ,
-    children: string
+    children: string | React.ReactNode
 }
