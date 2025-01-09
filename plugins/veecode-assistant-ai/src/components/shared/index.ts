@@ -9,3 +9,4 @@ export { LoadingAnswer } from './loadingAnswer/LoadingAnswer';
 export { AlertBox } from './alertBox/AlertBox';
 export { MarkdownRenderer } from './markdownRenderer/MarkdownRenderer';
 export { CodeBlockComponent } from './codeBlock/CodeBlock';
+export { FeedbackComponent } from './feedBackComponent/FeedBackComponent'
