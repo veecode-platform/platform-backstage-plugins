@@ -5,8 +5,7 @@ import { OpenAIClient } from "../openAIClient"
 import { ThreadsManager } from "../threadsManager";
 import { IOpenAIApi } from "../types";
 import { VectorStoreManager } from "../vectorStoreManager";
-import { extractFilesFromMessage } from "../../../utils/helpers/extractFilesFromMessage";
-import { FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { ChatProps, FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 
 export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
 
@@ -65,49 +64,48 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
     return run;
   }
 
-  async getChat(assistantId: string, threadId: string, message: string, template?: string) {
-    try {
-        // Add the message to the thread
-        await this.threadsManager.addMessageToThread(threadId, message);
+async getChat(assistantId: string, threadId: string, message: string, template?: string) {
+  try {
+      // Add the message to the thread
+      await this.threadsManager.addMessageToThread(threadId, message);
 
-         // Execute and create the run
-        const run = await this.executeAndCreateRun(assistantId, threadId, template!);
+      // Execute and create the run
+      const run = await this.executeAndCreateRun(assistantId, threadId, template!);
 
-        // Wait for the run to finish
-        let runValidate = await this.threadsManager.checkRunStatus(threadId, run.id);
-        while (runValidate.status !== 'completed') {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            runValidate = await this.threadsManager.checkRunStatus(threadId, run.id);
-        }
+      // Wait for the run to finish
+      let runValidate = await this.threadsManager.checkRunStatus(threadId, run.id);
+      while (runValidate.status !== 'completed') {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          runValidate = await this.threadsManager.checkRunStatus(threadId, run.id);
+      }
 
-       // Retrieves the most recent messages
-        const latestMessages = await this.threadsManager.listMessages(threadId);
+      // Retrieves the most recent messages
+      const latestMessages = await this.threadsManager.listMessages(threadId);
 
-         // Extracts files generated from messages
-        const generatedFiles: FileContent[] = latestMessages.data
-            .flatMap((msg: any) => extractFilesFromMessage(msg.content));
+      // Check messages for analysis
+      const analysisResponse = latestMessages.data
+          .filter((msg: any) => msg.role === "assistant")
+          .map((msg: any) => {
+              const contentBlock = msg.content?.find((content: any) => content.type === "text");
+              return contentBlock?.text?.value || null;
+          })
+          .filter((text: string | null) => text !== null)
+          .join("\n\n");
 
-        // Check messages for analysis
-        const analysisText = latestMessages.data
-            .filter((msg: any) => msg.role === "assistant")
-            .map((msg: any) => {
-                const contentBlock = msg.content?.find((content: any) => content.type === "text");
-                return contentBlock?.text?.value || null;
-            })
-            .filter((text: string | null) => text !== null)
-            .join("\n\n");
 
-        // Returns the processed result
-        return {
-            analysis: analysisText || "Analysis not available.",
-            generatedFiles: generatedFiles,
-            messages: latestMessages.data,
-        };
-    } catch (error: any) {
-        throw new Error(`Erro ao obter o chat: ${error}`);
-    }
+      // parse response
+      const analysisResponseParsed = JSON.parse(analysisResponse) as ChatProps;
+
+      // Returns the processed result
+      return {
+          analysis: analysisResponseParsed.text || "Analysis not available.",
+          generatedFiles: analysisResponseParsed.files || [],
+          messages: latestMessages.data,
+      };
+  } catch (error: any) {
+      throw new Error(`Erro ao obter o chat: ${error}`);
+  }
 }
-
 
   async clearHistory(vectorStoreId:string,assistantId:string, threadId:string){
     this.logger.info('clearing History...');
