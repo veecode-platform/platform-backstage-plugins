@@ -1,5 +1,4 @@
 import type { LoggerService } from "@backstage/backend-plugin-api";
-import type { Config } from "@backstage/config";
 import { parseGitUrl } from "../../../utils/helpers/parseGitUrl";
 import { GithubManager } from "../github";
 import { GitlabManager } from "../gitlab";
@@ -8,22 +7,18 @@ import simpleGit from 'simple-git';
 import fs from 'fs';
 import path from 'path';
 import mime from 'mime-types';
-// import { IGitManager } from "./types";
+import { IGitManager } from "./types";
 
-export class GitManager /* implements IGitManager */  {
+export class GitManager implements IGitManager  {
 
     private readonly githubManager : GithubManager;
     private readonly gitlabManager : GitlabManager;
-    private readonly token: string;
     
     constructor(
-        private readonly config: Config,
         private readonly logger: LoggerService,
-        token: string
-    ){
-        this.token = token;    
-        this.githubManager = new GithubManager(this.config, this.logger, this.token);
-        this.gitlabManager = new GitlabManager(this.config, this.logger, this.token);
+    ){  
+        this.githubManager = new GithubManager();
+        this.gitlabManager = new GitlabManager();
     }
 
     async returnRepoInfo(location:string){
@@ -38,9 +33,9 @@ export class GitManager /* implements IGitManager */  {
           default:
             throw new Error('Git provider error: unimplemented!');
       }
-  }
+   }
    
-   async removeTemporaryPath (localPath:string){
+    async removeTemporaryPath (localPath:string){
      await fs.promises.rm(localPath, { recursive: true, force: true });
    }
 
@@ -50,8 +45,6 @@ export class GitManager /* implements IGitManager */  {
           this.logger.info("Initializing the repository clone process...");
         // Check if the folder exists and remove it if necessary
           if (fs.existsSync(localPath)) {
-            // this.logger.info(`Removing existing directory: ${localPath}`);
-            // await this.removeTemporaryPath(localPath);
             this.logger.info(`Directory exists: ${localPath}`);
             const response = await this.returnFilesFromLocalPath(localPath);
             if(response.files.length > 0){
@@ -95,7 +88,7 @@ export class GitManager /* implements IGitManager */  {
       }
   
       const files: FileContent[] = [];
-      const tree: Record<string, any> = {}; // Estrutura para armazenar o diretório
+      const tree: Record<string, any> = {}; 
   
       const allowedForApi = [
           "c", "cpp", "css", "csv", "doc", "docx", "gif", "go", "html",
@@ -112,7 +105,7 @@ export class GitManager /* implements IGitManager */  {
           for (const entry of entries) {
               const fullPath = path.join(dir, entry.name);
   
-              // Ignorar o diretório .git
+              // Ignore .git
               if (entry.name === ".git") continue;
   
               if (entry.isDirectory()) {
@@ -121,7 +114,7 @@ export class GitManager /* implements IGitManager */  {
               } else {
                   const extension = path.extname(entry.name).toLowerCase().replace(".", "");
   
-                  // Ignorar arquivos não permitidos e certos nomes
+                  // Ignore not allowed files and not allowed names
                   if (notAllowedFiles.includes(extension) || notAllowedFilenames.includes(entry.name)) {
                       this.logger.info(`Ignoring file: ${entry.name}`);
                       continue;
@@ -142,7 +135,7 @@ export class GitManager /* implements IGitManager */  {
   
                   if (!isAllowed) {
                     files.push({
-                        name: `${entry.name}.txt`, // Mantém a extensão original e adiciona .txt
+                        name: `${entry.name}.txt`, // Keeps the original extension and add .txt
                         relativePath: `${path.dirname(relativePath)}/${entry.name}.txt`,
                         content,
                         type: "text/plain",
@@ -158,39 +151,17 @@ export class GitManager /* implements IGitManager */  {
                     });
                 }
   
-                  // Adiciona arquivo ao diretório no formato de árvore
-                  parentTree[entry.name] = null; // Arquivos são folhas
+                  // Adds a file to the directory in the format of
+                  parentTree[entry.name] = null; 
               }
           }
       };
   
       await readDirectory(localPath, tree);
   
-      // Converte a árvore em formato de string para as instruções
+      // Converts the tree into string format for the instructions
       const structure = JSON.stringify(tree, null, 4).replace(/"/g, "");
   
       return { files, structure };
   }
-
-    async createPullRequest(
-        files: FileContent[],
-        location: string,
-        title: string,
-        message: string
-    ){
-        const  url = parseGitUrl(location); 
-
-        switch(true){
-            case url.includes('github'): {
-               return this.githubManager.createPullRequest(files,url,title,message);
-            }
-            case url.includes('gitlab'): {
-                return this.gitlabManager.createMergeRequest(files,url,title,message);
-             }
-            default:
-              throw new Error('Git provider error: unimplemented!');
-        }
-
-        
-    }
 }
