@@ -55,11 +55,9 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
               const response = await api.getChat(engine,vectorStoreId,prompt,projectName, projectStructure);
               setAssistantId(response.assistantId);
               setThreadId(response.threadId);
-              // eslint-disable-next-line no-console
-              console.log("AI RAPAZEADA O RESPONSE DO CHAT >>>>",response)
               return {
                 analysis: response.message,
-                files: response.data.generatedFiles
+                files: response.generatedFiles
               }
             }
             return null
