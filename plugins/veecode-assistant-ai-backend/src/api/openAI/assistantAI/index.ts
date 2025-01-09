@@ -2,7 +2,6 @@ import { OpenAIClient } from "../openAIClient";
 import type { IAssistantAI } from "../types";
 import { assistantInstructions } from "./instructions";
 
-
 export class AssistantAI extends OpenAIClient implements IAssistantAI {
 
     async initializeAssistant(vectorStoreId: string, repoName: string, repoStructure: string,model: string,){
@@ -26,7 +25,7 @@ export class AssistantAI extends OpenAIClient implements IAssistantAI {
                   vector_store_ids: [vectorStoreId],
                 },
               },
-            });
+             });
           }
 
            this.logger.info(`New Assistant Created: ${assistant.id}`);
