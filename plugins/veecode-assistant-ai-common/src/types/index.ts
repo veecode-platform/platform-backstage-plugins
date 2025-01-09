@@ -92,11 +92,17 @@ export interface SubmitRepoResponse {
 export interface InitializeAssistantAIResponse {
   assistantId: string,
   message: string,
+  generatedFiles: FileContent[],
   data:  {
     messages: Message[],
     generatedFiles: FileContent[]
   },
   threadId: string
+}
+
+export interface ChatProps {
+  text: string,
+  files: FileContent[]
 }
 
 export interface ClearHistoryResponse{
