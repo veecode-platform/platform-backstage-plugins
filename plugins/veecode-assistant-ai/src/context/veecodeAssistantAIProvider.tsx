@@ -71,8 +71,8 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
     const analyzeChangesAndSubmitToRepository = async(files:FileContent[])=>{
         try{
             if(vectorStoreId && entityInfoState){
-                const { engine, location } = entityInfoState;
-                const response = await api.saveChangesInRepository(files,engine, vectorStoreId, location);
+                const { engine, location, projectName } = entityInfoState;
+                const response = await api.saveChangesInRepository(files,engine, vectorStoreId, location,projectName);
                 AlertApi.post({
                     message: 'Pull request created!',
                     severity: 'success',

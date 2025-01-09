@@ -5,7 +5,8 @@ import { OpenAIClient } from "../openAIClient"
 import { ThreadsManager } from "../threadsManager";
 import { IOpenAIApi } from "../types";
 import { VectorStoreManager } from "../vectorStoreManager";
-import { ChatProps, FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { validateAssistantResponse } from "../../../utils/helpers/validateAssistantResponse";
 
 export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
 
@@ -94,7 +95,7 @@ async getChat(assistantId: string, threadId: string, message: string, template?:
 
 
       // parse response
-      const analysisResponseParsed = JSON.parse(analysisResponse) as ChatProps;
+      const analysisResponseParsed = validateAssistantResponse(analysisResponse);
 
       // Returns the processed result
       return {

@@ -64,6 +64,7 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
     repoName,
     files
    };
+
   const headers: RequestInit = {
      method: "POST",
      body: JSON.stringify(body),
@@ -97,14 +98,8 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
 
  async getChat(engine: string = "openAI",vectorStoreId: string, prompt: string, repoName?:string, repoStructure?:string):Promise<InitializeAssistantAIResponse>{
     const response = await this.createAssistant(engine,vectorStoreId,prompt, repoName, repoStructure);
-    // eslint-disable-next-line no-console
-    console.log("olhaaaaaaaaaaaaaaaa get chat >>>>>>>>>>>>",response)
     return response
  };
-
- // TODO uma funçao get chat, que receberia o id do thread ? deveria ser um get no backend
-
- // private async getChat(threadId:string){}
 
  async clearHistory(engine: string = "openAI", vectorStoreId: string, assistantId: string, threadId: string):Promise<ClearHistoryResponse>{
   const body = {
@@ -124,25 +119,27 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
   return response;  
  };
 
- async generateTitleAndMessageForPullRequest(engine: string = "openAI",vectorStoreId: string){
+ async generateTitleAndMessageForPullRequest(engine: string = "openAI",vectorStoreId: string, repoName:string){
    const promptTitle = `Based on the changes you've made, create a title for the pull request that will be submitted to the repository`;
    const promptMessage = 'Based on the changes made, create a message to serve as a description of the pull request that will be submitted to the repository.' 
 
    const [responseTitle, responseMessage] = await Promise.all([
-      this.getChat(engine, vectorStoreId, promptTitle),
-      this.getChat(engine, vectorStoreId, promptMessage),
+      this.getChat(engine, vectorStoreId, promptTitle,repoName),
+      this.getChat(engine, vectorStoreId, promptMessage, repoName),
     ]);
 
+    // eslint-disable-next-line no-console
+    console.log("VEJA OQUE VEM AQUI< MEU COMPANHEIRO GORDO >>>>", responseTitle, responseMessage)
+
    return {
-      // response.choices[0]?.message?.content;
       title: responseTitle.message,
       message: responseMessage.message
    }
  }
 
- async saveChangesInRepository(files: FileContent[], engine:string = "openAI", vectorStoreId: string, location: string){  
+ async saveChangesInRepository(files: FileContent[], engine:string = "openAI", vectorStoreId: string, location: string,repoName:string){  
  
-   const { title, message } = await this.generateTitleAndMessageForPullRequest(engine, vectorStoreId)
+   const { title, message } = await this.generateTitleAndMessageForPullRequest(engine, vectorStoreId,repoName)
    const gitAuthProvider = await this.getGitAuthProvider();
    const token = await gitAuthProvider.getAccessToken(location);
    
@@ -152,8 +149,12 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
     title,
     message  
    };
+
+  // eslint-disable-next-line no-console
+  console.log("VEJA MEU REI, RECEBI AQUI AS PARADAS PARA FZER O PULL REQUEST >>", engine, location, title, message, files);
+
   const headers: RequestInit = {
-     method: "DELETE",
+     method: "POST",
      body: JSON.stringify(body),
      headers: {
         'Content-Type': 'application/json',
