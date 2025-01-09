@@ -96,7 +96,9 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
  }
 
  async getChat(engine: string = "openAI",vectorStoreId: string, prompt: string, repoName?:string, repoStructure?:string):Promise<InitializeAssistantAIResponse>{
-    const response = await this.createAssistant(engine,vectorStoreId,prompt, repoName, repoStructure)
+    const response = await this.createAssistant(engine,vectorStoreId,prompt, repoName, repoStructure);
+    // eslint-disable-next-line no-console
+    console.log("olhaaaaaaaaaaaaaaaa get chat >>>>>>>>>>>>",response)
     return response
  };
 
