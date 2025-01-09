@@ -79,7 +79,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
         assistantId: response.assistantId,
         message: response.analysis,
         data: response.messages,
-        generatedFiles: response.generatedFiles || [],
+        generatedFiles: response.generatedFiles,
         threadId: response.threadId
       });
     } catch (err: any) {
