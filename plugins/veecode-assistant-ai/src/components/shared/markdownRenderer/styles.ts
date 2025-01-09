@@ -9,7 +9,7 @@ export const useMarkdowRendererStyles = makeStyles({
     color: themeVariables.colors.white,
     paddingBottom: "2rem",
     overflowY: "auto",
-    fontSize: '1rem',
+    fontSize: '.9rem',
     /* scrollbar */
     "&::-webkit-scrollbar": {
       width: "6px",
