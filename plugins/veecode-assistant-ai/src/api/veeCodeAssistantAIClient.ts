@@ -1,8 +1,8 @@
 import { ConfigApi, FetchApi,OAuthApi } from "@backstage/core-plugin-api";
 import { VeeCodeAssistantAIApi } from "./veeCodeAssistantAIApi";
 import { ResponseError } from '@backstage/errors';
-import { ClearHistoryResponse, FileContent, InitializeAssistantAIResponse, IRepository, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
-import { GitAuthManager } from "./git/gitAuthManager";
+import { ClearHistoryResponse, FileContent, InitializeAssistantAIResponse, IRepository, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { GitManager } from "./git/gitManager";
 
 
 export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
@@ -29,8 +29,8 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
     return response.json() as Promise<T>
  };
 
- private async getGitAuthProvider(){
-  return new GitAuthManager(this.githubAuthApi, this.gitlabAuthApi)
+ private async getGitManager(){
+  return new GitManager(this.githubAuthApi, this.gitlabAuthApi)
 }
 
  async cloneRepo (location:string) {
@@ -38,8 +38,8 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
     location
    };
 
-   const gitAuthProvider = await this.getGitAuthProvider();
-   const token = await gitAuthProvider.getAccessToken(location);
+   const gitManager = await this.getGitManager();
+   const token = await gitManager.getAccessToken(location);
 
    const headers: RequestInit = {
     method: "POST",
@@ -136,34 +136,5 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
       message: responseMessage.message
    }
  }
-
- async saveChangesInRepository(files: FileContent[], engine:string = "openAI", vectorStoreId: string, location: string,repoName:string){  
- 
-   const { title, message } = await this.generateTitleAndMessageForPullRequest(engine, vectorStoreId,repoName)
-   const gitAuthProvider = await this.getGitAuthProvider();
-   const token = await gitAuthProvider.getAccessToken(location);
-   
-   const body = {
-    files,
-    location,
-    title,
-    message  
-   };
-
-  // eslint-disable-next-line no-console
-  console.log("VEJA MEU REI, RECEBI AQUI AS PARADAS PARA FZER O PULL REQUEST >>", engine, location, title, message, files);
-
-  const headers: RequestInit = {
-     method: "POST",
-     body: JSON.stringify(body),
-     headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
-    }
-
-  const response = await this.fetch<PullRequestResponse>("/save-changes", headers);
-  return response;  
- };
 
 }
