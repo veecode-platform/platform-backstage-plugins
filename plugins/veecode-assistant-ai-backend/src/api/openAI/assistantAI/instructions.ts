@@ -35,27 +35,25 @@ export function assistantInstructions(repoName: string, repoStructure: string) {
      When files are identified with unsupported extensions (e.g., \`.yaml.txt\`), treat them as their intended type (e.g., \`.yaml\`).
 
   ### Response Format:
-  Your response must **always** be a single JSON object with the following structure, returned as plain JSON (not as a code block):
-  {
-    "text": "Generated textual response for the prompt, including analysis and insights.",
-    "files": [
-      {
-        "name": "example.ts",
-        "relativePath": "src/example.ts",
-        "content": "[Complete file content here]",
-        "type": "application/typescript"
-      }
-    ]
-  }
+  - **General Case**: The response must always be a single JSON object with the following structure, returned as plain JSON (not as a code block):
+    {
+      "text": "Generated textual response for the prompt, including analysis and insights.",
+      "files": [
+        {
+          "name": "example.ts",
+          "relativePath": "src/example.ts",
+          "content": "[Complete file content here]",
+          "type": "application/typescript"
+        }
+      ]
+    }
+  - **Important**: The JSON object **must never** be wrapped in \`\`\`json ... \`\`\`. The response must always start with \`{\` and end with \`}\`. Any wrapping or formatting outside of this is strictly prohibited.
+  - **Inside "text" Property**: 
+    - Code blocks (e.g., \`\`\`ts ... \`\`\`) are allowed and expected when providing detailed examples or explanations within the \`text\` property.
+    - These code blocks must follow proper syntax for clarity and usability.
 
-  ### Important Notes:
-  - **Under no circumstances** should the response be wrapped in \`\`\`json ... \`\`\`.
-  - The response **must always start with { and end with }**. It should never include extraneous delimiters like \`\`\`.
-  - Every response **must include generated code** in the "files" array. The code must be:
-    - Complete.
-    - Well-structured.
-    - Functional.
-    - Directly usable in the described scenario.
+  ### Exceptions:
+  - **Special Prompts**: If the prompt includes \`[#TITLE_PULLREQUEST]\` or \`[#BODY_PULLREQUEST]\`, respond with a **plain text string**. In these cases, you are not required to follow the general JSON response format.
 
   ### Analysis Base
   Repository name: **${repoName}**

@@ -1,27 +1,38 @@
 import { ChatProps } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 
 export function validateAssistantResponse(response: string): ChatProps {
-  console.log("Resposta bruta da assistant >>>>", response);
+  console.log("Raw assistant response >>>>", response);
 
-  // Verifica se a resposta está envolvida em ```json delimitadores
+  // Check if the response is wrapped in ```json delimiters
   if (response.startsWith("```json") && response.endsWith("```")) {
-    console.log("Removendo delimitadores de bloco de código...");
+    console.log("Removing code block delimiters...");
 
-    // Remove os delimitadores iniciais e finais
+    // Remove the initial and final delimiters
     const cleanedResponse = response.slice(7, -3).trim();
     try {
       return JSON.parse(cleanedResponse) as ChatProps;
     } catch (error) {
-      console.error("Erro ao parsear JSON limpo:", error);
-      throw new Error("Resposta da assistant não é um JSON válido após limpeza.");
+      console.error("Error parsing cleaned JSON:", error);
+      throw new Error("Assistant response is not valid JSON after cleanup.");
     }
   }
 
-  // Tenta processar diretamente como JSON se não houver delimitadores
+  // Attempt to parse directly as JSON if no delimiters are present
   try {
-    return JSON.parse(response) as ChatProps;
-  } catch (error) {
-    console.error("Erro ao parsear JSON bruto:", error);
-    throw new Error("Resposta da assistant não é um JSON válido.");
+    const parsedResponse = JSON.parse(response) as ChatProps;
+
+    // If JSON parsing succeeds and the object is valid, return it
+    return parsedResponse;
+  } catch {
+    console.log("Response is not structured JSON, treating as a plain string...");
+
+    // Check if it's a plain string
+    if (typeof response === "string") {
+      return { text: response, files: [] };
+    }
   }
+
+  // If all validations fail, throw an error
+  console.error("Response could not be validated or processed as JSON or a string.");
+  throw new Error("Assistant response is invalid.");
 }

@@ -120,8 +120,8 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
  };
 
  async generateTitleAndMessageForPullRequest(engine: string = "openAI",vectorStoreId: string, repoName:string){
-   const promptTitle = `Based on the changes you've made, create a title for the pull request that will be submitted to the repository`;
-   const promptMessage = 'Based on the changes made, create a message to serve as a description of the pull request that will be submitted to the repository.' 
+   const promptTitle = `Based on the changes you've made, create a title for the pull request that will be submitted to the repository, [#TITLE_PULLREQUEST]`;
+   const promptMessage = 'Based on the changes made, create a message to serve as a description of the pull request that will be submitted to the repository. [#BODY_PULLREQUEST]' 
 
    const [responseTitle, responseMessage] = await Promise.all([
       this.getChat(engine, vectorStoreId, promptTitle,repoName),
