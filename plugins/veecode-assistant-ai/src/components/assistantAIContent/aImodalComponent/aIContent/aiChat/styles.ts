@@ -30,5 +30,9 @@ export const useAIChatStyles = makeStyles({
         justifyContent: "center",
         flexDirection:"column",
         gap: '.8rem'
-    }
+    },
+    spinner:{
+        // color: theme.palette.text.primary,
+        marginLeft: '.5rem'
+      },
 })
