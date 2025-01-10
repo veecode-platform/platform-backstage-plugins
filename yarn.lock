@@ -7666,14 +7666,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gitbeaker/core@npm:^41.3.0":
-  version: 41.3.0
-  resolution: "@gitbeaker/core@npm:41.3.0"
+"@gitbeaker/core@npm:^42.0.2":
+  version: 42.0.2
+  resolution: "@gitbeaker/core@npm:42.0.2"
   dependencies:
-    "@gitbeaker/requester-utils": "npm:^41.3.0"
+    "@gitbeaker/requester-utils": "npm:^42.0.2"
     qs: "npm:^6.12.2"
     xcase: "npm:^2.0.1"
-  checksum: 10/db60bfedcd541bd9826f7292630109934a4c667c240e4e914cdb8034c7628a841ebef8701f3d8ed5ac7a64b67479ae7415049a45071b12e40787332653f0f99f
+  checksum: 10/de13407079efd0bac8da260e66a0929e001015cf6a3578240ade9c049f2479058fb9eb237b266699ee52f60120e85da3d28895d143aec7ff6d361cbddd54a6dd
   languageName: node
   linkType: hard
 
@@ -7737,15 +7737,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gitbeaker/requester-utils@npm:^41.3.0":
-  version: 41.3.0
-  resolution: "@gitbeaker/requester-utils@npm:41.3.0"
+"@gitbeaker/requester-utils@npm:^42.0.2":
+  version: 42.0.2
+  resolution: "@gitbeaker/requester-utils@npm:42.0.2"
   dependencies:
     picomatch-browser: "npm:^2.2.6"
     qs: "npm:^6.12.2"
     rate-limiter-flexible: "npm:^4.0.1"
     xcase: "npm:^2.0.1"
-  checksum: 10/10e3d6a87368f7111493a86f17dc969f0e8abb1aae07ac577b204acc297efa1711bfb4d6ba1f8299273e2bc410a755bd329111943fc6337c573cdbb38ab5f899
+  checksum: 10/e83bf16c7f26d5161e421526fda307dee0a259c4a745623309aa39ec370bd482bac394a88e78fb902365f38c77fafc9ab97767a353e58c946f42dcacabe187e2
   languageName: node
   linkType: hard
 
@@ -7779,13 +7779,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gitbeaker/rest@npm:^41.3.0":
-  version: 41.3.0
-  resolution: "@gitbeaker/rest@npm:41.3.0"
+"@gitbeaker/rest@npm:^42.0.2":
+  version: 42.0.2
+  resolution: "@gitbeaker/rest@npm:42.0.2"
   dependencies:
-    "@gitbeaker/core": "npm:^41.3.0"
-    "@gitbeaker/requester-utils": "npm:^41.3.0"
-  checksum: 10/8f280919303e2a57f9cf7070cc3bb74966be73c24448ab6cdd59c7ca6ad9f79f34a1454fb47138fddf91cc743ba769ead42513e5efb06e2be9d40f1f92432cc7
+    "@gitbeaker/core": "npm:^42.0.2"
+    "@gitbeaker/requester-utils": "npm:^42.0.2"
+  checksum: 10/0fda4b4b0270529916bcb287eeda02fc9c66ec98e7afaa9ff1ddeeaf49b6170e84fa42fdbf97a9be1bf75c652bb84c280e8ce1ed5fcc550d8deee21258a8a48f
   languageName: node
   linkType: hard
 
@@ -16635,7 +16635,7 @@ __metadata:
     "@backstage/plugin-catalog-react": "npm:^1.14.2"
     "@backstage/test-utils": "npm:^1.7.0"
     "@backstage/theme": "npm:^0.6.0"
-    "@gitbeaker/rest": "npm:^41.3.0"
+    "@gitbeaker/rest": "npm:^42.0.2"
     "@material-ui/core": "npm:^4.9.13"
     "@material-ui/icons": "npm:^4.9.1"
     "@material-ui/lab": "npm:^4.0.0-alpha.61"
