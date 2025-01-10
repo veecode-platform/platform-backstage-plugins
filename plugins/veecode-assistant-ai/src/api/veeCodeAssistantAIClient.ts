@@ -30,7 +30,7 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
  };
 
  private async getGitManager(){
-  return new GitManager(this.githubAuthApi, this.gitlabAuthApi)
+  return new GitManager(this.configApi, this.githubAuthApi, this.gitlabAuthApi)
 }
 
  async cloneRepo (location:string) {
@@ -135,6 +135,24 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
       title: responseTitle.message,
       message: responseMessage.message
    }
+ }
+
+ async saveChangesInRepository(
+  files: FileContent[],
+  location: string,
+  engine: string,
+  vectorStoreId: string,
+  repoName: string
+ ){
+  const gitManager = await this.getGitManager();
+  const { title, message } = await this.generateTitleAndMessageForPullRequest(engine, vectorStoreId, repoName);
+
+  return gitManager.createPullRequest(
+    files,
+    location,
+    title,
+    message
+)
  }
 
 }
