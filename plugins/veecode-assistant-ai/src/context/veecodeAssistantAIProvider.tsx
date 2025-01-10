@@ -72,9 +72,9 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
         try{
             if(vectorStoreId && entityInfoState){
                 const { engine, location, projectName } = entityInfoState;
-                const response = await api.saveChangesInRepository(files,engine, vectorStoreId, location,projectName);
+                const response = await api.saveChangesInRepository(files,location, engine, vectorStoreId,projectName);
                 AlertApi.post({
-                    message: 'Pull request created!',
+                    message: response.message,
                     severity: 'success',
                     display: 'transient',
                   });
