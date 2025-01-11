@@ -10,6 +10,9 @@ export const useMarkdowRendererStyles = makeStyles({
     paddingBottom: "2rem",
     overflowY: "auto",
     fontSize: '.9rem',
+    '& p, & ul, & table, & div':{
+      maxWidth: '95%',
+    },
     /* scrollbar */
     "&::-webkit-scrollbar": {
       width: "6px",
