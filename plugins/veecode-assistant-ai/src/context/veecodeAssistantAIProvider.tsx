@@ -34,11 +34,6 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
              const response = await api.submitRepo(engine, files, projectName);
              setVectorStoreId(response.vectorStoreId);
              setProjectStructure(structure);
-             AlertApi.post({
-                message: response.message,
-                severity: 'success',
-                display: 'transient',
-              });
               return response
             }
             return null
