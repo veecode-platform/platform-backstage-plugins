@@ -1,11 +1,14 @@
 import React from "react";
 import Lottie from "react-lottie";
-import animationData from '../../../assets/lotties/typing.json'
+import animationData from '../../../assets/lotties/typing.json';
+import animationStars from '../../../assets/lotties/stars.json';
 import { useLoadingAnswerStyles } from "./styles";
+import { Box, Typography } from "@material-ui/core";
+import { LoadingAnswerProps } from "./types";
 
-export const LoadingAnswer = () => {
+export const LoadingAnswer : React.FC<LoadingAnswerProps> = ({analysis}) => {
 
-    const {loadingContent} = useLoadingAnswerStyles();
+    const {loadingContent, loadingAnalysis, analysisText} = useLoadingAnswerStyles();
 
     const defaultOptions = {
         loop: true,
@@ -15,14 +18,39 @@ export const LoadingAnswer = () => {
           preserveAspectRatio: "xMidYMid slice"
         }
       };
+    
+    const stars = {
+      loop: true,
+      autoplay: true,
+      animationData: animationStars,
+      rendererSettings: {
+        preserveAspectRatio: "xMidYMid slice"
+      }
+    }
 
     return (
     <div className={loadingContent}>
-      <Lottie 
-        options={defaultOptions}
-        height={120}
-        width={120}
-       />
+      <>
+        { analysis ? (
+          <Box className={loadingAnalysis}> 
+            <Typography variant="body1" className={analysisText}>
+              Analyzing the code and generating a context ...
+            </Typography>
+              <Lottie
+               options={stars}
+               height={60}
+               width={60}
+               style={{position: 'absolute', top: '1.5rem', bottom: '0', right: '1.5rem'}}
+              />
+          </Box>) 
+          : (<Lottie 
+              options={defaultOptions}
+              height={120}
+              width={120}
+            />)
+          }
+      </>
     </div>
   )
+
 }
