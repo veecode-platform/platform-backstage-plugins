@@ -17,7 +17,7 @@ export const AIOptions : React.FC<AIOptionsProps> = (props) => {
 
     return(
         <div className={root}>
-          <ChatBubble robot loading={loading} error={error}>
+          <ChatBubble robot loading={loading} error={error} analysis>
               <TypingAnimation 
                 text="Perfect, I managed to take a look at your code, now I need you to tell me which instruction to make:" 
                 speed={15} 
