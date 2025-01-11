@@ -13,6 +13,6 @@ export function extractGitLabInfo(url:string) {
       group,
       repo,
       branch,
-      filePath,
+      filePath: filePath  || ""
     };
   }
