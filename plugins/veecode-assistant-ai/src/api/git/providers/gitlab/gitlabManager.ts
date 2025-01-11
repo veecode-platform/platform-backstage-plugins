@@ -1,5 +1,4 @@
 import { FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
-import { Gitlab } from "@gitbeaker/rest";
 import { Base64 } from "js-base64";
 import { readGitLabIntegrationConfigs } from "@backstage/integration";
 import { PullRequestResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
@@ -7,90 +6,110 @@ import { extractGitLabInfo } from "../../../../utils/helpers/extractGitlabInfo";
 import { generateBranchName } from "../../../../utils/helpers/generateBranchName";
 import { IGitlabManager } from "./types";
 import { Provider } from "../provider";
+import { formatHttpErrorMessage } from "../../../../utils/helpers/formatHttpErrorMessage";
 
 export class GitlabManager extends Provider implements IGitlabManager {
 
-    private async getGitlabApi(hostname: string = 'gitlab.com'){
-        const configs = readGitLabIntegrationConfigs(
-            this.configApi.getOptionalConfigArray('integrations.gitlab') ?? [],
-          );
-          const gitlabIntegrationConfig = configs.find(v => v.host === hostname);
-          const baseUrl = gitlabIntegrationConfig?.apiBaseUrl;
-          return new Gitlab({ host:baseUrl, token: this.token }); // TODO check baseurl or host
+  private async getApiBaseUrl(hostname: string): Promise<string> {
+    const configs = readGitLabIntegrationConfigs(
+      this.configApi.getOptionalConfigArray('integrations.gitlab') ?? [],
+    );
+    const gitlabIntegrationConfig = configs.find(v => v.host === hostname);
+    return gitlabIntegrationConfig?.apiBaseUrl || `https://${hostname}/api/v4`;
+  }
+
+  private async fetchFromGitLab(url: string, token: string, options: RequestInit = {}) {
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    });
+  
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      const error = {
+        status: response.status,
+        message: errorMessage || `Error fetching ${url}`,
+      };
+      throw new Error(formatHttpErrorMessage(`Error fetching ${url}`, error));
     }
+  
+    return response.json();
+  }
 
-    async createMergeRequest(
-        files: FileContent[],
-        url: string,
-        title: string,
-        message: string) {
-
-        const { host, group, repo } = extractGitLabInfo(url);
-
-        const gitlabApi = await this.getGitlabApi(host);
-        const projectId = encodeURIComponent(`${group}/${repo}`);
-        const branchName = generateBranchName();
-        const baseBranch = "main";
-
+  async createMergeRequest(
+    files: FileContent[],
+    url: string,
+    title: string,
+    message: string
+  ): Promise<PullRequestResponse> {
+    const { host, group, repo } = extractGitLabInfo(url);
+  
+    const baseUrl = await this.getApiBaseUrl(host);
+    const projectUrl = `${baseUrl}/projects/${encodeURIComponent(`${group}/${repo}`)}`;
+    const project = await this.fetchFromGitLab(projectUrl, this.token);
+    const defaultBranch = project.default_branch ?? 'main';
+    const branchName = generateBranchName();
+  
+    try {
+      // Create branch
+      const createBranchUrl = `${baseUrl}/projects/${project.id}/repository/branches`;
+      await this.fetchFromGitLab(createBranchUrl, this.token, {
+        method: 'POST',
+        body: JSON.stringify({
+          branch: branchName,
+          ref: defaultBranch,
+        }),
+      });
+  
+      // Add or update files in the branch
+      for (const file of files) {
+        const { relativePath, content } = file;
+        const fileUrl = `${baseUrl}/projects/${project.id}/repository/files/${encodeURIComponent(relativePath!)}`;
+  
         try {
-            // create branch
-            await gitlabApi.Branches.create(projectId, branchName, baseBranch);
-
-            // Add files to the branch
-            for (const file of files) {
-                const { name, content } = file;
-
-                let fileExists = false;
-
-                try {
-                    await gitlabApi.RepositoryFiles.show(projectId, name, branchName);
-                    fileExists = true;
-                } catch (error: any) {
-                    if (error.response?.status !== 404) {
-                        throw new Error(`Error fetching file ${name}: ${error.message}`);
-                    }
-                }
-
-                if (fileExists) {
-                    // Update existing file
-                    await gitlabApi.RepositoryFiles.edit(
-                        projectId,
-                        name,
-                        branchName,
-                        Base64.encode(content),
-                        `Updating ${name} in branch ${branchName}`
-                    );
-                } else {
-                    // Create new file
-                    await gitlabApi.RepositoryFiles.create(
-                        projectId,
-                        name,
-                        branchName,
-                        Base64.encode(content),
-                        `Adding ${name} in branch ${branchName}`
-                    );
-                }
-            }
-
-            // Create merge request
-            const mergeRequest = await gitlabApi.MergeRequests.create(
-                projectId,
-                branchName,
-                baseBranch,
-                title,
-                {
-                    description: message,
-                }
-            );
-
-            return {
-                status: "success",
-                link: mergeRequest.web_url as string,
-                message: "Merge request created successfuly!"
-            } as PullRequestResponse;
+          // Directly try to create or update the file
+          await this.fetchFromGitLab(fileUrl, this.token, {
+            method: 'POST',
+            body: JSON.stringify({
+              branch: branchName,
+              content: Base64.encode(content),
+              commit_message: `Adding or updating ${relativePath} in branch ${branchName}`,
+              encoding: 'base64',
+            }),
+          });
         } catch (error: any) {
-            throw new Error(`Error creating pull request: ${error.message}`);
+          throw new Error(`Error creating or updating file ${relativePath}: ${error.message}`);
         }
-
+      }
+  
+      // Create merge request
+      const mergeRequestUrl = `${baseUrl}/projects/${project.id}/merge_requests`;
+      const mergeRequest = await this.fetchFromGitLab(mergeRequestUrl, this.token, {
+        method: 'POST',
+        body: JSON.stringify({
+          source_branch: branchName,
+          target_branch: defaultBranch,
+          title,
+          description: message,
+        }),
+      });
+  
+      return {
+        status: mergeRequest.web_url ? 'ok' : 'error',
+        link: mergeRequest.web_url,
+        message: 'Merge request created successfully!',
+      } as PullRequestResponse;
+    } catch (error: any) {
+      throw new Error(`Error creating merge request: ${error.message}`);
     }
+  }
+   
+  
+  
 }
+
+
