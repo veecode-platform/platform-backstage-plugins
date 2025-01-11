@@ -39,45 +39,58 @@ export class GitManager implements IGitManager  {
      await fs.promises.rm(localPath, { recursive: true, force: true });
    }
 
-    async cloneRepo(token:string,localPath: string, repoUrl: string, branch: string) {
-        const git = simpleGit();
-        try {
+    async cloneRepo(token: string, localPath: string, repoUrl: string, branch: string) {
+      const git = simpleGit();
+      try {
           this.logger.info("Initializing the repository clone process...");
-        // Check if the folder exists and remove it if necessary
+  
+          // Check if the folder exists and remove it if necessary
           if (fs.existsSync(localPath)) {
-            this.logger.info(`Directory exists: ${localPath}`);
-            const response = await this.returnFilesFromLocalPath(localPath);
-            if(response.files.length > 0){
-              this.logger.info(`Directory contain files, return existing files`);
-              return response
-            }
-        
-            this.logger.info(`Directory is empty, removing it.`);
-            await this.removeTemporaryPath(localPath);
-        }
-        // Configure the authorization header
-          await git.addConfig('http.extraHeader', `Authorization: Bearer ${token}`);
-        // Clone the repository
-          await git.clone(repoUrl, localPath, ['--branch', branch]);
-          this.logger.info(`Repository successfully cloned! Cloned repository path: ${localPath}`);
-         
-          if (!fs.existsSync(localPath)) {
-            this.logger.error(`Directory not found: ${localPath}`);
-            throw new Error(`Error: Directory not found: ${localPath}`);
+              this.logger.info(`Directory exists: ${localPath}`);
+              const response = await this.returnFilesFromLocalPath(localPath);
+              if (response.files.length > 0) {
+                  this.logger.info(`Directory contains files, returning existing files`);
+                  return response;
+              }
+  
+              this.logger.info(`Directory is empty, removing it.`);
+              await this.removeTemporaryPath(localPath);
           }
-
-        // return the files from the temporary folder
-         const response = await this.returnFilesFromLocalPath(localPath)
-
-        // Remove the authorization header
+  
+          // Configure the authorization header
+          const isGitLab = repoUrl.includes('gitlab');
+          const headerAuth = isGitLab
+              ? `PRIVATE-TOKEN: ${token}`
+              : `Authorization: Bearer ${token}`;
+          await git.addConfig('http.extraHeader', headerAuth);
+  
+          // Update the repoUrl for GitLab to include the token
+          const authenticatedRepoUrl = isGitLab
+              ? repoUrl.replace('https://', `https://oauth2:${token}@`)
+              : repoUrl;
+  
+          // Clone the repository
+          await git.clone(authenticatedRepoUrl, localPath, ['--branch', branch]);
+          this.logger.info(`Repository successfully cloned! Cloned repository path: ${localPath}`);
+  
+          if (!fs.existsSync(localPath)) {
+              this.logger.error(`Directory not found: ${localPath}`);
+              throw new Error(`Error: Directory not found: ${localPath}`);
+          }
+  
+          // Return the files from the temporary folder
+          const response = await this.returnFilesFromLocalPath(localPath);
+  
+          // Remove the authorization header
           await git.raw(['config', '--unset', 'http.extraHeader']);
-
+  
           return response;
-        } catch (error) {
-          this.logger.error(`Error when cloning repository ${error}`);
-          throw new Error(`Error when cloning repository:  ${error}`);
-        }
+      } catch (error) {
+          this.logger.error(`Error when cloning repository: ${error}`);
+          throw new Error(`Error when cloning repository: ${error}`);
       }
+  }
+  
 
     async returnFilesFromLocalPath(localPath: string): Promise<IRepository> {
       this.logger.info("Recovering cloned files...");
