@@ -12,6 +12,7 @@ export class AssistantAI extends OpenAIClient implements IAssistantAI {
             name: repoName,
             instructions: assistantInstructions(repoName,repoStructure),
             model: model,
+            temperature: 0,
             tools: [
               { type: "file_search" },
               { type: "code_interpreter" }
