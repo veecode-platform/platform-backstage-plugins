@@ -22,13 +22,13 @@ const ChatBubbleWrapper : React.FC<ChatBubbleWrapperProps> = (props) => {
 }
 
 export const ChatBubble : React.FC<ChatBubbleProps> = (props) => {
-    const { robot, children, loading, error } = props;
+    const { robot, children, loading, analysis, error } = props;
     const { root, loadingContent, bubble, aiBubble, avatar, avatarImg, content} = useChatBubbleStyles();
 
     if(loading) return (
       <ChatBubbleWrapper robot={robot}>
         <Box className={`${loadingContent} ${robot ? aiBubble : ''}`}>
-          <LoadingAnswer/>
+         <LoadingAnswer analysis={!!analysis}/>
         </Box>
       </ChatBubbleWrapper>
     )
