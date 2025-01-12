@@ -6,6 +6,7 @@ import { MdClose } from "react-icons/md";
 import { AIContent } from "./aIContent";
 import { useEntity } from "@backstage/plugin-catalog-react";
 import { useEntityAnnotation } from "../../../hooks/useEntityAnnotation";
+import { useVeecodeAssistantAIContext } from "../../../context";
 
 export const AIModalComponent : React.FC<AIModalComponentProps> = (props) => {
     
@@ -13,6 +14,12 @@ export const AIModalComponent : React.FC<AIModalComponentProps> = (props) => {
     const { modalOnBlur,modalContent,modalHeader,closeModal,modalBody } = useAIModalComponentStyles();
     const { entity } = useEntity();
     const { location, projectName, engine } = useEntityAnnotation(entity);
+    const { clearHistory } = useVeecodeAssistantAIContext();
+
+    const handleCloseModal = () => {
+        clearHistory();
+        toggleDialog()
+    }
 
     return (
       <Modal
@@ -30,7 +37,7 @@ export const AIModalComponent : React.FC<AIModalComponentProps> = (props) => {
                   <MdClose 
                     size={32}
                     className={closeModal}
-                    onClick={toggleDialog}
+                    onClick={handleCloseModal}
                     />
                 </Tooltip>
               </div>
@@ -39,7 +46,7 @@ export const AIModalComponent : React.FC<AIModalComponentProps> = (props) => {
                 engine={engine!}
                 location={location!}
                 projectName={projectName!}
-                toggleDialog={toggleDialog}
+                toggleDialog={handleCloseModal}
                 />
             </div>
           </Box>
