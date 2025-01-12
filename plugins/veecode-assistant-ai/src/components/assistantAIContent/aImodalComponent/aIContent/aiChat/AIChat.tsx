@@ -13,11 +13,12 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
     const [LoadingPullRequest, setLoadingPullRequest ] = React.useState<boolean>(false);
     const [ showFeedback, setShowFeedback ] = React.useState<boolean>(false); 
     const [ pullRequestResponseState, pullRequestResponseDispatch ] = React.useReducer(PullRequestResponseReducer,initialPullRequestResponseState);
-    const { handleChat, chat, promptValue, analyzeChangesAndSubmitToRepository } = useVeecodeAssistantAIContext();
+    const { handleChat, chat, promptValue, analyzeChangesAndSubmitToRepository, clearHistory } = useVeecodeAssistantAIContext();
     const { closeModal } = props;
-    const { root, chatContent, footer, buttonGroup, spinner } = useAIChatStyles();
+    const { root, chatContent, footer, buttonGroup, spinner, creatingPr } = useAIChatStyles();
 
     const clearHistoryAndExit = () => {
+      clearHistory();
       closeModal();
       handleChat();
     };
@@ -35,6 +36,7 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
           setShowFeedback(true);
           setTimeout(()=>{
             setShowFeedback(false);
+            handleChat();
           },3000);
         }
       }
@@ -62,20 +64,23 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
                     </Typography>
                     <Button  
                       disabled={LoadingPullRequest} 
-                      variant="primary"
+                      variant='primary'
                       onClick={() => preparePullRequest(chatResponse.files)}
                       >
                       {LoadingPullRequest ? 
-                        (<><CircularProgress className={spinner} size={20} /> Creating ...</>) 
+                        (<span className={creatingPr}>
+                          <CircularProgress className={spinner} size={20} color="inherit" /> 
+                             Creating ...
+                        </span>) 
                         : (<>Create Pull Request</>)}  
                     </Button>
                   </div>
                 )}
             </ChatBubble>
           </div>
-         {( loading) ? null : (<div className={buttonGroup}>
+         {( loading || LoadingPullRequest) ? null : (<div className={buttonGroup}>
             <Button variant="secondary" onClick={handleChat}> New Analysis </Button>
-            <Button variant="danger" onClick={ clearHistoryAndExit }>Exit</Button>
+            <Button variant="danger" onClick={ clearHistoryAndExit}>Exit</Button>
           </div>
          )}
         </div>
