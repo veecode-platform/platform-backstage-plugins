@@ -15,6 +15,12 @@ export const useButtonStyles = makeStyles({
         '&:hover':{
             transform: 'scale(1.04)',
             transition: 'all .5s ease-in-out'
+        },
+        '&:disabled': {
+            cursor: 'not-allowed',
+            backgroundColor: themeVariables.colors.grey,
+            color: themeVariables.colors.dark, 
+            opacity: 0.6, 
         }
     },
     primary:{
