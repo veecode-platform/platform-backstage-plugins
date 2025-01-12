@@ -12,7 +12,8 @@ export class AssistantAI extends OpenAIClient implements IAssistantAI {
             name: repoName,
             instructions: assistantInstructions(repoName,repoStructure),
             model: model,
-            temperature: 0,
+            temperature: 0, // Deterministic responses
+            top_p: 0.1, // Focus on top 10% most probable outputs
             tools: [
               { type: "file_search" },
               { type: "code_interpreter" }
