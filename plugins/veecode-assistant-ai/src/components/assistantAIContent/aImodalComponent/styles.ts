@@ -26,7 +26,12 @@ export const useAIModalComponentStyles = makeStyles(theme=>({
         padding: '.8rem',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        [theme.breakpoints.down('md')]: {
+            padding: '1.2rem .8rem',
+            marginBottom: '.5rem'
+        },
+        
        },
        closeModal:{
         cursor: 'pointer',
