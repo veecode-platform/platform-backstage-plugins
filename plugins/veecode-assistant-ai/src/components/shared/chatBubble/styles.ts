@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import { themeVariables } from "../../../utils/constants/theme";
 
-export const useChatBubbleStyles = makeStyles({
+export const useChatBubbleStyles = makeStyles(theme => ({
     root:{
         display: 'flex',
         alignItems: 'flex-start',
@@ -42,6 +42,9 @@ export const useChatBubbleStyles = makeStyles({
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        [theme.breakpoints.down('md')]: {
+            width: '60vw'
+           }
     }
-})
+}))
