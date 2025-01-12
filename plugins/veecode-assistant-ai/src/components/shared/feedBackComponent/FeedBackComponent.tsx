@@ -19,8 +19,8 @@ const SuccessAnimation = () => {
   return (
       <Lottie 
 	      options={defaultOptions}
-        height={180}
-        width={180}
+        height={150}
+        width={150}
       />
   );
 }
@@ -39,7 +39,7 @@ const ErrorAnimation = () => {
   return (
       <Lottie 
 	      options={defaultOptions}
-        height={90}
+        height={80}
         width={90}
       />
   );
@@ -48,9 +48,10 @@ const ErrorAnimation = () => {
 export const FeedbackComponent : React.FC<FeedbackComponentProps>= (props) => {
 
   const { variant, message } = props;
-  const { root, content, animation } = useFeedbackComponentStyles();
+  const { blur, root, content, animation } = useFeedbackComponentStyles();
 
   return (
+   <div className={blur}>
     <Box
       className={root}
      > 
@@ -58,8 +59,9 @@ export const FeedbackComponent : React.FC<FeedbackComponentProps>= (props) => {
          <div className={animation}>
            {variant === "success" ? <SuccessAnimation/> : <ErrorAnimation/>}
           </div>
-          <Typography variant="h6">{message}</Typography>
+          <Typography variant="h6" style={{marginLeft: '2rem'}}>{message}</Typography>
       </div>
     </Box>
+   </div>
   )
 }
