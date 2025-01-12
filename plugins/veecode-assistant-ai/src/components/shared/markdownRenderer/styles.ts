@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import { themeVariables } from "../../../utils/constants/theme";
 
-export const useMarkdowRendererStyles = makeStyles({
+export const useMarkdowRendererStyles = makeStyles(theme => ({
   wrapper: {
     width: "100%",
     maxWidth: "52vw",
@@ -10,6 +10,9 @@ export const useMarkdowRendererStyles = makeStyles({
     paddingBottom: "2rem",
     overflowY: "auto",
     fontSize: '.9rem',
+    [theme.breakpoints.down('md')]: {
+      maxWidth: "65vw",
+     },
     '& p, & ul, & table, & div':{
       maxWidth: '95%',
     },
@@ -30,4 +33,4 @@ export const useMarkdowRendererStyles = makeStyles({
       cursor: 'pointer'
     },
   }
-});
+}));
