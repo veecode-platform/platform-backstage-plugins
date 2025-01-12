@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import { themeVariables } from "../../../utils/constants/theme";
 
-export const useLoadingAnswerStyles = makeStyles({
+export const useLoadingAnswerStyles = makeStyles(theme => ({
     loadingContent: {
         width: '100%',
         height: '100%',
@@ -22,6 +22,9 @@ export const useLoadingAnswerStyles = makeStyles({
         borderRadius: '0px 20px 20px 20px',
         padding: '2.5rem 3rem',
         backgroundColor: themeVariables.background.main,
+        [theme.breakpoints.down('md')]: {
+            minWidth: '35vw',
+           }
     },
     analysisText: {
         animation: `$fadeInOut 2s infinite`,
@@ -30,4 +33,4 @@ export const useLoadingAnswerStyles = makeStyles({
         "0%": { opacity: 0 },
         "100%": { opacity: 1 },
     },
-});
+}));
