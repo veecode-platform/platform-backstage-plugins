@@ -1,15 +1,22 @@
 import { makeStyles } from "@material-ui/core";
 
-export const useAIChatStyles = makeStyles({
+export const useAIChatStyles = makeStyles(theme => ({
     root:{
         width: '100%',
         height: '100%',
         display: 'flex',
         alignItems: 'flex-start',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        [theme.breakpoints.down('md')]: {
+          scrollY: 'auto',
+          flexDirection: 'column'
+         }
     },
     chatContent:{
       flex:'4',
+      [theme.breakpoints.down('md')]: {
+        width: '100%'
+       }
     },
     footer:{
        display: "flex",
@@ -32,7 +39,12 @@ export const useAIChatStyles = makeStyles({
         gap: '.8rem'
     },
     spinner:{
-        // color: theme.palette.text.primary,
         marginLeft: '.5rem'
       },
-})
+      creatingPr:{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '1rem'
+      }
+}))
