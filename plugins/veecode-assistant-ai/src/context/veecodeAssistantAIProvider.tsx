@@ -68,11 +68,6 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
             if(vectorStoreId && entityInfoState){
                 const { engine, location, projectName } = entityInfoState;
                 const response = await api.saveChangesInRepository(files,location, engine, vectorStoreId,projectName);
-                AlertApi.post({
-                    message: response.message,
-                    severity: 'success',
-                    display: 'transient',
-                  });
                 return response
             }
             return null
@@ -94,6 +89,7 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
                     display: 'transient',
                   });
             }
+            return
         }
         catch(error:any){
             errorApi.post(error);
@@ -113,8 +109,6 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
             handleChat,
             entityInfoState,
             entityInfoDispatch,
-            // getFilesFromRepo,
-            // createVectorStore,
             getFilesFromRepoAndCreateVectorStore,
             chat,
             setPromptValue,
