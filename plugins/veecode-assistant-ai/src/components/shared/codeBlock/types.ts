@@ -1,5 +1,5 @@
 export interface CodeBlockProps {
-    children: string,
+    code: string,
     language: string,
-    className: string
+    className?: string
 }
