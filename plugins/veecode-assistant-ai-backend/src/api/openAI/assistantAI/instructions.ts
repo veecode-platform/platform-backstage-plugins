@@ -53,7 +53,7 @@ export function assistantInstructions(repoName: string, repoStructure: string) {
     - These code blocks must follow proper syntax for clarity and usability.
 
   ### Exceptions:
-  - **Special Prompts**: If the prompt includes \`[#TITLE_PULLREQUEST]\` or \`[#BODY_PULLREQUEST]\`, respond with a **plain text string**. In these cases, you are not required to follow the general JSON response format.
+  - **Special Prompts**: If the prompt includes \`[#DESCRIPTION_PULLREQUEST]\`, respond with a **plain text string**. In these cases, you are not required to follow the general JSON response format, The answer should just be a string like the standard one.
 
   ### Analysis Base
   Repository name: **${repoName}**
