@@ -8,7 +8,7 @@ import { LoadingAnswerProps } from "./types";
 
 export const LoadingAnswer : React.FC<LoadingAnswerProps> = ({analysis}) => {
 
-    const {loadingContent, loadingAnalysis, analysisText} = useLoadingAnswerStyles();
+    const {loadingContent, loadingAnalysis, analysisText, block } = useLoadingAnswerStyles();
 
     const defaultOptions = {
         loop: true,
@@ -33,9 +33,12 @@ export const LoadingAnswer : React.FC<LoadingAnswerProps> = ({analysis}) => {
       <>
         { analysis ? (
           <Box className={loadingAnalysis}> 
-            <Typography variant="body1" className={analysisText}>
-              Analyzing the code and generating a context ...
-            </Typography>
+           <div className={analysisText}>
+            <div className={block}> </div>
+            <Typography variant="body1">
+                Analyzing the code and generating a context ...
+              </Typography>
+           </div>
               <Lottie
                options={stars}
                height={60}

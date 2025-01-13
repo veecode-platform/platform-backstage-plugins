@@ -27,10 +27,20 @@ export const useLoadingAnswerStyles = makeStyles(theme => ({
            }
     },
     analysisText: {
-        animation: `$fadeInOut 2s infinite`,
+       position: 'relative',
+       overflow: 'hidden'
     },
-    "@keyframes fadeInOut": {
-        "0%": { opacity: 0 },
-        "100%": { opacity: 1 },
+    block:{
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        width: '100%',
+        height: '28px',
+        backgroundColor: 'gray',
+        animation: '$revealBlock .5s .5s both'
+    },
+    "@keyframes revealBlock": {
+        "0%": { transform: 'translateX(0%)' },
+        "100%": { transform: 'translateX(100%)' },
     },
 }));
