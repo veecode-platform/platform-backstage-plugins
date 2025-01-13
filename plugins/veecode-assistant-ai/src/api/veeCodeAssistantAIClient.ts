@@ -128,9 +128,6 @@ export class VeeCodeAssistantAIClient implements VeeCodeAssistantAIApi {
       this.getChat(engine, vectorStoreId, promptMessage, repoName),
     ]);
 
-    // eslint-disable-next-line no-console
-    console.log("VEJA OQUE VEM AQUI< MEU COMPANHEIRO GORDO >>>>", responseTitle, responseMessage)
-
    return {
       title: responseTitle.message,
       message: responseMessage.message

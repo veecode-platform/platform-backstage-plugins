@@ -1,11 +1,9 @@
 import { ChatProps } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 
 export function validateAssistantResponse(response: string): ChatProps {
-  console.log("Raw assistant response >>>>", response);
 
   // Check if the response is wrapped in ```json delimiters
   if (response.startsWith("```json") && response.endsWith("```")) {
-    console.log("Removing code block delimiters...");
 
     // Remove the initial and final delimiters
     const cleanedResponse = response.slice(7, -3).trim();
