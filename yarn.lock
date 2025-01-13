@@ -7059,6 +7059,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@emotion/is-prop-valid@npm:1.2.2":
+  version: 1.2.2
+  resolution: "@emotion/is-prop-valid@npm:1.2.2"
+  dependencies:
+    "@emotion/memoize": "npm:^0.8.1"
+  checksum: 10/0fa3960abfbe845d40cc230ab8c9408e1f33d3c03b321980359911c7212133cdcb0344d249e9dab23342b304567eece7a10ec44b986f7230e0640ba00049dceb
+  languageName: node
+  linkType: hard
+
 "@emotion/is-prop-valid@npm:^0.8.2":
   version: 0.8.8
   resolution: "@emotion/is-prop-valid@npm:0.8.8"
@@ -7081,6 +7090,13 @@ __metadata:
   version: 0.7.4
   resolution: "@emotion/memoize@npm:0.7.4"
   checksum: 10/4e3920d4ec95995657a37beb43d3f4b7d89fed6caa2b173a4c04d10482d089d5c3ea50bbc96618d918b020f26ed6e9c4026bbd45433566576c1f7b056c3271dc
+  languageName: node
+  linkType: hard
+
+"@emotion/memoize@npm:^0.8.1":
+  version: 0.8.1
+  resolution: "@emotion/memoize@npm:0.8.1"
+  checksum: 10/a19cc01a29fcc97514948eaab4dc34d8272e934466ed87c07f157887406bc318000c69ae6f813a9001c6a225364df04249842a50e692ef7a9873335fbcc141b0
   languageName: node
   linkType: hard
 
@@ -7156,6 +7172,13 @@ __metadata:
   version: 0.8.5
   resolution: "@emotion/stylis@npm:0.8.5"
   checksum: 10/ceaa673457f501a393cb52873b2bc34dbe35ef0fb8faa4b943d73ecbbb42bc3cea53b87cbf482038b7b9b1f95859be3d8b58d508422b4d15aec5b62314cc3c1e
+  languageName: node
+  linkType: hard
+
+"@emotion/unitless@npm:0.8.1":
+  version: 0.8.1
+  resolution: "@emotion/unitless@npm:0.8.1"
+  checksum: 10/918f73c46ac0b7161e3c341cc07d651ce87e31ab1695e74b12adb7da6bb98dfbff8c69cf68a4e40d9eb3d820ca055dc1267aeb3007927ce88f98b885bf729b63
   languageName: node
   linkType: hard
 
@@ -15830,6 +15853,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/stylis@npm:4.2.5":
+  version: 4.2.5
+  resolution: "@types/stylis@npm:4.2.5"
+  checksum: 10/f8dde326432a7047b6684b96442f0e2ade2cfe8c29bf56217fb8cbbe4763997051fa9dc0f8dba4aeed2fddb794b4bc91feba913b780666b3adc28198ac7c63d4
+  languageName: node
+  linkType: hard
+
 "@types/superagent@npm:*":
   version: 8.1.9
   resolution: "@types/superagent@npm:8.1.9"
@@ -16656,7 +16686,7 @@ __metadata:
     msw: "npm:^1.0.0"
     prism-react-renderer: "npm:^2.4.1"
     react: "npm:^16.13.1 || ^17.0.0 || ^18.0.0"
-    react-code-block: "npm:^1.1.1"
+    react-code-blocks: "npm:^0.1.6"
     react-icons: "npm:^5.4.0"
     react-lottie: "npm:^1.2.10"
     react-markdown: "npm:^9.0.3"
@@ -20980,7 +21010,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css-to-react-native@npm:^3.0.0":
+"css-to-react-native@npm:3.2.0, css-to-react-native@npm:^3.0.0":
   version: 3.2.0
   resolution: "css-to-react-native@npm:3.2.0"
   dependencies:
@@ -21134,17 +21164,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"csstype@npm:3.1.3, csstype@npm:^3.0.2, csstype@npm:^3.1.2, csstype@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "csstype@npm:3.1.3"
+  checksum: 10/f593cce41ff5ade23f44e77521e3a1bcc2c64107041e1bf6c3c32adc5187d0d60983292fda326154d20b01079e24931aa5b08e4467cc488b60bb1e7f6d478ade
+  languageName: node
+  linkType: hard
+
 "csstype@npm:^2.5.2":
   version: 2.6.21
   resolution: "csstype@npm:2.6.21"
   checksum: 10/bf9072344fac1b56dc390fbc410b411bbc2a03fa9c3d243a74ff5687f94777f9da03a5681ac01efc2e68b51055e2c7d6a489185a85a8f01c976a85f9eec3b75e
-  languageName: node
-  linkType: hard
-
-"csstype@npm:^3.0.2, csstype@npm:^3.1.2, csstype@npm:^3.1.3":
-  version: 3.1.3
-  resolution: "csstype@npm:3.1.3"
-  checksum: 10/f593cce41ff5ade23f44e77521e3a1bcc2c64107041e1bf6c3c32adc5187d0d60983292fda326154d20b01079e24931aa5b08e4467cc488b60bb1e7f6d478ade
   languageName: node
   linkType: hard
 
@@ -34089,6 +34119,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"postcss@npm:8.4.38":
+  version: 8.4.38
+  resolution: "postcss@npm:8.4.38"
+  dependencies:
+    nanoid: "npm:^3.3.7"
+    picocolors: "npm:^1.0.0"
+    source-map-js: "npm:^1.2.0"
+  checksum: 10/6e44a7ed835ffa9a2b096e8d3e5dfc6bcf331a25c48aeb862dd54e3aaecadf814fa22be224fd308f87d08adf2299164f88c5fd5ab1c4ef6cbd693ceb295377f4
+  languageName: node
+  linkType: hard
+
 "postcss@npm:^8.1.0, postcss@npm:^8.4.33":
   version: 8.4.47
   resolution: "postcss@npm:8.4.47"
@@ -34841,17 +34882,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-code-block@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "react-code-block@npm:1.1.1"
-  peerDependencies:
-    prism-react-renderer: ^2
-    react: ^18
-    react-dom: ^18
-  checksum: 10/47c02f6aae1edfbffee9c0c51038cd547ab37e99e15a8d3730eb33b489f4c1f47130347156d094db1b8f1708137582c2081aafb313e6aee2733b4ad693ca055e
-  languageName: node
-  linkType: hard
-
 "react-code-blocks@npm:^0.0.9-0":
   version: 0.0.9-0
   resolution: "react-code-blocks@npm:0.0.9-0"
@@ -34863,6 +34893,20 @@ __metadata:
   peerDependencies:
     react: ">=16"
   checksum: 10/6cceb5f6fa6ce2ed080e9cfa81f8ce4fbc1e23eb8bd8e8b3daea0f7a2642f3d4b4abf6724f10e87544b915d9fc1535280f1fa01f63c85d402092c9b9693f8237
+  languageName: node
+  linkType: hard
+
+"react-code-blocks@npm:^0.1.6":
+  version: 0.1.6
+  resolution: "react-code-blocks@npm:0.1.6"
+  dependencies:
+    "@babel/runtime": "npm:^7.10.4"
+    react-syntax-highlighter: "npm:^15.5.0"
+    styled-components: "npm:^6.1.0"
+    tslib: "npm:^2.6.0"
+  peerDependencies:
+    react: ">=16"
+  checksum: 10/169ac3c0abd9f1a480e6513576bc6079b2648c18a017d0caa108a71e0407c9250ed4ffa55147b65363b3db142e682eab60ecb2709f1899ff79f771fad42bcb16
   languageName: node
   linkType: hard
 
@@ -36951,7 +36995,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shallowequal@npm:^1.1.0":
+"shallowequal@npm:1.1.0, shallowequal@npm:^1.1.0":
   version: 1.1.0
   resolution: "shallowequal@npm:1.1.0"
   checksum: 10/f4c1de0837f106d2dbbfd5d0720a5d059d1c66b42b580965c8f06bb1db684be8783538b684092648c981294bf817869f743a066538771dbecb293df78f765e00
@@ -37215,7 +37259,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-js@npm:^1.2.1":
+"source-map-js@npm:^1.2.0, source-map-js@npm:^1.2.1":
   version: 1.2.1
   resolution: "source-map-js@npm:1.2.1"
   checksum: 10/ff9d8c8bf096d534a5b7707e0382ef827b4dd360a577d3f34d2b9f48e12c9d230b5747974ee7c607f0df65113732711bb701fe9ece3c7edbd43cb2294d707df3
@@ -38089,6 +38133,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"styled-components@npm:^6.1.0":
+  version: 6.1.14
+  resolution: "styled-components@npm:6.1.14"
+  dependencies:
+    "@emotion/is-prop-valid": "npm:1.2.2"
+    "@emotion/unitless": "npm:0.8.1"
+    "@types/stylis": "npm:4.2.5"
+    css-to-react-native: "npm:3.2.0"
+    csstype: "npm:3.1.3"
+    postcss: "npm:8.4.38"
+    shallowequal: "npm:1.1.0"
+    stylis: "npm:4.3.2"
+    tslib: "npm:2.6.2"
+  peerDependencies:
+    react: ">= 16.8.0"
+    react-dom: ">= 16.8.0"
+  checksum: 10/de26960b8e2b8d9430e8a02a22a7fa1ae764d914064525008257fb5d469cbddb4ef9b8b5b5e4baaabd236bd77c84fdad9a8d5f0d2fd05ff39ff55d80a71ff9de
+  languageName: node
+  linkType: hard
+
 "stylehacks@npm:^5.1.1":
   version: 5.1.1
   resolution: "stylehacks@npm:5.1.1"
@@ -38105,6 +38169,13 @@ __metadata:
   version: 4.2.0
   resolution: "stylis@npm:4.2.0"
   checksum: 10/58359185275ef1f39c339ae94e598168aa6bb789f6cf0d52e726c1e7087a94e9c17f0385a28d34483dec1ffc2c75670ec714dc5603d99c3124ec83bc2b0a0f42
+  languageName: node
+  linkType: hard
+
+"stylis@npm:4.3.2":
+  version: 4.3.2
+  resolution: "stylis@npm:4.3.2"
+  checksum: 10/4d3e3cb5cbfc7abdf14e424c8631a15fd15cbf0357ffc641c319587e00c2d1036b1a71cb88b42411bc3ce10d7730ad3fb9789b034d11365e8a19d23f56486c77
   languageName: node
   linkType: hard
 
@@ -39151,6 +39222,13 @@ __metadata:
     minimist: "npm:^1.2.6"
     strip-bom: "npm:^3.0.0"
   checksum: 10/5e55cc2fb6b800eb72011522e10edefccb45b1f9af055681a51354c9b597d1390c6fa9cc356b8c7529f195ac8a90a78190d563159f3a1eed10e01bbd4d01a8ab
+  languageName: node
+  linkType: hard
+
+"tslib@npm:2.6.2":
+  version: 2.6.2
+  resolution: "tslib@npm:2.6.2"
+  checksum: 10/bd26c22d36736513980091a1e356378e8b662ded04204453d353a7f34a4c21ed0afc59b5f90719d4ba756e581a162ecbf93118dc9c6be5acf70aa309188166ca
   languageName: node
   linkType: hard
 

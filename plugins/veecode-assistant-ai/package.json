@@ -43,7 +43,7 @@
     "js-base64": "^3.7.7",
     "jszip": "^3.10.1",
     "prism-react-renderer": "^2.4.1",
-    "react-code-block": "^1.1.1",
+    "react-code-blocks": "^0.1.6",
     "react-icons": "^5.4.0",
     "react-lottie": "^1.2.10",
     "react-markdown": "^9.0.3",
