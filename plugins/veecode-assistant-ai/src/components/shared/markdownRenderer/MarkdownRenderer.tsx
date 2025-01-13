@@ -25,9 +25,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ markdown }) 
               );
             }
             return (
-              <CodeBlockComponent language={language} className={className!}>
-                {String(children).trim()}
-              </CodeBlockComponent>
+              <CodeBlockComponent language={language} code={String(children).trim()}/>
             );
           },
         }}

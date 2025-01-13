@@ -1,24 +1,15 @@
 import React from 'react';
-import { CodeBlock } from 'react-code-block';
 import { CodeBlockProps } from './types';
-import { themeVariables } from '../../../utils/constants/theme';
+import { CopyBlock, dracula } from "react-code-blocks";
 
-export const CodeBlockComponent : React.FC<CodeBlockProps> = ({ children, language, className }) => {
+export const CodeBlockComponent : React.FC<CodeBlockProps> = ({ code, language }) => {
   return (
-    <CodeBlock code={children} language={language}>
-      <CodeBlock.Code className={className} 
-       style={
-         { 
-            backgroundColor: themeVariables.codeBlock.dark,
-            maxWidth: '95%',
-            padding: '1rem',
-            overflowX: 'auto'
-          }
-        }>
-        <CodeBlock.LineContent>
-          <CodeBlock.Token />
-        </CodeBlock.LineContent>
-      </CodeBlock.Code>
-    </CodeBlock>
+      <CopyBlock
+        text={code}
+        language={language}
+        theme={dracula} 
+        showLineNumbers={false}
+        codeBlock 
+      />
   );
 }
