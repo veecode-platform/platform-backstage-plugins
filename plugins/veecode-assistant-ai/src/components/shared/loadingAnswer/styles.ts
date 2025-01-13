@@ -10,7 +10,7 @@ export const useLoadingAnswerStyles = makeStyles(theme => ({
         justifyContent: 'center',
     },
     loadingAnalysis: {
-        minWidth: '25vw',
+        minWidth: '35vw',
         marginLeft: '.8rem',
         marginTop: '1.5rem',
         display: 'flex',
