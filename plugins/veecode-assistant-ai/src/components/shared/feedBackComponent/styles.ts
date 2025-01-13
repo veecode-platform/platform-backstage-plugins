@@ -16,8 +16,8 @@ export const useFeedbackComponentStyles = makeStyles(theme=>({
         '-webkit-backdrop-filter':'blur(8px)',
     },
     root:{
-        width: '40%',
-        minWidth: '300px',
+        width: '45%',
+        minWidth: '350px',
         borderRadius:'5px',
         backgroundColor: themeVariables.background.main,
         position: 'absolute',
@@ -40,5 +40,13 @@ export const useFeedbackComponentStyles = makeStyles(theme=>({
     animation:{
         position: 'absolute',
         left: '10%'
+    },
+    btnGroup:{
+        width: '80%',
+        margin: '2rem auto 0 auto',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '1rem'
     }
 }))
