@@ -34,10 +34,6 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
             link: response.link
           }));
           setShowFeedback(true);
-          setTimeout(()=>{
-            setShowFeedback(false);
-            handleChat();
-          },3000);
         }
       }
     }
@@ -89,6 +85,12 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
             (<FeedbackComponent 
               variant={pullRequestResponseState!.status} 
               message={pullRequestResponseState!.message} 
+              actions={
+                <>
+                <Button variant="secondary" onClick={handleChat}> New Analysis </Button>
+                <Button variant="danger" onClick={ clearHistoryAndExit}>Exit</Button>
+                </>
+              }
               />)}
        </>
     )
