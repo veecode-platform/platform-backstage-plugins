@@ -47,8 +47,8 @@ const ErrorAnimation = () => {
 
 export const FeedbackComponent : React.FC<FeedbackComponentProps>= (props) => {
 
-  const { variant, message } = props;
-  const { blur, root, content, animation } = useFeedbackComponentStyles();
+  const { variant, message, actions } = props;
+  const { blur, root, content, animation, btnGroup } = useFeedbackComponentStyles();
 
   return (
    <div className={blur}>
@@ -61,7 +61,12 @@ export const FeedbackComponent : React.FC<FeedbackComponentProps>= (props) => {
           </div>
           <Typography variant="h6" style={{marginLeft: '2rem'}}>{message}</Typography>
       </div>
+      {!!actions && (
+         <div className={btnGroup}>
+         {actions}
+         </div>
+      )}
     </Box>
-   </div>
+    </div>
   )
 }
