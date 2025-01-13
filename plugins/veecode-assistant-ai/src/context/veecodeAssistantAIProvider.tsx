@@ -1,7 +1,7 @@
 import React from "react";
 import { VeeCodeAssistantAIContext } from "./veecodeAssistantAIContext";
 import { EntityInfoReducer, initialEntityInfoState } from "./state";
-import { errorApiRef, useApi,alertApiRef } from '@backstage/core-plugin-api';
+import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { veecodeAssistantAIApiRef } from "../api/veeCodeAssistantAIApi";
 import { FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 
@@ -20,7 +20,6 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
     const [ entityInfoState, entityInfoDispatch ] = React.useReducer(EntityInfoReducer, initialEntityInfoState);
     const api = useApi(veecodeAssistantAIApiRef);
     const errorApi = useApi(errorApiRef);
-    const AlertApi = useApi(alertApiRef);
 
     const handleChat = () => {
         setShowChat(!showChat)
@@ -82,12 +81,7 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
         try{
             if(vectorStoreId && assistantId && threadId && entityInfoState){
                 const { engine } = entityInfoState;
-                const response = await api.clearHistory(engine,vectorStoreId, assistantId, threadId);
-                AlertApi.post({
-                    message: response.message,
-                    severity: 'success',
-                    display: 'transient',
-                  });
+                await api.clearHistory(engine,vectorStoreId, assistantId, threadId);
             }
             return
         }
