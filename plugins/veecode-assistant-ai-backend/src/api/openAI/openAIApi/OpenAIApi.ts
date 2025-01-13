@@ -110,23 +110,21 @@ async getChat(assistantId: string, threadId: string, message: string, template?:
 
   async clearHistory(vectorStoreId:string,assistantId:string, threadId:string){
     this.logger.info('clearing History...');
-    // delete vectorStore
-    const deleteVectorStore = await this.vectorStoreManager.deleteVectorStore(vectorStoreId);
-    // delete threads
-    const deleteThread = await this.threadsManager.deleteThread(threadId);
-    // delete assistant
-    const deleteAssistant = await this.assistantAI.deleteAssistant(assistantId);
+    try{
+      if(vectorStoreId) await this.vectorStoreManager.deleteVectorStore(vectorStoreId);
+      if(threadId) await this.threadsManager.deleteThread(threadId);
+      if(assistantId) await this.assistantAI.deleteAssistant(assistantId);
 
-    if(deleteVectorStore.status === "ok" && deleteThread.status === "ok" && deleteAssistant.status === "ok"){
       return {
         status: "ok",
         message: "History successfully cleared!"
       }
     }
-
-    return{
-      status: "failed",
-      message: "Failed to delete history!"
+    catch(error:any){
+      return{
+          status: "failed",
+          message: error.message
+        }
     }
   }
 
