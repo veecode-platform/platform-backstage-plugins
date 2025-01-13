@@ -36,7 +36,7 @@ export const useLoadingAnswerStyles = makeStyles(theme => ({
         left: '0',
         width: '100%',
         height: '28px',
-        backgroundColor: 'gray',
+        backgroundColor: '#7f7f7f',
         animation: '$revealBlock .5s .5s both'
     },
     "@keyframes revealBlock": {
