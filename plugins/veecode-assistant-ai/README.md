@@ -75,6 +75,7 @@ spec:
 In the design of the plugin, the assistant fits into the **overview** of the entities, but if in your development there is a **overview** for each type of kind, apply those that you think best suit our proposal.
 In this example we'll add to the overview of all the entities:
 
+
 ```diff
 ... 
 + import { AssistantAIContent } from '@veecode-platform/backstage-plugin-veecode-assistant-ai';
@@ -101,25 +102,35 @@ const overviewContent = (
 
 ```
 
+
 ### 👉 Overview
 
 The assistant's icon will remain fixed on the entity's screen:
 
+
 ![ft1](https://github.com/user-attachments/assets/b2beb350-bcfc-400e-8a46-3bcb0dcab50e)
+
 
 When triggered, the service receives the location of the entity, and from there, with the code from the repository, a context is created for the AI:
 
+
 ![Ft2](https://github.com/user-attachments/assets/aa79ec52-bce1-4c46-951f-3435715a38d1)
+
 
 At this stage, we have iteration options in which the assistant will propose improvements or analyses:
 
+
 ![ft3](https://github.com/user-attachments/assets/b42b3b53-3280-4a75-a94a-2266a46e0bad)
+
 
 So this detailed analysis and the pull-request proposal:
 
+
 ![ft4](https://github.com/user-attachments/assets/3e24c326-9225-4971-9aae-aa93ec9b412e)
 
+
 If the changes are pertinent, the pullrquest is created, the new branch will have all the suggested changes and additions, and the diff analysis can be done both in your git provider and in your IDE:
+
 
 ![ft5](https://github.com/user-attachments/assets/b05274f6-d4cf-492d-adde-4dd3104bdf85)
 
