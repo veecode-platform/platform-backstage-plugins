@@ -1,4 +1,4 @@
-![ft5](https://github.com/user-attachments/assets/b05274f6-d4cf-492d-adde-4dd3104bdf85)# VeeCode Assistant AI 
+# VeeCode Assistant AI 
 
 ### Our community
 
@@ -101,7 +101,7 @@ const overviewContent = (
 
 ```
 
-### 👉 OVERVIEW:
+### OVERVIEW
 
 ![ft1](https://github.com/user-attachments/assets/b2beb350-bcfc-400e-8a46-3bcb0dcab50e)
 
@@ -111,8 +111,6 @@ const overviewContent = (
 
 ![ft4](https://github.com/user-attachments/assets/3e24c326-9225-4971-9aae-aa93ec9b412e)
 
-![ft5](https://github.com/user-attachments/assets/b6e435f7-5fb5-4cac-9bca-d41b0dab8051)
-
-
+![ft5](https://github.com/user-attachments/assets/b05274f6-d4cf-492d-adde-4dd3104bdf85)
 
 
