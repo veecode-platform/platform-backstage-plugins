@@ -131,7 +131,7 @@ backend.start();
 
 <br>
 
-## To train your model and use the template creation module with AI:
+<!-- ## To train your model and use the template creation module with AI:
 
 To do this, in this example we created this training data set to tune the AI.
 
@@ -419,7 +419,7 @@ The references that will further enrich your prompt in the hope of returning a t
 - **id**: This refers to the name of the referenced stack, for example "EKS Provision";
 **source**: Refers to a remote repository that will provide template code for the template to follow, so we can maintain a standard according to your needs at development time.
 
-[See an example of a reference template here.See an example of a reference template here](https://gitlab.vertigo-devops.com/vertigobr/ia/autoskaff/-/tree/main/reference)
+[See an example of a reference template here.See an example of a reference template here](https://gitlab.vertigo-devops.com/vertigobr/ia/autoskaff/-/tree/main/reference) -->
 
 ## Routes
 
@@ -427,10 +427,8 @@ The references that will further enrich your prompt in the hope of returning a t
 |--------|---------------------------------------------|--------------------------------------------------------|
 | POST    | /submit-repo                     | backendBaseUrl/api/veecode-assistant-ai/submit-repo                               |
 | POST    | /chat-analyze-repo              | backendBaseUrl/api/veecode-assistant-ai/chat-analyze-repo  |
+| POST    | /clone-repository               | backendBaseUrl/api/veecode-assistant-ai/clone-repository                 |
 | DELETE    | /chat-analyze-repo                    | backendBaseUrl/api/veecode-assistant-ai/chat-analyze-repo        |
-| POST    | /upload-template                     | backendBaseUrl/api/veecode-assistant-ai/upload-template                               |
-| POST    | /chat-template              | backendBaseUrl/api/veecode-assistant-ai/chat-template  |
-| DELETE    | /chat-template                   | backendBaseUrl/api/veecode-assistant-ai/chat-template        |
 
 ---
 
