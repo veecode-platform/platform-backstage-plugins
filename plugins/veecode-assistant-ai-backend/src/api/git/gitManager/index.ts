@@ -107,7 +107,7 @@ export class GitManager implements IGitManager  {
           "c", "cpp", "css", "csv", "doc", "docx", "gif", "go", "html",
           "java", "jpeg", "jpg", "js", "json", "md", "pdf", "php", "pkl",
           "png", "pptx", "py", "rb", "tar", "tex", "ts", "txt", "webp",
-          "xlsx", "xml", "zip"
+          "xlsx", "zip"
       ];
       const notAllowedFiles = ["webp", "ico", "mp4", "png", "jpg", "jpeg", "gif", "bmp", "svg", "avi", "mov", "mp3", "wav", "ogg"];
       const notAllowedFilenames = ["yarn.lock", "package-lock.json"];
