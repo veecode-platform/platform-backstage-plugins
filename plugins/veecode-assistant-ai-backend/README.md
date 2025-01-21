@@ -38,19 +38,7 @@ veecodeAssistantAI:
   openai:
     apiBaseUrl: https://api.openai.com/v1
     apiKey: ${OPENAI_API_KEY}
-    assistantName: VeeCode Platform AI #by default we have VeeCode Platform AI
     model: gpt-4o #The desired model, for best results use gpt-4o >
-    instructions: 'You are an assistant specialized in the VeeCode platform and Backstage.' #Instructions field for the assistant, by default set to basic
-    timeout: 600 #optional
-    dataset:    # This key is optional, only if you use the component to generate templates
-      model: ft:gpt-4o-2024-08-06:xxxxxxxxxxxx  # the model must be trained
-      references:  # References are pre-created template models, following the desired stack, which are referenced through their location (we'll explain more below).
-        - id: Terraform Project             
-          source: https://xxxxxxxxxxxxx
-        - id: Springboot
-          source: https://xxxxxxxxxxxxx
-        - id: OpenApi
-          source: https://xxxxxxxxxxxxx
    ```
 
 You also need to configure the `config.d.ts` file in the backend:
@@ -62,17 +50,7 @@ export interface Config {
       openai?: {
         apiBaseUrl: string;
         apiKey: string;
-        assistant: string;
         model: string;
-        instructions: string;
-        timeout?:string;
-        dataset?: {
-          model?: string;
-          references?: Array<{
-            id: string;
-            source: string;
-            }>;
-        }
       }
     }
 }
@@ -153,7 +131,7 @@ backend.start();
 
 <br>
 
-## To train your model and use the template creation module with AI:
+<!-- ## To train your model and use the template creation module with AI:
 
 To do this, in this example we created this training data set to tune the AI.
 
@@ -441,7 +419,7 @@ The references that will further enrich your prompt in the hope of returning a t
 - **id**: This refers to the name of the referenced stack, for example "EKS Provision";
 **source**: Refers to a remote repository that will provide template code for the template to follow, so we can maintain a standard according to your needs at development time.
 
-[See an example of a reference template here.See an example of a reference template here](https://gitlab.vertigo-devops.com/vertigobr/ia/autoskaff/-/tree/main/reference)
+[See an example of a reference template here.See an example of a reference template here](https://gitlab.vertigo-devops.com/vertigobr/ia/autoskaff/-/tree/main/reference) -->
 
 ## Routes
 
@@ -449,10 +427,8 @@ The references that will further enrich your prompt in the hope of returning a t
 |--------|---------------------------------------------|--------------------------------------------------------|
 | POST    | /submit-repo                     | backendBaseUrl/api/veecode-assistant-ai/submit-repo                               |
 | POST    | /chat-analyze-repo              | backendBaseUrl/api/veecode-assistant-ai/chat-analyze-repo  |
+| POST    | /clone-repository               | backendBaseUrl/api/veecode-assistant-ai/clone-repository                 |
 | DELETE    | /chat-analyze-repo                    | backendBaseUrl/api/veecode-assistant-ai/chat-analyze-repo        |
-| POST    | /upload-template                     | backendBaseUrl/api/veecode-assistant-ai/upload-template                               |
-| POST    | /chat-template              | backendBaseUrl/api/veecode-assistant-ai/chat-template  |
-| DELETE    | /chat-template                   | backendBaseUrl/api/veecode-assistant-ai/chat-template        |
 
 ---
 
