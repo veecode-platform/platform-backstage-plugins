@@ -6,3 +6,4 @@
  */
 
 export * from './actions'
+export { scaffolderModuleVeecodeExtensions as default}  from './module'

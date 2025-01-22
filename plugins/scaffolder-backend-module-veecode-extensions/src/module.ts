@@ -13,7 +13,8 @@ export const scaffolderModuleVeecodeExtensions = createBackendModule({
             async init({scaffolder}){
                 scaffolder.addActions(
                     backendModuleActions.createFileAction(),
-                    backendModuleActions.parseJsonAction()
+                    backendModuleActions.parseJsonAction(),
+                    backendModuleActions.toBase64Action(),
                 );
             }
         })
