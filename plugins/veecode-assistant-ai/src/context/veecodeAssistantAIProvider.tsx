@@ -73,7 +73,11 @@ export const VeecodeAssistantAIProvider: React.FC<VeecodeAssistantAIProviderProp
         }
         catch(error:any){
             errorApi.post(error);
-            return null
+            return {
+                status: 'error',
+                link: '',
+                message: 'There was an error trying to save the changes'
+                }
         }
     }
 
