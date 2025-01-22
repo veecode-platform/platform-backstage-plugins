@@ -174,6 +174,9 @@ export class GitManager implements IGitManager  {
   
       // Converts the tree into string format for the instructions
       const structure = JSON.stringify(tree, null, 4).replace(/"/g, "");
+
+      // remove temporary folder
+      await this.removeTemporaryPath(localPath)
   
       return { files, structure };
   }
