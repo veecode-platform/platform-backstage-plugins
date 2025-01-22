@@ -88,18 +88,26 @@ export class GithubManager extends Provider implements IGithubManager {
                 )
               );
             }
+
+            fileSha = undefined;
           }
+
+          const payload: any = {
+            owner,
+            repo,
+            path: relativePath ?? '.',
+            message: `${title}: Update ${relativePath}`,
+            content: Base64.encode(content),
+            branch: branchName,
+          };
+
+          if (fileSha) {
+            payload.sha = fileSha;  // If the file already exists, pass sha to update
+          }
+        
     
           await octokit.repos
-            .createOrUpdateFileContents({
-              owner,
-              repo,
-              path: relativePath!,
-              message: `${title}: Update ${relativePath}`,
-              content: Base64.encode(content),
-              branch: branchName,
-              sha: fileSha,
-            })
+            .createOrUpdateFileContents(payload)
             .catch((e:any) => {
               throw new Error(
                 formatHttpErrorMessage(
