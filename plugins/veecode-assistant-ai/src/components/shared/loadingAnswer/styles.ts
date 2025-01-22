@@ -23,7 +23,7 @@ export const useLoadingAnswerStyles = makeStyles(theme => ({
         padding: '2.5rem 3rem',
         backgroundColor: themeVariables.background.main,
         [theme.breakpoints.down('md')]: {
-            minWidth: '35vw',
+            minWidth: '60vw'
            }
     },
     analysisText: {

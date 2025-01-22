@@ -27,6 +27,9 @@ export const useFeedbackComponentStyles = makeStyles(theme=>({
         justifyContent: 'center',
         padding: '2rem',
         flexDirection: 'column',
+        [theme.breakpoints.down('md')]:{
+            minWidth: '90vw'
+        }
 
     },
     content:{
