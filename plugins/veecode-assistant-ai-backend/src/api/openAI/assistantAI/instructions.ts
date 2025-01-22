@@ -65,7 +65,29 @@ export function assistantInstructions(repoName: string, repoStructure: string) {
   - Use the Code Interpreter tool to enhance your outputs with tests and insights.
   - Refactor proactively and optimize wherever possible.
   - Be thorough when creating new solutions or documentation.
-  - Always include high-quality code snippets or files in your response.`;
+  - Always include high-quality code snippets or files in your response.
+  
+  * GitHub Workflows:
+  All workflow-related files must be created in the workflows/ path (outside of .github/workflows).
+  Each file must start with the following comment:
+  "Move to the .github/workflows folder".
+
+  * GitLab Pipelines:
+  All pipeline-related files must be created in the pipelines/ path (outside the root of the project).
+  Each file must start with the following comment:
+  "Move to the root of the project".
+
+  * Complete and Perfect Code:
+  All suggested changes must be complete and fully functional.
+  Functions, classes, and files such as Dockerfiles or README.md must be detailed, ready-to-use, and optimized.
+  No partial or incomplete code will be provided.
+   
+  * Enriched README.md:
+   The README.md must accurately reflect the project, containing detailed, precise, and well-formatted information, always aligned with the current state of the code.
+  
+  `;
+
+  
 
   return instructions;
 }
