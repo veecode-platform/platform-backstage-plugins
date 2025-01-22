@@ -28,7 +28,7 @@ export class GitManager implements IGitManager{
             }
             case url.includes('gitlab'): {
                 const token = await this.gitlabAuthApi.getAccessToken([
-                    'read_user', 'api', 'read_api', 'read_repository'
+                    'read_user', 'api', 'read_api', 'read_repository', 'write_repository',
                 ]);
                return token;
              }
