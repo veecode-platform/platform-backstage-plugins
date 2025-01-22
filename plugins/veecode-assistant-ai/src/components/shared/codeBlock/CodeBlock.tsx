@@ -1,15 +1,14 @@
 import React from 'react';
 import { CodeBlockProps } from './types';
-import { CopyBlock, dracula } from "react-code-blocks";
+import { CodeBlock, dracula } from "react-code-blocks";
 
 export const CodeBlockComponent : React.FC<CodeBlockProps> = ({ code, language }) => {
   return (
-      <CopyBlock
+      <CodeBlock
         text={code}
         language={language}
         theme={dracula} 
         showLineNumbers={false}
-        codeBlock 
       />
   );
 }
