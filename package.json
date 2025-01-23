@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-    "node": "18 || 20"
+    "node": "20 || 22"
   },
   "scripts": {
     "dev": "concurrently \"yarn start\" \"yarn start-backend\"",
-    "dev-local": "NODE_OPTIONS='--no-node-snapshot' concurrently \"yarn start --config ../../app-config.local.yaml\" \"yarn start-backend --config ../../app-config.local.yaml\"",
+    "dev-local": "NODE_OPTIONS='--no-node-snapshot --max-old-space-size=4096' concurrently \"yarn start --config ../../app-config.local.yaml\" \"yarn start-backend --config ../../app-config.local.yaml\"",
     "start": "yarn workspace app start",
     "start-backend": "yarn workspace backend start",
     "build:backend": "yarn workspace backend build",
@@ -32,7 +32,7 @@
     ]
   },
   "devDependencies": {
-    "@backstage/cli": "^0.28.0",
+    "@backstage/cli": "^0.29.5",
     "@spotify/prettier-config": "^12.0.0",
     "@types/pluralize": "^0.0.33",
     "concurrently": "^6.0.0",
@@ -60,8 +60,7 @@
   },
   "packageManager": "yarn@4.5.0",
   "dependencies": {
-    "@backstage/plugin-catalog-backend-module-scaffolder-entity-model": "^0.2.1",
-    "@backstage/plugin-catalog-react": "^1.14.2",
+    "@backstage/plugin-catalog-backend-module-scaffolder-entity-model": "^0.2.4",
     "jose": "^5.2.3",
     "knex": "^3.1.0",
     "react-icons": "^5.2.1"

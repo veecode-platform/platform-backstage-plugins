@@ -16,6 +16,13 @@
 
 /** Configuration for the devportal plugin behavior */
 export interface Config {
+  /** @visibility frontend */
+  zoraOss?: {
+    /** @visibility frontend */
+    openAiApiKey?: string;
+    /** @visibility frontend */
+    openAiModel?: string;
+  },
   /**
   * Configuration for scaffolder towards various external repository provider systems
   * @visibility frontend

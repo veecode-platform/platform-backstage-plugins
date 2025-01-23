@@ -1,5 +1,5 @@
 import { createBackendModule } from "@backstage/backend-plugin-api"
-import { scaffolderActionsExtensionPoint } from "@backstage/plugin-scaffolder-node/dist/alpha"
+import { scaffolderActionsExtensionPoint } from "@backstage/plugin-scaffolder-node/alpha"
 import * as backendModuleActions from './actions';
 
 export const scaffolderModuleVeecodeExtensions = createBackendModule({
@@ -13,7 +13,8 @@ export const scaffolderModuleVeecodeExtensions = createBackendModule({
             async init({scaffolder}){
                 scaffolder.addActions(
                     backendModuleActions.createFileAction(),
-                    backendModuleActions.parseJsonAction()
+                    backendModuleActions.parseJsonAction(),
+                    backendModuleActions.toBase64Action(),
                 );
             }
         })
