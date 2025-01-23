@@ -65,7 +65,6 @@ import { RELATION_ENVIRONMENT_OF, RELATION_FROM_ENVIRONMENT } from '@veecode-pla
 import {  KongServiceManagerContent, isKongServiceManagerAvailable } from '@veecode-platform/plugin-kong-service-manager';
 import { KubernetesGptAnalyzerPage,KubernetesGptAnalyzerCard } from '@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer';
 import { InfracostOverviewPage, isInfracostAvailable } from '@veecode-platform/backstage-plugin-infracost';
-import { AssistantAIContent } from '@veecode-platform/backstage-plugin-veecode-assistant-ai';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -185,7 +184,6 @@ const overviewContent = (
     {/* <Grid item md={8} xs={12}>
       <EntityHasSubcomponentsCard variant="gridItem" />
     </Grid> */}
-    <AssistantAIContent/>
   </Grid>
 );
 
