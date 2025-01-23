@@ -1,1 +1,0 @@
-export { VeeCodeAssistantAIClient } from "./veeCodeAssistantAIClient"
