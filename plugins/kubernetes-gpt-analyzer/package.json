@@ -38,7 +38,6 @@
     "@material-ui/lab": "^4.0.0-alpha.61",
     "@types/react-icons": "^3.0.0",
     "@types/react-lottie": "^1.2.10",
-    "@veecode-platform/plugin-kubernetes": "0.11.13-next.2",
     "@veecode-platform/plugin-kubernetes-react": "0.4.2-next.1",
     "react-icons": "^5.2.1",
     "react-lottie": "^1.2.4",
@@ -55,6 +54,7 @@
     "@testing-library/jest-dom": "5.17.0",
     "@testing-library/react": "12.1.5",
     "@testing-library/user-event": "^14.0.0",
+    "@veecode-platform/plugin-kubernetes": "0.11.13-next.2",
     "msw": "^1.0.0"
   },
   "files": [

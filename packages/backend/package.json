@@ -48,7 +48,7 @@
     "@backstage/plugin-techdocs-backend": "^1.11.5",
     "@immobiliarelabs/backstage-plugin-gitlab-backend": "^6.7.0",
     "@janus-idp/backstage-plugin-keycloak-backend": "^1.14.0",
-    "@veecode-platform/backstage-plugin-infracost-backend": "0.4.0",
+    "@veecode-platform/backstage-plugin-infracost-backend": "workspace:^",
     "@veecode-platform/backstage-plugin-kong-service-manager-common": "workspace:^",
     "@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions": "workspace:^",
     "@veecode-platform/plugin-kong-service-manager-backend": "workspace:^",

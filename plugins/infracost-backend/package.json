@@ -62,7 +62,7 @@
     "@sniptt/monads": "^0.5.10",
     "@types/compression": "^1.7.5",
     "@types/express": "*",
-    "@veecode-platform/backstage-plugin-infracost-common": "^0.1.8",
+    "@veecode-platform/backstage-plugin-infracost-common": "workspace:^",
     "axios": "^1.7.2",
     "compression": "^1.7.4",
     "express": "^4.17.1",

@@ -37,7 +37,7 @@
     "@backstage/plugin-permission-node": "^0.8.7",
     "@keycloak/keycloak-admin-client": "18.0.2",
     "@types/express": "*",
-    "@veecode-platform/plugin-application-common": "^0.1.86",
+    "@veecode-platform/plugin-application-common": "workspace:^",
     "axios": "0.27.0",
     "class-validator": "^0.14.0",
     "express": "^4.17.1",
