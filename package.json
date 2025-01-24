@@ -23,7 +23,9 @@
     "prettier:check": "prettier --check .",
     "new": "backstage-cli new --scope internal",
     "clear-deps": "find .  -path ./.docker-data -prune -o -name node_modules -type d -exec rm -rf '{}' +",
-    "dnpm": "dnpm"
+    "dnpm": "dnpm",
+    "verify-deps": "node scripts/verify-local-dependencies.js",
+    "verify-deps:fix": "node scripts/verify-local-dependencies.js --fix"
   },
   "workspaces": {
     "packages": [
