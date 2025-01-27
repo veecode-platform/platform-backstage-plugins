@@ -4,13 +4,13 @@ import { PluginsCards } from './PluginsCards';
 import useAsync from 'react-use/lib/useAsync';
 import { CardTab, Progress, TabbedCard } from '@backstage/core-components';
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
-import { useKongServiceManagerContext } from '../../context';
 import { usePluginListStyles } from './styles';
 import { Box } from '@material-ui/core';
+import { PluginsListProps } from './types';
 
-export const PluginsList = () => {
+const PluginsList : React.FC<PluginsListProps> = (props) => {
 
-  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPluginsState, pluginsPerCategoryState} = useKongServiceManagerContext();
+  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPluginsState, pluginsPerCategoryState} = props;
   const { wrapper, emptyContent } = usePluginListStyles();
 
   const getPluginsEnabled = async () => {
@@ -54,3 +54,5 @@ export const PluginsList = () => {
     </ErrorBoundary>
   );
 }
+
+export default PluginsList
