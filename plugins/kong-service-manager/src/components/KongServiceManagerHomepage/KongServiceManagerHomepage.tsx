@@ -3,7 +3,6 @@ import { Container, Grid } from '@material-ui/core';
 import { MenuOptions } from './MenuOptions';
 import { Navigate, Route, Routes, useNavigate} from 'react-router-dom';
 import { ServicePage } from '../ServicePage';
-import { PluginsList } from '../PluginsList';
 import { KongServiceManagerProvider } from '../../context';
 import {RoutesList} from '../RoutesList';
 import { useHomepageStyles } from './styles';
@@ -12,7 +11,7 @@ import { SpecPluginsList } from '../SpecList/SpecPluginsList';
 import { isKongManagerSpecAvailable } from '../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { RequirePermission } from '@backstage/plugin-permission-react';
-import { kongReadAvailablePluginsPermission, kongRoutesReadPermission, kongServiceReadPermission, kongReadSpecsPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { kongRoutesReadPermission, kongServiceReadPermission, kongReadSpecsPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 export const KongServiceManagerHomepage = () => {
 
@@ -43,11 +42,6 @@ export const KongServiceManagerHomepage = () => {
               <Route path="all-routes" element={
                 <RequirePermission permission={kongRoutesReadPermission}>
                 <RoutesList />
-                </RequirePermission>
-                } />
-              <Route path="all-plugins" element={
-                <RequirePermission permission={kongReadAvailablePluginsPermission}>
-                 <PluginsList />
                 </RequirePermission>
                 } />
               <Route

@@ -14,10 +14,6 @@ const MenuOptionsItems = [
         link: 'all-routes'
     },
     {
-        label: 'Plugins',
-        link: 'all-plugins'
-    },
-    {
        label: 'Specs',
        link: 'all-specs'
     }
