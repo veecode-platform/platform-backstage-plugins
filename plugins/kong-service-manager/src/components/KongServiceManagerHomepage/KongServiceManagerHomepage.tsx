@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Grid } from '@material-ui/core';
 import { MenuOptions } from './MenuOptions';
 import { Navigate, Route, Routes, useNavigate} from 'react-router-dom';
-import { AboutPage } from '../AboutPage';
+import { ServicePage } from '../ServicePage';
 import { PluginsList } from '../PluginsList';
 import { KongServiceManagerProvider } from '../../context';
 import {RoutesList} from '../RoutesList';
@@ -37,7 +37,7 @@ export const KongServiceManagerHomepage = () => {
             <Routes>
               <Route path="" element={
                  <RequirePermission permission={kongServiceReadPermission}>
-                   <AboutPage />
+                   <ServicePage />
                 </RequirePermission>
               } />
               <Route path="all-routes" element={
