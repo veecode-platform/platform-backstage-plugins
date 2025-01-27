@@ -6,7 +6,7 @@ import { MenuOptionsProps } from './types';
 
 const MenuOptionsItems = [
     {
-        label: 'About',
+        label: 'Service',
         link: ''
     },
     {
