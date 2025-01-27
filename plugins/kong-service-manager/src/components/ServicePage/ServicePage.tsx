@@ -3,14 +3,16 @@ import useAsync from 'react-use/lib/useAsync';
 import { useKongServiceManagerContext } from '../../context';
 import { ServiceInfoResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import AboutService from './aboutService/AboutService';
-import { TabbedLayout } from '@backstage/core-components';
+import { CardTab, TabbedCard } from '@backstage/core-components';
+import  PluginsList  from '../PluginsList/PluginsList';
+import { useServicePageStyles } from './styles';
 
 
 export const ServicePage = () => {
 
-  const { getServiceDetails } = useKongServiceManagerContext();
-  // const {  } = useAboutStyles();
-  
+  const { getServiceDetails, listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPluginsState, pluginsPerCategoryState} = useKongServiceManagerContext();
+  const { cardTabstyle } = useServicePageStyles();
+
   const { error, loading, value:serviceDetails } = useAsync(async (): Promise<ServiceInfoResponse | null> => {
     const data = await getServiceDetails();
     return data
@@ -18,18 +20,23 @@ export const ServicePage = () => {
 
 
  return (
-  <TabbedLayout>
-  <TabbedLayout.Route path="/" title="About">
-      <AboutService
-        loading={loading}
-        error={error}
-        serviceDetails={serviceDetails}
+  <TabbedCard title=''>
+    <CardTab label="About" className={cardTabstyle}>
+        <AboutService
+          loading={loading}
+          error={error}
+          serviceDetails={serviceDetails}
+        />
+    </CardTab>
+    <CardTab label="Plugins" className={cardTabstyle}>
+      <PluginsList
+      listAllEnabledPlugins={listAllEnabledPlugins}
+      listAssociatedPlugins={listAssociatedPlugins}
+      allAssociatedPluginsState={allAssociatedPluginsState}
+      pluginsPerCategoryState={pluginsPerCategoryState}
       />
-  </TabbedLayout.Route>
-  <TabbedLayout.Route path="/some-other-path" title="plugins">
-    <div>tabbed-test-content-2</div>
-  </TabbedLayout.Route>
-</TabbedLayout>
+    </CardTab>
+</TabbedCard>
 
  );
 }
