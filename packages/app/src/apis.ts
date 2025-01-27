@@ -46,6 +46,7 @@ export const apis: AnyApiFactory[] = [
         OAuth2.create({
           discoveryApi,
           oauthRequestApi,
+          configApi,
           provider: {
             id: 'oidc',
             title: 'Default keycloak authentication provider',

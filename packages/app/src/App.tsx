@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Route } from 'react-router-dom';
-import { ApiExplorerPage } from '@veecode-platform/backstage-plugin-api-explorer';
+import { ApiExplorerPage } from '@backstage/plugin-api-docs';
 import {
   CatalogEntityPage,
   CatalogIndexPage,
