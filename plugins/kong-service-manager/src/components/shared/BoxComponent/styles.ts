@@ -26,6 +26,7 @@ export const useBoxComponentStyles = makeStyles(theme=>({
     titlebar: {
       flexGrow: 1,
       color: theme.palette.text.primary,
+      marginBottom: '-1%',
       '&:after': {
         content: '""',
         display: 'block',
