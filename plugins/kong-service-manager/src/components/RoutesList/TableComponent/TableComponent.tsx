@@ -1,7 +1,7 @@
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import { Table,TableColumn} from '@backstage/core-components';
+import { Link, Table,TableColumn} from '@backstage/core-components';
 import { Box, Fade, IconButton } from '@material-ui/core';
 import { HtmlTooltip } from '../../shared';
 import MoreIcon from '@material-ui/icons/More';
@@ -73,6 +73,11 @@ export const TableComponent : React.FC<TableComponentProps> = (props) => {
       type: 'string',
       align: 'center',
       width: '1fr',
+      render: (row:Partial<TableData>) => (
+        <Link to={row.id!}>
+          {row.name}
+        </Link>
+      )
     },
     {
       id: 'protocols',
