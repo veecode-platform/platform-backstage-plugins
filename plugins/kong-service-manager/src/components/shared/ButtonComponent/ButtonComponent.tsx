@@ -10,7 +10,9 @@ export const ButtonComponent : React.FC<ButtonComponentProps>= (props) => {
     
   return (
     <Button 
-      className={`${root} ${classes ?? {}}`} 
+      className={
+        `${root}
+         ${classes ?? {}}`} 
       disabled={isDisabled}
       onClick={handleClick}
       >
