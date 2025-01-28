@@ -167,7 +167,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
     async getRoutesFromService(instanceName:string, serviceIdOrName: string): Promise<RouteResponse[]> {
 
         const  workspace  = this.validateWorkspace(instanceName);
-        const response = await this.fetch(`${workspace}/services/${serviceIdOrName}/routes`, instanceName)
+        const response = await this.fetch(`${workspace}/services/${serviceIdOrName}/routes`, instanceName);
         return response.data;
     }
 
@@ -176,6 +176,7 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         const  workspace  = this.validateWorkspace(instanceName);
         const response = await this.fetch(`${workspace}/services/${serviceIdOrName}/routes/${routeIdOrName}`, instanceName);
         const route: RouteResponse = {
+            id: response.id,
             name: response.name,
             protocols: response.protocols,
             methods: response.methods,
@@ -192,6 +193,9 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
             preserve_host: response.preserve_host,
             request_buffering: response.request_buffering,
             response_buffering: response.response_buffering,
+            created_at: response.created_at,
+            updated_at: response.updated_at,
+            service_id: response.service.id
         }
 
         return route;
