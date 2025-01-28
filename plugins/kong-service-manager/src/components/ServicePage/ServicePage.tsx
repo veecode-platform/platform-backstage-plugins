@@ -30,10 +30,10 @@ export const ServicePage = () => {
     </CardTab>
     <CardTab label="Plugins" className={cardTabstyle}>
       <PluginsList
-      listAllEnabledPlugins={listAllEnabledPlugins}
-      listAssociatedPlugins={listAssociatedPlugins}
-      allAssociatedPluginsState={allAssociatedPluginsState}
-      pluginsPerCategoryState={pluginsPerCategoryState}
+        listAllEnabledPlugins={listAllEnabledPlugins}
+        listAssociatedPlugins={listAssociatedPlugins}
+        allAssociatedPluginsState={allAssociatedPluginsState}
+        pluginsPerCategoryState={pluginsPerCategoryState}
       />
     </CardTab>
 </TabbedCard>
