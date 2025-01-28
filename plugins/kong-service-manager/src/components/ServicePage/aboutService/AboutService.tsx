@@ -1,13 +1,11 @@
 import React from 'react';
 import { Box, Chip, List, ListItem, ListItemText } from '@material-ui/core';
 import { useAboutServiceStyles } from './styles';
-import { LabelField } from '../Fields';
 import { CopyTextButton } from '@backstage/core-components';
 import dayjs from 'dayjs';
-import { SkeletonComponent } from './SkeletonComponent';
 import { AboutServiceProps } from './types';
 import ErrorBoundary from '../../ErrorBoundary/ErrorBondary';
-import { BoxComponent, EmptyStateComponent } from '../../shared';
+import { BoxComponent, EmptyStateComponent,SkeletonComponent,LabelField } from '../../shared';
 
 const AboutService : React.FC<AboutServiceProps> = (props) => {
 
@@ -17,9 +15,11 @@ const AboutService : React.FC<AboutServiceProps> = (props) => {
     if(error) return <EmptyStateComponent/>
 
     if(loading) return (
-      <BoxComponent title="Configuration">
+      <BoxComponent title="Service Details">
         <List className={listComponent}>
-          <SkeletonComponent />
+          <SkeletonComponent
+            options={["id", "Enabled", "Last Updated", "Created", "Protocol", "Host", "Path", "Port", "Tags"]}
+           />
         </List>
       </BoxComponent>
     );
@@ -27,7 +27,7 @@ const AboutService : React.FC<AboutServiceProps> = (props) => {
 
   return (
     <ErrorBoundary>
-    <BoxComponent title="Configuration">
+    <BoxComponent title={serviceDetails!.name}>
       <List className={listComponent}>
         {
           serviceDetails ? (
@@ -42,15 +42,6 @@ const AboutService : React.FC<AboutServiceProps> = (props) => {
                     text={serviceDetails.id}
                     tooltipText="Copy ID"
                     tooltipDelay={3000}/>
-                </ListItemText>
-                </Box>
-              </ListItem>
-              {/* NAME */}
-              <ListItem className={listItemWrapper}>
-                <Box className={listItem}>
-                  <LabelField title="Name"/>
-                <ListItemText className={itemValue}>
-                  {serviceDetails.name}
                 </ListItemText>
                 </Box>
               </ListItem>
