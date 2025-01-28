@@ -12,15 +12,10 @@ const AboutRoute : React.FC<AboutRouteProps> = (props) => {
   const { error, loading, routeDetails } = props;
   const { listComponent, listItemWrapper,listItem,itemValue} = useAboutRouteStyles();
 
-  React.useEffect(()=>{
-    // eslint-disable-next-line no-console
-    console.log("ROTA >>>", routeDetails)
-  },[routeDetails])
-
     if(error) return <EmptyStateComponent/>
 
     if(loading) return (
-      <BoxComponent title="Route Details">
+      <BoxComponent title="About Route">
         <List className={listComponent}>
           <SkeletonComponent 
             options={["Id", "Last Update","Created", "Protocols","Hosts", "Paths", "Redirect Status", "Service Id", "Tags"]}
@@ -32,7 +27,7 @@ const AboutRoute : React.FC<AboutRouteProps> = (props) => {
 
   return (
    <ErrorBoundary>
-    <BoxComponent title={routeDetails!.name}>
+    <BoxComponent title="About Route" noSelectInstance>
       <List className={listComponent}>
         {
           routeDetails ? (
@@ -49,7 +44,16 @@ const AboutRoute : React.FC<AboutRouteProps> = (props) => {
                     tooltipDelay={3000}/>
                 </ListItemText>
                 </Box>
-              </ListItem>            
+              </ListItem>
+              {/* NAME */}
+              <ListItem className={listItemWrapper}>
+                <Box className={listItem}>
+                  <LabelField title="Name"/>
+                  <ListItemText className={itemValue}>
+                   {routeDetails.name}
+                  </ListItemText>
+                </Box>
+              </ListItem>           
               {/* LAST UPDATE */}
               <ListItem className={listItemWrapper}>
                 <Box className={listItem}>
