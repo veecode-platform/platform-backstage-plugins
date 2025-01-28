@@ -15,7 +15,7 @@ const AboutService : React.FC<AboutServiceProps> = (props) => {
     if(error) return <EmptyStateComponent/>
 
     if(loading) return (
-      <BoxComponent title="Service Details">
+      <BoxComponent title="About Service">
         <List className={listComponent}>
           <SkeletonComponent
             options={["id", "Enabled", "Last Updated", "Created", "Protocol", "Host", "Path", "Port", "Tags"]}
@@ -27,7 +27,7 @@ const AboutService : React.FC<AboutServiceProps> = (props) => {
 
   return (
     <ErrorBoundary>
-    <BoxComponent title={serviceDetails!.name}>
+    <BoxComponent title="About Service">
       <List className={listComponent}>
         {
           serviceDetails ? (
@@ -43,6 +43,15 @@ const AboutService : React.FC<AboutServiceProps> = (props) => {
                     tooltipText="Copy ID"
                     tooltipDelay={3000}/>
                 </ListItemText>
+                </Box>
+              </ListItem>
+              {/* NAME */}
+              <ListItem className={listItemWrapper}>
+                <Box className={listItem}>
+                  <LabelField title="Name"/>
+                  <ListItemText className={itemValue}>
+                   {serviceDetails.name}
+                  </ListItemText>
                 </Box>
               </ListItem>
               {/* ENABLED */}
