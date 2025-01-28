@@ -94,6 +94,7 @@ export interface ServiceInfoResponse {
   }
 
   export interface RouteResponse{
+    id: string,
     name: string,
     protocols: string[],
     methods: string[],
@@ -110,6 +111,9 @@ export interface ServiceInfoResponse {
     preserve_host: boolean,
     request_buffering: boolean,
     response_buffering: boolean,
+    created_at: number,
+    updated_at: number,
+    service_id: string
   }
 
   export interface HeaderObj {
