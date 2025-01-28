@@ -28,7 +28,7 @@ export const RoutePage = () => {
  return (
   <div className={root}>
     <ButtonComponent classes={backButton} handleClick={backToRoutesList}>
-      Back To Routes
+      Back to Routes
     </ButtonComponent>
     <TabbedCard title=''>
       <CardTab label="About" className={cardTabstyle}>
