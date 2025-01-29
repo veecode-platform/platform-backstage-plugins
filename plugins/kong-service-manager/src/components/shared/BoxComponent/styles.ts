@@ -27,6 +27,10 @@ export const useBoxComponentStyles = makeStyles(theme=>({
       flexGrow: 1,
       color: theme.palette.text.primary,
       marginBottom: '-1%',
+      minHeight: '103px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
       '&:after': {
         content: '""',
         display: 'block',
