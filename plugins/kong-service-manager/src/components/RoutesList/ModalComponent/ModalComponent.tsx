@@ -6,7 +6,6 @@ import { useModalComponentStyles } from "./styles";
 import { ModalComponentProps, InputChangeEvent, ItemsChangeEvent, SetState } from "./types";
 import { MdClose, MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
 import StringInputList from '../StringInputList/StringInputList';
-import { useKongServiceManagerContext } from '../../../context';
 import { convertToHeadersObject } from "../../../utils/helpers/convertoToHeadersObject";
 import { RedirectStatusCode } from "../../../utils/enums/KongRouteRedirectStatusCode";
 import { Protocols, ProtocolDescriptions } from '../../../utils/enums/KongRouteProtocols';
@@ -14,6 +13,7 @@ import DynamicFields from "./DynamicFields";
 import { convertToArrayOfObjects, convertToObjArray } from "../../../utils/helpers/convertToArrayOfObjects";
 import { prepareDestinations, prepareSources } from "../../../utils/helpers/preparePayload";
 import { CreateRoute } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { useKongServiceManagerContext } from "../../../context";
 
 export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
 
@@ -38,7 +38,6 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
   const { show, handleCloseModal, route, refreshList } = props;
   const { fieldContent, modalOnBlur,modalContent, modalHeader,closeModal,modalBody, container, titleBar, content } = useModalComponentStyles();
   const { createRoute, editRoute, getRoute } = useKongServiceManagerContext();
-
   
   const handleChange = <T,>(event: InputChangeEvent | ItemsChangeEvent, setState: SetState<T>, transformFn?: (value: unknown, checked?: boolean) => T) => {
     if (Array.isArray(event)) {
