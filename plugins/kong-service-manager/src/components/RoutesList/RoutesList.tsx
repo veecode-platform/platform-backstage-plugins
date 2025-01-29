@@ -10,7 +10,7 @@ import { ModalComponent } from './ModalComponent/ModalComponent';
 import { kongRouteCreatePermission, RouteResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import { usePermission } from '@backstage/plugin-permission-react';
 
-export const RoutesList = () => {
+const RoutesList = () => {
   const [showModal, setShowModal] = React.useState<boolean>(false);
   const [refresh, setRefresh] = React.useState(false);
   const [route, setRoute] = React.useState<any>();
@@ -74,3 +74,5 @@ export const RoutesList = () => {
     </ErrorBoundary>
   );
 }
+
+export default React.memo(RoutesList)

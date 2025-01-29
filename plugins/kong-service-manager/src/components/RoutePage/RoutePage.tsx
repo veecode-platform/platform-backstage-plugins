@@ -10,7 +10,7 @@ import AboutRoute from './aboutRoute/AboutRoute';
 import { ButtonComponent } from '../../components/shared';
 
 
-export const RoutePage = () => {
+const RoutePage = () => {
 
   const { routeNameOrId } = useParams();
   const navigate = useNavigate();
@@ -51,3 +51,6 @@ export const RoutePage = () => {
 
  );
 }
+
+
+export default React.memo(RoutePage);

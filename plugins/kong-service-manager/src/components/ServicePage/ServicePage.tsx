@@ -8,7 +8,7 @@ import  PluginsList  from '../PluginsList/PluginsList';
 import { useServicePageStyles } from './styles';
 
 
-export const ServicePage = () => {
+const ServicePage = () => {
 
   const { getServiceDetails, listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPluginsState, pluginsPerCategoryState} = useKongServiceManagerContext();
   const { cardTabstyle } = useServicePageStyles();
@@ -40,3 +40,6 @@ export const ServicePage = () => {
 
  );
 }
+
+
+export default React.memo(ServicePage);

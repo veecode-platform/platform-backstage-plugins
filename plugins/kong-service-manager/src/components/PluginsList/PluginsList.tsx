@@ -55,4 +55,4 @@ const PluginsList : React.FC<PluginsListProps> = (props) => {
   );
 }
 
-export default PluginsList
+export default React.memo(PluginsList);

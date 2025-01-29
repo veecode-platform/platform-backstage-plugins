@@ -2,17 +2,17 @@ import React from 'react';
 import { Container, Grid } from '@material-ui/core';
 import { MenuOptions } from './MenuOptions';
 import { Navigate, Route, Routes, useNavigate} from 'react-router-dom';
-import { ServicePage } from '../ServicePage';
 import { KongServiceManagerProvider } from '../../context';
-import {RoutesList} from '../RoutesList';
 import { useHomepageStyles } from './styles';
-import { SpecList } from '../SpecList';
 import { SpecPluginsList } from '../SpecList/SpecPluginsList';
 import { isKongManagerSpecAvailable } from '../../hooks';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { kongRoutesReadPermission, kongServiceReadPermission, kongReadSpecsPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
-import { RoutePage } from '../../components/RoutePage';
+import RoutePage  from '../RoutePage/RoutePage';
+import ServicePage  from '../ServicePage/ServicePage';
+import RoutesList from '../RoutesList/RoutesList';
+import SpecList  from '../SpecList/SpecList';
 
 export const KongServiceManagerHomepage = () => {
 

@@ -29,7 +29,7 @@ const SpecListWrapper : React.FC<SpecListProps> = (props) => {
 }
 
 
-export const SpecList = () => {
+const SpecList = () => {
   
   const [ selectedSpec, setSelectedSpec ] = React.useState<string>('');
   const { entity, getSpecs, selectedSpecDispatch } = useKongServiceManagerContext();
@@ -85,3 +85,4 @@ export const SpecList = () => {
 }
 
 
+export default React.memo(SpecList);
