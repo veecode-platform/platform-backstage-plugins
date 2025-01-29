@@ -6,31 +6,32 @@ import { CardTab, Progress, TabbedCard } from '@backstage/core-components';
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
 import { usePluginListStyles } from './styles';
 import { Box } from '@material-ui/core';
-import { PluginsListProps } from './types';
+import { useKongServiceManagerContext } from '../../context';
+import { PluginListProps } from './types';
 
-const PluginsList : React.FC<PluginsListProps> = (props) => {
 
-  const { listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPluginsState, pluginsPerCategoryState} = props;
+
+const PluginsList : React.FC<PluginListProps> = (props) => {
+
+  const {listAllPlugins, listAssociatedPlugins, associatedPluginsState, associatedPluginsName } = props;
   const { wrapper, emptyContent } = usePluginListStyles();
+  const { pluginsPerCategoryState } = useKongServiceManagerContext();
 
   const getPluginsEnabled = async () => {
-    await listAllEnabledPlugins();
+    await listAllPlugins();
   };
 
-  const getAssociatedPlugins = async () => {
-    await listAssociatedPlugins();
-  };
-
-  const { loading, error } = useAsync(async (): Promise<void> => {
-    getPluginsEnabled();
-    getAssociatedPlugins();
-  }, []);
+    const { loading, error } = useAsync(async (): Promise<void> => {
+      await Promise.all([
+           Promise.all([listAllPlugins(), listAssociatedPlugins()])
+      ]);
+    }, []);
 
   React.useEffect(()=>{
     getPluginsEnabled();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[allAssociatedPluginsState]);
-
+  },[associatedPluginsState]);
+    
   if (loading) return <Progress />;
 
   if(error) return <EmptyStateComponent/>;
@@ -41,11 +42,11 @@ const PluginsList : React.FC<PluginsListProps> = (props) => {
         <Box className={wrapper}>
           <TabbedCard title="">
             <CardTab label="All Plugins">
-              {pluginsPerCategoryState && pluginsPerCategoryState.length >=1 ? <PluginsCards /> : <div className={emptyContent}> No data to display ...</div>}
+              {pluginsPerCategoryState && pluginsPerCategoryState.length >=1 ? <PluginsCards listAllPlugins={listAllPlugins} associatedPluginsName={associatedPluginsName} /> : <div className={emptyContent}> No data to display ...</div>}
             </CardTab>
               <CardTab 
                label="Associated Plugins">
-                {allAssociatedPluginsState && allAssociatedPluginsState.length >= 1 ? (<PluginsCards filterByAssociated />) 
+                {associatedPluginsState && associatedPluginsState.length >= 1 ? (<PluginsCards filterByAssociated listAllPlugins={listAllPlugins} associatedPluginsName={associatedPluginsName} />) 
                 : <div className={emptyContent}> No data to display ...</div>}
               </CardTab>
           </TabbedCard>

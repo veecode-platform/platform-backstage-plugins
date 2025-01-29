@@ -12,9 +12,10 @@ import { kongApplyPluginToServicePermission, kongDisableServicePluginPermission,
 export const CardComponent : React.FC<CardComponentProps> = (props) => { 
   
   const [processingData, setProcessingData] = React.useState<boolean>(false);
-  const { handleToggleDrawer, setPluginState, disablePlugin } = useKongServiceManagerContext();
+  const { handleToggleDrawer, setPluginState, disablePlugin, isRoute, disabledPluginFromRoute } = useKongServiceManagerContext();
   const {card, cardHeader, cardTitle, cardIcon,description, button,spinner} = usePluginsCardsStyles();
   const {data} = props;
+  
   // permissions
   const { loading: loadingApplyPluginPermission, allowed: canApplyPlugin } = usePermission({
     permission: kongApplyPluginToServicePermission,
@@ -39,7 +40,8 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
      if(data.id){
       setProcessingData(true)
         const id = data.id;
-        await disablePlugin(id);
+        if(isRoute) await disabledPluginFromRoute(id)
+        else await disablePlugin(id);
         setProcessingData(false)
         }
      }

@@ -1,11 +1,12 @@
 import React from 'react';
 import { CategoryComponent } from '../CategoryComponent';
-import { useKongServiceManagerContext } from '../../../../context';
 import { PluginCard } from '../../../../utils/types';
+import { useKongServiceManagerContext } from '../../../../context';
 
-export const AssociatedPlugins = () => { 
+export const AssociatedPlugins= () => { 
 
-  const { pluginsPerCategoryState } = useKongServiceManagerContext()
+  const { pluginsPerCategoryState } = useKongServiceManagerContext();
+ 
   return (
     <>
       { 

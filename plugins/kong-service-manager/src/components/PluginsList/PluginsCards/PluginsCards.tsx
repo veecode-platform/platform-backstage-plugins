@@ -4,24 +4,37 @@ import { AllPlugins } from './AllPlugins';
 import { usePluginsCardsStyles } from './styles';
 import { AssociatedPlugins } from './AssociatedPlugins';
 import { DrawerComponent } from '../DrawerComponent';
-import { useKongServiceManagerContext } from '../../../context';
-import { PluginsCardsProps } from './types';
+import { PluginsCardsProps, PluginsCardsWrapperProps } from './types';
+
+const PluginsCardsWrapper : React.FC<PluginsCardsWrapperProps> = (props) => {
+  const { children } = props;
+  const { content } = usePluginsCardsStyles();
+  return(
+    <Content className={content}>
+     <DrawerComponent />
+     {children}
+    </Content>
+  )
+}
 
 export const PluginsCards : React.FC<PluginsCardsProps> = (props) => {
 
-  const {listAllEnabledPlugins,associatedPluginsName} = useKongServiceManagerContext();
-  const { content } = usePluginsCardsStyles();
-  const {filterByAssociated} = props;
+  const {filterByAssociated, listAllPlugins, associatedPluginsName} = props;
 
-  React.useEffect(()=>{
-     listAllEnabledPlugins()
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   },[associatedPluginsName])
+    React.useEffect(()=>{
+      listAllPlugins()
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+     },[associatedPluginsName])
+
+  if(filterByAssociated) return(
+    <PluginsCardsWrapper>
+     <AssociatedPlugins/>
+    </PluginsCardsWrapper>
+  )
 
   return (
-    <Content className={content}>
-      <DrawerComponent />
-      <>{!filterByAssociated ? <AllPlugins /> : <AssociatedPlugins />}</>
-    </Content>
+    <PluginsCardsWrapper>
+     <AllPlugins/>
+    </PluginsCardsWrapper>
   );
 };

@@ -10,14 +10,13 @@ import { addFields, FieldsReducer, initialFieldsState } from './state';
 import { PluginFieldsResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 
 
-
 export const DrawerComponent = () => {
 
   const [ isLoading, setLoading] = React.useState<boolean>(false);
   const [processingData, setProcessingData] = React.useState<boolean>(false);
   const [ fieldsState, fieldsDispatch ] = React.useReducer(FieldsReducer, initialFieldsState);
   const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction, spinner} = useDrawerStyles();
-  const { handleToggleDrawer, openDrawer, enablePlugin, editPlugin, getPluginFields ,selectedPluginState, allAssociatedPluginsState, setConfigState, configState} = useKongServiceManagerContext();
+  const { handleToggleDrawer, openDrawer ,selectedPluginState, allAssociatedPluginsState, setConfigState, configState, enablePlugin, isRoute, enablePluginToRoute, editPlugin, editPluginFromRoute, getPluginFields } = useKongServiceManagerContext();
 
   const handleChangeInput = (key: string, value: string | boolean | string[] | number) => {
     if(value!==""){
@@ -39,7 +38,8 @@ export const DrawerComponent = () => {
         config: configState,
         name: selectedPluginState.slug
       } 
-      await enablePlugin(config);
+      if(isRoute) await enablePluginToRoute(config);
+      else await enablePlugin(config);
       setProcessingData(false)  
       handleToggleDrawer();
     }
@@ -53,7 +53,8 @@ export const DrawerComponent = () => {
         config: configState,
         name: selectedPluginState.slug
       } 
-      await editPlugin(id,config);
+      if(isRoute) await editPluginFromRoute(id,config);
+      else await editPlugin(id,config);
       setProcessingData(false)  
       handleToggleDrawer();
     }
