@@ -1,6 +1,6 @@
 import { ConfigApi, createApiRef, FetchApi } from "@backstage/core-plugin-api";
 import { ScmAuthApi, ScmIntegrationsApi } from "@backstage/integration-react";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, ISpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { PullRequestResponse } from "../utils/types";
 
 export type Options = {
@@ -27,7 +27,10 @@ export interface KongServiceManagerApi {
     createRouteFromService(serviceName:string, instanceName:string, config: CreateRoute): Promise<any>;
     editRouteFromService(serviceName:string, instanceName:string, routeIdOrName: string, config: CreateRoute): Promise<any>;
     removeRouteFromService(serviceName:string, instanceName:string, routeIdOrName: string): Promise<any>;
-    getSpecs(kind: string, entityName: string): Promise<ISpec[]>;
+    getRouteAssociatedPlugins(instanceName: string, routeId: string): Promise<AssociatedPluginsResponse[]>;
+    addRoutePlugin(instanceName: string, routeId: string, config: CreatePlugin): Promise<any>;
+    editRoutePlugin(instanceName: string, routeId: string, pluginId: string, config: CreatePlugin): Promise<any>,
+    removeRoutePlugin(instanceName: string, routeId: string, pluginId: string): Promise<any>;
     getAllSpecs(location: string, filePath: string[]): Promise<any[]>;
     getPluginsFromSpec(entityName: string): Promise<IKongPluginSpec[]>;
     applyPluginsToSpec(specName:string,location: string, fileContent:string, title: string, message: string): Promise<PullRequestResponse>

@@ -1,6 +1,6 @@
 import { ConfigApi, FetchApi } from "@backstage/core-plugin-api";
 import { KongServiceManagerApi, Options } from "./KongServiceManagerApi";
-import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, ISpec, PluginCard, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
+import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IKongPluginSpec, PluginCard, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import { PluginsInfoData } from "../data/data";
 import { GitManager } from "./GitManager";
 
@@ -183,9 +183,49 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
         return response.message
     }
 
-    async getSpecs(kind:string,entityName:string) : Promise<ISpec[]>{
-        const response = await this.fetch(`/${kind}/${entityName}/specs`);
-        return response.specs as ISpec[];
+    async getRouteAssociatedPlugins(instanceName:string,routeId:string): Promise<AssociatedPluginsResponse[]> {
+        const response = await this.fetch(`/${instanceName}/routes/${routeId}/plugins/associated`)
+        return response.plugins
+    }
+
+    async addRoutePlugin(instanceName:string, routeId:string, config: CreatePlugin): Promise<any> {
+        const body = {
+            config
+        }
+        const headers: RequestInit = {
+         method: "POST",
+         body: JSON.stringify(body),
+         headers: {
+            'Content-Type': 'application/json', 
+          }
+        }
+        const response = await this.fetch(`/${instanceName}/routes/${routeId}/plugins`,headers)
+        return response
+    }
+
+    async editRoutePlugin(instanceName:string,routeId: string, pluginId: string, config: CreatePlugin): Promise<any> {
+        const body = {
+            ...config
+        }
+        const headers: RequestInit = {
+         method: "PATCH",
+         body: JSON.stringify(body),
+         headers: {
+             'Content-Type': 'application/json', 
+         }
+        }
+        const response = await this.fetch(`/${instanceName}/routes/${routeId}/plugins/${pluginId}`, headers)
+        return response
+
+    }
+
+    async removeRoutePlugin(instanceName:string,routeId: string, pluginId: string): Promise<any> {
+
+        const headers: RequestInit = {
+            method: "DELETE",
+        }
+        const response = await this.fetch(`/${instanceName}/routes/${routeId}/plugins/${pluginId}`, headers)
+        return response.message
     }
 
     async getAllSpecs(location:string, filePath:string[]){
