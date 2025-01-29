@@ -7,12 +7,12 @@ import { HtmlTooltip } from '../../shared';
 import MoreIcon from '@material-ui/icons/More';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
-import { useKongServiceManagerContext } from '../../../context';
 import { ConfirmDeleteDialog } from '../ConfirmDeleteDialog/ConfirmDeleteDialog';
 import { TableComponentProps, TableData } from './types';
 import { tableStyle, useTableComponentStyle } from './styles';
 import { kongRouteDeletePermission, kongUpdateRoutePermission, RoutesResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import { usePermission } from '@backstage/plugin-permission-react';
+import { useKongServiceManagerContext } from '../../../context';
 
 
 export const TableComponent : React.FC<TableComponentProps> = (props) => {
