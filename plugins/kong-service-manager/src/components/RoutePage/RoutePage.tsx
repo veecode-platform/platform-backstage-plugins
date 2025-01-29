@@ -32,10 +32,10 @@ const RoutePage = () => {
     </ButtonComponent>
     <TabbedCard title=''>
       <CardTab label="About" className={cardTabstyle}>
-          <AboutRoute
-            loading={loading}
-            error={error}
-            routeDetails={routeDetails}
+        <AboutRoute
+          loading={loading}
+          error={error}
+          routeDetails={routeDetails}
           />
       </CardTab>
       <CardTab label="Plugins" className={cardTabstyle}>
