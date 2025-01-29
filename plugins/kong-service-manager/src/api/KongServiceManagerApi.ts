@@ -17,6 +17,7 @@ export const kongServiceManagerApiRef = createApiRef<KongServiceManagerApi>({
 export interface KongServiceManagerApi {
     getServiceInfo(serviceName:string, instanceName:string): Promise<ServiceInfoResponse>;
     getEnabledPlugins(serviceName:string, instanceName:string, searchFilter?: string): Promise<PluginPerCategory[]>;
+    getEnabledRoutePlugins(routeId: string, instanceName:string, searchFilter?:string):Promise<PluginPerCategory[]>;
     getPluginFields(instanceName:string,pluginName:string): Promise<PluginFieldsResponse[]>;
     getServiceAssociatedPlugins(serviceName:string, instanceName:string): Promise<AssociatedPluginsResponse[]>;
     createServicePlugin(serviceName: string, instanceName:string, config: CreatePlugin): Promise<any>;

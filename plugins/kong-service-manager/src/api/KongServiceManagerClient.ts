@@ -83,6 +83,46 @@ export class KongServiceManagerApiClient extends Client implements KongServiceMa
     
         return mapedEnabledPluginsList;
     }
+
+    async getEnabledRoutePlugins(instanceName: string, routeId: string, searchFilter?: string): Promise<PluginPerCategory[]> {
+        const response = await this.fetch(`/${instanceName}/plugins`);
+        const availablePluginsResponse = response.plugins as string[];
+        let availablePluginsList = availablePluginsResponse;
+    
+        if (searchFilter !== "" && searchFilter) {
+            availablePluginsList = availablePluginsResponse.filter(plugin =>
+                plugin.toLowerCase().includes(searchFilter.toLowerCase())
+            );
+        }
+    
+        const associatedPluginsList = await this.getRouteAssociatedPlugins(instanceName, routeId);
+    
+        const mapedEnabledPluginsList = await Promise.all(PluginsInfoData.categories.map(async (category) => {
+            const plugins = await Promise.all(category.plugins.map(async (categoryPlugin) => {
+                const filteredPluginMatch = availablePluginsList.find((availablePlugin) => availablePlugin === categoryPlugin.slug);
+                if (!filteredPluginMatch) return null; 
+    
+                const filteredAssocietedPluginMatch = associatedPluginsList.find((associatedPlugin) => associatedPlugin.name === categoryPlugin.slug);
+                return {
+                    id: filteredAssocietedPluginMatch?.id ?? null,
+                    name: categoryPlugin.name,
+                    slug: categoryPlugin.slug,
+                    associated: filteredAssocietedPluginMatch?.enabled ?? false,
+                    image: await this.getImagePayload(categoryPlugin.image),
+                    tags: categoryPlugin.tags,
+                    description: categoryPlugin.description
+                };
+            }));
+    
+ 
+            return {
+                category: category.category,
+                plugins: plugins.filter((plugin) => plugin !== null) as PluginCard[], 
+            };
+        }));
+    
+        return mapedEnabledPluginsList;
+    }
     
 
     async getPluginFields(instanceName:string, pluginName:string): Promise<PluginFieldsResponse[]> {
