@@ -36,7 +36,7 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
   const [ hasChange, setHasChange ] = React.useState<boolean>(false);
   const { specName } = props;
   const { root,iconAndName, apply, remove, submit, footer, fixedToBottom } = usePluginsTableStyles();
-  const { listAllPluginsForSpec, pluginsToSpecState, pluginsToSpecDispatch } = useKongServiceManagerContext();
+  const {  pluginsToSpecState, pluginsToSpecDispatch,listAllServicePluginsForSpec } = useKongServiceManagerContext();
   const { loading: loadingUpdateSpecPermission, allowed: canUpdateSpec } = usePermission({
     permission: kongUpdateSpecPermission,
   });
@@ -54,7 +54,7 @@ export const PluginsTable : React.FC<PluginsTableProps> = (props) => {
   };
 
   const fetchData = async (): Promise<PluginForSpec[]> => {
-    const data = await listAllPluginsForSpec() as PluginForSpec[];
+    const data = await listAllServicePluginsForSpec() as PluginForSpec[];
     return data
   };
 

@@ -32,7 +32,7 @@ const SpecListWrapper : React.FC<SpecListProps> = (props) => {
 const SpecList = () => {
   
   const [ selectedSpec, setSelectedSpec ] = React.useState<string>('');
-  const { entity, getSpecs, selectedSpecDispatch } = useKongServiceManagerContext();
+  const { entity, selectedSpecDispatch,getSpecs } = useKongServiceManagerContext();
   const { noSpec } = useSpecListStyles();
 
   const fetchSpecs = async (): Promise<IDefinition[]> => {

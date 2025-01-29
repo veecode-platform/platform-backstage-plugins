@@ -11,6 +11,7 @@ import { useKongServiceManagerContext } from '../../../context';
 import { FeedbackComponent } from '../../shared/FeedbackComponent';
 import { addPullRequestResponse, initialPullRequestResponseState, PullRequestResponseReducer } from './state';
 
+
 export const PullRequestModal: React.FC<PullRequestModalProps> = props => {
   const [title, setTitle] = React.useState<string>('');
   const [message, setMessage] = React.useState<string>('');
@@ -20,7 +21,7 @@ export const PullRequestModal: React.FC<PullRequestModalProps> = props => {
   const { show, handleCloseModal } = props;
   const { modalOnBlur,modalContent,modalBody,container,titleBar,titleContent,modalHeader,closeModal,content,pullRequestCard,input,footer,spinner,cancel,submit } = usePullRequestStyles();
   const navigate = useNavigate();
-  const { entity, kongSpecs, pluginsToSpecState, applyKongPluginsToSpec } = useKongServiceManagerContext();
+  const { entity, kongSpecs, pluginsToSpecState,applyKongServicePluginsToSpec } = useKongServiceManagerContext();
   const location = entity?.metadata.annotations?.[
     ANNOTATION_LOCATION
   ] as string;
@@ -33,7 +34,7 @@ export const PullRequestModal: React.FC<PullRequestModalProps> = props => {
   const preparatePullRequest = async () => {
     if (pluginsToSpecState && kongSpecs) {
       setProcessingData(true)
-      const response = await applyKongPluginsToSpec(
+      const response = await applyKongServicePluginsToSpec(
         kongSpecs[0] as string,
         title,
         message,
