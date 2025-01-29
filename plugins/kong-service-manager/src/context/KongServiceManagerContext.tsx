@@ -1,9 +1,8 @@
 import { createContext } from "react";
 import {  PluginCard, PullRequestResponse } from "../utils/types";
 import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IDefinition, IKongPluginSpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
-import {  AssociatedPluginsActionType, PluginsPerCategoryActionType, PluginsToSpecActionType, SelectedSpecActionType } from "./state";
+import {  AssociatedPluginsActionType, AssociatedRoutePluginsActionType, PluginsPerCategoryActionType, PluginsToSpecActionType, SelectedSpecActionType } from "./state";
 import { Entity } from "@backstage/catalog-model";
-import { AssociatedRoutePluginsActionType } from "./state/allAssociatedRoutePluginsState/actions";
 
 
 export type KongServiceManagerContextType = {

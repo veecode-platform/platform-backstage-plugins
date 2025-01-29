@@ -14,9 +14,12 @@ import {
 import {
   addPluginsAssociated,
   addPluginsPerCategory,
+  addRoutePluginsAssociated,
   addSelectedPlugin,
   AssociatedPluginsReducer,
+  AssociatedRoutePluginsReducer,
   initialAssociatedPluginsState,
+  initialAssociatedRoutePluginsState,
   initialPluginsPerCategoryState,
   initialPluginsToSpecState,
   initialSelectedPluginState,
@@ -24,6 +27,7 @@ import {
   PluginsPerCategoryReducer,
   PluginsToSpecReducer,
   removePluginAssociated,
+  removeRoutePluginAssociated,
   SelectedPluginReducer,
   SelectedSpecReducer,
 } from './state';
@@ -32,8 +36,6 @@ import { alertApiRef, errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { ANNOTATION_LOCATION } from '@backstage/catalog-model';
 import { removePropsNull } from '../utils/helpers/removePropsNull';
 import { formatObject } from '../utils/helpers/formactObject';
-import { AssociatedRoutePluginsReducer, initialAssociatedRoutePluginsState } from './state/allAssociatedRoutePluginsState/reducer';
-import { addRoutePluginsAssociated, removeRoutePluginAssociated } from './state/allAssociatedRoutePluginsState/actions';
 
 interface KongServiceManagerProviderProps {
   children: React.ReactNode;
