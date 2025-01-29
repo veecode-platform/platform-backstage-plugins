@@ -1,29 +1,31 @@
 import React from 'react';
 import useAsync from 'react-use/lib/useAsync';
-import { useKongServiceManagerContext } from '../../context';
 import { RouteResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import { CardTab, TabbedCard } from '@backstage/core-components';
-import  PluginsList  from '../PluginsList/PluginsList';
 import { useServicePageStyles } from './styles';
 import { useNavigate, useParams } from 'react-router-dom';
 import AboutRoute from './aboutRoute/AboutRoute';
 import { ButtonComponent } from '../../components/shared';
+import PluginsList from '../PluginsList/PluginsList';
+import { useKongServiceManagerContext } from '../../context';
 
 
 const RoutePage = () => {
 
   const { routeNameOrId } = useParams();
   const navigate = useNavigate();
-  const { getRoute, listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPluginsState, pluginsPerCategoryState} = useKongServiceManagerContext();
+  const { getRoute, listAllEnabledRoutePlugins, listAssociatedRoutePlugins , allAssociatedRoutePluginsState, associatedRoutePluginsName} = useKongServiceManagerContext();
   const { root, cardTabstyle, backButton } = useServicePageStyles();
 
   const { error, loading, value:routeDetails } = useAsync(async (): Promise<RouteResponse | null> => {
-    const data = await getRoute(routeNameOrId!);
-    return data
+    if(routeNameOrId){
+      const data = await getRoute(routeNameOrId);
+      return data
+    }
+    return null
   }, [routeNameOrId]);
 
-  const backToRoutesList = () => navigate(-1)
-
+  const backToRoutesList = () => navigate(-1);
 
  return (
   <div className={root}>
@@ -40,10 +42,10 @@ const RoutePage = () => {
       </CardTab>
       <CardTab label="Plugins" className={cardTabstyle}>
         <PluginsList
-          listAllEnabledPlugins={listAllEnabledPlugins}
-          listAssociatedPlugins={listAssociatedPlugins}
-          allAssociatedPluginsState={allAssociatedPluginsState}
-          pluginsPerCategoryState={pluginsPerCategoryState}
+          listAllPlugins={listAllEnabledRoutePlugins}
+          listAssociatedPlugins={listAssociatedRoutePlugins}
+          associatedPluginsState={allAssociatedRoutePluginsState}
+          associatedPluginsName={associatedRoutePluginsName}
         />
       </CardTab>
   </TabbedCard>

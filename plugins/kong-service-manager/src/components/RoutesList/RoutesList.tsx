@@ -4,11 +4,11 @@ import { Box, Button } from '@material-ui/core';
 import useAsync from 'react-use/lib/useAsync';
 import { TableComponent } from './TableComponent';
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
-import { useKongServiceManagerContext } from '../../context';
 import { useRoutesListStyles } from './styles';
 import { ModalComponent } from './ModalComponent/ModalComponent';
 import { kongRouteCreatePermission, RouteResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import { usePermission } from '@backstage/plugin-permission-react';
+import { useKongServiceManagerContext } from '../../context';
 
 const RoutesList = () => {
   const [showModal, setShowModal] = React.useState<boolean>(false);
@@ -17,7 +17,6 @@ const RoutesList = () => {
   const { loading: loadingCreateRoutePermission, allowed: canAddRoute } = usePermission({
     permission: kongRouteCreatePermission,
   });
-
   const { getRoutesList } = useKongServiceManagerContext();
   const { content, button } = useRoutesListStyles();
 
