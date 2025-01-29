@@ -1,45 +1,70 @@
 import { createContext } from "react";
-import {  PluginCard, PluginForSpec, PullRequestResponse } from "../utils/types";
+import {  PluginCard, PullRequestResponse } from "../utils/types";
 import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IDefinition, IKongPluginSpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
-import {  PluginsToSpecActionType, SelectedSpecActionType } from "./state";
+import {  AssociatedPluginsActionType, PluginsPerCategoryActionType, PluginsToSpecActionType, SelectedSpecActionType } from "./state";
 import { Entity } from "@backstage/catalog-model";
+import { AssociatedRoutePluginsActionType } from "./state/allAssociatedRoutePluginsState/actions";
 
 
 export type KongServiceManagerContextType = {
     entity: Entity;
+    serviceName: string | null;
     instance: string;
-    kongSpecs: string[] | null | undefined,
+    kongSpecs: string[] | null | undefined;
+    routeId: string | null;
+    setRouteId: React.Dispatch<React.SetStateAction<string|null>>;
+    isRoute: boolean;
+    setIsRoute: React.Dispatch<React.SetStateAction<boolean>>;
     setInstanceState: (instanceState: string) => void;
-    listAllEnabledPlugins: () => Promise<PluginPerCategory[] | null>;
-    getServiceDetails: () => Promise<ServiceInfoResponse | null>;
-    getRoutesList: () => Promise<RouteResponse[] | null>;
-    listAssociatedPlugins: () => Promise<AssociatedPluginsResponse[]>;
     allAssociatedPluginsState: AssociatedPluginsResponse[] | null;
+    associatedPluginsDispatch: React.Dispatch<AssociatedPluginsActionType>;
+    allAssociatedRoutePluginsState: AssociatedPluginsResponse[];
+    associatedRoutePluginsDispatch: React.Dispatch<AssociatedRoutePluginsActionType>;
     associatedPluginsName: [] | string[];
-    getPluginFields: (pluginName: string) => Promise<PluginFieldsResponse[] | null>;
-    enablePlugin: (config: CreatePlugin) => Promise<void | null>;
-    disablePlugin: (pluginId: string) => Promise<any>;
+    associatedRoutePluginsName: [] | string[];
     handleToggleDrawer: () => void;
     openDrawer: boolean;
     setPluginState: (data: PluginCard) => void;
     selectedPluginState: PluginCard | null;
-    editPlugin: (pluginId: string,config: CreatePlugin) => Promise<void | null>;
     pluginsPerCategoryState: [] | PluginPerCategory[],
+    pluginsPerCategoryDispatch: React.Dispatch<PluginsPerCategoryActionType>;
     configState: any;
     setConfigState: React.Dispatch<any>;
     setSearchState: (search: string) => void;
     searchTerm: string,
-    createRoute: (config: CreateRoute) => Promise<void | null>;
-    editRoute: (routeNameOrId: string, config: CreateRoute) => Promise<void | null>;
-    removeRoute: (routeNameOrId: string) => Promise<void | null>;
-    getRoute:  (routeNameOrId: string) => Promise<RouteResponse | null>;
-    getSpecs: () => Promise<IDefinition[] | null >;
     selectedSpecState: IDefinition | null;
     selectedSpecDispatch: React.Dispatch<SelectedSpecActionType>;
-    listAllPluginsForSpec: () => Promise<PluginForSpec[]>;
     pluginsToSpecState: IKongPluginSpec[];
     pluginsToSpecDispatch: React.Dispatch<PluginsToSpecActionType>;
-    applyKongPluginsToSpec: (specName:string,title: string, message: string, location: string, plugins: IKongPluginSpec[]) => Promise<PullRequestResponse>
+    getServiceDetails: () => Promise<ServiceInfoResponse | null>;
+    listAllEnabledPlugins: () => Promise<PluginPerCategory[] | null>;
+    listAssociatedPlugins: () => Promise<AssociatedPluginsResponse[]>;
+    enablePlugin: (config: CreatePlugin) => Promise<void | null>;
+    editPlugin: (pluginId: string, config: CreatePlugin) => Promise<void | null>;
+    disablePlugin: (pluginId: string) => Promise<void | null>;
+    getPluginFields: (pluginName: string) => Promise<PluginFieldsResponse[] | null>
+    getRoutesList: () => Promise<RouteResponse[] | null>;
+    getRoute: (routeNameOrId: string) => Promise<RouteResponse | null>;
+    createRoute: (config: CreateRoute) => Promise<any>;
+    editRoute: (config: CreateRoute) => Promise<void | null>;
+    removeRoute: () => Promise<void | null>;
+    listAllEnabledRoutePlugins: () => Promise<PluginPerCategory[] | null>;
+    listAssociatedRoutePlugins: () => Promise<AssociatedPluginsResponse[]>;
+    enablePluginToRoute: ( config: CreatePlugin) => Promise<any>;
+    editPluginFromRoute: ( pluginId: string, config: CreatePlugin) => Promise<any>;
+    disabledPluginFromRoute: (rpluginId: string) => Promise<any>;
+    getSpecs: () => Promise<any[] | null>;
+    listAllServicePluginsForSpec: () => Promise<{
+        image: string;
+        name: string;
+        slug: string;
+        description: string;
+        config: {
+            [x: string]: unknown;
+        };
+        enabledToSpec: boolean;
+    }[]>;
+    applyKongServicePluginsToSpec: (specName: string, title: string, message: string, location: string, plugins: IKongPluginSpec[]) => Promise<PullRequestResponse>;
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!);
