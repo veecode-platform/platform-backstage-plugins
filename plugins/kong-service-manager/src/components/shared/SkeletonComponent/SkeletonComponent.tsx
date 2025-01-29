@@ -18,7 +18,7 @@ export const SkeletonComponent : React.FC<SkeletonComponentProps> = (props) => {
   return (
     <>
     {options.map(option => (
-        <ListItem className={listItemWrapper}>
+        <ListItem key={option} className={listItemWrapper}>
             <Box className={listItem}>
                 <LabelField title={option}/>
                 <Skeleton animation="pulse" className={`${option.toLowerCase() === "id" && id} ${option.toLowerCase() === "tags" ? tags : normal}`} />
