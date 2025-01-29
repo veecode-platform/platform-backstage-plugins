@@ -7,4 +7,6 @@ export * from './selectedPluginState/reducer';
 export * from './pluginsToSpecState/actions';
 export * from './pluginsToSpecState/reducer';
 export * from './selectedSpecState/actions';
-export * from './selectedSpecState/reducer'
+export * from './selectedSpecState/reducer';
+export * from './allAssociatedRoutePluginsState/actions';
+export * from './allAssociatedRoutePluginsState/reducer';
