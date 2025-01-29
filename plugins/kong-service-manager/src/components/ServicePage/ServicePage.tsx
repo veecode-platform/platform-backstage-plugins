@@ -10,14 +10,13 @@ import { useServicePageStyles } from './styles';
 
 const ServicePage = () => {
 
-  const { getServiceDetails, listAllEnabledPlugins ,listAssociatedPlugins, allAssociatedPluginsState, pluginsPerCategoryState} = useKongServiceManagerContext();
+  const { allAssociatedPluginsState, associatedPluginsName,getServiceDetails, listAllEnabledPlugins ,listAssociatedPlugins } = useKongServiceManagerContext();
   const { cardTabstyle } = useServicePageStyles();
 
   const { error, loading, value:serviceDetails } = useAsync(async (): Promise<ServiceInfoResponse | null> => {
     const data = await getServiceDetails();
     return data
   }, []);
-
 
  return (
   <TabbedCard title=''>
@@ -30,10 +29,10 @@ const ServicePage = () => {
     </CardTab>
     <CardTab label="Plugins" className={cardTabstyle}>
       <PluginsList
-        listAllEnabledPlugins={listAllEnabledPlugins}
+        listAllPlugins={listAllEnabledPlugins}
         listAssociatedPlugins={listAssociatedPlugins}
-        allAssociatedPluginsState={allAssociatedPluginsState}
-        pluginsPerCategoryState={pluginsPerCategoryState}
+        associatedPluginsState={allAssociatedPluginsState}
+        associatedPluginsName={associatedPluginsName}
       />
     </CardTab>
 </TabbedCard>
