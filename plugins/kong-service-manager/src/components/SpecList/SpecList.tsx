@@ -77,7 +77,7 @@ const SpecList = () => {
             description={spec.info.description}
             owner={entity.spec?.owner as string}
             setSpec={setSelectedSpec}           
-        />
+          />
         )
       )}
     </SpecListWrapper>
