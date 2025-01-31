@@ -84,8 +84,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     setOpenDrawer(!openDrawer);
   };
 
-  const setPluginState = (data: PluginCard) =>
-    selectedPluginDispatch(addSelectedPlugin(data));
+  const setPluginState = (data: PluginCard) => selectedPluginDispatch(addSelectedPlugin(data));
 
   const getAssociatedPuginsName = (
     pluginsParams: AssociatedPluginsResponse[],
