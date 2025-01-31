@@ -18,5 +18,10 @@ export const useSpecPluginsListStyles = makeStyles( theme => ({
       width: '100%',
       padding: '.5rem',
       borderBottom: '1px solid grey'
-   }
+   },
+   cardTabstyle:{
+      backgroundColor: theme.palette.background.paper,
+      height: '65px',
+      padding: '.5rem'
+    }
 }))
