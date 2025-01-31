@@ -16,7 +16,7 @@ export const DrawerComponent = () => {
   const [processingData, setProcessingData] = React.useState<boolean>(false);
   const [ fieldsState, fieldsDispatch ] = React.useReducer(FieldsReducer, initialFieldsState);
   const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction, spinner} = useDrawerStyles();
-  const { handleToggleDrawer, openDrawer ,selectedPluginState, allAssociatedPluginsState, setConfigState, configState, enablePlugin, isRoute, enablePluginToRoute, editPlugin, editPluginFromRoute, getPluginFields } = useKongServiceManagerContext();
+  const { handleToggleDrawer, openDrawer ,selectedPluginState, allAssociatedPluginsState, allAssociatedRoutePluginsState, setConfigState, configState, enablePlugin, isRoute, enablePluginToRoute, editPlugin, editPluginFromRoute, getPluginFields } = useKongServiceManagerContext();
 
   const handleChangeInput = (key: string, value: string | boolean | string[] | number) => {
     if(value!==""){
@@ -46,14 +46,14 @@ export const DrawerComponent = () => {
   };
 
   const handleEditAction = async () => { 
-    if (selectedPluginState && selectedPluginState.id && allAssociatedPluginsState && configState) {
+    if (selectedPluginState && selectedPluginState.id && configState) {
       setProcessingData(true);
       const id = selectedPluginState.id;
       const config = {
         config: configState,
         name: selectedPluginState.slug
       } 
-      if(isRoute) await editPluginFromRoute(id,config);
+      if(isRoute) await editPluginFromRoute(id,config)
       else await editPlugin(id,config);
       setProcessingData(false)  
       handleToggleDrawer();
@@ -65,7 +65,28 @@ export const DrawerComponent = () => {
     
     if (fields) {
       let fieldsData: PluginFieldsResponse[] = [];
-    
+
+
+      if(isRoute){
+        if(selectedPluginState?.associated && allAssociatedRoutePluginsState) {
+          allAssociatedRoutePluginsState.forEach((plugin) => {
+            if (plugin.name === selectedPluginState.slug) {
+              const config = plugin.config;
+              const updateFields: PluginFieldsResponse[] = [];          
+              fields.forEach((field) => {    
+                if (config[field.name] !== null) {
+                  updateFields.push({
+                    ...field,
+                    defaultValue: config[field.name],
+                  });
+                }
+              });
+              fieldsData = fieldsData.concat(updateFields);
+            }
+          });
+        }
+      }
+
       if (selectedPluginState?.associated && allAssociatedPluginsState) {
         allAssociatedPluginsState.forEach((plugin) => {
           if (plugin.name === selectedPluginState.slug) {
@@ -83,7 +104,8 @@ export const DrawerComponent = () => {
           }
         });
       }
-      else fieldsData = fields;
+     
+      // else fieldsData = fields;
       
       let updatedConfigState = { ...configState };
       
