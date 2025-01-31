@@ -50,6 +50,7 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
   const handleEditAction = () => {
     setPluginState(data);
     handleToggleDrawer();
+    return
   }
 
   return (
