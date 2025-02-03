@@ -497,6 +497,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   };
 
+  /**
+   * Service
+  */
+
   const getConfigFromService = async (pluginName: string) => {
     const asociatedPlugins = await listAssociatedPlugins();
 
@@ -607,6 +611,125 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   };
 
+  /**
+  * Route
+  */
+
+  const getConfigFromRoute = async (pluginName: string) => {
+    const asociatedPlugins = await listAssociatedPlugins();
+
+    if (asociatedPlugins) {
+      const data = asociatedPlugins.find(
+        associatedPlugin =>
+          associatedPlugin.name === pluginName && associatedPlugin.config,
+      );
+
+      if (data) {
+        const filteredConfig = removePropsNull(data.config);
+        return { ...filteredConfig };
+      }
+    }
+    return {};
+  };
+
+  const listAllRoutePluginsForSpec = async (path?:string) => {
+    if (!selectedSpecState) return [];
+
+    const pluginsInSpec = Object.keys(selectedSpecState)
+      .filter(key => key.startsWith('x-kong'))
+      .map(key => selectedSpecState[key]);
+
+
+      // eslint-disable-next-line no-console
+      console.log(`Esse é o path >>> ${path}, plugins >>> ${pluginsInSpec}`)
+
+    if (allAssociatedPluginsState && pluginsPerCategoryState && pluginsInSpec) {
+      const pluginsList = await Promise.all(
+        pluginsPerCategoryState.flatMap(category =>
+          category.plugins
+            .filter(plugin => plugin.associated)
+            .map(async plugin => ({
+              image: plugin.image,
+              name: plugin.name,
+              slug: plugin.slug,
+              description: plugin.description,
+              config: await getConfigFromService(plugin.slug),
+              enabledToSpec: !!pluginsInSpec.find(p => p.name === plugin.slug),
+            })),
+        ),
+      );
+      return pluginsList;
+    }
+    return [];
+  };
+
+  const applyKongRoutePluginsToSpec = async (
+    specName: string,
+    title: string,
+    message: string,
+    location: string,
+    plugins: IKongPluginSpec[],
+  ) => {
+    try {
+      if (selectedSpecState) {
+        // delete kong's plugin (old state)
+        for (const key in selectedSpecState) {
+          if (key.startsWith('x-kong')) {
+            delete selectedSpecState[key];
+          }
+        }
+
+        // map new plugins
+        const pluginsWithPrefix: IPluginsWithPrefix = {};
+
+        plugins.map(plugin => {
+          const pluginKey = `x-kong-${plugin.name
+            .replace(' ', '-')
+            .toLowerCase()}`;
+          const newData = {
+            name: plugin.name,
+            enabled: plugin.enabled,
+            config: plugin.config,
+          };
+          pluginsWithPrefix[`${pluginKey}`] = newData;
+        });
+
+        const definitionUpdated = {
+          openapi: selectedSpecState.openapi,
+          info: selectedSpecState.info,
+          externalDocs: selectedSpecState.externalDocs,
+          servers: selectedSpecState.servers,
+          tags: selectedSpecState.tags,
+          ...pluginsWithPrefix,
+          paths: selectedSpecState.paths,
+          components: selectedSpecState.components,
+        };
+
+        const fileContent = formatObject(definitionUpdated);
+
+        const response = await api.applyPluginsToSpec(
+          specName,
+          location,
+          fileContent,
+          title,
+          message,
+        );
+        return response;
+      }
+      return {
+        status: 400,
+        message: 'Pull Request aborted',
+      };
+    } catch (e: any) {
+      errorApi.post(e);
+      return {
+        status: 400,
+        message: 'Pull Request aborted',
+      };
+    }
+  };
+
+
   React.useEffect(() => {
     if (allAssociatedPluginsState) {
       getAssociatedPuginsName(allAssociatedPluginsState);
@@ -689,6 +812,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         getSpecs,
         listAllServicePluginsForSpec,
         applyKongServicePluginsToSpec,
+        listAllRoutePluginsForSpec
       }}
     >
       {children}

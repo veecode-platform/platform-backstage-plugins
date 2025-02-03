@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import {  PluginCard, PullRequestResponse } from "../utils/types";
+import {  PluginCard, PluginForSpec, PullRequestResponse } from "../utils/types";
 import { AssociatedPluginsResponse, CreatePlugin, CreateRoute, IDefinition, IKongPluginSpec, PluginFieldsResponse, PluginPerCategory, RouteResponse, ServiceInfoResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 import {  AssociatedPluginsActionType, AssociatedRoutePluginsActionType, PluginsPerCategoryActionType, PluginsToSpecActionType, SelectedSpecActionType } from "./state";
 import { Entity } from "@backstage/catalog-model";
@@ -53,17 +53,9 @@ export type KongServiceManagerContextType = {
     editPluginFromRoute: ( pluginId: string, config: CreatePlugin) => Promise<any>;
     disabledPluginFromRoute: (rpluginId: string) => Promise<any>;
     getSpecs: () => Promise<any[] | null>;
-    listAllServicePluginsForSpec: () => Promise<{
-        image: string;
-        name: string;
-        slug: string;
-        description: string;
-        config: {
-            [x: string]: unknown;
-        };
-        enabledToSpec: boolean;
-    }[]>;
+    listAllServicePluginsForSpec: () => Promise<PluginForSpec[]>;
     applyKongServicePluginsToSpec: (specName: string, title: string, message: string, location: string, plugins: IKongPluginSpec[]) => Promise<PullRequestResponse>;
+    listAllRoutePluginsForSpec: (path?: string) => Promise<PluginForSpec[]>
 };
 
 export const KongServiceManagerContext = createContext<KongServiceManagerContextType>(null!);
