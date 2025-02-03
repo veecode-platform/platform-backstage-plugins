@@ -1,0 +1,1 @@
+export { WrapperComponent } from "./WrapperComponent";
