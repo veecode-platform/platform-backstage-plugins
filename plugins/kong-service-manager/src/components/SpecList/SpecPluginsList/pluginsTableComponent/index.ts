@@ -1,0 +1,1 @@
+export { PluginsTableComponent } from './PluginsTableComponent';
