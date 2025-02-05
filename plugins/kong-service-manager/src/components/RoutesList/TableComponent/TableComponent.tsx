@@ -2,7 +2,7 @@ import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { Link, Table,TableColumn} from '@backstage/core-components';
-import { Box, Fade, IconButton } from '@material-ui/core';
+import { Box, Fade, IconButton, Tooltip } from '@material-ui/core';
 import { HtmlTooltip } from '../../shared';
 import MoreIcon from '@material-ui/icons/More';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -20,7 +20,7 @@ export const TableComponent : React.FC<TableComponentProps> = (props) => {
   const [showDialog, setShowDialog] = React.useState<boolean>(false);
   const [routeId, setRouteId] = React.useState<string>();
   const { removeRoute } = useKongServiceManagerContext();
-  const {tooltipContent, tags, actions} = useTableComponentStyle();
+  const {tooltipContent, label ,tags, actions} = useTableComponentStyle();
   const {isLoading,dataProps, handleEditModal, refreshList} = props;
   const { loading: loadingUpdateRoutePermission, allowed: canUpdateRoute } = usePermission({
     permission: kongUpdateRoutePermission,
@@ -59,7 +59,7 @@ export const TableComponent : React.FC<TableComponentProps> = (props) => {
   
   const handleRemoveRoute = async () => {
     if (!routeId) return;
-    await removeRoute(routeId);
+    await removeRoute();
     refreshList();
     handleCloseDialog();
   }
@@ -74,9 +74,11 @@ export const TableComponent : React.FC<TableComponentProps> = (props) => {
       align: 'center',
       width: '1fr',
       render: (row:Partial<TableData>) => (
-        <Link to={row.id!}>
+        <Tooltip title={row.id!}>
+          <Link to={row.id!} className={label}>
           {row.name}
         </Link>
+        </Tooltip>
       )
     },
     {
@@ -212,7 +214,15 @@ export const TableComponent : React.FC<TableComponentProps> = (props) => {
       <>
         <Table
           isLoading={isLoading}
-          options={{ paging: true, padding: 'dense',minBodyHeight:'55vh',paginationType:'stepped', paginationPosition:'bottom' }}
+          options={{ 
+            paging: true, 
+            padding: 'dense',
+            minBodyHeight:'55vh',
+            paginationType:'stepped', 
+            paginationPosition:'bottom',
+            pageSize: 10, 
+            pageSizeOptions: [5, 10, 20, 50],
+           }}
           data={generateData(dataProps)}
           columns={columns}
           title=""

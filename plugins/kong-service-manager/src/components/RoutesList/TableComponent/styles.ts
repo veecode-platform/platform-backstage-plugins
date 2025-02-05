@@ -4,6 +4,14 @@ export const useTableComponentStyle = makeStyles({
     tooltipContent:{
       width: '100%',
     },
+    label:{
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      maxWidth: '320px', 
+      display: 'inline-block', 
+      verticalAlign: 'middle',
+    },
     tags: {
       cursor: 'pointer',
     },
