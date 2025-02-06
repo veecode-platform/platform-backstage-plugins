@@ -6,6 +6,8 @@ import dayjs from 'dayjs';
 import { AboutRouteProps } from './types';
 import ErrorBoundary from '../../ErrorBoundary/ErrorBondary';
 import { BoxComponent, EmptyStateComponent,LabelField,SkeletonComponent } from '../../shared';
+import { themeVariables } from '../../../utils/constants/theme';
+import { transformPath } from '../../../utils/helpers/transformPath';
 
 const AboutRoute : React.FC<AboutRouteProps> = (props) => {
 
@@ -18,7 +20,7 @@ const AboutRoute : React.FC<AboutRouteProps> = (props) => {
       <BoxComponent title="About Route">
         <List className={listComponent}>
           <SkeletonComponent 
-            options={["Id", "Last Update","Created", "Protocols","Hosts", "Paths", "Redirect Status", "Service Id", "Tags"]}
+            options={["Id", "Name", "Methods","Last Update","Created", "Protocols","Hosts", "Paths", "Redirect Status", "Service Id", "Tags"]}
           />
         </List>
       </BoxComponent>
@@ -53,7 +55,30 @@ const AboutRoute : React.FC<AboutRouteProps> = (props) => {
                    {routeDetails.name}
                   </ListItemText>
                 </Box>
-              </ListItem>           
+              </ListItem>
+              {/* METHODS */}
+              <ListItem className={listItemWrapper}>
+                <Box className={listItem}>
+                  <LabelField title="Methods"/>
+                  <ListItemText className={itemValue}>
+                  {routeDetails.methods.map(method => { 
+                      const upperMethod = method.toUpperCase();
+                      const backgroundColor = upperMethod in themeVariables.methods
+                          ? themeVariables.methods[upperMethod as keyof typeof themeVariables.methods]
+                          : themeVariables.background.secondary;
+                        return (
+                                <Chip 
+                                  label={method} 
+                                  key={method}
+                                  style={{
+                                    color: "#FFFFFF",
+                                    background: backgroundColor
+                                   }}
+                                   />
+                                )})}
+                </ListItemText>
+                </Box>
+              </ListItem>             
               {/* LAST UPDATE */}
               <ListItem className={listItemWrapper}>
                 <Box className={listItem}>
@@ -107,7 +132,7 @@ const AboutRoute : React.FC<AboutRouteProps> = (props) => {
                 <ListItemText className={itemValue}>
                   {
                     routeDetails.paths.map(path => (
-                      <p key={path}>{path}</p>
+                      <p key={path}>{transformPath(path)}</p>
                     ))
                   }
                 </ListItemText>
