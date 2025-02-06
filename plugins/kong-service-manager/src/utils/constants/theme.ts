@@ -4,8 +4,14 @@ export const themeVariables = {
         grey: "#B6B6B6",
         black: "#151515",
         dark: "#00000067",
-        white: "#FAFAFA",
-        red: "red",
+        white: "#FAFAFA"
+    },
+    methods:{
+        DELETE: "#E3463E",
+        GET: "#61AFFE",
+        POST: "#73CD90",
+        PUT: "#EE9F2F",
+        PATCH: "#7DE4C2"
     },
     blur:{
         dark: '#00000070'
