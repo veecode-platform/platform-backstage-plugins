@@ -105,7 +105,7 @@ export const DrawerComponent = () => {
         });
       }
      
-      // else fieldsData = fields;
+      else fieldsData = fields;
       
       let updatedConfigState = { ...configState };
       
