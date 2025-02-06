@@ -10,13 +10,17 @@ import TableRow from '@mui/material/TableRow';
 import { LoadingComponent } from "../../../../shared";
 import { MdOpenInNew } from "react-icons/md";
 import { addRouteDetails, RouteDetailsProps } from "../state";
+import { transformPath } from "../../../../../utils/helpers/transformPath";
+import { themeVariables } from "../../../../../utils/constants/theme";
+import { Chip } from "@material-ui/core";
 
 const createData = (
     id: string,
+    method: string,
     name: string, // not used in table
     path: string
 ) => {
-    return { id, name, path }
+    return { id, method, name, path }
 };
 
 
@@ -30,6 +34,7 @@ const DefaultTable : React.FC<DefaultTableProps> = (props) => {
         <TableHead>
           <TableRow>
             <StyledTableCell>Id</StyledTableCell>
+            <StyledTableCell align="center">Method</StyledTableCell>
             <StyledTableCell align="center">Path</StyledTableCell>
             <StyledTableCell align="center">Action</StyledTableCell>
           </TableRow>
@@ -48,13 +53,14 @@ const RouteListTable : React.FC<RouteListTableProps> = (props) => {
     const { setRouteId } = useKongServiceManagerContext();
 
     const rows = ( routes && routes.length > 0 ) ? routes.map(
-        route => createData(route.id, route.name, route.paths[0])
+        route => createData(route.id, route.methods[0], route.name, route.paths[0])
       ) : [];
 
     const handleSetRoute = (routeParams:RouteDetailsProps) => {
       setRouteId(routeParams.id);
       setRouteDetails(addRouteDetails({
         id: routeParams.id,
+        method: routeParams.method,
         name: routeParams.name,
         path: routeParams.path
       }))
@@ -68,12 +74,27 @@ const RouteListTable : React.FC<RouteListTableProps> = (props) => {
 
     return (
       <DefaultTable>
-        {rows.map(row => (
+        {rows.map(row => { 
+           const upperMethod = row.method.toUpperCase();
+           const backgroundColor = upperMethod in themeVariables.methods
+                ? themeVariables.methods[upperMethod as keyof typeof themeVariables.methods]
+                : themeVariables.background.secondary;
+          return (
           <StyledTableRow key={row.id}>
             <StyledTableCell component="th" scope="row">
               <div className={column}>{row.id}</div>
             </StyledTableCell>
-            <StyledTableCell align="center">{row.path}</StyledTableCell>
+            <StyledTableCell align="center">
+              <Chip
+                 label={row.method} 
+                 style={{
+                  color: "#FFFFFF",
+                  background: backgroundColor,
+                  textAlign: 'center'
+                 }}
+                 />
+            </StyledTableCell>
+            <StyledTableCell align="center">{transformPath(row.path)}</StyledTableCell>
             <StyledTableCell align="center">
               <MdOpenInNew
                 onClick={() => handleSetRoute(row)}
@@ -83,7 +104,7 @@ const RouteListTable : React.FC<RouteListTableProps> = (props) => {
               />
             </StyledTableCell>
           </StyledTableRow>
-        ))}
+        )})}
       </DefaultTable>
     );
 }
