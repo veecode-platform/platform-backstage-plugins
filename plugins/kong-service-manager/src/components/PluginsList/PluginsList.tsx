@@ -2,12 +2,13 @@ import React from 'react'
 import { BoxComponent, EmptyStateComponent } from '../shared'
 import { PluginsCards } from './PluginsCards';
 import useAsync from 'react-use/lib/useAsync';
-import { CardTab, Progress, TabbedCard } from '@backstage/core-components';
+import { CardTab, TabbedCard } from '@backstage/core-components';
 import ErrorBoundary from '../ErrorBoundary/ErrorBondary';
 import { usePluginListStyles } from './styles';
 import { Box } from '@material-ui/core';
 import { useKongServiceManagerContext } from '../../context';
 import { PluginListProps } from './types';
+import { PluginListSkeleton } from './PluginListSkeleton';
 
 
 
@@ -31,8 +32,6 @@ const PluginsList : React.FC<PluginListProps> = (props) => {
     getPluginsEnabled();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[associatedPluginsState]);
-    
-  if (loading) return <Progress />;
 
   if(error) return <EmptyStateComponent/>;
 
@@ -42,10 +41,12 @@ const PluginsList : React.FC<PluginListProps> = (props) => {
         <Box className={wrapper}>
           <TabbedCard title="">
             <CardTab label="All Plugins">
+              {loading && (<PluginListSkeleton/>)}
               {pluginsPerCategoryState && pluginsPerCategoryState.length >=1 ? <PluginsCards listAllPlugins={listAllPlugins} associatedPluginsName={associatedPluginsName} /> : <div className={emptyContent}> No data to display ...</div>}
             </CardTab>
               <CardTab 
                label="Associated Plugins">
+                {loading && (<PluginListSkeleton/>)}
                 {associatedPluginsState && associatedPluginsState.length >= 1 ? (<PluginsCards filterByAssociated listAllPlugins={listAllPlugins} associatedPluginsName={associatedPluginsName} />) 
                 : <div className={emptyContent}> No data to display ...</div>}
               </CardTab>
