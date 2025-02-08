@@ -56,11 +56,6 @@ export const kongRouteDeletePermission = createPermission({
     attributes: { action: 'delete' }
 })
 
-// export const kongReadPluginsAvailableRoutePermission = createPermission({
-//     name: 'kong.read.plugins.available.route',
-//     attributes: { action: 'read'}
-// })
-
 export const kongApplyPluginToRoutePermission = createPermission({
     name: 'kong.apply.plugins.route',
     attributes: { action: 'create'}
@@ -82,6 +77,8 @@ export const kongDisableRoutePluginPermission = createPermission({
  *  @public
 */
 
+// services
+
 export const kongReadSpecsPermission = createPermission({
     name: 'kong.read.specs',
     attributes: { action: 'read'}
@@ -92,6 +89,73 @@ export const kongUpdateSpecPermission = createPermission({
     attributes: { action: 'update'}
 })
 
+export const kongUpdateRoutePathInSpecPermission = createPermission({  
+    name: 'kong.update.route.path',
+    attributes: { action: 'update'}
+})
+
+/**
+ * plugins ( categories )
+ * @public
+ *  AI - ai
+    Authentication → auth
+    Security → security
+    Traffic Control → traffic
+    Serverless → serverless
+    Transformation → transform
+    Logging → logging
+    Analytics & Monitoring → analytics
+    Proxy Caching → cache
+    Datastore → datastore
+    Enterprise → enterprise
+    Observability → observe
+    Rate Limiting → ratelimit
+    Load Balancing → loadbalancer
+    gRPC Support → grpc
+    Request/Response Validation → validate
+    Custom Plugins → custom
+ */
+export const kongAIPluginsPermission = createPermission({  
+    name: 'kong.read.auth.plugins',
+    attributes: { action: 'read'}
+});
+
+export const kongAuthPluginsPermission = createPermission({  
+    name: 'kong.read.auth.plugins',
+    attributes: { action: 'read'}
+});
+export const kongSecurityPluginsPermission = createPermission({  
+    name: 'kong.read.security.plugins',
+    attributes: { action: 'read'}
+});
+export const kongTrafficPluginsPermission = createPermission({  
+    name: 'kong.read.traffic.plugins',
+    attributes: { action: 'read'}
+});
+export const kongServerlessPluginsPermission = createPermission({  
+    name: 'kong.read.serverless.plugins',
+    attributes: { action: 'read'}
+});
+export const kongTransformPluginsPermission = createPermission({  
+    name: 'kong.read.transform.plugins',
+    attributes: { action: 'read'}
+});
+export const kongLoggingPluginsPermission = createPermission({  
+    name: 'kong.read.logging.plugins',
+    attributes: { action: 'read'}
+});
+export const kongAnalyticsPluginsPermission = createPermission({  
+    name: 'kong.read.analytics.plugins',
+    attributes: { action: 'read'}
+});
+export const kongCachePluginsPermission = createPermission({  
+    name: 'kong.read.cache.plugins',
+    attributes: { action: 'read'}
+});
+export const kongDataStorePluginsPermission = createPermission({  
+    name: 'kong.read.datastore.plugins',
+    attributes: { action: 'read'}
+});
 
 export const kongServiceManagerPermissions = {
     kongServiceReadPermission,
@@ -107,5 +171,16 @@ export const kongServiceManagerPermissions = {
     kongUpdateRoutePluginPermission,
     kongDisableRoutePluginPermission,
     kongReadSpecsPermission,
-    kongUpdateSpecPermission
+    kongUpdateSpecPermission,
+    kongUpdateRoutePathInSpecPermission,
+    kongAIPluginsPermission,
+    kongAuthPluginsPermission,
+    kongSecurityPluginsPermission,
+    kongTrafficPluginsPermission,
+    kongServerlessPluginsPermission,
+    kongTransformPluginsPermission,
+    kongLoggingPluginsPermission,
+    kongAnalyticsPluginsPermission,
+    kongCachePluginsPermission,
+    kongDataStorePluginsPermission
 }
