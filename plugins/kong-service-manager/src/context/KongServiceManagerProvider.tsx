@@ -712,7 +712,6 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
         const updatedMethod = { ...pathSelected, ...pluginsWithPrefix };
         
-
         const definitionUpdated = {
           ...selectedSpecState,
           paths: {
@@ -768,6 +767,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     if(!isRoute && serviceName){
       listAllEnabledPlugins();
     }
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm]);
 
