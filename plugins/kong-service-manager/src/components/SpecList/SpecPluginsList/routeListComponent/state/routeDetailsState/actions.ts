@@ -1,4 +1,5 @@
-import { RouteDetailsProps } from "./types";
+import { RouteDetailsProps } from "../../../../../../utils/types";
+
 
 export const addRouteDetails = (routeParams: RouteDetailsProps) => ({
     type: 'ADD_ROUTE_DETAILS',

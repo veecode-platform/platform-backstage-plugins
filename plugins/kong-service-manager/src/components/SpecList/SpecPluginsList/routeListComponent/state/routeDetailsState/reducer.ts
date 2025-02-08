@@ -1,5 +1,5 @@
+import { RouteDetailsProps } from "../../../../../../utils/types";
 import { RouteDetailsPropsType } from "./actions";
-import { RouteDetailsProps } from "./types";
 
 export const initialRouteDetailsState : RouteDetailsProps | null = null;
 
