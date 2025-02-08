@@ -1,4 +1,6 @@
+import { RouteDetailsProps } from "../../../../utils/types";
+
 export interface PluginsTableProps {
     specName:string,
-    routeId?:string,
+    route?:RouteDetailsProps,
 }
