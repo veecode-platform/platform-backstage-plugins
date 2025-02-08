@@ -10,37 +10,52 @@ import { ANNOTATION_LOCATION } from '@backstage/catalog-model';
 import { useKongServiceManagerContext } from '../../../context';
 import { FeedbackComponent } from '../../shared/FeedbackComponent';
 import { addPullRequestResponse, initialPullRequestResponseState, PullRequestResponseReducer } from './state';
+import { PullRequestResponse } from '../../../utils/types';
+import { HttpMethod } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { transformPath } from '../../../utils/helpers/transformPath';
 
 
 export const PullRequestModal: React.FC<PullRequestModalProps> = props => {
   const [title, setTitle] = React.useState<string>('');
   const [message, setMessage] = React.useState<string>('');
-  const [ showFeedback, setShowFeedback ] = React.useState<boolean>(false); // false
+  const [ showFeedback, setShowFeedback ] = React.useState<boolean>(false);
   const [ pullRequestResponseState, pullRequestResponseDispatch ] = React.useReducer(PullRequestResponseReducer,initialPullRequestResponseState);
   const [ processingData, setProcessingData ] = React.useState<boolean>(false);
-  const { show, handleCloseModal } = props;
+  const { show, handleCloseModal,route } = props;
   const { modalOnBlur,modalContent,modalBody,container,titleBar,titleContent,modalHeader,closeModal,content,pullRequestCard,input,footer,spinner,cancel,submit } = usePullRequestStyles();
   const navigate = useNavigate();
-  const { entity, kongSpecs, pluginsToSpecState,applyKongServicePluginsToSpec } = useKongServiceManagerContext();
+  const { entity, kongSpecs, pluginsToSpecState,applyKongServicePluginsToSpec,applyKongRoutePluginsToSpec } = useKongServiceManagerContext();
   const location = entity?.metadata.annotations?.[
     ANNOTATION_LOCATION
   ] as string;
   const provider = checkGitProvider(location!);
 
-  const goBack = () => {
-    navigate(-1);
-  };
+  const goBack = () => navigate(-1);
 
   const preparatePullRequest = async () => {
     if (pluginsToSpecState && kongSpecs) {
       setProcessingData(true)
-      const response = await applyKongServicePluginsToSpec(
-        kongSpecs[0] as string,
-        title,
-        message,
-        location,
-        pluginsToSpecState,
-      );
+      let response : PullRequestResponse;
+      if(route) {
+        response = await applyKongRoutePluginsToSpec(
+          kongSpecs[0] as string,
+          title,
+          message,
+          location,
+          route.path,
+          route.method.toLowerCase() as HttpMethod,
+          pluginsToSpecState,
+        );
+      }
+      else{
+        response = await applyKongServicePluginsToSpec(
+          kongSpecs[0] as string,
+          title,
+          message,
+          location,
+          pluginsToSpecState,
+        );
+      }
 
       if (response) {
         pullRequestResponseDispatch(addPullRequestResponse({
@@ -67,12 +82,22 @@ export const PullRequestModal: React.FC<PullRequestModalProps> = props => {
   React.useEffect(() => {
     if (pluginsToSpecState.length > 0) {
       const plugins: string[] = pluginsToSpecState.flatMap(item => item.name);
-      setMessage(
-        `Add/Update Kong plugins to spec: \n\n${plugins
-          .map(plugin => `✔️ ${plugin}\n`)
-          .join('')}`,
-      );
+      if(route){
+        setMessage(
+          `Add/Update Kong plugins to path: ${transformPath(route.path)}, method: ${route.method.toString()} \n\n${plugins
+            .map(plugin => `✔️ ${plugin}\n`)
+            .join('')}`,
+        );
+      }
+      else {
+        setMessage(
+          `Add/Update Kong plugins to spec: \n\n${plugins
+            .map(plugin => `✔️ ${plugin}\n`)
+            .join('')}`,
+        );
+      }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pluginsToSpecState]);
 
   return (
