@@ -7,9 +7,9 @@ import { WrapperComponent } from "../wrapperComponent";
 import { PluginsTableComponent } from "../pluginsTableComponent";
 import RouteListTable from "./routeListTable/RouteListTable";
 import { initialRouteDetailsState, removeRouteDetails, RouteDetailsReducer } from "./state";
+import { transformPath } from "../../../../utils/helpers/transformPath";
 
 const RouteListComponent : React.FC<RouteListComponentProps> = (props) => { 
-  // const [ routeIdValue, setRouteIdValue ] = React.useState<string|null>(null);
   const [ routeDetailsState, routeDetailsDispatch] = React.useReducer(RouteDetailsReducer, initialRouteDetailsState);
   const { getRoutesList } = useKongServiceManagerContext();
   const { specname } = props;
@@ -23,9 +23,10 @@ const RouteListComponent : React.FC<RouteListComponentProps> = (props) => {
 
   const {value: routes, loading, error} = useAsync(fetchRoutes,[]);
 
+  // TODO create error component
   if(error)  return (
     <WrapperComponent title="Route List">
-      <div>Error..</div>
+      <div>Error...</div>  
     </WrapperComponent>
   )
 
@@ -33,13 +34,13 @@ const RouteListComponent : React.FC<RouteListComponentProps> = (props) => {
     <>
       {routeDetailsState ? (
         <WrapperComponent 
-          title={<>Plugins associated to path <span>{routeDetailsState.path}</span></>} 
+          title={<>Plugins associated to path <span>{transformPath(routeDetailsState.path)}</span></>} 
           buttonBack
           handleBack={resetRouteIdValue}
           >
           <PluginsTableComponent 
             specName={specname} 
-            routeId={routeDetailsState.id}
+            route={routeDetailsState}
             />
         </WrapperComponent>
       ) : (
