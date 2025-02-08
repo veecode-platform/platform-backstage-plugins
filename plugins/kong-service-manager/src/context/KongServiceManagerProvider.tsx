@@ -8,6 +8,7 @@ import {
   AssociatedPluginsResponse,
   CreatePlugin,
   CreateRoute,
+  HttpMethod,
   IKongPluginSpec,
   IPluginsWithPrefix,
 } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
@@ -36,6 +37,7 @@ import { alertApiRef, errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { ANNOTATION_LOCATION } from '@backstage/catalog-model';
 import { removePropsNull } from '../utils/helpers/removePropsNull';
 import { formatObject } from '../utils/helpers/formactObject';
+import { transformPath } from '../utils/helpers/transformPath';
 
 interface KongServiceManagerProviderProps {
   children: React.ReactNode;
@@ -525,22 +527,25 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
       .filter(key => key.startsWith('x-kong'))
       .map(key => selectedSpecState[key]);
 
-    if (allAssociatedPluginsState && pluginsPerCategoryState && pluginsInSpec) {
-      const pluginsList = await Promise.all(
-        pluginsPerCategoryState.flatMap(category =>
-          category.plugins
-            .filter(plugin => plugin.associated)
-            .map(async plugin => ({
-              image: plugin.image,
-              name: plugin.name,
-              slug: plugin.slug,
-              description: plugin.description,
-              config: await getConfigFromService(plugin.slug),
-              enabledToSpec: !!pluginsInSpec.find(p => p.name === plugin.slug),
-            })),
-        ),
-      );
-      return pluginsList;
+    if (allAssociatedPluginsState && pluginsInSpec) {
+      const enableServicePlugins = await listAllEnabledPlugins();
+      if(enableServicePlugins){
+        const pluginsList = await Promise.all(
+          enableServicePlugins.flatMap(category =>
+            category.plugins
+              .filter(plugin => plugin.associated)
+              .map(async plugin => ({
+                image: plugin.image,
+                name: plugin.name,
+                slug: plugin.slug,
+                description: plugin.description,
+                config: await getConfigFromService(plugin.slug),
+                enabledToSpec: !!pluginsInSpec.find(p => p.name === plugin.slug),
+              })),
+          ),
+        );
+        return pluginsList;
+      }
     }
     return [];
   };
@@ -616,10 +621,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   */
 
   const getConfigFromRoute = async (pluginName: string) => {
-    const asociatedPlugins = await listAssociatedPlugins();
+    const associatedPlugins = await listAssociatedRoutePlugins();
 
-    if (asociatedPlugins) {
-      const data = asociatedPlugins.find(
+    if (associatedPlugins) {
+      const data = associatedPlugins.find(
         associatedPlugin =>
           associatedPlugin.name === pluginName && associatedPlugin.config,
       );
@@ -632,20 +637,22 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     return {};
   };
 
-  const listAllRoutePluginsForSpec = async (path?:string) => {
+  const listAllRoutePluginsForSpec = async (path:string, method: HttpMethod) => {
     if (!selectedSpecState) return [];
 
-    const pluginsInSpec = Object.keys(selectedSpecState)
+    const formattedPath = transformPath(path);
+    const specPath = selectedSpecState.paths;
+    const pathResult = specPath[formattedPath][method];
+
+    const pluginsInPath = Object.keys(pathResult)
       .filter(key => key.startsWith('x-kong'))
-      .map(key => selectedSpecState[key]);
+      .map(key => pathResult[key]);
 
-
-      // eslint-disable-next-line no-console
-      console.log(`Esse é o path >>> ${path}, plugins >>> ${pluginsInSpec}`)
-
-    if (allAssociatedPluginsState && pluginsPerCategoryState && pluginsInSpec) {
+    if (allAssociatedRoutePluginsState && pluginsInPath) {
+     const enableRoutePlugins = await listAllEnabledRoutePlugins();
+     if(enableRoutePlugins){
       const pluginsList = await Promise.all(
-        pluginsPerCategoryState.flatMap(category =>
+        enableRoutePlugins.flatMap(category =>
           category.plugins
             .filter(plugin => plugin.associated)
             .map(async plugin => ({
@@ -653,12 +660,13 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
               name: plugin.name,
               slug: plugin.slug,
               description: plugin.description,
-              config: await getConfigFromService(plugin.slug),
-              enabledToSpec: !!pluginsInSpec.find(p => p.name === plugin.slug),
+              config: await getConfigFromRoute(plugin.slug),
+              enabledToSpec: !!pluginsInPath.find(p => p.name === plugin.slug),
             })),
         ),
       );
       return pluginsList;
+     }
     }
     return [];
   };
@@ -668,14 +676,22 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     title: string,
     message: string,
     location: string,
+    path: string,
+    method: HttpMethod,
     plugins: IKongPluginSpec[],
   ) => {
+
     try {
       if (selectedSpecState) {
+
+        const formattedPath = transformPath(path);
+        const specPaths = selectedSpecState.paths;
+        const pathSelected = specPaths[formattedPath][method];
+  
         // delete kong's plugin (old state)
-        for (const key in selectedSpecState) {
+        for (const key in pathSelected) {
           if (key.startsWith('x-kong')) {
-            delete selectedSpecState[key];
+            delete pathSelected[key];
           }
         }
 
@@ -694,15 +710,18 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
           pluginsWithPrefix[`${pluginKey}`] = newData;
         });
 
+        const updatedMethod = { ...pathSelected, ...pluginsWithPrefix };
+        
+
         const definitionUpdated = {
-          openapi: selectedSpecState.openapi,
-          info: selectedSpecState.info,
-          externalDocs: selectedSpecState.externalDocs,
-          servers: selectedSpecState.servers,
-          tags: selectedSpecState.tags,
-          ...pluginsWithPrefix,
-          paths: selectedSpecState.paths,
-          components: selectedSpecState.components,
+          ...selectedSpecState,
+          paths: {
+            ...specPaths,
+            [formattedPath]: {
+              ...specPaths[formattedPath],
+              [method]: updatedMethod,
+            },
+          },
         };
 
         const fileContent = formatObject(definitionUpdated);
@@ -812,7 +831,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         getSpecs,
         listAllServicePluginsForSpec,
         applyKongServicePluginsToSpec,
-        listAllRoutePluginsForSpec
+        listAllRoutePluginsForSpec,
+        applyKongRoutePluginsToSpec
       }}
     >
       {children}
