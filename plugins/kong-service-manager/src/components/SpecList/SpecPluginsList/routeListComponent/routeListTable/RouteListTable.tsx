@@ -9,10 +9,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { LoadingComponent } from "../../../../shared";
 import { MdOpenInNew } from "react-icons/md";
-import { addRouteDetails, RouteDetailsProps } from "../state";
+import { addRouteDetails } from "../state";
 import { transformPath } from "../../../../../utils/helpers/transformPath";
 import { themeVariables } from "../../../../../utils/constants/theme";
 import { Chip } from "@material-ui/core";
+import { RouteDetailsProps } from "../../../../../utils/types";
 
 const createData = (
     id: string,
