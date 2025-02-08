@@ -13,10 +13,11 @@ import { addPluginsToList, initialPluginsSpecListState, PluginsSpecListReducer, 
 import { PluginForSpec } from '../../../../utils/types';
 import useAsync from 'react-use/esm/useAsync';
 import { addPluginsToSpec } from '../../../../context/state';
-import { IKongPluginSpec, kongUpdateSpecPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { HttpMethod, IKongPluginSpec, kongUpdateSpecPermission } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import { ButtonComponent, LoadingComponent } from '../../../shared';
 import { PullRequestModal } from '../../PullRequesModal';
 import { usePermission } from '@backstage/plugin-permission-react';
+import { FcInfo } from "react-icons/fc";
 
 
 const createData = (
@@ -34,8 +35,8 @@ export const PluginsTableComponent : React.FC<PluginsTableProps> = (props) => {
   const [pluginsSpecListState, pluginsSpecListDispatch] = React.useReducer(PluginsSpecListReducer,initialPluginsSpecListState);
   const [showModal, setShowModal] = React.useState<boolean>(false);
   const [ hasChange, setHasChange ] = React.useState<boolean>(false);
-  const { specName, routeId } = props;
-  const { root,iconAndName, apply, remove, submit, footer, fixedToBottom } = usePluginsTableStyles();
+  const { specName, route } = props;
+  const { root,iconAndName, apply, remove, submit, noPluginsInfo, footer, fixedToBottom } = usePluginsTableStyles();
   const {  pluginsToSpecState, pluginsToSpecDispatch,listAllServicePluginsForSpec,listAllRoutePluginsForSpec } = useKongServiceManagerContext();
   const { loading: loadingUpdateSpecPermission, allowed: canUpdateSpec } = usePermission({
     permission: kongUpdateSpecPermission,
@@ -55,9 +56,7 @@ export const PluginsTableComponent : React.FC<PluginsTableProps> = (props) => {
 
   const fetchData = async (): Promise<PluginForSpec[]> => {
     let data : PluginForSpec[] = [];
-    if(routeId) {
-      data = await listAllRoutePluginsForSpec() as PluginForSpec[];
-    }
+    if(route) data = await listAllRoutePluginsForSpec(route.path, route.method.toLowerCase() as HttpMethod) as PluginForSpec[];
     else data = await listAllServicePluginsForSpec() as PluginForSpec[];
     return data
   };
@@ -70,9 +69,7 @@ export const PluginsTableComponent : React.FC<PluginsTableProps> = (props) => {
 
   const handleToggleModal = () => setShowModal(!showModal);
 
-  const handleApplyChanges = () => {
-    handleToggleModal()
-  }
+  const handleApplyChanges = () => handleToggleModal();
 
 
   const checkChanges = (): boolean => {
@@ -133,40 +130,50 @@ export const PluginsTableComponent : React.FC<PluginsTableProps> = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              { loading ? <LoadingComponent/> : <> {
-                rows.map((row) => (
-                  <StyledTableRow key={row.name}>
-                    <StyledTableCell component="th" scope="row">
-                    <div className={iconAndName}> <img src={row.image} alt={row.name}/> {row.name}</div>
-                    </StyledTableCell>
-                    <StyledTableCell align="center">{row.description}</StyledTableCell>
-                    <StyledTableCell align="center">
-                    {!loadingUpdateSpecPermission && (  
-                        <ButtonComponent 
-                          handleClick={()=> handleAction(row.name)} 
-                          isDisabled={!canUpdateSpec}
-                          classes={row.enableToSpec ? remove: apply}> 
-                          {row.enableToSpec ? (<><IoMdRemove size={20}/> Remove from Spec</>): (<><IoMdAdd size={20}/> Apply to Spec</>)}
-                        </ButtonComponent>
-                      )}
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))
-              }</>}
-            </TableBody>
-            <TableFooter className={`${footer} ${rows.length <= 3 && fixedToBottom}`}>
+              { loading ? <LoadingComponent/> : (<>
+               { rows.length <= 0 ?  (
                 <StyledTableRow>
-                  <StyledTableCell colSpan={3} align="center" >  
-                    {!loadingUpdateSpecPermission && (       
-                      <ButtonComponent 
-                        isDisabled={!hasChange && !canUpdateSpec} 
-                        classes={submit} 
-                        handleClick={handleApplyChanges}>
-                          Apply
-                      </ButtonComponent>)}
-                  </StyledTableCell>
-                </StyledTableRow>
-            </TableFooter>
+                  <StyledTableCell component="th" scope="row" colSpan={3}>
+                   <div className={noPluginsInfo}> <FcInfo /> No associated plugins</div>
+                   </StyledTableCell>
+                 </StyledTableRow>
+               ) : (
+                  rows.map((row) => (
+                    <StyledTableRow key={row.name}>
+                      <StyledTableCell component="th" scope="row">
+                      <div className={iconAndName}> <img src={row.image} alt={row.name}/> {row.name}</div>
+                      </StyledTableCell>
+                      <StyledTableCell align="center">{row.description}</StyledTableCell>
+                      <StyledTableCell align="center">
+                      {!loadingUpdateSpecPermission && (  
+                          <ButtonComponent 
+                            handleClick={()=> handleAction(row.name)} 
+                            isDisabled={!canUpdateSpec}
+                            classes={row.enableToSpec ? remove: apply}> 
+                            {row.enableToSpec ? (<><IoMdRemove size={20}/> Remove from Spec</>): (<><IoMdAdd size={20}/> Apply to Spec</>)}
+                          </ButtonComponent>
+                        )}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))
+                 )}</>
+              )}
+            </TableBody>
+            {rows.length > 0 && (
+              <TableFooter className={`${footer} ${rows.length <= 3 && fixedToBottom}`}>
+              <StyledTableRow>
+                <StyledTableCell colSpan={3} align="center" >  
+                  {!loadingUpdateSpecPermission && (       
+                    <ButtonComponent 
+                      isDisabled={!hasChange && !canUpdateSpec} 
+                      classes={submit} 
+                      handleClick={handleApplyChanges}>
+                        Apply
+                    </ButtonComponent>)}
+                </StyledTableCell>
+              </StyledTableRow>
+          </TableFooter>
+            )}
           </Table>
         </TableContainer>
         {showModal && (
@@ -174,6 +181,7 @@ export const PluginsTableComponent : React.FC<PluginsTableProps> = (props) => {
             specName={specName}
             show={showModal}
             handleCloseModal={handleToggleModal}
+            route={route}
            />
         )}
       </>

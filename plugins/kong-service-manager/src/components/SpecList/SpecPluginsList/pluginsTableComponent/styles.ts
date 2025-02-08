@@ -68,6 +68,16 @@ export const usePluginsTableStyles = makeStyles(theme => ({
           cursor: 'not-allowed'
         }
     },
+    noPluginsInfo:{
+      margin: '.5rem auto 0 auto',
+      padding: '1rem',
+      borderRadius: '10px',
+      backgroundColor: "#61AFFE35",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      gap: '1rem'
+    },
     footer:{
         background: theme.palette.background.default,
         marginTop: '2rem'
