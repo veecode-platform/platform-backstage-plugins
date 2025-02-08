@@ -175,7 +175,7 @@ export interface IDefinitionBase {
   externalDocs?: IDefinitionExternalDocs,
   servers: IDefinitionServer[],
   tags?: IDefinitionTag[],
-  paths: IDefinitionPath[],
+  paths: IDefinitionPath,
   components?: IDefinitionComponent[],
 }
 export interface IDefinitionInfo {
@@ -211,11 +211,21 @@ export interface IDefinitionTag {
   externalDocs: IDefinitionExternalDocs
 }
 
-export interface IDefinitionPath {
-  [key:string]:{
-    [key:string]: object
+export type HttpMethod = 'get' | 'post' | 'put' | 'patch' | 'delete' | 'head' | 'options';
+export interface IDefinitionPathBase {
+  [path:string]:{
+    [method in HttpMethod]?: {
+      summary?: string;
+      responses?: Record<string, any>;
+      parameters?: Array<any>;
+      requestBody?: any;
+    }
   }
 }
+
+export type IDefinitionPath = IDefinitionPathBase & {
+  [key: string]: IKongPluginSpec | any;
+};
 
 export interface IDefinitionComponent {
   schemas: {
