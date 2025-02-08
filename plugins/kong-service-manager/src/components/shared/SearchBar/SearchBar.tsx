@@ -13,6 +13,11 @@ export const SearchBar = () => {
   setSearchState(event?.target.value)
  }
 
+ React.useEffect(()=>{
+  setSearchState('')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
+
   return (
     <div className={search}>
     <div className={searchIcon}>
