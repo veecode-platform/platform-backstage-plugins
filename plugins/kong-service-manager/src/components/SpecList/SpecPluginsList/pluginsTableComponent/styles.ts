@@ -79,8 +79,8 @@ export const usePluginsTableStyles = makeStyles(theme => ({
       gap: '1rem'
     },
     footer:{
-        background: theme.palette.background.default,
-        marginTop: '2rem'
+      background: theme.palette.background.paper,
+      marginTop: '2rem'
     },
     fixedToBottom: {
      position: 'absolute',

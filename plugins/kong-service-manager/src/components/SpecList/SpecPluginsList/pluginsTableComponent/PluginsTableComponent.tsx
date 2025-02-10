@@ -161,18 +161,18 @@ export const PluginsTableComponent : React.FC<PluginsTableProps> = (props) => {
             </TableBody>
             {rows.length > 0 && (
               <TableFooter className={`${footer} ${rows.length <= 3 && fixedToBottom}`}>
-              <StyledTableRow>
-                <StyledTableCell colSpan={3} align="center" >  
-                  {!loadingUpdateSpecPermission && (       
-                    <ButtonComponent 
-                      isDisabled={!hasChange && !canUpdateSpec} 
-                      classes={submit} 
-                      handleClick={handleApplyChanges}>
-                        Apply
-                    </ButtonComponent>)}
-                </StyledTableCell>
-              </StyledTableRow>
-          </TableFooter>
+                <StyledTableRow>
+                  <StyledTableCell colSpan={3} align="center" className={footer} >  
+                    {!loadingUpdateSpecPermission && (       
+                      <ButtonComponent 
+                        isDisabled={!hasChange && !canUpdateSpec} 
+                        classes={submit} 
+                        handleClick={handleApplyChanges}>
+                          Apply
+                      </ButtonComponent>)}
+                  </StyledTableCell>
+                </StyledTableRow>
+             </TableFooter>
             )}
           </Table>
         </TableContainer>
