@@ -117,7 +117,7 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
 
     try {
       if (route.id) {
-        await editRoute(route.id, config);
+        await editRoute(config);
         refreshList();
         handleCloseModal({});
         return;
