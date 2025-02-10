@@ -116,7 +116,7 @@ export const kongUpdateRoutePathInSpecPermission = createPermission({
     Custom Plugins → custom
  */
 export const kongAIPluginsPermission = createPermission({  
-    name: 'kong.read.auth.plugins',
+    name: 'kong.read.ai.plugins',
     attributes: { action: 'read'}
 });
 
