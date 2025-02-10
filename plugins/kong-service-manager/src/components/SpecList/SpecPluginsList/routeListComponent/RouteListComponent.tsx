@@ -8,10 +8,13 @@ import { PluginsTableComponent } from "../pluginsTableComponent";
 import RouteListTable from "./routeListTable/RouteListTable";
 import { initialRouteDetailsState, removeRouteDetails, RouteDetailsReducer } from "./state";
 import { transformPath } from "../../../../utils/helpers/transformPath";
+import { EmptyState } from "@backstage/core-components";
+import { useRouteListComponentStyles } from "./style";
 
 const RouteListComponent : React.FC<RouteListComponentProps> = (props) => { 
   const [ routeDetailsState, routeDetailsDispatch] = React.useReducer(RouteDetailsReducer, initialRouteDetailsState);
   const { getRoutesList } = useKongServiceManagerContext();
+  const { root } = useRouteListComponentStyles();
   const { specname } = props;
 
   const fetchRoutes = async (): Promise<RouteResponse[]> => {
@@ -23,10 +26,15 @@ const RouteListComponent : React.FC<RouteListComponentProps> = (props) => {
 
   const {value: routes, loading, error} = useAsync(fetchRoutes,[]);
 
-  // TODO create error component
   if(error)  return (
     <WrapperComponent title="Route List">
-      <div>Error...</div>  
+     <div className={root}>
+      <EmptyState 
+       missing="data" 
+       title="No routes to show" 
+       description={error.message}
+        />  
+     </div>
     </WrapperComponent>
   )
 
