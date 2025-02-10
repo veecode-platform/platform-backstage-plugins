@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import { Link, Table,TableColumn} from '@backstage/core-components';
 import { Box, Fade, IconButton, Tooltip } from '@material-ui/core';
-import { HtmlTooltip } from '../../shared';
+import { HtmlTooltip, MethodLabel } from '../../shared';
 import MoreIcon from '@material-ui/icons/More';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit';
@@ -13,7 +13,6 @@ import { tableStyle, useTableComponentStyle } from './styles';
 import { kongRouteDeletePermission, kongUpdateRoutePermission, RoutesResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
 import { usePermission } from '@backstage/plugin-permission-react';
 import { useKongServiceManagerContext } from '../../../context';
-import { themeVariables } from '../../../utils/constants/theme';
 import { transformPath } from '../../../utils/helpers/transformPath';
 
 
@@ -108,21 +107,9 @@ export const TableComponent : React.FC<TableComponentProps> = (props) => {
       render: (row: Partial<TableData>) => (
         <>
           {(row.methods && row.methods.length > 0 )
-            ? row.methods.map(method => { 
-              const upperMethod = method.toUpperCase();
-              const backgroundColor = upperMethod in themeVariables.methods
-              ? themeVariables.methods[upperMethod as keyof typeof themeVariables.methods]
-              : themeVariables.background.secondary;
-              return (
-                <Chip 
-                 label={method} 
-                 key={method}
-                 style={{
-                  color: "#FFFFFF",
-                  background: backgroundColor
-                 }}
-                 />
-              )})
+            ? row.methods.map(method => (
+                <MethodLabel key={method} variant={method}/>
+              ))
             : ' - '}
         </>
       ),

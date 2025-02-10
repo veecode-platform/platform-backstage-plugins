@@ -7,3 +7,4 @@ export * from './LoadingComponent';
 export * from './MissingAnnotation';
 export * from './SkeletonComponent';
 export * from './Fields';
+export * from './MethodLabel';

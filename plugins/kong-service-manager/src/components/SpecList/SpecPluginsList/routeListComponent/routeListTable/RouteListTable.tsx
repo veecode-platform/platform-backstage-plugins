@@ -7,12 +7,10 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { LoadingComponent } from "../../../../shared";
+import { LoadingComponent, MethodLabel } from "../../../../shared";
 import { MdOpenInNew } from "react-icons/md";
 import { addRouteDetails } from "../state";
 import { transformPath } from "../../../../../utils/helpers/transformPath";
-import { themeVariables } from "../../../../../utils/constants/theme";
-import { Chip } from "@material-ui/core";
 import { RouteDetailsProps } from "../../../../../utils/types";
 
 const createData = (
@@ -75,24 +73,14 @@ const RouteListTable : React.FC<RouteListTableProps> = (props) => {
 
     return (
       <DefaultTable>
-        {rows.map(row => { 
-           const upperMethod = row.method.toUpperCase();
-           const backgroundColor = upperMethod in themeVariables.methods
-                ? themeVariables.methods[upperMethod as keyof typeof themeVariables.methods]
-                : themeVariables.background.secondary;
-          return (
+        {rows.map(row => (
           <StyledTableRow key={row.id}>
             <StyledTableCell component="th" scope="row">
               <div className={column}>{row.id}</div>
             </StyledTableCell>
             <StyledTableCell align="center">
-              <Chip
-                 label={row.method} 
-                 style={{
-                  color: "#FFFFFF",
-                  background: backgroundColor,
-                  textAlign: 'center'
-                 }}
+              <MethodLabel
+                 variant={row.method} 
                  />
             </StyledTableCell>
             <StyledTableCell align="center">{transformPath(row.path)}</StyledTableCell>
@@ -105,7 +93,7 @@ const RouteListTable : React.FC<RouteListTableProps> = (props) => {
               />
             </StyledTableCell>
           </StyledTableRow>
-        )})}
+        ))}
       </DefaultTable>
     );
 }

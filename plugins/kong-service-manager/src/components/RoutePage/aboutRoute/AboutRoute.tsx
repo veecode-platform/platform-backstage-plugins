@@ -5,8 +5,7 @@ import { CopyTextButton } from '@backstage/core-components';
 import dayjs from 'dayjs';
 import { AboutRouteProps } from './types';
 import ErrorBoundary from '../../ErrorBoundary/ErrorBondary';
-import { BoxComponent, EmptyStateComponent,LabelField,SkeletonComponent } from '../../shared';
-import { themeVariables } from '../../../utils/constants/theme';
+import { BoxComponent, EmptyStateComponent,LabelField,MethodLabel,SkeletonComponent } from '../../shared';
 import { transformPath } from '../../../utils/helpers/transformPath';
 
 const AboutRoute : React.FC<AboutRouteProps> = (props) => {
@@ -61,21 +60,12 @@ const AboutRoute : React.FC<AboutRouteProps> = (props) => {
                 <Box className={listItem}>
                   <LabelField title="Methods"/>
                   <ListItemText className={itemValue}>
-                  {routeDetails.methods.map(method => { 
-                      const upperMethod = method.toUpperCase();
-                      const backgroundColor = upperMethod in themeVariables.methods
-                          ? themeVariables.methods[upperMethod as keyof typeof themeVariables.methods]
-                          : themeVariables.background.secondary;
-                        return (
-                                <Chip 
-                                  label={method} 
-                                  key={method}
-                                  style={{
-                                    color: "#FFFFFF",
-                                    background: backgroundColor
-                                   }}
-                                   />
-                                )})}
+                  {routeDetails.methods.map(method => (
+                    <MethodLabel
+                      key={method}
+                      variant={method} 
+                       />
+                    ))}
                 </ListItemText>
                 </Box>
               </ListItem>             
