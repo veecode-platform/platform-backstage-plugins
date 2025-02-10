@@ -9,6 +9,7 @@ import { PluginsCardsProps, PluginsCardsWrapperProps } from './types';
 const PluginsCardsWrapper : React.FC<PluginsCardsWrapperProps> = (props) => {
   const { children } = props;
   const { content } = usePluginsCardsStyles();
+  
   return(
     <Content className={content}>
      <DrawerComponent />
