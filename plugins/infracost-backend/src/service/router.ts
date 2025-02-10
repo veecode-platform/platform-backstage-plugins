@@ -33,7 +33,7 @@ export async function createRouter(
           if (req.headers['x-no-compression']) return false;
           return compression.filter(req, res);
         },
-      }) as RequestHandler
+      }) as unknown as RequestHandler  // TODO -> wait fix : express && types/express version
     );
 
   router.use(express.json({ limit: "50mb" }));
