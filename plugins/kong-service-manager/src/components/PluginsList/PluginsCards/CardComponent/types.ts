@@ -1,5 +1,6 @@
 import { PluginCard } from "../../../../utils/types"
 
 export interface CardComponentProps {
-    data: PluginCard
+    data: PluginCard,
+    allowed?:boolean
 }

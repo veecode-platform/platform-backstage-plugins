@@ -14,7 +14,7 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
   const [processingData, setProcessingData] = React.useState<boolean>(false);
   const { handleToggleDrawer, setPluginState, disablePlugin, isRoute, disabledPluginFromRoute } = useKongServiceManagerContext();
   const {card, cardHeader, cardTitle, cardIcon,description, button,spinner} = usePluginsCardsStyles();
-  const {data} = props;
+  const {data, allowed } = props;
   
   // permissions
   const { loading: loadingApplyPluginPermission, allowed: canApplyPlugin } = usePermission({
@@ -65,7 +65,7 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
                 <IconButton 
                   aria-label="settings" 
                   title="Edit Plugin" 
-                  disabled={!canUpdatePlugin}
+                  disabled={!canUpdatePlugin || !allowed}
                   onClick={handleEditAction}>
                   <Edit />
                 </IconButton>)}
@@ -95,7 +95,7 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
                 variant="contained"
                 className={button}
                 onClick={handlePluginRemove}
-                disabled={processingData || !canDeletePlugin}
+                disabled={processingData || !canDeletePlugin || !allowed}
               >
                 {processingData ? (
                   <>
@@ -115,7 +115,7 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
                 variant="outlined"
                 className={button}
                 onClick={handlePluginEnable}
-                disabled={!canApplyPlugin}
+                disabled={!canApplyPlugin || !allowed}
               >
                 Enable
               </Button>)}
