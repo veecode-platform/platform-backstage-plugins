@@ -7,11 +7,20 @@ export const themeVariables = {
         white: "#FAFAFA"
     },
     methods:{
-        DELETE: "#E3463E",
-        GET: "#61AFFE",
-        POST: "#73CD90",
-        PUT: "#EE9F2F",
-        PATCH: "#7DE4C2"
+        background: {
+         get: "#BBDEFB",
+         delete: "#FFCDD2",
+         post: "#C8E6C9",
+         put: "#FFE0B2",
+         patch: "#B2EBF2"
+        },
+        colors: {
+         get: "#0D47A1",
+         delete: "#B71C1C",
+         post: "#1B5E20",
+         put: "#FF6D00",
+         patch: "#006064"
+        }
     },
     blur:{
         dark: '#00000070'
