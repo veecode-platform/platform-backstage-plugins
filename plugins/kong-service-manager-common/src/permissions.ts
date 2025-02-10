@@ -148,14 +148,6 @@ export const kongAnalyticsPluginsPermission = createPermission({
     name: 'kong.read.analytics.plugins',
     attributes: { action: 'read'}
 });
-export const kongCachePluginsPermission = createPermission({  
-    name: 'kong.read.cache.plugins',
-    attributes: { action: 'read'}
-});
-export const kongDataStorePluginsPermission = createPermission({  
-    name: 'kong.read.datastore.plugins',
-    attributes: { action: 'read'}
-});
 
 export const kongServiceManagerPermissions = {
     kongServiceReadPermission,
@@ -180,7 +172,5 @@ export const kongServiceManagerPermissions = {
     kongServerlessPluginsPermission,
     kongTransformPluginsPermission,
     kongLoggingPluginsPermission,
-    kongAnalyticsPluginsPermission,
-    kongCachePluginsPermission,
-    kongDataStorePluginsPermission
+    kongAnalyticsPluginsPermission
 }
