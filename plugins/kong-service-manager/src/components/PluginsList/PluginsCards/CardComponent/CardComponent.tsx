@@ -13,7 +13,7 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
   
   const [processingData, setProcessingData] = React.useState<boolean>(false);
   const { handleToggleDrawer, setPluginState, disablePlugin, isRoute, disabledPluginFromRoute } = useKongServiceManagerContext();
-  const {card, cardHeader, cardTitle, cardIcon,description, button,spinner} = usePluginsCardsStyles();
+  const {card, cardHeader, cardTitle, disabledTitle, cardIcon,disabledImg, description, button,spinner} = usePluginsCardsStyles();
   const {data, allowed } = props;
   
   // permissions
@@ -53,6 +53,7 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
     return
   }
 
+
   return (
     <Card key={data.name} className={card}>
       <CardHeader
@@ -76,13 +77,13 @@ export const CardComponent : React.FC<CardComponentProps> = (props) => {
           </>
         }
         title={
-          <Typography variant="h6" className={cardTitle}>
+          <Typography variant="h6" className={`${cardTitle} ${!allowed ? disabledTitle: ''}`}>
             {data.name}
           </Typography>
         }
       />
       <CardMedia>
-        <img src={data.image} alt="picture" className={cardIcon} />
+        <img src={data.image} alt="picture" className={`${cardIcon} ${!allowed ? disabledImg : ''}`} />
       </CardMedia>
       <CardContent className={description}>{data.description}</CardContent>
       <CardActions>

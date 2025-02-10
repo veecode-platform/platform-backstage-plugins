@@ -5,7 +5,15 @@ import type { PermissionPolicy, PolicyQuery, PolicyQueryUser } from "@backstage/
 import { policyExtensionPoint } from '@backstage/plugin-permission-node/alpha';
 import {
   kongRouteCreatePermission,
-  kongApplyPluginToRoutePermission
+  kongApplyPluginToRoutePermission,
+  kongAuthPluginsPermission,
+  kongAIPluginsPermission,
+  kongAnalyticsPluginsPermission,
+  kongLoggingPluginsPermission,
+  kongSecurityPluginsPermission,
+  kongServerlessPluginsPermission,
+  kongTrafficPluginsPermission,
+  kongTransformPluginsPermission
 } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
 
 
@@ -17,16 +25,71 @@ class PermissionModule implements PermissionPolicy {
         if(isPermission(request.permission, kongRouteCreatePermission)){
         //  if(kongPermissions.includes(request.permission.name)){
             return {
-                result: AuthorizeResult.DENY
+                result: AuthorizeResult.ALLOW
             }
         }         
         
         if(isPermission(request.permission, kongApplyPluginToRoutePermission)){
           //  if(kongPermissions.includes(request.permission.name)){
               return {
-                  result: AuthorizeResult.DENY
+                  result: AuthorizeResult.ALLOW
               }
           } 
+
+        if(isPermission(request.permission, kongAIPluginsPermission)){
+          //  if(kongPermissions.includes(request.permission.name)){
+              return {
+                  result: AuthorizeResult.DENY
+              }
+          }
+        
+          if(isPermission(request.permission, kongAuthPluginsPermission)){
+            //  if(kongPermissions.includes(request.permission.name)){
+                return {
+                    result: AuthorizeResult.DENY
+                }
+            }
+        
+          if(isPermission(request.permission, kongAnalyticsPluginsPermission)){
+            //  if(kongPermissions.includes(request.permission.name)){
+                return {
+                   result: AuthorizeResult.DENY
+                 }
+              }
+
+          if(isPermission(request.permission, kongLoggingPluginsPermission)){
+          //  if(kongPermissions.includes(request.permission.name)){
+              return {
+                  result: AuthorizeResult.DENY
+              }
+          }
+          if(isPermission(request.permission, kongSecurityPluginsPermission)){
+            //  if(kongPermissions.includes(request.permission.name)){
+                return {
+                    result: AuthorizeResult.DENY
+                }
+            }
+        
+          if(isPermission(request.permission, kongServerlessPluginsPermission)){
+            //  if(kongPermissions.includes(request.permission.name)){
+                return {
+                   result: AuthorizeResult.DENY
+                 }
+              }
+
+          if(isPermission(request.permission, kongTrafficPluginsPermission)){
+          //  if(kongPermissions.includes(request.permission.name)){
+              return {
+                  result: AuthorizeResult.ALLOW
+              }
+          }
+
+          if(isPermission(request.permission, kongTransformPluginsPermission)){
+            //  if(kongPermissions.includes(request.permission.name)){
+                return {
+                    result: AuthorizeResult.DENY
+                }
+            } 
 
         return {
             result: AuthorizeResult.ALLOW

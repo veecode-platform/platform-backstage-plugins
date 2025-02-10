@@ -37,33 +37,33 @@ const PluginsCategory : React.FC<PluginsCategoryProps> = (props) => {
 export const CategoryComponent : React.FC<CategoryComponentProps> = (props) => {
 
   const {label, plugins} = props;
-  const { allowed: canHandleAIPlugins } = usePermission({ permission: kongAIPluginsPermission });
-  const { allowed: canHandleAnalyticsPlugins } = usePermission({ permission: kongAnalyticsPluginsPermission });
-  const { allowed: canHandleAuthPlugins } = usePermission({ permission: kongAuthPluginsPermission });
-  const { allowed: canHandleLogginPlugins } = usePermission({ permission: kongLoggingPluginsPermission });
-  const { allowed: canHandleSecurityPlugins } = usePermission({ permission: kongSecurityPluginsPermission });
-  const { allowed: canHandleServerlessPlugins } = usePermission({ permission: kongServerlessPluginsPermission });
-  const { allowed: canHandleTrafficPlugins } = usePermission({ permission: kongTrafficPluginsPermission });
-  const { allowed: canHandleTransformPlugins } = usePermission({ permission: kongTransformPluginsPermission });
+  const {loading: LoadingPermissionHandleAIPlugins, allowed: canHandleAIPlugins } = usePermission({ permission: kongAIPluginsPermission });
+  const { loading: LoadingPermissionHandleAnalysticsPlugins, allowed: canHandleAnalyticsPlugins } = usePermission({ permission: kongAnalyticsPluginsPermission });
+  const { loading: LoadingPermissionHandleAuthPlugins, allowed: canHandleAuthPlugins } = usePermission({ permission: kongAuthPluginsPermission });
+  const { loading: LoadingPermissionHandleLoggingPlugins, allowed: canHandleLogginPlugins } = usePermission({ permission: kongLoggingPluginsPermission });
+  const { loading: LoadingPermissionHandleSecurityPlugins, allowed: canHandleSecurityPlugins } = usePermission({ permission: kongSecurityPluginsPermission });
+  const { loading: LoadingPermissionHandleServerlessPlugins, allowed: canHandleServerlessPlugins } = usePermission({ permission: kongServerlessPluginsPermission });
+  const { loading: LoadingPermissionHandleTrafficPlugins, allowed: canHandleTrafficPlugins } = usePermission({ permission: kongTrafficPluginsPermission });
+  const { loading: LoadingPermissionHandleTransformPlugins, allowed: canHandleTransformPlugins } = usePermission({ permission: kongTransformPluginsPermission });
 
 
   switch (label) {
     case CategoryPluginsEnum.AI:
-      return <PluginsCategory label={label} plugins={plugins} allowed={canHandleAIPlugins}/>;
+      return (<> {!LoadingPermissionHandleAIPlugins && <PluginsCategory label={label} plugins={plugins} allowed={canHandleAIPlugins}/>} </>);
     case CategoryPluginsEnum.Analytics:
-      return <PluginsCategory label={label} plugins={plugins} allowed={canHandleAnalyticsPlugins}/>;
+      return (<> {!LoadingPermissionHandleAnalysticsPlugins && <PluginsCategory label={label} plugins={plugins} allowed={canHandleAnalyticsPlugins}/> }</>);
     case CategoryPluginsEnum.Auth:
-      return <PluginsCategory label={label} plugins={plugins} allowed={canHandleAuthPlugins}/>;
+     return (<> {!LoadingPermissionHandleAuthPlugins && <PluginsCategory label={label} plugins={plugins} allowed={canHandleAuthPlugins}/> }</>);
     case CategoryPluginsEnum.Logging:
-      return <PluginsCategory label={label} plugins={plugins} allowed={canHandleLogginPlugins}/>;
+     return (<> {!LoadingPermissionHandleLoggingPlugins && <PluginsCategory label={label} plugins={plugins} allowed={canHandleLogginPlugins}/> }</>);
     case CategoryPluginsEnum.Security:
-      return <PluginsCategory label={label} plugins={plugins} allowed={canHandleSecurityPlugins}/>;
+     return (<> {!LoadingPermissionHandleSecurityPlugins && <PluginsCategory label={label} plugins={plugins} allowed={canHandleSecurityPlugins}/> }</>);
     case CategoryPluginsEnum.Serverless:
-      return <PluginsCategory label={label} plugins={plugins} allowed={canHandleServerlessPlugins}/>;
+     return (<> {!LoadingPermissionHandleServerlessPlugins && <PluginsCategory label={label} plugins={plugins} allowed={canHandleServerlessPlugins}/> }</>);
     case CategoryPluginsEnum.Traffic:
-      return <PluginsCategory label={label} plugins={plugins} allowed={canHandleTrafficPlugins}/>;
+     return (<> {!LoadingPermissionHandleTrafficPlugins && <PluginsCategory label={label} plugins={plugins} allowed={canHandleTrafficPlugins}/> }</>);
     case CategoryPluginsEnum.Transform:
-      return <PluginsCategory label={label} plugins={plugins} allowed={canHandleTransformPlugins}/>;
+     return (<> {!LoadingPermissionHandleTransformPlugins && <PluginsCategory label={label} plugins={plugins} allowed={canHandleTransformPlugins}/> }</>);
     default:
       return <PluginsCategory label={label} plugins={plugins} allowed />;
   }

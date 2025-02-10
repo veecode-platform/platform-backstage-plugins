@@ -14,12 +14,12 @@ export const usePluginsCardsStyles = makeStyles( theme => ({
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      backgroundColor: '#1E1E1E05',
+      backgroundColor: theme.palette.background.default,
       gap: theme.spacing(4),
       borderRadius: '8px',
       border: `1px solid ${theme.palette.action.focus}`,
       minHeight: '100%',
-      boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
+      boxShadow: ' rgba(0, 0, 0, 0.16) 0px 1px 4px'
      },
      cardHeader:{
       width:'100%',
@@ -34,17 +34,23 @@ export const usePluginsCardsStyles = makeStyles( theme => ({
       alignItems: 'center',
       justifyContent: 'center',
      },
+     disabledTitle:{
+      color: theme.palette.text.primary,
+     },
      description:{
       textAlign: 'center', 
      },
      cardEdit:{
-      
      },
      cardIcon:{
       width: '60px',
       height: '60px',
       objectFit: 'cover',
       borderRadius: '5px'
+     },
+     disabledImg:{
+      filter: 'grayscale(100%)',
+      opacity: '.5'
      },
      button:{
       border: `1px solid ${theme.palette.primary.main}`,
