@@ -3,7 +3,7 @@ export function extractGitHubInfo(url: string) {
   const match = url.match(regex);
 
   if (!match) {
-    throw new Error("URL inválida");
+    throw new Error("Invalid URL");
   }
 
   const [_, host, owner, repo, branch, path, file] = match;
