@@ -125,53 +125,19 @@ const serviceEntityPage = (
 
 Now that the plugin is properly configured, let's take a look at the screens it offers:
 
-### 👉 About Page:
+### 👉 Service:
 
-![About](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/e1f2aedc-644b-448b-adbc-ceba6d646c87)
+![Captura de tela de 2025-02-11 09-16-21](https://github.com/user-attachments/assets/06731ad4-9c7e-4413-84e6-e4026ab960f3)
 
 Here we've highlighted all the information about the service referenced in the component, note that in the top right corner we have a combobox where we can navigate between the available kong instances:
 
 ![Select Instance](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/2cb10361-8e04-4c47-b36e-55faa4791abf)
 
-<br>
+In addition, we were able to add plugins to the service:
 
-### 👉 All Routes:
-- List of all routes for your Kong instance; ✅
-- Create / Removing and Editing a route at your Service; ✅
-- Filtering by the routes created in the service; ✅
+![Captura de tela de 2025-02-11 09-14-48](https://github.com/user-attachments/assets/277c5ade-56e7-4046-9877-10faafe85919)
 
-On this screen, we list all the routes that the service has:
-
-![image](https://github.com/user-attachments/assets/35611ac3-9153-417c-925f-cae53e1ad12e)
-
-Also noteworthy is the behavior of the `tags` field, which expands when triggered:
-
-![tags](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/c3f74551-38ee-401d-80f4-c3de8ba52b66)
-
-In the actions column, you can edit a route or delete it.
-You can also create new routes with the “create” button:
-
-![image](https://github.com/user-attachments/assets/b591e35c-7159-4cbf-8ceb-a530c93bebae)
-
-![image](https://github.com/user-attachments/assets/c1c60310-c70b-4569-a871-3324a90a4acb)
-
-<br>
-
-### 👉 All Plugins:
-
-The list of plugins:
-
-- List of all plugins eligible for your Kong instance;  ✅
-- Installing / Removing and Editing a plugin at your Service; ✅
-- Plugin search field; ✅
-- Filtering by the plugins installed in the service; ✅
-
-
-#### Listing of all plugins:
-
-![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/4c47f308-157e-45ee-874c-ef89c556efc9)
-
-#### Installing a plugin
+#### Installing a plugin to Service
 
 For the example, we'll use the **rate limiting** plugin:
 
@@ -186,6 +152,38 @@ From then on, the plugin will already be configured in your service:
 ![image](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/0a4f68c3-cb68-4106-9991-427b40f4ec0b)
 
 
+<br>
+
+### 👉 All Routes:
+- List of all routes for your Kong instance; ✅
+- Create / Removing and Editing a route at your Service; ✅
+- Filtering by the routes created in the service; ✅
+- Apply plugins for specific rotes; ✅
+
+On this screen, we list all the routes that the service has:
+
+![Captura de tela de 2025-02-11 09-18-05](https://github.com/user-attachments/assets/4bd1989e-7034-4343-88fd-004d54d08ac2)
+
+Also noteworthy is the behavior of the `tags` field, which expands when triggered:
+
+![tags](https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/c3f74551-38ee-401d-80f4-c3de8ba52b66)
+
+In the actions column, you can edit a route or delete it.
+You can also create new routes with the “create” button:
+
+![image](https://github.com/user-attachments/assets/b591e35c-7159-4cbf-8ceb-a530c93bebae)
+
+![image](https://github.com/user-attachments/assets/c1c60310-c70b-4569-a871-3324a90a4acb)
+
+**Route Details**
+Each route in the list has its own unique screen, where we can expand route details and also manipulate plugins:
+
+![Captura de tela de 2025-02-11 09-21-25](https://github.com/user-attachments/assets/8ccbd034-aad4-4346-8a8d-43cfab57132b)
+
+![image](https://github.com/user-attachments/assets/2357a5f7-20b1-4e56-aabf-9b44bca39820)
+
+
+<br>
 
 
 ### 👉 Specs:
@@ -195,6 +193,7 @@ Finally
 - List of all specs available  ✅
 - The spec will list the plugins that are associated with the service ✅
 - In the list of plugins, we can enable and remove them from the spec via a pull request to the repository ✅
+- In addition to handling service plugins, we also list all the routes and apply the plugins associated with these routes directly to the spec's paths.
 
 > ℹ️ To use the spec manipulation functionality, you'll need to configure the integration and authentication of the chosen git provider (**At this point Gitlab or Github**).
 > See how to add authentication [here](https://backstage.io/docs/auth/) and integration by clicking [here](https://backstage.io/docs/integrations/)
@@ -209,6 +208,11 @@ Finally
 
 ![image](https://github.com/user-attachments/assets/6fc8eb9b-94c1-4fee-8b85-7d3336883718)
 
+👉 **Applying to specific paths**
+
+![Captura de tela de 2025-02-11 09-26-09](https://github.com/user-attachments/assets/202b3a45-92e3-412d-bdd9-83eed9379380)
+
+![image](https://github.com/user-attachments/assets/df8be686-2b50-4075-afba-db9d494d3c5b)
 
 
 ---
@@ -233,6 +237,14 @@ This plugin provides the following permissions:
 - `kongDisableRoutePluginPermission` 👉 Allows you to remove a plugin from a route,
 - `kongReadSpecsPermission` 👉 It allows you to read the specs of the source code, if they are properly pointed out,
 - `kongUpdateSpecPermission` 👉 Allows project specs to be updated.
+- `kongAIPluginsPermission` 👉 Allows you to manipulate Plugins from the AI category.
+- `kongAuthPluginsPermission` 👉 Allows you to manipulate Plugins from the Authentication category.
+- `kongSecurityPluginsPermission` 👉 Allows you to manipulate Plugins from the Security category.
+- `kongTrafficPluginsPermission` 👉 Allows you to manipulate Plugins from the Traffic Control category.
+- `kongServerlessPluginsPermission` 👉 Allows you to manipulate Plugins from the Serverless category.
+- `kongTransformPluginsPermission` 👉 Allows you to manipulate Plugins from the Transformations category.
+- `kongLoggingPluginsPermission` 👉 Allows you to manipulate Plugins from the Logging category.
+- `kongAnalyticsPluginsPermission` 👉 Allows the manipulation of Plugins from the Analytics & Monitoring category.
 
 
 > 🚨 View Backstage docs to learn how to set up your instance of Backstage to use these permissions.
