@@ -21,8 +21,9 @@ export const useWrapperComponentStyles = makeStyles( theme => ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      '& span':{
-         color: theme.palette.linkHover
-      }
+      '& strong':{
+         color: theme.palette.linkHover,
+         marginRight: '.5rem'
+      },
    }
 }))

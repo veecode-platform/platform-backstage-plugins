@@ -10,6 +10,7 @@ import { initialRouteDetailsState, removeRouteDetails, RouteDetailsReducer } fro
 import { transformPath } from "../../../../utils/helpers/transformPath";
 import { EmptyState } from "@backstage/core-components";
 import { useRouteListComponentStyles } from "./style";
+import { MethodLabel } from "../../../../components/shared";
 
 const RouteListComponent : React.FC<RouteListComponentProps> = (props) => { 
   const [ routeDetailsState, routeDetailsDispatch] = React.useReducer(RouteDetailsReducer, initialRouteDetailsState);
@@ -42,7 +43,7 @@ const RouteListComponent : React.FC<RouteListComponentProps> = (props) => {
     <>
       {routeDetailsState ? (
         <WrapperComponent 
-          title={<>Plugins associated to path <span>{transformPath(routeDetailsState.path)}</span></>} 
+          title={<>Plugins associated to path <strong>{transformPath(routeDetailsState.path)}</strong>  <span><MethodLabel variant={routeDetailsState.method} /></span> </>} 
           buttonBack
           handleBack={resetRouteIdValue}
           >
