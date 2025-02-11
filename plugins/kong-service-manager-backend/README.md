@@ -137,20 +137,25 @@ backend.start();
 
 ## Routes
 
-| Method | Path                                        | Endpoint                                               |
-|--------|---------------------------------------------|--------------------------------------------------------|
-| Get    | /:instanceName/services/:serviceName                      | backendBaseUrl/api/kong/:instance/services/:serviceName                               |
-| Get    | /:instanceName/plugins              | backendBaseUrl/api/kong/:instance/plugins  |
-| Get    | /:instanceName/services/plugins/fields                    | backendBaseUrl/api/kong/services/plugins/fields        |
-| Get    | /:instanceName/services/:serviceName/plugins/associated   | backendBaseUrl/api/kong/:instance/services/:serviceName/plugins/associated |
-| Post   | /:instanceName/services/:serviceName/plugins              | backendBaseUrl/api/kong/:instance/services/:serviceName/plugins  |
-| Patch  | /:instanceName/services/:serviceName/plugins/:pluginId              | backendBaseUrl/api/kong/:instance/services/:serviceName/plugins  |
-| Delete | /:instanceName/services/:serviceName/plugins/pluginId              | backendBaseUrl/api/kong/:instance/services/:serviceName/plugins  |
-| Get    | /:instanceName/services/:serviceName/routes               | backendBaseUrl/api/kong/:instance/services/:serviceName/routes   |
-| Get    | /:instanceName/services/:serviceName/routes/:routeId      | backendBaseUrl/api/kong/:instance/services/:serviceName/routes/:routeId |
-| Post   | /:instanceName/services/:serviceName/routes      | backendBaseUrl/api/kong/:instance/services/:serviceName/routes |  
-| Patch  | /:instanceName/services/:serviceName/routes/:routeId      | backendBaseUrl/api/kong/:instance/services/:serviceName/routes/:routeId |
-| Delete | /:instanceName/services/:serviceName/routes/:routeId      | backendBaseUrl/api/kong/:instanceservices/:serviceName/routes/:routeId |
+| Method | Path                                                     | Endpoint                                                                                     |
+|--------|----------------------------------------------------------|----------------------------------------------------------------------------------------------|
+| GET    | /:instanceName/services/:serviceName                     | backendBaseUrl/api/kong/:instanceName/services/:serviceName                                   |
+| GET    | /:instanceName/services/:serviceName/plugins/associated  | backendBaseUrl/api/kong/:instanceName/services/:serviceName/plugins/associated               |
+| POST   | /:instanceName/services/:serviceName/plugins             | backendBaseUrl/api/kong/:instanceName/services/:serviceName/plugins                           |
+| PATCH  | /:instanceName/services/:serviceName/plugins/:pluginId   | backendBaseUrl/api/kong/:instanceName/services/:serviceName/plugins/:pluginId                 |
+| DELETE | /:instanceName/services/:serviceName/plugins/:pluginId   | backendBaseUrl/api/kong/:instanceName/services/:serviceName/plugins/:pluginId                 |
+| GET    | /:instanceName/plugins                                   | backendBaseUrl/api/kong/:instanceName/plugins                                                |
+| GET    | /:instanceName/services/plugins/:pluginName/fields       | backendBaseUrl/api/kong/:instanceName/services/plugins/:pluginName/fields                     |
+| GET    | /:instanceName/services/:serviceName/routes              | backendBaseUrl/api/kong/:instanceName/services/:serviceName/routes                            |
+| GET    | /:instanceName/services/:serviceName/routes/:routeId     | backendBaseUrl/api/kong/:instanceName/services/:serviceName/routes/:routeId                   |
+| POST   | /:instanceName/services/:serviceName/routes              | backendBaseUrl/api/kong/:instanceName/services/:serviceName/routes                            |
+| PATCH  | /:instanceName/services/:serviceName/routes/:routeId     | backendBaseUrl/api/kong/:instanceName/services/:serviceName/routes/:routeId                   |
+| DELETE | /:instanceName/services/:serviceName/routes/:routeId     | backendBaseUrl/api/kong/:instanceName/services/:serviceName/routes/:routeId                   |
+| GET    | /:instanceName/routes/:routeId/plugins/associated        | backendBaseUrl/api/kong/:instanceName/routes/:routeId/plugins/associated                      |
+| POST   | /:instanceName/routes/:routeId/plugins                   | backendBaseUrl/api/kong/:instanceName/routes/:routeId/plugins                                 |
+| PATCH  | /:instanceName/routes/:routeId/plugins/:pluginId         | backendBaseUrl/api/kong/:instanceName/routes/:routeId/plugins/:pluginId                       |
+| DELETE | /:instanceName/routes/:routeId/plugins/:pluginId         | backendBaseUrl/api/kong/:instanceName/routes/:routeId/plugins/:pluginId                       |
+
 
 
 
@@ -177,6 +182,14 @@ This plugin provides the following permissions:
 - `kongDisableRoutePluginPermission` 👉 Allows you to remove a plugin from a route,
 - `kongReadSpecsPermission` 👉 It allows you to read the specs of the source code, if they are properly pointed out,
 - `kongUpdateSpecPermission` 👉 Allows project specs to be updated.
+-  `kongAIPluginsPermission` 👉 Allows you to manipulate Plugins from the AI category.
+-  `kongAuthPluginsPermission` 👉 Allows you to manipulate Plugins from the Authentication category.
+-  `kongSecurityPluginsPermission` 👉 Allows you to manipulate Plugins from the Security category.
+-  `kongTrafficPluginsPermission` 👉 Allows you to manipulate Plugins from the Traffic Control category.
+-  `kongServerlessPluginsPermission` 👉 Allows you to manipulate Plugins from the Serverless category.
+-  `kongTransformPluginsPermission` 👉 Allows you to manipulate Plugins from the Transformations category.
+-  `kongLoggingPluginsPermission` 👉 Allows you to manipulate Plugins from the Logging category.
+-  `kongAnalyticsPluginsPermission` 👉 Allows the manipulation of Plugins from the Analytics & Monitoring category.
 
 
 > 🚨 View Backstage docs to learn how to set up your instance of Backstage to use these permissions.
