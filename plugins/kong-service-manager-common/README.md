@@ -56,6 +56,14 @@ This plugin provides the following permissions:
 - `kongDisableRoutePluginPermission` 👉 Allows you to remove a plugin from a route,
 - `kongReadSpecsPermission` 👉 It allows you to read the specs of the source code, if they are properly pointed out,
 - `kongUpdateSpecPermission` 👉 Allows project specs to be updated.
+-  `kongAIPluginsPermission` 👉 Allows you to manipulate Plugins from the AI category.
+-  `kongAuthPluginsPermission` 👉 Allows you to manipulate Plugins from the Authentication category.
+-  `kongSecurityPluginsPermission` 👉 Allows you to manipulate Plugins from the Security category.
+-  `kongTrafficPluginsPermission` 👉 Allows you to manipulate Plugins from the Traffic Control category.
+-  `kongServerlessPluginsPermission` 👉 Allows you to manipulate Plugins from the Serverless category.
+-  `kongTransformPluginsPermission` 👉 Allows you to manipulate Plugins from the Transformations category.
+-  `kongLoggingPluginsPermission` 👉 Allows you to manipulate Plugins from the Logging category.
+-  `kongAnalyticsPluginsPermission` 👉 Allows the manipulation of Plugins from the Analytics & Monitoring category.
 
 
 > 🚨 View Backstage docs to learn how to set up your instance of Backstage to use these permissions.
