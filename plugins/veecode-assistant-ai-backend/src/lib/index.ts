@@ -1,0 +1,1 @@
+export { VeecodeAssistantAIConfig } from "./config"
