@@ -16631,7 +16631,7 @@ __metadata:
     js-yaml: "npm:^4.1.0"
     mime-types: "npm:^2.1.35"
     octokit: "npm:^4.0.2"
-    openai: "npm:^4.77.3"
+    openai: "npm:^4.84.0"
     p-limit: "npm:^6.2.0"
     simple-git: "npm:^3.27.0"
     supertest: "npm:^7.0.0"
@@ -32244,7 +32244,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openai@npm:^4.72.0, openai@npm:^4.77.3":
+"openai@npm:^4.72.0":
   version: 4.83.0
   resolution: "openai@npm:4.83.0"
   dependencies:
@@ -32291,6 +32291,31 @@ __metadata:
   bin:
     openai: bin/cli
   checksum: 10/0b3806373ac0f4282a20b4d09de50293e6140e25d035046e6ceff2633cc72176124bf1802dc44265e8a8e89786eb000767f73b269f0be9139007ab446295d6ee
+  languageName: node
+  linkType: hard
+
+"openai@npm:^4.84.0":
+  version: 4.84.0
+  resolution: "openai@npm:4.84.0"
+  dependencies:
+    "@types/node": "npm:^18.11.18"
+    "@types/node-fetch": "npm:^2.6.4"
+    abort-controller: "npm:^3.0.0"
+    agentkeepalive: "npm:^4.2.1"
+    form-data-encoder: "npm:1.7.2"
+    formdata-node: "npm:^4.3.2"
+    node-fetch: "npm:^2.6.7"
+  peerDependencies:
+    ws: ^8.18.0
+    zod: ^3.23.8
+  peerDependenciesMeta:
+    ws:
+      optional: true
+    zod:
+      optional: true
+  bin:
+    openai: bin/cli
+  checksum: 10/bb3560aa57a06481ada5d57e7aa754b28436aedff9ae2ab717d9997d628ce8e68cf365ad2628b0f813b20e22f9d8ded0f8254b7c3744c7b11d14b7388a2d158a
   languageName: node
   linkType: hard
 

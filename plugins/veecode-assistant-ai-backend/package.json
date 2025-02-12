@@ -42,7 +42,7 @@
     "js-yaml": "^4.1.0",
     "mime-types": "^2.1.35",
     "octokit": "^4.0.2",
-    "openai": "^4.77.3",
+    "openai": "^4.84.0",
     "p-limit": "^6.2.0",
     "simple-git": "^3.27.0",
     "winston": "^3.17.0",
