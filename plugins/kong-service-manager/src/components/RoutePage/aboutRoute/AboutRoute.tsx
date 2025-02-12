@@ -60,12 +60,12 @@ const AboutRoute : React.FC<AboutRouteProps> = (props) => {
                 <Box className={listItem}>
                   <LabelField title="Methods"/>
                   <ListItemText className={itemValue}>
-                  {routeDetails.methods.map(method => (
+                  {(routeDetails.methods && routeDetails.methods.length > 0) ? (routeDetails.methods.map(method => (
                     <MethodLabel
                       key={method}
                       variant={method} 
                        />
-                    ))}
+                    ))) : "-"}
                 </ListItemText>
                 </Box>
               </ListItem>             
@@ -92,10 +92,10 @@ const AboutRoute : React.FC<AboutRouteProps> = (props) => {
                 <Box className={listItem}>
                   <LabelField title="Protocols"/>
                 <ListItemText className={itemValue}>
-                  {
-                    routeDetails.protocols.map(protocol => (
+                  { (routeDetails.protocols && routeDetails.protocols.length > 0 ) ?
+                    (routeDetails.protocols.map(protocol => (
                       <p key={protocol}>{protocol}</p>
-                    ))
+                    ))): " - "
                   }
                 </ListItemText>
                 </Box>
@@ -120,10 +120,10 @@ const AboutRoute : React.FC<AboutRouteProps> = (props) => {
                 <Box className={listItem}>
                   <LabelField title="Paths"/>
                 <ListItemText className={itemValue}>
-                  {
-                    routeDetails.paths.map(path => (
+                  { (routeDetails.paths && routeDetails.paths.length > 0 ) ?
+                    (routeDetails.paths.map(path => (
                       <p key={path}>{transformPath(path)}</p>
-                    ))
+                  ))) : " - "
                   }
                 </ListItemText>
                 </Box>
@@ -133,7 +133,7 @@ const AboutRoute : React.FC<AboutRouteProps> = (props) => {
                 <Box className={listItem}>
                   <LabelField title="Redirect Status Code"/>
                 <ListItemText className={itemValue}>
-                  {routeDetails.https_redirect_status_code}
+                  {routeDetails.https_redirect_status_code ?? " - "}
                 </ListItemText>
                 </Box>
               </ListItem>
@@ -151,9 +151,10 @@ const AboutRoute : React.FC<AboutRouteProps> = (props) => {
                 <Box className={listItem}>
                   <LabelField title="Tags"/>
                 <ListItemText className={itemValue}>
-                  {routeDetails.tags.map(t=>(
+                  { (routeDetails.tags && routeDetails.tags.length > 0 ) ?
+                    (routeDetails.tags.map(t=>(
                     <Chip label={t} key={t}/>
-                  ))}
+                  ))) : " - "  }
                 </ListItemText>
                 </Box>
               </ListItem>
