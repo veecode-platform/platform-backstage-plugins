@@ -1,0 +1,1 @@
+export const PLUGIN_DOCS = "https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/veecode-assistant-ai/README.md"

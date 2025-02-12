@@ -1,0 +1,1 @@
+export { VeeCodeAssistantAIClient } from "./veeCodeAssistantAIClient"
