@@ -4,7 +4,7 @@ import { Base64 } from 'js-base64';
 import { extractGitHubInfo } from "../../../../utils/helpers/extractGithubInfo";
 import { formatHttpErrorMessage } from "../../../../utils/helpers/formatHttpErrorMessage";
 import { generateBranchName } from "../../../../utils/helpers/generateBranchName";
-import { FileContent, PullRequestResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { FileContent, PullRequestResponse } from "@veecode-platform/backstage-plugin-vee-common";
 import { IGithubManager } from "./type";
 import { Provider } from "../provider";
 

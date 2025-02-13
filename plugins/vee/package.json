@@ -37,7 +37,7 @@
     "@material-ui/lab": "^4.0.0-alpha.61",
     "@octokit/rest": "^21.1.0",
     "@types/react-icons": "^3.0.0",
-    "@veecode-platform/backstage-plugin-veecode-assistant-ai-common": "^0.1.0",
+    "@veecode-platform/backstage-plugin-vee-common": "^0.1.0",
     "file-saver": "^2.0.5",
     "highlight.js": "^11.11.1",
     "js-base64": "^3.7.7",

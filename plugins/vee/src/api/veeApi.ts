@@ -1,5 +1,5 @@
 import { createApiRef } from "@backstage/core-plugin-api";
-import { ClearHistoryResponse, FileContent, InitializeAssistantAIResponse, IRepository, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { ClearHistoryResponse, FileContent, InitializeAssistantAIResponse, IRepository, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-vee-common";
 
 export const veeApiRef = createApiRef<VeeApi>({
     id: 'plugin.vee'

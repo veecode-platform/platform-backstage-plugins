@@ -1,7 +1,7 @@
 import { ConfigApi, FetchApi,OAuthApi } from "@backstage/core-plugin-api";
 import { VeeApi } from "./veeApi";
 import { ResponseError } from '@backstage/errors';
-import { ClearHistoryResponse, FileContent, InitializeAssistantAIResponse, IRepository, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { ClearHistoryResponse, FileContent, InitializeAssistantAIResponse, IRepository, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-vee-common";
 import { GitManager } from "./git/gitManager";
 
 

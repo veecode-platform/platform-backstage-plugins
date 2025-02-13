@@ -1,7 +1,6 @@
-import { FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
 import { Base64 } from "js-base64";
 import { readGitLabIntegrationConfigs } from "@backstage/integration";
-import { PullRequestResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { FileContent, PullRequestResponse } from "@veecode-platform/backstage-plugin-vee-common";
 import { extractGitLabInfo } from "../../../../utils/helpers/extractGitlabInfo";
 import { generateBranchName } from "../../../../utils/helpers/generateBranchName";
 import { IGitlabManager } from "./types";

@@ -1,4 +1,4 @@
-import type { FileContent, PullRequestResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import type { FileContent, PullRequestResponse } from "@veecode-platform/backstage-plugin-vee-common";
 
 /**
  *  @public

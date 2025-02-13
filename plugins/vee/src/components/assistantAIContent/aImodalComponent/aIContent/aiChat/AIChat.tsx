@@ -3,9 +3,9 @@ import { Button, ChatBubble, FeedbackComponent, MarkdownRenderer } from "../../.
 import { CircularProgress, Typography } from "@material-ui/core";
 import { useAIChatStyles } from "./styles";
 import type { AIChatProps } from "./types";
-import { useVeecodeAssistantAIContext } from "../../../../../context/veeProvider";
+import { useVeeContext } from "../../../../../context/veeProvider";
 import useAsync from "react-use/esm/useAsync";
-import { FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { FileContent } from "@veecode-platform/backstage-plugin-vee-common";
 import { addPullRequestResponse, initialPullRequestResponseState, PullRequestResponseReducer } from "./state";
 
 export const AIChat : React.FC<AIChatProps> = (props) => {
@@ -13,7 +13,7 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
     const [LoadingPullRequest, setLoadingPullRequest ] = React.useState<boolean>(false);
     const [ showFeedback, setShowFeedback ] = React.useState<boolean>(false); 
     const [ pullRequestResponseState, pullRequestResponseDispatch ] = React.useReducer(PullRequestResponseReducer,initialPullRequestResponseState);
-    const { handleChat, chat, promptValue, analyzeChangesAndSubmitToRepository, clearHistory } = useVeecodeAssistantAIContext();
+    const { handleChat, chat, promptValue, analyzeChangesAndSubmitToRepository, clearHistory } = useVeeContext();
     const { closeModal } = props;
     const { root, chatContent, footer, buttonGroup, spinner, creatingPr } = useAIChatStyles();
 

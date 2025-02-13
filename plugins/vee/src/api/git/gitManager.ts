@@ -1,7 +1,7 @@
 import { ConfigApi, OAuthApi } from "@backstage/core-plugin-api";
 import { parseGitUrl } from "../../utils/helpers/parseGitUrl";
 import { IGitManager } from "./types";
-import { FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { FileContent } from "@veecode-platform/backstage-plugin-vee-common";
 import { GithubManager } from "./providers/github/githubManager";
 import { GitlabManager } from "./providers/gitlab/gitlabManager";
 

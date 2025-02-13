@@ -1,4 +1,4 @@
-import { PullRequestResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { PullRequestResponse } from "@veecode-platform/backstage-plugin-vee-common";
 import { PullRequestResponseActionType } from "./actions";
 
 export const initialPullRequestResponseState : PullRequestResponse | null = null;
