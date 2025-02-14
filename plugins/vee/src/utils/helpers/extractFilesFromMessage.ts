@@ -1,4 +1,4 @@
-import { FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { FileContent } from "@veecode-platform/backstage-plugin-vee-common";
 
 export function extractFilesFromMessage(content: string): FileContent[] {
     const fileRegex = /---START FILE---\nName: (.+?)\nContent:\n([\s\S]+?)\n---END FILE---/g;
