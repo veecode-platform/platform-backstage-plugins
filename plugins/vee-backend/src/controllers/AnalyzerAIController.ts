@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AssistantAIController } from './AssistantAIController';
-import { AnalyzeAndStartChatParams, DeleteChatParams, DonwloadRepoAndCreateVectorStoreParams, veecodeAssistantAIAnalyzerReadPermission } from '@veecode-platform/backstage-plugin-veecode-assistant-ai-common';
+import { AnalyzeAndStartChatParams, DeleteChatParams, DonwloadRepoAndCreateVectorStoreParams, veeAnalyzerReadPermission } from '@veecode-platform/backstage-plugin-vee-common';
 import { InputError, NotAllowedError, stringifyError } from '@backstage/errors';
 import { IAnalyzerAIControler } from './types';
 import { VeeClient } from "../api/client";
@@ -28,7 +28,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
     if (
       !(await this.isRequestAuthorized(
         req,
-        veecodeAssistantAIAnalyzerReadPermission,
+        veeAnalyzerReadPermission,
       ))
     ) {
       throw new NotAllowedError('Unauthorized');
@@ -65,7 +65,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
     if (
       !(await this.isRequestAuthorized(
         req,
-        veecodeAssistantAIAnalyzerReadPermission,
+        veeAnalyzerReadPermission,
       ))
     ) {
       throw new NotAllowedError('Unauthorized');
@@ -101,13 +101,11 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
     if (
       !(await this.isRequestAuthorized(
         req,
-        veecodeAssistantAIAnalyzerReadPermission,
+        veeAnalyzerReadPermission,
       ))
     ) {
       throw new NotAllowedError('Unauthorized');
     }
-
-    // TODO Check response
 
      try{
        const response = await this.veeCodeAssistantAI.clearHistory(engine,vectorStoreId, assistantId, threadId)
