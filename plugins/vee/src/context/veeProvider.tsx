@@ -3,7 +3,7 @@ import { VeeContext } from "./veeContext";
 import { EntityInfoReducer, initialEntityInfoState } from "./state";
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { veeApiRef } from "../api/veeApi";
-import { FileContent } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { FileContent } from "@veecode-platform/backstage-plugin-vee-common";
 
 interface VeeProviderProps {
     children: React.ReactNode
