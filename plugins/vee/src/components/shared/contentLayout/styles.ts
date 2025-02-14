@@ -24,7 +24,7 @@ export const useContentLayoutStyles = makeStyles({
       padding: "0 1rem",
     },
     logo: {
-      width: "220px",
+      width: "90px",
     },
     body: {
       padding: "2.5rem 2rem",
