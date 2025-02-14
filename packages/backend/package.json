@@ -52,7 +52,7 @@
     "@veecode-platform/backstage-plugin-infracost-backend": "workspace:^",
     "@veecode-platform/backstage-plugin-kong-service-manager-common": "workspace:^",
     "@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions": "workspace:^",
-    "@veecode-platform/backstage-plugin-veecode-assistant-ai-backend": "workspace:^",
+    "@veecode-platform/backstage-plugin-vee-backend": "workspace:^",
     "@veecode-platform/plugin-kong-service-manager-backend": "workspace:^",
     "@veecode-platform/plugin-veecode-platform-common": "workspace:^",
     "@veecode-platform/plugin-veecode-platform-module": "workspace:^",

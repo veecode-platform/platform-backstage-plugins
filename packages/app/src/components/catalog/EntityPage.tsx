@@ -66,7 +66,7 @@ import {  KongServiceManagerContent, isKongServiceManagerAvailable } from '@veec
 import { KubernetesGptAnalyzerPage,KubernetesGptAnalyzerCard } from '@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer';
 import { InfracostOverviewPage, isInfracostAvailable } from '@veecode-platform/backstage-plugin-infracost';
 import { ZoraOssPage } from '@veecode-platform/backstage-plugin-zora-oss';
-import { AssistantAIContent } from '@veecode-platform/backstage-plugin-veecode-assistant-ai';
+import { AssistantAIContent } from '@veecode-platform/backstage-plugin-vee';
 
 const techdocsContent = (
   <EntityTechdocsContent>

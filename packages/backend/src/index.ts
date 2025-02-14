@@ -62,7 +62,7 @@ backend.add(catalogPluginGitlabFillerProcessorModule);
 
 backend.add(import('@backstage/plugin-techdocs-backend/alpha'));
 
-backend.add(import('@veecode-platform/backstage-plugin-veecode-assistant-ai-backend'));
+backend.add(import('@veecode-platform/backstage-plugin-vee-backend'));
 
 backend.start();
 

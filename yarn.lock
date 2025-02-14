@@ -16600,7 +16600,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-vee-backend@workspace:plugins/vee-backend":
+"@veecode-platform/backstage-plugin-vee-backend@workspace:^, @veecode-platform/backstage-plugin-vee-backend@workspace:plugins/vee-backend":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-vee-backend@workspace:plugins/vee-backend"
   dependencies:
@@ -16615,7 +16615,7 @@ __metadata:
     "@backstage/integration": "npm:^1.15.2"
     "@backstage/plugin-catalog-node": "npm:^1.13.1"
     "@backstage/plugin-permission-common": "npm:^0.8.1"
-    "@backstage/plugin-permission-node": "npm:^0.8.4"
+    "@backstage/plugin-permission-node": "npm:^0.8.7"
     "@backstage/types": "npm:^1.2.0"
     "@gitbeaker/rest": "npm:^41.2.0"
     "@types/compression": "npm:^1"
@@ -16623,6 +16623,7 @@ __metadata:
     "@types/js-yaml": "npm:^4"
     "@types/mime-types": "npm:^2"
     "@types/supertest": "npm:^2.0.8"
+    "@veecode-platform/backstage-plugin-vee-common": "workspace:^"
     "@veecode-platform/backstage-plugin-veecode-assistant-ai-common": "npm:^0.1.0"
     compression: "npm:^1.8.0"
     express: "npm:^4.17.6"
@@ -16641,7 +16642,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-vee-common@npm:^0.1.0, @veecode-platform/backstage-plugin-vee-common@workspace:plugins/vee-common":
+"@veecode-platform/backstage-plugin-vee-common@npm:^0.1.0, @veecode-platform/backstage-plugin-vee-common@workspace:^, @veecode-platform/backstage-plugin-vee-common@workspace:plugins/vee-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-vee-common@workspace:plugins/vee-common"
   dependencies:
@@ -16651,7 +16652,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-vee@workspace:plugins/vee":
+"@veecode-platform/backstage-plugin-vee@workspace:^, @veecode-platform/backstage-plugin-vee@workspace:plugins/vee":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-vee@workspace:plugins/vee"
   dependencies:
@@ -16709,7 +16710,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-veecode-assistant-ai-backend@workspace:^, @veecode-platform/backstage-plugin-veecode-assistant-ai-backend@workspace:plugins/veecode-assistant-ai-backend":
+"@veecode-platform/backstage-plugin-veecode-assistant-ai-backend@workspace:plugins/veecode-assistant-ai-backend":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-veecode-assistant-ai-backend@workspace:plugins/veecode-assistant-ai-backend"
   dependencies:
@@ -16760,7 +16761,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-veecode-assistant-ai@workspace:^, @veecode-platform/backstage-plugin-veecode-assistant-ai@workspace:plugins/veecode-assistant-ai":
+"@veecode-platform/backstage-plugin-veecode-assistant-ai@workspace:plugins/veecode-assistant-ai":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-veecode-assistant-ai@workspace:plugins/veecode-assistant-ai"
   dependencies:
@@ -17793,7 +17794,7 @@ __metadata:
     "@veecode-platform/backstage-plugin-gitlab-pipelines": "workspace:^"
     "@veecode-platform/backstage-plugin-infracost": "workspace:^"
     "@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer": "workspace:^"
-    "@veecode-platform/backstage-plugin-veecode-assistant-ai": "workspace:^"
+    "@veecode-platform/backstage-plugin-vee": "workspace:^"
     "@veecode-platform/backstage-plugin-zora-oss": "workspace:^"
     "@veecode-platform/plugin-kong-service-manager": "workspace:^"
     "@veecode-platform/plugin-kubernetes": "npm:0.11.13-next.2"
@@ -18584,7 +18585,7 @@ __metadata:
     "@veecode-platform/backstage-plugin-infracost-backend": "workspace:^"
     "@veecode-platform/backstage-plugin-kong-service-manager-common": "workspace:^"
     "@veecode-platform/backstage-plugin-scaffolder-backend-module-veecode-extensions": "workspace:^"
-    "@veecode-platform/backstage-plugin-veecode-assistant-ai-backend": "workspace:^"
+    "@veecode-platform/backstage-plugin-vee-backend": "workspace:^"
     "@veecode-platform/plugin-kong-service-manager-backend": "workspace:^"
     "@veecode-platform/plugin-veecode-platform-common": "workspace:^"
     "@veecode-platform/plugin-veecode-platform-module": "workspace:^"
