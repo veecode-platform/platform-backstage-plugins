@@ -119,30 +119,14 @@ export class VeeClient implements VeeApi {
   return response;  
  };
 
- async generateTitleAndMessageForPullRequest(engine: string = "openAI",vectorStoreId: string, repoName:string){
-   const promptTitle = `Based on the changes made, create a message to serve as a title of the pull request that will be submitted to the repository, but remember, the answer shouldn't come with quotes like “That's my title”, because it's already a string. [#DESCRIPTION_PULLREQUEST]`;
-   const promptMessage = 'Based on the changes made, create a message to serve as a description of the pull request that will be submitted to the repository. [#DESCRIPTION_PULLREQUEST]' 
-
-   const [responseTitle, responseMessage] = await Promise.all([
-      this.getChat(engine, vectorStoreId, promptTitle,repoName),
-      this.getChat(engine, vectorStoreId, promptMessage, repoName),
-    ]);
-
-   return {
-      title: responseTitle.message,
-      message: responseMessage.message
-   }
- }
 
  async saveChangesInRepository(
   files: FileContent[],
   location: string,
-  engine: string,
-  vectorStoreId: string,
-  repoName: string
+  title: string,
+  message: string
  ){
   const gitManager = await this.getGitManager();
-  const { title, message } = await this.generateTitleAndMessageForPullRequest(engine, vectorStoreId, repoName);
 
   return gitManager.createPullRequest(
     files,
