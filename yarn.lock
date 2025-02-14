@@ -16600,6 +16600,47 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@veecode-platform/backstage-plugin-vee-backend@workspace:plugins/vee-backend":
+  version: 0.0.0-use.local
+  resolution: "@veecode-platform/backstage-plugin-vee-backend@workspace:plugins/vee-backend"
+  dependencies:
+    "@backstage/backend-common": "npm:^0.25.0"
+    "@backstage/backend-defaults": "npm:^0.5.1"
+    "@backstage/backend-plugin-api": "npm:^1.0.1"
+    "@backstage/backend-test-utils": "npm:^1.0.2"
+    "@backstage/catalog-client": "npm:^1.7.1"
+    "@backstage/cli": "npm:^0.28.0"
+    "@backstage/core-plugin-api": "npm:^1.10.1"
+    "@backstage/errors": "npm:^1.2.4"
+    "@backstage/integration": "npm:^1.15.2"
+    "@backstage/plugin-catalog-node": "npm:^1.13.1"
+    "@backstage/plugin-permission-common": "npm:^0.8.1"
+    "@backstage/plugin-permission-node": "npm:^0.8.4"
+    "@backstage/types": "npm:^1.2.0"
+    "@gitbeaker/rest": "npm:^41.2.0"
+    "@types/compression": "npm:^1"
+    "@types/express": "npm:^4.17.6"
+    "@types/js-yaml": "npm:^4"
+    "@types/mime-types": "npm:^2"
+    "@types/supertest": "npm:^2.0.8"
+    "@veecode-platform/backstage-plugin-veecode-assistant-ai-common": "npm:^0.1.0"
+    compression: "npm:^1.8.0"
+    express: "npm:^4.17.6"
+    express-promise-router: "npm:^4.1.0"
+    js-base64: "npm:^3.7.7"
+    js-yaml: "npm:^4.1.0"
+    mime-types: "npm:^2.1.35"
+    octokit: "npm:^4.0.2"
+    openai: "npm:^4.84.0"
+    p-limit: "npm:^6.2.0"
+    simple-git: "npm:^3.27.0"
+    supertest: "npm:^7.0.0"
+    winston: "npm:^3.17.0"
+    yauzl: "npm:^3.2.0"
+    zod: "npm:^3.22.4"
+  languageName: unknown
+  linkType: soft
+
 "@veecode-platform/backstage-plugin-vee-common@npm:^0.1.0, @veecode-platform/backstage-plugin-vee-common@workspace:plugins/vee-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-vee-common@workspace:plugins/vee-common"
@@ -20112,6 +20153,21 @@ __metadata:
     safe-buffer: "npm:5.2.1"
     vary: "npm:~1.1.2"
   checksum: 10/c69cf6da151db6f9db2e242b6a0039ad41975ee886c385cff2920c5f8f7050678e0ee9a021437af033536c451791de529de376851b8d31fee42ca2d6adca03f0
+  languageName: node
+  linkType: hard
+
+"compression@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "compression@npm:1.8.0"
+  dependencies:
+    bytes: "npm:3.1.2"
+    compressible: "npm:~2.0.18"
+    debug: "npm:2.6.9"
+    negotiator: "npm:~0.6.4"
+    on-headers: "npm:~1.0.2"
+    safe-buffer: "npm:5.2.1"
+    vary: "npm:~1.1.2"
+  checksum: 10/ca213b9bd03e56c7c3596399d846237b5f0b31ca4cdeaa76a9547cd3c1465fbcfcb0fe93a5d7ff64eff28383fc65b53f1ef8bb2720d11bb48ad8c0836c502506
   languageName: node
   linkType: hard
 
