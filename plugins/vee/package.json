@@ -10,7 +10,13 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "frontend-plugin"
+    "role": "frontend-plugin",
+    "pluginId": "vee",
+    "pluginPackages": [
+      "@veecode-platform/backstage-plugin-vee",
+      "@veecode-platform/backstage-plugin-vee-backend",
+      "@veecode-platform/backstage-plugin-vee-common"
+    ]
   },
   "sideEffects": false,
   "scripts": {
