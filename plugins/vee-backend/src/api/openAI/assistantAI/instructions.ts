@@ -36,14 +36,15 @@ export function assistantInstructions(repoName: string, repoStructure: string) {
 
   ### Response Format:
   - **General Case**: The response must always be a single JSON object with the following structure, returned as plain JSON (not as a code block):
-    {
-      "text": "Generated textual response for the prompt, including analysis and insights.",
-      "files": [
+ {
+      “text": ‘Generated textual answer to the question, including analysis and ideas’,
+      “title" : “Create a title of no more than 5 words about the suggested changes”,
+      “files": [
         {
-          "name": "example.ts",
-          "relativePath": "src/example.ts",
-          "content": "[Complete file content here]",
-          "type": "application/typescript"
+          “name": ‘example.ts’,
+          “relativePath": ‘src/example.ts’,
+          “content": ‘[Full file content here]’,
+          “type": ”application/typescript”
         }
       ]
     }

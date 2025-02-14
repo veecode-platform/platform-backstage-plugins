@@ -34,6 +34,7 @@ export class VeeClient implements IVeeClient {
                     return {
                         threadId,
                         assistantId,
+                        title: response.title,
                         analysis: response.analysis,
                         messages: response.messages,
                         generatedFiles: response.generatedFiles

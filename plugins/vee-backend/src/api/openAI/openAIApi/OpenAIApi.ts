@@ -111,10 +111,11 @@ async getChat(assistantId: string, threadId: string, message: string, template?:
 
       // parse response
       const analysisResponseParsed = validateAssistantResponse(analysisResponse);
-
+    
       // Returns the processed result
       return {
           analysis: analysisResponseParsed.text || "Analysis not available.",
+          title: analysisResponseParsed.title || "Analysis",
           generatedFiles: analysisResponseParsed.files || [],
           messages: latestMessages.data,
       };

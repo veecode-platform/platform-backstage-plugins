@@ -77,6 +77,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
 
       res.status(200).json({
         assistantId: response.assistantId,
+        title: response.title,
         message: response.analysis,
         data: response.messages,
         generatedFiles: response.generatedFiles,

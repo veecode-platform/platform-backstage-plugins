@@ -26,7 +26,7 @@ export function validateAssistantResponse(response: string): ChatProps {
 
     // Check if it's a plain string
     if (typeof response === "string") {
-      return { text: response, files: [] };
+      return { text: response, title: response, files: [] };
     }
   }
 
