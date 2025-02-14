@@ -15,6 +15,7 @@ export interface IRepository{
 export interface IChat {
   threadId: string;
   assistantId: string;
+  title:string;
   messages: Message[];
   generatedFiles: FileContent[] | string[]
   }
@@ -91,6 +92,7 @@ export interface SubmitRepoResponse {
 
 export interface InitializeAssistantAIResponse {
   assistantId: string,
+  title: string,
   message: string,
   generatedFiles: FileContent[],
   data:  {
@@ -102,6 +104,7 @@ export interface InitializeAssistantAIResponse {
 
 export interface ChatProps {
   text: string,
+  title: string,
   files: FileContent[]
 }
 
