@@ -10,7 +10,7 @@ export class VeeConfig implements IVeeConfig {
     ){}
 
     getOpenAIConfig() : OpenAIProviderConfig{
-        const openAIConfig = this.config.get<OpenAIProviderConfig>('veecodeAssistantAI.openai');
+        const openAIConfig = this.config.get<OpenAIProviderConfig>('vee.openai');
         if(!openAIConfig) {
             this.logger.error("Not configuration found for openAI")
         }
