@@ -1,7 +1,7 @@
 import React from "react";
 import { EntityAnnotationType } from "../utils/types";
 import { EntityInfoActionType } from "./state";
-import { FileContent, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-veecode-assistant-ai-common";
+import { FileContent, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-vee-common";
 
 export type VeeContextType = {
     vectorStoreId: string | null;
