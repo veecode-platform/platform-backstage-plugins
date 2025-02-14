@@ -1,6 +1,6 @@
 import React from "react";
 import { VeeContext } from "./veeContext";
-import { EntityInfoReducer, initialEntityInfoState } from "./state";
+import { EntityInfoReducer, initialEntityInfoState, initialPullRequestState, PullRequestInfoReducer, savePullRequestInfo } from "./state";
 import { errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { veeApiRef } from "../api/veeApi";
 import { FileContent } from "@veecode-platform/backstage-plugin-vee-common";
@@ -17,6 +17,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const [ showChat, setShowChat ] = React.useState<boolean>(false);
     const [ projectStructure, setProjectStructure] = React.useState<string|null>(null);
     const [ promptValue, setPromptValue ] = React.useState<string|null>(null);
+    const [ pullRequestInfoState, dispatchPullRequestInfo ] = React.useReducer(PullRequestInfoReducer, initialPullRequestState);
     const [ entityInfoState, entityInfoDispatch ] = React.useReducer(EntityInfoReducer, initialEntityInfoState);
     const api = useApi(veeApiRef);
     const errorApi = useApi(errorApiRef);
@@ -49,7 +50,9 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
               const response = await api.getChat(engine,vectorStoreId,prompt,projectName, projectStructure);
               setAssistantId(response.assistantId);
               setThreadId(response.threadId);
+              dispatchPullRequestInfo(savePullRequestInfo({title: response.title, message: response.message}))
               return {
+                title: response.title,
                 analysis: response.message,
                 files: response.generatedFiles
               }
@@ -64,9 +67,10 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
 
     const analyzeChangesAndSubmitToRepository = async(files:FileContent[])=>{
         try{
-            if(vectorStoreId && entityInfoState){
-                const { engine, location, projectName } = entityInfoState;
-                const response = await api.saveChangesInRepository(files,location, engine, vectorStoreId,projectName);
+            if(vectorStoreId && entityInfoState && pullRequestInfoState){
+                const { location } = entityInfoState;
+                const { title, message } = pullRequestInfoState;
+                const response = await api.saveChangesInRepository(files,location,title, message);
                 return response
             }
             return null

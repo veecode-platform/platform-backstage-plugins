@@ -4,6 +4,11 @@ export type EntityAnnotationType = {
     projectName: string
 }
 
+export type PullRequestType = {
+    title: string,
+    message: string
+}
+
 export interface submitRepoAndCreateVectorStoreResponse {
     vectorStoreId: string
 }
