@@ -1,27 +1,17 @@
+import React from 'react';
 import { Box, Typography } from '@material-ui/core'
-import React from 'react'
 import Lottie from 'react-lottie';
 import { FeedbackComponentProps } from './types';
 import { useFeedbackComponentStyles } from './styles';
-import { JsonObject } from '../../../utils/types';
-import { getImagePayload } from '../../../utils/helpers/getImagePayload';
+import SuccessAnimationData from '../../../assets/success.json';
+import ErrorAnimationData from '../../../assets/error.json';
 
 const SuccessAnimation = () => {
-
-  const [ successAnimation, setSuccessAnimation ] = React.useState<JsonObject|null>(null);
-
-  React.useEffect(()=>{
-    const loadAnimation = async () => {
-      const animation = await getImagePayload('success.json');
-      setSuccessAnimation(animation);
-    };
-    loadAnimation();
-  },[])
 
   const defaultOptions = {
     loop: false,
     autoplay: true,
-    animationData: successAnimation!,
+    animationData: SuccessAnimationData,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice"
     }
@@ -38,20 +28,10 @@ const SuccessAnimation = () => {
 
 const ErrorAnimation = () => {
 
-  const [ errorAnimation, setErrorAnimation ] = React.useState<JsonObject|null>(null);
-
-  React.useEffect(()=>{
-    const loadAnimation = async () => {
-      const animation = await getImagePayload('error.json');
-      setErrorAnimation(animation);
-    };
-    loadAnimation();
-  },[]);
-
   const defaultOptions = {
     loop: false,
     autoplay: true,
-    animationData: errorAnimation!,
+    animationData: ErrorAnimationData,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice"
     }

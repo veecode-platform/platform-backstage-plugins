@@ -23,9 +23,6 @@ export const useContentLayoutStyles = makeStyles({
       borderLeft: `3px solid ${themeVariables.colors.main}`,
       padding: "0 1rem",
     },
-    logo: {
-      width: "90px",
-    },
     body: {
       padding: "2.5rem 2rem",
       height: "79vh",

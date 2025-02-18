@@ -33,10 +33,6 @@ export const useChatBubbleStyles = makeStyles(theme => ({
         backgroundColor: themeVariables.colors.black,
         border: `1px solid ${themeVariables.border.main}`,
     },
-    avatarImg:{
-        width: '75%',
-        objectFit: 'cover'
-    },
     content:{
         width: '100%',
         display: 'flex',

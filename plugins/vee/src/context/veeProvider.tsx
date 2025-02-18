@@ -22,6 +22,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const api = useApi(veeApiRef);
     const errorApi = useApi(errorApiRef);
 
+
     const handleChat = () => {
         setShowChat(!showChat)
       };

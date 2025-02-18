@@ -41,10 +41,5 @@ export const useAssistantAIStyles = makeStyles(theme=>({
             '100%': {
                 opacity: '1'
             }
-        },
-    icon:{
-        color: '#87F3CF',
-        width: '100%',
-        maxWidth: '30px'
-    }
+        }
 }))

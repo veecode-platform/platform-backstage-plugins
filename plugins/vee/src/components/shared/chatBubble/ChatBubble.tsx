@@ -4,30 +4,19 @@ import { Box } from "@material-ui/core";
 import { useChatBubbleStyles } from "./styles";
 import { LoadingAnswer } from "../loadingAnswer/LoadingAnswer";
 import { AlertBox } from "../alertBox/AlertBox";
-import { getImagePayload } from "../../../utils/helpers/getImagePayload";
-
+import { LogoVeecode } from "../../../assets/logo-veecode";
+import { Person } from "../../../assets/person";
 
 
 const AvatarComponent : React.FC<AvatarComponentProps>= (props) => {
- 
-  const [veeCodeIcon, setVeeCodeIcon] = React.useState<string|null>(null);
-  const [personAvatar, setPersonAvatar] = React.useState<string|null>(null);
-  const { avatar, avatarImg } = useChatBubbleStyles();
+
+  const { avatar } = useChatBubbleStyles();
   const { robot } = props;
 
-  React.useEffect(() => {
-    const loadImage = async () => {
-      const veeCodeIconImg = await getImagePayload('logo-veecode.png');
-      const personAvatarImg = await getImagePayload('person.png');
-      setVeeCodeIcon(veeCodeIconImg);
-      setPersonAvatar(personAvatarImg);
-    };
-    loadImage();
-  },[]);
 
   return (
     <div className={avatar}>
-      <img alt="" src={`${robot ? veeCodeIcon : personAvatar}`} className={avatarImg} />
+      {robot ? <LogoVeecode/> : <Person/>}
     </div>
   );
 }

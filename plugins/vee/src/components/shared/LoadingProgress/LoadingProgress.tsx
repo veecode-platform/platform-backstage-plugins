@@ -1,26 +1,17 @@
 import React from 'react'
 import { useLoadingProgressStyles } from './styles'
 import Lottie from 'react-lottie';
-import { getImagePayload } from '../../../utils/helpers/getImagePayload';
-import { JsonObject } from '../../../utils/types';
+import StarsAnimationData from '../../../assets/stars.json';
+
 
 export const LoadingProgress = () => {
 
-  const [starsAnimation, setStarsAnimation] = React.useState<JsonObject|null>(null);
   const {loadingContent} = useLoadingProgressStyles();
-
-  React.useEffect(()=>{
-    const loadAnimation = async () => {
-      const animation = await getImagePayload('stars.json');
-      setStarsAnimation(animation);
-    };
-    loadAnimation();
-  },[])
 
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    animationData: starsAnimation!,
+    animationData: StarsAnimationData,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice"
     }

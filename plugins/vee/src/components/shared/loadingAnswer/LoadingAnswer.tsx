@@ -3,29 +3,17 @@ import Lottie from "react-lottie";
 import { useLoadingAnswerStyles } from "./styles";
 import { Box, Typography } from "@material-ui/core";
 import { LoadingAnswerProps } from "./types";
-import { JsonObject } from "../../../utils/types";
-import { getImagePayload } from "../../../utils/helpers/getImagePayload";
+import LoadingAnimationData from '../../../assets/typing.json';
+import StarsAnimationData from '../../../assets/stars.json';
 
 export const LoadingAnswer : React.FC<LoadingAnswerProps> = ({analysis}) => {
     
-    const[ typingAnimation, setTypingAnimation ] = React.useState<JsonObject|null>(null);
-    const [ starsAnimation, setStarsAnimation ] = React.useState<JsonObject|null>(null);
     const {loadingContent, loadingAnalysis, analysisText, block } = useLoadingAnswerStyles();
-
-    React.useEffect(()=>{
-      const loadAnimation = async () => {
-        const typing = await getImagePayload('typing.json');
-        const stars = await getImagePayload('stars.json');
-        setTypingAnimation(typing);
-        setStarsAnimation(stars);
-      };
-      loadAnimation();
-    },[]);
 
     const defaultOptions = {
         loop: true,
         autoplay: true,
-        animationData: typingAnimation!,
+        animationData: LoadingAnimationData,
         rendererSettings: {
           preserveAspectRatio: "xMidYMid slice"
         }
@@ -34,7 +22,7 @@ export const LoadingAnswer : React.FC<LoadingAnswerProps> = ({analysis}) => {
     const stars = {
       loop: true,
       autoplay: true,
-      animationData: starsAnimation!,
+      animationData: StarsAnimationData,
       rendererSettings: {
         preserveAspectRatio: "xMidYMid slice"
       }
