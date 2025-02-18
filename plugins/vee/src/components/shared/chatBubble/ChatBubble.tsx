@@ -1,21 +1,45 @@
 import React from "react";
-import type { ChatBubbleProps, ChatBubbleWrapperProps } from "./types";
+import type { AvatarComponentProps, ChatBubbleProps, ChatBubbleWrapperProps } from "./types";
 import { Box } from "@material-ui/core";
 import { useChatBubbleStyles } from "./styles";
-import VeeCodeIcon from "../../../assets/logo-veecode.png";
-import PersonAvatar from "../../../assets/person.png";
 import { LoadingAnswer } from "../loadingAnswer/LoadingAnswer";
 import { AlertBox } from "../alertBox/AlertBox";
+import { getImagePayload } from "../../../utils/helpers/getImagePayload";
+
+
+
+const AvatarComponent : React.FC<AvatarComponentProps>= (props) => {
+ 
+  const [veeCodeIcon, setVeeCodeIcon] = React.useState<string|null>(null);
+  const [personAvatar, setPersonAvatar] = React.useState<string|null>(null);
+  const { avatar, avatarImg } = useChatBubbleStyles();
+  const { robot } = props;
+
+  React.useEffect(() => {
+    const loadImage = async () => {
+      const veeCodeIconImg = await getImagePayload('logo-veecode.png');
+      const personAvatarImg = await getImagePayload('person.png');
+      setVeeCodeIcon(veeCodeIconImg);
+      setPersonAvatar(personAvatarImg);
+    };
+    loadImage();
+  },[]);
+
+  return (
+    <div className={avatar}>
+      <img alt="" src={`${robot ? veeCodeIcon : personAvatar}`} className={avatarImg} />
+    </div>
+  );
+}
 
 const ChatBubbleWrapper : React.FC<ChatBubbleWrapperProps> = (props) => {
+
   const { children, robot } = props;
-  const { root, avatar, avatarImg } = useChatBubbleStyles();
+  const { root } = useChatBubbleStyles();
 
   return (
       <Box className={root}>
-        <div className={avatar}>
-          <img alt="" src={`${robot ? VeeCodeIcon : PersonAvatar}`} className={avatarImg} />
-        </div>
+        <AvatarComponent robot={robot}/>
         {children}
      </Box>
   )
@@ -23,7 +47,7 @@ const ChatBubbleWrapper : React.FC<ChatBubbleWrapperProps> = (props) => {
 
 export const ChatBubble : React.FC<ChatBubbleProps> = (props) => {
     const { robot, children, loading, analysis, error } = props;
-    const { root, loadingContent, bubble, aiBubble, avatar, avatarImg, content} = useChatBubbleStyles();
+    const { root, loadingContent, bubble, aiBubble, content} = useChatBubbleStyles();
 
     if(loading) return (
       <ChatBubbleWrapper robot={robot}>
@@ -41,9 +65,7 @@ export const ChatBubble : React.FC<ChatBubbleProps> = (props) => {
 
     return (
         <Box className={root}>
-        <div className={avatar}>
-          <img alt="" src={`${robot ? VeeCodeIcon : PersonAvatar}`} className={avatarImg} />
-        </div>   
+        <AvatarComponent robot={robot}/>  
           <Box className={`${bubble} ${robot ? aiBubble : ''}`}>
               <div className={content}>
                 {children}

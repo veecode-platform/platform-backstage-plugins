@@ -10,3 +10,7 @@ export interface ChatBubbleProps {
     analysis?: boolean;
     error?: Error | undefined
 }
+
+export interface AvatarComponentProps {
+    robot?: boolean
+}
