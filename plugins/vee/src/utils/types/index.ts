@@ -12,3 +12,7 @@ export type PullRequestType = {
 export interface submitRepoAndCreateVectorStoreResponse {
     vectorStoreId: string
 }
+
+export type JsonObject = {
+    [key:string] : string
+}
