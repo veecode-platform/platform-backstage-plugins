@@ -46,7 +46,7 @@ export class VeeClient implements VeeApi {
     body: JSON.stringify(body),
     headers: {
        'Content-Type': 'application/json',
-       Authorization: `Bearer ${token}`
+       'Git-Authorization': `Bearer ${token}`
      }
    }
 
