@@ -17,7 +17,7 @@ export abstract class AssistantAIController {
     ){ }
 
     protected getToken(req:Request){
-        const headerAuthorization = req.headers.authorization;
+        const headerAuthorization = req.headers['git-authorization'] as string;
         if(!headerAuthorization){
             throw new Error("Error: Not Found Authorization token")
         }
