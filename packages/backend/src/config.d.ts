@@ -13,7 +13,7 @@ export interface Config {
           }
           }>;
         };
-    veecodeAssistantAI?:{
+    vee?:{
       openai?: {
         apiBaseUrl: string;
         apiKey: string;

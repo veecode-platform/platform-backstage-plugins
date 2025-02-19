@@ -66,6 +66,7 @@ import { KongServiceManagerContent, isKongServiceManagerAvailable } from '@veeco
 import { KubernetesGptAnalyzerPage, KubernetesGptAnalyzerCard } from '@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer';
 import { InfracostOverviewPage, isInfracostAvailable } from '@veecode-platform/backstage-plugin-infracost';
 import { ZoraOssPage, ZoraOssProjectCard, ZoraOssProjectTable } from '@veecode-platform/backstage-plugin-zora-oss';
+import { AssistantAIContent } from '@veecode-platform/backstage-plugin-vee';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -185,6 +186,8 @@ const overviewContent = (
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
     </Grid>
+
+    <AssistantAIContent/>
     {/* <Grid item md={8} xs={12}>
       <EntityHasSubcomponentsCard variant="gridItem" />
     </Grid> */}
@@ -568,15 +571,16 @@ const clusterPage = (
       {WorkflowsContent}
     </EntityLayout.Route> */}
 
-    <EntityLayout.Route
-      if={(entity) => {
-        const show = entity.metadata.annotations?.hasOwnProperty('backstage.io/techdocs-ref')
-        if (show !== undefined) return show
-        return false
-      }}
-      path="/docs" title="Docs" >
-      {techdocsContent}
-    </EntityLayout.Route>
+  <EntityLayout.Route
+    if={(entity) => {
+      const show = Object.prototype.hasOwnProperty.call(entity.metadata.annotations, 'backstage.io/techdocs-ref');
+      return show ?? false;
+    }}
+    path="/docs"
+    title="Docs"
+  >
+    {techdocsContent}
+  </EntityLayout.Route>
   </EntityLayout>
 );
 

@@ -86,7 +86,7 @@ const AboutService : React.FC<AboutServiceProps> = (props) => {
                 <Box className={listItem}>
                   <LabelField title="Protocol"/>
                 <ListItemText className={itemValue}>
-                  {serviceDetails.protocol}
+                  {serviceDetails.protocol ?? " - "}
                 </ListItemText>
                 </Box>
               </ListItem>
@@ -95,7 +95,7 @@ const AboutService : React.FC<AboutServiceProps> = (props) => {
                 <Box className={listItem}>
                   <LabelField title="Host"/>
                 <ListItemText className={itemValue}>
-                  {serviceDetails.host}
+                  {serviceDetails.host ?? " - "}
                 </ListItemText>
                 </Box>
               </ListItem>
@@ -104,7 +104,7 @@ const AboutService : React.FC<AboutServiceProps> = (props) => {
                 <Box className={listItem}>
                   <LabelField title="Path"/>
                 <ListItemText className={itemValue}>
-                  {serviceDetails.path}
+                  {serviceDetails.path ?? " - "}
                 </ListItemText>
                 </Box>
               </ListItem>
@@ -113,7 +113,7 @@ const AboutService : React.FC<AboutServiceProps> = (props) => {
                 <Box className={listItem}>
                   <LabelField title="Port"/>
                 <ListItemText className={itemValue}>
-                  {serviceDetails.port}
+                  {serviceDetails.port ?? " - "}
                 </ListItemText>
                 </Box>
               </ListItem>
@@ -122,9 +122,9 @@ const AboutService : React.FC<AboutServiceProps> = (props) => {
                 <Box className={listItem}>
                   <LabelField title="Tags"/>
                 <ListItemText className={itemValue}>
-                  {serviceDetails.tags.map(t=>(
+                  { serviceDetails.tags && serviceDetails.tags.length > 0 ? (serviceDetails.tags.map(t=>(
                     <Chip label={t} key={t}/>
-                  ))}
+                  ))): " - " }
                 </ListItemText>
                 </Box>
               </ListItem>
