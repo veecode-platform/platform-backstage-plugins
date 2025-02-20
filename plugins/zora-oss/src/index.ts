@@ -1,1 +1,1 @@
-export { zoraOssPlugin, ZoraOssPage } from './plugin';
+export { zoraOssPlugin, ZoraOssPage, ZoraOssProjectCard, ZoraOssProjectTable } from './plugin';

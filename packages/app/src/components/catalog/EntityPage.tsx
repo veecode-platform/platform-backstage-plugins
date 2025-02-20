@@ -62,10 +62,10 @@ import { ClusterInstructionsCard, ClusterOverviewPage, isClusterInstructionsAvai
 import { DatabaseOverview } from '@veecode-platform/plugin-database-explorer';
 import { RELATION_ENVIRONMENT_OF, RELATION_FROM_ENVIRONMENT } from '@veecode-platform/plugin-veecode-platform-common';
 // kong
-import {  KongServiceManagerContent, isKongServiceManagerAvailable } from '@veecode-platform/plugin-kong-service-manager';
-import { KubernetesGptAnalyzerPage,KubernetesGptAnalyzerCard } from '@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer';
+import { KongServiceManagerContent, isKongServiceManagerAvailable } from '@veecode-platform/plugin-kong-service-manager';
+import { KubernetesGptAnalyzerPage, KubernetesGptAnalyzerCard } from '@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer';
 import { InfracostOverviewPage, isInfracostAvailable } from '@veecode-platform/backstage-plugin-infracost';
-import { ZoraOssPage } from '@veecode-platform/backstage-plugin-zora-oss';
+import { ZoraOssPage, ZoraOssProjectCard, ZoraOssProjectTable } from '@veecode-platform/backstage-plugin-zora-oss';
 import { AssistantAIContent } from '@veecode-platform/backstage-plugin-vee';
 
 const techdocsContent = (
@@ -82,7 +82,7 @@ const cicdContent = (
   <EntitySwitch>
     <EntitySwitch.Case if={isGithubAvailable}>
       {/* <EntityGithubActionsContent /> */}
-      <GithubWorkflowsContent/>
+      <GithubWorkflowsContent />
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isGitlabAvailable}>
@@ -179,6 +179,9 @@ const overviewContent = (
       </EntitySwitch.Case>
     </EntitySwitch>
 
+    <Grid item lg={6}>
+      <ZoraOssProjectCard />
+    </Grid>
 
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
@@ -201,6 +204,10 @@ const serviceEntityPage = (
       {cicdContent}
     </EntityLayout.Route>
 
+    <EntityLayout.Route path="/zora" title="Vulnerabilities">
+      <ZoraOssProjectTable />
+    </EntityLayout.Route>
+
     {/* <EntityLayout.Route path="/cluster-overview" title="cluster overview">
       <ClusterOverviewPage/>
     </EntityLayout.Route> */}
@@ -218,7 +225,7 @@ const serviceEntityPage = (
     <EntityLayout.Route
       if={isKongServiceManagerAvailable}
       path="/kong-service-manager" title="Kong">
-      <KongServiceManagerContent/>
+      <KongServiceManagerContent />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/api" title="API">
@@ -268,7 +275,7 @@ const websiteEntityPage = (
     <EntityLayout.Route
       if={isKongServiceManagerAvailable}
       path="/kong-service-manager" title="Kong">
-      <KongServiceManagerContent/>
+      <KongServiceManagerContent />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/dependencies" title="Dependencies">
@@ -300,11 +307,11 @@ const defaultEntityPage = (
     <EntityLayout.Route path="/" title="Overview">
       {overviewContent}
     </EntityLayout.Route>
-    
+
     <EntityLayout.Route
       if={isKongServiceManagerAvailable}
       path="/kong-service-manager" title="Kong">
-      <KongServiceManagerContent/>
+      <KongServiceManagerContent />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/docs" title="Docs">
@@ -470,7 +477,7 @@ const clusterPage = (
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/kubernetes" title="Kubernetes">
-    <EntityKubernetesContent refreshIntervalMs={30000} />
+      <EntityKubernetesContent refreshIntervalMs={30000} />
     </EntityLayout.Route>
 
 
@@ -508,7 +515,7 @@ const clusterPage = (
         </Grid>
 
         <Grid item md={7} sm={12}>
-            <KubernetesGptAnalyzerCard/>
+          <KubernetesGptAnalyzerCard />
         </Grid>
 
         {/* Github */}
@@ -546,18 +553,18 @@ const clusterPage = (
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/kubernetes-gpt-analyzer" title="Kubernetes GPT">
-      <KubernetesGptAnalyzerPage/>
+      <KubernetesGptAnalyzerPage />
     </EntityLayout.Route>
 
     <EntityLayout.Route path="/zora-oss" title="Zora OSS">
-      <ZoraOssPage/>
+      <ZoraOssPage />
     </EntityLayout.Route>
 
 
     <EntityLayout.Route if={isInfracostAvailable} path="/infracost" title="Infracost">
-      <InfracostOverviewPage/>
+      <InfracostOverviewPage />
     </EntityLayout.Route>
-{/* 
+    {/* 
     <EntityLayout.Route
       if={isGithubAvailable}
       path="/workflows" title="Workflows">

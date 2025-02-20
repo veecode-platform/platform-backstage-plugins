@@ -16,8 +16,9 @@ import { kubernetesApiRef } from '@veecode-platform/plugin-kubernetes';
 import { createStyles, Theme } from "@material-ui/core";
 import { useZoraWrapperStyles } from '../styles';
 import { ClusterVulnerabilitiesLineChart } from './clusterVulnerabilitiesLineChart';
-import { CveModalComponent } from './AI/CveModal';
-import { SiOpenai } from "react-icons/si";
+//ai features
+//import { CveModalComponent } from './AI/CveModal';
+//import { SiOpenai } from "react-icons/si";
 
 
 function groupItemsByScan(items: typeof dataJson.items) {
@@ -66,13 +67,13 @@ export const DenseTable = ({ clusterVulnerabilities }: DenseTableProps) => {
     const { paper, critical, high, medium } = useDrawerStyles();
     const [isOpen, setIsOpen] = useState(false);
     const [clusterResources, setClusterResources] = useState([{}])
-    const [showModal, setShowModal] = useState(false);
-    //const [loadingAi, setLoadingAI] = useState(false)
 
-    const [cve, setCve] = useState("")
-    const [packageName, setPackageName] = useState("")
-    const [imageName, setImageName] = useState("")
-    const [distro, setDistro] = useState("")
+    //ai features
+    //const [showModal, setShowModal] = useState(false);
+    //const [cve, setCve] = useState("")
+    //const [packageName, setPackageName] = useState("")
+    //const [imageName, setImageName] = useState("")
+    //const [distro, setDistro] = useState("")
 
     const columns: TableColumn[] = [
         { title: 'Namespace', field: 'namespace' },
@@ -127,13 +128,13 @@ export const DenseTable = ({ clusterVulnerabilities }: DenseTableProps) => {
                         status: cve.status,
                         url: <a href={cve.url} target='_blank'><IconButton><Link /></IconButton></a>,
                         version: cve.version,
-                        ai: cve.status === "fixed" ? <IconButton onClick={() => {
-                            setShowModal(true)
-                            setImageName(clusterVulnerability.spec.image)
-                            setCve(cve.id)
-                            setDistro(clusterVulnerability.spec.distro.name)
-                            setPackageName(cve.package)                           
-                        }}><SiOpenai /></IconButton> : null
+                        //ai: cve.status === "fixed" ? <IconButton onClick={() => {
+                        //    setShowModal(true)
+                        //    setImageName(clusterVulnerability.spec.image)
+                        //    setCve(cve.id)
+                        //    setDistro(clusterVulnerability.spec.distro.name)
+                        //    setPackageName(cve.package)                           
+                        //}}><SiOpenai /></IconButton> : null
 
                     }
                 }))
@@ -175,7 +176,9 @@ export const DenseTable = ({ clusterVulnerabilities }: DenseTableProps) => {
 
                 </Grid>
             </Drawer>
-            <CveModalComponent show={showModal} imageName={imageName} distro={distro} cve={cve} packageName={packageName} /*handleLoadingAi={setLoadingAI}*/ handleCloseModal={() => setShowModal(!showModal)}/>    
+            {/*}
+            <CveModalComponent show={showModal} imageName={imageName} distro={distro} cve={cve} packageName={packageName} handleCloseModal={() => setShowModal(!showModal)}/>    
+            */}
             <Table
                 options={{ search: true, paging: true }}
                 columns={columns}
@@ -201,7 +204,8 @@ export const ClusterVulnerabilitiesTableComponent = ({clusterName}: {clusterName
     }> => {
         const vulnerabilities: typeof dataJson = await (await kubernetesApi.proxy({
             clusterName: clusterName,
-            path: '/apis/zora.undistro.io/v1alpha1/namespaces/zora-system/vulnerabilityreports',
+            path: '/apis/zora.undistro.io/v1alpha1/vulnerabilityreports',
+            //path: '/apis/zora.undistro.io/v1alpha1/namespaces/zora-system/vulnerabilityreports',
         })).json();
 
 
