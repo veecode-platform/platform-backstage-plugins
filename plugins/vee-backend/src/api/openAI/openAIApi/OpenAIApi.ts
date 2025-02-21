@@ -26,9 +26,9 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
  try{
   this.logger.info("Check VectorStore Available...")
   const existingStores = await this.client.beta.vectorStores.list();
-  const existingStore = existingStores.data.find((store:VectorStore)=> store.name === repoName)
+  const existingStore = existingStores.data.find((store:VectorStore)=> store.name === repoName);
   let vectorStoreId: string;
-  if(existingStore){
+  if(existingStore && existingStore.status !== 'expired'){
     this.logger.info(`VectorStore found: ${existingStore.id}`);
     vectorStoreId = existingStore.id
   }else{
