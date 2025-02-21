@@ -16,6 +16,7 @@ Before installing the plugin, there are some prerequisites to ensure its functio
 
 - Have a locally installed Backstage project, :heavy_check_mark: [How to create a Backstage app :page_with_curl:](https://backstage.io/docs/getting-started/create-an-app) .
 - Have the `Vee Backend`  plugin installed on your Backstage, see how to install [here](https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/vee-backend/README.md).
+- Have git in the docker image that will be uploaded to your environment. 
 
 <br>
 
