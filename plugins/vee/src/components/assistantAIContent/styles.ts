@@ -5,8 +5,9 @@ export const useAssistantAIStyles = makeStyles(theme=>({
     assistant:{
         width: '80px',
         height: '80px',
+        'z-index': '9999999999999999',
         backgroundColor: theme.palette.background.paper,
-        border: `1px solid ${themeVariables.colors.main}`,
+        border: `1px solid ${themeVariables.colors.grey}`,
         boxShadow: 'rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px',
         padding: '1.5rem',
         borderRadius: '50px',
