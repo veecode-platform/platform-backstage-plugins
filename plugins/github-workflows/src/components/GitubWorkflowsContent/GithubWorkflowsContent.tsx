@@ -10,6 +10,7 @@ import useAsync from 'react-use/esm/useAsync';
 import { EmptyState, ErrorBoundary, Progress, ResponseErrorPanel } from '@backstage/core-components';
 import WorkflowsDetails from './WorkflowsDetails/WorkflowsDetails';
 import { addWorkflows } from '../../context/state';
+import { workflowFilter } from '../../utils/helpers/filters';
 
 
 const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
@@ -17,7 +18,7 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
   const {cards} = props;
   const [ loadingState, setLoadingState ] = React.useState(true);
   const { setCardsView, entity, hostname, projectName, workflowsByAnnotation, branch, listAllWorkflows, allWorkflowsState, dispatchWorkflows } = useGithuWorkflowsContext();
-  const filters = workflowsByAnnotation ? workflowsByAnnotation.flatMap((w) => w.workflow) : []
+  const filters = workflowFilter(workflowsByAnnotation)
 
   const updateData = async ()=> {
     const data = await listAllWorkflows(cards ? filters : []);
