@@ -1,4 +1,4 @@
-import { ConfigApi } from "@backstage/core-plugin-api";
+import { ConfigApi, FetchApi } from "@backstage/core-plugin-api";
 import { ScmAuthApi } from "@backstage/integration-react";
 import { Octokit, RestEndpointMethodTypes } from "@octokit/rest";
 import { GithubWorkflowsApi } from "./GithubWorkflowsApi";
@@ -20,14 +20,15 @@ import { readGithubIntegrationConfigs } from "@backstage/integration";
 class Client {
   private readonly configApi: ConfigApi;
   private readonly scmAuthApi: ScmAuthApi;
+  private readonly fetchApi : FetchApi
 
   constructor(options: Options) {
     this.configApi = options.configApi;
     this.scmAuthApi = options.scmAuthApi;
+    this.fetchApi = options.fetchApi
   }
 
-  private async getOctokit(hostname: string = 'github.com'):Promise<Octokit>{
-    
+  private async getToken(hostname:string){
     const { token } = await this.scmAuthApi.getCredentials({
       url: `https://${hostname}/`,
       additionalScope: {
@@ -36,14 +37,48 @@ class Client {
         },
       },
     });
+    return token
+  }
+
+  private getBaseUrl(hostname:string){
     const configs = readGithubIntegrationConfigs(
       this.configApi.getOptionalConfigArray('integrations.github') ?? [],
     );
     const githubIntegrationConfig = configs.find(v => v.host === hostname);
     const baseUrl = githubIntegrationConfig?.apiBaseUrl;
+    return baseUrl
+  }
+
+  private async getOctokit(hostname: string = 'github.com'):Promise<Octokit>{
+    
+    const token = await this.getToken(hostname);
+    const baseUrl = this.getBaseUrl(hostname);
     return new Octokit({ auth: token, baseUrl });
 
   }
+
+  /**
+   * 
+   *  Created for specific cases where octokit is unable to treat
+   */
+  public async alternativeFetch<T = any>(input: string, hostname: string, githubRepoSlug:string,init?: RequestInit): Promise<T> {
+
+    const token = await this.getToken(hostname)
+    const apiUrl = this.getBaseUrl(hostname);
+
+   const resp = await this.fetchApi.fetch(`${apiUrl}/repos/${githubRepoSlug}${input}`, {
+       ...init,
+       headers: {
+          Authorization: `Bearer ${token}`,
+        }
+   });
+
+    if (!resp.ok) {
+        throw new Error(`Request failed - ${(await resp.json()).message}`);
+    }
+    
+    return await resp.json();
+}
 
   private parseRepo(githubRepoSlug:string) : {repo:string, owner: string}{
     const parse = githubRepoSlug.split('/');
@@ -192,16 +227,9 @@ class Client {
   }
 
   async getFileContentFromPath(hostname:string, githubRepoSlug:string, filePath: string, branch:string):Promise<any>{
-    const octokit = await this.getOctokit(hostname);
-    const { owner, repo } = this.parseRepo(githubRepoSlug);
-    const response = await octokit.repos.getContent({
-      owner,
-      repo,
-      path: filePath,
-      branch
-    });
 
-    const data : GithubFileResponse = response.data as GithubFileResponse;
+    const response = await this.alternativeFetch(`/contents/${filePath}?ref=${branch}`,hostname,githubRepoSlug);
+    const data : GithubFileResponse = response as GithubFileResponse;
 
     const yamlContent = YAML.load(
       Buffer.from(data.content, 'base64').toString('utf8'),
@@ -215,6 +243,7 @@ class Client {
       
     const dynamicWorkflow = filePath.startsWith("dynamic/");
     const yamlContent = dynamicWorkflow ? [] : await this.getFileContentFromPath(hostname, githubRepoSlug, filePath, branch);
+
     if (!yamlContent.on?.workflow_dispatch?.inputs) return [];
     const inputs = yamlContent.on.workflow_dispatch?.inputs;
 
