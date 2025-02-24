@@ -1,4 +1,4 @@
-import { ConfigApi } from "@backstage/core-plugin-api";
+import { ConfigApi, FetchApi } from "@backstage/core-plugin-api";
 import { ScmAuthApi } from "@backstage/integration-react";
 import { WorkflowDispatchParameters } from "../utils/types";
 
@@ -11,6 +11,7 @@ export type Integrations = {
 export type Options = {
     configApi: ConfigApi;
     scmAuthApi: ScmAuthApi;
+    fetchApi: FetchApi
 };
 
 export interface Workflows {
