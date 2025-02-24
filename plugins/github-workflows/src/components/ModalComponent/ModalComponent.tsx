@@ -16,7 +16,7 @@ import { ModalComponentProps } from './types';
 
 export const ModalComponent = ({open, handleModal, parameters, handleStartWorkflow }:ModalComponentProps) => {
 
-  const [inputWorkflow, setInputWorkflow] = useState<Record<string, any>>({});
+   const [inputWorkflow, setInputWorkflow] = useState<Record<string, any>>({});
   const [errorsState, setErrorsState] = useState<Record<string, boolean>>({});
   const {modal,label,formControl,footer} = useModalStyles();
   const { setInputParams } = useGithuWorkflowsContext();
@@ -43,7 +43,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
     if(event){
       const isChecked = event.target.checked;
       setInputWorkflow({ ...inputWorkflow, [event.target.name]: isChecked });
-    }
+    };
   };
 
   const touchedField = (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>, required: boolean) => {
@@ -54,7 +54,9 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
   const handleSetInputs = () => {
     setInputParams(inputWorkflow);
     handleModal();
-    if(!!handleStartWorkflow) handleStartWorkflow();
+    if (handleStartWorkflow) {
+      handleStartWorkflow();
+    }
   }
 
   const handleChangeSelect = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
