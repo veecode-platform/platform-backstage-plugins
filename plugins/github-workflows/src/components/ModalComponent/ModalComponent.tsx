@@ -16,9 +16,7 @@ import { ModalComponentProps } from './types';
 
 export const ModalComponent = ({open, handleModal, parameters, handleStartWorkflow }:ModalComponentProps) => {
 
-  const [stateCheckbox, setStateCheckbox ] = useState<boolean>(false);
-  const [valueOption, setValueOption] = useState<string|null>(null);
-  const [ inputWorkflow, setInputWorkflow ] = useState<object>({});
+  const [inputWorkflow, setInputWorkflow] = useState<Record<string, any>>({});
   const [errorsState, setErrorsState] = useState<Record<string, boolean>>({});
   const {modal,label,formControl,footer} = useModalStyles();
   const { setInputParams } = useGithuWorkflowsContext();
@@ -42,9 +40,9 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
   };
 
   const handleStateCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if(event.target.value){
-    setStateCheckbox(event.target.checked);
-    setInputWorkflow({ ...inputWorkflow, [event.target.name]: stateCheckbox });
+    if(event){
+      const isChecked = event.target.checked;
+      setInputWorkflow({ ...inputWorkflow, [event.target.name]: isChecked });
     }
   };
 
@@ -60,7 +58,6 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
   }
 
   const handleChangeSelect = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
-   setValueOption(event.target.value as string);
    if(event){
      setInputWorkflow({...inputWorkflow, [event.target.name!]: event.target.value})
    }
@@ -125,7 +122,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                     <Select
                       labelId={p.name}
                       id="select-outlined"
-                      value={valueOption ?? p.default}
+                      value={inputWorkflow[p.name] ?? p.default}
                       variant="filled"
                       onChange={handleChangeSelect}
                       label={p.description}
@@ -145,7 +142,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                   <EnvironmentFieldComponent
                     name={p.name}
                     description={p.description}
-                    value={valueOption}
+                    value={inputWorkflow[p.name]}
                     defaultValue={p.default}
                     required={p.required}
                     onSelect={handleChangeSelect}
@@ -157,7 +154,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                     control={
                       <Checkbox
                         defaultChecked={p.default as boolean}
-                        value={stateCheckbox}
+                        value={inputWorkflow[p.name]}
                         onChange={handleStateCheckbox}
                         name={p.name}
                         color="primary"
