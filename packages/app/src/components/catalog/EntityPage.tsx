@@ -40,6 +40,7 @@ import {
   EntityCatalogGraphCard,
 } from '@backstage/plugin-catalog-graph';
 import {
+  Entity,
   RELATION_API_CONSUMED_BY,
   RELATION_API_PROVIDED_BY,
   RELATION_CONSUMES_API,
@@ -67,6 +68,10 @@ import { KubernetesGptAnalyzerPage, KubernetesGptAnalyzerCard } from '@veecode-p
 import { InfracostOverviewPage, isInfracostAvailable } from '@veecode-platform/backstage-plugin-infracost';
 import { ZoraOssPage, ZoraOssProjectCard, ZoraOssProjectTable } from '@veecode-platform/backstage-plugin-zora-oss';
 import { AssistantAIContent } from '@veecode-platform/backstage-plugin-vee';
+
+// Entity validate
+const isAnnotationAvailable = (entity: Entity, annotation: string) =>
+  !!entity?.metadata.annotations?.[annotation];
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -179,9 +184,13 @@ const overviewContent = (
       </EntitySwitch.Case>
     </EntitySwitch>
 
-    <Grid item lg={6}>
-      <ZoraOssProjectCard />
-    </Grid>
+   <EntitySwitch>
+     <EntitySwitch.Case if={(entity) => isAnnotationAvailable(entity, 'veecode/cluster-name')}>
+      <Grid item lg={6}>
+        <ZoraOssProjectCard />
+      </Grid>
+     </EntitySwitch.Case>
+   </EntitySwitch>
 
     <Grid item md={4} xs={12}>
       <EntityLinksCard />
