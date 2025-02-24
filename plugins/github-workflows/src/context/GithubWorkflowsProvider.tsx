@@ -9,7 +9,8 @@ import { Entity } from '@backstage/catalog-model';
 import { useEntityAnnotations } from '../hooks';
 import { addWorkflows, initialWorkflowsState, WorkflowsReducer } from './state';
 import { initialInputsParamsState, InputsParamsReducer } from './state/inputParamsState/reducer';
-import { addInputsParams } from './state/inputParamsState/actions';
+import { addInputsParams, removeInputsParams } from './state/inputParamsState/actions';
+import { workflowFilter } from '../utils/helpers/filters';
 
 interface GithubWorkflowsProviderProps {
   children: React.ReactNode;
@@ -34,8 +35,13 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const setBranchState = React.useCallback((branchState: string) => setBranch(branchState),[branch])
 
+  const resetInputs = () => {
+    dispatchInputsParams(removeInputsParams())
+  }
+
   const listAllWorkflows = async (filter: string[] = []) => {
     try {
+      resetInputs();
       const workflows = await api.listWorkflows(hostname,projectName, branch, filter);
       if(workflows){
         const newWorkflowsState = await Promise.all(workflows.map(async (w) => {
@@ -141,6 +147,20 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
       return null
     }
   }
+
+  React.useEffect(()=>{
+    if(branch && workflowsByAnnotation){
+      // eslint-disable-next-line no-console
+      console.log(" A branch nmudou para >>", branch)
+      const filters = workflowFilter(workflowsByAnnotation)
+      const updateData = async ()=> {
+       const data = await listAllWorkflows(cardsView ? filters : []);
+         dispatchWorkflows(addWorkflows(data))
+        }
+      updateData()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[branch])
 
 
   return (
