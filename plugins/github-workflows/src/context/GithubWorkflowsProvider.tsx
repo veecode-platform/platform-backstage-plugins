@@ -41,7 +41,6 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
 
   const listAllWorkflows = async (filter: string[] = []) => {
     try {
-      resetInputs();
       const workflows = await api.listWorkflows(hostname,projectName, branch, filter);
       if(workflows){
         const newWorkflowsState = await Promise.all(workflows.map(async (w) => {
@@ -150,8 +149,7 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
 
   React.useEffect(()=>{
     if(branch && workflowsByAnnotation){
-      // eslint-disable-next-line no-console
-      console.log(" A branch nmudou para >>", branch)
+      resetInputs();
       const filters = workflowFilter(workflowsByAnnotation)
       const updateData = async ()=> {
        const data = await listAllWorkflows(cardsView ? filters : []);
@@ -161,7 +159,6 @@ export const GithubWorkflowsProvider: React.FC<GithubWorkflowsProviderProps> = (
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[branch])
-
 
   return (
     <GithubWorkflowsContext.Provider
