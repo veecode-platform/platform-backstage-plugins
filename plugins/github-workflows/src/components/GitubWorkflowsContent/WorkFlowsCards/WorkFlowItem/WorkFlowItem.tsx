@@ -51,8 +51,8 @@ export const WorkFlowItem: React.FC<WorkFlowItemProps> = (props) => {
 
         <Box role="button" className={classes.clickable}>
           {parameters &&
-          parameters.length > 0 &&
-          status !== StatusWorkflowEnum.queued ? (
+           parameters.length > 0 &&
+           status !== StatusWorkflowEnum.queued && (
             <Tooltip title="Add Parameters" placement="top">
               <Box
                 role="button"
@@ -62,14 +62,14 @@ export const WorkFlowItem: React.FC<WorkFlowItemProps> = (props) => {
                 <SettingsIcon />
               </Box>
             </Tooltip>
-          ) : (
-            <WorkFlowActions
-              status={status}
-              conclusion={conclusion}
-              workflowId={id}
-              parameters={parameters}
-            />
           )}
+
+          <WorkFlowActions
+           status={status}
+           conclusion={conclusion}
+           workflowId={id}
+           parameters={parameters}
+            />
         </Box>
       </Box>
 
