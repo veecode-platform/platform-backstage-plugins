@@ -24,7 +24,7 @@ const EnvironmentFieldComponent : React.FC<EnvironmentFieldProps> = ({name,descr
 
     if(loading) return <Skeleton animation="wave" height="90px"/>
 
-    if(error) return <h1>Erro ....</h1>
+    if(error) return <InfoBox message="Environments Not Found"/>
 
     return (
         <FormControl variant="outlined" className={formControl} >
@@ -42,7 +42,7 @@ const EnvironmentFieldComponent : React.FC<EnvironmentFieldProps> = ({name,descr
                   onBlur={(event) => onTouch(event,required)}
                   variant="filled"
                     >
-                    {options!.map(e => (
+                    {options.map(e => (
                       <MenuItem value={e} key={e}>
                           <em>{e}</em>
                       </MenuItem>
