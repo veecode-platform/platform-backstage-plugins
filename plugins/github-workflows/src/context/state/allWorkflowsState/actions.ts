@@ -5,6 +5,11 @@ export const addWorkflows = (workflows:WorkflowResultsProps[]) => ({
     payload: workflows
 } as const)
 
+export const resetWorkflows = () => ({
+    type: 'RESET_WORKFLOWS',
+    payload: []
+} as const);
+
 export const removeWorkflow = (workflowId: number) => ({
     type: 'REMOVE_WORKFLOW',
     payload: workflowId
@@ -16,4 +21,4 @@ export const updateWorkflows = (workflow: WorkflowResultsProps) => ({
 } as const);
 
 
-export type WorkflowActionType = ReturnType<typeof addWorkflows | typeof removeWorkflow | typeof updateWorkflows>;
+export type WorkflowActionType = ReturnType<typeof addWorkflows | typeof resetWorkflows | typeof removeWorkflow | typeof updateWorkflows>;

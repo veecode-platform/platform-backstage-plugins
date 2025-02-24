@@ -7,6 +7,8 @@ export const WorkflowsReducer = (state: WorkflowResultsProps[], action: Workflow
     switch (action.type) {
         case 'ADD_WORKFLOWS':
             return action.payload;
+        case 'RESET_WORKFLOWS':
+            return [];
         case 'REMOVE_WORKFLOW':
             return state.filter(item => item.id !== action.payload)
         case 'UPDATE_WORKFLOWS':
