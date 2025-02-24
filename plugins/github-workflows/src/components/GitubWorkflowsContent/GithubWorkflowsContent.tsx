@@ -17,7 +17,7 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
 
   const {cards} = props;
   const [ loadingState, setLoadingState ] = React.useState(true);
-  const { setCardsView, entity, hostname, projectName, workflowsByAnnotation, branch, listAllWorkflows, allWorkflowsState, dispatchWorkflows } = useGithuWorkflowsContext();
+  const { setCardsView, entity, hostname, projectName, workflowsByAnnotation, listAllWorkflows, allWorkflowsState, dispatchWorkflows } = useGithuWorkflowsContext();
   const filters = workflowFilter(workflowsByAnnotation)
 
   const updateData = async ()=> {
@@ -41,11 +41,6 @@ const WorkflowContent : React.FC<GithubWorkflowsEntityProps> = (props) => {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[props])
-
-  React.useEffect(()=>{
-    updateData();
-// eslint-disable-next-line react-hooks/exhaustive-deps
-},[branch]);
 
   if (loading) {
     return <Progress />;
