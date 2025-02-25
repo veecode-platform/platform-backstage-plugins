@@ -3,6 +3,7 @@ import { Job, WorkflowAnnotation, WorkflowResultsProps, WorkflowRun } from "../u
 import { RestEndpointMethodTypes } from "@octokit/rest";
 import { Entity } from "@backstage/catalog-model";
 import { WorkflowActionType } from "./state";
+import { InputsParamsType } from "./state/inputParamsState/types";
 
 
 export type GithubWorkflowsContextType = {
@@ -14,8 +15,8 @@ export type GithubWorkflowsContextType = {
   workflowsByAnnotation: WorkflowAnnotation[] | null,
   branch: string | null,
   setBranchState: (branch: string) => void,
-  inputsParamsState: object,
-  setInputParams: (inputsParams: object) => void,
+  inputsParamsState: InputsParamsType,
+  setInputParams: (inputsParams: InputsParamsType) => void,
   allWorkflowsState: WorkflowResultsProps[],
   dispatchWorkflows: React.Dispatch<WorkflowActionType>,
   listAllWorkflows: (filter?: string[]) => Promise<WorkflowResultsProps[] | null | void>,
