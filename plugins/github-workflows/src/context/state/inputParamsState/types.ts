@@ -1,0 +1,1 @@
+export type InputsParamsType = Record<string, any> 

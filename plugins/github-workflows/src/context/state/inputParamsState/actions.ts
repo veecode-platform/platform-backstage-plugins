@@ -1,4 +1,6 @@
-export const addInputsParams = (inputs:object)=>({
+import { InputsParamsType } from "./types";
+
+export const addInputsParams = (inputs: InputsParamsType)=>({
     type: 'ADD_INPUTS',
     payload: inputs
 }as const);
