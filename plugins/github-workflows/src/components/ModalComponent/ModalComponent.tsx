@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -16,10 +16,10 @@ import { ModalComponentProps } from './types';
 
 export const ModalComponent = ({open, handleModal, parameters, handleStartWorkflow }:ModalComponentProps) => {
 
-   const [inputWorkflow, setInputWorkflow] = useState<Record<string, any>>({});
-  const [errorsState, setErrorsState] = useState<Record<string, boolean>>({});
+   const [inputWorkflow, setInputWorkflow] = React.useState<Record<string, any>>({});
+  const [errorsState, setErrorsState] = React.useState<Record<string, boolean>>({});
   const {modal,label,formControl,footer} = useModalStyles();
-  const { setInputParams } = useGithuWorkflowsContext();
+  const { setInputParams, inputsParamsState } = useGithuWorkflowsContext();
 
   const handleChange = (event: React.ChangeEvent<{ name?: string | undefined; value: unknown; }>, required: boolean, type: string | number | boolean) : void => {
     if(required){
@@ -65,14 +65,21 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
    }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     const data: any = {};
     parameters.forEach(p => {
       data[p.name] = p.default;
     });
     setInputWorkflow(data);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])  
+
+  React.useEffect(()=>{
+    if (inputsParamsState) {
+      setInputWorkflow(inputsParamsState)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[inputsParamsState])
 
   return (
       <Dialog open={open} onClose={handleModal} aria-labelledby="form-dialog-title">
@@ -90,6 +97,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                   id={p.name}
                   name={p.name}
                   defaultValue={p.default}
+                  value={inputWorkflow[p.name]}
                   required={p.required as boolean}
                   label={p.description}
                   type="string"
@@ -110,6 +118,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                   id={p.name}
                   name={p.name}
                   defaultValue={p.default}
+                  value={inputWorkflow[p.name]}
                   required={p.required as boolean}
                   label={p.description}
                   onBlur={(event) => touchedField(event, p.required)}
@@ -124,7 +133,8 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                     <Select
                       labelId={p.name}
                       id="select-outlined"
-                      value={inputWorkflow[p.name] ?? p.default}
+                      defaultValue={p.default}
+                      value={inputWorkflow[p.name] ?? ""}
                       variant="filled"
                       onChange={handleChangeSelect}
                       label={p.description}
@@ -144,28 +154,28 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                   <EnvironmentFieldComponent
                     name={p.name}
                     description={p.description}
-                    value={inputWorkflow[p.name]}
                     defaultValue={p.default}
+                    value={inputWorkflow[p.name]}
                     required={p.required}
                     onSelect={handleChangeSelect}
                     onTouch={touchedField}
                   />
               )}
-                {p.type === "boolean" && (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        defaultChecked={p.default as boolean}
-                        value={inputWorkflow[p.name]}
-                        onChange={handleStateCheckbox}
-                        name={p.name}
-                        color="primary"
-                        required={p.required as boolean}
-                      />
-                    }
+              {p.type === "boolean" && (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      defaultChecked={p.default as boolean}
+                      checked={Boolean(inputWorkflow[p.name])}
+                      onChange={handleStateCheckbox}
+                      name={p.name}
+                      color="primary"
+                      required={p.required as boolean}
+                    />
+                  }
                   label={p.description}
                 />
-                )}
+              )}
               </div>
             ))
           }
