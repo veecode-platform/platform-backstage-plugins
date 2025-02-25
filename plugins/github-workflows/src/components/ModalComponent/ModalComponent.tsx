@@ -96,7 +96,6 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                   margin="dense"
                   id={p.name}
                   name={p.name}
-                  defaultValue={p.default}
                   value={inputWorkflow[p.name] ?? p.default}
                   required={p.required as boolean}
                   label={p.description}
@@ -117,7 +116,6 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                   margin="dense"
                   id={p.name}
                   name={p.name}
-                  defaultValue={p.default}
                   value={inputWorkflow[p.name] ?? p.default}
                   required={p.required as boolean}
                   label={p.description}
@@ -165,8 +163,7 @@ export const ModalComponent = ({open, handleModal, parameters, handleStartWorkfl
                 <FormControlLabel
                   control={
                     <Checkbox
-                      defaultChecked={p.default as boolean}
-                      checked={Boolean(inputWorkflow[p.name])}
+                      checked={Boolean(inputWorkflow[p.name]) ?? Boolean(p.default)}
                       onChange={handleStateCheckbox}
                       name={p.name}
                       color="primary"
