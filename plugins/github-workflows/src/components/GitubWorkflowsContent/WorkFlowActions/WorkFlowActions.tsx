@@ -57,7 +57,7 @@ export const WorkFlowActions: React.FC<WorkFlowActionsProps> = (props) => {
       conclusion: undefined,
     } as WorkflowResultsProps));
 
-    const response = await handleStartWorkflowRun(workFlowSelected?.id as number);
+    const response = await handleStartWorkflowRun(workFlowSelected?.id as number, );
     if (response && workFlowSelected && workFlowSelected.id) {
       setTimeout(() => {
         updateWorkflowState(workFlowSelected.id as number);
@@ -77,7 +77,7 @@ export const WorkFlowActions: React.FC<WorkFlowActionsProps> = (props) => {
           case StatusWorkflowEnum.canceled:
           case StatusWorkflowEnum.timeOut:
           case StatusWorkflowEnum.default:
-            if (parameters && parameters.length > 0 && !inputsParamsState) {
+            if (parameters && parameters.length > 0 && Object.keys(inputsParamsState).length === 0) {
               return setShowModal(true);
             }
             return handleStartWorkflow();
