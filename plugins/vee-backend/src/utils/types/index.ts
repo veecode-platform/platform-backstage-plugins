@@ -1,5 +1,6 @@
-import type { AuthService, DatabaseService, DiscoveryService, HttpAuthService, HttpRouterService, LoggerService, PermissionsService } from "@backstage/backend-plugin-api";
+import type { AuthService, DiscoveryService, HttpAuthService, HttpRouterService, LoggerService, PermissionsService } from "@backstage/backend-plugin-api";
 import type { Config } from "@backstage/config";
+import { DatabaseVeeStore } from "../../database";
 
 export interface OpenAIProviderConfig {
     apiBaseUrl: string;
@@ -21,7 +22,7 @@ export interface IDataSetReference {
 
 export interface AssistantAIOptions {
     logger: LoggerService;
-    database: DatabaseService,
+    database: DatabaseVeeStore,
     auth: AuthService;
     httpAuth: HttpAuthService;
     httpRouter: HttpRouterService;
