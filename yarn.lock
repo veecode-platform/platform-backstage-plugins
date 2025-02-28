@@ -15240,6 +15240,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/knex@npm:^0.16.1":
+  version: 0.16.1
+  resolution: "@types/knex@npm:0.16.1"
+  dependencies:
+    knex: "npm:*"
+  checksum: 10/daf16bef279e68a11c74ad5d351237c6667ea9921ebe73e613d24b26acc25ba86b40fdc9d8adddfe1a0d234f20336adde6e4a2d062ae7ebe74a2c288ac6ccdc5
+  languageName: node
+  linkType: hard
+
 "@types/lodash@npm:^4.17.1":
   version: 4.17.14
   resolution: "@types/lodash@npm:4.17.14"
@@ -16621,6 +16630,7 @@ __metadata:
     "@types/compression": "npm:^1"
     "@types/express": "npm:^4.17.6"
     "@types/js-yaml": "npm:^4"
+    "@types/knex": "npm:^0.16.1"
     "@types/mime-types": "npm:^2"
     "@types/supertest": "npm:^2.0.8"
     "@veecode-platform/backstage-plugin-vee-common": "workspace:^"
@@ -16629,6 +16639,7 @@ __metadata:
     express-promise-router: "npm:^4.1.0"
     js-base64: "npm:^3.7.7"
     js-yaml: "npm:^4.1.0"
+    knex: "npm:^3.1.0"
     mime-types: "npm:^2.1.35"
     octokit: "npm:^4.0.2"
     openai: "npm:^4.84.0"
@@ -16641,7 +16652,17 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-vee-common@npm:^0.1.0, @veecode-platform/backstage-plugin-vee-common@workspace:^, @veecode-platform/backstage-plugin-vee-common@workspace:plugins/vee-common":
+"@veecode-platform/backstage-plugin-vee-common@npm:^0.1.0":
+  version: 0.1.0
+  resolution: "@veecode-platform/backstage-plugin-vee-common@npm:0.1.0"
+  dependencies:
+    "@backstage/plugin-permission-common": "npm:^0.8.1"
+    openai: "npm:^4.72.0"
+  checksum: 10/3a83b874950595aee7ff74a19153e5a8f32f913eb6e56adc323532488f1c3218ff80f2811436feb4ef2dcc12b597ebf81b71ffeb61fedef37fc4a30347bbe161
+  languageName: node
+  linkType: hard
+
+"@veecode-platform/backstage-plugin-vee-common@workspace:^, @veecode-platform/backstage-plugin-vee-common@workspace:plugins/vee-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-vee-common@workspace:plugins/vee-common"
   dependencies:
@@ -28266,7 +28287,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"knex@npm:3, knex@npm:^3.0.0, knex@npm:^3.1.0":
+"knex@npm:*, knex@npm:3, knex@npm:^3.0.0, knex@npm:^3.1.0":
   version: 3.1.0
   resolution: "knex@npm:3.1.0"
   dependencies:
