@@ -3,6 +3,7 @@ import {
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
 import { createRouter } from './services/router';
+import { DatabaseVeeStore } from './database';
 /**
  * vee backend plugin
  *
@@ -14,6 +15,7 @@ export const veePlugin = createBackendPlugin({
     env.registerInit({
       deps: {
         logger: coreServices.logger,
+        database: coreServices.database,
         auth: coreServices.auth,
         httpAuth: coreServices.httpAuth,
         httpRouter: coreServices.httpRouter,
@@ -23,6 +25,7 @@ export const veePlugin = createBackendPlugin({
       },
       async init({
         logger,
+        database,
         auth,
         httpAuth,
         httpRouter,
@@ -32,9 +35,14 @@ export const veePlugin = createBackendPlugin({
       }) {
         if(config.has('vee'))
           {
+            const db = await DatabaseVeeStore.create({
+              database: database,
+              logger
+            })
             httpRouter.use(
             await createRouter({
               logger,
+              database: db,
               auth,
               httpAuth,
               httpRouter,
