@@ -115,3 +115,56 @@ export interface ClearHistoryResponse{
 export interface GetFilesResponse  {
   [fileName: string]: string;
 }
+
+/**
+ * Response from DB
+ */
+
+export interface IFixedOption {
+    id?: string,
+    type: string,
+    options: IOption[],
+    created_at?: Date,
+    updated_at?: Date
+}
+
+export interface IOption {
+   id?:string,
+   fixed_option_id?: string,
+   label: string,
+   prompt: string,
+   created_at?: Date,
+   updated_at?: Date,
+}
+
+export interface IStack {
+  id?:string,
+  name: string,
+  source: string,
+  icon?: string,
+  plugins: IPlugin[],
+  created_at?: Date,
+  updated_at?: Date,
+}
+
+export interface IPlugin{
+  id?:string,
+  name: string,
+  annotations: IAnnotationPlugin[],
+  created_at?: Date,
+  updated_at?: Date,
+}
+
+export interface IStackPlugin {
+  stack_id: string;
+  plugin_id: string;
+  created_at?: Date;
+}
+
+export interface IAnnotationPlugin {
+ id?:string,
+ plugin_id?:string,
+ annotation: string,
+ created_at?: Date,
+ updated_at?: Date,
+}
