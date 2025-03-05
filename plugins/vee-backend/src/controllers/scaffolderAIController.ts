@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import { AssistantAIController } from './AssistantAIController';
-import { veeScaffolderReadPermission} from '@veecode-platform/backstage-plugin-vee-common';
+import { veeReadPermission} from '@veecode-platform/backstage-plugin-vee-common';
 import { InputError, NotAllowedError, stringifyError } from '@backstage/errors';
 import { IScaffolderAIControler } from './types';
 import { VeeClient } from '../api/client';
 import type { HttpAuthService, LoggerService, PermissionsService } from '@backstage/backend-plugin-api';
 import type { Config } from "@backstage/config";
+import { DatabaseVeeStore } from '../database';
 
 export class ScaffolderAIController extends AssistantAIController implements IScaffolderAIControler{
 
@@ -16,8 +17,9 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
     protected permissions: PermissionsService,
     protected config: Config,
     protected logger: LoggerService,
+    protected database: DatabaseVeeStore
   ){
-    super(httpAuth,permissions,config,logger);
+    super(httpAuth,permissions,config,logger,database);
     this.veeCodeAssistantAI = new VeeClient(this.config, this.logger)
   }
 
@@ -28,7 +30,7 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
     if (
       !(await this.isRequestAuthorized(
         req,
-        veeScaffolderReadPermission,
+        veeReadPermission,
       ))
     ) {
       throw new NotAllowedError('Unauthorized');
@@ -66,7 +68,7 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
     if (
       !(await this.isRequestAuthorized(
         req,
-        veeScaffolderReadPermission,
+        veeReadPermission,
       ))
     ) {
       throw new NotAllowedError('Unauthorized');
@@ -99,7 +101,7 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
     if (
       !(await this.isRequestAuthorized(
         req,
-        veeScaffolderReadPermission,
+        veeReadPermission,
       ))
     ) {
       throw new NotAllowedError('Unauthorized');
