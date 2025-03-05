@@ -23,26 +23,26 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
   }
 
   async submitDataToVectorStore(repoName:string, files:FileContent[]){
- try{
-  this.logger.info("Check VectorStore Available...")
-  const existingStores = await this.client.beta.vectorStores.list();
-  const existingStore = existingStores.data.find((store:VectorStore)=> store.name === repoName);
-  let vectorStoreId: string;
-  if(existingStore && existingStore.status !== 'expired'){
-    this.logger.info(`VectorStore found: ${existingStore.id}`);
-    vectorStoreId = existingStore.id
-  }else{
-    this.logger.info(`VectorStore not found. Creating a new one for repo: ${repoName}`);
-    vectorStoreId = await this.vectorStoreManager.createVector(repoName);
-  }
-  const response = await this.vectorStoreManager.uploadFiles(vectorStoreId, files);
-  return {
-    ...response,
-    vectorStoreId
-  }
-  } catch (error: any) {
-    throw new Error(`Erro to check vectorStore:  ${error}`);
-  }
+  try{
+    this.logger.info("Check VectorStore Available...")
+    const existingStores = await this.client.beta.vectorStores.list();
+    const existingStore = existingStores.data.find((store:VectorStore)=> store.name === repoName);
+    let vectorStoreId: string;
+    if(existingStore && existingStore.status !== 'expired'){
+      this.logger.info(`VectorStore found: ${existingStore.id}`);
+      vectorStoreId = existingStore.id
+    }else{
+      this.logger.info(`VectorStore not found. Creating a new one for repo: ${repoName}`);
+      vectorStoreId = await this.vectorStoreManager.createVector(repoName);
+    }
+    const response = await this.vectorStoreManager.uploadFiles(vectorStoreId, files);
+    return {
+      ...response,
+      vectorStoreId
+    }
+    } catch (error: any) {
+      throw new Error(`Erro to check vectorStore:  ${error}`);
+    }
   }
 
   async initializeAssistant(vectorStoreId: string, repoName:string, repoStructure:string, useDataset?:boolean) {
