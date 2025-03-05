@@ -5,6 +5,7 @@ import type { LoggerService } from "@backstage/backend-plugin-api";
 import type { Config } from "@backstage/config";
 import { extractToken } from "../utils/helpers/extractToken";
 import { GitManager } from "../api/git/gitManager";
+import { DatabaseVeeStore } from "../database";
 
 
 export abstract class AssistantAIController {
@@ -14,6 +15,7 @@ export abstract class AssistantAIController {
         protected permissions: PermissionsService,
         protected config: Config,
         protected logger: LoggerService,
+        protected database: DatabaseVeeStore
     ){ }
 
     protected getToken(req:Request){
