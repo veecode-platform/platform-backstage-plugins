@@ -61,7 +61,22 @@ export interface ReturnFromLocalPathParams {
   localPath: string
 }
 
+export interface CreateFixedOptionsParams {
+  type: string,
+  options: IOption[]
+}
 
+export interface CreateStackParams {
+  name: string,
+  source: string,
+  icon?: string,
+  plugins?: IPlugin[]
+}
+
+export interface CreatePluginParams {
+  name: string,
+  annotations?: IAnnotationPlugin[]
+}
 
 /**
  *  @public
@@ -120,7 +135,7 @@ export interface GetFilesResponse  {
  * Response from DB
  */
 
-export interface IFixedOption {
+export interface IFixedOptions {
     id?: string,
     type: string,
     options: IOption[],
@@ -142,7 +157,7 @@ export interface IStack {
   name: string,
   source: string,
   icon?: string,
-  plugins: IPlugin[],
+  plugins?: IPlugin[],
   created_at?: Date,
   updated_at?: Date,
 }
