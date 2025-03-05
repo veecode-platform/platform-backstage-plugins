@@ -6,6 +6,7 @@ import { IAnalyzerAIControler } from './types';
 import { VeeClient } from "../api/client";
 import type { Config } from "@backstage/config";
 import { HttpAuthService, LoggerService, PermissionsService } from '@backstage/backend-plugin-api';
+import { DatabaseVeeStore } from '../database';
 
 export class AnalyzerAIController extends AssistantAIController implements IAnalyzerAIControler{
 
@@ -16,8 +17,9 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
     protected permissions: PermissionsService,
     protected config: Config,
     protected logger: LoggerService,
+    protected database: DatabaseVeeStore
   ){
-    super(httpAuth,permissions,config,logger);
+    super(httpAuth,permissions,config,logger,database);
     this.veeCodeAssistantAI = new VeeClient(this.config, this.logger)
   }
  
