@@ -27,6 +27,7 @@ import {
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import LockIcon from '@material-ui/icons/Lock';
+import { AssistantAIMenu } from '@veecode-platform/backstage-plugin-vee';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -72,6 +73,7 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         <SidebarItem icon={LockIcon} to="vault-explorer" text="Vault"/>
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
+        <AssistantAIMenu/>
         {/* End global nav */}
         <SidebarDivider />
         <SidebarScrollWrapper>

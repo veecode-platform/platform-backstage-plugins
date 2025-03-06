@@ -128,6 +128,7 @@ const routes = (
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/kong-service-manager" element={<KongServiceManagerContent />} />
     <Route path="/kubernetes-gpt-analyzer" element={<KubernetesGptAnalyzerPage />} />
+    <Route path="/vee" element={<h1>Hello World</h1>}/>
   </FlatRoutes>
 );
 
