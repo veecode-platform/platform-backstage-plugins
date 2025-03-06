@@ -1,7 +1,7 @@
 import { CreatePluginParams, IPlugin, veeAddPluginPermission, veeEditPluginPermission, veeReadPluginsPermission, veeRemovePluginPermission } from "@veecode-platform/backstage-plugin-vee-common";
 import { AssistantAIController } from "./AssistantAIController";
 import type { Request, Response } from "express";
-import { InputError, NotAllowedError, stringifyError } from "@backstage/errors/index";
+import { InputError, NotAllowedError, stringifyError } from "@backstage/errors";
 import { IPluginsController } from "./types";
 
 export class PluginsController extends AssistantAIController  implements IPluginsController{
