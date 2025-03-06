@@ -3,9 +3,10 @@ import {
   configApiRef,
   fetchApiRef,
   createPlugin,
-  createRoutableExtension,
+ // createRoutableExtension,
   gitlabAuthApiRef,
-  githubAuthApiRef
+  githubAuthApiRef,
+  createComponentExtension
 } from '@backstage/core-plugin-api';
 
 import { rootRouteRef } from './routes';
@@ -34,10 +35,21 @@ export const veePlugin = createPlugin({
 });
 
 export const AssistantAIContent = veePlugin.provide(
-  createRoutableExtension({
-    name: 'AssistantAIContent',
-    component: () =>
-      import('./components/assistantAIContent').then(m => m.AssistantAIContent),
-    mountPoint: rootRouteRef,
-  }),
-);
+    createComponentExtension({
+      name: 'AssistantAIContent',
+      component: {
+        lazy: () =>
+          import('./components/assistantAIContent').then(m => m.AssistantAIContent),
+      },
+    })
+  )
+
+export const AssistantAIMenu = veePlugin.provide(
+  createComponentExtension({
+    name: 'AssistantAIMenu',
+    component: {
+      lazy: () => 
+        import('./components/assistantAIMenu').then(m => m.AssistantAIMenu),
+    }
+  })
+)
