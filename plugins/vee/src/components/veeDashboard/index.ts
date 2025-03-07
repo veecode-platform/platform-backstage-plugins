@@ -1,0 +1,1 @@
+export { VeeDashboard } from "./VeeDashboard";
