@@ -4,13 +4,13 @@ export const rootRouteRef = createRouteRef({
   id: 'vee'
 })
 
-export const settingsRouteRef = createSubRouteRef({
+export const veeSettingsRouteRef = createSubRouteRef({
   id: 'settings',
   path: '/settings',
   parent: rootRouteRef,
 });
 
-export const scaffolderAIRouteRef = createSubRouteRef({
+export const veeScaffolderAIRouteRef = createSubRouteRef({
   id: 'scaffolder-ai',
   path: '/scaffolder-ai',
   parent: rootRouteRef,
