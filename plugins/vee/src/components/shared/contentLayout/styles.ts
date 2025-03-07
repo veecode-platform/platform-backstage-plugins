@@ -13,7 +13,7 @@ export const useContentLayoutStyles = makeStyles({
       width: "100%",
       margin: "auto",
       display: "flex",
-      padding: "1rem 2rem",
+      padding: ".5rem 2rem",
       alignItems: "center",
       justifyContent: "space-between",
       borderBottom: `1px solid ${themeVariables.border.main}`,
@@ -28,7 +28,7 @@ export const useContentLayoutStyles = makeStyles({
       color: themeVariables.colors.white
     },
     titleBar: {
-      padding: "3.5rem 1rem",
+      padding: "3rem 1rem",
       color: themeVariables.colors.white,
       display: 'flex',
       flexDirection: 'column',
@@ -41,7 +41,8 @@ export const useContentLayoutStyles = makeStyles({
       color: themeVariables.colors.grey,
       borderRadius: '5px',
       width: 'auto',
-      padding: '.5rem'
+      padding: '.5rem',
+      marginTop: '.2rem'
     },
     body: {
       padding: "2.5rem 2rem",

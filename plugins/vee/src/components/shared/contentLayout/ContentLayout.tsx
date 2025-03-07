@@ -8,15 +8,15 @@ import { VeeLogo } from '../../../assets/VeeLogo';
 export const ContentLayout: React.FC<ContentLayoutProps> = props => {
 
   const { label, title, subtitle, styleCustom, children } = props;
-  const { root, header, headerWithTitle, labelContent, titleBar, subtitleBox, body } = useContentLayoutStyles();
+  const { root, header, headerWithTitle, labelContent, titleBar,subtitleBox, body } = useContentLayoutStyles();
 
   return (
     <Box className={root}>
-      <div className={`${header} ${title && headerWithTitle}`}>
+      <div className={`${header} ${(title || subtitle) && headerWithTitle}`}>
+        <div className={titleBar}>
         { label && (<div className={labelContent}>
            <Typography variant="h6"> {label}</Typography>
         </div>)}
-        <div className={titleBar}>
           {title && <Typography variant="h5"> {title}</Typography>}
           {subtitle && (
             <div className={subtitleBox}>
