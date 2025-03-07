@@ -43,7 +43,7 @@ export const AIContent : React.FC<AIContentProps> = (props) => {
 
     return ( 
           <ContentLayout
-            title="Analyzer Source"
+            label="Analyzer Source"
             >
              { showChat ? 
              <AIChat closeModal={toggleDialog} /> 
