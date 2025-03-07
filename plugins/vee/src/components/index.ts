@@ -1,2 +1,3 @@
 export * from "./assistantAIContent";
-export { AssistantAIMenu } from "./assistantAIMenu"
+export { AssistantAIMenu } from "./assistantAIMenu";
+export { VeeDashboard } from "./veeDashboard";
