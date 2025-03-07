@@ -9,7 +9,7 @@ export const useContentLayoutStyles = makeStyles({
       borderRadius: "8px",
       border: `1px solid ${themeVariables.border.main}`,
     },
-    titleBar: {
+    header: {
       width: "100%",
       margin: "auto",
       display: "flex",
@@ -19,9 +19,29 @@ export const useContentLayoutStyles = makeStyles({
       borderBottom: `1px solid ${themeVariables.border.main}`,
       position: "relative",
     },
-    titleContent: {
+    headerWithTitle: {
+      alignItems: "flex-start",
+    },
+    labelContent: {
       borderLeft: `3px solid ${themeVariables.colors.main}`,
-      padding: "0 1rem",
+      padding: "0 1.5rem",
+      color: themeVariables.colors.white
+    },
+    titleBar: {
+      padding: "3.5rem 1rem",
+      color: themeVariables.colors.white,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      justifyContent: 'center',
+      gap: '.5rem'
+    },
+    subtitleBox: {
+      backgroundColor: themeVariables.colors.darkGrey,
+      color: themeVariables.colors.grey,
+      borderRadius: '5px',
+      width: 'auto',
+      padding: '.5rem'
     },
     body: {
       padding: "2.5rem 2rem",
@@ -50,5 +70,5 @@ export const useContentLayoutStyles = makeStyles({
         backgroundColor: themeVariables.background.secondary,
         cursor: 'pointer'
       },
-    },
+    }
   });
