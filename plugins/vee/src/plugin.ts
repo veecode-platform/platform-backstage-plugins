@@ -3,13 +3,13 @@ import {
   configApiRef,
   fetchApiRef,
   createPlugin,
- // createRoutableExtension,
   gitlabAuthApiRef,
   githubAuthApiRef,
-  createComponentExtension
+  createComponentExtension,
+  createRoutableExtension
 } from '@backstage/core-plugin-api';
 
-import { rootRouteRef } from './routes';
+import { rootRouteRef, veeScaffolderAIRouteRef, veeSettingsRouteRef } from './routes';
 import { veeApiRef } from './api/veeApi';
 import { VeeClient } from './api';
 
@@ -17,6 +17,8 @@ export const veePlugin = createPlugin({
   id: 'vee',
   routes: {
     root: rootRouteRef,
+    settings: veeSettingsRouteRef,
+    scaffolderAI: veeScaffolderAIRouteRef
   },
   apis:[
     createApiFactory({
@@ -54,12 +56,11 @@ export const AssistantAIMenu = veePlugin.provide(
   })
 );
 
-export const VeeDashboard = veePlugin.provide(
-  createComponentExtension({
-    name: 'VeeDashboard',
-    component: {
-      lazy: () => 
-        import('./components/veeDashboard').then(m => m.VeeDashboard),
-    }
+export const VeeHomepage = veePlugin.provide(
+  createRoutableExtension({
+    name: 'VeeHomepage',
+    component: () =>
+      import('./components/veeHomepage').then(m => m.VeeHomepage as any),
+    mountPoint: rootRouteRef,
   })
 );
