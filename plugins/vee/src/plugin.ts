@@ -42,7 +42,7 @@ export const AssistantAIContent = veePlugin.provide(
           import('./components/assistantAIContent').then(m => m.AssistantAIContent),
       },
     })
-  )
+  );
 
 export const AssistantAIMenu = veePlugin.provide(
   createComponentExtension({
@@ -52,4 +52,14 @@ export const AssistantAIMenu = veePlugin.provide(
         import('./components/assistantAIMenu').then(m => m.AssistantAIMenu),
     }
   })
-)
+);
+
+export const VeeDashboard = veePlugin.provide(
+  createComponentExtension({
+    name: 'VeeDashboard',
+    component: {
+      lazy: () => 
+        import('./components/veeDashboard').then(m => m.VeeDashboard),
+    }
+  })
+);
