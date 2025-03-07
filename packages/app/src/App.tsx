@@ -44,7 +44,7 @@ import { RepoUrlSelectorExtension, ResourcePickerExtension, UploadFilePickerExte
 import { apiDocsPlugin } from '@backstage/plugin-api-docs';
 import { KubernetesGptAnalyzerPage } from '@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer';
 
-import { VeeDashboard } from "@veecode-platform/backstage-plugin-vee"
+import { VeeHomepage } from "@veecode-platform/backstage-plugin-vee"
 
 const app = createApp({
   apis,
@@ -130,7 +130,7 @@ const routes = (
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
     <Route path="/kong-service-manager" element={<KongServiceManagerContent />} />
     <Route path="/kubernetes-gpt-analyzer" element={<KubernetesGptAnalyzerPage />} />
-    <Route path="/vee" element={<VeeDashboard/>}/>
+    <Route path="/vee" element={<VeeHomepage/>}/>
   </FlatRoutes>
 );
 
