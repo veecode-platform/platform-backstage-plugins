@@ -5,7 +5,8 @@ export const themeVariables = {
         black: "#151515",
         dark: "#00000067",
         white: "#FAFAFA",
-        red: "red",
+        red: "#D50000",
+        darkGrey: "#202020"
     },
     blur:{
         dark: '#00000070'
