@@ -13,6 +13,7 @@ import TableFooter from "@mui/material/TableFooter";
 import  IconButton  from '@mui/material/IconButton';
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useTableComponentStyles } from './styles';
+import { EmptyStateComponent } from '../emptyStateComponent/EmptyStateComponent';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -49,7 +50,7 @@ export const TableComponent =
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const {title, data, noId, actions, onEdit, onDelete} = props;
-  const { tableWrapper, actionButton, editAction, deleteAction } = useTableComponentStyles();
+  const { tableWrapper,actionButton, editAction, deleteAction } = useTableComponentStyles();
 
   const rows = data.map((item) => {
     if (noId) {
@@ -78,6 +79,12 @@ export const TableComponent =
     setPage(0);
   };
 
+
+  if(!data || data.length === 0) return (
+    <EmptyStateComponent 
+      title="No data" 
+      message="No data to be rendered..."/>
+  )
 
   return (
     <TableContainer component={Paper} className={tableWrapper}>
