@@ -1,17 +1,13 @@
 import { makeStyles } from "@material-ui/core";
 
-export const usePageLayoutStyles = makeStyles( theme => ({
-    wrapper : {
-        backgroundColor: theme.palette.grey[900],
-        minHeight: '100vh'
-    },
+export const usePageLayoutStyles = makeStyles({
     content: {
         padding: '4rem 1.5rem',
-        height: '70vh',
+        height: '75vh',
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        gap: '1rem',
+        gap: '.5rem',
         flexWrap: 'wrap',
         position: 'relative',
     },
@@ -20,4 +16,4 @@ export const usePageLayoutStyles = makeStyles( theme => ({
         bottom: '5%',
         right: '2%'
     }
-}))
+})
