@@ -11,7 +11,8 @@ export const InfoBox  : React.FC<InfoBoxPropType> = (props) => {
   return (
     <Box className={content}>
       ⚠️ {message}
-      <Button
+      {url && (
+        <Button
         href={url}
         target="_blank"
         style={{ margin: '16px' }}
@@ -20,6 +21,7 @@ export const InfoBox  : React.FC<InfoBoxPropType> = (props) => {
       >
         Docs
       </Button>
+      )}
     </Box>
   );
 }

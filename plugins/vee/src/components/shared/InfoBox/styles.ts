@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core";
 export const useInfoBoxStyles = makeStyles({
     content: {
         width: '100%',
-        padding: '0 1rem',
+        padding: '1rem',
         fontSize: '1rem',
         borderRadius: '8px',
         background: '#60a5fa40',
