@@ -3,5 +3,5 @@ export interface ContentLayoutProps {
     title?: string,
     subtitle?: string,
     styleCustom?:string,
-    children: React.ReactNode
+    children: React.ReactNode,
 }

@@ -46,12 +46,11 @@ export const useContentLayoutStyles = makeStyles({
     },
     body: {
       padding: "2.5rem 2rem",
-      height: "79vh",
+      height: "75vh",
       display: "flex",
       alignItems: "flex-start",
       justifyContent: "flex-start",
       backgroundColor: themeVariables.background.dark,
-      overflowY: "auto",
       borderBottomLeftRadius: "10px",
       borderBottomRightRadius: "10px",
   

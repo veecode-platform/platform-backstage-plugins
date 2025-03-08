@@ -12,3 +12,5 @@ export { MarkdownRenderer } from './markdownRenderer/MarkdownRenderer';
 export { CodeBlockComponent } from './codeBlock/CodeBlock';
 export { FeedbackComponent } from './feedBackComponent/FeedBackComponent';
 export { MenuOptionCard } from './menuOptionCard/MenuOptionCard';
+export { TableComponent } from './tableComponent/TableComponent';
+export { Wrapper } from './wrapper/Wrapper';
