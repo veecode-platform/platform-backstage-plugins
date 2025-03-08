@@ -8,14 +8,14 @@ export const settingsOptions = [
         icon: StackIcon,
         title: 'Manage Stacks',
         tooltip: 'List, create, delete or edit a stack in this menu.',
-        path: 'scaffolder-ai'  
+        path: 'manage-stacks'  
     },
     {
         id: 1,
         icon: PluginsIcon,
         title: 'Manage Plugins',
         tooltip: 'List, add, edit or remove the plugins that will be available for your templates',
-        path: 'settings'  
+        path: 'manage-plugins'  
     },
     // {
     //     id: 3,
