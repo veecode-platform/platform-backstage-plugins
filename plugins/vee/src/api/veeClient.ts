@@ -1,7 +1,7 @@
 import { ConfigApi, FetchApi,OAuthApi } from "@backstage/core-plugin-api";
 import { VeeApi } from "./veeApi";
 import { ResponseError } from '@backstage/errors';
-import { ClearHistoryResponse, FileContent, InitializeAssistantAIResponse, IRepository, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-vee-common";
+import { ClearHistoryResponse, CreatePluginParams, CreateStackParams, DeleteServiceResponse, FileContent, InitializeAssistantAIResponse, IPlugin, IRepository, IStack, ParamsWithRequiredId, SubmitRepoResponse, VeeResponse } from "@veecode-platform/backstage-plugin-vee-common";
 import { GitManager } from "./git/gitManager";
 
 
@@ -119,7 +119,6 @@ export class VeeClient implements VeeApi {
   return response;  
  };
 
-
  async saveChangesInRepository(
   files: FileContent[],
   location: string,
@@ -134,6 +133,114 @@ export class VeeClient implements VeeApi {
     title,
     message
 )
- }
+ };
+
+ async listStacks(){
+    const response = await this.fetch<IStack[]>("/stacks")
+    return response
+ };
+
+ async getStackById(stackId:string){
+  const response = await this.fetch<IStack>(`/stacks/${stackId}`)
+  return response
+};
+
+ async createStack({name, source, icon, plugins}:CreateStackParams){
+  const body = {
+     name,
+     source,
+     icon,
+     plugins
+   };
+  const headers: RequestInit = {
+     method: "POST",
+     body: JSON.stringify(body),
+     headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  const response = await this.fetch<VeeResponse<IStack>>("/stacks", headers);
+  return response;
+ };
+
+ async editStack({id, ...data}:ParamsWithRequiredId<IStack>){
+  const body = {
+    ...data
+  };
+  const stackId = id;
+ const headers: RequestInit = {
+    method: "PATCH",
+    body: JSON.stringify(body),
+    headers: {
+       'Content-Type': 'application/json'
+     }
+   }
+ const response = await this.fetch<VeeResponse<IStack>>(`/stacks/${stackId}`, headers);
+ return response;
+ };
+
+ async removeStack(stackId:string){
+  const headers: RequestInit = {
+    method: "DELETE",
+    headers: {
+       'Content-Type': 'application/json'
+     }
+   }
+  const response = await this.fetch<DeleteServiceResponse>(`/stacks/${stackId}`, headers)
+  return response
+ };
+
+  async listPlugins(){
+    const response = await this.fetch<IPlugin[]>("/plugins")
+    return response
+ };
+
+ async getPluginById(pluginId:string){
+  const response = await this.fetch<IPlugin>(`/plugin/${pluginId}`)
+  return response
+};
+
+ async addPlugin({name, annotations}:CreatePluginParams){
+  const body = {
+     name,
+     annotations,
+   };
+  const headers: RequestInit = {
+     method: "POST",
+     body: JSON.stringify(body),
+     headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+  const response = await this.fetch<VeeResponse<IPlugin>>("/plugins", headers);
+  return response;
+ };
+
+ async editPlugin({id, ...data}:ParamsWithRequiredId<IPlugin>){
+  const body = {
+    ...data
+  };
+  const pluginId = id;
+ const headers: RequestInit = {
+    method: "PATCH",
+    body: JSON.stringify(body),
+    headers: {
+       'Content-Type': 'application/json'
+     }
+   }
+ const response = await this.fetch<VeeResponse<IStack>>(`/plugins/${pluginId}`, headers);
+ return response;
+ };
+
+ async removePlugin(pluginId:string){
+  const headers: RequestInit = {
+    method: "DELETE",
+    headers: {
+       'Content-Type': 'application/json'
+     }
+   }
+  const response = await this.fetch<DeleteServiceResponse>(`/plugins/${pluginId}`, headers)
+  return response
+ };
 
 }
