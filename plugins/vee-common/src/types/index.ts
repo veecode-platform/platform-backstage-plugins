@@ -78,6 +78,8 @@ export interface CreatePluginParams {
   annotations?: IAnnotationPlugin[]
 }
 
+export type ParamsWithRequiredId<T extends {id?: string | undefined}> = Partial<T> & Required<Pick<T, "id">>
+
 /**
  *  @public
  *  Response types
@@ -98,6 +100,11 @@ message: string
 export interface DefaultResponse {
   status: string,
   message: string
+}
+
+export interface VeeResponse<T>{
+  message: string,
+  data: T
 }
 
 export interface SubmitRepoResponse {
@@ -124,6 +131,10 @@ export interface ChatProps {
 }
 
 export interface ClearHistoryResponse{
+  message: string
+}
+
+export interface DeleteServiceResponse {
   message: string
 }
 
