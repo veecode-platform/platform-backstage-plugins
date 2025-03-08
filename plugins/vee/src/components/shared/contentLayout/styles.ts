@@ -25,7 +25,7 @@ export const useContentLayoutStyles = makeStyles({
     labelContent: {
       borderLeft: `3px solid ${themeVariables.colors.main}`,
       padding: "0 1.5rem",
-      color: themeVariables.colors.white
+      color: themeVariables.colors.grey
     },
     titleBar: {
       padding: "3rem 1rem",
@@ -38,7 +38,7 @@ export const useContentLayoutStyles = makeStyles({
     },
     subtitleBox: {
       backgroundColor: themeVariables.colors.darkGrey,
-      color: themeVariables.colors.grey,
+      color: themeVariables.colors.white,
       borderRadius: '5px',
       width: 'auto',
       padding: '.5rem',
