@@ -9,7 +9,7 @@ import {
   createRoutableExtension
 } from '@backstage/core-plugin-api';
 
-import { rootRouteRef, veeScaffolderAIRouteRef, veeSettingsRouteRef } from './routes';
+import {rootRouteRef, veeScaffolderAIRouteRef, veeSettingsRouteRef } from './routes';
 import { veeApiRef } from './api/veeApi';
 import { VeeClient } from './api';
 
