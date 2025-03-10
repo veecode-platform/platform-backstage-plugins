@@ -7,7 +7,7 @@ exports.up = async function up(knex) {
         .createTable('fixed_options', table => {
             table.comment('Register the fixed options of the code analyzer');
             table.uuid('id').defaultTo(knex.fn.uuid()).primary().notNullable().comment('Auto-generated Id of the fixed_options item');
-            table.string('type', 255).notNullable().comment('Type of the entity that the fixed option will be part of');
+            table.string('type', 255).notNullable().unique().comment('Type of the entity that the fixed option will be part of');
             table.timestamps(true, true);
         })
         /**
@@ -18,7 +18,7 @@ exports.up = async function up(knex) {
             table.uuid('id').defaultTo(knex.fn.uuid()).primary().notNullable().comment('Auto-generated Id of the option item');
             table.uuid('fixed_option_id').notNullable();
             table.foreign('fixed_option_id').references('id').inTable('fixed_options').onDelete('CASCADE');
-            table.string('label',255).notNullable().comment('Label of each option');
+            table.string('label',255).notNullable().unique().comment('Label of each option');
             table.string('prompt',255).notNullable().comment('Prompt for each option');
             table.timestamps(true, true);
         })
@@ -28,7 +28,7 @@ exports.up = async function up(knex) {
         .createTable('stacks', table => {
             table.comment('Register stacks for use in template generation');
             table.uuid('id').defaultTo(knex.fn.uuid()).primary().notNullable().comment('Auto-generated Id of the stack item');
-            table.string('name',255).notNullable().comment('Name of the stack');
+            table.string('name',255).notNullable().unique().comment('Name of the stack');
             table.string('source',255).notNullable().comment('Support source for template generation');
             table.string('icon',255).comment('Icon for the stack');
             table.timestamps(true, true);
@@ -39,7 +39,7 @@ exports.up = async function up(knex) {
         .createTable('plugins', table => {
             table.comment('Table of plugins that will serve the stacks');
             table.uuid('id').defaultTo(knex.fn.uuid()).primary().notNullable().comment('Auto-generated Id of plugin');
-            table.string('name',255).notNullable().comment('Plugin name');
+            table.string('name',255).notNullable().unique().comment('Plugin name');
             table.timestamps(true, true);
         })
         /**
@@ -70,9 +70,9 @@ exports.up = async function up(knex) {
         console.log(`ERROR MIGRATE:UP ${err}`);
         return false;
     } 
-    // finally {
-    //     knex.destroy()
-    // }
+    finally {
+        knex.destroy()
+    }
     return true
 }
 
@@ -90,8 +90,8 @@ exports.down = async function down(knex){
     }catch(err){
         console.error(`ERROR MIGRATE:DOWN ${err}`)
     }
-    // finally{
-    //     knex.destroy();
-    // }
+    finally{
+        knex.destroy();
+    }
     return true
 }
