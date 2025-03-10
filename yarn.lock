@@ -16766,6 +16766,7 @@ __metadata:
     "@types/supertest": "npm:^2.0.8"
     "@veecode-platform/backstage-plugin-vee-common": "workspace:^"
     compression: "npm:^1.8.0"
+    crypto: "npm:^1.0.1"
     express: "npm:^4.17.6"
     express-promise-router: "npm:^4.1.0"
     js-base64: "npm:^3.7.7"
@@ -20861,6 +20862,13 @@ __metadata:
     randombytes: "npm:^2.1.0"
     randomfill: "npm:^1.0.4"
   checksum: 10/13da0b5f61b3e8e68fcbebf0394f2b2b4d35a0d0ba6ab762720c13391d3697ea42735260a26328a6a3d872be7d4cb5abe98a7a8f88bc93da7ba59b993331b409
+  languageName: node
+  linkType: hard
+
+"crypto@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "crypto@npm:1.0.1"
+  checksum: 10/087fe3165bd94c333a49e6ed66a0193911f63eac38a24f379b3001a5fe260a59c413646e53a0f67875ba13902b2686d81dc703cb2c147a4ec727dcdc04e5645e
   languageName: node
   linkType: hard
 
