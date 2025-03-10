@@ -14,6 +14,7 @@ import  IconButton  from '@mui/material/IconButton';
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useTableComponentStyles } from './styles';
 import { EmptyStateComponent } from '../emptyStateComponent/EmptyStateComponent';
+import { LoadingProgress } from '../LoadingProgress/LoadingProgress';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -49,24 +50,19 @@ export const TableComponent =
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const {title, data, noId, actions, onEdit, onDelete} = props;
+  const {title, loading, error,data, actions, onEdit, onDelete} = props;
   const { tableWrapper,actionButton, editAction, deleteAction } = useTableComponentStyles();
 
   const rows = data.map((item) => {
-    if (noId) {
-      const { id, ...rest } = item;
-      return createData(rest);
-    }
     return createData(item);
   });
   const columns = rows.length > 0 ? Object.keys(rows[0]) : [];
   columns.push(actions ? "actions" : "");
 
   const alignCell = (cols: string[],index: number) => {
-   // const firstColumnIndex = noId ? 1 : 0; 
     if (index === 0) return "left";
     if (index === cols.length - 1) return "right";
-    return "center";
+    return "left";
   
   }
 
@@ -79,16 +75,21 @@ export const TableComponent =
     setPage(0);
   };
 
-
-  if(!data || data.length === 0) return (
+  if(!data || data.length === 0 || error ) return (
     <EmptyStateComponent 
       title="No data" 
       message="No data to be rendered..."/>
   )
 
+  if(loading) <LoadingProgress/>
+
   return (
     <TableContainer component={Paper} className={tableWrapper}>
-      <Table stickyHeader sx={{ minWidth: 700 }} aria-label={title}>
+      <Table 
+        stickyHeader 
+        sx={{ minWidth: 700 }} 
+        aria-label={title} 
+        >
         <TableHead>
           <TableRow>
             {columns.map((column,index) => (
@@ -108,12 +109,14 @@ export const TableComponent =
                   {
                     actions && (
                       <StyledTableCell key="actions" align="right">
-                        <IconButton onClick={onEdit} color="primary" className={`${actionButton} ${editAction}`} title="Edit item">
-                          <MdEdit />
-                        </IconButton>
-                        <IconButton onClick={onDelete} color="error" className={`${actionButton} ${deleteAction}`} title="Delete item">
-                          <MdDelete />
-                        </IconButton>
+                        {}
+                        { onEdit && ( <IconButton onClick={()=> onEdit(row.id)} color="primary" className={`${actionButton} ${editAction}`} title="Edit item">
+                             <MdEdit/>
+                            </IconButton>)}
+                        { onDelete && (
+                            <IconButton onClick={onDelete} color="error" className={`${actionButton} ${deleteAction}`} title="Delete item">
+                              <MdDelete />
+                            </IconButton>)}
                     </StyledTableCell>
                     )
                   }

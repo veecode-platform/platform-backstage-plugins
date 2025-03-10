@@ -1,8 +1,9 @@
 export interface TableComponentProps<T> {
-    title: string
+    title: string,
+    loading?:boolean,
+    error?:Error | string | undefined | null,
     data: T,
-    noId?: boolean,
     actions?: boolean,
-    onEdit?: () => void,
+    onEdit?: (id:string) => void,
     onDelete?: () => void
 }
