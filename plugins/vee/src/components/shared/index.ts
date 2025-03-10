@@ -15,3 +15,4 @@ export { MenuOptionCard } from './menuOptionCard/MenuOptionCard';
 export { TableComponent } from './tableComponent/TableComponent';
 export { Wrapper } from './wrapper/Wrapper';
 export { EmptyStateComponent } from './emptyStateComponent/EmptyStateComponent';
+export { ModalComponent } from './modalComponent/ModalComponent';
