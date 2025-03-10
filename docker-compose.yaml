@@ -1,0 +1,127 @@
+version: '3.5'
+
+services:
+### POSTGRES ###
+  postgres:
+    profiles:
+      - postgres
+      - complete
+      - basic
+      - postgresadmin
+    container_name: postgres_devportal
+    image: pgvector/pgvector:pg15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      IDLE_SESSION_TIMEOUT: 2147483647
+    volumes:
+       - ./.docker-data/postgres:/var/lib/postgresql/data
+       - ./docker-compose-init/sql:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - devportal-compose-network
+    restart: unless-stopped
+
+### PGADMIN ###  
+  pgadmin:
+    profiles:
+      - complete
+      - postgresadmin
+    container_name: pgadmin_devportal
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: youremail@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+       - pgadmin:/var/lib/pgadmin
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres
+    networks:
+      - devportal-compose-network
+    restart: unless-stopped
+
+### KEYCLOAK ###
+  keycloak:
+    profiles:
+      - complete
+      - basic
+      - demo
+      - keycloak
+    container_name: keycloak_devportal
+    image: quay.io/keycloak/keycloak:24.0.1
+    # restart: unless-stopped
+    environment:
+      KC_METRICS_ENABLED: "true"
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak_adm
+      KC_DB_PASSWORD: keycloak_adm
+      # KC_FEATURES: authorization,token-exchange,docker,impersonation,scripts,upload-scripts,web-authn,client-policies,dynamic-scopes
+      #KC_DB_URL_PROPERTIES: "verifyServerCertificate=false&ssl=allow"
+      # KC_HOSTNAME: keycloak.local:8443
+      # KC_HOSTNAME_STRICT: "false"
+      # KC_HTTPS_CLIENT_AUTH: request
+      # KC_HTTPS_CERTIFICATE_FILE: /opt/keycloak/conf/server.crt.pem
+      # KC_HTTPS_CERTIFICATE_KEY_FILE: /opt/keycloak/conf/server.key.pem
+      # KC_HTTPS_PORT: 8443
+      # KC_HTTPS_PROTOCOLS: TLSv1.3,TLSv1.2
+      # KC_HTTP_ENABLED: "true"
+      # KC_HTTP_PORT: 8080
+      # KC_HTTPS_PROTOCOLS: TLSv1.3docker compose --profile=basic up -d
+    entrypoint: /opt/keycloak/bin/kc.sh start-dev --import-realm
+    volumes:
+      - ./.docker-data/keycloak/keycloak.local+1.pem:/opt/keycloak/conf/server.crt.pem
+      - ./.docker-data/keycloak/keycloak.local+1-key.pem:/opt/keycloak/conf/server.key.pem
+      - ./keycloak/realm-platform-devportal.json:/opt/keycloak/data/import/realm-platform-devportal.json
+      - ./keycloak/themes/:/opt/keycloak/themes/platform-theme/
+    ports:
+      - 8080:8080
+      - 8443:8443
+    depends_on:
+      - postgres
+    networks:
+      - devportal-compose-network
+    restart: unless-stopped
+  
+  ##VAULT##
+  vault-server:
+    profiles:
+    - complete
+    - demo
+    - vault
+    - basic
+    container_name: vault_devportal
+    image: hashicorp/vault:1.16
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_ADDR: "http://0.0.0.0:8200"
+      VAULT_DEV_ROOT_TOKEN_ID: "vault-plaintext-root-token"
+    cap_add:
+      - IPC_LOCK
+    networks:
+      - devportal-compose-network
+    restart: unless-stopped
+    #networks:
+    #  vault-network:
+    #    ipv4_address: 172.21.0.10
+    #    aliases:
+    #      - vault-server
+networks:
+  devportal-compose-network:
+    driver: bridge
+  #vault-network:
+  #  ipam:
+  #    config:
+  #      - subnet: 172.21.0.0/24
+
+volumes:
+    postgres:
+    pgadmin:
+    

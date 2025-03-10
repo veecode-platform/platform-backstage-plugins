@@ -24,6 +24,8 @@
     "new": "backstage-cli new --scope internal",
     "clear-deps": "find .  -path ./.docker-data -prune -o -name node_modules -type d -exec rm -rf '{}' +",
     "dnpm": "dnpm",
+    "docker-up": "docker compose --profile=complete up -d",
+    "docker-down": "docker compose --profile=complete down",
     "verify-deps": "node scripts/verify-local-dependencies.js",
     "verify-deps:fix": "node scripts/verify-local-dependencies.js --fix"
   },
