@@ -1,7 +1,7 @@
 import React from "react";
 import { EntityAnnotationType } from "../utils/types";
 import { EntityInfoActionType } from "./state";
-import { FileContent, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-vee-common";
+import { CreatePluginParams, FileContent, IPlugin, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-vee-common";
 
 export type VeeContextType = {
     vectorStoreId: string | null;
@@ -21,9 +21,15 @@ export type VeeContextType = {
     } | null>
     setPromptValue: React.Dispatch<React.SetStateAction<string | null>>;
     promptValue: string | null;
-    analyzeChangesAndSubmitToRepository: (files: FileContent[]) => Promise<PullRequestResponse | null>,
-    clearHistory: () => Promise<void>
-    
+    analyzeChangesAndSubmitToRepository: (files: FileContent[]) => Promise<PullRequestResponse | null>;
+    clearHistory: () => Promise<void>;
+    listAllPlugins: () => Promise<IPlugin[]>;
+    getPluginById: (id: string) => Promise<IPlugin | null>;
+    addPlugin: (pluginData: CreatePluginParams) => Promise<void>;
+    updatePlugin: (id: string, updateData: IPlugin) => Promise<void>;
+    removePlugin: (pluginId: string) => Promise<void>;
+    pluginSelectedState: IPlugin | null;
+    addPluginSelected: (plugin: IPlugin) => void
 }
 
 export const VeeContext = React.createContext<VeeContextType>(null!)

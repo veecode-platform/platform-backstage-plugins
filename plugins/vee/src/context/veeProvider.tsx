@@ -1,9 +1,9 @@
 import React from "react";
 import { VeeContext } from "./veeContext";
-import { EntityInfoReducer, initialEntityInfoState, initialPullRequestState, PullRequestInfoReducer, savePullRequestInfo } from "./state";
-import { errorApiRef, useApi } from '@backstage/core-plugin-api';
+import { EntityInfoReducer, initialEntityInfoState, initialPluginSelectedState, initialPullRequestState, PluginSelectedReducer, PullRequestInfoReducer, savePluginSelected, savePullRequestInfo } from "./state";
+import { alertApiRef, errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { veeApiRef } from "../api/veeApi";
-import { FileContent } from "@veecode-platform/backstage-plugin-vee-common";
+import { CreatePluginParams, FileContent, IPlugin } from "@veecode-platform/backstage-plugin-vee-common";
 
 interface VeeProviderProps {
     children: React.ReactNode
@@ -19,8 +19,10 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const [ promptValue, setPromptValue ] = React.useState<string|null>(null);
     const [ pullRequestInfoState, dispatchPullRequestInfo ] = React.useReducer(PullRequestInfoReducer, initialPullRequestState);
     const [ entityInfoState, entityInfoDispatch ] = React.useReducer(EntityInfoReducer, initialEntityInfoState);
+    const [ pluginSelectedState, pluginSelectedDispatch ] = React.useReducer(PluginSelectedReducer, initialPluginSelectedState);
     const api = useApi(veeApiRef);
     const errorApi = useApi(errorApiRef);
+    const alertApi = useApi(alertApiRef)
 
 
     const handleChat = () => {
@@ -97,7 +99,69 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
         catch(error:any){
             errorApi.post(error);
         }
-    }
+    };
+
+    const listAllPlugins = React.useCallback( async ()=>{
+        try{
+               return await api.listPlugins();
+            }
+            catch(err:any){
+              errorApi.post(err.message)
+              return []
+            }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        },[api]);
+    
+    const getPluginById = React.useCallback(async (id:string) => {
+        try{
+            return await api.getPluginById(id)
+        }
+        catch(err:any){
+            errorApi.post(err.message);
+            return null;
+        }    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[api]);
+
+    const addPlugin = React.useCallback(async(pluginData : CreatePluginParams)=>{
+        try{
+            const newPlugin = await api.addPlugin(pluginData);
+            alertApi.post({severity: 'success', message: newPlugin.message, display:'transient'})
+        }
+        catch(err:any){
+            errorApi.post(err)
+            errorApi.post(err.message)
+        }
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[api]);
+    
+    const updatePlugin = React.useCallback( async(id:string, updateData: IPlugin)=>{
+       try{
+        const response = await api.editPlugin({id, ...updateData});
+        alertApi.post({severity: "success", message: response.message, display:'transient'})     
+       }
+       catch(err:any){
+          errorApi.post(err.message);
+       }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[api]);
+
+    const removePlugin = React.useCallback(async (pluginId: string) => {
+        try{
+           const response = await api.removePlugin(pluginId);
+           alertApi.post({severity: "success", message: response.message, display: "transient" })
+        }
+        catch(err:any){
+            errorApi.post(err.message);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [api]);
+
+    const addPluginSelected = React.useCallback((plugin:IPlugin)=>{
+      pluginSelectedDispatch(savePluginSelected(plugin))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[pluginSelectedState])
 
     return (
         <VeeContext.Provider 
@@ -117,7 +181,14 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             setPromptValue,
             promptValue,
             analyzeChangesAndSubmitToRepository,
-            clearHistory    
+            clearHistory,
+            listAllPlugins,
+            getPluginById,
+            addPlugin,
+            updatePlugin,
+            removePlugin,
+            addPluginSelected,
+            pluginSelectedState
          }}
         >
             {children}
