@@ -4,5 +4,6 @@ export interface PageLayoutProps {
     label?:string,
     goBack?:boolean,
     handleBack?: () => void,
+    createAction?: () => void,
     children: React.ReactNode
 }
