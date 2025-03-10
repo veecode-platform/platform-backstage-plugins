@@ -20,7 +20,6 @@ export const ManageStacks = () => {
           <TableComponent 
              title="Stacks" 
              data={rows as IStack[]}
-             noId
              actions
              onEdit={()=>{}}
              onDelete={()=>{}}
