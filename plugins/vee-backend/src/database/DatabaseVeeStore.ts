@@ -1,6 +1,6 @@
 import { DatabaseService, LoggerService, resolvePackagePath } from "@backstage/backend-plugin-api";
 import { Knex } from "knex";
-import { FIXED_OPTIONS_TABLE, PLUGINS_TABLE, STACKS_TABLE } from "../utils/constants/tables";
+import { ANNOTATIONS_TABLE, FIXED_OPTIONS_TABLE, PLUGINS_TABLE, STACK_PLUGINS_TABLE, STACKS_TABLE } from "../utils/constants/tables";
 import { IFixedOptions, IPlugin, IStack } from "@veecode-platform/backstage-plugin-vee-common";
 import { UpdateFixedOptionsParams, UpdatePluginParams, UpdateStackParams, VeeStore } from "./types";
 
@@ -8,7 +8,6 @@ const migrationsDir = resolvePackagePath(
     '@veecode-platform/backstage-plugin-vee-backend',
     'migrations'
 );
-
 export class DatabaseVeeStore implements VeeStore {
 
   private constructor(
@@ -29,6 +28,7 @@ export class DatabaseVeeStore implements VeeStore {
         directory: migrationsDir,
       });
     }
+
     return new DatabaseVeeStore(client, logger);
   }
 
@@ -176,7 +176,6 @@ export class DatabaseVeeStore implements VeeStore {
             name: stack.name,
             source: stack.source,
             icon: stack.icon ?? null,
-            plugins: JSON.stringify(stack.plugins),
           })
           .onConflict(['name'])
           .ignore();
@@ -184,6 +183,14 @@ export class DatabaseVeeStore implements VeeStore {
         const [stackCreated] = await trx(STACKS_TABLE).where({
           name: stack.name,
         });
+
+        if (stack.plugins?.length) {
+          const stackPluginsData = stack.plugins.map(pluginId => ({
+            stack_id: stackCreated.id,
+            plugin_id: pluginId,
+          }));
+          await trx(STACK_PLUGINS_TABLE).insert(stackPluginsData);
+        }
 
         return (stackCreated as IStack) ?? null;
       });
@@ -200,7 +207,6 @@ export class DatabaseVeeStore implements VeeStore {
       if (stack.icon) updateData.icon = stack.icon;
       if (stack.name) updateData.name = stack.name;
       if (stack.source) updateData.source = stack.source;
-      if (stack.plugins) updateData.plugins = JSON.stringify(stack.plugins);
       if (Object.keys(updateData).length === 0) return null;
     
       return await this.db.transaction(async trx => {
@@ -208,11 +214,24 @@ export class DatabaseVeeStore implements VeeStore {
           .where('id', stackId)
           .update(updateData);
 
-          if (updateStackRowCount === 1) {
-            const [updatedStack] = await trx(STACKS_TABLE).where("id", stackId);
-            return updatedStack as IStack;
+        if (updateStackRowCount === 1) {
+          const [updatedStack] = await trx(STACKS_TABLE).where("id", stackId);
+
+          if (stack.plugins?.length) {
+            await trx(STACK_PLUGINS_TABLE)
+              .where('stack_id', stackId)
+              .delete();
+
+            const stackPluginsData = stack.plugins.map(pluginId => ({
+              stack_id: stackId,
+              plugin_id: pluginId,
+            }));
+            await trx(STACK_PLUGINS_TABLE).insert(stackPluginsData);
           }
-          return null;
+
+          return updatedStack as IStack;
+        }
+        return null;
       });
     } catch (error: any) {
       this.logger.error(error.message);
@@ -222,10 +241,17 @@ export class DatabaseVeeStore implements VeeStore {
 
   async deleteStack(stackId: string): Promise<boolean> {
     try {
-      const operation = await this.db(STACKS_TABLE)
-        .where('id', stackId)
-        .delete();
-      return !!operation;
+      return await this.db.transaction(async trx => {
+        await trx(STACK_PLUGINS_TABLE)
+          .where('stack_id', stackId)
+          .delete();
+
+        const operation = await trx(STACKS_TABLE)
+          .where('id', stackId)
+          .delete();
+
+        return !!operation;
+      });
     } catch (error: any) {
       this.logger.error(error.message);
       return false;
@@ -247,18 +273,56 @@ export class DatabaseVeeStore implements VeeStore {
 
   async listPlugins(): Promise<IPlugin[]> {
     try {
-      const plugins = await this.db.select('*').from(PLUGINS_TABLE);
+      const rows = await this.db(PLUGINS_TABLE)
+      .select('*')
+      .leftJoin(ANNOTATIONS_TABLE, `${PLUGINS_TABLE}.id`, '=', `${ANNOTATIONS_TABLE}.plugin_id`);
+
+      const plugins = rows.reduce((acc, row) => {
+        let plugin = acc.find((p : IPlugin) => p.id === row.id);
+  
+        if (!plugin) {
+          plugin = {
+            id: row.id,
+            name: row.name,
+            annotations: [],
+            created_at: row.created_at,
+            updated_at: row.updated_at,
+          };
+          acc.push(plugin);
+        }
+        if (row.annotation) {
+          plugin.annotations.push(JSON.parse(row.annotation));
+        }
+        return acc;
+      }, [] as IPlugin[]);
       return plugins;
     } catch (error: any) {
       this.logger.error(error.message);
+      this.logger.error('Plugins nao forram carregados');
       return [];
     }
   }
 
-  async getPluginById(pluginId: string): Promise<IPlugin[] | null> {
-    try {
-      const plugin = await this.db(PLUGINS_TABLE).where('id', pluginId);
-      return plugin && plugin.length > 0 ? plugin[0] : null;
+  async getPluginById(pluginId: string): Promise<IPlugin | null> {
+      try {
+        const rows = await this.db(PLUGINS_TABLE)
+          .select('*')
+          .leftJoin(ANNOTATIONS_TABLE, `${PLUGINS_TABLE}.id`, '=', `${ANNOTATIONS_TABLE}.plugin_id`)
+          .where(`${PLUGINS_TABLE}.id`, pluginId);
+
+        if (rows.length === 0) {
+          return null;
+        }
+  
+        const plugin: IPlugin = {
+          id: rows[0].id,
+          name: rows[0].name,
+          annotations: rows.map(row => row.annotation ? JSON.parse(row.annotation) : null),
+          created_at: rows[0].created_at,
+          updated_at: rows[0].updated_at,
+        };
+  
+        return plugin;
     } catch (error: any) {
       this.logger.error(error.message);
       return null;
@@ -273,8 +337,7 @@ export class DatabaseVeeStore implements VeeStore {
       return await this.db.transaction(async trx => {
         await trx(PLUGINS_TABLE)
           .insert({
-            name: plugin.name,
-            annotations: JSON.stringify(plugin.annotations),
+            name: plugin.name
           })
           .onConflict(['name'])
           .ignore();
@@ -283,7 +346,15 @@ export class DatabaseVeeStore implements VeeStore {
           name: plugin.name,
         });
 
-        return (pluginCreated as IPlugin) ?? null;
+        if(plugin.annotations?.length){
+          const annotationsData = plugin.annotations.map(annotation => ({
+            plugin_id: pluginCreated.id,
+            annotation: JSON.stringify(annotation)
+          }));
+          await trx(ANNOTATIONS_TABLE).insert(annotationsData)
+        }
+
+        return pluginCreated as IPlugin ?? null;
       });
     } catch (error: any) {
       this.logger.error(error.message);
@@ -296,7 +367,7 @@ export class DatabaseVeeStore implements VeeStore {
       const updateData: Partial<Record<keyof IPlugin, string>> = {};
   
       if (plugin.name) updateData.name = plugin.name;
-      if (plugin.annotations) updateData.annotations = JSON.stringify(plugin.annotations)
+      if (plugin.annotations) updateData.annotations = JSON.stringify(plugin.annotations);
       if (Object.keys(updateData).length === 0) return null;
 
       return await this.db.transaction(async trx => {
@@ -304,11 +375,24 @@ export class DatabaseVeeStore implements VeeStore {
           .where('id', pluginId)
           .update(updateData);
 
-          if (updatePluginRowsCount === 1) {
-            const [updatedPlugin] = await trx(PLUGINS_TABLE).where("id", pluginId);
-            return updatedPlugin as IPlugin;
+        if (updatePluginRowsCount === 1) {
+          const [updatedPlugin] = await trx(PLUGINS_TABLE).where("id", pluginId);
+
+          if (plugin.annotations?.length) {
+            await trx(ANNOTATIONS_TABLE)
+              .where('plugin_id', pluginId)
+              .delete();
+
+            const annotationsData = plugin.annotations.map(annotation => ({
+              plugin_id: pluginId,
+              annotation: JSON.stringify(annotation)
+            }));
+            await trx(ANNOTATIONS_TABLE).insert(annotationsData);
           }
-          return null;
+
+          return updatedPlugin as IPlugin;
+        }
+        return null;
       });
     } catch (error: any) {
       this.logger.error(error.message);
@@ -318,11 +402,17 @@ export class DatabaseVeeStore implements VeeStore {
 
   async deletePlugin(pluginId: string): Promise<boolean> {
     try {
-      const operation = await this.db(PLUGINS_TABLE)
-        .where('id', pluginId)
-        .delete();
-
-      return !!operation;
+      return await this.db.transaction(async trx => {
+        await trx(ANNOTATIONS_TABLE)
+          .where('plugin_id', pluginId)
+          .delete();
+  
+        const operation = await trx(PLUGINS_TABLE)
+          .where('id', pluginId)
+          .delete();
+  
+        return !!operation;
+      });  
     } catch (error: any) {
       this.logger.error(error.message);
       return false;
