@@ -19,6 +19,6 @@ export interface VeeApi {
     listPlugins(): Promise<IPlugin[]>;
     getPluginById(pluginId: string): Promise<IPlugin>;
     addPlugin({ name, annotations }: CreatePluginParams): Promise<VeeResponse<IPlugin>>;
-    editPlugin({ id, ...data }: ParamsWithRequiredId<IPlugin>): Promise<VeeResponse<IStack>>;
+    editPlugin({ id, ...data }: ParamsWithRequiredId<IPlugin>): Promise<VeeResponse<IPlugin>>;
     removePlugin(pluginId: string): Promise<DeleteServiceResponse>
 }
