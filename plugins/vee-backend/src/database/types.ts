@@ -12,7 +12,7 @@ export interface VeeStore {
     updateStack({stackId, stack}: UpdateStackParams): Promise<IStack | null>;
     deleteStack(stackId: string): Promise<boolean>
     listPlugins():Promise<IPlugin[]>,
-    getPluginById(pluginId:string):Promise<IPlugin[]|null>,
+    getPluginById(pluginId:string):Promise<IPlugin|null>,
     createPlugin(plugin:IPlugin):Promise<IPlugin|null>,
     updatePlugin({ pluginId, plugin}: UpdatePluginParams):Promise<IPlugin|null>,
     deletePlugin(pluginId: string):Promise<boolean>
