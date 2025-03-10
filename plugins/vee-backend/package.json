@@ -42,6 +42,7 @@
     "@gitbeaker/rest": "^41.2.0",
     "@veecode-platform/backstage-plugin-vee-common": "workspace:^",
     "compression": "^1.8.0",
+    "crypto": "^1.0.1",
     "express": "^4.17.6",
     "express-promise-router": "^4.1.0",
     "js-base64": "^3.7.7",
