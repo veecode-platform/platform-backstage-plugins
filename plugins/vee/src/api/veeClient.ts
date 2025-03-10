@@ -196,7 +196,7 @@ export class VeeClient implements VeeApi {
  };
 
  async getPluginById(pluginId:string){
-  const response = await this.fetch<IPlugin>(`/plugin/${pluginId}`)
+  const response = await this.fetch<IPlugin>(`/plugins/${pluginId}`)
   return response
 };
 
@@ -228,7 +228,7 @@ export class VeeClient implements VeeApi {
        'Content-Type': 'application/json'
      }
    }
- const response = await this.fetch<VeeResponse<IStack>>(`/plugins/${pluginId}`, headers);
+ const response = await this.fetch<VeeResponse<IPlugin>>(`/plugins/${pluginId}`, headers);
  return response;
  };
 
