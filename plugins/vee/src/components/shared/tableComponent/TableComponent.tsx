@@ -15,6 +15,7 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { useTableComponentStyles } from './styles';
 import { EmptyStateComponent } from '../emptyStateComponent/EmptyStateComponent';
 import { LoadingProgress } from '../LoadingProgress/LoadingProgress';
+import { Chip } from '@material-ui/core';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -25,7 +26,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    textAlign: "center"
+    textAlign: "center",
   },
 }));
 
@@ -104,7 +105,19 @@ export const TableComponent =
           {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, rowIndex) => (
               <StyledTableRow key={rowIndex}>
                 {columns.map((column,index) => (
-                  column !== "actions" ? (<StyledTableCell key={column} align={alignCell(columns,index)}>{row[column]}</StyledTableCell>):
+                  column !== "actions" ? (
+                  <StyledTableCell key={column} align={alignCell(columns,index)}>
+                    {Array.isArray(row[column]) ? (
+                      row[column].map((item: string, itemIndex: number) => (
+                        <div key={itemIndex} >
+                          <Chip label={item} size="small"/>
+                        </div>
+                      ))
+                    ) : (
+                      row[column]
+                    )}
+                  </StyledTableCell>
+                  ):
                   <>
                   {
                     actions && (
