@@ -271,60 +271,76 @@ export class DatabaseVeeStore implements VeeStore {
     return exists;
   }
 
+
   async listPlugins(): Promise<IPlugin[]> {
     try {
       const rows = await this.db(PLUGINS_TABLE)
-      .select('*')
-      .leftJoin(ANNOTATIONS_TABLE, `${PLUGINS_TABLE}.id`, '=', `${ANNOTATIONS_TABLE}.plugin_id`);
-
-      const plugins = rows.reduce((acc, row) => {
-        let plugin = acc.find((p : IPlugin) => p.id === row.id);
+        .select(
+          `${PLUGINS_TABLE}.id`,
+          `${PLUGINS_TABLE}.name`,
+          `${PLUGINS_TABLE}.created_at`,
+          `${PLUGINS_TABLE}.updated_at`,
+          `${ANNOTATIONS_TABLE}.annotation`
+        )
+        .leftJoin(ANNOTATIONS_TABLE, `${PLUGINS_TABLE}.id`, '=', `${ANNOTATIONS_TABLE}.plugin_id`);
   
-        if (!plugin) {
-          plugin = {
+      const pluginsMap = new Map<string, IPlugin>();
+  
+      rows.forEach(row => {
+        if (!pluginsMap.has(row.id)) {
+          pluginsMap.set(row.id, {
             id: row.id,
             name: row.name,
             annotations: [],
             created_at: row.created_at,
             updated_at: row.updated_at,
-          };
-          acc.push(plugin);
+          });
         }
         if (row.annotation) {
-          plugin.annotations.push(JSON.parse(row.annotation));
+          const plugin = pluginsMap.get(row.id);
+          plugin?.annotations.push(JSON.parse(row.annotation));
         }
-        return acc;
-      }, [] as IPlugin[]);
+      });
+  
+      const plugins = Array.from(pluginsMap.values());
       return plugins;
     } catch (error: any) {
       this.logger.error(error.message);
-      this.logger.error('Plugins nao forram carregados');
+      this.logger.error('Plugins not loaded');
       return [];
     }
   }
 
   async getPluginById(pluginId: string): Promise<IPlugin | null> {
-      try {
-        const rows = await this.db(PLUGINS_TABLE)
-          .select('*')
-          .leftJoin(ANNOTATIONS_TABLE, `${PLUGINS_TABLE}.id`, '=', `${ANNOTATIONS_TABLE}.plugin_id`)
-          .where(`${PLUGINS_TABLE}.id`, pluginId);
+    try {
+      const pluginRow = await this.db(PLUGINS_TABLE)
+        .select('*')
+        .where('id', pluginId)
+        .first();
+  
+      if (!pluginRow) {
+        this.logger.warn(`No plugin found with ID: ${pluginId}`);
+        return null;
+      }
 
-        if (rows.length === 0) {
-          return null;
-        }
+      const annotationRows = await this.db(ANNOTATIONS_TABLE)
+        .select('annotation')
+        .where('plugin_id', pluginId);
   
-        const plugin: IPlugin = {
-          id: rows[0].id,
-          name: rows[0].name,
-          annotations: rows.map(row => row.annotation ? JSON.parse(row.annotation) : null),
-          created_at: rows[0].created_at,
-          updated_at: rows[0].updated_at,
-        };
+      const plugin: IPlugin = {
+        id: pluginRow.id,
+        name: pluginRow.name,
+        annotations: annotationRows
+        .map(row => row.annotation ? JSON.parse(row.annotation) : null)
+        .filter(annotation => annotation !== null),
+        created_at: pluginRow.created_at,
+        updated_at: pluginRow.updated_at,
+      };
   
-        return plugin;
+      this.logger.info(`Plugin found: ${JSON.stringify(plugin)}`);
+      return plugin;
     } catch (error: any) {
-      this.logger.error(error.message);
+      this.logger.error(`Error in getPluginById: ${error.message}`);
       return null;
     }
   }
@@ -362,40 +378,39 @@ export class DatabaseVeeStore implements VeeStore {
     }
   }
 
-  async updatePlugin({pluginId, plugin}:UpdatePluginParams): Promise<IPlugin | null> {
+  async updatePlugin({pluginId, plugin}: UpdatePluginParams): Promise<IPlugin | null> {
     try {
       const updateData: Partial<Record<keyof IPlugin, string>> = {};
-  
+    
       if (plugin.name) updateData.name = plugin.name;
-      if (plugin.annotations) updateData.annotations = JSON.stringify(plugin.annotations);
-      if (Object.keys(updateData).length === 0) return null;
-
+      if (Object.keys(updateData).length === 0 && !plugin.annotations?.length) return null;
+  
       return await this.db.transaction(async trx => {
-        const updatePluginRowsCount = await trx(PLUGINS_TABLE)
-          .where('id', pluginId)
-          .update(updateData);
-
-        if (updatePluginRowsCount === 1) {
-          const [updatedPlugin] = await trx(PLUGINS_TABLE).where("id", pluginId);
-
-          if (plugin.annotations?.length) {
-            await trx(ANNOTATIONS_TABLE)
-              .where('plugin_id', pluginId)
-              .delete();
-
-            const annotationsData = plugin.annotations.map(annotation => ({
-              plugin_id: pluginId,
-              annotation: JSON.stringify(annotation)
-            }));
-            await trx(ANNOTATIONS_TABLE).insert(annotationsData);
+        if (Object.keys(updateData).length > 0) {
+          const updatePluginRowsCount = await trx(PLUGINS_TABLE)
+            .where('id', pluginId)
+            .update(updateData);
+  
+          if (updatePluginRowsCount !== 1) {
+            return null;
           }
-
-          return updatedPlugin as IPlugin;
         }
-        return null;
+        if (plugin.annotations?.length) {
+          await trx(ANNOTATIONS_TABLE)
+            .where('plugin_id', pluginId)
+            .delete();
+  
+          const annotationsData = plugin.annotations.map(annotation => ({
+            plugin_id: pluginId,
+            annotation: JSON.stringify(annotation)
+          }));
+          await trx(ANNOTATIONS_TABLE).insert(annotationsData);
+        }
+        const [updatedPlugin] = await trx(PLUGINS_TABLE).where("id", pluginId);
+        return updatedPlugin as IPlugin;
       });
     } catch (error: any) {
-      this.logger.error(error.message);
+      this.logger.error(`Error in updatePlugin: ${error.message}`);
       return null;
     }
   }
