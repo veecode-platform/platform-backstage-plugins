@@ -10,7 +10,7 @@ interface VeeProviderProps {
 }
 
 export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
-    
+
     const [ vectorStoreId, setVectorStoreId ] = React.useState<string|null>(null);
     const [ assistantId, setAssistantId ] = React.useState<string|null>(null);
     const [ threadId, setThreadId ] = React.useState<string|null>(null);
@@ -22,12 +22,12 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const [ pluginSelectedState, pluginSelectedDispatch ] = React.useReducer(PluginSelectedReducer, initialPluginSelectedState);
     const api = useApi(veeApiRef);
     const errorApi = useApi(errorApiRef);
-    const alertApi = useApi(alertApiRef)
-
+    const alertApi = useApi(alertApiRef);
 
     const handleChat = () => {
         setShowChat(!showChat)
       };
+
 
     const getFilesFromRepoAndCreateVectorStore =  async () => {
         try{
@@ -103,10 +103,11 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
 
     const listAllPlugins = React.useCallback( async ()=>{
         try{
-               return await api.listPlugins();
+             const plugins = await api.listPlugins();
+             return plugins
             }
             catch(err:any){
-              errorApi.post(err.message)
+              errorApi.post(err.message);
               return []
             }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,11 +127,11 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const addPlugin = React.useCallback(async(pluginData : CreatePluginParams)=>{
         try{
             const newPlugin = await api.addPlugin(pluginData);
-            alertApi.post({severity: 'success', message: newPlugin.message, display:'transient'})
+            await listAllPlugins();
+            alertApi.post({message: newPlugin.message, severity: 'success', display: 'transient'});
         }
         catch(err:any){
-            errorApi.post(err)
-            errorApi.post(err.message)
+            errorApi.post(err.message);
         }
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -139,10 +140,11 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const updatePlugin = React.useCallback( async(id:string, updateData: IPlugin)=>{
        try{
         const response = await api.editPlugin({id, ...updateData});
-        alertApi.post({severity: "success", message: response.message, display:'transient'})     
+        await listAllPlugins();
+        alertApi.post({message: response.message, severity: 'success', display: 'transient'});
        }
        catch(err:any){
-          errorApi.post(err.message);
+         errorApi.post(err.message);
        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[api]);
@@ -150,10 +152,11 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const removePlugin = React.useCallback(async (pluginId: string) => {
         try{
            const response = await api.removePlugin(pluginId);
-           alertApi.post({severity: "success", message: response.message, display: "transient" })
+           await listAllPlugins();
+           alertApi.post({message: response.message, severity: 'success', display: 'transient'});
         }
         catch(err:any){
-            errorApi.post(err.message);
+          errorApi.post(err.message);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [api]);
@@ -161,7 +164,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const addPluginSelected = React.useCallback((plugin:IPlugin)=>{
       pluginSelectedDispatch(savePluginSelected(plugin))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[pluginSelectedState])
+    },[pluginSelectedState]);
 
     return (
         <VeeContext.Provider 
