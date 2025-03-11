@@ -5,5 +5,5 @@ export interface TableComponentProps<T> {
     data: T,
     actions?: boolean,
     onEdit?: (id:string) => void,
-    onDelete?: () => void
+    onDelete?: (id:string) => void,
 }
