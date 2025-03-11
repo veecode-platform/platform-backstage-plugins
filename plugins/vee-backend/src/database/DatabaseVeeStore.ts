@@ -147,18 +147,120 @@ export class DatabaseVeeStore implements VeeStore {
 
   async listStacks(): Promise<IStack[]> {
     try {
-      const stacks = await this.db.select('*').from(STACKS_TABLE);
+      const rows = await this.db(STACKS_TABLE)
+        .select(
+          `${STACKS_TABLE}.id`,
+          `${STACKS_TABLE}.name`,
+          `${STACKS_TABLE}.source`,
+          `${STACKS_TABLE}.created_at`,
+          `${STACKS_TABLE}.updated_at`,
+          `${PLUGINS_TABLE}.id as plugin_id`,
+          `${PLUGINS_TABLE}.name as plugin_name`,
+          `${ANNOTATIONS_TABLE}.id as annotation_id`,
+          `${ANNOTATIONS_TABLE}.annotation as annotation_annotation`
+        )
+        .leftJoin(STACK_PLUGINS_TABLE, `${STACKS_TABLE}.id`, '=', `${STACK_PLUGINS_TABLE}.stack_id`)
+        .leftJoin(PLUGINS_TABLE, `${STACK_PLUGINS_TABLE}.plugin_id`, '=', `${PLUGINS_TABLE}.id`)
+        .leftJoin(ANNOTATIONS_TABLE, `${PLUGINS_TABLE}.id`, '=', `${ANNOTATIONS_TABLE}.plugin_id`);
+  
+      const stacksMap = new Map<string, IStack>();
+  
+      rows.forEach(row => {
+        if (!stacksMap.has(row.id)) {
+          stacksMap.set(row.id, {
+            id: row.id,
+            name: row.name,
+            source: row.source,
+            created_at: row.created_at,
+            updated_at: row.updated_at,
+            plugins: []
+          });
+        }
+        if (row.plugin_id) {
+          const stack = stacksMap.get(row.id);
+          if (stack && stack.plugins) {
+            let plugin = stack.plugins.find(p => p.id === row.plugin_id);
+            if (!plugin) {
+              plugin = {
+                id: row.plugin_id,
+                name: row.plugin_name,
+                annotations: []
+              };
+              stack.plugins.push(plugin);
+            }
+            if (row.annotation_id) {
+              plugin.annotations.push({
+                id: row.annotation_id,
+                plugin_id: row.plugin_id,
+                annotation: row.annotation_annotation
+              });
+            }
+          }
+        }
+      });
+  
+      const stacks = Array.from(stacksMap.values());
       return stacks;
     } catch (error: any) {
       this.logger.error(error.message);
       return [];
     }
   }
-
+  
   async getStackById(stackId: string): Promise<IStack | null> {
     try {
-      const stack = await this.db(STACKS_TABLE).where('id', stackId);
-      return stack && stack.length > 0 ? stack[0] : null;
+      const rows = await this.db(STACKS_TABLE)
+        .select(
+          `${STACKS_TABLE}.id`,
+          `${STACKS_TABLE}.name`,
+          `${STACKS_TABLE}.source`,
+          `${STACKS_TABLE}.created_at`,
+          `${STACKS_TABLE}.updated_at`,
+          `${PLUGINS_TABLE}.id as plugin_id`,
+          `${PLUGINS_TABLE}.name as plugin_name`,
+          `${ANNOTATIONS_TABLE}.id as annotation_id`,
+          `${ANNOTATIONS_TABLE}.annotation as annotation_annotation`
+        )
+        .leftJoin(STACK_PLUGINS_TABLE, `${STACKS_TABLE}.id`, '=', `${STACK_PLUGINS_TABLE}.stack_id`)
+        .leftJoin(PLUGINS_TABLE, `${STACK_PLUGINS_TABLE}.plugin_id`, '=', `${PLUGINS_TABLE}.id`)
+        .leftJoin(ANNOTATIONS_TABLE, `${PLUGINS_TABLE}.id`, '=', `${ANNOTATIONS_TABLE}.plugin_id`)
+        .where(`${STACKS_TABLE}.id`, stackId);
+  
+      if (rows.length === 0) {
+        return null;
+      }
+  
+      const stack: IStack = {
+        id: rows[0].id,
+        name: rows[0].name,
+        source: rows[0].source,
+        created_at: rows[0].created_at,
+        updated_at: rows[0].updated_at,
+        plugins: []
+      };
+  
+      rows.forEach(row => {
+        if (row.plugin_id) {
+          let plugin = stack.plugins!.find(p => p.id === row.plugin_id);
+          if (!plugin) {
+            plugin = {
+              id: row.plugin_id,
+              name: row.plugin_name,
+              annotations: []
+            };
+            stack.plugins!.push(plugin);
+          }
+          if (row.annotation_id) {
+            plugin.annotations.push({
+              id: row.annotation_id,
+              plugin_id: row.plugin_id,
+              annotation: row.annotation_annotation
+            });
+          }
+        }
+      });
+  
+      return stack;
     } catch (error: any) {
       this.logger.error(error.message);
       return null;
@@ -168,31 +270,33 @@ export class DatabaseVeeStore implements VeeStore {
   async createStack(stack: IStack): Promise<IStack | null> {
     try {
       if (await this.existsStack(stack)) {
-        return await this.updateStack({stackId: stack.id as string, stack});
+        return await this.updateStack({ stackId: stack.id as string, stack });
       }
       return await this.db.transaction(async trx => {
         await trx(STACKS_TABLE)
           .insert({
             name: stack.name,
-            source: stack.source,
-            icon: stack.icon ?? null,
+            source: stack.source
           })
           .onConflict(['name'])
           .ignore();
-
-        const [stackCreated] = await trx(STACKS_TABLE).where({
-          name: stack.name,
-        });
-
+  
+        const [stackCreated] = await trx(STACKS_TABLE)
+          .where({ name: stack.name });
+  
+        if (!stackCreated) {
+          throw new Error('Failed to retrieve the created stack');
+        }
+  
         if (stack.plugins?.length) {
-          const stackPluginsData = stack.plugins.map(pluginId => ({
+          const stackPluginsData = stack.plugins.map(plugin => ({
             stack_id: stackCreated.id,
-            plugin_id: pluginId,
+            plugin_id: plugin.id,
           }));
           await trx(STACK_PLUGINS_TABLE).insert(stackPluginsData);
         }
-
-        return (stackCreated as IStack) ?? null;
+  
+        return stackCreated as IStack;
       });
     } catch (error: any) {
       this.logger.error(error.message);
@@ -204,7 +308,6 @@ export class DatabaseVeeStore implements VeeStore {
     try {
       const updateData: Partial<Record<keyof IStack, string>> = {};
   
-      if (stack.icon) updateData.icon = stack.icon;
       if (stack.name) updateData.name = stack.name;
       if (stack.source) updateData.source = stack.source;
       if (Object.keys(updateData).length === 0) return null;
@@ -222,9 +325,9 @@ export class DatabaseVeeStore implements VeeStore {
               .where('stack_id', stackId)
               .delete();
 
-            const stackPluginsData = stack.plugins.map(pluginId => ({
+            const stackPluginsData = stack.plugins.map(plugin => ({
               stack_id: stackId,
-              plugin_id: pluginId,
+              plugin_id: plugin.id,
             }));
             await trx(STACK_PLUGINS_TABLE).insert(stackPluginsData);
           }
@@ -280,7 +383,9 @@ export class DatabaseVeeStore implements VeeStore {
           `${PLUGINS_TABLE}.name`,
           `${PLUGINS_TABLE}.created_at`,
           `${PLUGINS_TABLE}.updated_at`,
-          `${ANNOTATIONS_TABLE}.annotation`
+          `${ANNOTATIONS_TABLE}.id as annotation_id`,
+          `${ANNOTATIONS_TABLE}.plugin_id as annotation_plugin_id`,
+          `${ANNOTATIONS_TABLE}.annotation as annotation_annotation`
         )
         .leftJoin(ANNOTATIONS_TABLE, `${PLUGINS_TABLE}.id`, '=', `${ANNOTATIONS_TABLE}.plugin_id`);
   
@@ -296,9 +401,13 @@ export class DatabaseVeeStore implements VeeStore {
             updated_at: row.updated_at,
           });
         }
-        if (row.annotation) {
+        if (row.annotation_id) {
           const plugin = pluginsMap.get(row.id);
-          plugin?.annotations.push(JSON.parse(row.annotation));
+          plugin?.annotations.push({
+            id: row.annotation_id,
+            plugin_id: row.annotation_plugin_id,
+            annotation: row.annotation_annotation
+          });
         }
       });
   
@@ -314,30 +423,39 @@ export class DatabaseVeeStore implements VeeStore {
   async getPluginById(pluginId: string): Promise<IPlugin | null> {
     try {
       const pluginRow = await this.db(PLUGINS_TABLE)
-        .select('*')
+        .select(
+          `${PLUGINS_TABLE}.id`,
+          `${PLUGINS_TABLE}.name`,
+          `${PLUGINS_TABLE}.created_at`,
+          `${PLUGINS_TABLE}.updated_at`
+        )
         .where('id', pluginId)
         .first();
   
       if (!pluginRow) {
-        this.logger.warn(`No plugin found with ID: ${pluginId}`);
         return null;
       }
-
+  
       const annotationRows = await this.db(ANNOTATIONS_TABLE)
-        .select('annotation')
+        .select(
+          `${ANNOTATIONS_TABLE}.id as annotation_id`,
+          `${ANNOTATIONS_TABLE}.plugin_id as annotation_plugin_id`,
+          `${ANNOTATIONS_TABLE}.annotation as annotation_annotation`
+        )
         .where('plugin_id', pluginId);
   
       const plugin: IPlugin = {
         id: pluginRow.id,
         name: pluginRow.name,
-        annotations: annotationRows
-        .map(row => row.annotation ? JSON.parse(row.annotation) : null)
-        .filter(annotation => annotation !== null),
+        annotations: annotationRows.map(row => ({
+          id: row.annotation_id,
+          plugin_id: row.annotation_plugin_id,
+          annotation: row.annotation_annotation
+        })),
         created_at: pluginRow.created_at,
         updated_at: pluginRow.updated_at,
       };
   
-      this.logger.info(`Plugin found: ${JSON.stringify(plugin)}`);
       return plugin;
     } catch (error: any) {
       this.logger.error(`Error in getPluginById: ${error.message}`);
