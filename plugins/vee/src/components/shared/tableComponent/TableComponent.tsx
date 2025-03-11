@@ -84,7 +84,7 @@ export const TableComponent =
   if(loading) <LoadingProgress/>
 
   return (
-    <TableContainer component={Paper} className={tableWrapper}>
+      <TableContainer component={Paper} className={tableWrapper}>
       <Table 
         stickyHeader 
         sx={{ minWidth: 700 }} 
@@ -114,7 +114,7 @@ export const TableComponent =
                              <MdEdit/>
                             </IconButton>)}
                         { onDelete && (
-                            <IconButton onClick={onDelete} color="error" className={`${actionButton} ${deleteAction}`} title="Delete item">
+                            <IconButton  onClick={()=> onDelete(row.id)}  color="error" className={`${actionButton} ${deleteAction}`} title="Delete item">
                               <MdDelete />
                             </IconButton>)}
                     </StyledTableCell>
