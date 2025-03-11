@@ -1,4 +1,6 @@
 export * from "./entityInfo";
 export * from "./pullRequestState";
-export * from "./plugins";
 export * from "./pluginSelected";
+export * from "./stackSelected";
+export * from "./allStacks";
+export * from "./allPlugins"
