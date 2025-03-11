@@ -9,7 +9,7 @@ import { UpdatePlugin } from "./updatePlugin";
 export const ManagePlugins = () => {
 
     const [ showModal, setShowModal] = React.useState<boolean>(false);
-    const { listAllPlugins, getPluginById, addPluginSelected } = useVeeContext();
+    const { listAllPlugins, getPluginById, addPluginSelected, removePlugin } = useVeeContext();
     const [ modalVariant, setModalVariant ] = React.useState<ModalVariantKey>(null);
 
     const { value: allPlugins, loading, error } = useAsync(listAllPlugins,[]);
@@ -36,13 +36,15 @@ export const ManagePlugins = () => {
         setShowModal(true);
         setModalVariant("create")
     }
-    const updatePlugin = async (id:string) => {
+    const handleUpdatePlugin = async (id:string) => {
         const plugin = await getPluginById(id);
-        // eslint-disable-next-line no-console
-        console.log("SALVEI ESSE PRUGGGG >>>", plugin)
         if(plugin) addPluginSelected(plugin);
         setShowModal(true);
         setModalVariant("edit")
+    }
+
+    const handleRemovePlugin = async (id:string)=>{
+        await removePlugin(id)
     }
 
     return (
@@ -59,8 +61,8 @@ export const ManagePlugins = () => {
               error={error}
               data={rows as ManagePluginsRow[]}
               actions
-              onEdit={updatePlugin}
-              onDelete={()=>{}}
+              onEdit={handleUpdatePlugin}
+              onDelete={handleRemovePlugin}
               />
          </PageLayout>
          <ModalComponent 
@@ -68,8 +70,8 @@ export const ManagePlugins = () => {
            open={showModal} 
            handleClose={handleClose} 
            >
-          { modalVariant === "create" && <AddPlugin/>}
-          { modalVariant === "edit" && <UpdatePlugin/>}
+          { modalVariant === "create" && <AddPlugin onCloseModal={handleClose}/>}
+          { modalVariant === "edit" && <UpdatePlugin onCloseModal={handleClose}/>}
          </ModalComponent>
        </>
     )
