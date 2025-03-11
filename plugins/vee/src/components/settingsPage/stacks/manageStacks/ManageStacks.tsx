@@ -34,14 +34,14 @@ export const ManageStacks = () => {
     const handleClose = () => setShowModal(!showModal);
 
     const addNewStack = () => {
+        setModalVariant("create");
         setShowModal(true);
-        setModalVariant("create")
     }
     const handleUpdateStack = async (id:string) => {
-        const plugin = await getStackById(id);
-        if(plugin) addStackSelected(plugin);
+        const stack = await getStackById(id);
+        if(stack) addStackSelected(stack);
+        setModalVariant("edit");
         setShowModal(true);
-        setModalVariant("edit")
     }
 
     const handleRemoveStack = async (id:string)=>{
