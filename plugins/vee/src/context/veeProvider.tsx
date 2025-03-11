@@ -1,6 +1,6 @@
 import React from "react";
 import { VeeContext } from "./veeContext";
-import { addNewPlugin, addNewStack, EntityInfoReducer, initialEntityInfoState, initialPluginSelectedState, initialPluginsState, initialPullRequestState, initialStackSelectedState, initialStacksState, PluginSelectedReducer, PluginsReducer, PullRequestInfoReducer, removePluginFromList, removeStackFromList, savePlugins, savePluginSelected, savePullRequestInfo, saveStacks, saveStackSelected, StackSelectedReducer, StacksReducer, updatePluginFromlist, updateStackFromlist } from "./state";
+import { addNewStack, EntityInfoReducer, initialEntityInfoState, initialPluginSelectedState, initialPluginsState, initialPullRequestState, initialStackSelectedState, initialStacksState, PluginSelectedReducer, PluginsReducer, PullRequestInfoReducer, removeStackFromList, savePlugins, savePluginSelected, savePullRequestInfo, saveStacks, saveStackSelected, StackSelectedReducer, StacksReducer, updateStackFromlist } from "./state";
 import { alertApiRef, errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { veeApiRef } from "../api/veeApi";
 import { CreatePluginParams, CreateStackParams, FileContent, IPlugin, IStack } from "@veecode-platform/backstage-plugin-vee-common";
