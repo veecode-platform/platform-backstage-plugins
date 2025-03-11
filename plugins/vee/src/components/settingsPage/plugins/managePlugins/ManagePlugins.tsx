@@ -9,18 +9,18 @@ import { UpdatePlugin } from "./updatePlugin";
 export const ManagePlugins = () => {
 
     const [ showModal, setShowModal] = React.useState<boolean>(false);
-    const { listAllPlugins, getPluginById, addPluginSelected, removePlugin } = useVeeContext();
+    const { listAllPlugins, allPluginsState,  getPluginById, addPluginSelected, removePlugin } = useVeeContext();
     const [ modalVariant, setModalVariant ] = React.useState<ModalVariantKey>(null);
 
-    const { value: allPlugins, loading, error } = useAsync(listAllPlugins,[]);
+    const { loading, error } = useAsync(listAllPlugins,[]);
 
     const rows = React.useMemo(() => {
-        return allPlugins?.map(plugin => ({
+        return allPluginsState?.map(plugin => ({
             id: plugin.id,
             name: plugin.name,
-            annotations: [plugin.annotations[0]?.annotation as string]
+            annotations: plugin.annotations ? plugin.annotations.flatMap( annotation => annotation.annotation) : []
         })) || [];
-    }, [allPlugins]);
+    }, [allPluginsState]);
 
     const modalTitle = () => {
         if (modalVariant){
