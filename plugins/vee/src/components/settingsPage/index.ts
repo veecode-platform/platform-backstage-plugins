@@ -1,1 +1,1 @@
-export { SettingsPageRoot } from "./settingsPageRoot"
+export { SettingsPageRoot } from "./SettingsPageRoot"
