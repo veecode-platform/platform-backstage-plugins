@@ -6,16 +6,18 @@ import {
 import { useStepperStyles } from './styles';
 import  Autocomplete  from '@mui/material/Autocomplete';
 import { useVeeContext } from '../../../../../context';
+import { UpdatePluginProps } from './types';
 
-export const UpdatePlugin = () => {
+export const UpdatePlugin : React.FC<UpdatePluginProps> = (props) => {
 
-  const [plugin, setPlugin] = React.useState<{name:string, annotations: string[]}>({ name: '', annotations: []}); 
+  const [plugin, setPlugin] = React.useState<{pluginId:string, name:string, annotations: string[]}>({pluginId: '',name: '', annotations: []}); 
   const [step0Error, setStep0Error] = React.useState<boolean>(true)
   const [step1Error, setStep1Error] = React.useState<boolean>(true)
   const [activeStep, setActiveStep] = React.useState(0);
   const [loading, setLoading ] = React.useState<boolean>(false);
   const steps = ["Edit plugin name", "Edit annotations"];
-  const { pluginSelectedState, updatePlugin } = useVeeContext()
+  const { pluginSelectedState, updatePlugin } = useVeeContext();
+  const { onCloseModal } = props;
   const { input, root } = useStepperStyles();
 
   const handleSubmit = async () => {
@@ -25,8 +27,9 @@ export const UpdatePlugin = () => {
         name: plugin.name,
         annotations: annotationsMap
       };
-    await updatePlugin('232323',newPlugin);
+    await updatePlugin(plugin.pluginId,newPlugin);
     setLoading(false)
+    onCloseModal();
   };
 
   const handleNext = () => {
@@ -55,7 +58,7 @@ export const UpdatePlugin = () => {
   }, [plugin])
 
   React.useEffect(()=>{
-     if(pluginSelectedState) setPlugin({name: pluginSelectedState.name, annotations: pluginSelectedState.annotations.flatMap(item => item.annotation)})
+     if(pluginSelectedState) setPlugin({pluginId: pluginSelectedState.id as string, name: pluginSelectedState.name, annotations: pluginSelectedState.annotations.flatMap(item => item.annotation)})
   },[pluginSelectedState])
 
   const Step0Content = () => {

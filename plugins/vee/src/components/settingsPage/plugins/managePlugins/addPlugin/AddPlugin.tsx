@@ -6,14 +6,16 @@ import {
 import { useStepperStyles } from './styles';
 import  Autocomplete  from '@mui/material/Autocomplete';
 import { useVeeContext } from '../../../../../context';
+import { AddPluginProps } from './types';
 
-export const AddPlugin = () => {
+export const AddPlugin : React.FC<AddPluginProps> = (props) => {
 
   const [plugin, setPlugin] = React.useState<{name:string, annotations: string[]}>({ name: '', annotations: []}); 
   const [step0Error, setStep0Error] = React.useState<boolean>(true)
   const [step1Error, setStep1Error] = React.useState<boolean>(true)
   const [activeStep, setActiveStep] = React.useState(0);
   const [loading, setLoading ] = React.useState<boolean>(false);
+  const { onCloseModal } = props;
   const steps = ["Add plugin name", "Add annotations"];
   const { addPlugin } = useVeeContext()
   const { input, root } = useStepperStyles();
@@ -26,7 +28,8 @@ export const AddPlugin = () => {
         annotations: annotationsMap
       };
     await addPlugin(newPlugin);
-    setLoading(false)
+    setLoading(false);
+    onCloseModal();
   };
 
   const handleNext = () => {
