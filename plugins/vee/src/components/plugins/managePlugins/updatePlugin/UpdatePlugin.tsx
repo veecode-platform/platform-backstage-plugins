@@ -5,7 +5,7 @@ import {
   StepContent, Typography} from '@material-ui/core';
 import { useStepperStyles } from './styles';
 import  Autocomplete  from '@mui/material/Autocomplete';
-import { useVeeContext } from '../../../../../context';
+import { useVeeContext } from '../../../../context';
 import { PluginStateType, UpdatePluginProps } from './types';
 
 export const UpdatePlugin : React.FC<UpdatePluginProps> = (props) => {

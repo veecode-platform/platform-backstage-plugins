@@ -1,10 +1,10 @@
 import React from "react";
-import { ModalComponent, PageLayout, TableComponent } from "../../../shared";
+import { ModalComponent, PageLayout, TableComponent } from "../../shared";
 import { AddStack } from "./addStack";
 import { UpdateStack } from "./updateStack";
 import useAsync from "react-use/esm/useAsync";
-import { ModalVariantKey } from "components/shared/modalComponent/types";
-import { useVeeContext } from "../../../../context";
+import { ModalVariantKey } from "../../shared/modalComponent/types";
+import { useVeeContext } from "../../../context";
 import { ManageStacksRow } from "./types";
 
 export const ManageStacks = () => {

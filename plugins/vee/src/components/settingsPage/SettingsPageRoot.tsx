@@ -1,8 +1,8 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { SettingsPage } from "./SettingsPage";
-import { ManageStacks } from "./stacks";
-import { ManagePlugins } from "./plugins";
+import { ManageStacks } from "../stacks";
+import { ManagePlugins } from "../plugins";
 
 
 export const SettingsPageRoot = () => {

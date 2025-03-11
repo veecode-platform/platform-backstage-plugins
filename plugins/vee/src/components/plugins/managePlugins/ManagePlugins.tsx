@@ -1,10 +1,11 @@
 import React from "react";
-import { PageLayout, TableComponent,ModalComponent } from "../../../shared";
-import { ManagePluginsRow, ModalVariantKey } from "./types";
+import { PageLayout, TableComponent,ModalComponent } from "../../shared";
+import { ManagePluginsRow } from "./types";
 import { AddPlugin } from "./addPlugin/AddPlugin";
 import useAsync from "react-use/esm/useAsync";
-import { useVeeContext } from "../../../../context";
+import { useVeeContext } from "../../../context";
 import { UpdatePlugin } from "./updatePlugin";
+import { ModalVariantKey } from "../../shared/modalComponent/types";
 
 export const ManagePlugins = () => {
 

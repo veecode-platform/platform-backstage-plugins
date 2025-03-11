@@ -6,42 +6,39 @@ import {
   Chip} from '@material-ui/core';
 import { useStepperStyles } from './styles';
 import  Autocomplete  from '@mui/material/Autocomplete';
-import { useVeeContext } from '../../../../../context';
-import { UpdateStackProps } from './types';
+import { useVeeContext } from '../../../../context';
+import { AddStackProps } from './types';
 import { IPlugin, IStack } from '@veecode-platform/backstage-plugin-vee-common';
 
+export const AddStack : React.FC<AddStackProps> = (props) => {
 
-export const UpdateStack : React.FC<UpdateStackProps> = (props) => {
-
-  const [ stackState, setStackState ] = React.useState<Partial<IStack> | null>(null);
   const [step0Error, setStep0Error] = React.useState<boolean>(true)
   const [step1Error, setStep1Error] = React.useState<boolean>(true)
   const [activeStep, setActiveStep] = React.useState(0);
   const [loading, setLoading ] = React.useState<boolean>(false);
+ const [ stackState, setStackState ] = React.useState<Partial<IStack> | null>(null);
   const { onCloseModal } = props;
   const steps = ["Add stack name", "Add source", "Add Plugins"];
-  const { updateStack, stackSelectedState, listAllPlugins, allPluginsState } = useVeeContext()
+  const { createStack, listAllPlugins, allPluginsState } = useVeeContext()
   const { input, root } = useStepperStyles();
+
   const pluginsOptions = allPluginsState ? allPluginsState.flatMap(plugin => plugin.name) : [];
-
-  const resetStackState = () => setStackState(null);
-
   const checkPluginDetails = (pluginName:string) => {
     const pluginFiltered = allPluginsState.find(plugin => plugin.name === pluginName) as IPlugin;
     return pluginFiltered ?? null
   }
 
   const handleSubmit = async () => {
-    if(stackState){
+    if(stackState && stackState.name && stackState.source){
       setLoading(true)
-      const stackUpdated = {
+      const newStack = {
         name: stackState.name,
         source: stackState.source
       } as IStack;
-      if(stackState.plugins) stackUpdated.plugins = stackState.plugins; 
-      await updateStack(stackState.id!,stackUpdated);
+      if(stackState.plugins) newStack.plugins = stackState.plugins; 
+      await createStack(newStack);
       setLoading(false);
-      resetStackState();
+      setStackState(null);
       onCloseModal();
     }
   };
@@ -63,8 +60,14 @@ export const UpdateStack : React.FC<UpdateStackProps> = (props) => {
       default:
         return false;
     }
-
   }
+
+  const getButtonText = () => {
+    if (activeStep === steps.length - 1) {
+      return loading ? "loading..." : "Create";
+    }
+    return "Next";
+  };
 
   const Step0Content = () => {
     return (
@@ -132,13 +135,6 @@ export const UpdateStack : React.FC<UpdateStackProps> = (props) => {
     );
   };
 
-  const getButtonText = () => {
-    if (activeStep === steps.length - 1) {
-      return loading ? "loading..." : "Save Changes";
-    }
-    return "Next";
-  };
-
   const StepsContent = [ Step0Content, Step1Content, Step3Content ];
 
   React.useEffect(() => {
@@ -150,16 +146,9 @@ export const UpdateStack : React.FC<UpdateStackProps> = (props) => {
 
   React.useEffect(()=>{
     listAllPlugins();
-    resetStackState();
+    setStackState(null);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
-
-  React.useEffect(()=>{
-    if(stackSelectedState){
-      setStackState(stackSelectedState)
-    }
-  },
-[stackSelectedState])
 
   return ( <Stepper activeStep={activeStep} orientation='vertical' className={root}>
                 {steps.map((label) => (

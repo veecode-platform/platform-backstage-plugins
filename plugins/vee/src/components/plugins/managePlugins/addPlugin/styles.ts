@@ -1,5 +1,5 @@
 import { makeStyles } from "@material-ui/core";
-import { themeVariables } from "../../../../../utils/constants/theme";
+import { themeVariables } from "../../../../utils/constants/theme";
 
 export const useStepperStyles = makeStyles({
     root:{
