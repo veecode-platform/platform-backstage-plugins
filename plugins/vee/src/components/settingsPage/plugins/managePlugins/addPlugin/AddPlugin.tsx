@@ -20,6 +20,8 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
   const { addPlugin } = useVeeContext()
   const { input, root } = useStepperStyles();
 
+  const resetPluginState =  () => setPlugin({ name: '', annotations: []})
+
   const handleSubmit = async () => {
     setLoading(true)
     const annotationsMap = plugin.annotations.map(annotationString => { return { annotation: annotationString} })
@@ -29,6 +31,7 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
       };
     await addPlugin(newPlugin);
     setLoading(false);
+    resetPluginState();
     onCloseModal();
   };
 
@@ -51,11 +54,6 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
     }
 
   }
-
-  React.useEffect(() => {
-    setStep0Error(plugin.name === "")
-    setStep1Error(plugin.annotations.length === 0)
-  }, [plugin])
 
   const Step0Content = () => {
     return (
@@ -101,8 +99,16 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
     return "Next";
   };
 
+  const StepsContent = [ Step0Content, Step1Content ];
 
-  const StepsContent = [ Step0Content, Step1Content ]
+  React.useEffect(() => {
+    setStep0Error(plugin.name === "")
+    setStep1Error(plugin.annotations.length === 0)
+  }, [plugin]);
+
+  React.useEffect(()=>{
+    resetPluginState();
+  },[])
 
   return ( <Stepper activeStep={activeStep} orientation='vertical' className={root}>
                 {steps.map((label) => (
