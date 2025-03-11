@@ -1,6 +1,6 @@
 import React from "react";
 import { VeeContext } from "./veeContext";
-import { addNewStack, EntityInfoReducer, initialEntityInfoState, initialPluginSelectedState, initialPluginsState, initialPullRequestState, initialStackSelectedState, initialStacksState, PluginSelectedReducer, PluginsReducer, PullRequestInfoReducer, removeStackFromList, savePlugins, savePluginSelected, savePullRequestInfo, saveStacks, saveStackSelected, StackSelectedReducer, StacksReducer, updateStackFromlist } from "./state";
+import { EntityInfoReducer, initialEntityInfoState, initialPluginSelectedState, initialPluginsState, initialPullRequestState, initialStackSelectedState, initialStacksState, PluginSelectedReducer, PluginsReducer, PullRequestInfoReducer, savePlugins, savePluginSelected, savePullRequestInfo, saveStacks, saveStackSelected, StackSelectedReducer, StacksReducer } from "./state";
 import { alertApiRef, errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { veeApiRef } from "../api/veeApi";
 import { CreatePluginParams, CreateStackParams, FileContent, IPlugin, IStack } from "@veecode-platform/backstage-plugin-vee-common";
@@ -122,7 +122,8 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
 
     const getStackById = React.useCallback(async (id:string) => {
         try{
-            return await api.getStackById(id)
+            const response = await api.getStackById(id)
+            return response
         }
         catch(err:any){
             errorApi.post(err.message);
@@ -134,7 +135,8 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const createStack = React.useCallback(async(stackData : CreateStackParams)=>{
         try{
             const newStack = await api.createStack(stackData);
-            allStackDispatch(addNewStack(newStack.data))
+            // allStackDispatch(addNewStack(newStack.data))
+            await listAllStacks();
             alertApi.post({message: newStack.message, severity: 'success', display: 'transient'});
         }
         catch(err:any){
@@ -147,7 +149,8 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const updateStack = React.useCallback( async(id:string, updateData: IStack)=>{
         try{
          const response = await api.editStack({id, ...updateData});
-         allStackDispatch(updateStackFromlist(response.data))
+         // allStackDispatch(updateStackFromlist(response.data))
+         await listAllStacks();
          alertApi.post({message: response.message, severity: 'success', display: 'transient'});
         }
         catch(err:any){
@@ -159,7 +162,8 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
      const removeStack = React.useCallback(async (stackId: string) => {
          try{
             const response = await api.removeStack(stackId);
-            allStackDispatch(removeStackFromList(stackId));
+            // allStackDispatch(removeStackFromList(stackId));
+            await listAllStacks();
             alertApi.post({message: response.message, severity: 'success', display: 'transient'});
          }
          catch(err:any){
@@ -180,7 +184,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const listAllPlugins = React.useCallback( async ()=>{
         try{
              const plugins = await api.listPlugins();
-             allPluginsDispatch(savePlugins(plugins))
+             allPluginsDispatch(savePlugins(plugins));
              return plugins
             }
             catch(err:any){
@@ -192,7 +196,8 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     
     const getPluginById = React.useCallback(async (id:string) => {
         try{
-            return await api.getPluginById(id)
+            const plugin = await api.getPluginById(id);
+            return plugin
         }
         catch(err:any){
             errorApi.post(err.message);
