@@ -18,7 +18,7 @@ export const ManagePlugins = () => {
         return allPluginsState?.map(plugin => ({
             id: plugin.id,
             name: plugin.name,
-            annotations: plugin.annotations ? plugin.annotations.flatMap( annotation => annotation.annotation) : []
+            annotations: plugin.annotations ? plugin.annotations.flatMap( annotation => JSON.parse(annotation.annotation).annotation) : []
         })) || [];
     }, [allPluginsState]);
 
@@ -33,14 +33,14 @@ export const ManagePlugins = () => {
     const handleClose = () => setShowModal(!showModal);
 
     const addNewPlugin = () => {
+        setModalVariant("create");
         setShowModal(true);
-        setModalVariant("create")
     }
     const handleUpdatePlugin = async (id:string) => {
         const plugin = await getPluginById(id);
         if(plugin) addPluginSelected(plugin);
-        setShowModal(true);
         setModalVariant("edit")
+        setShowModal(true);
     }
 
     const handleRemovePlugin = async (id:string)=>{
