@@ -1,1 +1,0 @@
-export {WorkflowDetails} from './WorkflowDetails'
