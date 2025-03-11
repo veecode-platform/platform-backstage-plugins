@@ -6,11 +6,11 @@ import {
 import { useStepperStyles } from './styles';
 import  Autocomplete  from '@mui/material/Autocomplete';
 import { useVeeContext } from '../../../../../context';
-import { UpdatePluginProps } from './types';
+import { PluginStateType, UpdatePluginProps } from './types';
 
 export const UpdatePlugin : React.FC<UpdatePluginProps> = (props) => {
 
-  const [plugin, setPlugin] = React.useState<{pluginId:string, name:string, annotations: string[]}>({pluginId: '',name: '', annotations: []}); 
+  const [plugin, setPlugin] = React.useState<PluginStateType>({pluginId: '',name: '', annotations: []}); 
   const [step0Error, setStep0Error] = React.useState<boolean>(true)
   const [step1Error, setStep1Error] = React.useState<boolean>(true)
   const [activeStep, setActiveStep] = React.useState(0);
@@ -52,15 +52,6 @@ export const UpdatePlugin : React.FC<UpdatePluginProps> = (props) => {
 
   }
 
-  React.useEffect(() => {
-    setStep0Error(plugin.name === "")
-    setStep1Error(plugin.annotations.length === 0)
-  }, [plugin])
-
-  React.useEffect(()=>{
-     if(pluginSelectedState) setPlugin({pluginId: pluginSelectedState.id as string, name: pluginSelectedState.name, annotations: pluginSelectedState.annotations.flatMap(item => item.annotation)})
-  },[pluginSelectedState])
-
   const Step0Content = () => {
     return (
         <TextField 
@@ -100,13 +91,22 @@ export const UpdatePlugin : React.FC<UpdatePluginProps> = (props) => {
 
   const getButtonText = () => {
     if (activeStep === steps.length - 1) {
-      return loading ? "loading..." : "Create";
+      return loading ? "loading..." : "Save Changes";
     }
     return "Next";
   };
 
 
   const StepsContent = [ Step0Content, Step1Content ]
+
+  React.useEffect(() => {
+    setStep0Error(plugin.name === "")
+    setStep1Error(plugin.annotations.length === 0)
+  }, [plugin])
+
+  React.useEffect(()=>{
+     if(pluginSelectedState) setPlugin({pluginId: pluginSelectedState.id as string, name: pluginSelectedState.name, annotations: pluginSelectedState.annotations.flatMap(item => JSON.parse(item.annotation).annotation)})
+  },[pluginSelectedState])
 
   return ( <Stepper activeStep={activeStep} orientation='vertical' className={root}>
                 {steps.map((label) => (
