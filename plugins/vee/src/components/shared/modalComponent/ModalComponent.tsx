@@ -10,13 +10,13 @@ import Paper from "@mui/material/Paper";
 import Tooltip from "@mui/material/Tooltip";
 import  Backdrop from "@mui/material/Backdrop";
 
+
 export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
 
     const { title, open, handleClose, children } = props;
     const { modalOnBlur,modalContent,modalBody,container,titleBar,titleContent,modalHeader,closeModal,content } = useModalComponentStyles();
 
     return (
-        <>
          <Modal
             keepMounted
             open={open}
@@ -58,6 +58,5 @@ export const ModalComponent : React.FC<ModalComponentProps> = (props) => {
           </Box>
          </Fade>
         </Modal>
-       </>
     )
 }
