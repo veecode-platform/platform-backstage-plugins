@@ -1,9 +1,9 @@
 import React from "react";
 import { VeeContext } from "./veeContext";
-import { EntityInfoReducer, initialEntityInfoState, initialPluginSelectedState, initialPullRequestState, PluginSelectedReducer, PullRequestInfoReducer, savePluginSelected, savePullRequestInfo } from "./state";
+import { addNewPlugin, addNewStack, EntityInfoReducer, initialEntityInfoState, initialPluginSelectedState, initialPluginsState, initialPullRequestState, initialStackSelectedState, initialStacksState, PluginSelectedReducer, PluginsReducer, PullRequestInfoReducer, removePluginFromList, removeStackFromList, savePlugins, savePluginSelected, savePullRequestInfo, saveStacks, saveStackSelected, StackSelectedReducer, StacksReducer, updatePluginFromlist, updateStackFromlist } from "./state";
 import { alertApiRef, errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { veeApiRef } from "../api/veeApi";
-import { CreatePluginParams, FileContent, IPlugin } from "@veecode-platform/backstage-plugin-vee-common";
+import { CreatePluginParams, CreateStackParams, FileContent, IPlugin, IStack } from "@veecode-platform/backstage-plugin-vee-common";
 
 interface VeeProviderProps {
     children: React.ReactNode
@@ -19,6 +19,9 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const [ promptValue, setPromptValue ] = React.useState<string|null>(null);
     const [ pullRequestInfoState, dispatchPullRequestInfo ] = React.useReducer(PullRequestInfoReducer, initialPullRequestState);
     const [ entityInfoState, entityInfoDispatch ] = React.useReducer(EntityInfoReducer, initialEntityInfoState);
+    const [ allStacksState, allStackDispatch ] = React.useReducer(StacksReducer, initialStacksState);
+    const [ stackSelectedState, stackSelectedDispatch ] = React.useReducer(StackSelectedReducer, initialStackSelectedState);
+    const [ allPluginsState, allPluginsDispatch ] = React.useReducer(PluginsReducer, initialPluginsState);
     const [ pluginSelectedState, pluginSelectedDispatch ] = React.useReducer(PluginSelectedReducer, initialPluginSelectedState);
     const api = useApi(veeApiRef);
     const errorApi = useApi(errorApiRef);
@@ -101,9 +104,83 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
         }
     };
 
+    /**
+    * stacks
+    */
+    const listAllStacks = React.useCallback( async ()=>{
+        try{
+             const response = await api.listStacks();
+             allStackDispatch(saveStacks(response))
+             return response
+            }
+            catch(err:any){
+              errorApi.post(err.message);
+              return []
+            }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        },[api]);
+
+    const getStackById = React.useCallback(async (id:string) => {
+        try{
+            return await api.getStackById(id)
+        }
+        catch(err:any){
+            errorApi.post(err.message);
+            return null;
+        }    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[api]);
+
+    const createStack = React.useCallback(async(stackData : CreateStackParams)=>{
+        try{
+            const newStack = await api.createStack(stackData);
+            allStackDispatch(addNewStack(newStack.data))
+            alertApi.post({message: newStack.message, severity: 'success', display: 'transient'});
+        }
+        catch(err:any){
+            errorApi.post(err.message);
+        }
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[api]);
+
+    const updateStack = React.useCallback( async(id:string, updateData: IStack)=>{
+        try{
+         const response = await api.editStack({id, ...updateData});
+         allStackDispatch(updateStackFromlist(response.data))
+         alertApi.post({message: response.message, severity: 'success', display: 'transient'});
+        }
+        catch(err:any){
+          errorApi.post(err.message);
+        }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+     },[api]);
+ 
+     const removeStack = React.useCallback(async (stackId: string) => {
+         try{
+            const response = await api.removeStack(stackId);
+            allStackDispatch(removeStackFromList(stackId));
+            alertApi.post({message: response.message, severity: 'success', display: 'transient'});
+         }
+         catch(err:any){
+           errorApi.post(err.message);
+         }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+     }, [api]);
+ 
+     const addStackSelected = React.useCallback((stack:IStack)=>{
+      stackSelectedDispatch(saveStackSelected(stack))
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+     },[stackSelectedState]);
+
+    /**
+     * plugins
+     */
+
     const listAllPlugins = React.useCallback( async ()=>{
         try{
              const plugins = await api.listPlugins();
+             allPluginsDispatch(savePlugins(plugins))
              return plugins
             }
             catch(err:any){
@@ -127,6 +204,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const addPlugin = React.useCallback(async(pluginData : CreatePluginParams)=>{
         try{
             const newPlugin = await api.addPlugin(pluginData);
+           // allPluginsDispatch(addNewPlugin(newPlugin.data))
             await listAllPlugins();
             alertApi.post({message: newPlugin.message, severity: 'success', display: 'transient'});
         }
@@ -140,6 +218,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const updatePlugin = React.useCallback( async(id:string, updateData: IPlugin)=>{
        try{
         const response = await api.editPlugin({id, ...updateData});
+        // allPluginsDispatch(updatePluginFromlist(response.data))
         await listAllPlugins();
         alertApi.post({message: response.message, severity: 'success', display: 'transient'});
        }
@@ -152,6 +231,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const removePlugin = React.useCallback(async (pluginId: string) => {
         try{
            const response = await api.removePlugin(pluginId);
+           // allPluginsDispatch(removePluginFromList(pluginId))
            await listAllPlugins();
            alertApi.post({message: response.message, severity: 'success', display: 'transient'});
         }
@@ -185,6 +265,15 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             promptValue,
             analyzeChangesAndSubmitToRepository,
             clearHistory,
+            allStacksState,
+            listAllStacks,
+            getStackById,
+            createStack,
+            updateStack,
+            removeStack,
+            addStackSelected,
+            stackSelectedState,
+            allPluginsState,
             listAllPlugins,
             getPluginById,
             addPlugin,

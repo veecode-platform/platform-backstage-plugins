@@ -1,7 +1,7 @@
 import React from "react";
 import { EntityAnnotationType } from "../utils/types";
 import { EntityInfoActionType } from "./state";
-import { CreatePluginParams, FileContent, IPlugin, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-vee-common";
+import { CreatePluginParams, CreateStackParams, FileContent, IPlugin, IStack, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-vee-common";
 
 export type VeeContextType = {
     vectorStoreId: string | null;
@@ -23,6 +23,15 @@ export type VeeContextType = {
     promptValue: string | null;
     analyzeChangesAndSubmitToRepository: (files: FileContent[]) => Promise<PullRequestResponse | null>;
     clearHistory: () => Promise<void>;
+    allStacksState: IStack[];
+    stackSelectedState: IStack | null;
+    listAllStacks: () => Promise<IStack[]>;
+    getStackById: (id: string) => Promise<IStack | null>;
+    createStack: (stackData: CreateStackParams) => Promise<void>;
+    updateStack: (id: string, updateData: IStack) => Promise<void>;
+    removeStack: (stackId: string) => Promise<void>;
+    addStackSelected: (stack: IStack) => void;
+    allPluginsState: IPlugin[];
     listAllPlugins: () => Promise<IPlugin[]>;
     getPluginById: (id: string) => Promise<IPlugin | null>;
     addPlugin: (pluginData: CreatePluginParams) => Promise<void>;
