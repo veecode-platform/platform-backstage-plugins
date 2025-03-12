@@ -1,4 +1,7 @@
 export const themeVariables = {
+    layout: {
+        maxWidth: '1200px'
+    },
     colors:{
         main: "#00F6BD",
         grey: "#B6B6B6",
