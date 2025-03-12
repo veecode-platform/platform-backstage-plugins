@@ -35,7 +35,7 @@ export const PageLayout : React.FC<PageLayoutProps> = (props) => {
                        }
                         {
                           goBack && (
-                           <Button variant="primary" onClick={handleGoBack}>
+                           <Button variant="secondary" onClick={handleGoBack}>
                             Back
                            </Button>
                           )
