@@ -1,29 +1,22 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
 import { MenuOptionCardProps } from "./types";
 import { useMenuOptionCardStyles } from "./styles";
 import { Link } from "@backstage/core-components";
+import { CardComponent } from "../cardComponent/CardComponent";
 
 export const MenuOptionCard : React.FC<MenuOptionCardProps>= (props) => {
 
-    const { icon, title, description, path, tooltip } = props;
-    const { link, root, titleBar, body } = useMenuOptionCardStyles();
+    const { icon, title, description, path, subtitle, tooltip } = props;
+    const { link } = useMenuOptionCardStyles();
 
     return (
        <Link className={link} to={path} title={tooltip ?? ''}>
-        <Box className={root}>
-         {icon}
-         <div className={titleBar}>
-           <Typography variant="h6">{title}</Typography>
-         </div>
-         {description && (
-            <div className={body}>
-            <Typography variant="body1">
-                {description}
-            </Typography>
-            </div>
-         )}
-       </Box>
+        <CardComponent
+          title={title}
+          icon={icon}
+          subtitle={subtitle}
+          description={description}
+          />
        </Link>
     )
 }
