@@ -1,5 +1,5 @@
 import { StackIcon } from "../../assets/stack-icon";
-import { PluginsIcon } from "../../assets/plugins-Icon";
+import { PluginIcon } from "../../assets/plugin-icon";
 // import { FixedOptionsIcon } from "../../assets/fixed-options-icon";
 
 export const settingsOptions = [
@@ -12,7 +12,7 @@ export const settingsOptions = [
     },
     {
         id: 1,
-        icon: PluginsIcon,
+        icon: PluginIcon,
         title: 'Manage Plugins',
         tooltip: 'List, add, edit or remove the plugins that will be available for your templates',
         path: 'manage-plugins'  
