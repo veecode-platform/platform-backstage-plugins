@@ -1,1 +1,2 @@
-export { ManagePlugins } from "./managePlugins"
+export { ManagePlugins } from "./managePlugins";
+export { PluginList } from "./pluginList";
