@@ -27,16 +27,24 @@ export const useListComponentStyles = makeStyles({
             cursor: 'pointer'
           },
     },
-    listItemStyles:{
+    listItemWrapper:{
        backgroundColor: themeVariables.background.main,
        border: `1px solid ${themeVariables.border.main}`,
-       cursor: 'pointer',
        borderRadius: '5px',
        transition: 'all .5s ease-in',
+       padding: '.5rem !important',
        '&:hover':{
         transition: 'all .5s ease-in-out',
         border: `1px solid ${themeVariables.colors.main}`,
-        backgroundColor: themeVariables.background.secondary,
+        backgroundColor: `${themeVariables.background.secondary} !important`,
+       }
+    },
+    listItemStyles:{
+      cursor: 'pointer',
+      padding: '.5rem !important',
+      '&:hover':{
+        transition: 'all .5s ease-in-out',
+        backgroundColor: 'transparent !important',
        }
     },
     iconStyle:{
@@ -45,6 +53,7 @@ export const useListComponentStyles = makeStyles({
        justifyContent: "center",
        height: "100%",
        },
+
     iconImg:{
        width: '60px',
        height: '60px',

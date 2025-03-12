@@ -1,1 +1,1 @@
-export { ListComponent } from "./ListComponent";
+export { ListComponent } from "./ListComponent"
