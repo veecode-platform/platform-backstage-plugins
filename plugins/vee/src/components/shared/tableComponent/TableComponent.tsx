@@ -15,7 +15,8 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { useTableComponentStyles } from './styles';
 import { EmptyStateComponent } from '../emptyStateComponent/EmptyStateComponent';
 import { LoadingProgress } from '../LoadingProgress/LoadingProgress';
-import { Chip } from '@material-ui/core';
+import Chip from '@mui/material/Chip';
+import { RiStarSFill } from "react-icons/ri";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -109,9 +110,9 @@ export const TableComponent =
                   <StyledTableCell key={column} align={alignCell(columns,index)}>
                     {Array.isArray(row[column]) ? (
                       row[column].map((item: string, itemIndex: number) => (
-                        <div key={itemIndex} >
-                          <Chip label={item} size="small"/>
-                        </div>
+                        <span key={itemIndex} >
+                          <Chip label={item} sx={{ padding: '.05rem'}} size="small" icon={<RiStarSFill size={10}/>}/>
+                        </span>
                       ))
                     ) : (
                       row[column]
