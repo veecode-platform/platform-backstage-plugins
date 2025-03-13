@@ -83,7 +83,8 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
 
         {showFeedback && 
             (<FeedbackComponent 
-              variant={pullRequestResponseState!.status} 
+              open={showFeedback}
+              variant={pullRequestResponseState!.status as "success" | "error"} 
               message={pullRequestResponseState!.message} 
               actions={
                 <>
