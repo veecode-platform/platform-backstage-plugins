@@ -6,14 +6,15 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Checkbox from '@mui/material/Checkbox';
 import { PluginIcon } from '../../../../assets/plugin-icon';
-import { ListComponentProps } from './types';
+import { ListComponentProps, PluginListProps } from './types';
 import { useListComponentStyles } from './styles';
 import  Typography  from '@mui/material/Typography';
+import { InstructionsProps } from 'utils/types';
 
 export const ListComponent : React.FC<ListComponentProps> = (props) => {
 
   const [checked, setChecked] = React.useState([""]);
-   const { data } = props;
+   const { data, instructions, onSaveInstructions } = props;
     const { root,listItemWrapper, listItemStyles, iconImg } = useListComponentStyles();
 
   const handleToggle = (value: string) => () => {
@@ -25,9 +26,16 @@ export const ListComponent : React.FC<ListComponentProps> = (props) => {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-
     setChecked(newChecked);
+    
+    const pluginData = data.find(plugin => plugin.name  === value && plugin);
+    if(pluginData){
+      const newPluginData = [...data, pluginData]
+      onSaveInstructions({...instructions as InstructionsProps, plugins: newPluginData as PluginListProps[]})
+    }
   };
+
+  
 
   return (
     <List className={root}>
