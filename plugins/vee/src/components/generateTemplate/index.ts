@@ -1,1 +1,1 @@
-export { GenerateTemplate } from "./GenerateTemplate"
+export { GenerateTemplate } from "./generateTemplate"
