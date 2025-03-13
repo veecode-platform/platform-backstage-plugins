@@ -13,7 +13,7 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
   const [step0Error, setStep0Error] = React.useState<boolean>(true);
   const [activeStep, setActiveStep] = React.useState(0);
   const [loading, setLoading ] = React.useState<boolean>(false);
-  const { onCloseModal, instructions, onSaveInstructions, resetInstructions } = props;
+  const { onCloseModal, instructions, onSaveInstructions, resetInstructions, onTemplateProcessing } = props;
   const steps = ["Add Template name", "Add additional informations"];
  //  const { createTemplate } = useVeeContext()
   const { input, root, textareaStyles } = useStepperComponentStyles();
@@ -25,6 +25,7 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
        setLoading(false);
        resetInstructions();
        onCloseModal();
+       onTemplateProcessing(true);
     }
   };
 
