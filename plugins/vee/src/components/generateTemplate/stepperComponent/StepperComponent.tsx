@@ -7,7 +7,6 @@ import { useStepperComponentStyles } from './styles';
 // import { useVeeContext } from '../../context';
 import { StepperComponentProps } from './types';
 import { InstructionsProps } from '../../../utils/types';
-import  TextareaAutosize from '@mui/material/TextareaAutosize';
 
 export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
   
@@ -63,9 +62,12 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
   }
   const Step1Content = () => {
     return (
-        <TextareaAutosize 
-         minRows={15}
-         className={textareaStyles} 
+        <TextField 
+        multiline
+        minRows={15}
+        variant="outlined"
+        style={{ resize: 'none' }}
+        className={textareaStyles} 
          placeholder="Additional informations" 
          value={instructions ? instructions.additionalInfo : ''} 
          onChange={e => {

@@ -4,7 +4,8 @@ import { themeVariables } from "../../../utils/constants/theme";
 export const useStepperComponentStyles = makeStyles({
       root:{
           backgroundColor: themeVariables.background.dark,
-          width: '100%'
+          width: '100%',
+          maxWidth: themeVariables.layout.maxWidth
       },
       input: {
           '& input[type=number]': {
@@ -21,7 +22,6 @@ export const useStepperComponentStyles = makeStyles({
         },
       textareaStyles: {
         width: '100%',
-        border: `1px solid ${themeVariables.border.main}`,
         color: themeVariables.colors.white,
         background: 'transparent',
         padding: '.5rem',
