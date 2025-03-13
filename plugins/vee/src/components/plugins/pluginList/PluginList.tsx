@@ -1,84 +1,82 @@
-import React from "react";
-import { ModalComponent, PageLayout } from "../../shared"
-import { useVeeContext } from "../../../context";
-import useAsync from "react-use/esm/useAsync";
-import { PluginListProps } from "./listComponent/types";
-import { ListComponent } from "./listComponent";
-import { useParams } from "react-router-dom";
-import { GenerateTemplate } from "../../generateTemplate";
-import { InstructionsProps } from "../../../utils/types";
+import React from 'react';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Checkbox from '@mui/material/Checkbox';
+import  Typography  from '@mui/material/Typography';
+import ListSubheader  from '@mui/material/ListSubheader';
+import { PluginIcon } from '../../../assets/plugin-icon';
+import { usePluginListStyles } from './styles';
+import type { PluginListComponentProps, PluginListProps } from './types';
+import type { InstructionsProps } from '../../../utils/types';
 
-export const PluginList = () => {
+export const PluginList : React.FC<PluginListComponentProps> = (props) => {
 
-    const { stackId } = useParams();
-    const [ instructions, setInstructions ] = React.useState<InstructionsProps|null>(null);
-    const [ showModal, setShowModal] = React.useState<boolean>(false);
-    const { getStackById } = useVeeContext();
+  const [checked, setChecked] = React.useState([""]);
+  const { data, instructions, onSaveInstructions } = props;
+  const { root,titleBar,listItemWrapper, listItemStyles, iconImg } = usePluginListStyles();
 
-    const { value: allPlugins, loading, error } = useAsync(async()=>{
-        if(stackId){
-            const stack = await getStackById(stackId);
-            if(stack && stack.plugins) return stack.plugins;
-            return []
-        }
-        return []
-    },[]); // check error and loading
+  const handleToggle = (value: string) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
 
-    const plugins : PluginListProps[] = React.useMemo(()=>{
-       if(allPlugins){
-        return allPlugins.map(plugin => ({
-            id: plugin.id as string,
-            icon: null,
-            name: plugin.name
-        }))
-       }
-       return []
-    },[allPlugins]);
-
-    const handleClose = () => setShowModal(!showModal);
-
-    const handleSubmitInstructions = () => {
-        setShowModal(true);
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
     }
+    setChecked(newChecked);
+    
+    const pluginData = data.find(plugin => plugin.name  === value && plugin);
+    if(pluginData){
+      const newPluginData = [...data, pluginData]
+      onSaveInstructions({...instructions as InstructionsProps, plugins: newPluginData as PluginListProps[]})
+    }
+  };
 
-    const resetInstructionsState = () => setInstructions(null);
 
-
-    React.useEffect(()=>{
-        if(stackId){
-            setInstructions({...instructions as InstructionsProps, stackId: stackId})
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [stackId])
-
-    return (
-        <>
-        <PageLayout
-          title="Select plugins to add to the template"
-          label="Plugins"
-          goBack
-          createAction={handleSubmitInstructions}
-         >
-          {loading && <h1>Loading...</h1>}
-          {error && <h1>Error...</h1>}
-        <ListComponent 
-         data={plugins}
-         instructions={instructions}
-         onSaveInstructions={setInstructions}
-         />
-        </PageLayout>
-         <ModalComponent 
-           title="Template information"
-           open={showModal} 
-           handleClose={handleClose} 
-           >
-          <GenerateTemplate
-           onCloseModal={handleClose}
-           instructions={instructions}
-           onSaveInstructions={setInstructions}
-           resetInstructions={resetInstructionsState}
-          />
-         </ModalComponent>        
-        </>
-    )
+  return (
+    <List 
+      className={root}
+      subheader={<ListSubheader className={titleBar}>
+        <Typography variant="h6">Select plugins to add to the template</Typography>
+      </ListSubheader>}
+      >
+      {data.map((item) => {
+        const labelId = `checkbox-list-secondary-label-${item.name}`;
+        return (
+          <ListItem
+            className={listItemWrapper}
+            key={item.id}
+            secondaryAction={
+              <Checkbox
+                edge="end"
+                onChange={handleToggle(item.name)}
+                checked={checked.includes(item.name)}
+                slotProps={{
+                    input: {
+                       'aria-labelledby': labelId,
+                    }
+                 }}
+              />
+            }
+            disablePadding
+          >
+            <ListItemButton className={listItemStyles}>
+              <ListItemAvatar className={iconImg}>
+                  {item.icon ? item.icon : PluginIcon}
+              </ListItemAvatar>
+              <ListItemText id={labelId} primary={
+                <Typography variant="h6">
+                {item.name}
+              </Typography>
+              } />
+            </ListItemButton>
+          </ListItem>
+        );
+      })}
+    </List>
+  );
 }
