@@ -38,7 +38,8 @@ export const useCardElementStyles = makeStyles({
    iconImg:{
     width: '60px',
     height: '60px',
-    backgroundColor: themeVariables.colors.dark
+    backgroundColor: 'transparent'
+    // backgroundColor: themeVariables.colors.dark
    },
    titleStyle: {
     color: themeVariables.colors.white
