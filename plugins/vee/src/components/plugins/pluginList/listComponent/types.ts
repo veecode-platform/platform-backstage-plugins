@@ -1,5 +1,9 @@
+import { InstructionsProps } from "utils/types"
+
 export interface ListComponentProps {
-    data: PluginListProps[]
+    data: PluginListProps[],
+    instructions: InstructionsProps | null,
+    onSaveInstructions: React.Dispatch<React.SetStateAction<InstructionsProps | null>>
 }
 
 export interface PluginListProps {
