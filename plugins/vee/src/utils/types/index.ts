@@ -16,3 +16,12 @@ export interface submitRepoAndCreateVectorStoreResponse {
 export type JsonObject = {
     [key:string] : string
 }
+
+export interface InstructionsProps {
+    stackId: string,
+    templateName: string,
+    additionalInfo?: string,
+    plugins?: pluginInstructionsType[]
+}
+
+export type pluginInstructionsType = { id: string }
