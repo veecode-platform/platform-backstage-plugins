@@ -1,17 +1,17 @@
 import React from 'react';
 // import { useVeeContext } from '../../context';
-import { InstructionsProps } from '../../utils/types';
+import { PluginListProps } from '../../utils/types';
 import { StepperComponent } from './stepperComponent';
 import { useParams } from 'react-router-dom';
 import { useVeeContext } from '../../context';
 import useAsync from 'react-use/esm/useAsync';
 import { PluginList } from '../plugins';
-import type { PluginListProps } from "../plugins/pluginList/types"
 import { FeedbackComponent, ModalComponent, PageLayout } from '../shared';
 import { GenerateTemplateWrapperProps } from './types';
+import { setStackId } from '../../context/state';
 
 const GenerateTemplateWrapper : React.FC<GenerateTemplateWrapperProps> = (props) => {
-  const { children, createAction} = props;
+  const { children, createAction = () => {}} = props;
   return (
     <PageLayout
         title="Select plugins & generate a template with AI"
@@ -27,10 +27,9 @@ const GenerateTemplateWrapper : React.FC<GenerateTemplateWrapperProps> = (props)
 export const GenerateTemplate = () => {
 
   const { stackId } = useParams();
-  const [ instructions, setInstructions ] = React.useState<InstructionsProps|null>(null);
   const [ showModal, setShowModal] = React.useState<boolean>(false);
   const [ templateProcessing, setTemplateProcessing ] = React.useState<boolean>(false);
-  const { getStackById } = useVeeContext();
+  const { getStackById, instructionsDispatch } = useVeeContext();
 
   const { value: allPlugins, loading, error } = useAsync(async()=>{
           if(stackId){
@@ -54,11 +53,10 @@ export const GenerateTemplate = () => {
 
   const handleClose = () => setShowModal(!showModal);
   const handleSubmitInstructions = () => setShowModal(true);
-  const resetInstructionsState = () => setInstructions(null);
   
   React.useEffect(()=>{
       if(stackId){
-          setInstructions({...instructions as InstructionsProps, stackId: stackId})
+        instructionsDispatch(setStackId(stackId))
       }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stackId])
@@ -83,8 +81,6 @@ if(error) return (   // TODO
        createAction={handleSubmitInstructions}>
         <PluginList
           data={plugins}
-          instructions={instructions}
-          onSaveInstructions={setInstructions}
         />
       </GenerateTemplateWrapper>
 
@@ -95,9 +91,6 @@ if(error) return (   // TODO
       >
         <StepperComponent
           onCloseModal={handleClose}
-          instructions={instructions}
-          onSaveInstructions={setInstructions}
-          resetInstructions={resetInstructionsState}
           onTemplateProcessing={setTemplateProcessing}
         />
       </ModalComponent>
