@@ -1,4 +1,4 @@
 export interface GenerateTemplateWrapperProps {
-  createAction: () => void;
+  createAction?: () => void;
   children: React.ReactNode
 }
