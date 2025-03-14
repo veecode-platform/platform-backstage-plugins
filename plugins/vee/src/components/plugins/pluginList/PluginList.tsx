@@ -52,6 +52,7 @@ export const PluginList : React.FC<PluginListComponentProps> = (props) => {
           <ListItem
             className={listItemWrapper}
             key={item.id}
+            onClick={handleToggle(item.name)}
             secondaryAction={
               <Checkbox
                 edge="end"
