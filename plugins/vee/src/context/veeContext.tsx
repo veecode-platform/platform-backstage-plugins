@@ -1,6 +1,6 @@
 import React from "react";
-import { EntityAnnotationType } from "../utils/types";
-import { EntityInfoActionType } from "./state";
+import { EntityAnnotationType, InstructionsProps } from "../utils/types";
+import { EntityInfoActionType, InstructionsActionType } from "./state";
 import { CreatePluginParams, CreateStackParams, FileContent, IPlugin, IStack, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-vee-common";
 
 export type VeeContextType = {
@@ -38,7 +38,9 @@ export type VeeContextType = {
     updatePlugin: (id: string, updateData: IPlugin) => Promise<void>;
     removePlugin: (pluginId: string) => Promise<void>;
     pluginSelectedState: IPlugin | null;
-    addPluginSelected: (plugin: IPlugin) => void
+    addPluginSelected: (plugin: IPlugin) => void;
+    instructionsState: InstructionsProps;
+    instructionsDispatch: React.Dispatch<InstructionsActionType>
 }
 
 export const VeeContext = React.createContext<VeeContextType>(null!)

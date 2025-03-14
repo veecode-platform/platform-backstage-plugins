@@ -1,6 +1,6 @@
 import React from "react";
 import { VeeContext } from "./veeContext";
-import { EntityInfoReducer, initialEntityInfoState, initialPluginSelectedState, initialPluginsState, initialPullRequestState, initialStackSelectedState, initialStacksState, PluginSelectedReducer, PluginsReducer, PullRequestInfoReducer, savePlugins, savePluginSelected, savePullRequestInfo, saveStacks, saveStackSelected, StackSelectedReducer, StacksReducer } from "./state";
+import { EntityInfoReducer, initialEntityInfoState, initialInstructionsState, initialPluginSelectedState, initialPluginsState, initialPullRequestState, initialStackSelectedState, initialStacksState, InstructionsReducer, PluginSelectedReducer, PluginsReducer, PullRequestInfoReducer, savePlugins, savePluginSelected, savePullRequestInfo, saveStacks, saveStackSelected, StackSelectedReducer, StacksReducer } from "./state";
 import { alertApiRef, errorApiRef, useApi } from '@backstage/core-plugin-api';
 import { veeApiRef } from "../api/veeApi";
 import { CreatePluginParams, CreateStackParams, FileContent, IPlugin, IStack } from "@veecode-platform/backstage-plugin-vee-common";
@@ -23,6 +23,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const [ stackSelectedState, stackSelectedDispatch ] = React.useReducer(StackSelectedReducer, initialStackSelectedState);
     const [ allPluginsState, allPluginsDispatch ] = React.useReducer(PluginsReducer, initialPluginsState);
     const [ pluginSelectedState, pluginSelectedDispatch ] = React.useReducer(PluginSelectedReducer, initialPluginSelectedState);
+    const [ instructionsState, instructionsDispatch ] = React.useReducer(InstructionsReducer, initialInstructionsState);
     const api = useApi(veeApiRef);
     const errorApi = useApi(errorApiRef);
     const alertApi = useApi(alertApiRef);
@@ -285,7 +286,9 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             updatePlugin,
             removePlugin,
             addPluginSelected,
-            pluginSelectedState
+            pluginSelectedState,
+            instructionsState,
+            instructionsDispatch
          }}
         >
             {children}
