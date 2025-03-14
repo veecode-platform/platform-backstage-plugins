@@ -3,4 +3,5 @@ export * from "./pullRequestState";
 export * from "./pluginSelected";
 export * from "./stackSelected";
 export * from "./allStacks";
-export * from "./allPlugins"
+export * from "./allPlugins";
+export * from "./instructions";
