@@ -114,11 +114,11 @@ export const UpdatePlugin : React.FC<UpdatePluginProps> = (props) => {
                     <StepLabel><Typography variant="h6">{label}</Typography></StepLabel>
                     <StepContent>
                       <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item md={8} xs={12}>
                           {StepsContent[activeStep]()}
                         </Grid>
 
-                        <Grid item xs={12}>
+                        <Grid item md={8} xs={12}>
                           <Button disabled={activeStep === 0} onClick={handleBack}>
                             Back
                           </Button>
