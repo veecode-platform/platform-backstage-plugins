@@ -1,4 +1,4 @@
-import { PluginListProps } from "../../../../utils/types";
+import { PluginListProps } from "../../../utils/types";
 
 export const setStackId = (stackId:string) => ({
     type: "SET_STACK_ID",
