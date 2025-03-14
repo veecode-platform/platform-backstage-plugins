@@ -17,6 +17,11 @@ export type JsonObject = {
     [key:string] : string
 }
 
+export interface PluginListProps {
+    id: string,
+    icon: string | React.JSX.Element | null,
+    name: string
+}
 export interface InstructionsProps {
     stackId: string,
     templateName: string,
