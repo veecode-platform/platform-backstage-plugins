@@ -9,13 +9,15 @@ import  Typography  from '@mui/material/Typography';
 import ListSubheader  from '@mui/material/ListSubheader';
 import { PluginIcon } from '../../../assets/plugin-icon';
 import { usePluginListStyles } from './styles';
-import type { PluginListComponentProps, PluginListProps } from './types';
-import type { InstructionsProps } from '../../../utils/types';
+import type { PluginListComponentProps } from './types';
+import { useVeeContext } from '../../../context';
+import { setPlugins } from '../../../context/state';
 
 export const PluginList : React.FC<PluginListComponentProps> = (props) => {
 
   const [checked, setChecked] = React.useState([""]);
-  const { data, instructions, onSaveInstructions } = props;
+  const { data } = props;
+  const { instructionsDispatch } = useVeeContext();
   const { root,titleBar,listItemWrapper, listItemStyles, iconImg } = usePluginListStyles();
 
   const handleToggle = (value: string) => () => {
@@ -31,8 +33,8 @@ export const PluginList : React.FC<PluginListComponentProps> = (props) => {
     
     const pluginData = data.find(plugin => plugin.name  === value && plugin);
     if(pluginData){
-      const newPluginData = [...data, pluginData]
-      onSaveInstructions({...instructions as InstructionsProps, plugins: newPluginData as PluginListProps[]})
+      const newPluginData = [...data, pluginData];
+      instructionsDispatch(setPlugins(newPluginData));
     }
   };
 
