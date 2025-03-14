@@ -4,28 +4,28 @@ import {
   Stepper, Step, StepLabel,
   StepContent, Typography} from '@material-ui/core';
 import { useStepperComponentStyles } from './styles';
-// import { useVeeContext } from '../../context';
+import { useVeeContext } from '../../../context';
 import { StepperComponentProps } from './types';
-import { InstructionsProps } from '../../../utils/types';
+import { resetInstructions, setAdditionalInfo, setTemplateName } from '../../../context/state';
 
 export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
   
   const [step0Error, setStep0Error] = React.useState<boolean>(true);
   const [activeStep, setActiveStep] = React.useState(0);
   const [loading, setLoading ] = React.useState<boolean>(false);
-  const { onCloseModal, instructions, onSaveInstructions, resetInstructions, onTemplateProcessing } = props;
+  const { onCloseModal, onTemplateProcessing } = props;
   const steps = ["Add Template name", "Add additional informations"];
- //  const { createTemplate } = useVeeContext()
+  const { instructionsState, instructionsDispatch } = useVeeContext()
   const { input, root, textareaStyles } = useStepperComponentStyles();
 
   const handleSubmit = async () => {
-    if(instructions){
+    if(instructionsState){
        setLoading(true)
        // await addPlugin(newPlugin);
        setLoading(false);
-       resetInstructions();
-       onCloseModal();
        onTemplateProcessing(true);
+       instructionsDispatch(resetInstructions());
+       onCloseModal();
     }
   };
 
@@ -47,17 +47,23 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
 
   }
 
+  const handleAddTemplateName = (e:React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    instructionsDispatch(setTemplateName(e.target.value))
+  }
+
+  const handleAddAdditionalInfo = (e:React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    instructionsDispatch(setAdditionalInfo(e.target.value))
+  }
+
   const Step0Content = () => {
     return (
         <TextField 
          fullWidth variant="outlined" 
          label="Template Name" 
-         value={instructions ? instructions.templateName : ''} 
+         value={instructionsState ? instructionsState.templateName : ''} 
          className={input}
          required
-         onChange={e => {
-          onSaveInstructions({ ...instructions as InstructionsProps, templateName: e.target.value });
-         }}
+         onChange={handleAddTemplateName}
       />
     )
   }
@@ -70,10 +76,8 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
         style={{ resize: 'none' }}
         className={textareaStyles} 
          placeholder="Additional informations" 
-         value={instructions ? instructions.additionalInfo : ''} 
-         onChange={e => {
-           onSaveInstructions({ ...instructions as InstructionsProps, additionalInfo: e.target.value });
-         }}
+         value={instructionsState ? instructionsState.additionalInfo : ''} 
+         onChange={handleAddAdditionalInfo}
         />
     )
   }
@@ -88,15 +92,10 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
   const StepsContent = [ Step0Content, Step1Content ];
 
   React.useEffect(() => {
-    if(instructions){
-        setStep0Error(instructions.templateName === "")
+    if(instructionsState){
+        setStep0Error(instructionsState.templateName === "")
     }
-  }, [instructions]);
-
-  React.useEffect(()=>{
-    resetInstructions();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  }, [instructionsState]);
 
   return ( 
          <Stepper activeStep={activeStep} orientation='vertical' className={root}>
@@ -105,11 +104,11 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
                     <StepLabel><Typography variant="h6">{label}</Typography></StepLabel>
                     <StepContent>
                       <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item md={8} xs={12}>
                           {StepsContent[activeStep]()}
                         </Grid>
 
-                        <Grid item xs={12}>
+                        <Grid item md={8} xs={12}>
                           <Button disabled={activeStep === 0} onClick={handleBack}>
                             Back
                           </Button>
