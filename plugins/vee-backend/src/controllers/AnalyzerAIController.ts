@@ -42,7 +42,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
         res.status(400).json({error: "No files uploaded"})
       }
 
-      const response = await this.veeCodeAssistantAI.submitDataToVectorStore(engine,repoName, files);
+      const response = await this.veeCodeAssistantAI.submitDataToVectorStore({engine,repoName, files});
 
         res.status(200).json({
         message: response.message,
@@ -75,7 +75,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
 
     try {
 
-      const response = await this.veeCodeAssistantAI.chat(engine,vectorStoreId, prompt, repoName, repoStructure);
+      const response = await this.veeCodeAssistantAI.chat({engine,vectorStoreId, prompt, repoName, repoStructure});
 
       res.status(200).json({
         assistantId: response.assistantId,
@@ -111,7 +111,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
     }
 
      try{
-       const response = await this.veeCodeAssistantAI.clearHistory(engine,vectorStoreId, assistantId, threadId)
+       const response = await this.veeCodeAssistantAI.clearHistory({engine,assistantId,vectorStoreId, threadId})
        res.status(200).json({
         status: response.status,
         message: response.message,
