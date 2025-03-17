@@ -1,5 +1,6 @@
 import { OpenAIClient } from "../openAIClient";
-import { IThreadsManager } from "../types";
+import { AddMessageToThreadParams, CheckRunStatusParams, ExecuteAndCreateRunParams, IThreadsManager } from "../types";
+import { template_instructions } from "./template_instructions";
 
 export class ThreadsManager extends OpenAIClient implements IThreadsManager {
 
@@ -13,7 +14,7 @@ export class ThreadsManager extends OpenAIClient implements IThreadsManager {
         }
     }
 
-    async addMessageToThread(threadId: string, content: string) {
+    async addMessageToThread({threadId, content}:AddMessageToThreadParams) {
         try {
             await this.client.beta.threads.messages.create(
                 threadId,
@@ -24,16 +25,10 @@ export class ThreadsManager extends OpenAIClient implements IThreadsManager {
         }
     }
 
-    async executeAndCreateRun(threadId: string, assistantId: string, template: string) {
+    async executeAndCreateRun({threadId, assistantId, isTemplate}: ExecuteAndCreateRunParams) {
         try {
-            const instructions = template ? {
-                instructions: `
-                        You are an expert assistant in Spotify Backstage. 
-                        You have access to the content of the current template, 
-                        which is available as additional context. 
-                        Use this information to provide more accurate and relevant answers. 
-                        Template content:\n\n${template}
-                    `,
+            const instructions = isTemplate ? {
+                instructions: template_instructions,
             } : {};
             const run = await this.client.beta.threads.runs.create(
                 threadId,
@@ -48,7 +43,7 @@ export class ThreadsManager extends OpenAIClient implements IThreadsManager {
         }
     }
 
-    async checkRunStatus(threadId: string, runId: string) {
+    async checkRunStatus({threadId, runId}:CheckRunStatusParams) {
         try {
             const run = await this.client.beta.threads.runs.retrieve(
                 threadId,
