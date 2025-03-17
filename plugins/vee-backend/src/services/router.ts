@@ -40,16 +40,16 @@ export async function createRouter(
     })
   );
 
-  /**
-   * Analyzer
-   */ 
   router.post("/submit-repo", analyzerAIController.createVectorStore as RequestHandler);
   router.post("/chat-analyze-repo", analyzerAIController.analyzeAndStartChat as RequestHandler);
   router.delete("/chat-analyze-repo", analyzerAIController.deleteChat as RequestHandler);
   router.post("/clone-repository", gitController.clone as RequestHandler);
-  /**
-   *  Create template with AI
-   */
+  router.post("/partial-clone-repository", gitController.partialClone as RequestHandler);
+
+  router.post("/submit-template",scaffolderAIController.createVectorStore as RequestHandler )
+  router.post("/chat-template", scaffolderAIController.analyzeAndStartChat as RequestHandler);
+  router.delete("/chat-template", scaffolderAIController.deleteChat as RequestHandler);
+
   router.get("/fixedOptions", fixedOptionsController.ListAllFixedOptions as RequestHandler);
   router.get("/fixedOptions/:fixedOptionsId", fixedOptionsController.getFixedOptionsById as RequestHandler);
   router.post("/fixedOptions", fixedOptionsController.createFixedOptions as RequestHandler);
@@ -65,9 +65,6 @@ export async function createRouter(
   router.post("/plugins", pluginsController.addPlugin as RequestHandler);
   router.patch("/plugins/:pluginId", pluginsController.editPlugin as RequestHandler);
   router.delete("/plugins/:pluginId", pluginsController.deleteStack as RequestHandler);
-  
-  router.post("/chat-template", scaffolderAIController.startChat as RequestHandler);
-  router.delete("/chat-template", scaffolderAIController.deleteChat as RequestHandler);
 
     router.get('/health', (_, response) => {
     logger.info('PONG!');
