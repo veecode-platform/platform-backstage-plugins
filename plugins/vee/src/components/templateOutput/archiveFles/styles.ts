@@ -6,6 +6,23 @@ export const useArchivesFileStyles = makeStyles({
         width: "100%",
         height: "100% !important",
         backgroundColor: themeVariables.background.main,
+        overflow: 'auto',
+        "&::-webkit-scrollbar": {
+            width: "6px",
+            height: "4px",
+            backgroundColor: themeVariables.background.dark,
+          },
+          "&::-webkit-scrollbar-track": {
+            boxShadow: `inset 0 0 5px ${themeVariables.blur.dark}15`,
+            borderRadius: "10px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            background: themeVariables.border.main,
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: themeVariables.background.secondary,
+            cursor: 'pointer'
+          },
     },
     menu:{
         width: "100%",
