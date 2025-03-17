@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AssistantAIController } from './AssistantAIController';
-import { veeReadPermission} from '@veecode-platform/backstage-plugin-vee-common';
+import {  AnalyzeAndStartChatParams, DownloadTemplateAndCreateVectorStoreParams, veeReadPermission} from '@veecode-platform/backstage-plugin-vee-common';
 import { InputError, NotAllowedError, stringifyError } from '@backstage/errors';
 import { IScaffolderAIControler } from './types';
 import { VeeClient } from '../api/client';
@@ -23,47 +23,47 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
     this.veeCodeAssistantAI = new VeeClient(this.config, this.logger)
   }
 
-  async uploadTemplateFiles (req: Request, res: Response) {
-
-    const { engine, templateName, files } = req.body;
-
-    if (
-      !(await this.isRequestAuthorized(
-        req,
-        veeReadPermission,
-      ))
-    ) {
-      throw new NotAllowedError('Unauthorized');
-    }
-
-    try {
+   createVectorStore = async (req: Request, res: Response) => {
+  
+    const { engine, templateName, files } = req.body as DownloadTemplateAndCreateVectorStoreParams;
+  
+      if (
+        !(await this.isRequestAuthorized(
+          req,
+          veeReadPermission,
+        ))
+      ) {
+        throw new NotAllowedError('Unauthorized');
+      }
+  
+      try {
     
-      if(!files || files.length === 0){
-        res.status(400).json({error: "No files uploaded"})
-      }
-
-      const response = await this.veeCodeAssistantAI.submitDataToVectorStore(engine,templateName, files);
-
-      res.status(200).json({
+        if(!files || files.length === 0 || !Array.isArray(files)){
+          res.status(400).json({error: "No files uploaded"})
+        }
+  
+        const response = await this.veeCodeAssistantAI.submitDataToVectorStore({engine,repoName: templateName, files});
+  
+        res.status(200).json({
         message: response.message,
-        vectorStoreId: response.vectorStoreId,
-      })
-    } catch (err: any) {
-      if (err.errors) {
-        throw new InputError(
-          `Error during upload and initialization: ${stringifyError(
-            err.errors,
-          )}`,
-        );
+        vectorStoreId : response.vectorStoreId,
+        })
+      } catch (err: any) {
+        if (err.errors) {
+          throw new InputError(
+            `Error during upload and initialization: ${stringifyError(
+              err.errors,
+            )}`,
+          );
+        }
+        throw err;
       }
-      throw err;
-    }
-  };
+    };
+
+  async analyzeAndStartChat (req: Request, res: Response) {
 
 
-  async startChat (req: Request, res: Response) {
-
-    const { engine, vectorStoreId, prompt, template, useDataset } = req.body;
+    const {engine, vectorStoreId, prompt, repoName, repoStructure, isTemplate, useDataset } = req.body as AnalyzeAndStartChatParams;
 
     if (
       !(await this.isRequestAuthorized(
@@ -76,7 +76,7 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
 
     try {
 
-      const response = await this.veeCodeAssistantAI.chat(engine,vectorStoreId,prompt, template, useDataset)
+      const response = await this.veeCodeAssistantAI.chat({engine,vectorStoreId,repoName,repoStructure,prompt, isTemplate, useDataset})
 
       res.status(200).json({
         message: "Analysis completed",
@@ -107,10 +107,8 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
       throw new NotAllowedError('Unauthorized');
     }
 
-    // TODO Check response
-
      try{
-       const response = await this.veeCodeAssistantAI.clearHistory(engine,vectorStoreId, assistantId, threadId)
+       const response = await this.veeCodeAssistantAI.clearHistory({engine,vectorStoreId, assistantId, threadId})
        res.status(200).json({
         message: response.message,
       });
@@ -124,6 +122,4 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
         throw err;
       }
   };
-
-  // TODO -- next feature: publish template in git provider
 }
