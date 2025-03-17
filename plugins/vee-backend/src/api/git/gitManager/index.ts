@@ -7,7 +7,7 @@ import { FileContent, IRepository } from "@veecode-platform/backstage-plugin-vee
 import fs from "fs";
 import path from "path";
 import mime from "mime-types";
-import { IGitManager } from "./types";
+import { IGitManager, ReturnRepoInfoParams } from "./types";
 
 export class GitManager implements IGitManager {
   private readonly githubManager: GithubManager;
@@ -18,14 +18,14 @@ export class GitManager implements IGitManager {
     this.gitlabManager = new GitlabManager();
   }
 
-  async returnRepoInfo(location: string) {
+  async returnRepoInfo({location,partial}:ReturnRepoInfoParams) {
     const url = parseGitUrl(location);
     switch (true) {
       case url.includes("github"): {
-        return this.githubManager.returnRepoInfo(url);
+        return this.githubManager.returnRepoInfo({url,partial});
       }
       case url.includes("gitlab"): {
-        return this.gitlabManager.returnRepoInfo(url);
+        return this.gitlabManager.returnRepoInfo({url,partial});
       }
       default:
         throw new Error("Git provider error: unimplemented!");
@@ -76,6 +76,45 @@ export class GitManager implements IGitManager {
     }
   }
 
+  async partialClone(token: string, localPath: string, repoUrl: string, branch: string, folderPath: string) {
+    this.logger.info(`Initializing partial clone for folder: ${folderPath}`);
+
+    if (fs.existsSync(localPath)) {
+      this.logger.info(`Directory exists: ${localPath}, removing it.`);
+      await this.removeTemporaryPath(localPath);
+    }
+
+    const isGitLab = repoUrl.includes("gitlab");
+    const authenticatedRepoUrl = isGitLab
+      ? repoUrl.replace("https://", `https://oauth2:${token}@`)
+      : repoUrl.replace("https://", `https://${token}@`);
+
+    try {
+      this.logger.info(`Cloning repository...`);
+
+      const git = simpleGit();
+      await git.clone(authenticatedRepoUrl, localPath, ["--branch", branch, "--depth", "1"]);
+
+      if (!fs.existsSync(localPath)) {
+        throw new Error(`Error: Directory not found: ${localPath}`);
+      }
+
+      this.logger.info(`Repository successfully cloned! Now configuring sparse checkout.`);
+
+      await git.cwd(localPath);
+      await git.raw(['sparse-checkout', 'init', '--cone']);
+      await git.raw(['sparse-checkout', 'set', folderPath]);
+
+      this.logger.info(`Sparse checkout configured for: ${folderPath}`);
+
+      // Return files from the partially cloned repository
+      return await this.returnFilesFromLocalPath(path.join(localPath, folderPath));
+    } catch (error) {
+      this.logger.error(`Error during partial clone: ${error}`);
+      throw new Error(`Error during partial clone: ${error}`);
+    }
+  }
+  
   async returnFilesFromLocalPath(localPath: string): Promise<IRepository> {
     this.logger.info("Recovering cloned files...");
 
