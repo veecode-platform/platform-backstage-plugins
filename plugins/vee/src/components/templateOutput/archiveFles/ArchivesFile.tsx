@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Paper from '@mui/material/Paper';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
@@ -7,77 +7,118 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Collapse from '@mui/material/Collapse';
 import { FcFolder, FcFile } from "react-icons/fc";
 import { useArchivesFileStyles } from './styles';
-import { MdOutlineExpandMore } from "react-icons/md";
-import { MdChevronRight } from "react-icons/md";
+import { MdOutlineExpandMore, MdChevronRight } from "react-icons/md";
+import { ArchivesFileProps, TreeNode } from './types';
 
-export const ArchivesFile = () => {
+export const ArchivesFile: React.FC<ArchivesFileProps> = ({ data }) => {
   const { root, menu, item, itemLabel, subMenu } = useArchivesFileStyles();
-  const [openDocs, setOpenDocs] = useState(false);
-  const [openSkeleton, setOpenSkeleton] = useState(false);
+  const [menuOptions, setMenuOptions] = React.useState<Record<string, boolean>>({});
 
-  const handleClick = (folder:string) => {
-    if (folder === 'Docs') {
-      setOpenDocs(!openDocs);
-    } else if (folder === 'Skeleton') {
-      setOpenSkeleton(!openSkeleton);
-    }
+  const handleClick = (relativePath: string) => {
+    setMenuOptions(prevState => ({
+      ...prevState,
+      [relativePath]: !prevState[relativePath]
+    }));
+  };
+
+  const treeData = React.useMemo(() => {
+    const rootNode: TreeNode = {
+      name: 'root',
+      relativePath: '',
+      children: [],
+      isFile: false,
+    };
+
+    const nodeMap: { [key: string]: TreeNode } = { '': rootNode };
+
+    data.forEach(file => {
+      const relativePath = file.relativePath || '';
+      const parts = relativePath.split('/');
+      let currentPath = '';
+      let currentNode = rootNode;
+
+      parts.forEach((part) => {
+        if (part) {
+          const newPath = currentPath ? `${currentPath}/${part}` : part;
+          if (!nodeMap[newPath]) {
+            const newNode: TreeNode = {
+              name: part,
+              relativePath: newPath,
+              children: [],
+              isFile: false,
+            };
+            nodeMap[newPath] = newNode;
+            currentNode.children.push(newNode);
+          }
+          currentNode = nodeMap[newPath];
+          currentPath = newPath;
+        }
+      });
+
+      currentNode.children.push({
+        name: file.name,
+        relativePath: relativePath ? `${relativePath}/${file.name}` : file.name,
+        children: [],
+        isFile: true,
+        file: file,
+      });
+    });
+
+    return rootNode.children;
+  }, [data]);
+
+  const renderTree = (nodes: TreeNode[], path = '') => {
+    const folders: TreeNode[] = [];
+    const files: TreeNode[] = [];
+
+    nodes.forEach(node => {
+      if (node.isFile) {
+        files.push(node);
+      } else {
+        folders.push(node);
+      }
+    });
+
+    const sortedNodes = [...folders, ...files];
+
+    return sortedNodes.map(node => {
+      const fullPath = path ? `${path}/${node.name}` : node.name;
+      const isFolderOpen = !!menuOptions[node.relativePath];
+
+      if (!node.isFile) {
+        return (
+          <React.Fragment key={fullPath}>
+            <MenuItem onClick={() => handleClick(node.relativePath)} className={item}>
+              {isFolderOpen ? <MdOutlineExpandMore /> : <MdChevronRight />}
+              <ListItemIcon>
+                <FcFolder size={20} />
+              </ListItemIcon>
+              <ListItemText className={itemLabel}>{node.name}</ListItemText>
+            </MenuItem>
+            <Collapse in={isFolderOpen} timeout="auto" unmountOnExit>
+              <MenuList component="div" disablePadding className={subMenu}>
+                {renderTree(node.children, node.relativePath)}
+              </MenuList>
+            </Collapse>
+          </React.Fragment>
+        );
+      }
+
+      return (
+        <MenuItem className={item} key={fullPath}>
+          <ListItemIcon>
+            <FcFile size={20} />
+          </ListItemIcon>
+          <ListItemText className={itemLabel}>{node.name}</ListItemText>
+        </MenuItem>
+      );
+    });
   };
 
   return (
     <Paper className={root}>
       <MenuList className={menu}>
-        <MenuItem onClick={() => handleClick('Docs')} className={item}>
-         {openDocs ? <MdOutlineExpandMore /> : <MdChevronRight />}   
-         <ListItemIcon>
-           <FcFolder size={20}/>
-         </ListItemIcon>
-         <ListItemText className={itemLabel}>Docs</ListItemText>  
-        </MenuItem>
-          <Collapse in={openDocs} timeout="auto" unmountOnExit>
-            <MenuList component="div" disablePadding className={subMenu}>
-              <MenuItem className={item}>
-                <ListItemIcon>
-                  <FcFile size={20}/>
-                </ListItemIcon>
-                <ListItemText className={itemLabel}>index.md</ListItemText>
-              </MenuItem>
-            </MenuList>
-          </Collapse>
-        <MenuItem onClick={() => handleClick('Skeleton')} className={item}>
-         {openSkeleton ? <MdOutlineExpandMore /> : <MdChevronRight />}
-          <ListItemIcon>
-              <FcFolder size={20}/>
-            </ListItemIcon>
-            <ListItemText className={itemLabel}>Skeleton</ListItemText> 
-        </MenuItem>
-          <Collapse in={openSkeleton} timeout="auto" unmountOnExit>
-            <MenuList component="div" disablePadding className={subMenu}>
-              <MenuItem className={item}>
-                <ListItemIcon>
-                  <FcFile size={20}/>
-                </ListItemIcon>
-                <ListItemText className={itemLabel}>template.yaml</ListItemText>
-              </MenuItem>
-            </MenuList>
-          </Collapse>
-        <MenuItem className={item}>
-          <ListItemIcon>
-            <FcFile size={20}/>
-              </ListItemIcon>
-            <ListItemText className={itemLabel}>README.MD</ListItemText>
-          </MenuItem>
-        <MenuItem className={item}>
-            <ListItemIcon>
-              <FcFile size={20}/>
-            </ListItemIcon>
-            <ListItemText className={itemLabel}>mkdocs.yml</ListItemText>
-        </MenuItem>
-         <MenuItem className={item}>
-            <ListItemIcon>
-              <FcFile size={20}/>
-            </ListItemIcon>
-            <ListItemText className={itemLabel}>template.yaml</ListItemText>
-          </MenuItem>
+        {renderTree(treeData)}
       </MenuList>
     </Paper>
   );
