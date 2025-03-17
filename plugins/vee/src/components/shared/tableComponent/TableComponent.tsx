@@ -16,7 +16,6 @@ import { useTableComponentStyles } from './styles';
 import { EmptyStateComponent } from '../emptyStateComponent/EmptyStateComponent';
 import { LoadingProgress } from '../LoadingProgress/LoadingProgress';
 import Chip from '@mui/material/Chip';
-import { RiStarSFill } from "react-icons/ri";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -111,7 +110,10 @@ export const TableComponent =
                     {Array.isArray(row[column]) ? (
                       row[column].map((item: string, itemIndex: number) => (
                         <span key={itemIndex} >
-                          <Chip label={item} sx={{ padding: '.05rem'}} size="small" icon={<RiStarSFill size={10}/>}/>
+                          <Chip 
+                            label={item} 
+                            sx={{ padding: '.05rem'}} 
+                            />
                         </span>
                       ))
                     ) : (
