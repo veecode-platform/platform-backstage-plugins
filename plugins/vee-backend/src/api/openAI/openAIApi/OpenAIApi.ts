@@ -3,7 +3,7 @@ import type { Config } from "@backstage/config";
 import { AssistantAI } from "../assistantAI";
 import { OpenAIClient } from "../openAIClient"
 import { ThreadsManager } from "../threadsManager";
-import { IOpenAIApi } from "../types";
+import { ClearHistoryParams, ExecuteAndCreateRunParams, GetChatParams, IOpenAIApi, StartChatParams } from "../types";
 import { VectorStoreManager } from "../vectorStoreManager";
 import { FileContent } from "@veecode-platform/backstage-plugin-vee-common";
 import { validateAssistantResponse } from "../../../utils/helpers/validateAssistantResponse";
@@ -63,7 +63,7 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
     }
   }
 
-  async startChat(vectorStoreId: string, repoName:string, repoStructure:string, useDataset?:boolean) {
+  async startChat({vectorStoreId, repoName, repoStructure, useDataset}:StartChatParams) {
     try {
       this.logger.info('starting chat...');
       const assistant = await this.initializeAssistant(vectorStoreId,repoName, repoStructure, useDataset);
@@ -75,24 +75,24 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
     }
   }
 
-  async executeAndCreateRun(assistantId: string, threadId: string, template: string) {
-    const run = await this.threadsManager.executeAndCreateRun(threadId, assistantId, template ?? null)
+  async executeAndCreateRun({assistantId, threadId, isTemplate}:ExecuteAndCreateRunParams) {
+    const run = await this.threadsManager.executeAndCreateRun({threadId, assistantId, isTemplate})
     return run;
   }
 
-async getChat(assistantId: string, threadId: string, message: string, template?: string) {
+  async getChat({assistantId, threadId, message, isTemplate}:GetChatParams) {
   try {
       // Add the message to the thread
-      await this.threadsManager.addMessageToThread(threadId, message);
+      await this.threadsManager.addMessageToThread({threadId, content: message});
 
       // Execute and create the run
-      const run = await this.executeAndCreateRun(assistantId, threadId, template!);
+      const run = await this.executeAndCreateRun({assistantId, threadId, isTemplate});
 
       // Wait for the run to finish
-      let runValidate = await this.threadsManager.checkRunStatus(threadId, run.id);
+      let runValidate = await this.threadsManager.checkRunStatus({threadId,runId: run.id});
       while (runValidate.status !== 'completed') {
           await new Promise(resolve => setTimeout(resolve, 1000));
-          runValidate = await this.threadsManager.checkRunStatus(threadId, run.id);
+          runValidate = await this.threadsManager.checkRunStatus({threadId, runId: run.id});
       }
 
       // Retrieves the most recent messages
@@ -124,7 +124,7 @@ async getChat(assistantId: string, threadId: string, message: string, template?:
   }
 }
 
-  async clearHistory(vectorStoreId:string,assistantId:string, threadId:string){
+  async clearHistory({assistantId,vectorStoreId,threadId}:ClearHistoryParams){
     this.logger.info('clearing History...');
     try{
       if(vectorStoreId) await this.vectorStoreManager.deleteVectorStore(vectorStoreId);
