@@ -4,13 +4,14 @@ import { useButtonStyles } from "./styles";
 
 export const Button : React.FC<ButtonProps> = (props) => {
     const { variant, children, ...rest} = props;
-    const { root, primary, secondary, danger } = useButtonStyles();
+    const { root, primary, secondary, dark, danger } = useButtonStyles();
 
     return (
         <button className={`
           ${root}
           ${ variant === "primary" && primary}
           ${ variant === "secondary" && secondary}
+          ${ variant === "dark" && dark}
           ${ variant === "danger" && danger}
         `}
          {...rest}
