@@ -1,8 +1,8 @@
-import { PluginListProps } from "../../../utils/types";
+import { PluginListProps, StackInstructiosProps } from "../../../utils/types";
 
-export const setStackId = (stackId:string) => ({
+export const setStackInfo = (stackInfo: StackInstructiosProps) => ({
     type: "SET_STACK_ID",
-    payload: stackId
+    payload: stackInfo
 }as const);
 
 export const setPlugins = (plugins: PluginListProps[]) => ({
@@ -27,7 +27,7 @@ export const resetInstructions = () => ({
 
 export type InstructionsActionType = 
 ReturnType<
-typeof setStackId |
+typeof setStackInfo |
 typeof setPlugins |
 typeof setTemplateName |
 typeof setAdditionalInfo |
