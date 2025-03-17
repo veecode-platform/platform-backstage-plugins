@@ -7,7 +7,7 @@ export const usePluginListStyles = makeStyles({
         maxWidth: themeVariables.layout.maxWidth,
         backgroundColor: themeVariables.background.dark,
         borderRadius: '5px',
-        padding: '1rem',
+        padding: '0 1rem',
         display: 'flex',
         flexDirection: 'column',
         gap: '.5rem',
