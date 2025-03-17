@@ -22,8 +22,14 @@ export interface PluginListProps {
     icon: string | React.JSX.Element | null,
     name: string
 }
+
+export interface StackInstructiosProps {
+    id: string,
+    name: string,
+    source: string,
+}
 export interface InstructionsProps {
-    stackId: string,
+    stackInfo: StackInstructiosProps,
     templateName: string,
     additionalInfo?: string,
     plugins?: pluginInstructionsType[]
