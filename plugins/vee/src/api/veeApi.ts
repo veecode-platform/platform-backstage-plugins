@@ -6,10 +6,15 @@ export const veeApiRef = createApiRef<VeeApi>({
 });
 
 export interface VeeApi {
-    cloneRepo(location: string): Promise<IRepository>,
+    cloneRepo(location: string): Promise<IRepository>;
+    cloneTemplateSource(source: string): Promise<IRepository>;
+    getContentBySource(source: string): Promise<string>;
     submitRepo(engine: string | undefined, files: FileContent[], repoName: string): Promise<SubmitRepoResponse>,
+    submitTemplate(engine: string | undefined, files: FileContent[], templateName: string): Promise<SubmitRepoResponse>;
     getChat(engine: string | undefined, vectorStoreId: string, prompt: string, repoName?: string, repoStructure?: string): Promise<InitializeAssistantAIResponse>,
+    getChatForTemplate(engine: string | undefined, vectorStoreId: string, prompt: string, templateName?: string, repoStructure?: string): Promise<InitializeAssistantAIResponse>;
     clearHistory(engine: string | undefined, vectorStoreId: string, assistantId: string, threadId: string): Promise<ClearHistoryResponse>,
+    clearTemplateHistory(engine: string | undefined, vectorStoreId: string, assistantId: string, threadId: string): Promise<ClearHistoryResponse>;
     saveChangesInRepository(files: FileContent[], location: string,title:string, message: string): Promise<PullRequestResponse>
     listStacks(): Promise<IStack[]>;
     getStackById(stackId: string): Promise<IStack>;
