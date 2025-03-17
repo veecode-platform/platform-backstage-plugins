@@ -7,26 +7,46 @@ import { useStepperComponentStyles } from './styles';
 import { useVeeContext } from '../../../context';
 import { StepperComponentProps } from './types';
 import { resetInstructions, setAdditionalInfo, setTemplateName } from '../../../context/state';
+import { useNavigate } from 'react-router-dom';
+
 
 export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
   
   const [step0Error, setStep0Error] = React.useState<boolean>(true);
   const [activeStep, setActiveStep] = React.useState(0);
-  const [loading, setLoading ] = React.useState<boolean>(false);
-  const { onCloseModal, onTemplateProcessing } = props;
+  const { onCloseModal, processing, onProcessing } = props;
   const steps = ["Add Template name", "Add additional informations"];
-  const { instructionsState, instructionsDispatch } = useVeeContext()
+  const { instructionsState, instructionsDispatch , getTemplateFilesAndCreateVectorStore,templateChat} = useVeeContext()
   const { input, root, textareaStyles } = useStepperComponentStyles();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    if(instructionsState){
-       setLoading(true)
-       // await addPlugin(newPlugin);
-       setLoading(false);
-       onTemplateProcessing(true);
-       instructionsDispatch(resetInstructions());
-       onCloseModal();
-    }
+    onProcessing(true);
+    setTimeout(()=>{onProcessing(false);},2000);
+    onCloseModal();
+    navigate("/vee/scaffolder-ai/output")
+    // if(instructionsState){
+    //    onProcessing(true);
+    //    // TODO -- melhorar o prompt e incluir as docs dos plugins na tabela do backend e na interface do pluginListProps
+    //    const prompt = `
+    //     The template ${instructionsState.templateName} used the 
+    //     ${instructionsState.stackInfo.name}, that source url:
+    //     ${instructionsState.stackInfo.source}
+    //     ${instructionsState.plugins ? `and used instructionsState.plugins` : ''}
+    //     ,
+    //      more information about: 
+    //     ${instructionsState.additionalInfo}
+    //    `
+    //    const response = await getTemplateFilesAndCreateVectorStore(instructionsState.stackInfo.source, instructionsState.templateName); 
+    //   if(response){
+    //     await templateChat(instructionsState.templateName, prompt);
+    //     instructionsDispatch(resetInstructions());
+    //     onProcessing(false);
+    //     onCloseModal();
+    //     navigate("/vee/scaffolder-ai/output")
+    //   }
+  
+    // }
   };
 
   const handleNext = () => {
@@ -84,7 +104,7 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
 
   const getButtonText = () => {
     if (activeStep === steps.length - 1) {
-      return loading ? "loading..." : "Create";
+      return processing ? "loading..." : "Create";
     }
     return "Next";
   };
@@ -114,7 +134,7 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
                           </Button>
                           <Button variant="contained" color="primary"
                             onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
-                            disabled={loading || handleNextStep(activeStep)}>
+                            disabled={processing || handleNextStep(activeStep)}>
                             {getButtonText()}
                           </Button>
                         </Grid>
