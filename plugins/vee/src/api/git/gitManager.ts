@@ -17,8 +17,8 @@ export class GitManager implements IGitManager{
 
     async getAccessToken(location: string){
 
-        const  url = parseGitUrl(location); 
-
+        const  url = location.startsWith('url:') ? parseGitUrl(location) : location; 
+        
         switch(true){
             case url.includes('github'): {
                 const token = await this.githubAuthApi.getAccessToken([
@@ -71,4 +71,23 @@ export class GitManager implements IGitManager{
               throw new Error('Git provider error: Pull request unimplemented!');
         }  
     }
+
+    async getContentBySource(source: string){
+
+        switch(true){
+            case source.includes('github'): {
+                const token = await this.getAccessToken(source);
+                const githubManager = this.getGithubManager(token);
+                return githubManager.getContentBySource(source);
+            }
+            case source.includes('gitlab'): {  // TODO
+                const token = await this.getAccessToken(source);
+                const githubManager = this.getGithubManager(token);
+                return githubManager.getContentBySource(source);
+             }
+            default:
+              throw new Error('Git provider error: Pull request unimplemented!');
+        }  
+    }
+    
 }
