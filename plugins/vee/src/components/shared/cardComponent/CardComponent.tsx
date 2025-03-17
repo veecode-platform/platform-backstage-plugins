@@ -1,10 +1,5 @@
 import React from "react";
-import { useCardComponentStyles, useCardElementStyles } from "./styles";
-import { CardProps } from "./types";
 import Chip from "@mui/material/Chip";
-import { RiPuzzle2Fill } from "react-icons/ri";
-import { StackIcon } from "../../../assets/stack-icon";
-import { PluginIcon } from "../../../assets/plugin-icon";
 import  Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import  Card  from "@mui/material/Card";
@@ -12,6 +7,12 @@ import CardMedia  from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import  Avatar  from "@mui/material/Avatar";
 import { Link } from "@backstage/core-components";
+import Tooltip  from "@mui/material/Tooltip";
+import { StackIcon } from "../../../assets/stack-icon";
+import { PluginIcon } from "../../../assets/plugin-icon";
+import { useCardComponentStyles, useCardElementStyles } from "./styles";
+import type { CardProps } from "./types";
+
 
 const CardElement : React.FC<Omit<CardProps,"path">> = (props) => {
    
@@ -21,37 +22,39 @@ const CardElement : React.FC<Omit<CardProps,"path">> = (props) => {
     return (
         <Card className={root}>
             <Box className={card}>
-            <CardMedia className={iconStyle}>
-                <Avatar className={iconImg}>
-                    {!icon && variant === "stack" && StackIcon }
-                    {!icon  && variant === "plugin" && PluginIcon}
-                    {!icon && variant === "default" && null}
-                    {icon && icon}
-                </Avatar>
-            </CardMedia>
-            <CardContent className={content}>
-                <Typography component="div" variant="h5" className={titleStyle}>
-                {title}
-                </Typography>
-                {subtitle && (
-                <Typography
-                    variant="subtitle1"
-                    component="div"
-                    className={subtitleStyle}
-                >
-                    {subtitle}
-                </Typography>
-                )}
-                {description && (
-                <Typography
-                    variant="body2"
-                    component="div"
-                    className={descriptionSyle}
-                >
-                    {description}
-                </Typography>
-                )}           
-            </CardContent>
+                <CardMedia className={iconStyle}>
+                    <Avatar className={iconImg}>
+                        {!icon && variant === "stack" && StackIcon }
+                        {!icon  && variant === "plugin" && PluginIcon}
+                        {!icon && variant === "default" && null}
+                        {icon && icon}
+                    </Avatar>
+                </CardMedia>
+                <CardContent className={content}>
+                    <Typography component="div" variant="h5" className={titleStyle}>
+                    {title}
+                    </Typography>
+                    {subtitle && (
+                    <Tooltip title={subtitle} placement="right-start" arrow>
+                        <Typography
+                        variant="subtitle1"
+                        component="div"
+                        className={subtitleStyle}
+                        >
+                        {subtitle}
+                    </Typography>
+                    </Tooltip>
+                    )}
+                    {description && (
+                    <Typography
+                        variant="body2"
+                        component="div"
+                        className={descriptionSyle}
+                    >
+                        {description}
+                    </Typography>
+                    )}           
+                </CardContent>
             </Box>
             {items && (
                 <Box className={chips}>
@@ -60,7 +63,9 @@ const CardElement : React.FC<Omit<CardProps,"path">> = (props) => {
                     key={item}
                     label={item}
                     size="small"
-                    icon={<RiPuzzle2Fill size={10} />}
+                    sx={{
+                        padding: '.3rem'
+                    }}
                 />
                 ))}
             </Box>
