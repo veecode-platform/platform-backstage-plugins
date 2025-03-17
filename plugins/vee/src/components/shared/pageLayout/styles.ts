@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core";
 
 export const usePageLayoutStyles = makeStyles({
     content: {
-        padding: '4rem 1.5rem',
+        padding: '2rem 1.5rem',
         height: '75vh',
         display: 'flex',
         alignItems: 'flex-start',
