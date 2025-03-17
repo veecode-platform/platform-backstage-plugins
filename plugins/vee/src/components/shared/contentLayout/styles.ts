@@ -53,9 +53,7 @@ export const useContentLayoutStyles = makeStyles({
       backgroundColor: themeVariables.background.dark,
       borderBottomLeftRadius: "10px",
       borderBottomRightRadius: "10px",
-  
-      /* scrollbar */
-    "&::-webkit-scrollbar": {
+     "&::-webkit-scrollbar": {
         width: "6px",
         backgroundColor: themeVariables.background.dark,
       },
