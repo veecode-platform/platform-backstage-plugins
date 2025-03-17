@@ -7,6 +7,7 @@ import  Box  from "@mui/material/Box";
 import { FaGitAlt } from "react-icons/fa";
 import { RiFileDownloadFill } from "react-icons/ri";
 import { useTemplateOutputStyles } from "./styles";
+import { templateDataMock } from "../../mock/template";
 
 export const TemplateOutput = () => {
     const { instructionsState } = useVeeContext();
@@ -19,7 +20,9 @@ export const TemplateOutput = () => {
         >
         <Grid2 className={root} spacing={2} container>
            <Grid2 size={{ md: 2 }}>
-             <ArchivesFile/>
+             <ArchivesFile
+              data={templateDataMock}
+             />
            </Grid2>
            <Grid2 size={{ md: 8 }} className={codeSection}>
               <CodeBlockComponent 
