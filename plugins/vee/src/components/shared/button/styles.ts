@@ -31,6 +31,10 @@ export const useButtonStyles = makeStyles({
         backgroundColor: themeVariables.colors.grey,
         color: themeVariables.colors.black
     },
+    dark:{
+        backgroundColor: themeVariables.colors.darkGrey,
+        color: themeVariables.colors.white
+    },
     danger:{
         backgroundColor: themeVariables.colors.red,
         color: themeVariables.colors.white
