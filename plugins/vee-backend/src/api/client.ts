@@ -1,8 +1,8 @@
 import type { LoggerService } from "@backstage/backend-plugin-api";
 import type { Config } from "@backstage/config";
 import { OpenAIApi } from "./openAI/openAIApi/OpenAIApi";
-import { EngineEnum, FileContent } from "@veecode-platform/backstage-plugin-vee-common";
-import { IVeeClient } from "./types";
+import { EngineEnum } from "@veecode-platform/backstage-plugin-vee-common";
+import { ChatParams, ClearHistoryParams, IVeeClient, SubmitDataToVectorStoreParams } from "./types";
 
 
 export class VeeClient implements IVeeClient {
@@ -16,7 +16,7 @@ export class VeeClient implements IVeeClient {
         this.openAIApi = new OpenAIApi(this.config, this.logger)
     }
 
-    async submitDataToVectorStore (engine: string, repoName:string, files:FileContent[]){
+    async submitDataToVectorStore ({engine,repoName,files}:SubmitDataToVectorStoreParams){
       switch(engine){
         case EngineEnum.openAI:
             return await this.openAIApi.submitDataToVectorStore(repoName,files);
@@ -25,12 +25,12 @@ export class VeeClient implements IVeeClient {
       }
     }
 
-    async chat (engine:string, vectorStoreId: string, prompt: string,repoName:string, repoStructure:string,template?:string, useDataset?:boolean){
+    async chat ({engine, vectorStoreId, prompt,repoName, repoStructure,isTemplate, useDataset}:ChatParams){
         switch(engine){
             case EngineEnum.openAI:
                 {
-                    const { threadId, assistantId } = await this.openAIApi.startChat(vectorStoreId,repoName, repoStructure,useDataset);
-                    const response = await this.openAIApi.getChat(assistantId, threadId, prompt,template);
+                    const { threadId, assistantId } = await this.openAIApi.startChat({vectorStoreId,repoName, repoStructure,useDataset});
+                    const response = await this.openAIApi.getChat({assistantId, threadId, message:prompt,isTemplate});
                     return {
                         threadId,
                         assistantId,
@@ -45,11 +45,11 @@ export class VeeClient implements IVeeClient {
         }
     }
 
-    async clearHistory (engine:string,vectorStoreId: string, assistantId: string, threadId: string){
+    async clearHistory ({engine,vectorStoreId,assistantId,threadId}:ClearHistoryParams){
         switch(engine){
             case EngineEnum.openAI:
                 {
-                    const response = await this.openAIApi.clearHistory(vectorStoreId, assistantId, threadId);
+                    const response = await this.openAIApi.clearHistory({assistantId,vectorStoreId,threadId});
                     return response
                 }
             default:
