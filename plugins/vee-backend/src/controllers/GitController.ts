@@ -21,7 +21,7 @@ export class GitController extends AssistantAIController implements IGitControll
     try {
         const token = this.returnToken(req);
         const gitManager = this.gitManager();
-        const { localPath, repoUrl, branch } = await gitManager.returnRepoInfo(location);
+        const { localPath, repoUrl, branch } = await gitManager.returnRepoInfo({location});
         const response = await gitManager.cloneRepo(token,localPath,repoUrl,branch);
         res.status(200).json({
           message: 'Repository successfully cloned',
@@ -39,5 +39,35 @@ export class GitController extends AssistantAIController implements IGitControll
       }
       
     }
+
+    partialClone = async (req: Request,res: Response) => {
+
+      const { source } = req.body;
+  
+      if(!source){
+        res.status(400).json({error: "Bad Request: Expect: { source } in the request body"})
+      }
+  
+      try {
+          const token = this.returnToken(req);
+          const gitManager = this.gitManager();
+          const { localPath, repoUrl, branch, folderPath } = await gitManager.returnRepoInfo({location:source,partial:true});
+          const response = await gitManager.partialClone(token,localPath,repoUrl,branch,folderPath!);
+          res.status(200).json({
+            message: 'Repository successfully partial cloned',
+            data: response
+          })
+        } catch (err: any) {
+          if (err.errors) {
+            throw new InputError(
+              `Error during clone: ${stringifyError(
+                err.errors,
+              )}`,
+            );
+          }
+          throw err;
+        }
+        
+      }
 
 }
