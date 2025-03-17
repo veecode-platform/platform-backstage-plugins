@@ -4,7 +4,7 @@ import { Base64 } from 'js-base64';
 import { extractGitHubInfo } from "../../../../utils/helpers/extractGithubInfo";
 import { formatHttpErrorMessage } from "../../../../utils/helpers/formatHttpErrorMessage";
 import { generateBranchName } from "../../../../utils/helpers/generateBranchName";
-import { FileContent, PullRequestResponse } from "@veecode-platform/backstage-plugin-vee-common";
+import type { FileContent, PullRequestResponse, GithubFileResponse } from "@veecode-platform/backstage-plugin-vee-common";
 import { IGithubManager } from "./type";
 import { Provider } from "../provider";
 
@@ -143,4 +143,26 @@ export class GithubManager extends Provider implements IGithubManager {
           message: "Pull request created successfully!",
         } as PullRequestResponse;
       }
+
+    async getFileContentFromPath(source:string) {
+
+      const { host, owner, repo, branch, path } = extractGitHubInfo(source);
+      const octokit = await this.getOctokit(host);
+     
+      const response = await octokit.repos.getContent({
+        owner,
+        repo,
+        path,
+        ref: branch
+      });
+
+      const data : GithubFileResponse = response.data as GithubFileResponse;
+      return data;
+    }
+
+    async getContentBySource(source:string){
+      const data = await this.getFileContentFromPath(source);
+      const contentDecoded = Base64.decode(data.content)   
+      return contentDecoded
+    }
 }
