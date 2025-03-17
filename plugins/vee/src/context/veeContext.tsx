@@ -23,6 +23,9 @@ export type VeeContextType = {
     promptValue: string | null;
     analyzeChangesAndSubmitToRepository: (files: FileContent[]) => Promise<PullRequestResponse | null>;
     clearHistory: () => Promise<void>;
+    getTemplateFilesAndCreateVectorStore: (source: string, templateName: string, engine?: string) => Promise<SubmitRepoResponse>;
+    templateChat: (templateName: string, prompt: string, engine?: string) => Promise<{title: string; analysis: string; files: FileContent[]} | null>;
+    clearTemplateHistory: (engine?: string) => Promise<void>;
     allStacksState: IStack[];
     stackSelectedState: IStack | null;
     listAllStacks: () => Promise<IStack[]>;
@@ -40,7 +43,8 @@ export type VeeContextType = {
     pluginSelectedState: IPlugin | null;
     addPluginSelected: (plugin: IPlugin) => void;
     instructionsState: InstructionsProps;
-    instructionsDispatch: React.Dispatch<InstructionsActionType>
+    instructionsDispatch: React.Dispatch<InstructionsActionType>;
+    // generateTemplateChat: () => Promise<void>
 }
 
 export const VeeContext = React.createContext<VeeContextType>(null!)

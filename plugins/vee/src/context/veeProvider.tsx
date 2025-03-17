@@ -1,9 +1,36 @@
 import React from "react";
 import { VeeContext } from "./veeContext";
-import { EntityInfoReducer, initialEntityInfoState, initialInstructionsState, initialPluginSelectedState, initialPluginsState, initialPullRequestState, initialStackSelectedState, initialStacksState, InstructionsReducer, PluginSelectedReducer, PluginsReducer, PullRequestInfoReducer, savePlugins, savePluginSelected, savePullRequestInfo, saveStacks, saveStackSelected, StackSelectedReducer, StacksReducer } from "./state";
-import { alertApiRef, errorApiRef, useApi } from '@backstage/core-plugin-api';
+import { 
+    EntityInfoReducer, 
+    initialEntityInfoState, 
+    initialInstructionsState, 
+    initialPluginSelectedState, 
+    initialPluginsState, 
+    initialPullRequestState, 
+    initialStackSelectedState, 
+    initialStacksState, 
+    InstructionsReducer, 
+    PluginSelectedReducer,
+    PluginsReducer, 
+    PullRequestInfoReducer, 
+    savePlugins, 
+    savePluginSelected, 
+    savePullRequestInfo, 
+    saveStacks, 
+    saveStackSelected, 
+    StackSelectedReducer, 
+    StacksReducer } from "./state";
+import { 
+    alertApiRef, 
+    errorApiRef, 
+    useApi } from '@backstage/core-plugin-api';
 import { veeApiRef } from "../api/veeApi";
-import { CreatePluginParams, CreateStackParams, FileContent, IPlugin, IStack } from "@veecode-platform/backstage-plugin-vee-common";
+import { 
+    CreatePluginParams, 
+    CreateStackParams, 
+    FileContent, 
+    IPlugin, 
+    IStack } from "@veecode-platform/backstage-plugin-vee-common";
 
 interface VeeProviderProps {
     children: React.ReactNode
@@ -28,10 +55,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const errorApi = useApi(errorApiRef);
     const alertApi = useApi(alertApiRef);
 
-    const handleChat = () => {
-        setShowChat(!showChat)
-      };
-
+    const handleChat = () => setShowChat(!showChat);
 
     const getFilesFromRepoAndCreateVectorStore =  async () => {
         try{
@@ -41,7 +65,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
              const response = await api.submitRepo(engine, files, projectName);
              setVectorStoreId(response.vectorStoreId);
              setProjectStructure(structure);
-              return response
+             return response
             }
             return null
         }
@@ -97,6 +121,52 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             if(vectorStoreId && assistantId && threadId && entityInfoState){
                 const { engine } = entityInfoState;
                 await api.clearHistory(engine,vectorStoreId, assistantId, threadId);
+            }
+            return
+        }
+        catch(error:any){
+            errorApi.post(error);
+        }
+    };
+
+    const getTemplateFilesAndCreateVectorStore = async (source:string, templateName:string, engine: string = "openAI") => {
+        try{
+             const { files, structure } = await api.cloneRepo(source);
+             const response = await api.submitTemplate(engine, files, templateName);
+             setVectorStoreId(response.vectorStoreId);
+             setProjectStructure(structure);
+             return response
+        }
+        catch(error:any){ 
+            throw new Error(error);
+        }
+    }
+
+    const templateChat = async (templateName: string, prompt: string, engine: string = "openAI") => {
+        try{
+            if(vectorStoreId && projectStructure){
+              const response = await api.getChatForTemplate(engine,vectorStoreId,prompt,templateName, projectStructure);
+              setAssistantId(response.assistantId);
+              setThreadId(response.threadId);
+              dispatchPullRequestInfo(savePullRequestInfo({title: response.title, message: response.message}))
+              return {
+                title: response.title,
+                analysis: response.message,
+                files: response.generatedFiles,
+              }
+            }
+            return null
+        }
+        catch(error:any){
+            errorApi.post(error);
+            return null
+        }
+    }
+
+    const clearTemplateHistory = async (engine:string="openAI")=> {
+        try{
+            if(vectorStoreId && assistantId && threadId){
+                await api.clearTemplateHistory(engine,vectorStoreId, assistantId, threadId);
             }
             return
         }
@@ -252,6 +322,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[pluginSelectedState]);
 
+
     return (
         <VeeContext.Provider 
          value={{
@@ -271,6 +342,9 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             promptValue,
             analyzeChangesAndSubmitToRepository,
             clearHistory,
+            getTemplateFilesAndCreateVectorStore,
+            templateChat,
+            clearTemplateHistory,
             allStacksState,
             listAllStacks,
             getStackById,
