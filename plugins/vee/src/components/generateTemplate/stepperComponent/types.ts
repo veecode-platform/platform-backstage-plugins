@@ -1,4 +1,5 @@
 export interface StepperComponentProps {
     onCloseModal: () => void;
-    onTemplateProcessing: React.Dispatch<React.SetStateAction<boolean>>
+    processing: boolean;
+    onProcessing: React.Dispatch<React.SetStateAction<boolean>>
 }
