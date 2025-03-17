@@ -21,6 +21,7 @@ export const useCardElementStyles = makeStyles({
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
+    padding: '.5rem 0'
    },
    content:{
     display: 'flex',
@@ -45,7 +46,11 @@ export const useCardElementStyles = makeStyles({
     color: themeVariables.colors.white
    },
    subtitleStyle: {
-    color: themeVariables.colors.main
+    color: themeVariables.colors.main,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    width: '300px',
    },
    descriptionSyle: {
     color: themeVariables.colors.white
