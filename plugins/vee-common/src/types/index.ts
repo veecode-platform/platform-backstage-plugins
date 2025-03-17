@@ -31,12 +31,19 @@ export interface DonwloadRepoAndCreateVectorStoreParams {
   files: FileContent[]
 }
 
+export interface DownloadTemplateAndCreateVectorStoreParams 
+extends Omit<DonwloadRepoAndCreateVectorStoreParams,"reponame"> {
+  templateName: string
+} 
+
 export interface AnalyzeAndStartChatParams {
   engine: string,
   vectorStoreId: string,
   prompt: string,
   repoName: string,
-  repoStructure: string
+  repoStructure: string,
+  isTemplate?:boolean,
+  useDataset?: boolean
 }
 
 export interface DeleteChatParams {
@@ -140,6 +147,24 @@ export interface DeleteServiceResponse {
 
 export interface GetFilesResponse  {
   [fileName: string]: string;
+}
+export interface GithubFileResponse {
+  type:  "dir" | "file" | "submodule" | "symlink",
+  encoding: string,
+  size: number,
+  name: string,
+  path: string,
+  content: string,
+  sha: string,
+  url: string,
+  git_url: string,
+  html_url: string,
+  download_url: string,
+  _links: {
+    git: string,
+    self: string,
+    html: string
+  }
 }
 
 /**
