@@ -35,21 +35,50 @@ export interface IChatFactory {
  */
 
 export interface IOpenAIApi {
-  startChat(vectorStoreId: string,repoName:string, repoStructure: string,useDataset?:boolean): Promise<ThreadCreatedResponse>;
+  startChat(
+    {vectorStoreId,
+      repoName,
+      repoStructure,
+      useDataset}
+      :StartChatParams)
+      : Promise<ThreadCreatedResponse>;
   getChat(
-    vectoreStoreId: string,
+   {
+    assistantId,
+    threadId,
+    message,
+    isTemplate} : GetChatParams)
+    : Promise<{
+      analysis: string,
+      title:string;
+      messages: Message[];
+      generatedFiles: FileContent[];
+}>;
+  clearHistory({
+    assistantId, 
+    vectorStoreId, 
+    threadId}:ClearHistoryParams)
+    : Promise<DefaultResponse>
+}
+
+export type StartChatParams = {
+  vectorStoreId: string,
+  repoName:string, 
+  repoStructure: string,
+  useDataset?:boolean
+}
+
+export type GetChatParams = {
+    assistantId: string,
     threadId: string,
     message: string,
-    repoName:string,
-    repoStructure: string,
-    template: string,
-  ): Promise<{
-    analysis: string,
-    title:string;
-    messages: Message[];
-    generatedFiles: FileContent[];
-}>;
-  clearHistory(vectoreStoreId:string,assistantId: string, threadId: string): Promise<DefaultResponse>
+    isTemplate?: boolean,
+}
+
+export type ClearHistoryParams = {
+  assistantId: string, 
+  vectorStoreId:string,
+  threadId: string
 }
 
 export type ThreadCreatedResponse = {
@@ -68,19 +97,23 @@ export interface IThreadsManager {
       _request_id?: string | null;
     }
   >;
-  addMessageToThread(threadId: string, content: string): Promise<void>;
+  addMessageToThread({
+    threadId, 
+    content}
+    :AddMessageToThreadParams)
+    : Promise<void>;
   executeAndCreateRun(
-    threadId: string,
-    assistantId: string,
-    template: string,
+    {threadId,
+    assistantId,
+    isTemplate }:ExecuteAndCreateRunParams
   ): Promise<
     Run & {
       _request_id?: string | null;
     }
   >;
   checkRunStatus(
-    threadId: string,
-    runId: string,
+   {threadId,
+    runId}:CheckRunStatusParams
   ): Promise<
     Run & {
       _request_id?: string | null;
@@ -90,6 +123,22 @@ export interface IThreadsManager {
   deleteThread(threadId: string): Promise<ThreadDeleted & {
     _request_id?: string | null;
 }>
+}
+
+export type ExecuteAndCreateRunParams = {
+  assistantId: string,
+  threadId: string,
+  isTemplate?: boolean
+}
+
+export type AddMessageToThreadParams = {
+  threadId: string,
+  content: string
+}
+
+export type CheckRunStatusParams = {
+  threadId: string,
+  runId: string
 }
 
 /**
