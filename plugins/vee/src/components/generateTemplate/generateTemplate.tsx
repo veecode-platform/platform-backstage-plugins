@@ -1,5 +1,4 @@
 import React from 'react';
-// import { useVeeContext } from '../../context';
 import { PluginListProps } from '../../utils/types';
 import { StepperComponent } from './stepperComponent';
 import { useParams } from 'react-router-dom';
@@ -8,7 +7,7 @@ import useAsync from 'react-use/esm/useAsync';
 import { PluginList } from '../plugins';
 import { FeedbackComponent, ModalComponent, PageLayout } from '../shared';
 import { GenerateTemplateWrapperProps } from './types';
-import { setStackId } from '../../context/state';
+import { setStackInfo } from '../../context/state';
 
 const GenerateTemplateWrapper : React.FC<GenerateTemplateWrapperProps> = (props) => {
   const { children, createAction = () => {}} = props;
@@ -34,7 +33,10 @@ export const GenerateTemplate = () => {
   const { value: allPlugins, loading, error } = useAsync(async()=>{
           if(stackId){
               const stack = await getStackById(stackId);
-              if(stack && stack.plugins) return stack.plugins;
+              if(stack && stack.plugins) {
+                instructionsDispatch(setStackInfo({id: stack.id as string, name: stack.name, source: stack.source}))
+                return stack.plugins
+              }
               return []
           }
           return []
@@ -53,13 +55,6 @@ export const GenerateTemplate = () => {
 
   const handleClose = () => setShowModal(!showModal);
   const handleSubmitInstructions = () => setShowModal(true);
-  
-  React.useEffect(()=>{
-      if(stackId){
-        instructionsDispatch(setStackId(stackId))
-      }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stackId])
 
 
   if(loading) return (    // TODO 
@@ -91,7 +86,8 @@ if(error) return (   // TODO
       >
         <StepperComponent
           onCloseModal={handleClose}
-          onTemplateProcessing={setTemplateProcessing}
+          processing={templateProcessing}
+          onProcessing={setTemplateProcessing}
         />
       </ModalComponent>
 
