@@ -10,7 +10,8 @@ import { useArchivesFileStyles } from './styles';
 import { MdOutlineExpandMore, MdChevronRight } from "react-icons/md";
 import { ArchivesFileProps, TreeNode } from './types';
 
-export const ArchivesFile: React.FC<ArchivesFileProps> = ({ data }) => {
+export const ArchivesFile: React.FC<ArchivesFileProps> = (props) => {
+  const { data, handleCode } = props;
   const { root, menu, item, itemLabel, subMenu } = useArchivesFileStyles();
   const [menuOptions, setMenuOptions] = React.useState<Record<string, boolean>>({});
 
@@ -105,7 +106,15 @@ export const ArchivesFile: React.FC<ArchivesFileProps> = ({ data }) => {
       }
 
       return (
-        <MenuItem className={item} key={fullPath}>
+        <MenuItem
+          className={item}
+          key={fullPath}
+          onClick={() => {
+            if (node.file) {
+              handleCode(node.file.originalFormat as string, node.file.content);
+            }
+          }}
+        >
           <ListItemIcon>
             <FcFile size={20} />
           </ListItemIcon>
