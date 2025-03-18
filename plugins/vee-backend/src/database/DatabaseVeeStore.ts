@@ -1,6 +1,6 @@
 import { DatabaseService, LoggerService, resolvePackagePath } from "@backstage/backend-plugin-api";
 import { Knex } from "knex";
-import { ANNOTATIONS_TABLE, FIXED_OPTIONS_TABLE, PLUGINS_TABLE, STACK_PLUGINS_TABLE, STACKS_TABLE } from "../utils/constants/tables";
+import { ANNOTATIONS_TABLE, FIXED_OPTIONS_TABLE, OPTIONS_TABLE, PLUGINS_TABLE, STACK_PLUGINS_TABLE, STACKS_TABLE } from "../utils/constants/tables";
 import { IFixedOptions, IPlugin, IStack } from "@veecode-platform/backstage-plugin-vee-common";
 import { UpdateFixedOptionsParams, UpdatePluginParams, UpdateStackParams, VeeStore } from "./types";
 
@@ -62,7 +62,14 @@ export class DatabaseVeeStore implements VeeStore {
         'id',
         fixedOptionsId,
       );
-      return fixedOptions && fixedOptions.length > 0 ? fixedOptions[0] : null;
+
+      if (!fixedOptions || fixedOptions.length === 0) {
+        return null;
+      }
+
+      const fixedOption = fixedOptions[0];
+      const options = await this.db(OPTIONS_TABLE).where('fixed_option_id', fixedOption.id);
+      return { ...fixedOption, options };
     } catch (error: any) {
       this.logger.error(error.message);
       return null;
@@ -75,19 +82,20 @@ export class DatabaseVeeStore implements VeeStore {
         return await this.updateFixedOption({fixedOptionsId: fixedOptions.id as string, fixedOptions});
       }
       return await this.db.transaction(async trx => {
-        await trx(FIXED_OPTIONS_TABLE)
+        const [fixedOptionCreated] = await trx(FIXED_OPTIONS_TABLE)
           .insert({
             type: fixedOptions.type,
-            options: JSON.stringify(fixedOptions.options),
-          })
-          .onConflict(['type'])
-          .ignore();
+          }).returning('*');
 
-        const [fixedOptionCreated] = await trx(FIXED_OPTIONS_TABLE).where({
-          type: fixedOptions.type,
-        });
+        if (fixedOptions.options && fixedOptions.options.length > 0) {
+          const optionsToInsert = fixedOptions.options.map(option => ({
+            ...option,
+            fixed_option_id: fixedOptionCreated.id,
+          }));
+          await trx(OPTIONS_TABLE).insert(optionsToInsert);
+        }
 
-        return (fixedOptionCreated as IFixedOptions) ?? null;
+        return { ...fixedOptionCreated, options: fixedOptions.options };
       });
     } catch (error: any) {
       this.logger.error(error.message);
@@ -100,17 +108,26 @@ export class DatabaseVeeStore implements VeeStore {
       const updateData: Partial<Record<keyof IFixedOptions, string>> = {};
   
       if (fixedOptions.type) updateData.type = fixedOptions.type;
-      if (fixedOptions.options) updateData.options = JSON.stringify(fixedOptions.options);
       if (Object.keys(updateData).length === 0) return null;
       
       return await this.db.transaction(async trx => {
         const updateFixedOptionRowsCount = await trx(FIXED_OPTIONS_TABLE)
           .where("id", fixedOptionsId)
-          .update(updateData);
+          .update(updateData).returning('*');
   
-        if (updateFixedOptionRowsCount === 1) {
-          const [updatedFixedOption] = await trx(FIXED_OPTIONS_TABLE).where("id", fixedOptionsId);
-          return updatedFixedOption as IFixedOptions;
+        if (updateFixedOptionRowsCount && updateFixedOptionRowsCount.length > 0) {
+          const updatedFixedOption = updateFixedOptionRowsCount[0];
+
+          if (fixedOptions.options) {
+            await trx(OPTIONS_TABLE).where('fixed_option_id', fixedOptionsId).delete();
+            const optionsToInsert = fixedOptions.options.map(option => ({
+              ...option,
+              fixed_option_id: fixedOptionsId,
+            }));
+            await trx(OPTIONS_TABLE).insert(optionsToInsert);
+          }
+          const options = await trx(OPTIONS_TABLE).where('fixed_option_id', fixedOptionsId);
+          return { ...updatedFixedOption, options } as IFixedOptions;
         }
         return null;
       });
@@ -132,7 +149,6 @@ export class DatabaseVeeStore implements VeeStore {
       return false;
     }
   }
-
   /**
    *  Stacks
    */
