@@ -156,6 +156,7 @@ export class DatabaseVeeStore implements VeeStore {
           `${STACKS_TABLE}.updated_at`,
           `${PLUGINS_TABLE}.id as plugin_id`,
           `${PLUGINS_TABLE}.name as plugin_name`,
+          `${PLUGINS_TABLE}.docs as plugin_docs`,
           `${ANNOTATIONS_TABLE}.id as annotation_id`,
           `${ANNOTATIONS_TABLE}.annotation as annotation_annotation`
         )
@@ -184,6 +185,7 @@ export class DatabaseVeeStore implements VeeStore {
               plugin = {
                 id: row.plugin_id,
                 name: row.plugin_name,
+                docs: row.plugin_docs,
                 annotations: []
               };
               stack.plugins.push(plugin);
@@ -218,6 +220,7 @@ export class DatabaseVeeStore implements VeeStore {
           `${STACKS_TABLE}.updated_at`,
           `${PLUGINS_TABLE}.id as plugin_id`,
           `${PLUGINS_TABLE}.name as plugin_name`,
+          `${PLUGINS_TABLE}.docs as plugin_docs`,
           `${ANNOTATIONS_TABLE}.id as annotation_id`,
           `${ANNOTATIONS_TABLE}.annotation as annotation_annotation`
         )
@@ -246,6 +249,7 @@ export class DatabaseVeeStore implements VeeStore {
             plugin = {
               id: row.plugin_id,
               name: row.plugin_name,
+              docs: row.plugin_docs,
               annotations: []
             };
             stack.plugins!.push(plugin);
@@ -381,6 +385,7 @@ export class DatabaseVeeStore implements VeeStore {
         .select(
           `${PLUGINS_TABLE}.id`,
           `${PLUGINS_TABLE}.name`,
+          `${PLUGINS_TABLE}.docs`,
           `${PLUGINS_TABLE}.created_at`,
           `${PLUGINS_TABLE}.updated_at`,
           `${ANNOTATIONS_TABLE}.id as annotation_id`,
@@ -396,6 +401,7 @@ export class DatabaseVeeStore implements VeeStore {
           pluginsMap.set(row.id, {
             id: row.id,
             name: row.name,
+            docs: row.docs,
             annotations: [],
             created_at: row.created_at,
             updated_at: row.updated_at,
@@ -426,6 +432,7 @@ export class DatabaseVeeStore implements VeeStore {
         .select(
           `${PLUGINS_TABLE}.id`,
           `${PLUGINS_TABLE}.name`,
+          `${PLUGINS_TABLE}.docs`,
           `${PLUGINS_TABLE}.created_at`,
           `${PLUGINS_TABLE}.updated_at`
         )
@@ -447,6 +454,7 @@ export class DatabaseVeeStore implements VeeStore {
       const plugin: IPlugin = {
         id: pluginRow.id,
         name: pluginRow.name,
+        docs: pluginRow.docs,
         annotations: annotationRows.map(row => ({
           id: row.annotation_id,
           plugin_id: row.annotation_plugin_id,
@@ -471,7 +479,8 @@ export class DatabaseVeeStore implements VeeStore {
       return await this.db.transaction(async trx => {
         await trx(PLUGINS_TABLE)
           .insert({
-            name: plugin.name
+            name: plugin.name,
+            docs: plugin.docs
           })
           .onConflict(['name'])
           .ignore();
@@ -501,6 +510,7 @@ export class DatabaseVeeStore implements VeeStore {
       const updateData: Partial<Record<keyof IPlugin, string>> = {};
     
       if (plugin.name) updateData.name = plugin.name;
+      if (plugin.docs) updateData.docs = plugin.docs;
       if (Object.keys(updateData).length === 0 && !plugin.annotations?.length) return null;
   
       return await this.db.transaction(async trx => {
