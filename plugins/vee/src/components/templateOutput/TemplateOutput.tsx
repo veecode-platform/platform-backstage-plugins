@@ -23,7 +23,8 @@ export const TemplateOutput = () => {
 
     React.useEffect(()=>{
       // TODO
-      handleCode(templateDataMock[0].originalFormat as string,templateDataMock[0].content)
+      const fileSelected = templateDataMock.find(file => file.name === "template.yaml")
+      handleCode(fileSelected!.originalFormat as string,templateDataMock[0].content)
     },[])
 
     return (
