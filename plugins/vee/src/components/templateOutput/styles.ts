@@ -8,9 +8,26 @@ export const useTemplateOutputStyles = makeStyles({
         height: "100%"
     },
     codeSection:{
+        overflow: "auto !important",
+        "&::-webkit-scrollbar": {
+        width: "6px",
+        height: "4px",
+        backgroundColor: themeVariables.background.dark,
+        },
+        "&::-webkit-scrollbar-track": {
+            boxShadow: `inset 0 0 5px ${themeVariables.blur.dark}15`,
+            borderRadius: "10px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+            background: themeVariables.border.main,
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: themeVariables.background.secondary,
+            cursor: 'pointer'
+        },
         '& span':{
             backgroundColor: `${themeVariables.codeBlock.dark} !important`,
-            height: "100% !important"
+            height: "100% !important",
         }
     },
     footer: {
