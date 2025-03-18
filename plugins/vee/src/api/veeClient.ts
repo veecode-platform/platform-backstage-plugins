@@ -363,9 +363,10 @@ export class VeeClient implements VeeApi {
     return response;
   }
 
-  async addPlugin({ name, annotations }: CreatePluginParams) {
+  async addPlugin({ name, docs, annotations }: CreatePluginParams) {
     const body = {
       name,
+      docs,
       annotations,
     };
     const headers: RequestInit = {
