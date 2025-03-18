@@ -1,8 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { VeeContext } from "./veeContext";
 import { 
     EntityInfoReducer, 
+    FixedOptionSelectedReducer, 
+    FixedOptionsReducer, 
     initialEntityInfoState, 
+    initialFixedOptionSelectedState, 
+    initialFixedOptionsState, 
     initialInstructionsState, 
     initialPluginSelectedState, 
     initialPluginsState, 
@@ -13,6 +18,8 @@ import {
     PluginSelectedReducer,
     PluginsReducer, 
     PullRequestInfoReducer, 
+    saveFixedOptions, 
+    saveFixedOptionSelected, 
     savePlugins, 
     savePluginSelected, 
     savePullRequestInfo, 
@@ -26,9 +33,11 @@ import {
     useApi } from '@backstage/core-plugin-api';
 import { veeApiRef } from "../api/veeApi";
 import { 
+    CreateFixedOptionsParams,
     CreatePluginParams, 
     CreateStackParams, 
     FileContent, 
+    IFixedOptions, 
     IPlugin, 
     IStack } from "@veecode-platform/backstage-plugin-vee-common";
 
@@ -49,6 +58,8 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const [ allStacksState, allStackDispatch ] = React.useReducer(StacksReducer, initialStacksState);
     const [ stackSelectedState, stackSelectedDispatch ] = React.useReducer(StackSelectedReducer, initialStackSelectedState);
     const [ allPluginsState, allPluginsDispatch ] = React.useReducer(PluginsReducer, initialPluginsState);
+    const [ allFixedOptionsState, allFixedOptionsDispatch] = React.useReducer(FixedOptionsReducer,initialFixedOptionsState);
+    const [ fixedOptionSelectedState, fixedOptionselectedDispatch ] = React.useReducer(FixedOptionSelectedReducer, initialFixedOptionSelectedState);
     const [ pluginSelectedState, pluginSelectedDispatch ] = React.useReducer(PluginSelectedReducer, initialPluginSelectedState);
     const [ instructionsState, instructionsDispatch ] = React.useReducer(InstructionsReducer, initialInstructionsState);
     const api = useApi(veeApiRef);
@@ -188,7 +199,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
               errorApi.post(err.message);
               return []
             }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         },[api]);
 
     const getStackById = React.useCallback(async (id:string) => {
@@ -200,7 +210,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             errorApi.post(err.message);
             return null;
         }    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[api]);
 
     const createStack = React.useCallback(async(stackData : CreateStackParams)=>{
@@ -214,7 +223,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             errorApi.post(err.message);
         }
     
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[api]);
 
     const updateStack = React.useCallback( async(id:string, updateData: IStack)=>{
@@ -227,7 +235,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
         catch(err:any){
           errorApi.post(err.message);
         }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
      },[api]);
  
      const removeStack = React.useCallback(async (stackId: string) => {
@@ -240,12 +247,10 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
          catch(err:any){
            errorApi.post(err.message);
          }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
      }, [api]);
  
      const addStackSelected = React.useCallback((stack:IStack)=>{
       stackSelectedDispatch(saveStackSelected(stack))
-     // eslint-disable-next-line react-hooks/exhaustive-deps
      },[stackSelectedState]);
 
     /**
@@ -262,7 +267,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
               errorApi.post(err.message);
               return []
             }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         },[api]);
     
     const getPluginById = React.useCallback(async (id:string) => {
@@ -274,7 +279,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             errorApi.post(err.message);
             return null;
         }    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[api]);
 
     const addPlugin = React.useCallback(async(pluginData : CreatePluginParams)=>{
@@ -288,7 +292,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             errorApi.post(err.message);
         }
     
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[api]);
     
     const updatePlugin = React.useCallback( async(id:string, updateData: IPlugin)=>{
@@ -301,7 +304,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
        catch(err:any){
          errorApi.post(err.message);
        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[api]);
 
     const removePlugin = React.useCallback(async (pluginId: string) => {
@@ -314,14 +316,73 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
         catch(err:any){
           errorApi.post(err.message);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [api]);
 
     const addPluginSelected = React.useCallback((plugin:IPlugin)=>{
       pluginSelectedDispatch(savePluginSelected(plugin))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[pluginSelectedState]);
 
+    /**
+    * Fixed options
+    */
+    const listAllFixedOptions = React.useCallback( async ()=>{
+        try{
+           const response = await api.listAllFixedOptions();
+           allFixedOptionsDispatch(saveFixedOptions(response))
+           return response;
+        }catch(err:any){
+            errorApi.post(err.message);
+            return []
+        }     
+    },[api])
+
+    const getFixedOptionById = React.useCallback(async (id:string) => {
+        try{
+            const response = await api.getFixedOptionById(id)
+            return response
+        }
+        catch(err:any){
+            errorApi.post(err.message);
+            return null;
+        }    
+    },[api]);
+
+    const createFixedOption = React.useCallback(async(fixedOptionData : CreateFixedOptionsParams)=>{
+        try{
+            const newFixedOption = await api.createFixedOption(fixedOptionData);
+            await listAllFixedOptions();
+            alertApi.post({message: newFixedOption.message, severity: 'success', display: 'transient'});
+        }
+        catch(err:any){
+            errorApi.post(err.message);
+        }
+    },[api]);
+
+    const updateFixedOption = React.useCallback( async(id:string, updateData: IFixedOptions)=>{
+        try{
+         const response = await api.editFixedOption({id, ...updateData});
+         await listAllFixedOptions();
+         alertApi.post({message: response.message, severity: 'success', display: 'transient'});
+        }
+        catch(err:any){
+          errorApi.post(err.message);
+        }
+     },[api]);
+ 
+     const removeFixedOption = React.useCallback(async (fixedOptionId: string) => {
+         try{
+            const response = await api.removeFixedOption(fixedOptionId);
+            await listAllStacks();
+            alertApi.post({message: response.message, severity: 'success', display: 'transient'});
+         }
+         catch(err:any){
+           errorApi.post(err.message);
+         }
+     }, [api]);
+
+     const addFixedOptionSelected = React.useCallback((fixedOption:IFixedOptions)=>{
+        fixedOptionselectedDispatch(saveFixedOptionSelected(fixedOption))
+       },[stackSelectedState]);
 
     return (
         <VeeContext.Provider 
@@ -362,7 +423,15 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             addPluginSelected,
             pluginSelectedState,
             instructionsState,
-            instructionsDispatch
+            instructionsDispatch,
+            listAllFixedOptions,
+            getFixedOptionById,
+            createFixedOption,
+            updateFixedOption,
+            removeFixedOption,
+            addFixedOptionSelected,
+            allFixedOptionsState,
+            fixedOptionSelectedState
          }}
         >
             {children}
