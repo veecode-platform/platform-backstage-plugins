@@ -14,6 +14,52 @@ plugins:
     originalFormat: "yml",
   },
   {
+    name: "index.tsx",
+    relativePath: "/typescript",
+    content: `
+import React from 'react';
+import { CodeBlockProps } from './types';
+import { CodeBlock } from "react-code-blocks";
+import theme from './theme';  // comentario
+
+const numberX : number = 3
+
+export const CodeBlockComponent : React.FC<CodeBlockProps> = ({ code, language }) => {
+  return (
+      <CodeBlock
+        text={code}
+        language={language} 
+        showLineNumbers={false}
+        theme={theme}
+        customStyle={{
+          fontSize: '16px'
+        }}
+      />
+  );
+}
+    `,originalFormat: 'tsx'
+  },
+  {
+    name: 'teste.ts',
+    relativePath: '/typescript',
+    content: `
+    const teste = "Hello world"
+
+    console.log(teste) // output: teste
+    `,
+    originalFormat: 'ts'
+  },
+  {
+    name: 'teste.ts.test',
+    relativePath: '/typescript/__Tests__',
+    content: `
+    const teste = "Hello world"
+
+    console.log(teste) // output: teste
+    `,
+    originalFormat: 'ts'
+  },
+  {
     name: "template.yaml",
     relativePath: "",
     content: `apiVersion: scaffolder.backstage.io/v1beta3
