@@ -7,31 +7,35 @@ import { useStepperStyles } from './styles';
 import  Autocomplete  from '@mui/material/Autocomplete';
 import { useVeeContext } from '../../../../context';
 import { AddPluginProps } from './types';
+import { initialPluginState, PluginReducer, resetPluginState, setPluginAnnotations, setPluginDocs, setPluginName } from '../state';
 
 export const AddPlugin : React.FC<AddPluginProps> = (props) => {
 
-  const [plugin, setPlugin] = React.useState<{name:string, annotations: string[]}>({ name: '', annotations: []}); 
+
   const [step0Error, setStep0Error] = React.useState<boolean>(true)
   const [step1Error, setStep1Error] = React.useState<boolean>(true)
+  const [step2Error, setStep2Error] = React.useState<boolean>(true)
   const [activeStep, setActiveStep] = React.useState(0);
   const [loading, setLoading ] = React.useState<boolean>(false);
+  const [pluginState, pluginDispatch] = React.useReducer(PluginReducer, initialPluginState); 
   const { onCloseModal } = props;
-  const steps = ["Add plugin name", "Add annotations"];
+  const steps = ["Add plugin name","Add docs", "Add annotations"];
   const { addPlugin } = useVeeContext()
   const { input, root } = useStepperStyles();
 
-  const resetPluginState =  () => setPlugin({ name: '', annotations: []})
+  const resetPlugin =  () => pluginDispatch(resetPluginState());
 
   const handleSubmit = async () => {
     setLoading(true)
-    const annotationsMap = plugin.annotations.map(annotationString => { return { annotation: annotationString} })
+    const annotationsMap = pluginState.annotations.map(annotationString => { return { annotation: annotationString} })
     const newPlugin = {
-        name: plugin.name,
+        name: pluginState.name,
+        docs: pluginState.docs,
         annotations: annotationsMap
       };
     await addPlugin(newPlugin);
     setLoading(false);
-    resetPluginState();
+    resetPlugin();
     onCloseModal();
   };
 
@@ -49,6 +53,8 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
         return step0Error
       case 1:
         return step1Error
+      case 2:
+        return step2Error
       default:
         return false;
     }
@@ -60,24 +66,41 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
         <TextField 
          fullWidth variant="outlined" 
          label="Plugin Name" 
-         value={plugin.name} 
+         value={pluginState.name} 
          className={input}
          required
         onChange={e => {
-          setPlugin({ ...plugin, name: e.target.value });
+          pluginDispatch(setPluginName(e.target.value));
         }}
       />
     )
   }
+
   const Step1Content = () => {
+    return (
+        <TextField 
+         fullWidth variant="outlined" 
+         label="Plugin Docs" 
+         value={pluginState.docs} 
+         className={input}
+         required
+        onChange={e => {
+          pluginDispatch(setPluginDocs(e.target.value));
+        }}
+      />
+    )
+  }
+
+  const Step2Content = () => {
     return (
       <Autocomplete
         multiple
         freeSolo
         options={[]} 
-        value={plugin.annotations}
+        value={pluginState.annotations}
         onChange={(_, newValue) => {
-          setPlugin({ ...plugin, annotations: newValue });
+          // const annotations = [...pluginState.annotations, ...newValue];
+          pluginDispatch(setPluginAnnotations(newValue));
         }}
         renderInput={(params) => (
           <TextField 
@@ -99,15 +122,16 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
     return "Next";
   };
 
-  const StepsContent = [ Step0Content, Step1Content ];
+  const StepsContent = [ Step0Content, Step1Content,Step2Content ];
 
   React.useEffect(() => {
-    setStep0Error(plugin.name === "")
-    setStep1Error(plugin.annotations.length === 0)
-  }, [plugin]);
+    setStep0Error(pluginState.name === "")
+    setStep1Error(pluginState.docs === "")
+    setStep2Error(pluginState.annotations.length === 0)
+  }, [pluginState]);
 
   React.useEffect(()=>{
-    resetPluginState();
+    resetPlugin();
   },[])
 
   return ( <Stepper activeStep={activeStep} orientation='vertical' className={root}>
