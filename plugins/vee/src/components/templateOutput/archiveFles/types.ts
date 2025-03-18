@@ -1,7 +1,8 @@
 import { FileContent } from "@veecode-platform/backstage-plugin-vee-common";
 
 export interface ArchivesFileProps {
-    data: FileContent[]
+    data: FileContent[];
+    handleCode: (lang: string, code: string) => void
 }
 
 export interface TreeNode {
