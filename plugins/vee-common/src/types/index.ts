@@ -82,6 +82,7 @@ export interface CreateStackParams {
 
 export interface CreatePluginParams {
   name: string,
+  docs: string,
   annotations?: IAnnotationPlugin[]
 }
 
@@ -201,6 +202,7 @@ export interface IStack {
 export interface IPlugin{
   id?:string,
   name: string,
+  docs: string,
   annotations: IAnnotationPlugin[],
   created_at?: Date,
   updated_at?: Date,
