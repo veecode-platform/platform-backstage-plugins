@@ -22,7 +22,7 @@ export const themeVariables = {
         danger: '#FF000025'
     },
     codeBlock:{
-        dark: '#0C0D16'
+        dark: '#0D1117'
     },
     border:{
         main: '#B5B5B530'
