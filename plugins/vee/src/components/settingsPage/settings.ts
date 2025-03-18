@@ -1,6 +1,6 @@
 import { StackIcon } from "../../assets/stack-icon";
 import { PluginIcon } from "../../assets/plugin-icon";
-// import { FixedOptionsIcon } from "../../assets/fixed-options-icon";
+import { FixedOptionsIcon } from "../../assets/fixed-options-icon";
 
 export const settingsOptions = [
     {
@@ -17,11 +17,11 @@ export const settingsOptions = [
         tooltip: 'List, add, edit or remove the plugins that will be available for your templates',
         path: 'manage-plugins'  
     },
-    // {
-    //     id: 3,
-    //     icon: FixedOptionsIcon,
-    //     title: 'Manage Fixed Options',
-    //     tooltip: 'List, create, delete or edit fixed options that will appear in your AI assistant according to your needs.',
-    //     path: 'settings' 
-    // }
+    {
+        id: 3,
+        icon: FixedOptionsIcon,
+        title: 'Manage Fixed Options',
+        tooltip: 'List, create, delete or edit fixed options that will appear in your AI assistant according to your needs.',
+        path: 'manage-fixed-options' 
+    }
 ]
