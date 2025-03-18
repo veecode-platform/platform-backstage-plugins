@@ -1,7 +1,7 @@
 import React from "react";
 import { EntityAnnotationType, InstructionsProps } from "../utils/types";
 import { EntityInfoActionType, InstructionsActionType } from "./state";
-import { CreatePluginParams, CreateStackParams, FileContent, IPlugin, IStack, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-vee-common";
+import { CreateFixedOptionsParams, CreatePluginParams, CreateStackParams, FileContent, IFixedOptions, IPlugin, IStack, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-vee-common";
 
 export type VeeContextType = {
     vectorStoreId: string | null;
@@ -44,7 +44,14 @@ export type VeeContextType = {
     addPluginSelected: (plugin: IPlugin) => void;
     instructionsState: InstructionsProps;
     instructionsDispatch: React.Dispatch<InstructionsActionType>;
-    // generateTemplateChat: () => Promise<void>
+    listAllFixedOptions: () => Promise<IFixedOptions[]>;
+    getFixedOptionById: (id: string) => Promise<IFixedOptions | null>;
+    createFixedOption: (fixedOptionData: CreateFixedOptionsParams) => Promise<void>;
+    updateFixedOption: (id: string, updateData: IFixedOptions) => Promise<void>;
+    removeFixedOption: (fixedOptionId: string) => Promise<void>,
+    addFixedOptionSelected: (fixedOption: IFixedOptions) => void,
+    allFixedOptionsState : IFixedOptions[],
+    fixedOptionSelectedState: IFixedOptions | null;
 }
 
 export const VeeContext = React.createContext<VeeContextType>(null!)
