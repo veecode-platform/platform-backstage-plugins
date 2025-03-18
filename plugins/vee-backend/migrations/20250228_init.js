@@ -40,6 +40,7 @@ exports.up = async function up(knex) {
             table.comment('Table of plugins that will serve the stacks');
             table.uuid('id').defaultTo(knex.fn.uuid()).primary().notNullable().comment('Auto-generated Id of plugin');
             table.string('name',255).notNullable().unique().comment('Plugin name');
+            table.string('docs',255).notNullable().comment('Docs');
             table.timestamps(true, true);
         })
         /**
@@ -65,6 +66,16 @@ exports.up = async function up(knex) {
             table.timestamps(true, true);
             table.primary(['stack_id', 'plugin_id']);
         })
+        // /**
+        //  *  template_catalog manager
+        //  */
+        // .createTable('template_catalog', table => {
+        //     table.comment('Catalog Template manager');
+        //     table.uuid('id').defaultTo(knex.fn.uuid()).primary().notNullable().comment('Auto-generated Id of the option item');
+        //     table.string('url', 255).notNullable().unique().comment('The URL of the template catalog');
+        //     table.string('environment', 255).notNullable().unique().comment('Which environment will be published');
+        //     table.timestamps(true, true);
+        // })
     }
     catch(err){
         console.log(`ERROR MIGRATE:UP ${err}`);
