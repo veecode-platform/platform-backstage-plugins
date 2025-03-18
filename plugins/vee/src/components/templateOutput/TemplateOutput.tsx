@@ -9,9 +9,22 @@ import { RiFileDownloadFill } from "react-icons/ri";
 import { useTemplateOutputStyles } from "./styles";
 import { templateDataMock } from "../../mock/template";
 
+export type CodeBlockProps = {
+  language: string,
+  code: string
+}
+
 export const TemplateOutput = () => {
+    const [codeBlock, setCodeBlock] = React.useState<CodeBlockProps>({language: "javascript",code:"console.log('Hello word)"});
     const { instructionsState } = useVeeContext();
     const { root, codeSection, footer, buttonsGroup } = useTemplateOutputStyles();
+
+    const handleCode = (lang:string,code:string) => setCodeBlock({language:lang, code});
+
+    React.useEffect(()=>{
+      // TODO
+      handleCode(templateDataMock[0].originalFormat as string,templateDataMock[0].content)
+    },[])
 
     return (
       <PageLayout 
@@ -22,12 +35,13 @@ export const TemplateOutput = () => {
            <Grid2 size={{ md: 2 }}>
              <ArchivesFile
               data={templateDataMock}
+              handleCode={handleCode}
              />
            </Grid2>
            <Grid2 size={{ md: 8 }} className={codeSection}>
               <CodeBlockComponent 
-                code={`console.log("Hello World")`} 
-                language="js"
+                code={codeBlock.code} 
+                language={codeBlock.language}
                 />
            </Grid2>
            <Grid2 size={{ md: 2 }}>
