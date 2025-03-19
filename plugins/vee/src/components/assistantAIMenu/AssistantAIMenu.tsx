@@ -1,5 +1,5 @@
 import React from "react";
 import { SidebarItem } from "@backstage/core-components";
-import { StarsIcon } from "../../assets/stars";
+import { AssistantAIMenuIcon } from "../../assets/assistant-ai-menu-icon";
 
-export const AssistantAIMenu = () => (<SidebarItem icon={StarsIcon} to="vee" text="Assistant AI" />)
+export const AssistantAIMenu = () => (<SidebarItem icon={AssistantAIMenuIcon} to="vee" text="Assistant AI" />)
