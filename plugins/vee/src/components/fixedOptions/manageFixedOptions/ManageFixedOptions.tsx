@@ -4,6 +4,8 @@ import useAsync from "react-use/esm/useAsync";
 import { ModalVariantKey } from "../../shared/modalComponent/types";
 import { ModalComponent, PageLayout, TableComponent } from "../../shared";
 import { manageFixedOptionRow } from "./types";
+import { CreateFixedOption } from "./createFixedOption";
+import { UpdateFixedOption } from "./updateFixedOption";
 
 export const ManageFixedOptions = () => {
     const [ showModal, setShowModal] = React.useState<boolean>(false);
@@ -67,8 +69,8 @@ export const ManageFixedOptions = () => {
                open={showModal} 
                handleClose={handleClose} 
                >
-              { modalVariant === "create" && <h1>Create a fixed option</h1>}
-              { modalVariant === "edit" &&  <h1>Update a fixed option</h1>}
+              { modalVariant === "create" && <CreateFixedOption onCloseModal={handleClose}/>}
+              { modalVariant === "edit" &&  <UpdateFixedOption onCloseModal={handleClose}/>}
              </ModalComponent>
            </>
         )
