@@ -7,19 +7,29 @@ import { useStepperStyles } from './styles';
 import { useVeeContext } from '../../../../context';
 import { CreateFixedOptionProps } from './types';
 import { FixedOptionReducer, initialFixedOptionState, resetFixedOptionState, setFixedOptionType, setOptions } from '../state';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import { BackstageType } from '../types';
 
+const filter = createFilterOptions<BackstageType>();
 
-export const CreateFixedOption : React.FC<CreateFixedOptionProps> = (props) => {
+export const CreateFixedOption : React.FC<CreateFixedOptionProps> = ({ onCloseModal }) => {
 
   const [step0Error, setStep0Error] = React.useState<boolean>(true)
   const [step1Error, setStep1Error] = React.useState<boolean>(true)
   const [activeStep, setActiveStep] = React.useState(0);
   const [loading, setLoading ] = React.useState<boolean>(false);
   const [ fixedOptionState, fixedOptionDispatch] = React.useReducer(FixedOptionReducer, initialFixedOptionState); 
-  const { onCloseModal } = props;
   const steps = ["Add fixed option type","Add options"];
   const { createFixedOption } = useVeeContext()
   const { input, root } = useStepperStyles();
+  const allBackstageTypes: readonly BackstageType[] = [
+    {type: 'service'},
+    {type: 'website'},
+    {type: 'library'},
+    {type: 'devops'},
+    {type: 'infra'}
+    ];  
+
 
   const resetFixedOption =  () => fixedOptionDispatch(resetFixedOptionState());
 
@@ -56,22 +66,71 @@ export const CreateFixedOption : React.FC<CreateFixedOptionProps> = (props) => {
 
   }
 
-  const Step0Content = () => {
-    return (
-        <TextField 
-         fullWidth variant="outlined" 
-         label="Fixed option type" 
-         value={fixedOptionState.type} 
-         className={input}
-         required
-        onChange={e => {
-          fixedOptionDispatch(setFixedOptionType(e.target.value));
-        }}
-      />
-    )
-  }
 
-  const Step1Content = () => {
+    const Step0Content = () => {
+      return (
+        <Autocomplete
+          id="type"
+          value={fixedOptionState.type}
+          options={allBackstageTypes}
+          getOptionLabel={(option) => {
+            if (typeof option === 'string') {
+              return option;
+            }
+            if (option.inputValue) {
+              return option.inputValue;
+            }
+            return option.type;
+          }}
+          renderOption={(props, option) => {
+            const { key, ...optionProps } = props;
+            return (
+              <li key={key} {...optionProps}>
+                {option.type}
+              </li>
+            );
+          }}
+          freeSolo
+          onChange={(_, newValue) => {
+            if (typeof newValue === 'string') {
+              fixedOptionDispatch(setFixedOptionType(newValue))      
+            } else if (newValue && newValue.inputValue) {
+              fixedOptionDispatch(setFixedOptionType(newValue.inputValue))
+            } else {
+              fixedOptionDispatch(setFixedOptionType(newValue?.type as string))
+            }
+          }}
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
+    
+            const { inputValue } = params;
+            const isExisting = options.some((option) => inputValue === option.type);
+            if (inputValue !== '' && !isExisting) {
+              filtered.push({
+                inputValue,
+                type: `Add "${inputValue}"`,
+              });
+            }
+    
+            return filtered;
+          }}
+          selectOnFocus
+          clearOnBlur
+          handleHomeEndKeys
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="filled"
+              label="Type"
+              required
+              placeholder="Set type"
+            />
+            )}
+       />
+      );
+    };
+
+    const Step1Content = () => {
     return (
         <TextField 
          fullWidth variant="outlined" 
