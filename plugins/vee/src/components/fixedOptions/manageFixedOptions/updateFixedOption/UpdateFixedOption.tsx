@@ -5,10 +5,16 @@ import {
   StepContent, Typography} from '@material-ui/core';
 import { useStepperStyles } from './styles';
 import { useVeeContext } from '../../../../context';
-import { UpdatePluginProps } from './types';
-import { FixedOptionReducer, initialFixedOptionState, setFixedOption, setFixedOptionType, setOptions } from '../state/fixedOptionsState';
+import { UpdateFixedOptionProps } from './types';
+import { FixedOptionReducer, initialFixedOptionState, resetFixedOptionState, setFixedOption, setFixedOptionType, setOptions } from '../state/fixedOptionsState';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import { BackstageType } from '../types';
+import { IncrementedInput } from '../incrementedInput';
+import { IOption } from '@veecode-platform/backstage-plugin-vee-common';
 
-export const UpdateFixedOption : React.FC<UpdatePluginProps> = (props) => {
+const filter = createFilterOptions<BackstageType>();
+
+export const UpdateFixedOption : React.FC<UpdateFixedOptionProps> = ({ onCloseModal }) => {
 
   const [fixedOptionState, fixedOptionDispatch] = React.useReducer(FixedOptionReducer, initialFixedOptionState);
   const [step0Error, setStep0Error] = React.useState<boolean>(true)
@@ -17,20 +23,32 @@ export const UpdateFixedOption : React.FC<UpdatePluginProps> = (props) => {
   const [loading, setLoading ] = React.useState<boolean>(false);
   const steps = ["Edit fixed option type", "Edit options"];
   const { fixedOptionSelectedState, updateFixedOption } = useVeeContext();
-  const { onCloseModal } = props;
   const { input, root } = useStepperStyles();
+    const allBackstageTypes: readonly BackstageType[] = [
+      {type: 'default'},
+      {type: 'service'},
+      {type: 'website'},
+      {type: 'library'},
+      {type: 'devops'},
+      {type: 'infra'}
+      ]; 
 
   const handleSubmit = async () => {
     setLoading(true)
-    // const annotationsMap = pluginState.annotations.map(annotationString => { return { annotation: annotationString} })
     const fixedOptionUpdated = {
         type: fixedOptionState.type,
-        options: fixedOptionState.options ?? [],  // TODO
+        options: fixedOptionState.options
       };
-    await updateFixedOption(fixedOptionState.FixedOptionId!,fixedOptionUpdated);
+    // eslint-disable-next-line no-console
+    console.log("OLHA OQ EU QUERO ALTERAR >>",fixedOptionState)
+    await updateFixedOption(fixedOptionState.id as string,fixedOptionUpdated);
     setLoading(false)
     onCloseModal();
   };
+
+  const saveOptions = (options: IOption[]) => {
+    fixedOptionDispatch(setOptions(options))
+  }
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -52,33 +70,76 @@ export const UpdateFixedOption : React.FC<UpdatePluginProps> = (props) => {
 
   }
 
-  const Step0Content = () => {
-    return (
-        <TextField 
-         fullWidth variant="outlined" 
-         label="Fixed Option type" 
-         value={fixedOptionState.type} 
-         className={input}
-         required
-        onChange={e => {
-          fixedOptionDispatch(setFixedOptionType(e.target.value));
-        }}
-      />
-    )
-  }
+    const Step0Content = () => {
+      return (
+        <Autocomplete
+          id="type"
+          value={fixedOptionState.type}
+          options={allBackstageTypes}
+          getOptionLabel={(option) => {
+            if (typeof option === 'string') {
+              return option;
+            }
+            if (option.inputValue) {
+              return option.inputValue;
+            }
+            return option.type;
+          }}
+          renderOption={(props, option) => {
+            const { key, ...optionProps } = props;
+            return (
+              <li key={key} {...optionProps}>
+                {option.type}
+              </li>
+            );
+          }}
+          freeSolo
+          onChange={(_, newValue) => {
+            if (typeof newValue === 'string') {
+              fixedOptionDispatch(setFixedOptionType(newValue))      
+            } else if (newValue && newValue.inputValue) {
+              fixedOptionDispatch(setFixedOptionType(newValue.inputValue))
+            } else {
+              fixedOptionDispatch(setFixedOptionType(newValue?.type as string))
+            }
+          }}
+          filterOptions={(options, params) => {
+            const filtered = filter(options, params);
+    
+            const { inputValue } = params;
+            const isExisting = options.some((option) => inputValue === option.type);
+            if (inputValue !== '' && !isExisting) {
+              filtered.push({
+                inputValue,
+                type: `Add "${inputValue}"`,
+              });
+            }
+    
+            return filtered;
+          }}
+          selectOnFocus
+          clearOnBlur
+          handleHomeEndKeys
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="filled"
+              label="Type"
+              required
+              placeholder="Set type"
+              className={input}
+            />
+            )}
+       />
+      );
+    };
 
-  const Step1Content = () => {
+    const Step1Content = () => {
     return (
-        <TextField 
-         fullWidth variant="outlined" 
-         label="Set options" 
-         value={fixedOptionState.options} 
-         className={input}
-         required
-        onChange={e => {
-          fixedOptionDispatch(setOptions([{label: e.target.value, prompt: "test"}]));  // TODO
-        }}
-      />
+        <IncrementedInput
+         onSaveOptions={saveOptions}
+         allOptions={fixedOptionState.options}
+        />
     )
   }
 
@@ -98,7 +159,13 @@ export const UpdateFixedOption : React.FC<UpdatePluginProps> = (props) => {
   }, [fixedOptionState])
 
   React.useEffect(()=>{
-     if(fixedOptionSelectedState) fixedOptionDispatch(setFixedOption({FixedOptionId: fixedOptionSelectedState.id as string, type: fixedOptionSelectedState.type, options: fixedOptionSelectedState.options ?? []}))
+    if(fixedOptionSelectedState){
+      fixedOptionDispatch(setFixedOption(fixedOptionSelectedState))
+    }
+
+    return ()=> {
+      fixedOptionDispatch(resetFixedOptionState())
+    }
   },[fixedOptionSelectedState])
 
   return ( <Stepper activeStep={activeStep} orientation='vertical' className={root}>
