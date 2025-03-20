@@ -1,5 +1,5 @@
 export interface OptionStateProps {
-    id?: string,
+    id: string,
     label: string,
     prompt: string
 }
