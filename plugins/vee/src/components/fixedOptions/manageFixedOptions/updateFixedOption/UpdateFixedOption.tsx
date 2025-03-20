@@ -6,7 +6,7 @@ import {
 import { useStepperStyles } from './styles';
 import { useVeeContext } from '../../../../context';
 import { UpdatePluginProps } from './types';
-import { FixedOptionReducer, initialFixedOptionState, setFixedOption, setFixedOptionType, setOptions } from '../state';
+import { FixedOptionReducer, initialFixedOptionState, setFixedOption, setFixedOptionType, setOptions } from '../state/fixedOptionsState';
 
 export const UpdateFixedOption : React.FC<UpdatePluginProps> = (props) => {
 
