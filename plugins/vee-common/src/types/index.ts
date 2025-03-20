@@ -174,6 +174,7 @@ export interface GithubFileResponse {
 
 export interface IFixedOptions {
     id?: string,
+    fixed_option_id?:string,
     type: string,
     options: IOption[],
     created_at?: Date,
