@@ -9,7 +9,7 @@ import { CreateFixedOptionProps } from './types';
 import { FixedOptionReducer, initialFixedOptionState, resetFixedOptionState, setFixedOptionType, setOptions } from '../state/fixedOptionsState';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { BackstageType } from '../types';
-import { IncrementedInput } from './incrementedInput';
+import { IncrementedInput } from '../incrementedInput';
 
 const filter = createFilterOptions<BackstageType>();
 
