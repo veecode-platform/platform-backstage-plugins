@@ -19,7 +19,7 @@ exports.up = async function up(knex) {
             table.uuid('fixed_option_id').notNullable();
             table.foreign('fixed_option_id').references('id').inTable('fixed_options').onDelete('CASCADE');
             table.string('label',255).notNullable().unique().comment('Label of each option');
-            table.string('prompt',255).notNullable().comment('Prompt for each option');
+            table.text('prompt').notNullable().comment('Prompt for each option');
             table.timestamps(true, true);
         })
         /**
