@@ -17,7 +17,8 @@ import {
   OptionReducer,
   resetOption,
   setOptionLabel, 
-  setOptionPrompt
+  setOptionPrompt,
+  setOptionsList
 } from "../state";
 import { v4 as uuidv4 } from 'uuid';
 import { Button, InfoBox } from "../../../shared";
@@ -30,7 +31,7 @@ export const IncrementedInput : React.FC<IncrementedInputProps> = (props) => {
     const [ showInputs, setShowInputs ] = React.useState<boolean>(false);
     const [ optionState, optionDispatch ] = React.useReducer(OptionReducer,initialOptionState);
     const [ optionsListState, optionsListDispatch ] = React.useReducer(OptionsListReducer, initialOptionsListState);
-    const { onSaveOptions } = props;
+    const { onSaveOptions, allOptions } = props;
     const { root, newOptionStyle,inputGroup,input, buttonGroup, resetButton,addButton,footerButton } = useIncrementedInputStyles();
 
     const handleChangeOption = (e:React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -67,6 +68,12 @@ export const IncrementedInput : React.FC<IncrementedInputProps> = (props) => {
     }
 
     const saveAllOptionsToFixedOptions = () => onSaveOptions(optionsListState);
+
+    React.useEffect(()=>{
+      if(allOptions){
+        optionsListDispatch(setOptionsList(allOptions))
+      }
+    },[allOptions])
 
     return (
       <div className={root}>
@@ -106,7 +113,7 @@ export const IncrementedInput : React.FC<IncrementedInputProps> = (props) => {
                   <Button 
                   variant="danger"
                   onClick={()=>setShowInputs(false)}
-                  >cancel</Button>
+                  >Close</Button>
                 </div>
               </Grid2>
               <Grid2 size={{ md: 2}}>
