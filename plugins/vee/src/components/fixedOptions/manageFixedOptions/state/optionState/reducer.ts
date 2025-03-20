@@ -1,7 +1,7 @@
 import { OptionActionType } from "./actions";
 import { OptionStateProps } from "./types";
 
-export const initialOptionState : OptionStateProps = {label: '', prompt: ''};
+export const initialOptionState : OptionStateProps = {id: '',label: '', prompt: ''};
 
 export const OptionReducer = (state: OptionStateProps, action: OptionActionType ) : OptionStateProps => {
    switch (action.type) {
