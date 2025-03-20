@@ -25,6 +25,7 @@ export const CreateFixedOption : React.FC<CreateFixedOptionProps> = ({ onCloseMo
   const { createFixedOption } = useVeeContext()
   const { input, root } = useStepperStyles();
   const allBackstageTypes: readonly BackstageType[] = [
+    {type: 'default'},
     {type: 'service'},
     {type: 'website'},
     {type: 'library'},
