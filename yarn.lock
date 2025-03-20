@@ -16998,7 +16998,6 @@ __metadata:
     js-yaml: "npm:^4.1.0"
     jszip: "npm:^3.10.1"
     msw: "npm:^1.0.0"
-    nanoid: "npm:^5.1.5"
     prism-react-renderer: "npm:^2.4.1"
     react: "npm:^16.13.1 || ^17.0.0 || ^18.0.0"
     react-code-blocks: "npm:^0.1.6"
@@ -17017,6 +17016,7 @@ __metadata:
     remark-gfm: "npm:^4.0.0"
     shiki: "npm:^3.2.1"
     stream: "npm:^0.0.3"
+    uuid: "npm:^11.1.0"
     yauzl: "npm:^3.2.0"
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
@@ -31707,15 +31707,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^5.1.5":
-  version: 5.1.5
-  resolution: "nanoid@npm:5.1.5"
-  bin:
-    nanoid: bin/nanoid.js
-  checksum: 10/6de2d006b51c983be385ef7ee285f7f2a57bd96f8c0ca881c4111461644bd81fafc2544f8e07cb834ca0f3e0f3f676c1fe78052183f008b0809efe6e273119f5
-  languageName: node
-  linkType: hard
-
 "napi-build-utils@npm:^2.0.0":
   version: 2.0.0
   resolution: "napi-build-utils@npm:2.0.0"
@@ -40731,6 +40722,15 @@ __metadata:
   bin:
     uuid: dist/esm/bin/uuid
   checksum: 10/0594ecdff3051e15d4a2c614b4c72e73af373bde0a5d156512353c01156975295d024ae8d7151846d7bd4d22ccd251b16ed51b4318fa71505fb20ad984102dc1
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^11.1.0":
+  version: 11.1.0
+  resolution: "uuid@npm:11.1.0"
+  bin:
+    uuid: dist/esm/bin/uuid
+  checksum: 10/d2da43b49b154d154574891ced66d0c83fc70caaad87e043400cf644423b067542d6f3eb641b7c819224a7cd3b4c2f21906acbedd6ec9c6a05887aa9115a9cf5
   languageName: node
   linkType: hard
 
