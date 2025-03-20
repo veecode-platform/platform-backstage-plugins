@@ -1,15 +1,6 @@
 import { IOption } from "@veecode-platform/backstage-plugin-vee-common";
 import { OptionStateProps } from "../state/optionState/types";
 
-/**
- * @public
- * id?:string,
- * fixed_option_id?: string,
- * label: string,
- * prompt: string,
- * created_at?: Date,
- * updated_at?: Date,
- */
 export interface OptionListProps {
     data: IOption[],
     onRemoveOption: (id: string) => void,
