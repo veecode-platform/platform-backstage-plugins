@@ -215,7 +215,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const createStack = React.useCallback(async(stackData : CreateStackParams)=>{
         try{
             const newStack = await api.createStack(stackData);
-            // allStackDispatch(addNewStack(newStack.data))
             await listAllStacks();
             alertApi.post({message: newStack.message, severity: 'success', display: 'transient'});
         }
@@ -228,7 +227,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const updateStack = React.useCallback( async(id:string, updateData: IStack)=>{
         try{
          const response = await api.editStack({id, ...updateData});
-         // allStackDispatch(updateStackFromlist(response.data))
          await listAllStacks();
          alertApi.post({message: response.message, severity: 'success', display: 'transient'});
         }
@@ -240,7 +238,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
      const removeStack = React.useCallback(async (stackId: string) => {
          try{
             const response = await api.removeStack(stackId);
-            // allStackDispatch(removeStackFromList(stackId));
             await listAllStacks();
             alertApi.post({message: response.message, severity: 'success', display: 'transient'});
          }
@@ -284,7 +281,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const addPlugin = React.useCallback(async(pluginData : CreatePluginParams)=>{
         try{
             const newPlugin = await api.addPlugin(pluginData);
-           // allPluginsDispatch(addNewPlugin(newPlugin.data))
             await listAllPlugins();
             alertApi.post({message: newPlugin.message, severity: 'success', display: 'transient'});
         }
@@ -297,7 +293,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const updatePlugin = React.useCallback( async(id:string, updateData: IPlugin)=>{
        try{
         const response = await api.editPlugin({id, ...updateData});
-        // allPluginsDispatch(updatePluginFromlist(response.data))
         await listAllPlugins();
         alertApi.post({message: response.message, severity: 'success', display: 'transient'});
        }
@@ -309,7 +304,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const removePlugin = React.useCallback(async (pluginId: string) => {
         try{
            const response = await api.removePlugin(pluginId);
-           // allPluginsDispatch(removePluginFromList(pluginId))
            await listAllPlugins();
            alertApi.post({message: response.message, severity: 'success', display: 'transient'});
         }
@@ -348,7 +342,9 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     },[api]);
 
     const createFixedOption = React.useCallback(async(fixedOptionData : CreateFixedOptionsParams)=>{
-        try{
+        try{    
+            // eslint-disable-next-line no-console
+            console.log("FIXED_OPTION_DATA >>>> ",fixedOptionData)
             const newFixedOption = await api.createFixedOption(fixedOptionData);
             await listAllFixedOptions();
             alertApi.post({message: newFixedOption.message, severity: 'success', display: 'transient'});
