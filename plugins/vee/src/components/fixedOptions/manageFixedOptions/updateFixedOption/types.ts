@@ -1,10 +1,3 @@
-export interface UpdatePluginProps {
+export interface UpdateFixedOptionProps {
     onCloseModal: () => void;
 }
-
-// export type PluginStateType = {
-//     pluginId:string, 
-//     name:string, 
-//     docs: string,
-//     annotations: string[]
-// }
