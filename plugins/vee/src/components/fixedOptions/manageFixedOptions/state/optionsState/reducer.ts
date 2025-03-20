@@ -1,9 +1,9 @@
 import { IOption } from "@veecode-platform/backstage-plugin-vee-common";
 import { OptionsLisstActionType } from "./actions";
-import dataMock from "../../../../../lib/options.json";
+// import dataMock from "../../../../../lib/options.json";
 
 
-export const initialOptionsListState : IOption[] = dataMock;
+export const initialOptionsListState : IOption[] = [];
 
 export const OptionsListReducer = (state: IOption[], action: OptionsLisstActionType) : IOption[] => {
     switch (action.type){
