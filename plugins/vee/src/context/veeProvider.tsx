@@ -356,6 +356,8 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
 
     const updateFixedOption = React.useCallback( async(id:string, updateData: IFixedOptions)=>{
         try{
+         // eslint-disable-next-line no-console
+         console.log(`ESSE é O ID >> ${id} e esse os dados ${updateData}`)
          const response = await api.editFixedOption({id, ...updateData});
          await listAllFixedOptions();
          alertApi.post({message: response.message, severity: 'success', display: 'transient'});
@@ -368,7 +370,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
      const removeFixedOption = React.useCallback(async (fixedOptionId: string) => {
          try{
             const response = await api.removeFixedOption(fixedOptionId);
-            await listAllStacks();
+            await listAllFixedOptions();
             alertApi.post({message: response.message, severity: 'success', display: 'transient'});
          }
          catch(err:any){
