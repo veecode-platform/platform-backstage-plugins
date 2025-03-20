@@ -123,6 +123,8 @@ export class DatabaseVeeStore implements VeeStore {
             const optionsToInsert = fixedOptions.options.map(option => ({
               ...option,
               fixed_option_id: fixedOptionsId,
+              created_at: fixedOptions.created_at ? fixedOptions.created_at : new Date(),
+              updated_at: new Date(),
             }));
             await trx(OPTIONS_TABLE).insert(optionsToInsert);
           }
