@@ -16998,6 +16998,7 @@ __metadata:
     js-yaml: "npm:^4.1.0"
     jszip: "npm:^3.10.1"
     msw: "npm:^1.0.0"
+    nanoid: "npm:^5.1.5"
     prism-react-renderer: "npm:^2.4.1"
     react: "npm:^16.13.1 || ^17.0.0 || ^18.0.0"
     react-code-blocks: "npm:^0.1.6"
@@ -31703,6 +31704,15 @@ __metadata:
   bin:
     nanoid: bin/nanoid.cjs
   checksum: 10/2d1766606cf0d6f47b6f0fdab91761bb81609b2e3d367027aff45e6ee7006f660fb7e7781f4a34799fe6734f1268eeed2e37a5fdee809ade0c2d4eb11b0f9c40
+  languageName: node
+  linkType: hard
+
+"nanoid@npm:^5.1.5":
+  version: 5.1.5
+  resolution: "nanoid@npm:5.1.5"
+  bin:
+    nanoid: bin/nanoid.js
+  checksum: 10/6de2d006b51c983be385ef7ee285f7f2a57bd96f8c0ca881c4111461644bd81fafc2544f8e07cb834ca0f3e0f3f676c1fe78052183f008b0809efe6e273119f5
   languageName: node
   linkType: hard
 
