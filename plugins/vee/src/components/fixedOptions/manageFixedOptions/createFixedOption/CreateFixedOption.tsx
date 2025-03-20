@@ -6,9 +6,10 @@ import {
 import { useStepperStyles } from './styles';
 import { useVeeContext } from '../../../../context';
 import { CreateFixedOptionProps } from './types';
-import { FixedOptionReducer, initialFixedOptionState, resetFixedOptionState, setFixedOptionType, setOptions } from '../state';
+import { FixedOptionReducer, initialFixedOptionState, resetFixedOptionState, setFixedOptionType, setOptions } from '../state/fixedOptionsState';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { BackstageType } from '../types';
+import { IncrementedInput } from './incrementedInput';
 
 const filter = createFilterOptions<BackstageType>();
 
@@ -124,6 +125,7 @@ export const CreateFixedOption : React.FC<CreateFixedOptionProps> = ({ onCloseMo
               label="Type"
               required
               placeholder="Set type"
+              className={input}
             />
             )}
        />
@@ -132,16 +134,7 @@ export const CreateFixedOption : React.FC<CreateFixedOptionProps> = ({ onCloseMo
 
     const Step1Content = () => {
     return (
-        <TextField 
-         fullWidth variant="outlined" 
-         label="Set options" 
-         value={fixedOptionState.options} 
-         className={input}
-         required
-        onChange={e => {
-          fixedOptionDispatch(setOptions([{label: e.target.value, prompt: "test"}]));  // TODO
-        }}
-      />
+        <IncrementedInput/>
     )
   }
 
