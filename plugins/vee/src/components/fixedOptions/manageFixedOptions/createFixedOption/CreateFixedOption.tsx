@@ -10,6 +10,7 @@ import { FixedOptionReducer, initialFixedOptionState, resetFixedOptionState, set
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { BackstageType } from '../types';
 import { IncrementedInput } from '../incrementedInput';
+import { IOption } from '@veecode-platform/backstage-plugin-vee-common';
 
 const filter = createFilterOptions<BackstageType>();
 
@@ -36,16 +37,19 @@ export const CreateFixedOption : React.FC<CreateFixedOptionProps> = ({ onCloseMo
 
   const handleSubmit = async () => {
     setLoading(true)
-    // const annotationsMap = pluginState.annotations.map(annotationString => { return { annotation: annotationString} })
     const newFixedOption = {
         type: fixedOptionState.type,
-        options: [] // TODO
+        options: fixedOptionState.options as IOption[]
       };
     await createFixedOption(newFixedOption);
     setLoading(false);
     resetFixedOption();
     onCloseModal();
   };
+
+  const saveOptions = (options: IOption[]) => {
+    fixedOptionDispatch(setOptions(options))
+  }
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -134,7 +138,9 @@ export const CreateFixedOption : React.FC<CreateFixedOptionProps> = ({ onCloseMo
 
     const Step1Content = () => {
     return (
-        <IncrementedInput/>
+        <IncrementedInput
+         onSaveOptions={saveOptions}
+        />
     )
   }
 
@@ -150,7 +156,7 @@ export const CreateFixedOption : React.FC<CreateFixedOptionProps> = ({ onCloseMo
 
   React.useEffect(() => {
     setStep0Error(fixedOptionState.type === "")
-    setStep1Error(fixedOptionState.options!.length === 0)
+    setStep1Error(fixedOptionState.options.length === 0);
   }, [fixedOptionState]);
 
   React.useEffect(()=>{
