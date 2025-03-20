@@ -6,7 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import { RiResetRightLine } from "react-icons/ri";
 import Box from '@mui/material/Box';
 import { useIncrementedInputStyles } from "./styles";
-import { OptionList } from "./optionList";
+import { OptionsList } from "./optionsList";
 import { 
   addNewOptionToList, 
   initialOptionsListState, 
@@ -19,16 +19,18 @@ import {
   setOptionLabel, 
   setOptionPrompt
 } from "../state";
-import { nanoid } from 'nanoid';
+import { v4 as uuidv4 } from 'uuid';
 import { Button, InfoBox } from "../../../shared";
 import { IOption } from "@veecode-platform/backstage-plugin-vee-common";
+import { IncrementedInputProps } from "./types";
 
 
-export const IncrementedInput = () => {
+export const IncrementedInput : React.FC<IncrementedInputProps> = (props) => {
     
     const [ showInputs, setShowInputs ] = React.useState<boolean>(false);
     const [ optionState, optionDispatch ] = React.useReducer(OptionReducer,initialOptionState);
     const [ optionsListState, optionsListDispatch ] = React.useReducer(OptionsListReducer, initialOptionsListState);
+    const { onSaveOptions } = props;
     const { root, newOptionStyle,inputGroup,input, buttonGroup, resetButton,addButton,footerButton } = useIncrementedInputStyles();
 
     const handleChangeOption = (e:React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -43,8 +45,10 @@ export const IncrementedInput = () => {
 
     const addOptionToList = () => {
       if(optionState.label !== "" && optionState.prompt !== ""){
-        const fakeId = nanoid()
-        optionsListDispatch(addNewOptionToList({...optionState, id: fakeId}));
+        const generatedId = uuidv4();
+        const newOption = {...optionState, id: optionState.id ? optionState.id : generatedId} as IOption;
+        optionsListDispatch(addNewOptionToList(newOption));
+        onSaveOptions([...optionsListState, newOption])
         resetInputOption()
       }
     }
@@ -62,14 +66,17 @@ export const IncrementedInput = () => {
       setShowInputs(true);
     }
 
+    const saveAllOptionsToFixedOptions = () => onSaveOptions(optionsListState);
+
     return (
       <div className={root}>
         { (optionsListState.length === 0 && !showInputs ) ? 
           (<InfoBox message="No option to show, please create one."/> ) : 
-          (<OptionList 
+          (<OptionsList 
              data={optionsListState}
              onRemoveOption={handleDeleteOption}
              onEditOptionFromList={editOptionFromList}
+             onSaveOptions={saveAllOptionsToFixedOptions}
              />)
         }
         { showInputs && (
