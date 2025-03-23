@@ -1,19 +1,21 @@
+import { AIModel } from "@veecode-platform/backstage-plugin-vee-common";
 import { OpenAIClient } from "../openAIClient";
-import type { IAssistantAI } from "../types";
+import type { IAssistantAI, InitializeAssistantParams } from "../types";
 import { assistantInstructions } from "./instructions";
 
 export class AssistantAI extends OpenAIClient implements IAssistantAI {
 
-    async initializeAssistant(vectorStoreId: string, repoName: string, repoStructure: string,model: string,){
+    async initializeAssistant({vectorStoreId, repoName, modelType, model, repoStructure}: InitializeAssistantParams){
         try{
            this.logger.info("Initializing assistant...");
-
+           const assistantType = modelType === AIModel.default ? "codeAnalysis" : 'generateTemplate'
            const assistant = await this.client.beta.assistants.create({
             name: repoName,
-            instructions: assistantInstructions(repoName,repoStructure),
+            instructions: assistantInstructions({assistantType,vectorStoreId,repoName,repoStructure}),
             model: model,
             temperature: 0, // Deterministic responses
             top_p: 0.1, // Focus on top 10% most probable outputs
+            response_format: { type: "json_object" },
             tools: [
               { type: "file_search" },
               { type: "code_interpreter" }
