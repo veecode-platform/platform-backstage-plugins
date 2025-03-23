@@ -7,17 +7,11 @@ export interface OpenAIProviderConfig {
     apiKey: string;
     model: string;
     timeout?: string;
-    dataset?: IDataset
+    templateGenerationModel?: ICustomModel
 }
 
-export interface IDataset {
+export interface ICustomModel {
   model: string;
-  references: IDataSetReference[]
-}
-
-export interface IDataSetReference {
-  id: string;
-  source: string
 }
 
 export interface AssistantAIOptions {
