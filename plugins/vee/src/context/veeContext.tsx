@@ -1,5 +1,5 @@
 import React from "react";
-import { EntityAnnotationType, InstructionsProps } from "../utils/types";
+import { EntityAnnotationType, InstructionsProps, TemplateOutputProps } from "../utils/types";
 import { EntityInfoActionType, InstructionsActionType } from "./state";
 import { CreateFixedOptionsParams, CreatePluginParams, CreateStackParams, FileContent, IFixedOptions, IPlugin, IStack, PullRequestResponse, SubmitRepoResponse } from "@veecode-platform/backstage-plugin-vee-common";
 
@@ -23,8 +23,9 @@ export type VeeContextType = {
     promptValue: string | null;
     analyzeChangesAndSubmitToRepository: (files: FileContent[]) => Promise<PullRequestResponse | null>;
     clearHistory: () => Promise<void>;
-    getTemplateFilesAndCreateVectorStore: (source: string, templateName: string, engine?: string) => Promise<SubmitRepoResponse>;
-    templateChat: (templateName: string, prompt: string, engine?: string) => Promise<{title: string; analysis: string; files: FileContent[]} | null>;
+    getTemplateFilesAndCreateVectorStore: (source: string, templateName: string, engine?: string) => Promise<{projectStructure:string,vectorStoreId: string}>;
+    templateChat: (templateName: string, prompt: string, projectStructureValue:string, vectorStoreIdValue: string, engine?: string) => Promise<{title: string; analysis: string; files: FileContent[]} | null>;
+    templateOutputState: TemplateOutputProps | null;
     clearTemplateHistory: (engine?: string) => Promise<void>;
     allStacksState: IStack[];
     stackSelectedState: IStack | null;
