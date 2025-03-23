@@ -1,4 +1,4 @@
-import { DefaultResponse, FileContent, IChat } from "@veecode-platform/backstage-plugin-vee-common";
+import { DefaultResponse, FileContent, IChat, AIModel } from "@veecode-platform/backstage-plugin-vee-common";
 
 export interface IVeeClient{
     submitDataToVectorStore({
@@ -40,8 +40,7 @@ export type ChatParams = {
     prompt: string, 
     repoName:string, 
     repoStructure:string
-    isTemplate?:boolean,
-    useDataset?:boolean
+    modelType: AIModel
 }
 
 export type ClearHistoryParams = {
