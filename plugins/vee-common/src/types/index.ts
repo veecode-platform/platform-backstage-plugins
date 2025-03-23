@@ -1,4 +1,5 @@
 import { Message } from "openai/resources/beta/threads/messages";
+import { AIModel } from "../enums/model";
 
 export type FileContent = {
   name: string,
@@ -42,8 +43,7 @@ export interface AnalyzeAndStartChatParams {
   prompt: string,
   repoName: string,
   repoStructure: string,
-  isTemplate?:boolean,
-  useDataset?: boolean
+  model: AIModel
 }
 
 export interface DeleteChatParams {
@@ -82,8 +82,7 @@ export interface CreateStackParams {
 
 export interface CreatePluginParams {
   name: string,
-  docs: string,
-  annotations?: IAnnotationPlugin[]
+  docs: string
 }
 
 export type ParamsWithRequiredId<T extends {id?: string | undefined}> = Partial<T> & Required<Pick<T, "id">>
@@ -204,7 +203,6 @@ export interface IPlugin{
   id?:string,
   name: string,
   docs: string,
-  annotations: IAnnotationPlugin[],
   created_at?: Date,
   updated_at?: Date,
 }
@@ -213,12 +211,4 @@ export interface IStackPlugin {
   stack_id: string;
   plugin_id: string;
   created_at?: Date;
-}
-
-export interface IAnnotationPlugin {
- id?:string,
- plugin_id?:string,
- annotation: string,
- created_at?: Date,
- updated_at?: Date,
 }
