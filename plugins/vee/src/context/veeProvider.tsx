@@ -14,6 +14,7 @@ import {
     initialPullRequestState, 
     initialStackSelectedState, 
     initialStacksState, 
+    initialTemplateOutputState, 
     InstructionsReducer, 
     PluginSelectedReducer,
     PluginsReducer, 
@@ -25,8 +26,10 @@ import {
     savePullRequestInfo, 
     saveStacks, 
     saveStackSelected, 
+    setTemplateOutput, 
     StackSelectedReducer, 
-    StacksReducer } from "./state";
+    StacksReducer, 
+    TemplateOutputReducer} from "./state";
 import { 
     alertApiRef, 
     errorApiRef, 
@@ -62,6 +65,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const [ fixedOptionSelectedState, fixedOptionselectedDispatch ] = React.useReducer(FixedOptionSelectedReducer, initialFixedOptionSelectedState);
     const [ pluginSelectedState, pluginSelectedDispatch ] = React.useReducer(PluginSelectedReducer, initialPluginSelectedState);
     const [ instructionsState, instructionsDispatch ] = React.useReducer(InstructionsReducer, initialInstructionsState);
+    const [ templateOutputState, templateOutputDispatch ] = React.useReducer(TemplateOutputReducer, initialTemplateOutputState)
     const api = useApi(veeApiRef);
     const errorApi = useApi(errorApiRef);
     const alertApi = useApi(alertApiRef);
@@ -142,31 +146,32 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
 
     const getTemplateFilesAndCreateVectorStore = async (source:string, templateName:string, engine: string = "openAI") => {
         try{
-             const { files, structure } = await api.cloneRepo(source);
+             const { files, structure } = await api.cloneTemplateSource(source);
              const response = await api.submitTemplate(engine, files, templateName);
-             setVectorStoreId(response.vectorStoreId);
-             setProjectStructure(structure);
-             return response
+             return {
+                projectStructure: structure,
+                vectorStoreId: response.vectorStoreId
+             }
         }
         catch(error:any){ 
             throw new Error(error);
         }
     }
 
-    const templateChat = async (templateName: string, prompt: string, engine: string = "openAI") => {
+    const templateChat = async (templateName: string, prompt: string, projectStructureValue:string, vectorStoreIdValue: string, engine: string = "openAI") => {
         try{
-            if(vectorStoreId && projectStructure){
-              const response = await api.getChatForTemplate(engine,vectorStoreId,prompt,templateName, projectStructure);
-              setAssistantId(response.assistantId);
-              setThreadId(response.threadId);
-              dispatchPullRequestInfo(savePullRequestInfo({title: response.title, message: response.message}))
-              return {
-                title: response.title,
-                analysis: response.message,
-                files: response.generatedFiles,
-              }
+            // eslint-disable-next-line no-console
+            console.log("veja os parametros >>",templateName, prompt, projectStructureValue, vectorStoreIdValue, 'openAI')
+            const response = await api.getChatForTemplate(engine,vectorStoreIdValue,prompt,templateName, projectStructureValue);
+            setAssistantId(response.assistantId);
+            setThreadId(response.threadId);
+            dispatchPullRequestInfo(savePullRequestInfo({title: response.title, message: response.message}))
+            templateOutputDispatch(setTemplateOutput({templateName, files: response.generatedFiles}))
+            return {
+              title: response.title,
+              analysis: response.message,
+              files: response.generatedFiles,
             }
-            return null
         }
         catch(error:any){
             errorApi.post(error);
@@ -403,6 +408,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             clearHistory,
             getTemplateFilesAndCreateVectorStore,
             templateChat,
+            templateOutputState,
             clearTemplateHistory,
             allStacksState,
             listAllStacks,
