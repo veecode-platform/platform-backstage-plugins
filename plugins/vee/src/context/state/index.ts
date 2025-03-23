@@ -7,3 +7,4 @@ export * from "./allPlugins";
 export * from "./allFixedOptions";
 export * from "./fixedOptionSelected";
 export * from "./instructions";
+export * from "./templateOutputState";
