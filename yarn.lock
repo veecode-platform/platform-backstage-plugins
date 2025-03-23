@@ -15768,6 +15768,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/pdf-parse@npm:^1.1.4":
+  version: 1.1.4
+  resolution: "@types/pdf-parse@npm:1.1.4"
+  checksum: 10/20b2b29654cbb0ce77eafdad9b736a558e048eb87dc7782db9296113694df8300215e3370a4d88903cca60fde0906775390545a9d8f251b0b4fa94180ccff0df
+  languageName: node
+  linkType: hard
+
 "@types/pluralize@npm:^0.0.33":
   version: 0.0.33
   resolution: "@types/pluralize@npm:0.0.33"
@@ -16927,6 +16934,7 @@ __metadata:
     "@types/js-yaml": "npm:^4"
     "@types/knex": "npm:^0.16.1"
     "@types/mime-types": "npm:^2"
+    "@types/pdf-parse": "npm:^1.1.4"
     "@types/supertest": "npm:^2.0.8"
     "@veecode-platform/backstage-plugin-vee-common": "workspace:^"
     compression: "npm:^1.8.0"
@@ -16940,6 +16948,7 @@ __metadata:
     octokit: "npm:^4.0.2"
     openai: "npm:^4.84.0"
     p-limit: "npm:^6.2.0"
+    pdf-parse: "npm:^1.1.1"
     simple-git: "npm:^3.27.0"
     supertest: "npm:^7.0.0"
     winston: "npm:^3.17.0"
@@ -31874,6 +31883,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-ensure@npm:^0.0.0":
+  version: 0.0.0
+  resolution: "node-ensure@npm:0.0.0"
+  checksum: 10/1124623beb1dec66889794286ec1761ac3bfac42ce93b8652903efa5af14227edce5bafa06c4e0675cdc850360931d7c9413e3b5406150f05b2c9bf5bb3ccce4
+  languageName: node
+  linkType: hard
+
 "node-fetch-commonjs@npm:^3.3.2":
   version: 3.3.2
   resolution: "node-fetch-commonjs@npm:3.3.2"
@@ -33626,6 +33642,16 @@ __metadata:
   version: 1.0.3
   resolution: "pct-encode@npm:1.0.3"
   checksum: 10/04344233107a40590dd2d6fff3463040288d68ec66b6026cbb90a6ab1b29afdb5f196ff35b6ab5f86d4799a0dfea6117ab19fe836e0d5ffb49695c6ba60d05d8
+  languageName: node
+  linkType: hard
+
+"pdf-parse@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "pdf-parse@npm:1.1.1"
+  dependencies:
+    debug: "npm:^3.1.0"
+    node-ensure: "npm:^0.0.0"
+  checksum: 10/5ab94d8cdd52975b861d6ca541ad728e127c0aa51c5d8923229f0910ed2931aa703022750632fe2ddf4512fd14dad50501521a35e9a3492d75f80b1f32cc4b86
   languageName: node
   linkType: hard
 
