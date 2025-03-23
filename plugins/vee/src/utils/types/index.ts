@@ -1,3 +1,5 @@
+import { FileContent } from "@veecode-platform/backstage-plugin-vee-common"
+
 export type EntityAnnotationType = {
     engine: string,
     location: string,
@@ -20,7 +22,8 @@ export type JsonObject = {
 export interface PluginListProps {
     id: string,
     icon: string | React.JSX.Element | null,
-    name: string
+    name: string,
+    docs: string
 }
 
 export interface StackInstructiosProps {
@@ -35,4 +38,13 @@ export interface InstructionsProps {
     plugins?: pluginInstructionsType[]
 }
 
-export type pluginInstructionsType = { id: string }
+export type pluginInstructionsType = {
+    id: string,
+    name: string,
+    docs: string
+ }
+
+export type TemplateOutputProps = {
+    templateName: string,
+    files: FileContent[]
+}
