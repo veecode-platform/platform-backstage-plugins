@@ -7,7 +7,7 @@ import { FileContent, IRepository } from "@veecode-platform/backstage-plugin-vee
 import fs from "fs";
 import path from "path";
 import mime from "mime-types";
-import { IGitManager, ReturnRepoInfoParams } from "./types";
+import { IGitManager } from "./types";
 
 export class GitManager implements IGitManager {
   private readonly githubManager: GithubManager;
@@ -18,14 +18,15 @@ export class GitManager implements IGitManager {
     this.gitlabManager = new GitlabManager();
   }
 
-  async returnRepoInfo({location,partial}:ReturnRepoInfoParams) {
-    const url = parseGitUrl(location);
+  async returnRepoInfo(location:string) {
+    const url = location.startsWith("url") ? parseGitUrl(location) : location;
+   
     switch (true) {
       case url.includes("github"): {
-        return this.githubManager.returnRepoInfo({url,partial});
+        return this.githubManager.returnRepoInfo(url);
       }
       case url.includes("gitlab"): {
-        return this.gitlabManager.returnRepoInfo({url,partial});
+        return this.gitlabManager.returnRepoInfo(url);
       }
       default:
         throw new Error("Git provider error: unimplemented!");
