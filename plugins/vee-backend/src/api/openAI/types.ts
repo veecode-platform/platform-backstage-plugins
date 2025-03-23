@@ -6,7 +6,7 @@ import type {
 import type { Run } from 'openai/resources/beta/threads/runs/runs';
 import type { Thread, ThreadDeleted } from 'openai/resources/beta/threads/threads';
 import type { VectorStoreDeleted } from 'openai/resources/beta/vector-stores/vector-stores';
-import { DefaultResponse, FileContent } from '@veecode-platform/backstage-plugin-vee-common';
+import { AIModel, DefaultResponse, FileContent } from '@veecode-platform/backstage-plugin-vee-common';
 
 /**
  * @public
@@ -14,10 +14,19 @@ import { DefaultResponse, FileContent } from '@veecode-platform/backstage-plugin
  */
 
 export interface IAssistantAI {
-  initializeAssistant(vectorStoreId: string, model: string, repoName:string, repoStructure: string): Promise<string>;
+  initializeAssistant({vectorStoreId, model, modelType, repoName, repoStructure} :InitializeAssistantParams): Promise<string>;
   deleteAssistant(assistantId: string): Promise<AssistantDeleted & {
     _request_id?: string | null;
 }>
+}
+
+// params
+export type InitializeAssistantParams = {
+  vectorStoreId: string, 
+  modelType: AIModel,
+  model: string, 
+  repoName:string, 
+  repoStructure: string
 }
 
 /**
@@ -39,15 +48,14 @@ export interface IOpenAIApi {
     {vectorStoreId,
       repoName,
       repoStructure,
-      useDataset}
+      modelType}
       :StartChatParams)
       : Promise<ThreadCreatedResponse>;
   getChat(
    {
     assistantId,
     threadId,
-    message,
-    isTemplate} : GetChatParams)
+    message} : GetChatParams)
     : Promise<{
       analysis: string,
       title:string;
@@ -61,18 +69,29 @@ export interface IOpenAIApi {
     : Promise<DefaultResponse>
 }
 
+export type SubmitDataToVectorStoreParams = {
+  repoName:string,
+  files: FileContent[]
+}
+
+export type initializeAssistantParams = {
+  vectorStoreId: string,
+  repoName: string,
+  repoStructure: string,
+  modelType: AIModel
+}
+
 export type StartChatParams = {
   vectorStoreId: string,
   repoName:string, 
   repoStructure: string,
-  useDataset?:boolean
+  modelType: AIModel
 }
 
 export type GetChatParams = {
     assistantId: string,
     threadId: string,
-    message: string,
-    isTemplate?: boolean,
+    message: string
 }
 
 export type ClearHistoryParams = {
@@ -104,8 +123,8 @@ export interface IThreadsManager {
     : Promise<void>;
   executeAndCreateRun(
     {threadId,
-    assistantId,
-    isTemplate }:ExecuteAndCreateRunParams
+    assistantId
+   }:ExecuteAndCreateRunParams
   ): Promise<
     Run & {
       _request_id?: string | null;
@@ -127,8 +146,7 @@ export interface IThreadsManager {
 
 export type ExecuteAndCreateRunParams = {
   assistantId: string,
-  threadId: string,
-  isTemplate?: boolean
+  threadId: string
 }
 
 export type AddMessageToThreadParams = {
@@ -153,3 +171,5 @@ export interface IVectorStoreManager {
     _request_id?: string | null;
 }>
 }
+
+
