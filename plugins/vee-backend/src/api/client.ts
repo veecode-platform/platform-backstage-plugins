@@ -19,26 +19,26 @@ export class VeeClient implements IVeeClient {
     async submitDataToVectorStore ({engine,repoName,files}:SubmitDataToVectorStoreParams){
       switch(engine){
         case EngineEnum.openAI:
-            return await this.openAIApi.submitDataToVectorStore(repoName,files);
+            return await this.openAIApi.submitDataToVectorStore({repoName,files});
         default:
             throw new Error("No engine found");
       }
     }
 
-    async chat ({engine, vectorStoreId, prompt,repoName, repoStructure,isTemplate, useDataset}:ChatParams){
+    async chat ({engine, vectorStoreId, prompt,repoName, repoStructure,modelType}:ChatParams){
         switch(engine){
             case EngineEnum.openAI:
                 {
-                    const { threadId, assistantId } = await this.openAIApi.startChat({vectorStoreId,repoName, repoStructure,useDataset});
-                    const response = await this.openAIApi.getChat({assistantId, threadId, message:prompt,isTemplate});
-                    return {
-                        threadId,
-                        assistantId,
-                        title: response.title,
-                        analysis: response.analysis,
-                        messages: response.messages,
-                        generatedFiles: response.generatedFiles
-                    };
+                  const { threadId, assistantId } = await this.openAIApi.startChat({vectorStoreId,repoName, repoStructure,modelType});
+                  const response = await this.openAIApi.getChat({assistantId, threadId, message:prompt});
+                  return {
+                      threadId,
+                      assistantId,
+                      title: response.title,
+                      analysis: response.analysis,
+                      messages: response.messages,
+                      generatedFiles: response.generatedFiles
+                  };
                 }
             default:
                 throw new Error("No engine found");
