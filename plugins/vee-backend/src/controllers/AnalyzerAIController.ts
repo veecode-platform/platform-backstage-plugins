@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AssistantAIController } from './AssistantAIController';
-import { AnalyzeAndStartChatParams, DeleteChatParams, DonwloadRepoAndCreateVectorStoreParams, veeAnalyzerReadPermission } from '@veecode-platform/backstage-plugin-vee-common';
+import { AIModel, AnalyzeAndStartChatParams, DeleteChatParams, DonwloadRepoAndCreateVectorStoreParams, veeAnalyzerReadPermission } from '@veecode-platform/backstage-plugin-vee-common';
 import { InputError, NotAllowedError, stringifyError } from '@backstage/errors';
 import { IAnalyzerAIControler } from './types';
 import { VeeClient } from "../api/client";
@@ -75,7 +75,7 @@ export class AnalyzerAIController extends AssistantAIController implements IAnal
 
     try {
 
-      const response = await this.veeCodeAssistantAI.chat({engine,vectorStoreId, prompt, repoName, repoStructure});
+      const response = await this.veeCodeAssistantAI.chat({engine,vectorStoreId, prompt, repoName, repoStructure, modelType: AIModel.default});
 
       res.status(200).json({
         assistantId: response.assistantId,
