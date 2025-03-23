@@ -21,7 +21,7 @@ export interface Config {
         model: string;
         instructions: string;
         timeout?:string;
-        dataset?: {
+        templateGenerationModel?: {
           model?: string;
           references?: Array<{
             id: string;
