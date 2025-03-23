@@ -44,17 +44,6 @@ exports.up = async function up(knex) {
             table.timestamps(true, true);
         })
         /**
-         * Annotations plugin Table
-         */
-        .createTable('annotations',table => {
-            table.comment('List of annotations belonging to a plugin');
-            table.uuid('id').defaultTo(knex.fn.uuid()).primary().notNullable().comment('Auto-generated Id of annotation');
-            table.uuid('plugin_id').notNullable();
-            table.foreign('plugin_id').references('id').inTable('plugins').onDelete('CASCADE');
-            table.text('annotation').notNullable().comment('Annotation for plugin use');
-            table.timestamps(true, true);
-        })
-        /**
          *  stack_plugins
          */
         .createTable('stack_plugins', table => {
