@@ -63,8 +63,8 @@ export class PluginsController extends AssistantAIController  implements IPlugin
     * Add plugin
     */
     addPlugin = async (req: Request, resp: Response) => {
-      const { name, docs, annotations } = req.body as CreatePluginParams; 
-       if (!name || !docs || !annotations) {
+      const { name, docs } = req.body as CreatePluginParams; 
+       if (!name || !docs ) {
         throw new InputError(
           'The fields {name, docs} are required',
         );
@@ -74,7 +74,7 @@ export class PluginsController extends AssistantAIController  implements IPlugin
         if (!(await this.isRequestAuthorized(req, veeAddPluginPermission))) {
           throw new NotAllowedError('Unauthorized');
         }
-        const newPlugin = await this.database.createPlugin({name, docs, annotations});
+        const newPlugin = await this.database.createPlugin({name, docs });
         resp.status(201);
         resp.json({
             message: 'New Plugin Add!',
@@ -95,12 +95,11 @@ export class PluginsController extends AssistantAIController  implements IPlugin
     */
     editPlugin = async (req: Request, resp: Response) => {
      const { pluginId } = req.params;
-     const { name, docs, annotations } = req.body as Partial<CreatePluginParams>;
+     const { name, docs } = req.body as Partial<CreatePluginParams>;
      const updateData : Partial<IPlugin> = {};
 
      if(name) updateData.name = name;
      if(docs) updateData.docs = docs;
-     if(annotations) updateData.annotations = annotations;
 
     try {
      if (!(await this.isRequestAuthorized(req, veeEditPluginPermission))) {
