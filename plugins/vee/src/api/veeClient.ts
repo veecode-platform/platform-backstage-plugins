@@ -61,7 +61,8 @@ export class VeeClient implements VeeApi {
 
   async cloneTemplateSource(source: string) {
     const body = {
-      source,
+     // source, // TODO
+     location: source
     };
 
     const gitManager = await this.getGitManager();
@@ -76,10 +77,12 @@ export class VeeClient implements VeeApi {
       },
     };
 
-    const response = await this.fetch<any>(
-      '/partial-clone-repository',
-      headers,
-    );
+    // const response = await this.fetch<any>(
+    //   '/partial-clone-repository',
+    //   headers,
+    // );
+    const response = await this.fetch<any>('/clone-repository', headers);
+
 
     return {
       files: response.data.files,
@@ -205,8 +208,8 @@ export class VeeClient implements VeeApi {
     engine: string = 'openAI',
     vectorStoreId: string,
     prompt: string,
-    templateName?: string,
-    repoStructure?: string,
+    templateName: string,
+    repoStructure: string,
   ): Promise<InitializeAssistantAIResponse> {
     const body = {
       engine,
@@ -363,11 +366,10 @@ export class VeeClient implements VeeApi {
     return response;
   }
 
-  async addPlugin({ name, docs, annotations }: CreatePluginParams) {
+  async addPlugin({ name, docs }: CreatePluginParams) {
     const body = {
       name,
-      docs,
-      annotations,
+      docs
     };
     const headers: RequestInit = {
       method: 'POST',
