@@ -19,7 +19,7 @@ export const ManagePlugins = () => {
         return allPluginsState?.map(plugin => ({
             id: plugin.id,
             name: plugin.name,
-            annotations: plugin.annotations ? plugin.annotations.flatMap( annotation => JSON.parse(annotation.annotation).annotation) : []
+            docs: plugin.docs
         })) || [];
     }, [allPluginsState]);
 
