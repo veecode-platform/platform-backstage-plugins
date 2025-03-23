@@ -15,7 +15,7 @@ export interface IAnalyzerAIControler{
  *  ScaffolderAIController
  */
 export interface IScaffolderAIControler{
-    createVectorStore: (req: Request, res: Response) => Promise<void>;
+    createVectorStore(req: Request, res: Response): Promise<void>;
     analyzeAndStartChat(req: Request, res: Response): Promise<void>;
     deleteChat(req: Request, res: Response): Promise<void>
 }
