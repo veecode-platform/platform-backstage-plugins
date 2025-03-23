@@ -1,4 +1,4 @@
-export function extractGitHubInfo(url:string, partial?:boolean) {
+export function extractGitHubInfo(url:string) {
   const regex =
     /https:\/\/([^/]+)\/([^/]+)\/([^/]+)\/(blob|tree)\/([^/]+)(?:\/([^?]+))?/;
   const match = url.match(regex);
@@ -8,19 +8,7 @@ export function extractGitHubInfo(url:string, partial?:boolean) {
   }
 
   const [_, host, owner, repo, type, branch, path] = match;
-
-  if (partial && path) {
-    const folderPath = path.split('/').slice(0, -1).join('/');
-    return {
-      host,
-      owner,
-      repo,
-      type,
-      branch,
-      path,
-      folderPath,
-    };
-  }
+  const folderPath = path ? path.split('/').slice(0, -1).join('/') : '';
 
   return {
     host,
@@ -29,5 +17,6 @@ export function extractGitHubInfo(url:string, partial?:boolean) {
     type,
     branch,
     path: path || '',
+    folderPath
   };
 };
