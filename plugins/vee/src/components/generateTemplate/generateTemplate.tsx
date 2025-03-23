@@ -47,7 +47,8 @@ export const GenerateTemplate = () => {
           return allPlugins.map(plugin => ({
               id: plugin.id as string,
               icon: null,
-              name: plugin.name
+              name: plugin.name,
+              docs: plugin.docs
           }))
          }
          return []
