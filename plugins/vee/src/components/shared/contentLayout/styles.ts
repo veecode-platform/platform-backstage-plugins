@@ -46,7 +46,7 @@ export const useContentLayoutStyles = makeStyles({
     },
     body: {
       padding: "2.5rem 2rem",
-      height: "75vh",
+      minHeight: "75vh",
       display: "flex",
       alignItems: "flex-start",
       justifyContent: "flex-start",
