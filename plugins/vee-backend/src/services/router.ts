@@ -45,11 +45,9 @@ export async function createRouter(
   router.delete("/chat-analyze-repo", analyzerAIController.deleteChat as RequestHandler);
   router.post("/clone-repository", gitController.clone as RequestHandler);
   router.post("/partial-clone-repository", gitController.partialClone as RequestHandler);
-
   router.post("/submit-template",scaffolderAIController.createVectorStore as RequestHandler )
   router.post("/chat-template", scaffolderAIController.analyzeAndStartChat as RequestHandler);
   router.delete("/chat-template", scaffolderAIController.deleteChat as RequestHandler);
-
   router.get("/fixedOptions", fixedOptionsController.ListAllFixedOptions as RequestHandler);
   router.get("/fixedOptions/:fixedOptionsId", fixedOptionsController.getFixedOptionsById as RequestHandler);
   router.post("/fixedOptions", fixedOptionsController.createFixedOptions as RequestHandler);
