@@ -35,7 +35,8 @@ export const useTemplateOutputStyles = makeStyles({
         height: "100%",
         display: "flex",
         alignItems: "flex-end",
-        justifyContent: "center"
+        justifyContent: "center",
+        position: "relative"
     },
     buttonsGroup: {
         width: "100%",
@@ -43,6 +44,8 @@ export const useTemplateOutputStyles = makeStyles({
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
-        gap: "1rem"
+        gap: "1rem",
+        position: "fixed",
+        bottom: "5rem"
     }
 })
