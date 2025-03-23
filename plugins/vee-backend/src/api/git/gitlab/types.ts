@@ -3,15 +3,10 @@
  *  @public
  */
 export interface IGitlabManager {
-    returnRepoInfo({url, partial}:ReturnGitlabRepoInfo): Promise<{
+    returnRepoInfo(url:string): Promise<{
         localPath: string;
         repoUrl: string;
         branch: string;
         folderPath?: string | null
     }>,
-}
-
-export type ReturnGitlabRepoInfo = {
-    url: string,
-    partial?:boolean
 }
