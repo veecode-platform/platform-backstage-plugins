@@ -160,8 +160,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
 
     const templateChat = async (templateName: string, prompt: string, projectStructureValue:string, vectorStoreIdValue: string, engine: string = "openAI") => {
         try{
-            // eslint-disable-next-line no-console
-            console.log("veja os parametros >>",templateName, prompt, projectStructureValue, vectorStoreIdValue, 'openAI')
             const response = await api.getChatForTemplate(engine,vectorStoreIdValue,prompt,templateName, projectStructureValue);
             setAssistantId(response.assistantId);
             setThreadId(response.threadId);
@@ -176,6 +174,25 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
         catch(error:any){
             errorApi.post(error);
             return null
+        }
+    }
+
+    const saveTemplateToCatalog = async(location:string,files:FileContent[])=>{
+        try{
+          if(pullRequestInfoState){
+            const { title, message } = pullRequestInfoState;
+            const response = await api.saveChangesInRepository(files,location,title, message);
+            return response
+          }
+          return null
+        }
+        catch(error:any){
+            errorApi.post(error);
+            return {
+                status: 'error',
+                link: '',
+                message: 'There was an error trying to save the changes'
+                }
         }
     }
 
@@ -409,6 +426,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             getTemplateFilesAndCreateVectorStore,
             templateChat,
             templateOutputState,
+            saveTemplateToCatalog,
             clearTemplateHistory,
             allStacksState,
             listAllStacks,
