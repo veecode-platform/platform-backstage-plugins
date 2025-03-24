@@ -21,12 +21,9 @@ export interface Config {
         model: string;
         instructions: string;
         timeout?:string;
-        templateGenerationModel?: {
+        templateGeneration?: {
           model?: string;
-          references?: Array<{
-            id: string;
-            source: string;
-            }>;
+          catalog?: string;
         }
       }
     }
