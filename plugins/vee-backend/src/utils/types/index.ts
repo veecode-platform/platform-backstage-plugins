@@ -7,11 +7,12 @@ export interface OpenAIProviderConfig {
     apiKey: string;
     model: string;
     timeout?: string;
-    templateGenerationModel?: ICustomModel
+    templateGeneration?: ITemplateGeneration
 }
 
-export interface ICustomModel {
+export interface ITemplateGeneration {
   model: string;
+  catalog: string
 }
 
 export interface AssistantAIOptions {
