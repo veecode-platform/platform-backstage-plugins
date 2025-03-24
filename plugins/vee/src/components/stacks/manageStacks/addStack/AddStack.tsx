@@ -125,10 +125,10 @@ export const AddStack : React.FC<AddStackProps> = (props) => {
       }}
     renderInput={(params) => (
       <TextField
+        className={input}
         {...params}
         variant="filled"
         label="Plugin"
-        placeholder="Plugin"
       />
       )}
     />
