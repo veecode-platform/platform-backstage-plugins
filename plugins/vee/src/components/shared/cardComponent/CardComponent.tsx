@@ -14,7 +14,6 @@ import { useCardComponentStyles, useCardElementStyles } from "./styles";
 import type { CardProps } from "./types";
 
 
-
 const CardElement : React.FC<Omit<CardProps,"path">> = (props) => {
    
     const { /* id,*/ variant, icon, title, subtitle, description, items  } = props;
