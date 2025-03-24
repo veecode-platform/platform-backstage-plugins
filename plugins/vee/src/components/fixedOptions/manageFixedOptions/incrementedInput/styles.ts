@@ -27,6 +27,13 @@ export const useIncrementedInputStyles = makeStyles({
     },
     input: {
         width: '100%',
+        '& input':{
+          padding: '.5rem !important',
+          minHeight: '38px !important',
+        },
+        '& textarea':{
+          padding: '.5rem !important'
+        },
         '& input[type=number]': {
           '-moz-appearance': 'textfield'
         },
