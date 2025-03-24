@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, CodeBlockComponent, PageLayout } from "../shared"
+import { Button, CodeBlockComponent, FeedbackComponent, PageLayout } from "../shared"
 import { useVeeContext } from "../../context";
 import Grid2  from "@mui/material/Grid2";
 import { ArchivesFile } from "./archiveFles";
@@ -10,6 +10,8 @@ import { useTemplateOutputStyles } from "./styles";
 import { useNavigate } from "react-router-dom";
 import { getLanguageFromFilename } from "../../utils/helpers/getLanguageFromFilename";
 import { downloadTemplateFolder } from "../../utils/helpers/downloadTemplateFolder";
+import { useConfig } from "../../hooks/useConfig";
+import { addPullRequestResponse, initialPullRequestResponseState, PullRequestResponseReducer } from "./state";
 
 export type CodeBlockProps = {
   language: string,
@@ -17,8 +19,12 @@ export type CodeBlockProps = {
 }
 
 export const TemplateOutput = () => {
+  
+    const [ showFeedback, setShowFeedback ] = React.useState<boolean>(false); 
+    const [ pullRequestResponseState, pullRequestResponseDispatch ] = React.useReducer(PullRequestResponseReducer,initialPullRequestResponseState);
     const [codeBlock, setCodeBlock] = React.useState<CodeBlockProps>({language: "javascript",code:"console.log('Hello word)"});
-    const { templateOutputState, clearTemplateHistory } = useVeeContext();
+    const { templateOutputState, clearTemplateHistory, entityInfoState, saveTemplateToCatalog } = useVeeContext();
+    const { catalogLocation } = useConfig(entityInfoState?.engine.toLowerCase() ?? "openai");
     const navigate = useNavigate();
     const { root, codeSection, footer, buttonsGroup } = useTemplateOutputStyles();
 
@@ -32,6 +38,20 @@ export const TemplateOutput = () => {
     const handleTemplateDownload = () => {
       if(templateOutputState){
         downloadTemplateFolder(templateOutputState)
+      }
+    }
+
+    const createPullRequest = async () => {
+      if(catalogLocation && templateOutputState && templateOutputState.files.length > 0){
+        const response = await saveTemplateToCatalog(catalogLocation as string,templateOutputState.files);
+        if (response) {
+          pullRequestResponseDispatch(addPullRequestResponse({
+            status: response.status === "ok" ? 'success':'error',
+            message: response.message,
+            link: response.link
+          }));
+          setShowFeedback(true)
+        }
       }
     }
 
@@ -57,33 +77,57 @@ export const TemplateOutput = () => {
     },[templateOutputState])
 
     return (
-      <PageLayout 
-        label="Generating a template with AI"
-        title={templateOutputState ? templateOutputState.templateName : 'Template output'}
+      <>
+        <PageLayout
+          label="Generating a template with AI"
+          title={
+            templateOutputState
+              ? templateOutputState.templateName
+              : 'Template output'
+          }
         >
-        <Grid2 className={root} spacing={2} container>
-           <Grid2 size={{ md: 2 }}>
-             <ArchivesFile
-              data={templateFiles}
-              handleCode={handleCode}
-             />
-           </Grid2>
-           <Grid2 size={{ md: 8 }} className={codeSection}>
-              <CodeBlockComponent 
-                code={codeBlock.code} 
+          <Grid2 className={root} spacing={2} container>
+            <Grid2 size={{ md: 2 }}>
+              <ArchivesFile data={templateFiles} handleCode={handleCode} />
+            </Grid2>
+            <Grid2 size={{ md: 8 }} className={codeSection}>
+              <CodeBlockComponent
+                code={codeBlock.code}
                 language={codeBlock.language}
-                />
-           </Grid2>
-           <Grid2 size={{ md: 2 }}>
-            <Box className={footer}>
+              />
+            </Grid2>
+            <Grid2 size={{ md: 2 }}>
+              <Box className={footer}>
                 <div className={buttonsGroup}>
-                    <Button variant="danger" onClick={handleBack}> Cancel</Button>
-                    <Button variant="primary" onClick={handleTemplateDownload}> <RiFileDownloadFill/> Save</Button>
-                    <Button variant="dark"> <FaGitAlt/> Publish</Button>
+                  <Button variant="danger" onClick={handleBack}>
+                    {' '}
+                    Cancel
+                  </Button>
+                  <Button variant="primary" onClick={handleTemplateDownload}>
+                    {' '}
+                    <RiFileDownloadFill /> Save
+                  </Button>
+                  <Button variant="dark" onClick={createPullRequest}>
+                    {' '}
+                    <FaGitAlt /> Publish
+                  </Button>
                 </div>
-            </Box>
-           </Grid2>
-        </Grid2>
-    </PageLayout>
-    )
+              </Box>
+            </Grid2>
+          </Grid2>
+        </PageLayout>
+        <FeedbackComponent
+          open={showFeedback}
+          variant={pullRequestResponseState!.status as 'success' | 'error'}
+          message={pullRequestResponseState!.message}
+          actions={
+            <>
+              <Button variant="danger" onClick={handleBack}>
+                Exit
+              </Button>
+            </>
+          }
+        />
+      </>
+    );
 }
