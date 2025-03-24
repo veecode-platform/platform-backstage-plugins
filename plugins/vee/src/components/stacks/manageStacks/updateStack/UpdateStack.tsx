@@ -107,7 +107,12 @@ export const UpdateStack : React.FC<UpdateStackProps> = (props) => {
           value.map((option: string, index: number) => {
             const { key, ...tagProps } = getTagProps({ index });
             return (
-              <Chip variant="outlined" label={option} key={key} {...tagProps} />
+              <Chip 
+                variant="default" 
+                label={option} 
+                key={key} 
+                {...tagProps}
+                 />
             );
           })
         }
@@ -120,7 +125,11 @@ export const UpdateStack : React.FC<UpdateStackProps> = (props) => {
           stackDispatch(setStackPlugins(pluginList));
         }}
         renderInput={params => (
-          <TextField {...params} variant="filled" label="Plugin" />
+          <TextField 
+            {...params} 
+            variant="outlined" 
+            label="Plugin"
+             />
         )}
       />
     );
