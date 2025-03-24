@@ -38,7 +38,6 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
           ${instructionsState.additionalInfo ? `- Additional user information: ${instructionsState.additionalInfo}` : ''}
           Based on the plugins' documentation, determine which annotations should be added to the template and how the project skeleton should be structured. Follow best development practices, clean code standards, and software architecture, and include design patterns, containerization, and CI/CD with integrated and unit tests.`;
       
-      // TODO
       const { projectStructure, vectorStoreId } = await getTemplateFilesAndCreateVectorStore(instructionsState.stackInfo.source, instructionsState.templateName); 
 
       if(projectStructure && vectorStoreId){
