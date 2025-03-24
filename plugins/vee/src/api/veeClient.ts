@@ -61,7 +61,6 @@ export class VeeClient implements VeeApi {
 
   async cloneTemplateSource(source: string) {
     const body = {
-     // source, // TODO
      location: source
     };
 
@@ -77,10 +76,6 @@ export class VeeClient implements VeeApi {
       },
     };
 
-    // const response = await this.fetch<any>(
-    //   '/partial-clone-repository',
-    //   headers,
-    // );
     const response = await this.fetch<any>('/clone-repository', headers);
 
 
