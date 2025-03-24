@@ -48,10 +48,10 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
   async initializeAssistant({vectorStoreId, repoName, repoStructure, modelType}:initializeAssistantParams) {
     try {
       this.logger.info("Check Assistant Available...");
-      const configModel = this.OpenAIConfig.getOpenAIConfig();
+      const config = this.OpenAIConfig.getOpenAIConfig();
       const assistants = await this.client.beta.assistants.list();
       const existingAssistant = repoName ? assistants.data.find((a: any) => a.name === repoName) : false;
-      const model = (modelType === AIModel.customModel && configModel.templateGenerationModel) ? configModel.templateGenerationModel.model : configModel.model;
+      const model = (modelType === AIModel.customModel && config.templateGeneration) ? config.templateGeneration.model : config.model;
 
       if (!existingAssistant) return this.assistantAI.initializeAssistant({vectorStoreId,repoName,modelType, model,repoStructure});
 
