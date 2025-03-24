@@ -28,12 +28,12 @@ export function assistantInstructions({assistantType, vectorStoreId, repoName, r
       },
       {
         name: "index.md",
-        relativePath: "docs/",
+        relativePath: "docs/index.md",
         content: '[Full file content here]',
         type: "text/markdown",
       },
     ];
-    const skeletonFiles = transformStringToObject(repoStructure);
+    const skeletonFiles = transformStringToObject(repoStructure,"skeleton");
     const allFiles = [...defaultFiles, ...skeletonFiles];
     const response = {
       text: 'Generated textual answer to the question, including analysis and ideas',
