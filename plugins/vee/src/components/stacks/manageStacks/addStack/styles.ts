@@ -7,6 +7,10 @@ export const useStepperStyles = makeStyles({
         width: '100%'
     },
     input: {
+        '& input':{
+          padding: '.5rem !important',
+          minHeight: '38px !important'
+        },
         '& input[type=number]': {
           '-moz-appearance': 'textfield'
         },
