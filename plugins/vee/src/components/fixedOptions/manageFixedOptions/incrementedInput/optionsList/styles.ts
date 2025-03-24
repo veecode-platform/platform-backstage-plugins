@@ -61,6 +61,8 @@ export const useOptionsListStyles = makeStyles({
   },
   input: {
     width: "100% !important",
+    minHeight: "52px !important",
+    padding: ".5rem",
     '& input[type=number]': {
       '-moz-appearance': 'textfield'
     },
