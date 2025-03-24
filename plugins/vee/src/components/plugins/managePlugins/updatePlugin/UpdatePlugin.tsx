@@ -9,7 +9,6 @@ import { UpdatePluginProps } from './types';
 import { initialPluginState, PluginReducer, setPlugin,setPluginDocs, setPluginName } from '../state';
 
 export const UpdatePlugin : React.FC<UpdatePluginProps> = (props) => {
-
   const [pluginState, pluginDispatch] = React.useReducer(PluginReducer, initialPluginState);
   const [step0Error, setStep0Error] = React.useState<boolean>(true)
   const [step1Error, setStep1Error] = React.useState<boolean>(true)
@@ -51,7 +50,7 @@ export const UpdatePlugin : React.FC<UpdatePluginProps> = (props) => {
 
   }
 
-  const Step0Content = () => {
+  const PluginNameStepContent = () => {
     return (
         <TextField 
          fullWidth variant="outlined" 
@@ -66,7 +65,7 @@ export const UpdatePlugin : React.FC<UpdatePluginProps> = (props) => {
     )
   }
 
-  const Step1Content = () => {
+  const PluginDocsStepContent = () => {
     return (
         <TextField 
          fullWidth variant="outlined" 
@@ -89,7 +88,7 @@ export const UpdatePlugin : React.FC<UpdatePluginProps> = (props) => {
   };
 
 
-  const StepsContent = [ Step0Content, Step1Content ];
+  const StepsContent = [ PluginNameStepContent, PluginDocsStepContent ];
 
   React.useEffect(() => {
     setStep0Error(pluginState.name === "")
