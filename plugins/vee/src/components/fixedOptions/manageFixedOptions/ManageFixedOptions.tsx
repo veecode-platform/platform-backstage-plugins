@@ -18,7 +18,7 @@ export const ManageFixedOptions = () => {
         return allFixedOptionsState.map( fixedOption => ({
             id: fixedOption.id,
             type: fixedOption.type
-        }))
+        })).sort((a, b) => a.type.localeCompare(b.type));
     },[allFixedOptionsState]);
 
     const modalTitle = () => {
