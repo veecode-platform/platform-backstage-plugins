@@ -4,7 +4,7 @@ export interface IGitManager {
     returnRepoInfo(location:string): Promise<{
         localPath: string;
         repoUrl: string;
-        branch: string;
+        branch: string | null;
         folderPath: string | null
     }>,
     cloneRepo(token: string, localPath: string, repoUrl: string, branch: string): Promise<IRepository>;
