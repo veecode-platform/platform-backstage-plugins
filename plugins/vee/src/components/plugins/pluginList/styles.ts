@@ -60,8 +60,8 @@ export const usePluginListStyles = makeStyles({
        },
 
     iconImg:{
-       width: '60px',
-       height: '60px',
+       width: '40px',
+       height: '40px',
        backgroundColor: 'transparent',
        // backgroundColor: themeVariables.colors.dark
        display: 'flex',
