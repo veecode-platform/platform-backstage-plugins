@@ -81,18 +81,17 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
          )}
         </div>
 
-        {showFeedback && 
-            (<FeedbackComponent 
-              open={showFeedback}
-              variant={pullRequestResponseState!.status as "success" | "error"} 
-              message={pullRequestResponseState!.message} 
-              actions={
-                <>
-                <Button variant="secondary" onClick={handleChat}> New Analysis </Button>
-                <Button variant="danger" onClick={ clearHistoryAndExit}>Exit</Button>
-                </>
-              }
-              />)}
+        <FeedbackComponent 
+          open={showFeedback}
+          variant={pullRequestResponseState!.status as "success" | "error"} 
+          message={pullRequestResponseState!.message} 
+          actions={
+            <>
+            <Button variant="secondary" onClick={handleChat}> New Analysis </Button>
+            <Button variant="danger" onClick={ clearHistoryAndExit}>Exit</Button>
+            </>
+          }
+          />
        </>
     )
 }
