@@ -1,6 +1,5 @@
 export function extractGitHubInfo(url:string) {
-  const regex =
-    /https:\/\/([^/]+)\/([^/]+)\/([^/]+)\/(blob|tree)\/([^/]+)(?:\/([^?]+))?/;
+  const regex = /^https:\/\/([^/]+)\/([^/]+)\/([^/]+)(?:\/(blob|tree)\/([^/]+)(?:\/(.*))?)?/;
   const match = url.match(regex);
 
   if (!match) {
@@ -15,7 +14,7 @@ export function extractGitHubInfo(url:string) {
     owner,
     repo,
     type,
-    branch,
+    branch: branch || null,
     path: path || '',
     folderPath
   };
