@@ -68,14 +68,6 @@ export const TemplateOutput = () => {
       return []
     },[templateOutputState])
 
-    React.useEffect(()=>{
-      if(templateOutputState){
-        // TODO
-      // eslint-disable-next-line no-console
-      console.log(templateOutputState)
-      }
-    },[templateOutputState])
-
     return (
       <>
         <PageLayout
