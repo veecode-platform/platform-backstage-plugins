@@ -125,7 +125,6 @@ export const UpdateStack : React.FC<UpdateStackProps> = (props) => {
         {...params}
         variant="filled"
         label="Plugin"
-        placeholder="Plugin"
       />
       )}
     />
