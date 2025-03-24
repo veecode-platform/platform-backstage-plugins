@@ -5,7 +5,6 @@ import { UpdateStack } from "./updateStack";
 import useAsync from "react-use/esm/useAsync";
 import { ModalVariantKey } from "../../shared/modalComponent/types";
 import { useVeeContext } from "../../../context";
-import { ManageStacksRow } from "./types";
 
 export const ManageStacks = () => {
 
@@ -16,11 +15,12 @@ export const ManageStacks = () => {
     const { loading, error } = useAsync(listAllStacks,[]);
 
     const rows = React.useMemo(() => {
+        if(!allStacksState) return [];
         return allStacksState?.map(stack => ({
-            id: stack.id,
+            id: stack.id as string,
             name: stack.name,
             plugins: stack.plugins ? stack.plugins.flatMap(plugins => plugins.name) : []
-        })) || [];
+        })).sort((a, b) => a.name.localeCompare(b.name));
     }, [allStacksState]);
 
     const modalTitle = () => {
@@ -59,7 +59,7 @@ export const ManageStacks = () => {
               title="Stacks" 
               loading={loading}
               error={error}
-              data={rows as ManageStacksRow[]}
+              data={rows}
               actions
               onEdit={handleUpdateStack}
               onDelete={handleRemoveStack}
