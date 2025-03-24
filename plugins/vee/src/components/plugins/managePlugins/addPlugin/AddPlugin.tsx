@@ -1,16 +1,11 @@
 import React from 'react';
-import {
-  Grid, TextField, Button, 
-  Stepper, Step, StepLabel,
-  StepContent, Typography} from '@material-ui/core';
+import { Grid, TextField, Button, Stepper, Step, StepLabel,StepContent, Typography} from '@material-ui/core';
 import { useStepperStyles } from './styles';
 import { useVeeContext } from '../../../../context';
 import { AddPluginProps } from './types';
 import { initialPluginState, PluginReducer, resetPluginState, setPluginDocs, setPluginName } from '../state';
 
 export const AddPlugin : React.FC<AddPluginProps> = (props) => {
-
-
   const [step0Error, setStep0Error] = React.useState<boolean>(true)
   const [step1Error, setStep1Error] = React.useState<boolean>(true)
   const [activeStep, setActiveStep] = React.useState(0);
@@ -55,7 +50,7 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
 
   }
 
-  const Step0Content = () => {
+  const PluginNameStepContent = () => {
     return (
         <TextField 
          fullWidth variant="outlined" 
@@ -70,7 +65,7 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
     )
   }
 
-  const Step1Content = () => {
+  const PluginDocsStepContent = () => {
     return (
         <TextField 
          fullWidth variant="outlined" 
@@ -93,7 +88,7 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
     return "Next";
   };
 
-  const StepsContent = [ Step0Content, Step1Content ];
+  const StepsContent = [ PluginNameStepContent, PluginDocsStepContent ];
 
   React.useEffect(() => {
     setStep0Error(pluginState.name === "")
