@@ -83,7 +83,6 @@ export const OptionsList: React.FC<OptionListProps> = (props) => {
                 label="Label option"
                 name="label"
                 variant="standard"
-                placeholder="Insert the fixed option label"
                 onClick={(e) => e.stopPropagation()}
               />
             ) : (
@@ -148,7 +147,6 @@ export const OptionsList: React.FC<OptionListProps> = (props) => {
                 label="Prompt"
                 name="prompt"
                 variant="standard"
-                placeholder="Insert the prompt"
               />
             ) : (
               <Typography>{item.prompt}</Typography>
