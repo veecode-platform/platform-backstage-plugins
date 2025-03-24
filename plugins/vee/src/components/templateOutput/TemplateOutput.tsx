@@ -116,18 +116,20 @@ export const TemplateOutput = () => {
             </Grid2>
           </Grid2>
         </PageLayout>
-        <FeedbackComponent
-          open={showFeedback}
-          variant={pullRequestResponseState!.status as 'success' | 'error'}
-          message={pullRequestResponseState!.message}
-          actions={
-            <>
-              <Button variant="danger" onClick={handleBack}>
-                Exit
-              </Button>
-            </>
-          }
-        />
+        {showFeedback && (
+          <FeedbackComponent
+            open={showFeedback}
+            variant={pullRequestResponseState!.status as 'success' | 'error'}
+            message={pullRequestResponseState!.message}
+            actions={
+              <>
+                <Button variant="danger" onClick={handleBack}>
+                  Exit
+                </Button>
+              </>
+            }
+          />
+        )}
       </>
     );
 }
