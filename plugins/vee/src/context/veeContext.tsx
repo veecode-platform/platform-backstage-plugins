@@ -26,6 +26,7 @@ export type VeeContextType = {
     getTemplateFilesAndCreateVectorStore: (source: string, templateName: string, engine?: string) => Promise<{projectStructure:string,vectorStoreId: string}>;
     templateChat: (templateName: string, prompt: string, projectStructureValue:string, vectorStoreIdValue: string, engine?: string) => Promise<{title: string; analysis: string; files: FileContent[]} | null>;
     templateOutputState: TemplateOutputProps | null;
+    saveTemplateToCatalog: (location: string, files: FileContent[]) => Promise<PullRequestResponse | null>;
     clearTemplateHistory: (engine?: string) => Promise<void>;
     allStacksState: IStack[];
     stackSelectedState: IStack | null;
