@@ -96,7 +96,6 @@ export const IncrementedInput : React.FC<IncrementedInputProps> = (props) => {
                         value={optionState.label}
                         label="Label option"
                         name="label"
-                        placeholder="Insert the fixed option label"  
                     />
                     <TextField
                         className={input}
@@ -106,7 +105,6 @@ export const IncrementedInput : React.FC<IncrementedInputProps> = (props) => {
                         value={optionState.prompt ?? "Ensure the response includes modular, maintainable code ready for a pull request..."}
                         label="Prompt"
                         name="prompt"
-                        placeholder="Insert the prompt"
                     />
                 </Box>
                 <div className={footerButton}>
