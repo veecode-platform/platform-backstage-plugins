@@ -9,6 +9,7 @@ import  Autocomplete  from '@mui/material/Autocomplete';
 import { useVeeContext } from '../../../../context';
 import { AddStackProps } from './types';
 import { IPlugin, IStack } from '@veecode-platform/backstage-plugin-vee-common';
+import { initialStackState, resetStackState, setStackName, setStackPlugins, setStackSource, StackReducer } from '../state';
 
 export const AddStack : React.FC<AddStackProps> = (props) => {
 
@@ -16,7 +17,7 @@ export const AddStack : React.FC<AddStackProps> = (props) => {
   const [step1Error, setStep1Error] = React.useState<boolean>(true)
   const [activeStep, setActiveStep] = React.useState(0);
   const [loading, setLoading ] = React.useState<boolean>(false);
- const [ stackState, setStackState ] = React.useState<Partial<IStack> | null>(null);
+  const [ stackState, stackDispatch ] = React.useReducer(StackReducer, initialStackState);
   const { onCloseModal } = props;
   const steps = ["Add stack name", "Add source", "Add Plugins"];
   const { createStack, listAllPlugins, allPluginsState } = useVeeContext()
@@ -38,7 +39,7 @@ export const AddStack : React.FC<AddStackProps> = (props) => {
       if(stackState.plugins) newStack.plugins = stackState.plugins; 
       await createStack(newStack);
       setLoading(false);
-      setStackState(null);
+      stackDispatch(resetStackState());
       onCloseModal();
     }
   };
@@ -69,7 +70,7 @@ export const AddStack : React.FC<AddStackProps> = (props) => {
     return "Next";
   };
 
-  const Step0Content = () => {
+  const StackNameStepContent = () => {
     return (
         <TextField 
          fullWidth variant="outlined" 
@@ -78,13 +79,13 @@ export const AddStack : React.FC<AddStackProps> = (props) => {
          className={input}
          required
          onChange={e => {
-          setStackState({...stackState, name: e.target.value});
+          stackDispatch(setStackName(e.target.value));
         }}
       />
     )
   }
 
-  const Step1Content = () => {
+  const StackSourceStepContent = () => {
     return (
         <TextField 
          fullWidth variant="outlined" 
@@ -93,13 +94,13 @@ export const AddStack : React.FC<AddStackProps> = (props) => {
          className={input}
          required
          onChange={e => {
-          setStackState({...stackState, source: e.target.value});
+          stackDispatch(setStackSource(e.target.value));
         }}
       />
     )
   }
 
-  const Step3Content = () => {
+  const StackPluginsStepContent = () => {
     return (
       <Autocomplete
       multiple
@@ -121,7 +122,7 @@ export const AddStack : React.FC<AddStackProps> = (props) => {
           const plugin = checkPluginDetails(value);
           if(plugin) pluginList.push(plugin);
         })
-        setStackState({...stackState, plugins: pluginList})
+        stackDispatch(setStackPlugins(pluginList));
       }}
     renderInput={(params) => (
       <TextField
@@ -135,7 +136,7 @@ export const AddStack : React.FC<AddStackProps> = (props) => {
     );
   };
 
-  const StepsContent = [ Step0Content, Step1Content, Step3Content ];
+  const StepsContent = [ StackNameStepContent, StackSourceStepContent, StackPluginsStepContent ];
 
   React.useEffect(() => {
     if(stackState){
@@ -146,7 +147,7 @@ export const AddStack : React.FC<AddStackProps> = (props) => {
 
   React.useEffect(()=>{
     listAllPlugins();
-    setStackState(null);
+    stackDispatch(resetStackState());
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
