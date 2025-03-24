@@ -8,8 +8,8 @@ export const PluginIcon = (
     xmlnsXlink="http://www.w3.org/1999/xlink"
     fill="#00000000"
     stroke="#00000000"
-    width={40}
-    height={40}
+    width={30}
+    height={30}
   >
     <g id="SVGRepo_bgCarrier" strokeWidth="0"> </g>
     <g
