@@ -1,6 +1,5 @@
 import React from "react";
 import { PageLayout, TableComponent,ModalComponent } from "../../shared";
-import { ManagePluginsRow } from "./types";
 import { AddPlugin } from "./addPlugin/AddPlugin";
 import useAsync from "react-use/esm/useAsync";
 import { useVeeContext } from "../../../context";
@@ -16,11 +15,12 @@ export const ManagePlugins = () => {
     const { loading, error } = useAsync(listAllPlugins,[]);
 
     const rows = React.useMemo(() => {
-        return allPluginsState?.map(plugin => ({
-            id: plugin.id,
+        if(!allPluginsState) return [];
+        return allPluginsState.map(plugin => ({
+            id: plugin.id as string,
             name: plugin.name,
             docs: plugin.docs
-        })) || [];
+        })).sort((a, b) => a.name.localeCompare(b.name));
     }, [allPluginsState]);
 
     const modalTitle = () => {
@@ -57,10 +57,10 @@ export const ManagePlugins = () => {
           goBack
           >
            <TableComponent 
-              title="Plugins" 
+              title="Plugins"
               loading={loading}
               error={error}
-              data={rows as ManagePluginsRow[]}
+              data={rows}
               actions
               onEdit={handleUpdatePlugin}
               onDelete={handleRemovePlugin}
