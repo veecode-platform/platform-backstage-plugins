@@ -1,11 +1,11 @@
 import React from "react";
 import { useVeeContext } from "../../../context";
 import useAsync from "react-use/esm/useAsync";
-import { ModalVariantKey } from "../../shared/modalComponent/types";
 import { ModalComponent, PageLayout, TableComponent } from "../../shared";
-import { manageFixedOptionRow } from "./types";
 import { CreateFixedOption } from "./createFixedOption";
 import { UpdateFixedOption } from "./updateFixedOption";
+import type { manageFixedOptionRow } from "./types";
+import type { ModalVariantKey } from "../../shared/modalComponent/types";
 
 export const ManageFixedOptions = () => {
     const [ showModal, setShowModal] = React.useState<boolean>(false);
