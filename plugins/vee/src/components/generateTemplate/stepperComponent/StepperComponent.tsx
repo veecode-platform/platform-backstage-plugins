@@ -76,7 +76,7 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
     instructionsDispatch(setAdditionalInfo(e.target.value))
   }
 
-  const Step0Content = () => {
+  const TemplateNameStepContent = () => {
     return (
         <TextField 
          fullWidth variant="outlined" 
@@ -88,7 +88,7 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
       />
     )
   }
-  const Step1Content = () => {
+  const TemplateAddInfoStepContent = () => {
     return (
         <TextField 
         multiline
@@ -96,7 +96,7 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
         variant="outlined"
         style={{ resize: 'none' }}
         className={textareaStyles} 
-         placeholder="Additional informations" 
+         placeholder="Additional informations (optional)" 
          value={instructionsState ? instructionsState.additionalInfo : ''} 
          onChange={handleAddAdditionalInfo}
         />
@@ -110,7 +110,7 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
     return "Next";
   };
 
-  const StepsContent = [ Step0Content, Step1Content ];
+  const StepsContent = [ TemplateNameStepContent, TemplateAddInfoStepContent ];
 
   React.useEffect(() => {
     if(instructionsState){
