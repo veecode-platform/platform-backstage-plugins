@@ -43,7 +43,7 @@ export const PluginList : React.FC<PluginListComponentProps> = (props) => {
     <List 
       className={root}
       subheader={<ListSubheader className={titleBar}>
-        <Typography variant="h6">Select plugins to add to the template</Typography>
+        <Typography variant="subtitle1">Select plugins to add to the template</Typography>
       </ListSubheader>}
       >
       {data.map((item) => {
@@ -72,7 +72,7 @@ export const PluginList : React.FC<PluginListComponentProps> = (props) => {
                   {item.icon ? item.icon : PluginIcon}
               </ListItemAvatar>
               <ListItemText id={labelId} primary={
-                <Typography variant="h6">
+                <Typography>
                 {item.name}
               </Typography>
               } />
