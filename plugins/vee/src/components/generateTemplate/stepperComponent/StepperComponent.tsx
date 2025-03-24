@@ -27,7 +27,7 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
       const prompt = `
       Generate a Backstage template with the following characteristics: 
           - Template Name: ${instructionsState.templateName}
-          - Language: ${instructionsState.stackInfo.name}
+          - Stack: ${instructionsState.stackInfo.name}
           - Plugins to be used and their documentation:
       ${
         instructionsState.plugins &&
