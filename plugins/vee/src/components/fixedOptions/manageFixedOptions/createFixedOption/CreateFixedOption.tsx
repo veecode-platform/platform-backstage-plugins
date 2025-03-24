@@ -73,7 +73,7 @@ export const CreateFixedOption : React.FC<CreateFixedOptionProps> = ({ onCloseMo
   }
 
 
-    const Step0Content = () => {
+    const ContentTypeStep = () => {
       return (
         <Autocomplete
           id="type"
@@ -137,13 +137,13 @@ export const CreateFixedOption : React.FC<CreateFixedOptionProps> = ({ onCloseMo
       );
     };
 
-    const Step1Content = () => {
+    const IncrementedOptionsStep = () => {
     return (
-        <IncrementedInput
-         onSaveOptions={saveOptions}
-        />
+      <IncrementedInput
+       onSaveOptions={saveOptions}
+      />
     )
-  }
+    }
 
 
   const getButtonText = () => {
@@ -153,7 +153,7 @@ export const CreateFixedOption : React.FC<CreateFixedOptionProps> = ({ onCloseMo
     return "Next";
   };
 
-  const StepsContent = [ Step0Content, Step1Content ];
+  const StepsContent = [ ContentTypeStep, IncrementedOptionsStep ];
 
   React.useEffect(() => {
     setStep0Error(fixedOptionState.type === "")
