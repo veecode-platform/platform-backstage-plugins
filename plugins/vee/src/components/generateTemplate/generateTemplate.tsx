@@ -57,7 +57,6 @@ export const GenerateTemplate = () => {
   const handleClose = () => setShowModal(!showModal);
   const handleSubmitInstructions = () => setShowModal(true);
 
-
   if(loading) return (    // TODO 
    <GenerateTemplateWrapper 
      createAction={handleSubmitInstructions}>
