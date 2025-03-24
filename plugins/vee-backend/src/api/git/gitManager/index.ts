@@ -37,7 +37,7 @@ export class GitManager implements IGitManager {
     await fs.promises.rm(localPath, { recursive: true, force: true });
   }
 
-  async cloneRepo(token: string, localPath: string, repoUrl: string, branch: string) {
+  async cloneRepo(token: string, localPath: string, repoUrl: string, branch: string | null) {
     this.logger.info("Initializing the repository clone process...");
 
     if (fs.existsSync(localPath)) {
@@ -61,7 +61,7 @@ export class GitManager implements IGitManager {
       this.logger.info(`Cloning repository...`);
 
       const git = simpleGit();
-      await git.clone(authenticatedRepoUrl, localPath, ["--branch", branch, "--depth", "1"]);
+      await git.clone(authenticatedRepoUrl, localPath, branch ? ["--branch", branch, "--depth", "1"] : [] );
 
       if (!fs.existsSync(localPath)) {
         throw new Error(`Error: Directory not found: ${localPath}`);
@@ -77,7 +77,7 @@ export class GitManager implements IGitManager {
     }
   }
 
-  async partialClone(token: string, localPath: string, repoUrl: string, branch: string, folderPath: string) {
+  async partialClone(token: string, localPath: string, repoUrl: string, branch: string | null, folderPath: string) {
     this.logger.info(`Initializing partial clone for folder: ${folderPath}`);
 
     if (fs.existsSync(localPath)) {
@@ -94,7 +94,7 @@ export class GitManager implements IGitManager {
       this.logger.info(`Cloning repository...`);
 
       const git = simpleGit();
-      await git.clone(authenticatedRepoUrl, localPath, ["--branch", branch, "--depth", "1"]);
+      await git.clone(authenticatedRepoUrl, localPath, branch ? ["--branch", branch, "--depth", "1"] : []);
 
       if (!fs.existsSync(localPath)) {
         throw new Error(`Error: Directory not found: ${localPath}`);
