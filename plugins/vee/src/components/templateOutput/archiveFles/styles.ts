@@ -27,6 +27,7 @@ export const useArchivesFileStyles = makeStyles({
     menu:{
         width: "100%",
         maxHeight: "100%",
+        minHeight: "60vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
