@@ -9,6 +9,10 @@ export const useTemplateOutputStyles = makeStyles({
     },
     codeSection:{
         overflow: "auto !important",
+        height: "72vh",
+        overFlow: "auto",
+        border:`1px solid ${themeVariables.background.main}`,
+        padding: '.5rem',
         "&::-webkit-scrollbar": {
         width: "6px",
         height: "4px",
