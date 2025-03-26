@@ -17,9 +17,7 @@ export interface Config {
       openai?: {
         apiBaseUrl: string;
         apiKey: string;
-        assistant: string;
         model: string;
-        instructions: string;
         timeout?:string;
         templateGeneration?: {
           model?: string;
