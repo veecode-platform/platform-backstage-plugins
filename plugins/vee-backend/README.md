@@ -39,6 +39,9 @@ vee:
     apiBaseUrl: https://api.openai.com/v1
     apiKey: ${OPENAI_API_KEY}
     model: gpt-4o #The desired model, for best results use gpt-4o >
+    templateGeneration:
+      model: ${CUSTOM_MODEL} <- This model needs to be trained to generate qualified templates.
+      catalog: ${TEMPLATE_CATALOG_URL}
    ```
 
 You also need to configure the `config.d.ts` file in the backend:
@@ -51,6 +54,11 @@ export interface Config {
         apiBaseUrl: string;
         apiKey: string;
         model: string;
+        timeout?:string;
+        templateGeneration?: {
+          model?: string;
+          catalog?: string;
+        }
       }
     }
 }
@@ -130,319 +138,62 @@ backend.start();
 ```
 
 <br>
-
-<!-- ## To train your model and use the template creation module with AI:
-
-To do this, in this example we created this training data set to tune the AI.
-
-**AI used**: OpenAI
-**Base model** ': gpt4o
-**Data set**: https://gist.github.com/caiolombello/209ef48d1a0e8b0ba76ad83be6fb013f
-
-### AI system prompt:
-
-You are a wizard specialized in writing Backstage templates and configuring `catalog-info.yaml` files. When answering questions or providing code examples, please follow these guidelines: 
-
-1. **Present Yourself as an Expert**: Always start as a Backstage expert, focused on creating templates and configuring `catalog-info.yaml`. 
-
-2. **Provide Complete Answers**: Include complete code in your answers, with no omissions. Ensure that all instructions and parameters are presented clearly and in detail.
-
-3. **Use Structured Formats**: Structure your responses using code markup such as YAML or JSON. Use placeholders (`${}`) where the user must enter their own values.
-
-4. **Validate Compliance and Accuracy**: Ensure that all responses comply with Backstage standards and best practices. Include valid and complete examples.
-
-5. **Explain Customizations**: When providing examples, highlight where and how users should customize the templates to meet their specific needs.
-
-6. **Maintain Clarity and Conciseness**: Present information clearly and concisely, avoiding ambiguity.
-
-7. **Use Placeholders and Annotations**: Use placeholders (`${ values.parameterName }`) for variables to be replaced with actual values. Add annotations to explain the purpose of each field or parameter.
-
----
-### AI Response Example 
-
-```yaml
-apiVersion: scaffolder.backstage.io/v1beta3
-kind: Template
-metadata:
-  name: rds-devops-template
-  title: RDS DevOps Template
-  description: Template for provisioning an RDS instance on AWS.
-  annotations: backstage.io/techdocs-ref: dir:.
-tags:
- - platform-templates
- - devops
- - aws
-spec:
-  owner: vertigo/devops
-  type: devops
-
-parameters:
- - title: "Environment Settings"
- properties:
-  createNewEnvironment:
-  title: "Environment Settings"
-  type: object
-   properties:
-    create_new_environment:
-    title: "Create new environment"
-    type: boolean
-    enum:
-    - false
-    - true
-    enumNames:
-    - No
-    - Yes
-    default: false
-```
-
-**Response guidelines**
-List all necessary properties : include all the properties and specifications needed for a `catalog-info.yaml` valid file.
-
-Highlight possible customizations: clearly explain how and where the user can customize the template, highlighting specific parameters.
-
-Maintain a clear structure: organize answers clearly so that they are easier for users to understand and implement.
-
-Be complete and precise: all instructions must be complete and precise, avoiding assumptions about the user's knowledge.
-
-## My test:
-
-**Input**:
-Generate a template for this module:
-
-rds = { instance_class = "db.t3.small" deletion_protection = false multi_az = false availability_zone = "us-east-1a" db = { engine = "postgres" engine_version = "14.4" family = "postgres14" name = "postgres" } storage = { type = "gp2" allocated = 5 max_allocated = 100 encrypted = true } backup = { retention_period = 30 window = "04:00-06:00" } maintenance = { window = "tue:02:00-tue:04:00" auto_minor_version_upgrade = true } } credentials = { username = "postgres" password = "password_secret" }
-
-
-**output**:
-Of course! Here is a complete Backstage template based on the configuration provided for your RDS module:
-
-```yaml
-apiVersion: scaffolder.backstage.io/v1beta3
-kind: Template
-metadata:
-  name: rds-devops-template
-  title: RDS DevOps Template 
-  description: Template for provisioning an RDS instance on AWS.
-  annotations:
-    backstage.io/techdocs-ref: dir:.
-  tags:
-    - platform-templates
-    - devops
-    - aws
-spec:
-  owner: vertigo/devops
-  type: devops
-  parameters:
-    - title: "Environment Settings"
-      properties:
-        createNewEnvironment:
-          title: "Environment Settings"
-          type: object
-          properties:
-            create_new_environment:
-              title: "Create new environment"
-              type: boolean
-              enum:
-                - false
-                - true
-              enumNames:
-                - No
-                - Yes
-              default: false
-            environment_name:
-              title: "Environment name"
-              type: string
-              description: "Choose an existing environment or specify a new one."
-              ui:field: EnvironmentSelect
-              ui:options:
-                creatable: true
-                backstagePlugin: true
-              ui:backstagePlugin:
-                name: "environment"
-                valueField: "environment_name"
-                labelField: "environment_name"
-              ui:widget: "EnvironmentExists"
-              ui:exists:
-                section: "settings"
-            environment_time_to_live:
-              title: "Environment TTL"
-              description: "This is the default environment TTL. It will be forced if the environment is new."
-              type: object
-              ui:field: CategoryGrid
-              properties:
-                set_max_lifetime:
-                  title: "Set max lifetime"
-                  type: boolean
-                  default: false
-                max_lifetime:
-                  title: "Max lifetime"
-                  type: string
-                  default: ""
-                  ui:widget: DateTimePicker
-            instances_settings:
-              title: "Instances settings"
-              type: object
-              ui:field: CategoryGrid
-              properties:
-                allowPerInstanceShutdown:
-                  title: "Allow per instance shutdown"
-                  type: boolean
-                  description: "Allow requests to create and delete instances individually."
-                  default: false
-    - title: "Deployment Settings"
-      properties:
-        rds:
-          title: "RDS Instance Configuration"
-          type: object
-          properties:
-            instance_class:
-              title: "Instance Class"
-              type: string
-              default: "db.t3.small"
-            deletion_protection:
-              title: "Deletion Protection"
-              type: boolean
-              default: false
-            multi_az:
-              title: "Multi-AZ Deployment"
-              type: boolean
-              default: false
-            availability_zone:
-              title: "Availability Zone"
-              type: string
-              default: "us-east-1a"
-        db:
-          title: "Database Configuration"
-          type: object
-          properties:
-            engine:
-              title: "Engine"
-              type: string
-              default: "postgres"
-            engine_version:
-              title: "Engine Version"
-              type: string
-              default: "14.4"
-            family:
-              title: "Family"
-              type: string
-              default: "postgres14"
-            name:
-              title: "Database Name"
-              type: string
-              default: "postgres"
-        storage:
-          title: "Storage Configuration"
-          type: object
-          properties:
-            type:
-              title: "Storage Type"
-              type: string
-              default: "gp2"
-            allocated:
-              title: "Allocated Storage (GB)"
-              type: integer
-              default: 5
-            max_allocated:
-              title: "Max Allocated Storage (GB)"
-              type: integer
-              default: 100
-            encrypted:
-              title: "Encrypted"
-              type: boolean
-              default: true
-        backup:
-          title: "Backup Configuration"
-          type: object
-          properties:
-            retention_period:
-              title: "Retention Period (days)"
-              type: integer
-              default: 30
-            window:
-              title: "Backup Window"
-              type: string
-              default: "04:00-06:00"
-        maintenance:
-          title: "Maintenance Configuration"
-          type: object
-          properties:
-            window:
-              title: "Maintenance Window"
-              type: string
-              default: "tue:02:00-tue:04:00"
-            auto_minor_version_upgrade:
-              title: "Auto Minor Version Upgrade"
-              type: boolean
-              default: true
-        credentials:
-          title: "Database Credentials"
-          type: object
-          properties:
-            username:
-              title: "Username"
-              type: string
-              default: "postgres"
-            password:
-              title: "Password"
-              type: string
-              default: "password_secret"
-```
-              
--if you replace the passwords, check the actual ones and adjust the settings as necessary for your environment.
-
-
-## After training and creating your model, you can then reference it in the `app-config.yaml`:
-
-```yaml
-veecodeAssistantAI:
-  openai:
-    apiBaseUrl: https://api.openai.com/v1
-    apiKey: ${OPENAI_API_KEY}
-    assistantName: VeeCode Platform AI 
-    model: gpt-4o 
-    instructions: 'Você é um assistente especializado na plataforma VeeCode.' 
-    timeout: 600 
-    dataset:    
-      model: ${MODELO_TREINADO}  # informando ele na chave dataset.model
-      references:  # Abaixo vamos detalhar as referencias
-        - id: Terraform Project             
-          source: https://xxxxxxxxxxxxx
-        - id: Springboot
-          source: https://xxxxxxxxxxxxx
-        - id: OpenApi
-          source: https://xxxxxxxxxxxxx
+### 🤖 Training your AI model<br><br>
+To ensure that the results follow the expected pattern, we need to train with the model used.<br>
+Here's how ➡️ [click](https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/vee/training-your-model/README.md).
    ```
 
-## Referencias
 
-The references that will further enrich your prompt in the hope of returning a template that is fairer to what is expected, should follow a very simple model:
-- **id**: This refers to the name of the referenced stack, for example "EKS Provision";
-**source**: Refers to a remote repository that will provide template code for the template to follow, so we can maintain a standard according to your needs at development time.
+## 🌎 Routes
 
-[See an example of a reference template here.See an example of a reference template here](https://gitlab.vertigo-devops.com/vertigobr/ia/autoskaff/-/tree/main/reference) -->
-
-## Routes
-
-| Method | Path                                        | Endpoint                                               |
-|--------|---------------------------------------------|--------------------------------------------------------|
-| POST    | /submit-repo                     | backendBaseUrl/api/vee/submit-repo                               |
-| POST    | /chat-analyze-repo              | backendBaseUrl/api/vee/chat-analyze-repo  |
-| POST    | /clone-repository               | backendBaseUrl/api/vee/clone-repository                 |
-| DELETE    | /chat-analyze-repo                    | backendBaseUrl/api/vee/chat-analyze-repo        |
+| Method | Path                              | Endpoint                                      |
+|--------|-----------------------------------|-----------------------------------------------|
+| POST   | `/submit-repo`                    | `backendBaseUrl/api/vee/submit-repo`          |
+| POST   | `/chat-analyze-repo`              | `backendBaseUrl/api/vee/chat-analyze-repo`    |
+| DELETE | `/chat-analyze-repo`              | `backendBaseUrl/api/vee/chat-analyze-repo`    |
+| POST   | `/clone-repository`               | `backendBaseUrl/api/vee/clone-repository`     |
+| POST   | `/partial-clone-repository`       | `backendBaseUrl/api/vee/partial-clone-repository`|
+| POST   | `/submit-template`                | `backendBaseUrl/api/vee/submit-template`      |
+| POST   | `/chat-template`                  | `backendBaseUrl/api/vee/chat-template`        |
+| DELETE | `/chat-template`                  | `backendBaseUrl/api/vee/chat-template`        |
+| GET    | `/fixedOptions`                   | `backendBaseUrl/api/vee/fixedOptions`         |
+| GET    | `/fixedOptions/:fixedOptionsId`   | `backendBaseUrl/api/vee/fixedOptions/:fixedOptionsId`|
+| POST   | `/fixedOptions`                   | `backendBaseUrl/api/vee/fixedOptions`         |
+| PATCH  | `/fixedOptions/:fixedOptionsId`   | `backendBaseUrl/api/vee/fixedOptions/:fixedOptionsId`|
+| DELETE | `/fixedOptions/:fixedOptionsId`   | `backendBaseUrl/api/vee/fixedOptions/:fixedOptionsId`|
+| GET    | `/stacks`                         | `backendBaseUrl/api/vee/stacks`               |
+| GET    | `/stacks/:stackId`                | `backendBaseUrl/api/vee/stacks/:stackId`      |
+| POST   | `/stacks`                         | `backendBaseUrl/api/vee/stacks`               |
+| PATCH  | `/stacks/:stackId`                | `backendBaseUrl/api/vee/stacks/:stackId`      |
+| DELETE | `/stacks/:stackId`                | `backendBaseUrl/api/vee/stacks/:stackId`      |
+| GET    | `/plugins`                        | `backendBaseUrl/api/vee/plugins`              |
+| GET    | `/plugins/:pluginId`              | `backendBaseUrl/api/vee/plugins/:pluginId`    |
+| POST   | `/plugins`                        | `backendBaseUrl/api/vee/plugins`              |
+| PATCH  | `/plugins/:pluginId`              | `backendBaseUrl/api/vee/plugins/:pluginId`    |
+| DELETE | `/plugins/:pluginId`              | `backendBaseUrl/api/vee/plugins/:pluginId`    |
 
 ---
 
 
-## Permissions
+### 🔐 Permissions
+The permissions for the first version are broader, less granular and follow the following patternPermissions
+The permissions for the first version are broader, less granular and follow the following pattern:
 
-**See 👉**[Vee Common](https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/vee-common/README.md)
+| Permission                               | Description                                              |
+|------------------------------------------|----------------------------------------------------------|
+| `veeReadPermission`                      | Permission to read the Vee plugin                        |
+| `veeAnalyzerReadPermission`              | Permission for the plugin to analyze code                |
+| `veeAnalyzerSaveChangesInRepoPermission` | Permission to save changes to the repository via pull request |
+| `veeAccessSettingsPanelPermission`       | Permission to access settings                            |
+| `veeGenerateTemplatePermission`          | Access to the template generation menu                   |
+| `veeSaveTemplatePermission`              | Permission to save templates                             |
+| `veeManageStacksPermission`              | Manage stacks (create, edit, delete)                     |
+| `veeManagePluginsPermission`             | Manage plugins (create, edit, delete)                    |
+| `veeManageFixedOptions`                  | Manage fixed options (create, edit, delete)              |
 
+<br><br>
 
-This plugin provides the following permissions:
-
-- `veeReadPermission` 👉 Permission to make the plugin visible and access it.
-- `veeScaffolderReadPermission` 👉 Permission to make the template generation feature visible.
-- `veeAnalyzerReadPermission` 👉 Permission to make the local repository analysis feature visible.
+##### 💡 To find out more about permissions [here](https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/vee-common/README.md)
 
 
 > 🚨 View Backstage docs to learn how to set up your instance of Backstage to use these permissions.
