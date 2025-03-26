@@ -6,6 +6,21 @@ export const useTableComponentStyles = makeStyles({
         marginTop: '-1rem',
         maxHeight: '90%',
         overflowY: "auto",
+        '& .MuiTable-root': {
+            backgroundColor: themeVariables.background.main,
+            color: themeVariables.colors.white, // Cor de fundo geral
+          },
+          '& .MuiTableCell-head': {
+            backgroundColor: themeVariables.background.dark, // Cabeçalho da tabela
+            border: `2px solid ${themeVariables.background.dark}`,
+            fontWeight: 'bold',
+          },
+          '& .MuiTableRow-root:nth-of-type(odd)': {
+            backgroundColor: themeVariables.colors.darkGrey, // Linhas ímpares
+          },
+          '& .MuiTableRow-root:hover': {
+            backgroundColor:  themeVariables.background.secondary, // Cor ao passar mouse
+          },
     },
     actionButton: {
         margin: 'auto .5rem',
