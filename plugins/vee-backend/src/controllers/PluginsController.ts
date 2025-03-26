@@ -1,4 +1,4 @@
-import { CreatePluginParams, IPlugin, veeAddPluginPermission, veeEditPluginPermission, veeReadPluginsPermission, veeRemovePluginPermission } from "@veecode-platform/backstage-plugin-vee-common";
+import { CreatePluginParams, IPlugin, veeManagePluginsPermission, veeReadPluginsPermission } from "@veecode-platform/backstage-plugin-vee-common";
 import { AssistantAIController } from "./AssistantAIController";
 import type { Request, Response } from "express";
 import { InputError, NotAllowedError, stringifyError } from "@backstage/errors";
@@ -71,7 +71,7 @@ export class PluginsController extends AssistantAIController  implements IPlugin
       }
 
        try {
-        if (!(await this.isRequestAuthorized(req, veeAddPluginPermission))) {
+        if (!(await this.isRequestAuthorized(req, veeManagePluginsPermission))) {
           throw new NotAllowedError('Unauthorized');
         }
         const newPlugin = await this.database.createPlugin({name, docs });
@@ -102,7 +102,7 @@ export class PluginsController extends AssistantAIController  implements IPlugin
      if(docs) updateData.docs = docs;
 
     try {
-     if (!(await this.isRequestAuthorized(req, veeEditPluginPermission))) {
+     if (!(await this.isRequestAuthorized(req, veeManagePluginsPermission))) {
        throw new NotAllowedError('Unauthorized');
         }
      if(Object.keys(updateData).length === 0) {
@@ -134,7 +134,7 @@ export class PluginsController extends AssistantAIController  implements IPlugin
     deleteStack = async (req: Request, resp:Response) => {
       const { pluginId } = req.params;
       try {
-        if (!(await this.isRequestAuthorized(req, veeRemovePluginPermission))) {
+        if (!(await this.isRequestAuthorized(req, veeManagePluginsPermission))) {
             throw new NotAllowedError('Unauthorized');
         };
         await this.database.deletePlugin(pluginId);      
