@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AssistantAIController } from './AssistantAIController';
-import {  AIModel, AnalyzeAndStartChatParams, DownloadTemplateAndCreateVectorStoreParams, veeReadPermission} from '@veecode-platform/backstage-plugin-vee-common';
+import {  AIModel, AnalyzeAndStartChatParams, DownloadTemplateAndCreateVectorStoreParams, veeGenerateTemplatePermission, veeReadPermission} from '@veecode-platform/backstage-plugin-vee-common';
 import { InputError, NotAllowedError, stringifyError } from '@backstage/errors';
 import { IScaffolderAIControler } from './types';
 import { VeeClient } from '../api/client';
@@ -67,7 +67,7 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
     if (
       !(await this.isRequestAuthorized(
         req,
-        veeReadPermission,
+        veeGenerateTemplatePermission,
       ))
     ) {
       throw new NotAllowedError('Unauthorized');
