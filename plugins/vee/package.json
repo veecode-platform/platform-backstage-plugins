@@ -45,6 +45,7 @@
     "@backstage/integration": "^1.16.0",
     "@backstage/integration-react": "^1.2.2",
     "@backstage/plugin-catalog-react": "^1.14.2",
+    "@backstage/plugin-permission-react": "^0.4.32",
     "@backstage/theme": "^0.6.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
