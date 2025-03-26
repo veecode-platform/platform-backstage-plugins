@@ -17013,7 +17013,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-vee-common@npm:^0.3.0, @veecode-platform/backstage-plugin-vee-common@workspace:^, @veecode-platform/backstage-plugin-vee-common@workspace:plugins/vee-common":
+"@veecode-platform/backstage-plugin-vee-common@npm:^0.4.0, @veecode-platform/backstage-plugin-vee-common@workspace:^, @veecode-platform/backstage-plugin-vee-common@workspace:plugins/vee-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-vee-common@workspace:plugins/vee-common"
   dependencies:
@@ -17059,7 +17059,7 @@ __metadata:
     "@types/react-lottie": "npm:^1"
     "@types/react-syntax-highlighter": "npm:^15"
     "@types/react-typical": "npm:^0"
-    "@veecode-platform/backstage-plugin-vee-common": "npm:^0.3.0"
+    "@veecode-platform/backstage-plugin-vee-common": "npm:^0.4.0"
     file-saver: "npm:^2.0.5"
     highlight.js: "npm:^11.11.1"
     js-base64: "npm:^3.7.7"
