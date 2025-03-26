@@ -138,10 +138,20 @@ backend.start();
 ```
 
 <br>
+
+---
+
+<br>
+
 ### 🤖 Training your AI model<br><br>
 To ensure that the results follow the expected pattern, we need to train with the model used.<br>
-Here's how ➡️ [click](https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/vee/training-your-model/README.md).
-   ```
+Here's how ➡️ [click](https://github.com/veecode-platform/platform-backstage-plugins/blob/master/plugins/vee/training-your-model/README.md)
+
+<br>
+
+---
+
+<br>
 
 
 ## 🌎 Routes
