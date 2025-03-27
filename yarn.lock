@@ -17364,6 +17364,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@veecode-platform/veecode-core-components@workspace:packages/veecode-core-components":
+  version: 0.0.0-use.local
+  resolution: "@veecode-platform/veecode-core-components@workspace:packages/veecode-core-components"
+  dependencies:
+    "@backstage/cli": "npm:^0.29.5"
+    "@testing-library/jest-dom": "npm:^6.0.0"
+  languageName: unknown
+  linkType: soft
+
 "@veecode-platform/veecode-scaffolder-extensions@workspace:^, @veecode-platform/veecode-scaffolder-extensions@workspace:plugins/veecode-scaffolder-extensions":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/veecode-scaffolder-extensions@workspace:plugins/veecode-scaffolder-extensions"
