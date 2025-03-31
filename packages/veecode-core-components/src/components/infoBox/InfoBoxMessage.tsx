@@ -23,7 +23,7 @@ export const InfoBoxMessage :React.FC<InfoBoxMessageProps> = ({message}) => {
     const { messageContent } = useInfoBoxMessageStyles()
     return (
         <Box className={messageContent}>
-            <FcInfo size={20}/>
+           <FcInfo size={20}/>
            <Typography>{message}</Typography>
         </Box>
     )
