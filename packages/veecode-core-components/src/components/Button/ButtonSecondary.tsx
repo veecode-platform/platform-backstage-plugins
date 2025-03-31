@@ -5,7 +5,7 @@ import { ButtonRoot } from "./ButtonRoot";
 
 export interface ButtonSecondaryProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
  label: string,
- icon: React.ElementType
+ icon?: React.ElementType
 }
 
 const useButtonSecondaryStyles = makeStyles({
