@@ -1,6 +1,6 @@
 import React from "react";
 import type { Meta } from "@storybook/react";
-import { InfoBox, InfoBoxTypes } from "./InfoBox";
+import { InfoBox, InfoBoxProps } from "./InfoBox";
 import { Box } from "@mui/material";
 
 export default {
@@ -20,9 +20,9 @@ export default {
             </Box>)
         }
     ]
-} as Meta<InfoBoxTypes>
+} as Meta<InfoBoxProps>
 
-export const Default = (args:InfoBoxTypes) => (
+export const Default = (args:InfoBoxProps) => (
     <InfoBox.Root>
         <InfoBox.Message message={args.message} />
         <InfoBox.Docs url={args.url!}/>
