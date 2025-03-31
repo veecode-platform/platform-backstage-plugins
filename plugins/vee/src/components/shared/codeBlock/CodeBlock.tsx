@@ -28,7 +28,7 @@ export const CodeBlockComponent: React.FC<CodeBlockProps> = (props) => {
       }
     };
 
-    fetchCode(); // Chame a função assíncrona dentro do useEffect
+    fetchCode(); 
   }, [code, language]);
 
   if (codeState === '') {
