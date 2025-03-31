@@ -1,0 +1,9 @@
+html, body {
+    font-family: poppins, sans-serif;
+}
+
+body[data-mode="dark"],
+.docs-story {
+  background-color: #121212 !important;
+  color: #fff !important;
+}
