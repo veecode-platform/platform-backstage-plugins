@@ -4,8 +4,7 @@ import { themeVariables } from "../../utils/constants/themeVariables"
 import { ButtonRoot } from "./ButtonRoot";
 
 export interface ButtonPrimaryProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
- icon?: React.ElementType,
- label: string
+ children: React.ReactNode
 }
 
 const useButtonPrimaryStyles = makeStyles({
@@ -16,14 +15,14 @@ const useButtonPrimaryStyles = makeStyles({
 });
 
 export const ButtonPrimary = React.forwardRef<HTMLButtonElement, ButtonPrimaryProps>(
-    ({ label, icon: Icon, ...rest}, ref) => {
+    ({ children, ...rest}, ref) => {
         const { primary } = useButtonPrimaryStyles();
         return (
             <ButtonRoot 
               ref={ref} 
               styles={primary} 
               {...rest}>
-                {Icon && <Icon/> } {label}
+                {children}
             </ButtonRoot>
         )
     }

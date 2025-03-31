@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
 import { themeVariables } from "../../utils/constants/themeVariables";
+import { Typography } from "@mui/material";
 
 export interface ButtonRootProps extends React.ButtonHTMLAttributes<HTMLButtonElement>{
     children: React.ReactNode | string,
@@ -12,18 +13,15 @@ const useButtonStyles = makeStyles({
     outline: 'none',
     border: 'none',
     borderRadius: '5px',
-    minWidth: '200px',
-    padding: '.8rem',
+    padding: '.35rem .8rem',
     cursor: 'pointer',
-    fontSize: '16px',
-    fontWeight: 'bold',
     transition: 'all .5s ease-in',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: '.7rem',
     '&:hover': {
-      transform: 'scale(1.04)',
+      transform: 'scale(1.03)',
       transition: 'all .5s ease-in-out',
     },
     '&:disabled': {
@@ -44,7 +42,7 @@ export const ButtonRoot = React.forwardRef<HTMLButtonElement,ButtonRootProps>(
               className={`${root} ${styles}`}
               {...rest}
               >
-                {children}
+                <Typography variant="button">{children}</Typography>
              </button>
         )
     }

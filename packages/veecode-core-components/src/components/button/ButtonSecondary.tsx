@@ -1,11 +1,10 @@
-import { makeStyles } from "@mui/styles"
-import React from "react"
-import { themeVariables } from "../../utils/constants/themeVariables"
+import React from "react";
+import { makeStyles } from "@mui/styles";
+import { themeVariables } from "../../utils/constants/themeVariables";
 import { ButtonRoot } from "./ButtonRoot";
 
 export interface ButtonSecondaryProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
- label: string,
- icon?: React.ElementType
+ children: React.ReactNode,
 }
 
 const useButtonSecondaryStyles = makeStyles({
@@ -16,14 +15,14 @@ const useButtonSecondaryStyles = makeStyles({
 });
 
 export const ButtonSecondary = React.forwardRef<HTMLButtonElement, ButtonSecondaryProps>(
-    ({ label, icon: Icon, ...rest}, ref) => {
+    ({ children, ...rest}, ref) => {
         const { secondary } = useButtonSecondaryStyles();
         return (
             <ButtonRoot 
               ref={ref} 
               styles={secondary} 
               {...rest}>
-               {Icon && <Icon/>} {label}
+              {children}
             </ButtonRoot>
         )
     }

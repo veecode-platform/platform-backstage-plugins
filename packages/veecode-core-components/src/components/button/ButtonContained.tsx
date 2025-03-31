@@ -4,8 +4,7 @@ import { themeVariables } from "../../utils/constants/themeVariables"
 import { ButtonRoot } from "./ButtonRoot";
 
 export interface ButtonContainedProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
- icon?: React.ElementType,
- label: string
+ children: React.ReactNode
 }
 
 const useButtonContainedStyles = makeStyles({
@@ -16,14 +15,14 @@ const useButtonContainedStyles = makeStyles({
 });
 
 export const ButtonContained = React.forwardRef<HTMLButtonElement, ButtonContainedProps>(
-    ({ label, icon : Icon, ...rest}, ref) => {
+    ({ children, ...rest}, ref) => {
         const { contained } = useButtonContainedStyles();
         return (
             <ButtonRoot 
               ref={ref} 
               styles={contained} 
               {...rest}>
-                {Icon && (<Icon/>)} {label}
+                {children}
             </ButtonRoot>
         )
     }

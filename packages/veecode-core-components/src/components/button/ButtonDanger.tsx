@@ -4,8 +4,7 @@ import { themeVariables } from "../../utils/constants/themeVariables"
 import { ButtonRoot } from "./ButtonRoot";
 
 export interface ButtonDangerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
- icon?: React.ElementType,
- label: string
+ children: React.ReactNode
 }
 
 const useButtonDangerStyles = makeStyles({
@@ -16,14 +15,14 @@ const useButtonDangerStyles = makeStyles({
 });
 
 export const ButtonDanger = React.forwardRef<HTMLButtonElement, ButtonDangerProps>(
-    ({ label, icon: Icon, ...rest}, ref) => {
+    ({ children, ...rest}, ref) => {
         const { danger } = useButtonDangerStyles();
         return (
             <ButtonRoot 
               ref={ref} 
               styles={danger} 
               {...rest}>
-                {Icon && (<Icon/>)} {label}
+                {children}
             </ButtonRoot>
         )
     }

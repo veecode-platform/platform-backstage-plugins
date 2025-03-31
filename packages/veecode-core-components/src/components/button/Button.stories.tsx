@@ -1,32 +1,30 @@
 import React from "react";
 import type { Meta } from "@storybook/react";
 import { Button,ButtonProps } from "./Button";
-import { MdErrorOutline } from "react-icons/md";
-
 
 export default {
     title: 'Components/Button',
     component: Button.Primary,
     args:{
-        label: 'Button Label'
+        children: 'Button Label'
     },
     argTypes: {
-        label: { control: 'text' }
+        children: { control: 'object' }
     }
 } as Meta<ButtonProps>;
 
-export const Primary = ({label, ...rest}:ButtonProps) => (
-    <Button.Primary label={label} {...rest}/>
+export const Primary = ({children, ...rest}:ButtonProps) => (
+    <Button.Primary {...rest}>{children}</Button.Primary>
 )
 
-export const Secondary = ({label, ...rest}:ButtonProps) => (
-    <Button.Secondary label={label} {...rest} />
+export const Secondary = ({children, ...rest}:ButtonProps) => (
+    <Button.Secondary {...rest}>{children}</Button.Secondary>
 )
 
-export const Contained = ({label, ...rest}:ButtonProps) => (
-    <Button.Contained label={label} {...rest}/>
+export const Contained = ({children, ...rest}:ButtonProps) => (
+    <Button.Contained {...rest}>{children}</Button.Contained>
 )
 
-export const Danger = ({label, ...rest}:ButtonProps) => (
- <Button.Danger label={label} icon={MdErrorOutline} {...rest} />
+export const Danger = ({children, ...rest}:ButtonProps) => (
+ <Button.Danger {...rest}>{children}</Button.Danger>
 )
