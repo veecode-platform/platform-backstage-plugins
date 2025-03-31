@@ -18862,10 +18862,12 @@ __metadata:
     "@storybook/theming": "npm:^8.6.11"
     "@testing-library/jest-dom": "npm:^6.0.0"
     "@types/prop-types": "npm:^15"
+    "@types/react-lottie": "npm:^1.2.10"
     eslint-plugin-storybook: "npm:^0.12.0"
     prop-types: "npm:^15.8.1"
     react: "npm:^18.0.2"
     react-icons: "npm:^5.5.0"
+    react-lottie: "npm:^1.2.10"
     shiki: "npm:^3.2.1"
     storybook: "npm:^8.6.11"
   peerDependencies:
