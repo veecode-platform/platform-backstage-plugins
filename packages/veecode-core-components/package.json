@@ -21,11 +21,53 @@
     "test": "backstage-cli package test",
     "clean": "backstage-cli package clean",
     "prepack": "backstage-cli package prepack",
-    "postpack": "backstage-cli package postpack"
+    "postpack": "backstage-cli package postpack",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@backstage/core-components": "^0.17.0",
+    "@mui/core": "^5.0.0-alpha.54",
+    "@mui/material": "^7.0.0",
+    "@mui/styles": "^6.4.8",
+    "@storybook/addon-docs": "^8.6.11",
+    "react-icons": "^5.5.0",
+    "shiki": "^3.2.1"
   },
   "devDependencies": {
     "@backstage/cli": "^0.29.5",
-    "@testing-library/jest-dom": "^6.0.0"
+    "@chromatic-com/storybook": "^3",
+    "@mihkeleidast/storybook-addon-source": "^1.0.1",
+    "@storybook/addon-essentials": "^8.6.11",
+    "@storybook/addon-interactions": "^8.6.11",
+    "@storybook/addon-onboarding": "^8.6.11",
+    "@storybook/addon-storysource": "^8.6.11",
+    "@storybook/addon-themes": "^8.6.11",
+    "@storybook/addon-webpack5-compiler-swc": "^3.0.0",
+    "@storybook/addons": "7.6.17",
+    "@storybook/blocks": "^8.6.11",
+    "@storybook/manager-api": "^8.6.11",
+    "@storybook/react": "^8.6.11",
+    "@storybook/react-webpack5": "^8.6.11",
+    "@storybook/test": "^8.6.11",
+    "@storybook/theming": "^8.6.11",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@types/prop-types": "^15",
+    "eslint-plugin-storybook": "^0.12.0",
+    "prop-types": "^15.8.1",
+    "react": "^18.0.2",
+    "storybook": "^8.6.11"
+  },
+  "peerDependencies": {
+    "@types/react": "^17.0.0 || ^18.0.0",
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0",
+    "react-router-dom": "^6.3.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
   },
   "files": [
     "dist"
