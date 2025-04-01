@@ -10,7 +10,10 @@ export const themeVariables = {
         white: "#FAFAFA",
         red: "#D50000",
         darkGrey: "#202020",
-        success: "#4CAF50"
+        success: "#4CAF50",
+        warning: '#f5dd05',
+        info: '#3467eb',
+        danger: '#FF0000',
     },
     blur:{
         dark: '#00000070'
@@ -19,7 +22,10 @@ export const themeVariables = {
         main: '#151515',
         secondary: '#424242',
         dark: '#0F0F0F',
-        danger: '#FF000025'
+        danger: '#ff000010',
+        warning: '#f5dd0510',
+        success: '#04b92510',
+        info: '#3467eb10'
     },
     codeBlock:{
         dark: '#0D1117'
