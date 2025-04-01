@@ -33,7 +33,7 @@ export const FeedbackError : React.FC<FeedbackErrorProps> = ({message}) => {
     return (
       <Grid container className={body} justifyContent="center" alignItems="center" spacing={3}>
         <Grid size={4} className={animation}>
-          <ErrorAnimation width={60} height={60} />
+          <ErrorAnimation width={55} height={50} />
         </Grid>
         <Grid size={7}>
           <Typography variant="h6" className={textContent}>

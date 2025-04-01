@@ -2,13 +2,13 @@ import React from "react";
 import { makeStyles } from "@mui/styles";
 import { themeVariables } from "../../utils/constants/themeVariables";
 import { Grid, Typography } from "@mui/material";
-import { SuccessAnimation } from "../../animations";
+import { LoadingAnimation } from "../../animations";
 
-export interface FeedbackSuccessProps {
+export interface FeedbackLoadingProps {
     message: string
 }
 
-const useFeedBackSuccessStyles = makeStyles({
+const useFeedBackLoadingStyles = makeStyles({
   body: {
     width: '100%',
     position: 'relative',
@@ -28,18 +28,18 @@ const useFeedBackSuccessStyles = makeStyles({
   },
 });
 
-export const FeedbackSuccess : React.FC<FeedbackSuccessProps> = ({message}) => {
-    const { body, animation, textContent } = useFeedBackSuccessStyles();
+export const FeedbackLoading : React.FC<FeedbackLoadingProps> = ({message}) => {
+    const { body,animation, textContent } = useFeedBackLoadingStyles();
     return (
         <Grid container className={body} justifyContent="center" alignItems="center" spacing={3}>
-          <Grid size={4} className={animation}>
-            <SuccessAnimation width={60} height={60}/>
-            </Grid>
-            <Grid size={7}>
-                <Typography variant="h6" className={textContent}>
-                  {message}
-                </Typography>
-            </Grid>
-        </Grid>
+         <Grid size={4} className={animation}>
+           <LoadingAnimation width={50} height={50}/>
+          </Grid>
+          <Grid size={7}>
+              <Typography variant="h6" className={textContent}>
+                {message}
+              </Typography>
+           </Grid>
+      </Grid>
     )
 }

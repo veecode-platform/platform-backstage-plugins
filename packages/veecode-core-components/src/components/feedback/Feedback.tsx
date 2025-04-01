@@ -1,6 +1,7 @@
 import { FeedbackActions } from "./FeedbackActions"
 import { FeedbackAILoading } from "./FeedbackAILoading"
 import { FeedbackError } from "./FeedBackError"
+import { FeedbackLoading } from "./FeedbackLoading"
 import { FeedbackRoot } from "./FeedbackRoot"
 import { FeedbackSuccess } from "./FeedbackSuccess"
 
@@ -16,5 +17,6 @@ export const Feedback = {
     Success: FeedbackSuccess,
     Error: FeedbackError,
     AILoading: FeedbackAILoading,
+    Loading: FeedbackLoading,
     Actions: FeedbackActions
 }

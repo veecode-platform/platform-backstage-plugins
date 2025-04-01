@@ -34,6 +34,13 @@ export const Error = (args:FeedbackProps) => (
     </Feedback.Root>
 )
 
+export const Loading = (args:FeedbackProps) => (
+    <Feedback.Root open={args.open} onClose={args.onClose}>
+        <Feedback.Loading message={args.message}/>
+        <Feedback.Actions>{args.actions}</Feedback.Actions>
+    </Feedback.Root>
+)
+
 export const AILoading = (args:FeedbackProps) => (
     <Feedback.Root open={args.open} onClose={args.onClose}>
         <Feedback.AILoading message={args.message}/>
