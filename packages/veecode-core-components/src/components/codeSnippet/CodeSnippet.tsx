@@ -80,7 +80,7 @@ export const CodeSnippet: React.FC<CodeSnippetProps> = ({ code, language }) => {
 
   return (
     <CodeSnippetRoot>
-      <div dangerouslySetInnerHTML={{ __html: codeState }} />
+      <div dangerouslySetInnerHTML={{ __html: codeState }} style={{padding: '0 .5rem'}}/>
     </CodeSnippetRoot>
   );
 };

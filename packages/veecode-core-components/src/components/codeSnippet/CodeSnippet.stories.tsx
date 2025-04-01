@@ -18,7 +18,7 @@ export default {
     },
     decorators: [
       (Story) => {
-        return (<Box sx={{ maxWidth: '80vw'}}>{Story()}</Box>)
+        return (<Box sx={{ maxWidth: '60vw'}}>{Story()}</Box>)
       }
     ]
 } as Meta<CodeSnippetProps>;
