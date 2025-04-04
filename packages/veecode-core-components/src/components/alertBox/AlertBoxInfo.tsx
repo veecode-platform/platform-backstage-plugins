@@ -4,10 +4,7 @@ import { themeVariables } from "../../utils/constants/themeVariables";
 import { AlertBoxRoot } from "./AlertBoxRoot";
 import { InfoAnimation } from "../../animations";
 import { Typography } from "@mui/material";
-
-export interface AlertBoxInfoProps {
-    children: string
-}
+import { AlertBoxProps } from "./AltertBox";
 
 const useAlertBoxInfoStyles = makeStyles({
   content: {
@@ -18,10 +15,15 @@ const useAlertBoxInfoStyles = makeStyles({
   },
 });
 
-export const AlertBoxInfo : React.FC<AlertBoxInfoProps> = ({children}) => {
+export const AlertBoxInfo : React.FC<AlertBoxProps> = ({open, variant,children}) => {
     const { content } = useAlertBoxInfoStyles();
     return (
-        <AlertBoxRoot styles={content} icon={InfoAnimation}>
+        <AlertBoxRoot 
+           styles={content} 
+           icon={InfoAnimation}
+           variant={variant}
+           open={open}
+           >
          <Typography>
            {children}
           </Typography>

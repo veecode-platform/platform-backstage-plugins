@@ -4,10 +4,7 @@ import { themeVariables } from "../../utils/constants/themeVariables";
 import { AlertBoxRoot } from "./AlertBoxRoot";
 import { ErrorAnimation } from "../../animations";
 import { Typography } from "@mui/material";
-
-export interface AlertBoxErrorProps {
-    children: string
-}
+import { AlertBoxProps } from "./AltertBox";
 
 const useAlertBoxErrorStyles = makeStyles({
   content: {
@@ -18,10 +15,10 @@ const useAlertBoxErrorStyles = makeStyles({
   },
 });
 
-export const AlertBoxError : React.FC<AlertBoxErrorProps> = ({children}) => {
+export const AlertBoxError : React.FC<AlertBoxProps> = ({open,variant,children}) => {
     const { content } = useAlertBoxErrorStyles();
     return (
-        <AlertBoxRoot styles={content} icon={ErrorAnimation}>
+        <AlertBoxRoot open={open} variant={variant} styles={content} icon={ErrorAnimation}>
           <Typography>
             {children}
           </Typography>

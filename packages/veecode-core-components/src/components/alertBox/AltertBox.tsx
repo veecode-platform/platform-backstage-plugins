@@ -5,6 +5,8 @@ import { AlertBoxSuccess } from "./AlertBoxSuccess"
 import { AlertBoxWarning } from "./AlertBoxWarning"
 
 export interface AlertBoxProps {
+    open: boolean,
+    variant: "persistent" | "transient",
     children: string
 }
 

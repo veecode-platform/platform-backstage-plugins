@@ -4,10 +4,7 @@ import { themeVariables } from "../../utils/constants/themeVariables";
 import { AlertBoxRoot } from "./AlertBoxRoot";
 import { SuccessAnimation } from "../../animations";
 import { Typography } from "@mui/material";
-
-export interface AlertBoxSuccessProps {
-    children: string
-}
+import { AlertBoxProps } from "./AltertBox";
 
 const useAlertBoxSuccessStyles = makeStyles({
   content: {
@@ -18,10 +15,10 @@ const useAlertBoxSuccessStyles = makeStyles({
   },
 });
 
-export const AlertBoxSuccess : React.FC<AlertBoxSuccessProps> = ({children}) => {
+export const AlertBoxSuccess : React.FC<AlertBoxProps> = ({open, variant,children}) => {
     const { content } = useAlertBoxSuccessStyles();
     return (
-      <AlertBoxRoot styles={content} icon={SuccessAnimation}>
+      <AlertBoxRoot styles={content} open={open} variant={variant} icon={SuccessAnimation}>
         <Typography variant="body2">
           {children}
         </Typography>
