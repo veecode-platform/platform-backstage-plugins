@@ -4,7 +4,7 @@ import { InfoBox, InfoBoxProps } from "./InfoBox";
 import { Box } from "@mui/material";
 
 export default {
-    title: 'FeedBack/InfoBox',
+    title: 'Feedback/InfoBox',
     component: InfoBox.Root,
     args: {
       message: 'No data to show, see how add content in docs',
