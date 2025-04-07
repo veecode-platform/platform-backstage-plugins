@@ -25,10 +25,14 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build Storybook
-        run: yarn build-storybook
+        run: yarn build-storybook --output-dir storybook-static/veecode-core-components
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: packages/veecode-core-components/storybook-static
+          publish_dir: storybook-static/veecode-core-components
+
+      - name: Show deployed URL
+        run: |
+          echo "✅ Storybook disponível em: https://veecode-platform.github.io/platform-backstage-plugins/veecode-core-components/"
