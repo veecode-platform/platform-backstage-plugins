@@ -1,28 +1,77 @@
 
 import React from "react";
-import { Meta,StoryObj } from "@storybook/react";
-import { ContentLayout, ContentLayoutProps } from ".";
+import { Meta } from "@storybook/react";
+import { ContentLayout, ContentLayoutProps } from "./ContentLayout";
+import { VeeLogo } from "../../icons/VeeLogo";
+import { Content } from "@backstage/core-components";
 
 export default {
-    title: 'Examples/Layout/ContentLayout',
-    component: ContentLayout.Root,
-    decorators: [
-        () => {
-            return (
-                 <ContentLayout.Root>
-                    <ContentLayout.Header>
-                        <ContentLayout.Label label="Label test"/>
-                        <ContentLayout.Title title="Hello World"/>
-                        <ContentLayout.Subtitle subtitle="subtitle test"/>
-                    </ContentLayout.Header>
-                    <ContentLayout.Body>
-                        {/* TODO */}
-                        <h1>Hello World</h1> 
-                    </ContentLayout.Body>
-               </ContentLayout.Root>
-            )
-        }
-    ]
+  title: 'Layout/ContentLayout',
+  component: ContentLayout.Root,
+  args: {
+    icon: VeeLogo,
+    title: 'Title example',
+    subtitle: 'Subtitle example',
+    label: 'Label Example',
+    children: 'Content here...',
+  },
+  argsTypes: {
+    icon: { control: {} },
+    title: { control: 'text' },
+    subtitle: { control: 'text' },
+    label: { control: 'text' },
+    children: { control: {} },
+  },
+  decorators: [
+    Story => {
+      return <Content>{Story()}</Content>;
+    },
+  ],
 } as Meta<ContentLayoutProps>;
 
-export const Default : StoryObj<ContentLayoutProps> = {}
+export const Default = ({
+  icon,
+  title,
+  label,
+  subtitle,
+  children,
+}: ContentLayoutProps) => (
+  <ContentLayout.Root>
+    <ContentLayout.Header icon={icon}>
+      <ContentLayout.Label label={label!} />
+      <ContentLayout.Title title={title!} />
+      <ContentLayout.Subtitle subtitle={subtitle!} />
+    </ContentLayout.Header>
+    <ContentLayout.Body>{children}</ContentLayout.Body>
+  </ContentLayout.Root>
+);
+
+export const TitleAndSubtitle = ({
+    icon,
+    title,
+    subtitle,
+    children,
+  }: ContentLayoutProps) => (
+    <ContentLayout.Root>
+      <ContentLayout.Header icon={icon}>
+        <ContentLayout.Title title={title!} />
+        <ContentLayout.Subtitle subtitle={subtitle!} />
+      </ContentLayout.Header>
+      <ContentLayout.Body>{children}</ContentLayout.Body>
+    </ContentLayout.Root>
+  );
+
+  export const TitleAndLabel = ({
+    icon,
+    title,
+    label,
+    children,
+  }: ContentLayoutProps) => (
+    <ContentLayout.Root>
+      <ContentLayout.Header icon={icon}>
+        <ContentLayout.Label label={label!} />
+        <ContentLayout.Title title={title!} />
+      </ContentLayout.Header>
+      <ContentLayout.Body>{children}</ContentLayout.Body>
+    </ContentLayout.Root>
+  );
