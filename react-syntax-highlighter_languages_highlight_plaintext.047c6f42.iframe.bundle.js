@@ -1,1 +1,0 @@
-(self.webpackChunk_veecode_platform_veecode_core_components=self.webpackChunk_veecode_platform_veecode_core_components||[]).push([[42979],{"../../node_modules/highlight.js/lib/languages/plaintext.js":module=>{module.exports=function plaintext(hljs){return{name:"Plain text",aliases:["text","txt"],disableAutodetect:!0}}}}]);
