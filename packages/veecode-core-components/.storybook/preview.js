@@ -13,6 +13,9 @@ const preview = {
     docs: {
       theme: themes.dark,
       type: 'source'
+    },
+    router: {
+      basename: '/veecode-core-components',
     }
   },
 };

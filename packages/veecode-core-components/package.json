@@ -13,7 +13,7 @@
   "backstage": {
     "role": "web-library"
   },
-  "homepage": "https://veecode-platform.github.io/platform-backstage-plugins",
+  "homepage": "https://veecode-platform.github.io/platform-backstage-plugins/veecode-core-components",
   "sideEffects": false,
   "scripts": {
     "start": "backstage-cli package start",
@@ -24,8 +24,8 @@
     "prepack": "backstage-cli package prepack",
     "postpack": "backstage-cli package postpack",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "storybook:deploy": "storybook build && gh-pages -d storybook-static"
+    "build-storybook": "storybook build --output-dir storybook-static/veecode-core-components",
+      "storybook:deploy": "yarn build-storybook && gh-pages -d storybook-static/veecode-core-components"
   },
   "dependencies": {
     "@backstage/core-components": "^0.17.0",
