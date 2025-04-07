@@ -1,0 +1,64 @@
+name: Publish Devportal plugins
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['master']
+    paths:
+      - 'plugins/**'
+      - '.github/workflows/publish_plugins.yml'
+
+jobs:
+  build:
+    env:
+      CI: 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: use node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+          registry-url: https://registry.npmjs.org/
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - name: yarn install
+        run: yarn install
+
+      #- name: lerna install
+      #  run: yarn lerna init 
+
+      - name: yarn tsc
+        #continue-on-error: true
+        run: yarn tsc
+
+      - name: build workspace plugins
+        run: yarn backstage-cli repo build #yarn workspaces foreach run backstage-cli package build
+
+      #- name: bump plugins version
+      #  run: yarn workspaces foreach -v version patch
+      
+      #- name: Prepare workspaces.packages
+      #  run: jq '.workspaces.packages = ["plugins/*"]' package.json > tmp.json && mv tmp.json package.json
+
+      - name: publish plugins with lerna
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run : yarn lerna publish from-package --yes
+
+
+      #- name: publish plugins on npm
+      #  # run: yarn workspaces foreach npm publish --access public
+      #  env:
+      #    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #  run: npm publish --workspaces=true
+
+      - uses: EndBug/add-and-commit@v9
+        with:
+          add: 'plugins'
+          message: update plugins version
+          committer_name: veecode_actions
+          committer_email: actions@vee.codes
+
+        
