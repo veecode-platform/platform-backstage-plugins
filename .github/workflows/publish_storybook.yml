@@ -6,6 +6,7 @@ on:
 jobs:
   chromatic:
     runs-on: ubuntu-latest
+
     defaults:
       run:
         working-directory: packages/veecode-core-components
@@ -13,7 +14,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 0 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -27,3 +29,7 @@ jobs:
         run: yarn chromatic
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+
+      - name: ✅ Done
+        run: echo "✅ Storybook enviado para Chromatic com sucesso!"
