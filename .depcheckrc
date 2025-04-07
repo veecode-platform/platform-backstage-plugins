@@ -1,2 +1,0 @@
-ignores: ["eslint-*","@spotify/eslint-*","@typescript-eslint/*","@backstage/eslint-*"]
-ignore-bin-package: true
