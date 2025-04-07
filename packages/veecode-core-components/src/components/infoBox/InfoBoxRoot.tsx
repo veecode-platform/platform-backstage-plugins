@@ -9,7 +9,6 @@ export interface InfoBoxRootProps {
 const useInfoBoxRootStyles = makeStyles({
     root: {
         width: '100%',
-        padding: '.5rem',
         fontSize: '1rem',
         borderRadius: '8px',
         background: '#60a5fa40',
