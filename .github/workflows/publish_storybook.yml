@@ -1,38 +1,29 @@
-name: Deploy Storybook
+name: Deploy Storybook to Chromatic
 
 on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  chromatic:
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: packages/veecode-core-components
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: yarn
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
-      - name: Build Storybook
-        run: yarn build-storybook --output-dir storybook-static/veecode-core-components
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: storybook-static/veecode-core-components
-
-      - name: Show deployed URL
-        run: |
-          echo "✅ Storybook available at: https://veecode-platform.github.io/platform-backstage-plugins/veecode-core-components/"
+      - name: Publish to Chromatic
+        run: yarn chromatic
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
