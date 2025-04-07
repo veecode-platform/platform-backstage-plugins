@@ -31,5 +31,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
 
-      - name: ✅ Done
-        run: echo "✅ Storybook enviado para Chromatic com sucesso!"
+      - name: Done
+        run: echo "✅ Storybook successfully sent to Chromatic!"
