@@ -1,12 +1,7 @@
 name: Deploy Storybook
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'packages/veecode-core-components/**'
-      - '.github/workflows/storybook.yml'
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
