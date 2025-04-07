@@ -35,4 +35,4 @@ jobs:
 
       - name: Show deployed URL
         run: |
-          echo "✅ Storybook disponível em: https://veecode-platform.github.io/platform-backstage-plugins/veecode-core-components/"
+          echo "✅ Storybook available at: https://veecode-platform.github.io/platform-backstage-plugins/veecode-core-components/"
