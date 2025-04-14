@@ -15,11 +15,6 @@ export const setPluginDocs = (docs: string) => ({
     payload: docs
 } as const);
 
-export const setPluginAnnotations = (annotations: string[]) => ({
-    type: "SET_PLUGIN_ANNOTATIONS",
-    payload: annotations
-} as const);
-
 export const resetPluginState = () => ({
     type: 'RESET_PLUGIN_STATE',
     payload: null
@@ -30,6 +25,5 @@ ReturnType<
 typeof setPlugin |
 typeof setPluginName |
 typeof setPluginDocs |
-typeof setPluginAnnotations |
 typeof resetPluginState
 >

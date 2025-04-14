@@ -7,7 +7,7 @@ import { FileContent, IRepository } from "@veecode-platform/backstage-plugin-vee
 import fs from "fs";
 import path from "path";
 import mime from "mime-types";
-import { IGitManager, ReturnRepoInfoParams } from "./types";
+import { IGitManager } from "./types";
 
 export class GitManager implements IGitManager {
   private readonly githubManager: GithubManager;
@@ -18,14 +18,15 @@ export class GitManager implements IGitManager {
     this.gitlabManager = new GitlabManager();
   }
 
-  async returnRepoInfo({location,partial}:ReturnRepoInfoParams) {
-    const url = parseGitUrl(location);
+  async returnRepoInfo(location:string) {
+    const url = location.startsWith("url") ? parseGitUrl(location) : location;
+   
     switch (true) {
       case url.includes("github"): {
-        return this.githubManager.returnRepoInfo({url,partial});
+        return this.githubManager.returnRepoInfo(url);
       }
       case url.includes("gitlab"): {
-        return this.gitlabManager.returnRepoInfo({url,partial});
+        return this.gitlabManager.returnRepoInfo(url);
       }
       default:
         throw new Error("Git provider error: unimplemented!");
@@ -36,7 +37,7 @@ export class GitManager implements IGitManager {
     await fs.promises.rm(localPath, { recursive: true, force: true });
   }
 
-  async cloneRepo(token: string, localPath: string, repoUrl: string, branch: string) {
+  async cloneRepo(token: string, localPath: string, repoUrl: string, branch: string | null) {
     this.logger.info("Initializing the repository clone process...");
 
     if (fs.existsSync(localPath)) {
@@ -60,7 +61,7 @@ export class GitManager implements IGitManager {
       this.logger.info(`Cloning repository...`);
 
       const git = simpleGit();
-      await git.clone(authenticatedRepoUrl, localPath, ["--branch", branch, "--depth", "1"]);
+      await git.clone(authenticatedRepoUrl, localPath, branch ? ["--branch", branch, "--depth", "1"] : [] );
 
       if (!fs.existsSync(localPath)) {
         throw new Error(`Error: Directory not found: ${localPath}`);
@@ -76,7 +77,7 @@ export class GitManager implements IGitManager {
     }
   }
 
-  async partialClone(token: string, localPath: string, repoUrl: string, branch: string, folderPath: string) {
+  async partialClone(token: string, localPath: string, repoUrl: string, branch: string | null, folderPath: string) {
     this.logger.info(`Initializing partial clone for folder: ${folderPath}`);
 
     if (fs.existsSync(localPath)) {
@@ -93,7 +94,7 @@ export class GitManager implements IGitManager {
       this.logger.info(`Cloning repository...`);
 
       const git = simpleGit();
-      await git.clone(authenticatedRepoUrl, localPath, ["--branch", branch, "--depth", "1"]);
+      await git.clone(authenticatedRepoUrl, localPath, branch ? ["--branch", branch, "--depth", "1"] : []);
 
       if (!fs.existsSync(localPath)) {
         throw new Error(`Error: Directory not found: ${localPath}`);

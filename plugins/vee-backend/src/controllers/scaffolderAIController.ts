@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AssistantAIController } from './AssistantAIController';
-import {  AnalyzeAndStartChatParams, DownloadTemplateAndCreateVectorStoreParams, veeReadPermission} from '@veecode-platform/backstage-plugin-vee-common';
+import {  AIModel, AnalyzeAndStartChatParams, DownloadTemplateAndCreateVectorStoreParams, veeGenerateTemplatePermission, veeReadPermission} from '@veecode-platform/backstage-plugin-vee-common';
 import { InputError, NotAllowedError, stringifyError } from '@backstage/errors';
 import { IScaffolderAIControler } from './types';
 import { VeeClient } from '../api/client';
@@ -60,15 +60,14 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
       }
     };
 
-  async analyzeAndStartChat (req: Request, res: Response) {
+  analyzeAndStartChat = async (req: Request, res: Response) => {
 
-
-    const {engine, vectorStoreId, prompt, repoName, repoStructure, isTemplate, useDataset } = req.body as AnalyzeAndStartChatParams;
+    const {engine, vectorStoreId, prompt, repoName,repoStructure } = req.body as AnalyzeAndStartChatParams;
 
     if (
       !(await this.isRequestAuthorized(
         req,
-        veeReadPermission,
+        veeGenerateTemplatePermission,
       ))
     ) {
       throw new NotAllowedError('Unauthorized');
@@ -76,11 +75,15 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
 
     try {
 
-      const response = await this.veeCodeAssistantAI.chat({engine,vectorStoreId,repoName,repoStructure,prompt, isTemplate, useDataset})
+      const response = await this.veeCodeAssistantAI.chat({engine,vectorStoreId, prompt, repoName, repoStructure, modelType: AIModel.customModel});
 
       res.status(200).json({
-        message: "Analysis completed",
-        data: response
+        assistantId: response.assistantId,
+        title: response.title,
+        message: response.analysis,
+        data: response.messages,
+        generatedFiles: response.generatedFiles,
+        threadId: response.threadId
       });
     } catch (err: any) {
       if (err.errors) {
@@ -94,7 +97,7 @@ export class ScaffolderAIController extends AssistantAIController implements ISc
     }
   };
 
-  async deleteChat (req: Request, res: Response) {
+  deleteChat = async (req: Request, res: Response) => {
 
     const { engine,vectorStoreId, assistantId, threadId } = req.body;
    

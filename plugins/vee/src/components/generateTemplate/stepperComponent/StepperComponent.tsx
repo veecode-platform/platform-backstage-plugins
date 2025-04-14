@@ -21,32 +21,33 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    onProcessing(true);
-    setTimeout(()=>{onProcessing(false);},2000);
-    onCloseModal();
-    navigate("/vee/scaffolder-ai/output")
-    // if(instructionsState){
-    //    onProcessing(true);
-    //    // TODO -- melhorar o prompt e incluir as docs dos plugins na tabela do backend e na interface do pluginListProps
-    //    const prompt = `
-    //     The template ${instructionsState.templateName} used the 
-    //     ${instructionsState.stackInfo.name}, that source url:
-    //     ${instructionsState.stackInfo.source}
-    //     ${instructionsState.plugins ? `and used instructionsState.plugins` : ''}
-    //     ,
-    //      more information about: 
-    //     ${instructionsState.additionalInfo}
-    //    `
-    //    const response = await getTemplateFilesAndCreateVectorStore(instructionsState.stackInfo.source, instructionsState.templateName); 
-    //   if(response){
-    //     await templateChat(instructionsState.templateName, prompt);
-    //     instructionsDispatch(resetInstructions());
-    //     onProcessing(false);
-    //     onCloseModal();
-    //     navigate("/vee/scaffolder-ai/output")
-    //   }
+    if(instructionsState){
+      onCloseModal();
+      onProcessing(true);
+      const prompt = `
+      Generate a Backstage template with the following characteristics: 
+          - Template Name: ${instructionsState.templateName}
+          - Stack: ${instructionsState.stackInfo.name}
+          - Plugins to be used and their documentation:
+      ${
+        instructionsState.plugins &&
+        instructionsState.plugins
+          .map(plugin => `- ${plugin.name}: ${plugin.docs}`)
+          .join('\n')
+      }
+          ${instructionsState.additionalInfo ? `- Additional user information: ${instructionsState.additionalInfo}` : ''}
+          Based on the plugins' documentation, determine which annotations should be added to the template and how the project skeleton should be structured. Follow best development practices, clean code standards, and software architecture, and include design patterns, containerization, and CI/CD with integrated and unit tests.`;
+      
+      const { projectStructure, vectorStoreId } = await getTemplateFilesAndCreateVectorStore(instructionsState.stackInfo.source, instructionsState.templateName); 
+
+      if(projectStructure && vectorStoreId){
+        await templateChat(instructionsState.templateName, prompt,projectStructure,vectorStoreId);
+        instructionsDispatch(resetInstructions());
+        onProcessing(false);
+        navigate("/vee/scaffolder-ai/output")
+      }
   
-    // }
+    }
   };
 
   const handleNext = () => {
@@ -75,7 +76,7 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
     instructionsDispatch(setAdditionalInfo(e.target.value))
   }
 
-  const Step0Content = () => {
+  const TemplateNameStepContent = () => {
     return (
         <TextField 
          fullWidth variant="outlined" 
@@ -87,7 +88,7 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
       />
     )
   }
-  const Step1Content = () => {
+  const TemplateAddInfoStepContent = () => {
     return (
         <TextField 
         multiline
@@ -95,7 +96,7 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
         variant="outlined"
         style={{ resize: 'none' }}
         className={textareaStyles} 
-         placeholder="Additional informations" 
+         placeholder="Additional informations (optional)" 
          value={instructionsState ? instructionsState.additionalInfo : ''} 
          onChange={handleAddAdditionalInfo}
         />
@@ -109,7 +110,7 @@ export const StepperComponent : React.FC<StepperComponentProps> = (props) => {
     return "Next";
   };
 
-  const StepsContent = [ Step0Content, Step1Content ];
+  const StepsContent = [ TemplateNameStepContent, TemplateAddInfoStepContent ];
 
   React.useEffect(() => {
     if(instructionsState){

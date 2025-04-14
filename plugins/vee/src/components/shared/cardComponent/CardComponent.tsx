@@ -58,17 +58,24 @@ const CardElement : React.FC<Omit<CardProps,"path">> = (props) => {
             </Box>
             {items && (
                 <Box className={chips}>
-                {items.map((item: string) => (
-                <Chip
-                    key={item}
-                    label={item}
-                    size="small"
-                    sx={{
-                        padding: '.3rem'
-                    }}
-                />
-                ))}
-            </Box>
+                    <Tooltip 
+                        placement="right-start"
+                        arrow
+                        title={<>
+                            {items.map((item: string) => (
+                                <Chip
+                                    key={item}
+                                    label={item}
+                                    size="small"
+                                />
+                                ))}
+                            </>}>
+                            <Chip
+                                label="Available plugins"
+                                size="medium"
+                            />
+                    </Tooltip>
+                </Box>
             )}
         </Card>
     )

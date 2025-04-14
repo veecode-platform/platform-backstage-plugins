@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { AssistantAIController } from "./AssistantAIController";
 import { InputError, NotAllowedError, stringifyError } from "@backstage/errors";
-import { CreateFixedOptionsParams, IFixedOptions, veeCreateFixedOptionsPermission, veeEditFixedOptionsPermission, veeReadPermission, veeRemoveFixedOptionsPermission } from "@veecode-platform/backstage-plugin-vee-common";
+import { CreateFixedOptionsParams, IFixedOptions, veeManageFixedOptionsPermission, veeReadPermission } from "@veecode-platform/backstage-plugin-vee-common";
 import { IFixedOptionsController } from "./types";
 
 export class FixedOptionsController extends AssistantAIController implements IFixedOptionsController {
@@ -72,7 +72,7 @@ export class FixedOptionsController extends AssistantAIController implements IFi
        }
 
        try {
-        if (!(await this.isRequestAuthorized(req, veeCreateFixedOptionsPermission))) {
+        if (!(await this.isRequestAuthorized(req, veeManageFixedOptionsPermission))) {
           throw new NotAllowedError('Unauthorized');
         }
         const newFixedOptions = await this.database.createFixedOptions({type, options});
@@ -103,7 +103,7 @@ export class FixedOptionsController extends AssistantAIController implements IFi
         if(options) updateData.options = options;
 
         try {
-         if (!(await this.isRequestAuthorized(req, veeEditFixedOptionsPermission))) {
+         if (!(await this.isRequestAuthorized(req, veeManageFixedOptionsPermission))) {
            throw new NotAllowedError('Unauthorized');
          }
 
@@ -136,7 +136,7 @@ export class FixedOptionsController extends AssistantAIController implements IFi
     deleteFixedOptions = async (req: Request, resp:Response) => {
         const { fixedOptionsId } = req.params;
         try {
-         if (!(await this.isRequestAuthorized(req, veeRemoveFixedOptionsPermission))) {
+         if (!(await this.isRequestAuthorized(req, veeManageFixedOptionsPermission))) {
            throw new NotAllowedError('Unauthorized');
          }
          await this.database.deleteFixedOption(fixedOptionsId);         

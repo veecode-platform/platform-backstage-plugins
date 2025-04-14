@@ -17,16 +17,11 @@ export interface Config {
       openai?: {
         apiBaseUrl: string;
         apiKey: string;
-        assistant: string;
         model: string;
-        instructions: string;
         timeout?:string;
-        dataset?: {
+        templateGeneration?: {
           model?: string;
-          references?: Array<{
-            id: string;
-            source: string;
-            }>;
+          catalog?: string;
         }
       }
     }

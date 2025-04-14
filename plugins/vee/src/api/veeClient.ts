@@ -1,7 +1,7 @@
 import { ConfigApi, FetchApi,OAuthApi } from "@backstage/core-plugin-api";
 import { VeeApi } from "./veeApi";
 import { ResponseError } from '@backstage/errors';
-import { ClearHistoryResponse, CreatePluginParams, CreateStackParams, DeleteServiceResponse, FileContent, InitializeAssistantAIResponse, IPlugin, IRepository, IStack, ParamsWithRequiredId, SubmitRepoResponse, VeeResponse } from "@veecode-platform/backstage-plugin-vee-common";
+import { ClearHistoryResponse, CreateFixedOptionsParams, CreatePluginParams, CreateStackParams, DeleteServiceResponse, FileContent, IFixedOptions, InitializeAssistantAIResponse, IPlugin, IRepository, IStack, ParamsWithRequiredId, SubmitRepoResponse, VeeResponse } from "@veecode-platform/backstage-plugin-vee-common";
 import { GitManager } from "./git/gitManager";
 
 
@@ -61,7 +61,7 @@ export class VeeClient implements VeeApi {
 
   async cloneTemplateSource(source: string) {
     const body = {
-      source,
+     location: source
     };
 
     const gitManager = await this.getGitManager();
@@ -76,10 +76,8 @@ export class VeeClient implements VeeApi {
       },
     };
 
-    const response = await this.fetch<any>(
-      '/partial-clone-repository',
-      headers,
-    );
+    const response = await this.fetch<any>('/clone-repository', headers);
+
 
     return {
       files: response.data.files,
@@ -205,8 +203,8 @@ export class VeeClient implements VeeApi {
     engine: string = 'openAI',
     vectorStoreId: string,
     prompt: string,
-    templateName?: string,
-    repoStructure?: string,
+    templateName: string,
+    repoStructure: string,
   ): Promise<InitializeAssistantAIResponse> {
     const body = {
       engine,
@@ -363,11 +361,10 @@ export class VeeClient implements VeeApi {
     return response;
   }
 
-  async addPlugin({ name, docs, annotations }: CreatePluginParams) {
+  async addPlugin({ name, docs }: CreatePluginParams) {
     const body = {
       name,
-      docs,
-      annotations,
+      docs
     };
     const headers: RequestInit = {
       method: 'POST',
@@ -411,6 +408,65 @@ export class VeeClient implements VeeApi {
     };
     const response = await this.fetch<DeleteServiceResponse>(
       `/plugins/${pluginId}`,
+      headers,
+    );
+    return response;
+  }
+
+  async listAllFixedOptions() {
+    const response = await this.fetch<IFixedOptions[]>('/fixedOptions');
+    return response;
+  }
+
+  async getFixedOptionById(fixedOptionId: string) {
+    const response = await this.fetch<IFixedOptions>(`/fixedOptions/${fixedOptionId}`);
+    return response;
+  }
+
+  async createFixedOption({ type, options }: CreateFixedOptionsParams) {
+    const body = {
+      type,
+      options
+    };
+    const headers: RequestInit = {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const response = await this.fetch<VeeResponse<IFixedOptions>>('/fixedOptions', headers);
+    return response;
+  }
+
+  async editFixedOption({ id, ...data }: ParamsWithRequiredId<IFixedOptions>) {
+    const body = {
+      ...data,
+    };
+    const fixedOptionId = id;
+    const headers: RequestInit = {
+      method: 'PATCH',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const response = await this.fetch<VeeResponse<IFixedOptions>>(
+      `/fixedOptions/${fixedOptionId}`,
+      headers,
+    );
+    return response;
+  }
+
+  async removeFixedOption(fixedOptionId: string) {
+    const headers: RequestInit = {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const response = await this.fetch<DeleteServiceResponse>(
+      `/fixedOptions/${fixedOptionId}`,
       headers,
     );
     return response;

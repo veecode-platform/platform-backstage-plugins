@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AssistantAIController } from "./AssistantAIController";
-import { CreateStackParams, IStack, veeCreateStackPermission, veeEditStackPermission, veeReadStacksPermission, veeRemoveStackPermission } from "@veecode-platform/backstage-plugin-vee-common";
+import { CreateStackParams, IStack, veeManageStacksPermission, veeReadStacksPermission } from "@veecode-platform/backstage-plugin-vee-common";
 import { InputError, NotAllowedError, stringifyError } from "@backstage/errors";
 import { IStackController } from "./types";
 
@@ -74,7 +74,7 @@ export class StackController extends AssistantAIController implements IStackCont
       if(plugins) newData.plugins = plugins;
 
        try {
-        if (!(await this.isRequestAuthorized(req, veeCreateStackPermission))) {
+        if (!(await this.isRequestAuthorized(req, veeManageStacksPermission))) {
           throw new NotAllowedError('Unauthorized');
         }
         const newStack = await this.database.createStack(newData);
@@ -107,7 +107,7 @@ export class StackController extends AssistantAIController implements IStackCont
      if(plugins) updateData.plugins = plugins;
 
     try {
-     if (!(await this.isRequestAuthorized(req, veeEditStackPermission))) {
+     if (!(await this.isRequestAuthorized(req, veeManageStacksPermission))) {
        throw new NotAllowedError('Unauthorized');
         }
      if(Object.keys(updateData).length === 0) {
@@ -139,7 +139,7 @@ export class StackController extends AssistantAIController implements IStackCont
     deleteStack = async (req: Request, resp:Response) => {
       const { stackId } = req.params;
       try {
-        if (!(await this.isRequestAuthorized(req, veeRemoveStackPermission))) {
+        if (!(await this.isRequestAuthorized(req, veeManageStacksPermission))) {
             throw new NotAllowedError('Unauthorized');
             };
         await this.database.deleteStack(stackId);          

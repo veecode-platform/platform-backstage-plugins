@@ -1,6 +1,5 @@
 import { OpenAIClient } from "../openAIClient";
 import { AddMessageToThreadParams, CheckRunStatusParams, ExecuteAndCreateRunParams, IThreadsManager } from "../types";
-import { template_instructions } from "./template_instructions";
 
 export class ThreadsManager extends OpenAIClient implements IThreadsManager {
 
@@ -25,16 +24,12 @@ export class ThreadsManager extends OpenAIClient implements IThreadsManager {
         }
     }
 
-    async executeAndCreateRun({threadId, assistantId, isTemplate}: ExecuteAndCreateRunParams) {
+    async executeAndCreateRun({threadId, assistantId}: ExecuteAndCreateRunParams) {
         try {
-            const instructions = isTemplate ? {
-                instructions: template_instructions,
-            } : {};
             const run = await this.client.beta.threads.runs.create(
                 threadId,
                 {
                     assistant_id: assistantId,
-                    ...instructions
                 }
             );
             return run;

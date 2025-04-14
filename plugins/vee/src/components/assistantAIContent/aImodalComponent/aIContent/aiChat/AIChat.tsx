@@ -47,52 +47,69 @@ export const AIChat : React.FC<AIChatProps> = (props) => {
     },[promptValue]);
     
 
-    return(
-       <>
+    return (
+      <>
         <div className={root}>
           <div className={chatContent}>
             <ChatBubble robot loading={loading}>
-                <MarkdownRenderer markdown={chatResponse?.analysisText!} />
-                {(chatResponse && chatResponse.files.length > 0) && (
-                  <div className={footer}>
-                    <Typography variant="body1">
-                      Do you want to commit the changes to your repository?
-                    </Typography>
-                    <Button  
-                      disabled={LoadingPullRequest} 
-                      variant='primary'
-                      onClick={() => preparePullRequest(chatResponse.files)}
-                      >
-                      {LoadingPullRequest ? 
-                        (<span className={creatingPr}>
-                          <CircularProgress className={spinner} size={20} color="inherit" /> 
-                             Creating ...
-                        </span>) 
-                        : (<>Create Pull Request</>)}  
-                    </Button>
-                  </div>
-                )}
+              <MarkdownRenderer markdown={chatResponse?.analysisText!} />
+              {chatResponse && chatResponse.files.length > 0 && (
+                <div className={footer}>
+                  <Typography variant="body1">
+                    Do you want to commit the changes to your repository?
+                  </Typography>
+                  <Button
+                    disabled={LoadingPullRequest}
+                    variant="primary"
+                    onClick={() => preparePullRequest(chatResponse.files)}
+                  >
+                    {LoadingPullRequest ? (
+                      <span className={creatingPr}>
+                        <CircularProgress
+                          className={spinner}
+                          size={20}
+                          color="inherit"
+                        />
+                        Creating ...
+                      </span>
+                    ) : (
+                      <>Create Pull Request</>
+                    )}
+                  </Button>
+                </div>
+              )}
             </ChatBubble>
           </div>
-         {( loading || LoadingPullRequest) ? null : (<div className={buttonGroup}>
-            <Button variant="secondary" onClick={handleChat}> New Analysis </Button>
-            <Button variant="danger" onClick={ clearHistoryAndExit}>Exit</Button>
-          </div>
-         )}
+          {loading || LoadingPullRequest ? null : (
+            <div className={buttonGroup}>
+              <Button variant="secondary" onClick={handleChat}>
+                {' '}
+                New Analysis{' '}
+              </Button>
+              <Button variant="danger" onClick={clearHistoryAndExit}>
+                Exit
+              </Button>
+            </div>
+          )}
         </div>
 
-        {showFeedback && 
-            (<FeedbackComponent 
-              open={showFeedback}
-              variant={pullRequestResponseState!.status as "success" | "error"} 
-              message={pullRequestResponseState!.message} 
-              actions={
-                <>
-                <Button variant="secondary" onClick={handleChat}> New Analysis </Button>
-                <Button variant="danger" onClick={ clearHistoryAndExit}>Exit</Button>
-                </>
-              }
-              />)}
-       </>
-    )
+        {showFeedback && (
+          <FeedbackComponent
+            open={showFeedback}
+            variant={pullRequestResponseState!.status as 'success' | 'error'}
+            message={pullRequestResponseState!.message}
+            actions={
+              <>
+                <Button variant="secondary" onClick={handleChat}>
+                  New Analysis
+                </Button>
+                <Button variant="danger" onClick={clearHistoryAndExit}>
+                  Exit
+                </Button>
+              </>
+            }
+          />
+        )}
+      </>
+    );
 }

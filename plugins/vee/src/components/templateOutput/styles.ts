@@ -9,6 +9,10 @@ export const useTemplateOutputStyles = makeStyles({
     },
     codeSection:{
         overflow: "auto !important",
+        height: "72vh",
+        overFlow: "auto",
+        border:`1px solid ${themeVariables.background.main}`,
+        padding: '.5rem',
         "&::-webkit-scrollbar": {
         width: "6px",
         height: "4px",
@@ -35,7 +39,8 @@ export const useTemplateOutputStyles = makeStyles({
         height: "100%",
         display: "flex",
         alignItems: "flex-end",
-        justifyContent: "center"
+        justifyContent: "center",
+        position: "relative"
     },
     buttonsGroup: {
         width: "100%",
@@ -43,6 +48,8 @@ export const useTemplateOutputStyles = makeStyles({
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
-        gap: "1rem"
+        gap: "1rem",
+        position: "fixed",
+        bottom: "5rem"
     }
 })

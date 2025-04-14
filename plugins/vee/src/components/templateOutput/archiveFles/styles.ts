@@ -26,11 +26,14 @@ export const useArchivesFileStyles = makeStyles({
     },
     menu:{
         width: "100%",
+        maxHeight: "100%",
+        minHeight: "60vh",
         display: "flex",
         flexDirection: "column",
         alignItems: "flex-start",
-        justifyContent: "center",
-        gap: '.3rem'
+        justifyContent: "flex-start",
+        gap: '.3rem',
+        overflow: "auto"
     },
     item:{
         width: "100%",

@@ -3,9 +3,9 @@ import type { Config } from "@backstage/config";
 import { AssistantAI } from "../assistantAI";
 import { OpenAIClient } from "../openAIClient"
 import { ThreadsManager } from "../threadsManager";
-import { ClearHistoryParams, ExecuteAndCreateRunParams, GetChatParams, IOpenAIApi, StartChatParams } from "../types";
+import { ClearHistoryParams, ExecuteAndCreateRunParams, GetChatParams, initializeAssistantParams, IOpenAIApi, StartChatParams, SubmitDataToVectorStoreParams } from "../types";
 import { VectorStoreManager } from "../vectorStoreManager";
-import { FileContent } from "@veecode-platform/backstage-plugin-vee-common";
+import { AIModel } from "@veecode-platform/backstage-plugin-vee-common";
 import { validateAssistantResponse } from "../../../utils/helpers/validateAssistantResponse";
 import { VectorStore } from "openai/resources/beta/vector-stores/vector-stores";
 
@@ -22,7 +22,7 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
     this.threadsManager = new ThreadsManager(config, logger);
   }
 
-  async submitDataToVectorStore(repoName:string, files:FileContent[]){
+  async submitDataToVectorStore({repoName, files}:SubmitDataToVectorStoreParams){
   try{
     this.logger.info("Check VectorStore Available...")
     const existingStores = await this.client.beta.vectorStores.list();
@@ -45,15 +45,15 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
     }
   }
 
-  async initializeAssistant(vectorStoreId: string, repoName:string, repoStructure:string, useDataset?:boolean) {
+  async initializeAssistant({vectorStoreId, repoName, repoStructure, modelType}:initializeAssistantParams) {
     try {
       this.logger.info("Check Assistant Available...");
-      const { model, dataset } = this.OpenAIConfig.getOpenAIConfig();
+      const config = this.OpenAIConfig.getOpenAIConfig();
       const assistants = await this.client.beta.assistants.list();
       const existingAssistant = repoName ? assistants.data.find((a: any) => a.name === repoName) : false;
-      const modelUses = (useDataset && dataset) ? dataset.model : model;
+      const model = (modelType === AIModel.customModel && config.templateGeneration) ? config.templateGeneration.model : config.model;
 
-      if (!existingAssistant) return this.assistantAI.initializeAssistant(vectorStoreId,repoName,repoStructure,modelUses);
+      if (!existingAssistant) return this.assistantAI.initializeAssistant({vectorStoreId,repoName,modelType, model,repoStructure});
 
       this.logger.info(`Assistant found: ${existingAssistant.id}`);
       return existingAssistant.id;
@@ -63,10 +63,10 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
     }
   }
 
-  async startChat({vectorStoreId, repoName, repoStructure, useDataset}:StartChatParams) {
+  async startChat({vectorStoreId, repoName, repoStructure, modelType}:StartChatParams) {
     try {
       this.logger.info('starting chat...');
-      const assistant = await this.initializeAssistant(vectorStoreId,repoName, repoStructure, useDataset);
+      const assistant = await this.initializeAssistant({vectorStoreId,repoName, repoStructure, modelType});
       const thread = await this.threadsManager.createThread();
       this.logger.info(`Thread Created: ${thread.id}`);
       return { threadId: thread.id, assistantId: assistant };
@@ -75,18 +75,18 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
     }
   }
 
-  async executeAndCreateRun({assistantId, threadId, isTemplate}:ExecuteAndCreateRunParams) {
-    const run = await this.threadsManager.executeAndCreateRun({threadId, assistantId, isTemplate})
+  async executeAndCreateRun({assistantId, threadId}:ExecuteAndCreateRunParams) {
+    const run = await this.threadsManager.executeAndCreateRun({threadId, assistantId })
     return run;
   }
 
-  async getChat({assistantId, threadId, message, isTemplate}:GetChatParams) {
+  async getChat({assistantId, threadId, message}:GetChatParams) {
   try {
       // Add the message to the thread
       await this.threadsManager.addMessageToThread({threadId, content: message});
 
       // Execute and create the run
-      const run = await this.executeAndCreateRun({assistantId, threadId, isTemplate});
+      const run = await this.executeAndCreateRun({assistantId, threadId});
 
       // Wait for the run to finish
       let runValidate = await this.threadsManager.checkRunStatus({threadId,runId: run.id});
@@ -107,7 +107,6 @@ export class OpenAIApi extends OpenAIClient implements IOpenAIApi {
           })
           .filter((text: string | null) => text !== null)
           .join("\n\n");
-
 
       // parse response
       const analysisResponseParsed = validateAssistantResponse(analysisResponse);

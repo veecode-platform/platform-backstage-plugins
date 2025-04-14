@@ -19,7 +19,7 @@ exports.up = async function up(knex) {
             table.uuid('fixed_option_id').notNullable();
             table.foreign('fixed_option_id').references('id').inTable('fixed_options').onDelete('CASCADE');
             table.string('label',255).notNullable().unique().comment('Label of each option');
-            table.string('prompt',255).notNullable().comment('Prompt for each option');
+            table.text('prompt').notNullable().comment('Prompt for each option');
             table.timestamps(true, true);
         })
         /**
@@ -41,17 +41,6 @@ exports.up = async function up(knex) {
             table.uuid('id').defaultTo(knex.fn.uuid()).primary().notNullable().comment('Auto-generated Id of plugin');
             table.string('name',255).notNullable().unique().comment('Plugin name');
             table.string('docs',255).notNullable().comment('Docs');
-            table.timestamps(true, true);
-        })
-        /**
-         * Annotations plugin Table
-         */
-        .createTable('annotations',table => {
-            table.comment('List of annotations belonging to a plugin');
-            table.uuid('id').defaultTo(knex.fn.uuid()).primary().notNullable().comment('Auto-generated Id of annotation');
-            table.uuid('plugin_id').notNullable();
-            table.foreign('plugin_id').references('id').inTable('plugins').onDelete('CASCADE');
-            table.text('annotation').notNullable().comment('Annotation for plugin use');
             table.timestamps(true, true);
         })
         /**

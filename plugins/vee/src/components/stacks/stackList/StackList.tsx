@@ -1,14 +1,29 @@
 import React from "react";
-import { CardComponent, PageLayout } from "../../shared"
+import { CardComponent, EmptyStateComponent, PageLayout } from "../../shared"
 import useAsync from "react-use/esm/useAsync";
 import { useVeeContext } from "../../../context";
 import  Grid2 from "@mui/material/Grid2";
 import { StackCardProps } from "./types";
+import { CodeSnippet, Progress, WarningPanel } from "@backstage/core-components";
 
-export const StackList = () => {
+
+const StackListWrapper = ({children}:{children: React.ReactNode}) => {
+
+    return (
+        <PageLayout
+          title="Select the stack that will be used to create the new template"
+          label="Template Stack"
+          goBack
+         >
+          {children}
+        </PageLayout>
+    )
+}
+
+export const StackList = ()=> {
 
     const { listAllStacks } = useVeeContext();
-    const { value: allStacks, loading, error } = useAsync(listAllStacks,[]); // check error and loading
+    const { value: allStacks, loading, error } = useAsync(listAllStacks,[]);
 
     const stacks : StackCardProps[] = React.useMemo(()=>{
         if (allStacks){
@@ -21,31 +36,47 @@ export const StackList = () => {
             }))
         }
         return []
-    },[allStacks])
+    },[allStacks]);
+
+    if (error) return (
+        <StackListWrapper>
+          <WarningPanel severity="error" title={error.name}>
+            <CodeSnippet language="text" text={error.toString()} />
+          </WarningPanel>
+        </StackListWrapper>
+        );
+
+      if(loading) return (
+          <StackListWrapper>
+            <Progress/>
+          </StackListWrapper>
+      )
+    
+      if (!stacks || stacks.length === 0)
+        return (
+          <StackListWrapper>
+            <EmptyStateComponent 
+              title="No data" 
+              message="No data to be rendered..."
+               />
+          </StackListWrapper>
+        );
 
     return (
-        <PageLayout
-          title="Select the stack that will be used to create the new template"
-          label="Template Stack"
-          goBack
-         >
-          {loading && <h1>Loading...</h1>}
-          {error && <h1>Error...</h1>}
-          <Grid2 container spacing={2}>
-           { stacks ? 
-               stacks.map( 
-                 stack => ( 
-                   <CardComponent 
-                     key={stack.id}
-                     variant="stack"
-                     id={stack.id}
-                     title={stack.name}
-                     subtitle={stack.source}
-                     items={stack.plugins}
-                     path={stack.id}
-                     />)) 
-                    : <h1>Nada pra mostrar...</h1>}
-          </Grid2>
-        </PageLayout>
-    )
+      <StackListWrapper>
+        <Grid2 container spacing={2}>
+          {stacks.map(stack => (
+            <CardComponent
+              key={stack.id}
+              variant="stack"
+              id={stack.id}
+              title={stack.name}
+              subtitle={stack.source}
+              items={stack.plugins}
+              path={stack.id}
+            />
+          ))}
+        </Grid2>
+      </StackListWrapper>
+    );
 }

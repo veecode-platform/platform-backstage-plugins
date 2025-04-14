@@ -1,4 +1,4 @@
-import { CreatePluginParams, IPlugin, veeAddPluginPermission, veeEditPluginPermission, veeReadPluginsPermission, veeRemovePluginPermission } from "@veecode-platform/backstage-plugin-vee-common";
+import { CreatePluginParams, IPlugin, veeManagePluginsPermission, veeReadPluginsPermission } from "@veecode-platform/backstage-plugin-vee-common";
 import { AssistantAIController } from "./AssistantAIController";
 import type { Request, Response } from "express";
 import { InputError, NotAllowedError, stringifyError } from "@backstage/errors";
@@ -63,18 +63,18 @@ export class PluginsController extends AssistantAIController  implements IPlugin
     * Add plugin
     */
     addPlugin = async (req: Request, resp: Response) => {
-      const { name, docs, annotations } = req.body as CreatePluginParams; 
-       if (!name || !docs || !annotations) {
+      const { name, docs } = req.body as CreatePluginParams; 
+       if (!name || !docs ) {
         throw new InputError(
           'The fields {name, docs} are required',
         );
       }
 
        try {
-        if (!(await this.isRequestAuthorized(req, veeAddPluginPermission))) {
+        if (!(await this.isRequestAuthorized(req, veeManagePluginsPermission))) {
           throw new NotAllowedError('Unauthorized');
         }
-        const newPlugin = await this.database.createPlugin({name, docs, annotations});
+        const newPlugin = await this.database.createPlugin({name, docs });
         resp.status(201);
         resp.json({
             message: 'New Plugin Add!',
@@ -95,15 +95,14 @@ export class PluginsController extends AssistantAIController  implements IPlugin
     */
     editPlugin = async (req: Request, resp: Response) => {
      const { pluginId } = req.params;
-     const { name, docs, annotations } = req.body as Partial<CreatePluginParams>;
+     const { name, docs } = req.body as Partial<CreatePluginParams>;
      const updateData : Partial<IPlugin> = {};
 
      if(name) updateData.name = name;
      if(docs) updateData.docs = docs;
-     if(annotations) updateData.annotations = annotations;
 
     try {
-     if (!(await this.isRequestAuthorized(req, veeEditPluginPermission))) {
+     if (!(await this.isRequestAuthorized(req, veeManagePluginsPermission))) {
        throw new NotAllowedError('Unauthorized');
         }
      if(Object.keys(updateData).length === 0) {
@@ -135,7 +134,7 @@ export class PluginsController extends AssistantAIController  implements IPlugin
     deleteStack = async (req: Request, resp:Response) => {
       const { pluginId } = req.params;
       try {
-        if (!(await this.isRequestAuthorized(req, veeRemovePluginPermission))) {
+        if (!(await this.isRequestAuthorized(req, veeManagePluginsPermission))) {
             throw new NotAllowedError('Unauthorized');
         };
         await this.database.deletePlugin(pluginId);      

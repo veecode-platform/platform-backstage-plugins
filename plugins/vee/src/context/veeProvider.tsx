@@ -1,34 +1,46 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { VeeContext } from "./veeContext";
 import { 
     EntityInfoReducer, 
+    FixedOptionSelectedReducer, 
+    FixedOptionsReducer, 
     initialEntityInfoState, 
+    initialFixedOptionSelectedState, 
+    initialFixedOptionsState, 
     initialInstructionsState, 
     initialPluginSelectedState, 
     initialPluginsState, 
     initialPullRequestState, 
     initialStackSelectedState, 
     initialStacksState, 
+    initialTemplateOutputState, 
     InstructionsReducer, 
     PluginSelectedReducer,
     PluginsReducer, 
     PullRequestInfoReducer, 
+    saveFixedOptions, 
+    saveFixedOptionSelected, 
     savePlugins, 
     savePluginSelected, 
     savePullRequestInfo, 
     saveStacks, 
     saveStackSelected, 
+    setTemplateOutput, 
     StackSelectedReducer, 
-    StacksReducer } from "./state";
+    StacksReducer, 
+    TemplateOutputReducer} from "./state";
 import { 
     alertApiRef, 
     errorApiRef, 
     useApi } from '@backstage/core-plugin-api';
 import { veeApiRef } from "../api/veeApi";
 import { 
+    CreateFixedOptionsParams,
     CreatePluginParams, 
     CreateStackParams, 
     FileContent, 
+    IFixedOptions, 
     IPlugin, 
     IStack } from "@veecode-platform/backstage-plugin-vee-common";
 
@@ -49,8 +61,11 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
     const [ allStacksState, allStackDispatch ] = React.useReducer(StacksReducer, initialStacksState);
     const [ stackSelectedState, stackSelectedDispatch ] = React.useReducer(StackSelectedReducer, initialStackSelectedState);
     const [ allPluginsState, allPluginsDispatch ] = React.useReducer(PluginsReducer, initialPluginsState);
+    const [ allFixedOptionsState, allFixedOptionsDispatch] = React.useReducer(FixedOptionsReducer,initialFixedOptionsState);
+    const [ fixedOptionSelectedState, fixedOptionselectedDispatch ] = React.useReducer(FixedOptionSelectedReducer, initialFixedOptionSelectedState);
     const [ pluginSelectedState, pluginSelectedDispatch ] = React.useReducer(PluginSelectedReducer, initialPluginSelectedState);
     const [ instructionsState, instructionsDispatch ] = React.useReducer(InstructionsReducer, initialInstructionsState);
+    const [ templateOutputState, templateOutputDispatch ] = React.useReducer(TemplateOutputReducer, initialTemplateOutputState)
     const api = useApi(veeApiRef);
     const errorApi = useApi(errorApiRef);
     const alertApi = useApi(alertApiRef);
@@ -131,35 +146,53 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
 
     const getTemplateFilesAndCreateVectorStore = async (source:string, templateName:string, engine: string = "openAI") => {
         try{
-             const { files, structure } = await api.cloneRepo(source);
+             const { files, structure } = await api.cloneTemplateSource(source);
              const response = await api.submitTemplate(engine, files, templateName);
-             setVectorStoreId(response.vectorStoreId);
-             setProjectStructure(structure);
-             return response
+             return {
+                projectStructure: structure,
+                vectorStoreId: response.vectorStoreId
+             }
         }
         catch(error:any){ 
             throw new Error(error);
         }
     }
 
-    const templateChat = async (templateName: string, prompt: string, engine: string = "openAI") => {
+    const templateChat = async (templateName: string, prompt: string, projectStructureValue:string, vectorStoreIdValue: string, engine: string = "openAI") => {
         try{
-            if(vectorStoreId && projectStructure){
-              const response = await api.getChatForTemplate(engine,vectorStoreId,prompt,templateName, projectStructure);
-              setAssistantId(response.assistantId);
-              setThreadId(response.threadId);
-              dispatchPullRequestInfo(savePullRequestInfo({title: response.title, message: response.message}))
-              return {
-                title: response.title,
-                analysis: response.message,
-                files: response.generatedFiles,
-              }
+            const response = await api.getChatForTemplate(engine,vectorStoreIdValue,prompt,templateName, projectStructureValue);
+            setAssistantId(response.assistantId);
+            setThreadId(response.threadId);
+            dispatchPullRequestInfo(savePullRequestInfo({title: response.title, message: response.message}))
+            templateOutputDispatch(setTemplateOutput({templateName, files: response.generatedFiles}))
+            return {
+              title: response.title,
+              analysis: response.message,
+              files: response.generatedFiles,
             }
-            return null
         }
         catch(error:any){
             errorApi.post(error);
             return null
+        }
+    }
+
+    const saveTemplateToCatalog = async(location:string,files:FileContent[])=>{
+        try{
+          if(pullRequestInfoState){
+            const { title, message } = pullRequestInfoState;
+            const response = await api.saveChangesInRepository(files,location,title, message);
+            return response
+          }
+          return null
+        }
+        catch(error:any){
+            errorApi.post(error);
+            return {
+                status: 'error',
+                link: '',
+                message: 'There was an error trying to save the changes'
+                }
         }
     }
 
@@ -188,7 +221,6 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
               errorApi.post(err.message);
               return []
             }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         },[api]);
 
     const getStackById = React.useCallback(async (id:string) => {
@@ -200,13 +232,11 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             errorApi.post(err.message);
             return null;
         }    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[api]);
 
     const createStack = React.useCallback(async(stackData : CreateStackParams)=>{
         try{
             const newStack = await api.createStack(stackData);
-            // allStackDispatch(addNewStack(newStack.data))
             await listAllStacks();
             alertApi.post({message: newStack.message, severity: 'success', display: 'transient'});
         }
@@ -214,38 +244,32 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             errorApi.post(err.message);
         }
     
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[api]);
 
     const updateStack = React.useCallback( async(id:string, updateData: IStack)=>{
         try{
          const response = await api.editStack({id, ...updateData});
-         // allStackDispatch(updateStackFromlist(response.data))
          await listAllStacks();
          alertApi.post({message: response.message, severity: 'success', display: 'transient'});
         }
         catch(err:any){
           errorApi.post(err.message);
         }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
      },[api]);
  
      const removeStack = React.useCallback(async (stackId: string) => {
          try{
             const response = await api.removeStack(stackId);
-            // allStackDispatch(removeStackFromList(stackId));
             await listAllStacks();
             alertApi.post({message: response.message, severity: 'success', display: 'transient'});
          }
          catch(err:any){
            errorApi.post(err.message);
          }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
      }, [api]);
  
      const addStackSelected = React.useCallback((stack:IStack)=>{
       stackSelectedDispatch(saveStackSelected(stack))
-     // eslint-disable-next-line react-hooks/exhaustive-deps
      },[stackSelectedState]);
 
     /**
@@ -262,7 +286,7 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
               errorApi.post(err.message);
               return []
             }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         },[api]);
     
     const getPluginById = React.useCallback(async (id:string) => {
@@ -274,13 +298,11 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             errorApi.post(err.message);
             return null;
         }    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[api]);
 
     const addPlugin = React.useCallback(async(pluginData : CreatePluginParams)=>{
         try{
             const newPlugin = await api.addPlugin(pluginData);
-           // allPluginsDispatch(addNewPlugin(newPlugin.data))
             await listAllPlugins();
             alertApi.post({message: newPlugin.message, severity: 'success', display: 'transient'});
         }
@@ -288,40 +310,99 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             errorApi.post(err.message);
         }
     
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[api]);
     
     const updatePlugin = React.useCallback( async(id:string, updateData: IPlugin)=>{
        try{
         const response = await api.editPlugin({id, ...updateData});
-        // allPluginsDispatch(updatePluginFromlist(response.data))
         await listAllPlugins();
         alertApi.post({message: response.message, severity: 'success', display: 'transient'});
        }
        catch(err:any){
          errorApi.post(err.message);
        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[api]);
 
     const removePlugin = React.useCallback(async (pluginId: string) => {
         try{
            const response = await api.removePlugin(pluginId);
-           // allPluginsDispatch(removePluginFromList(pluginId))
            await listAllPlugins();
            alertApi.post({message: response.message, severity: 'success', display: 'transient'});
         }
         catch(err:any){
           errorApi.post(err.message);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [api]);
 
     const addPluginSelected = React.useCallback((plugin:IPlugin)=>{
       pluginSelectedDispatch(savePluginSelected(plugin))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[pluginSelectedState]);
 
+    /**
+    * Fixed options
+    */
+    const listAllFixedOptions = React.useCallback( async ()=>{
+        try{
+           const response = await api.listAllFixedOptions();
+           allFixedOptionsDispatch(saveFixedOptions(response))
+           return response;
+        }catch(err:any){
+            errorApi.post(err.message);
+            return []
+        }     
+    },[api])
+
+    const getFixedOptionById = React.useCallback(async (id:string) => {
+        try{
+            const response = await api.getFixedOptionById(id)
+            return response
+        }
+        catch(err:any){
+            errorApi.post(err.message);
+            return null;
+        }    
+    },[api]);
+
+    const createFixedOption = React.useCallback(async(fixedOptionData : CreateFixedOptionsParams)=>{
+        try{    
+            // eslint-disable-next-line no-console
+            console.log("FIXED_OPTION_DATA >>>> ",fixedOptionData)
+            const newFixedOption = await api.createFixedOption(fixedOptionData);
+            await listAllFixedOptions();
+            alertApi.post({message: newFixedOption.message, severity: 'success', display: 'transient'});
+        }
+        catch(err:any){
+            errorApi.post(err.message);
+        }
+    },[api]);
+
+    const updateFixedOption = React.useCallback( async(id:string, updateData: IFixedOptions)=>{
+        try{
+         // eslint-disable-next-line no-console
+         console.log(`ESSE é O ID >> ${id} e esse os dados ${updateData}`)
+         const response = await api.editFixedOption({id, ...updateData});
+         await listAllFixedOptions();
+         alertApi.post({message: response.message, severity: 'success', display: 'transient'});
+        }
+        catch(err:any){
+          errorApi.post(err.message);
+        }
+     },[api]);
+ 
+     const removeFixedOption = React.useCallback(async (fixedOptionId: string) => {
+         try{
+            const response = await api.removeFixedOption(fixedOptionId);
+            await listAllFixedOptions();
+            alertApi.post({message: response.message, severity: 'success', display: 'transient'});
+         }
+         catch(err:any){
+           errorApi.post(err.message);
+         }
+     }, [api]);
+
+     const addFixedOptionSelected = React.useCallback((fixedOption:IFixedOptions)=>{
+        fixedOptionselectedDispatch(saveFixedOptionSelected(fixedOption))
+       },[stackSelectedState]);
 
     return (
         <VeeContext.Provider 
@@ -344,6 +425,8 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             clearHistory,
             getTemplateFilesAndCreateVectorStore,
             templateChat,
+            templateOutputState,
+            saveTemplateToCatalog,
             clearTemplateHistory,
             allStacksState,
             listAllStacks,
@@ -362,7 +445,15 @@ export const VeeProvider: React.FC<VeeProviderProps> = ({children}) => {
             addPluginSelected,
             pluginSelectedState,
             instructionsState,
-            instructionsDispatch
+            instructionsDispatch,
+            listAllFixedOptions,
+            getFixedOptionById,
+            createFixedOption,
+            updateFixedOption,
+            removeFixedOption,
+            addFixedOptionSelected,
+            allFixedOptionsState,
+            fixedOptionSelectedState
          }}
         >
             {children}

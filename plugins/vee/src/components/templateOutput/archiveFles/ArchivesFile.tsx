@@ -34,39 +34,64 @@ export const ArchivesFile: React.FC<ArchivesFileProps> = (props) => {
 
     data.forEach(file => {
       const relativePath = file.relativePath || '';
-      const parts = relativePath.split('/');
-      let currentPath = '';
-      let currentNode = rootNode;
 
-      parts.forEach((part) => {
-        if (part) {
-          const newPath = currentPath ? `${currentPath}/${part}` : part;
-          if (!nodeMap[newPath]) {
-            const newNode: TreeNode = {
-              name: part,
-              relativePath: newPath,
-              children: [],
-              isFile: false,
-            };
-            nodeMap[newPath] = newNode;
-            currentNode.children.push(newNode);
+      if (relativePath === file.name) {
+        rootNode.children.push({
+          name: file.name,
+          relativePath: file.name,
+          children: [],
+          isFile: true,
+          file: file,
+        });
+      } else {
+        const parts = relativePath.split('/');
+        const filename = parts.pop()!; 
+        let currentPath = '';
+        let currentNode = rootNode;
+
+        parts.forEach((part) => {
+          if (part) {
+            const newPath = currentPath ? `${currentPath}/${part}` : part;
+            if (!nodeMap[newPath]) {
+              const newNode: TreeNode = {
+                name: part,
+                relativePath: newPath,
+                children: [],
+                isFile: false,
+              };
+              nodeMap[newPath] = newNode;
+              currentNode.children.push(newNode);
+            }
+            currentNode = nodeMap[newPath];
+            currentPath = newPath;
           }
-          currentNode = nodeMap[newPath];
-          currentPath = newPath;
-        }
-      });
+        });
 
-      currentNode.children.push({
-        name: file.name,
-        relativePath: relativePath ? `${relativePath}/${file.name}` : file.name,
-        children: [],
-        isFile: true,
-        file: file,
-      });
+        currentNode.children.push({
+          name: filename,
+          relativePath: relativePath,
+          children: [],
+          isFile: true,
+          file: file,
+        });
+      }
     });
 
     return rootNode.children;
   }, [data]);
+
+  const getLanguageFromFilename = (filename: string) => {
+    if (filename.startsWith('.')) {
+      const extension = filename.substring(1).toLowerCase();
+      return extension === 'md' ? 'markdown' : extension;
+    }
+    const parts = filename.split('.');
+    if (parts.length > 1) {
+      const extension = parts.pop()!.toLowerCase();
+      return extension === 'md' ? 'markdown' : extension;
+    }
+    return 'text';
+  };
 
   const renderTree = (nodes: TreeNode[], path = '') => {
     const folders: TreeNode[] = [];
@@ -111,7 +136,8 @@ export const ArchivesFile: React.FC<ArchivesFileProps> = (props) => {
           key={fullPath}
           onClick={() => {
             if (node.file) {
-              handleCode(node.file.originalFormat as string, node.file.content);
+              const language = getLanguageFromFilename(node.file.name);
+              handleCode(language, node.file.content);
             }
           }}
         >

@@ -3,15 +3,10 @@
  *  @public
  */
 export interface IGithubManager {
-    returnRepoInfo({url, partial}:ReturnGithubRepoInfo): Promise<{
+    returnRepoInfo(url: string): Promise<{
         localPath: string;
         repoUrl: string;
-        branch: string;
-        folderPath: string | null
+        branch: string | null;
+        folderPath: string | null;
     }>
-}
-
-export type ReturnGithubRepoInfo = {
-    url: string,
-    partial?:boolean
 }

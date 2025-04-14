@@ -1,25 +1,18 @@
 import React from 'react';
-import {
-  Grid, TextField, Button, 
-  Stepper, Step, StepLabel,
-  StepContent, Typography} from '@material-ui/core';
+import { Grid, TextField, Button, Stepper, Step, StepLabel,StepContent, Typography} from '@material-ui/core';
 import { useStepperStyles } from './styles';
-import  Autocomplete  from '@mui/material/Autocomplete';
 import { useVeeContext } from '../../../../context';
 import { AddPluginProps } from './types';
-import { initialPluginState, PluginReducer, resetPluginState, setPluginAnnotations, setPluginDocs, setPluginName } from '../state';
+import { initialPluginState, PluginReducer, resetPluginState, setPluginDocs, setPluginName } from '../state';
 
 export const AddPlugin : React.FC<AddPluginProps> = (props) => {
-
-
   const [step0Error, setStep0Error] = React.useState<boolean>(true)
   const [step1Error, setStep1Error] = React.useState<boolean>(true)
-  const [step2Error, setStep2Error] = React.useState<boolean>(true)
   const [activeStep, setActiveStep] = React.useState(0);
   const [loading, setLoading ] = React.useState<boolean>(false);
   const [pluginState, pluginDispatch] = React.useReducer(PluginReducer, initialPluginState); 
   const { onCloseModal } = props;
-  const steps = ["Add plugin name","Add docs", "Add annotations"];
+  const steps = ["Add plugin name","Add docs"];
   const { addPlugin } = useVeeContext()
   const { input, root } = useStepperStyles();
 
@@ -27,11 +20,9 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
 
   const handleSubmit = async () => {
     setLoading(true)
-    const annotationsMap = pluginState.annotations.map(annotationString => { return { annotation: annotationString} })
     const newPlugin = {
         name: pluginState.name,
-        docs: pluginState.docs,
-        annotations: annotationsMap
+        docs: pluginState.docs
       };
     await addPlugin(newPlugin);
     setLoading(false);
@@ -53,15 +44,13 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
         return step0Error
       case 1:
         return step1Error
-      case 2:
-        return step2Error
       default:
         return false;
     }
 
   }
 
-  const Step0Content = () => {
+  const PluginNameStepContent = () => {
     return (
         <TextField 
          fullWidth variant="outlined" 
@@ -76,7 +65,7 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
     )
   }
 
-  const Step1Content = () => {
+  const PluginDocsStepContent = () => {
     return (
         <TextField 
          fullWidth variant="outlined" 
@@ -91,29 +80,6 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
     )
   }
 
-  const Step2Content = () => {
-    return (
-      <Autocomplete
-        multiple
-        freeSolo
-        options={[]} 
-        value={pluginState.annotations}
-        onChange={(_, newValue) => {
-          // const annotations = [...pluginState.annotations, ...newValue];
-          pluginDispatch(setPluginAnnotations(newValue));
-        }}
-        renderInput={(params) => (
-          <TextField 
-            {...params} 
-            fullWidth 
-            variant="outlined" 
-            label="Annotations" 
-            required 
-          />
-        )}
-      />
-    );
-  };
 
   const getButtonText = () => {
     if (activeStep === steps.length - 1) {
@@ -122,12 +88,11 @@ export const AddPlugin : React.FC<AddPluginProps> = (props) => {
     return "Next";
   };
 
-  const StepsContent = [ Step0Content, Step1Content,Step2Content ];
+  const StepsContent = [ PluginNameStepContent, PluginDocsStepContent ];
 
   React.useEffect(() => {
     setStep0Error(pluginState.name === "")
     setStep1Error(pluginState.docs === "")
-    setStep2Error(pluginState.annotations.length === 0)
   }, [pluginState]);
 
   React.useEffect(()=>{

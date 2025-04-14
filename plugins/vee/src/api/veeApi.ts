@@ -1,5 +1,5 @@
 import { createApiRef } from "@backstage/core-plugin-api";
-import { ClearHistoryResponse, CreatePluginParams, CreateStackParams, DeleteServiceResponse, FileContent, InitializeAssistantAIResponse, IPlugin, IRepository, IStack, ParamsWithRequiredId, PullRequestResponse, SubmitRepoResponse, VeeResponse } from "@veecode-platform/backstage-plugin-vee-common";
+import { ClearHistoryResponse, CreateFixedOptionsParams, CreatePluginParams, CreateStackParams, DeleteServiceResponse, FileContent, IFixedOptions, InitializeAssistantAIResponse, IPlugin, IRepository, IStack, ParamsWithRequiredId, PullRequestResponse, SubmitRepoResponse, VeeResponse } from "@veecode-platform/backstage-plugin-vee-common";
 
 export const veeApiRef = createApiRef<VeeApi>({
     id: 'plugin.vee'
@@ -23,7 +23,12 @@ export interface VeeApi {
     removeStack(stackId: string): Promise<DeleteServiceResponse>;
     listPlugins(): Promise<IPlugin[]>;
     getPluginById(pluginId: string): Promise<IPlugin>;
-    addPlugin({ name, docs, annotations }: CreatePluginParams): Promise<VeeResponse<IPlugin>>;
+    addPlugin({ name, docs }: CreatePluginParams): Promise<VeeResponse<IPlugin>>;
     editPlugin({ id, ...data }: ParamsWithRequiredId<IPlugin>): Promise<VeeResponse<IPlugin>>;
-    removePlugin(pluginId: string): Promise<DeleteServiceResponse>
+    removePlugin(pluginId: string): Promise<DeleteServiceResponse>;
+    listAllFixedOptions(): Promise<IFixedOptions[]>;
+    getFixedOptionById(fixedOptionId: string): Promise<IFixedOptions>;
+    createFixedOption({ type, options }: CreateFixedOptionsParams): Promise<VeeResponse<IFixedOptions>>;
+    editFixedOption({ id, ...data }: ParamsWithRequiredId<IFixedOptions>): Promise<VeeResponse<IFixedOptions>>;
+    removeFixedOption(fixedOptionId: string): Promise<DeleteServiceResponse>
 }

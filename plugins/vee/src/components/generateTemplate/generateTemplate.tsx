@@ -8,6 +8,7 @@ import { PluginList } from '../plugins';
 import { FeedbackComponent, ModalComponent, PageLayout } from '../shared';
 import { GenerateTemplateWrapperProps } from './types';
 import { setStackInfo } from '../../context/state';
+import { CodeSnippet, Progress, WarningPanel } from '@backstage/core-components';
 
 const GenerateTemplateWrapper : React.FC<GenerateTemplateWrapperProps> = (props) => {
   const { children, createAction = () => {}} = props;
@@ -40,14 +41,15 @@ export const GenerateTemplate = () => {
               return []
           }
           return []
-      },[]); // check error and loading
+      },[]); 
 
   const plugins : PluginListProps[] = React.useMemo(()=>{
          if(allPlugins){
           return allPlugins.map(plugin => ({
               id: plugin.id as string,
               icon: null,
-              name: plugin.name
+              name: plugin.name,
+              docs: plugin.docs
           }))
          }
          return []
@@ -56,17 +58,18 @@ export const GenerateTemplate = () => {
   const handleClose = () => setShowModal(!showModal);
   const handleSubmitInstructions = () => setShowModal(true);
 
-
-  if(loading) return (    // TODO 
+  if(loading) return (    
    <GenerateTemplateWrapper 
      createAction={handleSubmitInstructions}>
-      <h1>Loading...</h1>
+     <WarningPanel title={error?.name} message={error?.message}>
+       <CodeSnippet language='txt' text={error?.cause as string}/>
+     </WarningPanel>
    </GenerateTemplateWrapper>);
 
-if(error) return (   // TODO 
+if(error) return (   
   <GenerateTemplateWrapper 
     createAction={handleSubmitInstructions}>
-     <h1>Error...</h1>
+     <Progress/>
   </GenerateTemplateWrapper>);
 
 

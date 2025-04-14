@@ -1,5 +1,23 @@
 import React from "react";
 import { SidebarItem } from "@backstage/core-components";
-import { StarsIcon } from "../../assets/stars";
+import { AssistantAIMenuIcon } from "../../assets/assistant-ai-menu-icon";
+import { usePermission } from "@backstage/plugin-permission-react";
+import { veeReadPermission } from "@veecode-platform/backstage-plugin-vee-common";
 
-export const AssistantAIMenu = () => (<SidebarItem icon={StarsIcon} to="vee" text="Assistant AI" />)
+export const AssistantAIMenu = () => {
+
+    const {loading: loadingPermission } = usePermission({
+        permission: veeReadPermission
+    });
+
+    return (
+       <>
+        {!loadingPermission && (
+            <SidebarItem 
+              icon={AssistantAIMenuIcon} 
+              to="vee" 
+              text="Vee AI" />
+        )}
+       </>
+    )
+}

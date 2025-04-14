@@ -5,6 +5,5 @@ export interface UpdatePluginProps {
 export type PluginStateType = {
     pluginId:string, 
     name:string, 
-    docs: string,
-    annotations: string[]
+    docs: string
 }
