@@ -30,13 +30,13 @@
     "postpack": "backstage-cli package postpack"
   },
   "devDependencies": {
-    "@backstage/cli": "^0.28.0"
+    "@backstage/cli": "^0.31.1"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@backstage/plugin-permission-common": "^0.8.1",
+    "@backstage/plugin-permission-common": "^0.8.4",
     "openai": "^4.72.0"
   }
 }

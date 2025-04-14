@@ -36,7 +36,7 @@
     ]
   },
   "devDependencies": {
-    "@backstage/cli": "^0.29.5",
+    "@backstage/cli": "^0.31.1",
     "@spotify/prettier-config": "^12.0.0",
     "@types/pluralize": "^0.0.33",
     "concurrently": "^6.0.0",
@@ -64,7 +64,7 @@
   },
   "packageManager": "yarn@4.5.0",
   "dependencies": {
-    "@backstage/plugin-catalog-backend-module-scaffolder-entity-model": "^0.2.4",
+    "@backstage/plugin-catalog-backend-module-scaffolder-entity-model": "^0.2.6",
     "jose": "^5.2.3",
     "knex": "^3.1.0",
     "react-icons": "^5.2.1"
