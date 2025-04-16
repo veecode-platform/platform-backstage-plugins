@@ -1,7 +1,7 @@
 import React from "react";
 import { themeVariables } from "../../utils/constants/themeVariables";
 import { makeStyles } from "@mui/styles";
-import { Chip, Paper, TableContainer, Typography } from "@mui/material";
+import { Chip, Paper, TableContainer } from "@mui/material";
 import { Table, TableColumn, WarningPanel } from "@backstage/core-components";
 import { CodeSnippet } from "../codeSnippet/CodeSnippet";
 import { EmptyStateComponent } from "../emptyStateComponent/EmptyStateComponent";
@@ -24,7 +24,8 @@ export interface TableComponentProps<T> {
           maxHeight: '90%',
           overflowY: "auto",
           '& .MuiToolbar-root':{
-              backgroundColor: themeVariables.colors.darkGrey
+              backgroundColor: themeVariables.background.main,
+              color: themeVariables.colors.white
           },
           '& .MuiTable-root': {
               backgroundColor: themeVariables.background.main,
@@ -33,6 +34,7 @@ export interface TableComponentProps<T> {
             '& .MuiTableCell-head': {
               backgroundColor: themeVariables.background.dark, 
               border: `2px solid ${themeVariables.background.dark}`,
+              color: themeVariables.colors.grey,
               fontWeight: 'bold',
             },
             '& .MuiTableRow-root:nth-of-type(odd)': {
@@ -122,23 +124,13 @@ export interface TableComponentProps<T> {
     const actionsColumns = actions
       ? [
           (rowData: T) => ({
-            icon: () => (
-              <>
-                <EditIcon />
-                <Typography>Edit</Typography>
-              </>
-            ),
+            icon: () =>  <EditIcon />,
             disable: !onEdit,
             tooltip: 'Edit',
             onClick: () => onEdit?.(rowData.id as string),
           }),
           (rowData: T) => ({
-            icon: () => (
-              <>
-                <DeleteOutlineIcon />
-                <Typography>Delete</Typography>
-              </>
-            ),
+            icon: () => <DeleteOutlineIcon />,
             disable: !onDelete,
             tooltip: 'Delete',
             onClick: () => onDelete?.(rowData.id as string),
@@ -164,4 +156,3 @@ export interface TableComponentProps<T> {
       </TableContainer>
     );
   };
-  

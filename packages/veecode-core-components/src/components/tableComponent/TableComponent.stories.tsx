@@ -1,60 +1,58 @@
 import React from "react";
 import type { Meta } from "@storybook/react";
 import { TableComponent, TableComponentProps } from "./TableComponent";
+import { mockData, MockDataProps } from "./mockData";
+import { Box } from "@mui/material";
 import { ApiProvider, ApiFactoryRegistry } from '@backstage/core-app-api';
-import { apis } from './apis';
+import { storybookApis } from '../../utils/mock/storybook.mockApis';
 import { ApiResolver } from '@backstage/core-app-api';
 
-interface DataFakeItem {
-    id: string,
-    name: string,
-    description: string
-}
-
 const registry = new ApiFactoryRegistry();
-for (const apiFactory of apis) {
-  registry.register('default', apiFactory);
+for (const factory of storybookApis) {
+  registry.register('default', factory);
 }
 const apiHolder = new ApiResolver(registry);
-
-const dataFake : DataFakeItem[] = [
-    {id: '00000000001', name: 'Item1', description: 'Description Item 1'},
-    {id: '00000000002', name: 'Item2', description: 'Description Item 2'},
-    {id: '00000000003', name: 'Item3', description: 'Description Item 3'},
-    {id: '00000000004', name: 'Item4', description: 'Description Item 4'},
-    {id: '00000000005', name: 'Item5', description: 'Description Item 5'}
-]
 
 
 export default {
     title: 'Components/TableComponent',
     component: TableComponent,
     args: {
-        title: 'Table Name',
-        data: dataFake,
-        actions: true,
+        title: 'Table Title Example',
+        loading: false,
+        error: null,
+        data: mockData,
         onEdit: () => {},
-        onDelete: ()=>{}
+        onDelete: () => {}
     },
-    argsType: {
-        title: { control: 'text' },
-        data: {control: 'object'}
+    argsTypes:{
+        title: { control: 'text'},
+        loading: { control: 'boolean'},
+        error: { control: 'text'},
+        data: { control: {}},
+        actions: { control: 'boolean'},
+        onEdit: { control: {}},
+        onDelete: { control: {}}
     },
     decorators: [
-        (Story) => (
-          <ApiProvider apis={apiHolder}>
-           {Story()}
-          </ApiProvider>
-        ),
-      ]
-} as Meta<TableComponentProps<DataFakeItem>>;
+        (Storys) => {
+            return (
+              <ApiProvider apis={apiHolder}>
+                <Box sx={{ maxWidth: '80vw' }}>{Storys()}</Box>
+              </ApiProvider>
+            );
+        }
+    ]
+} as Meta<TableComponentProps<MockDataProps>>;
 
-export const Default = ({title,data,onEdit,onDelete}:TableComponentProps<DataFakeItem>) => (
+export const Default = (args:TableComponentProps<MockDataProps>) => (
     <TableComponent
-     title={title}
-     data={data}
-     actions
-     onEdit={onEdit}
-     onDelete={onDelete}
+      title={args.title}
+      loading={args.loading}
+      error={args.error}
+      data={args.data}
+      actions
+      onDelete={args.onDelete}
+      onEdit={args.onEdit}
     />
 )

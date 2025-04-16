@@ -21,7 +21,7 @@ export const ContentLayoutLabel : React.FC<ContentLayoutLabelProps> = ({label}) 
   const { labelContent } = useContentLayoutLabelStyles();
   return (
     <Box component="span" className={labelContent}>
-        <Typography variant="h6">
+        <Typography variant="caption">
           {label}
         </Typography>
     </Box>
