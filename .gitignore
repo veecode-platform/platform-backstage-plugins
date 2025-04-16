@@ -53,3 +53,6 @@ site
 *TODO*
 
 *storybook.log
+
+# Storybook build output
+storybook-static
