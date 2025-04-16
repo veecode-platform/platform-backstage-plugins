@@ -27,8 +27,12 @@
     "build-storybook": "storybook build --output-dir storybook-static/veecode-core-components",
     "chromatic": "chromatic --build-script-name=build-storybook --exit-zero-on-changes"
   },
+  "resolutions": {
+    "rxjs": "^7.8.1"
+  },
   "dependencies": {
     "@backstage/core-components": "^0.17.0",
+    "@backstage/theme": "^0.6.4",
     "@mui/core": "^5.0.0-alpha.54",
     "@mui/material": "^7.0.0",
     "@mui/styles": "^6.4.8",
