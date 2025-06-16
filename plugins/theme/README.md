@@ -1,4 +1,4 @@
-# [RHDH](https://developers.redhat.com/rhdh) / Red Hat Developer Hub Theme 🎨
+# VeeCode Developer Hub Theme 🎨
 
 A set of theming options for [MUI Material UI](https://mui.com/material-ui/) and
 [Backstage](https://backstage.io/) that look more similar to [PatternFly](https://www.patternfly.org/).
@@ -31,11 +31,8 @@ or
 yarn add @red-hat-developer-hub/backstage-plugin-theme
 ```
 
-## Use it with RHDH app
+## Use it with VeeCode app
 
-Starting with 1.2 this library is shipped with your RHDH installation.
-
-On older RHDH instances you can install it:
 
 1. Install the dependency with
 
@@ -143,3 +140,5 @@ On older RHDH instances you can install it:
   - [Palette](https://mui.com/material-ui/customization/palette/)
   - [Theme components](https://mui.com/material-ui/customization/theme-components/)
   - [packages/mui-material/src/styles/adaptV4Theme.js](https://github.com/mui/material-ui/blob/master/packages/mui-material/src/styles/adaptV4Theme.js)
+
+By: RHDH
