@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Poppins Font Family Demo</title>
+    <link rel="stylesheet" href="./font.css" />
+    <style>
+      /* Variables and styles related to 'font-variation-settings' have been removed,
+         as your Poppins fonts are not variable fonts. */
+
+      *,
+      *:before,
+      *:after {
+        box-sizing: border-box;
+      }
+
+      html {
+        font-size: 100%;
+      }
+
+      body {
+        /* Set Poppins as the default font for the entire body */
+        font-family: 'Poppins', sans-serif;
+        line-height: 1.5; /* Adjusted for better readability */
+        text-rendering: optimizeLegibility;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        font-weight: 700; /* Apply font weight directly */
+        font-size: clamp(1.2rem, 2.5vw, 4rem);
+        background-color: #151515;
+        height: 40vh; /* Height adjusted as the slider was removed */
+        color: #fff;
+        padding: 30px;
+        display: grid;
+        align-items: center;
+        /* grid-template-rows: auto 100px; - Removed as the slider is no longer there */
+      }
+
+      header .vf-header {
+        place-self: center;
+        padding-top: 0; /* Adjusted */
+      }
+
+      header .controls {
+        /* Removed or adjusted, as the slider is no longer functional with TTF fonts */
+        display: none; /* Hide the slider control */
+      }
+
+      /* Removed, as it's no longer relevant for non-variable fonts */
+      /* header input[type='range']::-moz-range-track {
+        background-color: white;
+      } */
+
+      main {
+        font-size: clamp(1.2rem, 2.5vw, 2.2rem);
+        margin-bottom: 50px;
+      }
+
+      /* The .RedHatDisplay, .RedHatText, .RedHatMono classes are no longer necessary
+         if you apply 'Poppins' globally or to specific elements.
+         If you want classes for different font families, create new ones.
+         For simplicity, I'm removing them and using 'Poppins' on the body. */
+
+      /* Keeping weight classes, as they can still be useful with Poppins */
+      .w100 { font-weight: 100; } /* Poppins Thin */
+      .w200 { font-weight: 200; } /* Poppins ExtraLight */
+      .w300 { font-weight: 300; } /* Poppins Light */
+      .w400 { font-weight: 400; } /* Poppins Regular */
+      .w500 { font-weight: 500; } /* Poppins Medium */
+      .w600 { font-weight: 600; } /* Poppins SemiBold */
+      .w700 { font-weight: 700; } /* Poppins Bold */
+      .w800 { font-weight: 800; } /* Poppins ExtraBold */
+      .w900 { font-weight: 900; } /* Poppins Black */
+
+      .section-title {
+        margin-top: 50px;
+        font-size: clamp(1.8rem, 4vw, 4rem);
+        /* font-family: 'Poppins'; - Already defined on body, but can be explicit here */
+        font-weight: 700; /* Default weight for titles */
+      }
+
+      .section-bg {
+        padding: 0 30px 80px;
+      }
+
+      .section-bg:nth-child(even) {
+        background-color: #f0f0f0;
+      }
+
+      section {
+        position: relative;
+        overflow: hidden;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      section h3 {
+        border-top: 1px solid #d2d2d2;
+        padding: 50px 0 0;
+        margin: 50px 0 30px;
+        font-weight: 500; /* Default weight for sub-titles */
+      }
+
+      section p {
+        margin: 0;
+      }
+
+      section p + p {
+        margin-top: 20px;
+      }
+
+      /* Removed, as it's no longer relevant for non-variable fonts */
+      /* .demo * {
+        font-variation-settings: 'wght' var(--font-weight);
+      } */
+
+      .controls {
+        font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+        margin-top: 30px;
+        padding: 15px;
+        /* Removed, as slider controls are no longer used for TTF fonts */
+        display: none;
+      }
+
+      /* Removed, as it's no longer relevant for non-variable fonts */
+      /* input[type='range'] {
+        background-color: transparent;
+      } */
+
+      .controls--bg {
+        background-color: #f0f0f0;
+      }
+
+      .section-bg:nth-child(even) .controls--bg {
+        background-color: #fff;
+      }
+
+      /* Added style for italic */
+      em {
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <header id="header">
+      <div class="vf-header">
+        <h1 class="w700">Poppins Font Demo</h1>
+      </div>
+      </header>
+
+    <main id="main">
+      <div class="section-bg">
+        <section>
+          <h2 class="section-title w700">Poppins Weights & Styles</h2>
+
+          <h3>Poppins Thin (100)</h3>
+          <p class="w100">The quick brown fox jumps over the lazy dog.</p>
+          <p class="w100"><em>The quick brown fox jumps over the lazy dog.</em></p>
+
+          <h3>Poppins ExtraLight (200)</h3>
+          <p class="w200">The quick brown fox jumps over the lazy dog.</p>
+          <p class="w200"><em>The quick brown fox jumps over the lazy dog.</em></p>
+
+          <h3>Poppins Light (300)</h3>
+          <p class="w300">The quick brown fox jumps over the lazy dog.</p>
+          <p class="w300"><em>The quick brown fox jumps over the lazy dog.</em></p>
+
+          <h3>Poppins Regular (400)</h3>
+          <p class="w400">The quick brown fox jumps over the lazy dog.</p>
+          <p class="w400"><em>The quick brown fox jumps over the lazy dog.</em></p>
+
+          <h3>Poppins Medium (500)</h3>
+          <p class="w500">The quick brown fox jumps over the lazy dog.</p>
+          <p class="w500"><em>The quick brown fox jumps over the lazy dog.</em></p>
+
+          <h3>Poppins SemiBold (600)</h3>
+          <p class="w600">The quick brown fox jumps over the lazy dog.</p>
+          <p class="w600"><em>The quick brown fox jumps over the lazy dog.</em></p>
+
+          <h3>Poppins Bold (700)</h3>
+          <p class="w700">The quick brown fox jumps over the lazy dog.</p>
+          <p class="w700"><em>The quick brown fox jumps over the lazy dog.</em></p>
+
+          <h3>Poppins ExtraBold (800)</h3>
+          <p class="w800">The quick brown fox jumps over the lazy dog.</p>
+          <p class="w800"><em>The quick brown fox jumps over the lazy dog.</em></p>
+
+          <h3>Poppins Black (900)</h3>
+          <p class="w900">The quick brown fox jumps over the lazy dog.</p>
+          <p class="w900"><em>The quick brown fox jumps over the lazy dog.</em></p>
+
+          </section>
+      </div>
+
+      </main>
+
+    </body>
+</html>
