@@ -1,1 +1,1 @@
-export * from "./GithubWorkflowsContent"
+export * from './GithubWorkflowsContent';
