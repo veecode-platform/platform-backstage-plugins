@@ -25,7 +25,7 @@ import { isGithubAvailable } from '../hooks';
 export const GithubWorkflowsTabContent = EntityContentBlueprint.make({
   name: 'entity',
   params: {
-    defaultPath: 'github-actions',
+    defaultPath: 'github-workflows',
     defaultTitle: 'GitHub Actions',
     filter: isGithubAvailable,
     routeRef: convertLegacyRouteRef(rootRouteRef),
