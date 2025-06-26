@@ -18682,6 +18682,7 @@ __metadata:
     "@material-ui/core": "npm:^4.12.4"
     "@material-ui/icons": "npm:^4.11.3"
     "@material-ui/lab": "npm:^4.0.0-alpha.61"
+    "@mui/icons-material": "npm:^6.4.7"
     "@mui/material": "npm:^6.1.2"
     "@octokit/rest": "npm:^21.0.2"
     "@testing-library/jest-dom": "npm:^5.10.1"

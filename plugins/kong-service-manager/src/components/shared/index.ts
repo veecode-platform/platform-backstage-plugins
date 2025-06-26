@@ -8,3 +8,4 @@ export * from './MissingAnnotation';
 export * from './SkeletonComponent';
 export * from './Fields';
 export * from './MethodLabel';
+export * from './icons';
