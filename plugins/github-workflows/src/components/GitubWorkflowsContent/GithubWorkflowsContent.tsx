@@ -129,5 +129,7 @@ export const GithubWorkflowsContent: React.FC<
 };
 
 // For Dynamic exports
-export const GithubWorkflowsOverviewContent = <GithubWorkflowsContent cards />;
-export const GithubWorkflowsTabContent = <GithubWorkflowsContent />;
+export const GithubWorkflowsOverviewContent = () => (
+  <GithubWorkflowsContent cards />
+);
+export const GithubWorkflowsTabContent = () => <GithubWorkflowsContent />;
