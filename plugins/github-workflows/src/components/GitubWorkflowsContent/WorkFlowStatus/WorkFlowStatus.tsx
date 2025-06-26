@@ -1,13 +1,15 @@
 import React from 'react';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import CancelIcon from '@material-ui/icons/Cancel';
-import ErrorIcon from '@material-ui/icons/Error';
-import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled';
-import ReportOffOutlined from '@material-ui/icons/ReportOffOutlined';
 import { Loading } from './loading';
 import { Queued } from './queued';
 import { StatusWorkflowEnum } from '../../../utils/enums/WorkflowListEnum';
 import { WorkFlowStatusProps } from './types';
+import {
+  CancelIconOutline,
+  CheckOkIcon,
+  PlayCircleIcon,
+  ReportOffIcon,
+  WarningIcon,
+} from '../../shared';
 
 const styles = {
   display: 'flex',
@@ -35,30 +37,26 @@ export const WorkFlowStatus: React.FC<WorkFlowStatusProps> = props => {
     case StatusWorkflowEnum.requested:
       return (
         <div style={styles}>
-          <ErrorIcon style={{ fontSize: '20px', color: 'orange' }} />{' '}
-          {!icon && 'Please wait'}
+          <WarningIcon /> {!icon && 'Please wait'}
         </div>
       );
     case StatusWorkflowEnum.actionRequired:
       return (
         <div style={styles}>
-          <ErrorIcon style={{ fontSize: '20px', color: 'orange' }} />{' '}
-          {!icon && 'Workflow dynamic'}
+          <WarningIcon /> {!icon && 'Workflow dynamic'}
         </div>
       );
     case StatusWorkflowEnum.failure:
     case StatusWorkflowEnum.timeOut:
       return (
         <div style={styles}>
-          <CancelIcon style={{ fontSize: '20px', color: '#E2524B' }} />{' '}
-          {!icon && 'Error'}
+          <CancelIconOutline /> {!icon && 'Error'}
         </div>
       );
     case StatusWorkflowEnum.aborted:
       return (
         <div style={styles}>
-          <ReportOffOutlined style={{ fontSize: '20px', color: '#cdcdcd' }} />{' '}
-          {!icon && 'Aborted'}
+          <ReportOffIcon /> {!icon && 'Aborted'}
         </div>
       );
     case StatusWorkflowEnum.inProgress:
@@ -75,10 +73,7 @@ export const WorkFlowStatus: React.FC<WorkFlowStatusProps> = props => {
         case StatusWorkflowEnum.default:
           return (
             <div style={styles}>
-              <ReportOffOutlined
-                style={{ fontSize: '22px', color: '#cdcdcd' }}
-              />{' '}
-              {!icon && 'Aborted'}
+              <ReportOffIcon /> {!icon && 'Aborted'}
             </div>
           );
         case StatusWorkflowEnum.timeOut:
@@ -87,30 +82,27 @@ export const WorkFlowStatus: React.FC<WorkFlowStatusProps> = props => {
         case StatusWorkflowEnum.neutral:
           return (
             <div style={styles}>
-              <ErrorIcon style={{ fontSize: '20px', color: 'orange' }} />{' '}
-              {!icon && 'Timed out'}
+              <WarningIcon /> {!icon && 'Timed out'}
             </div>
           );
         case StatusWorkflowEnum.failure:
         case null:
           return (
             <div style={styles}>
-              <CancelIcon style={{ fontSize: '20px', color: '#E2524B' }} />{' '}
-              {!icon && 'Error'}
+              <CancelIconOutline /> {!icon && 'Error'}
             </div>
           );
         default:
           return (
             <div style={styles}>
-              <CheckCircleIcon style={{ fontSize: '20px', color: '#61AB5A' }} />{' '}
-              {!icon && 'Completed'}
+              <CheckOkIcon /> {!icon && 'Completed'}
             </div>
           );
       }
     default:
       return (
         <div style={styles}>
-          <PlayCircleFilled style={{ fontSize: '22px', color: '#cdcdcd' }} />
+          <PlayCircleIcon />
           {!icon && 'Run Workflow'}
         </div>
       );
