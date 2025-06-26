@@ -4,12 +4,19 @@ import Paper from '@mui/material/Paper';
 import type { TableComponentProps } from './types';
 import { useTableComponentStyles } from './styles';
 import { EmptyStateComponent } from '../emptyStateComponent/EmptyStateComponent';
-import { CodeSnippet, Table, TableColumn, WarningPanel } from '@backstage/core-components';
+import {
+  CodeSnippet,
+  Table,
+  TableColumn,
+  WarningPanel,
+} from '@backstage/core-components';
 import { Typography } from '@material-ui/core';
-import { MdDelete, MdEdit } from 'react-icons/md';
-import  Chip from '@mui/material/Chip';
+import Chip from '@mui/material/Chip';
+import { EditIcon, TrashIcon } from '../icons';
 
-export const TableComponent = <T extends Record<string, any> & { id: string | number }>(
+export const TableComponent = <
+  T extends Record<string, any> & { id: string | number },
+>(
   props: TableComponentProps<T>,
 ) => {
   const { title, loading, error, data, actions, onEdit, onDelete } = props;
@@ -17,36 +24,37 @@ export const TableComponent = <T extends Record<string, any> & { id: string | nu
 
   const columns: TableColumn<T>[] = React.useMemo(() => {
     if (!data || data.length === 0) return [];
-  
+
     const keys = Object.keys(data[0]);
-  
-    return keys.map((column: string): TableColumn<T> => ({
-      title: column.charAt(0).toUpperCase() + column.slice(1),
-      field: column,
-      highlight: column === 'name' || column === 'type',
-      render: (rowData: T) => {
-        const value = rowData[column];
-  
-        if (Array.isArray(value)) {
-          return (
-            <>
-              {value.map((item: any, index: number) => (
-                <Chip
-                  key={index}
-                  label={item}
-                  size="small"
-                  variant="outlined"
-                  style={{ margin: '2px' }}
-                />
-              ))}
-            </>
-          );
-        }
-        return String(value);
-      },
-    }));
+
+    return keys.map(
+      (column: string): TableColumn<T> => ({
+        title: column.charAt(0).toUpperCase() + column.slice(1),
+        field: column,
+        highlight: column === 'name' || column === 'type',
+        render: (rowData: T) => {
+          const value = rowData[column];
+
+          if (Array.isArray(value)) {
+            return (
+              <>
+                {value.map((item: any, index: number) => (
+                  <Chip
+                    key={index}
+                    label={item}
+                    size="small"
+                    variant="outlined"
+                    style={{ margin: '2px' }}
+                  />
+                ))}
+              </>
+            );
+          }
+          return String(value);
+        },
+      }),
+    );
   }, [data]);
-  
 
   if (error) {
     return (
@@ -60,7 +68,10 @@ export const TableComponent = <T extends Record<string, any> & { id: string | nu
 
   if (!data || data.length === 0)
     return (
-      <EmptyStateComponent title="No data" message="No data to be rendered..." />
+      <EmptyStateComponent
+        title="No data"
+        message="No data to be rendered..."
+      />
     );
 
   const actionsColumns = actions
@@ -68,7 +79,7 @@ export const TableComponent = <T extends Record<string, any> & { id: string | nu
         (rowData: T) => ({
           icon: () => (
             <>
-              <MdEdit size={20} />
+              <EditIcon />
               <Typography variant="srOnly">Edit</Typography>
             </>
           ),
@@ -79,7 +90,7 @@ export const TableComponent = <T extends Record<string, any> & { id: string | nu
         (rowData: T) => ({
           icon: () => (
             <>
-              <MdDelete size={20} />
+              <TrashIcon />
               <Typography variant="srOnly">Delete</Typography>
             </>
           ),

@@ -18448,7 +18448,7 @@ __metadata:
     knex: "npm:^3.1.0"
     mime-types: "npm:^2.1.35"
     octokit: "npm:^4.0.2"
-    openai: "npm:^4.84.0"
+    openai: "npm:^5.7.0"
     p-limit: "npm:^6.2.0"
     pdf-parse: "npm:^1.1.1"
     simple-git: "npm:^3.27.0"
@@ -34933,7 +34933,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openai@npm:^4.72.0, openai@npm:^4.78.0, openai@npm:^4.84.0":
+"openai@npm:^4.72.0, openai@npm:^4.78.0":
   version: 4.104.0
   resolution: "openai@npm:4.104.0"
   dependencies:
@@ -34955,6 +34955,23 @@ __metadata:
   bin:
     openai: bin/cli
   checksum: 10/e1bdfea7b58f6d6cc0c2787254e9ae0395c7cb78b6ad4383c2777fd929ff43d2cb614c12ff7aaef04e260a6b48f3bc15f3c864abb9df35cfc7594e6aa46d4858
+  languageName: node
+  linkType: hard
+
+"openai@npm:^5.7.0":
+  version: 5.7.0
+  resolution: "openai@npm:5.7.0"
+  peerDependencies:
+    ws: ^8.18.0
+    zod: ^3.23.8
+  peerDependenciesMeta:
+    ws:
+      optional: true
+    zod:
+      optional: true
+  bin:
+    openai: bin/cli
+  checksum: 10/c60a1e571fe9e84269fc702b3915c76c405f7575b7a17a266a0883219689260980486c959077a9400727b24b80f495919636fe37687d9be6c0ac130a11327617
   languageName: node
   linkType: hard
 

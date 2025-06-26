@@ -5,20 +5,26 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Collapse from '@mui/material/Collapse';
-import { FcFolder, FcFile } from "react-icons/fc";
 import { useArchivesFileStyles } from './styles';
-import { MdOutlineExpandMore, MdChevronRight } from "react-icons/md";
 import { ArchivesFileProps, TreeNode } from './types';
+import {
+  ChevronRightIcon,
+  ExpandMoreIcon,
+  FileIcon,
+  FolderIcon,
+} from '../../shared';
 
-export const ArchivesFile: React.FC<ArchivesFileProps> = (props) => {
+export const ArchivesFile: React.FC<ArchivesFileProps> = props => {
   const { data, handleCode } = props;
   const { root, menu, item, itemLabel, subMenu } = useArchivesFileStyles();
-  const [menuOptions, setMenuOptions] = React.useState<Record<string, boolean>>({});
+  const [menuOptions, setMenuOptions] = React.useState<Record<string, boolean>>(
+    {},
+  );
 
   const handleClick = (relativePath: string) => {
     setMenuOptions(prevState => ({
       ...prevState,
-      [relativePath]: !prevState[relativePath]
+      [relativePath]: !prevState[relativePath],
     }));
   };
 
@@ -45,11 +51,11 @@ export const ArchivesFile: React.FC<ArchivesFileProps> = (props) => {
         });
       } else {
         const parts = relativePath.split('/');
-        const filename = parts.pop()!; 
+        const filename = parts.pop()!;
         let currentPath = '';
         let currentNode = rootNode;
 
-        parts.forEach((part) => {
+        parts.forEach(part => {
           if (part) {
             const newPath = currentPath ? `${currentPath}/${part}` : part;
             if (!nodeMap[newPath]) {
@@ -114,10 +120,13 @@ export const ArchivesFile: React.FC<ArchivesFileProps> = (props) => {
       if (!node.isFile) {
         return (
           <React.Fragment key={fullPath}>
-            <MenuItem onClick={() => handleClick(node.relativePath)} className={item}>
-              {isFolderOpen ? <MdOutlineExpandMore /> : <MdChevronRight />}
+            <MenuItem
+              onClick={() => handleClick(node.relativePath)}
+              className={item}
+            >
+              {isFolderOpen ? <ExpandMoreIcon /> : <ChevronRightIcon />}
               <ListItemIcon>
-                <FcFolder size={20} />
+                <FolderIcon />
               </ListItemIcon>
               <ListItemText className={itemLabel}>{node.name}</ListItemText>
             </MenuItem>
@@ -142,7 +151,7 @@ export const ArchivesFile: React.FC<ArchivesFileProps> = (props) => {
           }}
         >
           <ListItemIcon>
-            <FcFile size={20} />
+            <FileIcon />
           </ListItemIcon>
           <ListItemText className={itemLabel}>{node.name}</ListItemText>
         </MenuItem>
@@ -152,9 +161,7 @@ export const ArchivesFile: React.FC<ArchivesFileProps> = (props) => {
 
   return (
     <Paper className={root}>
-      <MenuList className={menu}>
-        {renderTree(treeData)}
-      </MenuList>
+      <MenuList className={menu}>{renderTree(treeData)}</MenuList>
     </Paper>
   );
 };
