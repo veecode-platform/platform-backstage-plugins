@@ -1,7 +1,6 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import Grid2 from '@mui/material/Grid2';
-import { IoAddOutline } from 'react-icons/io5';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import { useIncrementedInputStyles } from './styles';
@@ -20,7 +19,7 @@ import {
   setOptionsList,
 } from '../state';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, InfoBox, ResetIcon } from '../../../shared';
+import { AddIcon, Button, InfoBox, ResetIcon } from '../../../shared';
 import { IOption } from '@veecode-platform/backstage-plugin-vee-common';
 import { IncrementedInputProps } from './types';
 
@@ -148,7 +147,7 @@ export const IncrementedInput: React.FC<IncrementedInputProps> = props => {
                 className={addButton}
                 onClick={addOptionToList}
               >
-                <IoAddOutline />
+                <AddIcon />
               </IconButton>
               <IconButton
                 size="large"
@@ -171,7 +170,7 @@ export const IncrementedInput: React.FC<IncrementedInputProps> = props => {
           className={addButton}
           onClick={handleOpenInputs}
         >
-          <IoAddOutline />
+          <AddIcon />
         </IconButton>
       )}
     </div>

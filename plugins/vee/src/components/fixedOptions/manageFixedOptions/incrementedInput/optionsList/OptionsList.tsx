@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { OptionListProps } from './types';
-import { MdKeyboardArrowRight } from 'react-icons/md';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
@@ -19,6 +18,7 @@ import { OptionStateProps } from '../../state/optionState/types';
 import {
   CancelIconOutline,
   CheckIcon,
+  ChevronRightIcon,
   EditIcon,
   TrashIcon,
 } from '../../../../shared';
@@ -91,7 +91,7 @@ export const OptionsList: React.FC<OptionListProps> = props => {
           <MuiAccordionSummary
             aria-controls={`panel${item.id}-content`}
             id={`panel${item.id}-header`}
-            expandIcon={<MdKeyboardArrowRight size={25} />}
+            expandIcon={<ChevronRightIcon />}
             className={accordionSummary}
           >
             {editingStates[item.id as string] ? (
