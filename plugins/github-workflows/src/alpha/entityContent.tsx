@@ -22,7 +22,7 @@ import { isGithubAvailable } from '../hooks';
 /**
  * @alpha
  */
-export const entityGithubWorkflowsContent = EntityContentBlueprint.make({
+export const GithubWorkflowsTabContent = EntityContentBlueprint.make({
   name: 'entity',
   params: {
     defaultPath: 'github-actions',
