@@ -1,7 +1,9 @@
-export * from './plugin';
-export * from './hooks';
 export {
+  githubWorkflowsPlugin,
+  githubWorkflowsPlugin as plugin,
   GithubWorkflowsContent,
   GithubWorkflowsOverviewContent,
   GithubWorkflowsTabContent,
-} from './components/GitubWorkflowsContent/GithubWorkflowsContent';
+} from './plugin';
+export * from './hooks';
+export * from './components/GitubWorkflowsContent/GithubWorkflowsContent';
