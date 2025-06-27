@@ -62,7 +62,6 @@
     "dayjs": "^1.11.9",
     "git-url-parse": "^14.0.0",
     "js-yaml": "^4.1.0",
-    "react-icons": "^5.2.1",
     "react-use": "^17.2.4"
   },
   "devDependencies": {
