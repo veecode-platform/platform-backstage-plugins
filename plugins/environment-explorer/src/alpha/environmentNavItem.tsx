@@ -24,6 +24,6 @@ export const EnvironmentNavItem = NavItemBlueprint.make({
   params: {
     icon: PublicIcon,
     routeRef: convertLegacyRouteRef(rootRouteRef),
-    title: 'Environment',
+    title: 'Environments',
   },
 });
