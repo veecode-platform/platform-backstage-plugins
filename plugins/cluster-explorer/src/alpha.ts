@@ -19,6 +19,7 @@ import {
   ClusterOverviewTabContent,
   ClusterInstructionsCardOverviewContent,
   ClusterExplorerPage,
+  ClusterNavItem,
 } from './alpha/index';
 import { rootRouteRef } from './routes';
 
@@ -35,5 +36,6 @@ export default createFrontendPlugin({
     ClusterOverviewTabContent,
     ClusterInstructionsCardOverviewContent,
     ClusterExplorerPage,
+    ClusterNavItem,
   ],
 });
