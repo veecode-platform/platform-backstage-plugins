@@ -22,7 +22,7 @@ import { isZoraAvailable } from '../hooks';
 /**
  * @alpha
  */
-export const ZoraOSSTabContent = EntityContentBlueprint.make({
+export const ZoraOSSProjectTabContent = EntityContentBlueprint.make({
   name: 'entity',
   params: {
     defaultPath: 'zora-oss',
@@ -33,5 +33,20 @@ export const ZoraOSSTabContent = EntityContentBlueprint.make({
       import('../components/projectVulnerabilities/VulnerabilitiesTable').then(
         m => <m.ProjectVulnerabilitiesTable />,
       ),
+  },
+});
+
+/**
+ * @alpha
+ */
+export const ZoraOSSClusterTabContent = EntityContentBlueprint.make({
+  name: 'entity',
+  params: {
+    defaultPath: 'zora-oss',
+    defaultTitle: 'Zora OSS',
+    filter: isZoraAvailable,
+    routeRef: convertLegacyRouteRef(rootRouteRef),
+    loader: () =>
+      import('../components/PluginPage').then(m => <m.ExampleComponent />),
   },
 });
