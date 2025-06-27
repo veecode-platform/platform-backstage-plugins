@@ -46,16 +46,16 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@backstage/errors": "^1.2.5",
-    "@backstage/plugin-permission-react": "^0.4.32",
     "@backstage/catalog-model": "^1.7.4",
     "@backstage/core-compat-api": "^0.4.2",
     "@backstage/core-components": "^0.17.2",
     "@backstage/core-plugin-api": "^1.10.7",
+    "@backstage/errors": "^1.2.5",
     "@backstage/frontend-plugin-api": "^0.10.2",
     "@backstage/integration": "^1.17.0",
     "@backstage/integration-react": "^1.2.7",
     "@backstage/plugin-catalog-react": "^1.18.0",
+    "@backstage/plugin-permission-react": "^0.4.32",
     "@backstage/theme": "^0.6.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
