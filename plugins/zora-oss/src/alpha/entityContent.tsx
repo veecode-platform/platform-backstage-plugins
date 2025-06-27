@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /*
  * Copyright 2024 The Backstage Authors
  *
@@ -17,7 +18,7 @@ import React from 'react';
 import { convertLegacyRouteRef } from '@backstage/core-compat-api';
 import { EntityContentBlueprint } from '@backstage/plugin-catalog-react/alpha';
 import { rootRouteRef } from '../routes';
-import { isZoraAvailable } from '../hooks';
+import { isZoraAvailable, isZoraCluster, isZoraProject } from '../hooks';
 
 /**
  * @alpha
@@ -27,7 +28,7 @@ export const ZoraOSSProjectTabContent = EntityContentBlueprint.make({
   params: {
     defaultPath: 'zora-oss',
     defaultTitle: 'Zora OSS',
-    filter: isZoraAvailable,
+    filter: !!isZoraAvailable && isZoraProject,
     routeRef: convertLegacyRouteRef(rootRouteRef),
     loader: () =>
       import('../components/projectVulnerabilities/VulnerabilitiesTable').then(
@@ -44,7 +45,7 @@ export const ZoraOSSClusterTabContent = EntityContentBlueprint.make({
   params: {
     defaultPath: 'zora-oss',
     defaultTitle: 'Zora OSS',
-    filter: isZoraAvailable,
+    filter: !!isZoraAvailable && isZoraCluster,
     routeRef: convertLegacyRouteRef(rootRouteRef),
     loader: () =>
       import('../components/PluginPage').then(m => <m.ExampleComponent />),
