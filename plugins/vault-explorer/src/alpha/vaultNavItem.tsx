@@ -24,6 +24,6 @@ export const VaultNavItem = NavItemBlueprint.make({
   params: {
     icon: KeyIcon,
     routeRef: convertLegacyRouteRef(rootRouteRef),
-    title: 'Vault',
+    title: 'Vaults',
   },
 });
