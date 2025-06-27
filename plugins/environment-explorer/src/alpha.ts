@@ -18,6 +18,7 @@ import { createFrontendPlugin } from '@backstage/frontend-plugin-api';
 import {
   EnvironmentExplorerPage,
   EnvironmentOverviewTabContent,
+  EnvironmentNavItem,
 } from './alpha/index';
 import { rootRouteRef } from './routes';
 
@@ -30,5 +31,9 @@ export default createFrontendPlugin({
     root: rootRouteRef,
     entityContent: rootRouteRef,
   }),
-  extensions: [EnvironmentExplorerPage, EnvironmentOverviewTabContent],
+  extensions: [
+    EnvironmentExplorerPage,
+    EnvironmentOverviewTabContent,
+    EnvironmentNavItem,
+  ],
 });
