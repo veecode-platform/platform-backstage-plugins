@@ -10769,6 +10769,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mui/icons-material@npm:^7.1.2":
+  version: 7.1.2
+  resolution: "@mui/icons-material@npm:7.1.2"
+  dependencies:
+    "@babel/runtime": "npm:^7.27.1"
+  peerDependencies:
+    "@mui/material": ^7.1.2
+    "@types/react": ^17.0.0 || ^18.0.0 || ^19.0.0
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10/2f0f85562bf9783530e3fe694c29e7d98c266a464f2d67586c043ef6346959b12e25781d08813896970a72e02b1e7d2f8d30ae078345c11bd23fc44765d1677a
+  languageName: node
+  linkType: hard
+
 "@mui/material@npm:^5.12.2":
   version: 5.17.1
   resolution: "@mui/material@npm:5.17.1"
@@ -18585,7 +18601,6 @@ __metadata:
     git-url-parse: "npm:^14.0.0"
     js-yaml: "npm:^4.1.0"
     msw: "npm:^1.0.0"
-    react-icons: "npm:^5.2.1"
     react-use: "npm:^17.2.4"
   peerDependencies:
     react: ^16.13.1 || ^17.0.0 || ^18.0.0
@@ -19006,11 +19021,17 @@ __metadata:
   resolution: "@veecode-platform/plugin-environment-explorer@workspace:plugins/environment-explorer"
   dependencies:
     "@backstage/catalog-model": "npm:^1.7.4"
-    "@backstage/cli": "npm:^0.29.5"
-    "@backstage/core-app-api": "npm:^1.15.4"
-    "@backstage/core-components": "npm:^0.16.3"
-    "@backstage/core-plugin-api": "npm:^1.10.3"
-    "@backstage/dev-utils": "npm:^1.1.6"
+    "@backstage/cli": "npm:^0.32.1"
+    "@backstage/core-app-api": "npm:^1.17.0"
+    "@backstage/core-compat-api": "npm:^0.4.2"
+    "@backstage/core-components": "npm:^0.17.2"
+    "@backstage/core-plugin-api": "npm:^1.10.7"
+    "@backstage/dev-utils": "npm:^1.1.10"
+    "@backstage/frontend-plugin-api": "npm:^0.10.2"
+    "@backstage/frontend-test-utils": "npm:^0.3.2"
+    "@backstage/integration": "npm:^1.17.0"
+    "@backstage/integration-react": "npm:^1.2.7"
+    "@backstage/plugin-catalog-react": "npm:^1.18.0"
     "@backstage/test-utils": "npm:^1.7.4"
     "@backstage/theme": "npm:^0.6.3"
     "@material-ui/core": "npm:^4.12.2"
@@ -19024,7 +19045,9 @@ __metadata:
     msw: "npm:^1.0.0"
     react-use: "npm:^17.2.4"
   peerDependencies:
-    react: ^16.13.1 || ^17.0.0
+    react: ^16.13.1 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
+    react-router-dom: 6.0.0-beta.0 || ^6.3.0
   languageName: unknown
   linkType: soft
 
@@ -19174,16 +19197,21 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@veecode-platform/plugin-vault-explorer@workspace:plugins/vault-explorer"
   dependencies:
+    "@backstage/catalog-model": "npm:^1.7.4"
     "@backstage/cli": "npm:^0.29.5"
     "@backstage/core-app-api": "npm:^1.15.4"
+    "@backstage/core-compat-api": "npm:^0.4.2"
     "@backstage/core-components": "npm:^0.16.3"
     "@backstage/core-plugin-api": "npm:^1.10.3"
     "@backstage/dev-utils": "npm:^1.1.6"
+    "@backstage/frontend-plugin-api": "npm:^0.10.2"
+    "@backstage/plugin-catalog-react": "npm:^1.18.0"
     "@backstage/test-utils": "npm:^1.7.4"
     "@backstage/theme": "npm:^0.6.3"
     "@material-ui/core": "npm:^4.9.13"
     "@material-ui/icons": "npm:^4.9.1"
     "@material-ui/lab": "npm:^4.0.0-alpha.61"
+    "@mui/icons-material": "npm:^7.1.2"
     "@testing-library/jest-dom": "npm:^5.10.1"
     "@testing-library/react": "npm:^12.1.3"
     "@testing-library/user-event": "npm:^14.0.0"
