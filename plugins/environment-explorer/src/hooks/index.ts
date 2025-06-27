@@ -1,0 +1,1 @@
+export { isEnvironmentKind } from './useEnvironmentKind';
