@@ -15,7 +15,7 @@
  */
 import { convertLegacyRouteRefs } from '@backstage/core-compat-api';
 import { createFrontendPlugin } from '@backstage/frontend-plugin-api';
-import { VeeAssistantAIContent } from './alpha/index';
+import { VeeAssistantAIContent, VeePage, VeeNavItem } from './alpha/index';
 import { rootRouteRef } from './routes';
 
 /**
@@ -24,7 +24,7 @@ import { rootRouteRef } from './routes';
 export default createFrontendPlugin({
   id: 'vee',
   routes: convertLegacyRouteRefs({
-    entityContent: rootRouteRef,
+    root: rootRouteRef,
   }),
-  extensions: [VeeAssistantAIContent],
+  extensions: [VeeAssistantAIContent, VeePage, VeeNavItem],
 });
