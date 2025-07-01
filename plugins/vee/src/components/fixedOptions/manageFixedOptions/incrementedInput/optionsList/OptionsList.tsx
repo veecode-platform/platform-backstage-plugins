@@ -1,44 +1,63 @@
-import React, { useState } from "react";
-import { OptionListProps } from "./types";
-import { MdKeyboardArrowRight } from "react-icons/md";
+import React, { useState } from 'react';
+import { OptionListProps } from './types';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import { useOptionsListStyles } from "./styles";
-import IconButton from "@mui/material/IconButton";
-import { MdEdit } from "react-icons/md";
-import { FaTrashAlt } from "react-icons/fa";
-import { FcCheckmark } from "react-icons/fc";
-import { FcCancel } from "react-icons/fc";
-import TextField from "@mui/material/TextField";
-import { 
-  initialOptionState, 
-  OptionReducer, 
-  setOption, 
-  setOptionLabel, 
-  setOptionPrompt 
-} from "../../state";
-import { OptionStateProps } from "../../state/optionState/types";
+import { useOptionsListStyles } from './styles';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import {
+  initialOptionState,
+  OptionReducer,
+  setOption,
+  setOptionLabel,
+  setOptionPrompt,
+} from '../../state';
+import { OptionStateProps } from '../../state/optionState/types';
+import {
+  CancelIconOutline,
+  CheckIcon,
+  ChevronRightIcon,
+  EditIcon,
+  TrashIcon,
+} from '../../../../shared';
 
-export const OptionsList: React.FC<OptionListProps> = (props) => {
+export const OptionsList: React.FC<OptionListProps> = props => {
   const [expanded, setExpanded] = useState<string | false>(false);
-  const [editingStates, setEditingStates] = useState<{ [id: string]: boolean }>({});
-  const [ optionData, optionDataDispatch ] = React.useReducer(OptionReducer,initialOptionState)
+  const [editingStates, setEditingStates] = useState<{ [id: string]: boolean }>(
+    {},
+  );
+  const [optionData, optionDataDispatch] = React.useReducer(
+    OptionReducer,
+    initialOptionState,
+  );
   const { data, onRemoveOption, onEditOptionFromList, onSaveOptions } = props;
-  const { root, accordion, accordionSummary, accordionActions, editButton, deleteButton, accordionDetails, input } = useOptionsListStyles();
+  const {
+    root,
+    accordion,
+    accordionSummary,
+    accordionActions,
+    editButton,
+    deleteButton,
+    accordionDetails,
+    input,
+  } = useOptionsListStyles();
 
-  const handleChange = (panel: string) => (_event: React.SyntheticEvent, newExpanded: boolean) => {
-    setExpanded(newExpanded ? panel : false);
-  };
+  const handleChange =
+    (panel: string) => (_event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? panel : false);
+    };
 
-  const handleChangeOption = (e:React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleChangeOption = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+  ) => {
     const value = e.target.value;
     const name = e.target.name;
-     e.stopPropagation();
-     if(name === "label") optionDataDispatch(setOptionLabel(value));
-     if(name === "prompt") optionDataDispatch(setOptionPrompt(value))
-  }  
+    e.stopPropagation();
+    if (name === 'label') optionDataDispatch(setOptionLabel(value));
+    if (name === 'prompt') optionDataDispatch(setOptionPrompt(value));
+  };
 
   const handleEditClick = (id: string) => {
     setEditingStates(prevState => ({
@@ -47,15 +66,15 @@ export const OptionsList: React.FC<OptionListProps> = (props) => {
     }));
   };
 
-  const handleSaveChanges = (id:string) => {
+  const handleSaveChanges = (id: string) => {
     onEditOptionFromList(optionData);
     onSaveOptions();
     handleEditClick(id);
-  }
+  };
 
-  const saveOptionInState = (item:OptionStateProps) => {
-    optionDataDispatch(setOption(item))
-  }
+  const saveOptionInState = (item: OptionStateProps) => {
+    optionDataDispatch(setOption(item));
+  };
 
   return (
     <div className={root}>
@@ -72,7 +91,7 @@ export const OptionsList: React.FC<OptionListProps> = (props) => {
           <MuiAccordionSummary
             aria-controls={`panel${item.id}-content`}
             id={`panel${item.id}-header`}
-            expandIcon={<MdKeyboardArrowRight size={25} />}
+            expandIcon={<ChevronRightIcon />}
             className={accordionSummary}
           >
             {editingStates[item.id as string] ? (
@@ -83,7 +102,7 @@ export const OptionsList: React.FC<OptionListProps> = (props) => {
                 label="Label option"
                 name="label"
                 variant="standard"
-                onClick={(e) => e.stopPropagation()}
+                onClick={e => e.stopPropagation()}
               />
             ) : (
               <Typography component="span">{item.label}</Typography>
@@ -98,7 +117,7 @@ export const OptionsList: React.FC<OptionListProps> = (props) => {
                     className={editButton}
                     onClick={() => handleSaveChanges(item.id as string)}
                   >
-                    <FcCheckmark size={18} />
+                    <CheckIcon />
                   </IconButton>
                   <IconButton
                     aria-label="cancel"
@@ -106,7 +125,7 @@ export const OptionsList: React.FC<OptionListProps> = (props) => {
                     className={deleteButton}
                     onClick={() => handleEditClick(item.id as string)}
                   >
-                    <FcCancel size={18} />
+                    <CancelIconOutline />
                   </IconButton>
                 </>
               ) : (
@@ -116,11 +135,15 @@ export const OptionsList: React.FC<OptionListProps> = (props) => {
                     title="Edit option"
                     className={editButton}
                     onClick={() => {
-                      saveOptionInState({id: item.id as string, label: item.label, prompt: item.prompt})
-                      handleEditClick(item.id as string)
+                      saveOptionInState({
+                        id: item.id as string,
+                        label: item.label,
+                        prompt: item.prompt,
+                      });
+                      handleEditClick(item.id as string);
                     }}
                   >
-                    <MdEdit size={18} />
+                    <EditIcon />
                   </IconButton>
                   <IconButton
                     aria-label="delete"
@@ -130,7 +153,7 @@ export const OptionsList: React.FC<OptionListProps> = (props) => {
                       onRemoveOption(item.id as string);
                     }}
                   >
-                    <FaTrashAlt size={18} />
+                    <TrashIcon />
                   </IconButton>
                 </>
               )}

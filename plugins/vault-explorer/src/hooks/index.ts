@@ -1,0 +1,1 @@
+export { isVaultKind } from './useVaultKind';

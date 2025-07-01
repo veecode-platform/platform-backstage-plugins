@@ -1,36 +1,36 @@
-import React from 'react'
-import { useAnalysisComponentStyles } from './styles'
+import React from 'react';
+import { useAnalysisComponentStyles } from './styles';
 import { Typography } from '@material-ui/core';
-import { BsStars } from 'react-icons/bs';
 import { AnalysisComponentProps, FormatedContentProps } from './types';
 import { parseString } from '../../../../../utils/helpers/parseString';
+import { StarsIcon } from '../../../../shared';
 
-const FormatedContent : React.FC<FormatedContentProps> = ({contentString}) => {
+const FormatedContent: React.FC<FormatedContentProps> = ({ contentString }) => {
   const { message } = useAnalysisComponentStyles();
-  const parsedAnalyses : string[] = parseString(contentString);
+  const parsedAnalyses: string[] = parseString(contentString);
 
-  return(
+  return (
     <div className={message}>
-      {parsedAnalyses.map(analysis => <p key={analysis}>{analysis}</p>)}
+      {parsedAnalyses.map(analysis => (
+        <p key={analysis}>{analysis}</p>
+      ))}
     </div>
-  )
-}
+  );
+};
 
-
-export const AnalysisComponent : React.FC<AnalysisComponentProps> = (props) => {
-
+export const AnalysisComponent: React.FC<AnalysisComponentProps> = props => {
   const { solution } = props;
   const { content, label } = useAnalysisComponentStyles();
 
   return (
     <div className={content}>
       <div className={label}>
-        <BsStars size={22}/>
+        <StarsIcon />
         <Typography variant="h6"> Suggested actions </Typography>
       </div>
       <div>
-          <FormatedContent contentString={solution}/>
+        <FormatedContent contentString={solution} />
       </div>
     </div>
-  )
-}
+  );
+};

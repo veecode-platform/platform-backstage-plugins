@@ -1,14 +1,32 @@
 {
   "name": "@veecode-platform/backstage-plugin-github-workflows",
-  "version": "1.1.4",
+  "version": "1.2.3",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "license": "Apache-2.0",
   "publishConfig": {
-    "access": "public",
-    "main": "dist/index.esm.js",
-    "types": "dist/index.d.ts"
+    "access": "public"
   },
+  "exports": {
+    ".": "./src/index.ts",
+    "./alpha": "./src/alpha.ts",
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "alpha": [
+        "src/alpha.ts"
+      ],
+      "package.json": [
+        "package.json"
+      ]
+    }
+  },
+  "keywords": [
+    "backstage",
+    "github",
+    "github workflows"
+  ],
   "backstage": {
     "role": "frontend-plugin",
     "pluginId": "github-workflows",
@@ -28,13 +46,15 @@
     "postpack": "backstage-cli package postpack"
   },
   "dependencies": {
-    "@backstage/catalog-model": "^1.7.3",
-    "@backstage/core-components": "^0.17.0",
-    "@backstage/core-plugin-api": "^1.10.5",
-    "@backstage/integration": "^1.16.2",
-    "@backstage/integration-react": "^1.2.5",
-    "@backstage/plugin-catalog-react": "^1.16.0",
-    "@backstage/theme": "^0.6.4",
+    "@backstage/catalog-model": "^1.7.4",
+    "@backstage/core-compat-api": "^0.4.2",
+    "@backstage/core-components": "^0.17.2",
+    "@backstage/core-plugin-api": "^1.10.7",
+    "@backstage/frontend-plugin-api": "^0.10.2",
+    "@backstage/integration": "^1.17.0",
+    "@backstage/integration-react": "^1.2.7",
+    "@backstage/plugin-catalog-react": "^1.18.0",
+    "@backstage/theme": "^0.6.3",
     "@material-ui/core": "^4.12.2",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "4.0.0-alpha.61",
@@ -42,24 +62,25 @@
     "dayjs": "^1.11.9",
     "git-url-parse": "^14.0.0",
     "js-yaml": "^4.1.0",
-    "react-icons": "^5.2.1",
     "react-use": "^17.2.4"
   },
-  "peerDependencies": {
-    "react": "^16.13.1 || ^17.0.0",
-    "react-router-dom": "^6.24.1"
-  },
   "devDependencies": {
-    "@backstage/cli": "^0.31.1",
-    "@backstage/core-app-api": "^1.16.0",
-    "@backstage/dev-utils": "^1.1.8",
-    "@backstage/test-utils": "^1.7.6",
+    "@backstage/cli": "^0.32.1",
+    "@backstage/core-app-api": "^1.17.0",
+    "@backstage/dev-utils": "^1.1.10",
+    "@backstage/frontend-test-utils": "^0.3.2",
+    "@backstage/test-utils": "^1.7.4",
     "@testing-library/jest-dom": "^5.10.1",
     "@testing-library/react": "^12.1.3",
     "@testing-library/user-event": "^14.0.0",
     "@types/git-url-parse": "^9.0.3",
     "@types/node": "*",
     "msw": "^1.0.0"
+  },
+  "peerDependencies": {
+    "react": "^16.13.1 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.13.1 || ^17.0.0 || ^18.0.0",
+    "react-router-dom": "6.0.0-beta.0 || ^6.3.0"
   },
   "files": [
     "dist"

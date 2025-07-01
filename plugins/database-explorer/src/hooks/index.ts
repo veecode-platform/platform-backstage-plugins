@@ -1,0 +1,1 @@
+export { isDatabaseKind } from './useDatabaseKind';
