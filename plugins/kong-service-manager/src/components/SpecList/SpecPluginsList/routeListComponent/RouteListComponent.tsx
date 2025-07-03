@@ -1,61 +1,84 @@
-import { RouteResponse } from "@veecode-platform/backstage-plugin-kong-service-manager-common";
-import { useKongServiceManagerContext } from "../../../../context";
-import React from "react";
-import { RouteListComponentProps } from "./types";
-import useAsync from "react-use/esm/useAsync";
-import { WrapperComponent } from "../wrapperComponent";
-import { PluginsTableComponent } from "../pluginsTableComponent";
-import RouteListTable from "./routeListTable/RouteListTable";
-import { initialRouteDetailsState, removeRouteDetails, RouteDetailsReducer } from "./state";
-import { transformPath } from "../../../../utils/helpers/transformPath";
-import { EmptyState } from "@backstage/core-components";
-import { useRouteListComponentStyles } from "./style";
-import { MethodLabel } from "../../../../components/shared";
+/* eslint-disable no-restricted-syntax */
 
-const RouteListComponent : React.FC<RouteListComponentProps> = (props) => { 
-  const [ routeDetailsState, routeDetailsDispatch] = React.useReducer(RouteDetailsReducer, initialRouteDetailsState);
+import React from 'react';
+import { RouteResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
+import { useKongServiceManagerContext } from '../../../../context';
+import { RouteListComponentProps } from './types';
+import useAsync from 'react-use/esm/useAsync';
+import { WrapperComponent } from '../wrapperComponent';
+import { PluginsTableComponent } from '../pluginsTableComponent';
+import RouteListTable from './routeListTable/RouteListTable';
+import {
+  initialRouteDetailsState,
+  removeRouteDetails,
+  RouteDetailsReducer,
+} from './state';
+import { transformPath } from '../../../../utils/helpers/transformPath';
+import { EmptyState } from '@backstage/core-components';
+import { useRouteListComponentStyles } from './style';
+import { MethodLabel } from '../../../../components/shared';
+
+const RouteListComponent: React.FC<RouteListComponentProps> = props => {
+  const [routeDetailsState, routeDetailsDispatch] = React.useReducer(
+    RouteDetailsReducer,
+    initialRouteDetailsState,
+  );
   const { getRoutesList } = useKongServiceManagerContext();
   const { root } = useRouteListComponentStyles();
   const { specname } = props;
 
-  const fetchRoutes = async (): Promise<RouteResponse[]> => {
-    const data = await getRoutesList() as RouteResponse[];
-    return data;
-  }
+  const resetRouteIdValue = () => routeDetailsDispatch(removeRouteDetails());
 
-  const resetRouteIdValue = () => routeDetailsDispatch(removeRouteDetails())
+  const {
+    value: routes,
+    loading,
+    error,
+  } = useAsync(async () => {
+    const response = await getRoutesList();
+    // eslint-disable-next-line no-console
+    console.log('AQUI RENDERIZA >>>', response);
+    if (response) return response as RouteResponse[];
+    return [];
+  }, []);
 
-  const {value: routes, loading, error} = useAsync(fetchRoutes,[]);
-
-  if(error)  return (
-    <WrapperComponent title="Route List">
-     <div className={root}>
-      <EmptyState 
-       missing="data" 
-       title="No routes to show" 
-       description={error.message}
-        />  
-     </div>
-    </WrapperComponent>
-  )
+  if (error)
+    return (
+      <WrapperComponent title="Route List">
+        <div className={root}>
+          <EmptyState
+            missing="data"
+            title="No routes to show"
+            description={error ? error.message : ''}
+          />
+        </div>
+      </WrapperComponent>
+    );
 
   return (
     <>
       {routeDetailsState ? (
-        <WrapperComponent 
-          title={<>Plugins associated to path <strong>{transformPath(routeDetailsState.path)}</strong>  <span><MethodLabel variant={routeDetailsState.method} /></span> </>} 
+        <WrapperComponent
+          title={
+            <>
+              Plugins associated to path{' '}
+              <strong>{transformPath(routeDetailsState.path)}</strong>{' '}
+              <span>
+                <MethodLabel variant={routeDetailsState.method} />
+              </span>{' '}
+            </>
+          }
           buttonBack
           handleBack={resetRouteIdValue}
-          >
-          <PluginsTableComponent 
-            specName={specname} 
+        >
+          <PluginsTableComponent
+            specName={specname}
             route={routeDetailsState}
-            />
+          />
         </WrapperComponent>
       ) : (
         <WrapperComponent title="Route List">
           <RouteListTable
-            routes={routes!}
+            routes={routes ?? []}
             loading={loading}
             setRouteDetails={routeDetailsDispatch}
           />
@@ -63,6 +86,6 @@ const RouteListComponent : React.FC<RouteListComponentProps> = (props) => {
       )}
     </>
   );
-}
+};
 
-export default React.memo(RouteListComponent)
+export default React.memo(RouteListComponent);

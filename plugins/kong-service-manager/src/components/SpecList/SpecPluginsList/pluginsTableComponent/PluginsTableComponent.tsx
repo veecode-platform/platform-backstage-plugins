@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -35,15 +36,16 @@ import {
 } from '../../../shared';
 import { PullRequestModal } from '../../PullRequesModal';
 import { usePermission } from '@backstage/plugin-permission-react';
+import { PluginImage } from '@veecode-platform/plugin-kong-service-manager-react';
 
 const createData = (
   name: string,
-  image: string,
+  slug: string,
   description: string,
   config: any,
   enableToSpec: boolean,
 ) => {
-  return { name, image, description, config, enableToSpec };
+  return { name, slug, description, config, enableToSpec };
 };
 
 export const PluginsTableComponent: React.FC<PluginsTableProps> = props => {
@@ -79,7 +81,6 @@ export const PluginsTableComponent: React.FC<PluginsTableProps> = props => {
     const plugin = pluginsSpecListState.filter(p => p.name === pluginName)[0];
     pluginsSpecListDispatch(
       updatePluginFromList({
-        image: plugin.image,
         name: plugin.name,
         slug: plugin.slug,
         description: plugin.description,
@@ -107,7 +108,7 @@ export const PluginsTableComponent: React.FC<PluginsTableProps> = props => {
       ? pluginsSpecListState.map(plugin =>
           createData(
             plugin.name,
-            plugin.image,
+            plugin.slug,
             plugin.description,
             plugin.config,
             plugin.enabledToSpec,
@@ -198,7 +199,7 @@ export const PluginsTableComponent: React.FC<PluginsTableProps> = props => {
                       <StyledTableCell component="th" scope="row">
                         <div className={iconAndName}>
                           {' '}
-                          <img src={row.image} alt={row.name} /> {row.name}
+                          <PluginImage pluginSlug={row.slug} /> {row.name}
                         </div>
                       </StyledTableCell>
                       <StyledTableCell align="center">

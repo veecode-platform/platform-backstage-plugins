@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import React from 'react';
 import { useKongServiceManagerContext } from '../../../../../context';
 import {
@@ -55,7 +56,12 @@ const RouteListTable: React.FC<RouteListTableProps> = props => {
   const rows =
     routes && routes.length > 0
       ? routes.map(route =>
-          createData(route.id, route.methods[0], route.name, route.paths[0]),
+          createData(
+            route.id,
+            route.methods?.[0] ?? 'GET',
+            route.name,
+            route.paths?.[0] ?? '/',
+          ),
         )
       : [];
 

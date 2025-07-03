@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import React from 'react';
 import { KongServiceManagerContext } from './KongServiceManagerContext';
@@ -43,15 +44,28 @@ interface KongServiceManagerProviderProps {
   children: React.ReactNode;
 }
 
-export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProps> = ({ children }) => {
-
-  const [allAssociatedPluginsState, associatedPluginsDispatch] = React.useReducer(AssociatedPluginsReducer, initialAssociatedPluginsState);
-  const [allAssociatedRoutePluginsState, associatedRoutePluginsDispatch] = React.useReducer(AssociatedRoutePluginsReducer, initialAssociatedRoutePluginsState);
+export const KongServiceManagerProvider: React.FC<
+  KongServiceManagerProviderProps
+> = ({ children }) => {
+  const [allAssociatedPluginsState, associatedPluginsDispatch] =
+    React.useReducer(AssociatedPluginsReducer, initialAssociatedPluginsState);
+  const [allAssociatedRoutePluginsState, associatedRoutePluginsDispatch] =
+    React.useReducer(
+      AssociatedRoutePluginsReducer,
+      initialAssociatedRoutePluginsState,
+    );
   const [openDrawer, setOpenDrawer] = React.useState<boolean>(false);
-  const [selectedPluginState, selectedPluginDispatch] = React.useReducer(SelectedPluginReducer,initialSelectedPluginState, );
-  const [associatedPluginsName, setAssociatedPluginsName] = React.useState<string[] | []>([]);
-  const [ associatedRoutePluginsName, setAssociatedRoutePluginsName ] = React.useState<string[]|[]>([]);
-  const [pluginsPerCategoryState, pluginsPerCategoryDispatch] = React.useReducer(PluginsPerCategoryReducer, initialPluginsPerCategoryState);
+  const [selectedPluginState, selectedPluginDispatch] = React.useReducer(
+    SelectedPluginReducer,
+    initialSelectedPluginState,
+  );
+  const [associatedPluginsName, setAssociatedPluginsName] = React.useState<
+    string[] | []
+  >([]);
+  const [associatedRoutePluginsName, setAssociatedRoutePluginsName] =
+    React.useState<string[] | []>([]);
+  const [pluginsPerCategoryState, pluginsPerCategoryDispatch] =
+    React.useReducer(PluginsPerCategoryReducer, initialPluginsPerCategoryState);
   const [configState, setConfigState] = React.useState<any | null>(null);
   const [searchTerm, setSeachTerm] = React.useState<string>('');
   const [routeId, setRouteId] = React.useState<string | null>(null);
@@ -86,7 +100,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     setOpenDrawer(!openDrawer);
   };
 
-  const setPluginState = (data: PluginCard) => selectedPluginDispatch(addSelectedPlugin(data));
+  const setPluginState = (data: PluginCard) =>
+    selectedPluginDispatch(addSelectedPlugin(data));
 
   const getAssociatedPuginsName = (
     pluginsParams: AssociatedPluginsResponse[],
@@ -273,7 +288,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   };
 
-  const getRoute = async (routeNameOrId:string) => {
+  const getRoute = async (routeNameOrId: string) => {
     try {
       if (instance && serviceName && routeNameOrId) {
         const route = await api.getRouteFromService(
@@ -383,10 +398,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   const listAssociatedRoutePlugins = async () => {
     try {
       if (instance && routeId) {
-        const plugins = await api.getRouteAssociatedPlugins(
-          instance,
-          routeId,
-        );
+        const plugins = await api.getRouteAssociatedPlugins(instance, routeId);
         if (plugins !== null && plugins !== undefined) {
           associatedRoutePluginsDispatch(addRoutePluginsAssociated(plugins));
           return plugins;
@@ -399,16 +411,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   };
 
-  const enablePluginToRoute = async (
-    config: CreatePlugin,
-  ) => {
+  const enablePluginToRoute = async (config: CreatePlugin) => {
     try {
       if (instance && routeId) {
-        const response = await api.addRoutePlugin(
-          instance,
-          routeId,
-          config,
-        );
+        const response = await api.addRoutePlugin(instance, routeId, config);
         if (response) {
           await listAssociatedRoutePlugins();
           alertApi.post({
@@ -438,14 +444,14 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
           pluginId,
           config,
         );
-      if(response){
-        await listAssociatedRoutePlugins();
-        return alertApi.post({
-          message: 'Plugin successfully edited!',
-          severity: 'success',
-          display: 'transient',
-        });
-      }
+        if (response) {
+          await listAssociatedRoutePlugins();
+          return alertApi.post({
+            message: 'Plugin successfully edited!',
+            severity: 'success',
+            display: 'transient',
+          });
+        }
       }
       return null;
     } catch (e: any) {
@@ -454,9 +460,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   };
 
-  const disabledPluginFromRoute = async (
-    pluginId: string,
-  ) => {
+  const disabledPluginFromRoute = async (pluginId: string) => {
     try {
       if (instance && routeId && pluginId) {
         const response = await api.removeRoutePlugin(
@@ -464,14 +468,14 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
           routeId,
           pluginId,
         );
-       if(response && allAssociatedPluginsState){
-        associatedRoutePluginsDispatch(removeRoutePluginAssociated(pluginId));
-        return alertApi.post({
-          message: 'Plugin successfully disabled',
-          severity: 'success',
-          display: 'transient',
-        });
-       }
+        if (response && allAssociatedPluginsState) {
+          associatedRoutePluginsDispatch(removeRoutePluginAssociated(pluginId));
+          return alertApi.post({
+            message: 'Plugin successfully disabled',
+            severity: 'success',
+            display: 'transient',
+          });
+        }
       }
       return null;
     } catch (e: any) {
@@ -501,7 +505,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
   /**
    * Service
-  */
+   */
 
   const getConfigFromService = async (pluginName: string) => {
     const asociatedPlugins = await listAssociatedPlugins();
@@ -529,18 +533,20 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
 
     if (allAssociatedPluginsState && pluginsInSpec) {
       const enableServicePlugins = await listAllEnabledPlugins();
-      if(enableServicePlugins){
+      if (enableServicePlugins) {
         const pluginsList = await Promise.all(
           enableServicePlugins.flatMap(category =>
             category.plugins
               .filter(plugin => plugin.associated)
               .map(async plugin => ({
-                image: plugin.image,
+                // image: plugin.image,
                 name: plugin.name,
                 slug: plugin.slug,
                 description: plugin.description,
                 config: await getConfigFromService(plugin.slug),
-                enabledToSpec: !!pluginsInSpec.find(p => p.name === plugin.slug),
+                enabledToSpec: !!pluginsInSpec.find(
+                  p => p.name === plugin.slug,
+                ),
               })),
           ),
         );
@@ -617,8 +623,8 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
   };
 
   /**
-  * Route
-  */
+   * Route
+   */
 
   const getConfigFromRoute = async (pluginName: string) => {
     const associatedPlugins = await listAssociatedRoutePlugins();
@@ -637,7 +643,10 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     return {};
   };
 
-  const listAllRoutePluginsForSpec = async (path:string, method: HttpMethod) => {
+  const listAllRoutePluginsForSpec = async (
+    path: string,
+    method: HttpMethod,
+  ) => {
     if (!selectedSpecState) return [];
 
     const formattedPath = transformPath(path);
@@ -649,24 +658,26 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
       .map(key => pathResult[key]);
 
     if (allAssociatedRoutePluginsState && pluginsInPath) {
-     const enableRoutePlugins = await listAllEnabledRoutePlugins();
-     if(enableRoutePlugins){
-      const pluginsList = await Promise.all(
-        enableRoutePlugins.flatMap(category =>
-          category.plugins
-            .filter(plugin => plugin.associated)
-            .map(async plugin => ({
-              image: plugin.image,
-              name: plugin.name,
-              slug: plugin.slug,
-              description: plugin.description,
-              config: await getConfigFromRoute(plugin.slug),
-              enabledToSpec: !!pluginsInPath.find(p => p.name === plugin.slug),
-            })),
-        ),
-      );
-      return pluginsList;
-     }
+      const enableRoutePlugins = await listAllEnabledRoutePlugins();
+      if (enableRoutePlugins) {
+        const pluginsList = await Promise.all(
+          enableRoutePlugins.flatMap(category =>
+            category.plugins
+              .filter(plugin => plugin.associated)
+              .map(async plugin => ({
+                // image: plugin.image,
+                name: plugin.name,
+                slug: plugin.slug,
+                description: plugin.description,
+                config: await getConfigFromRoute(plugin.slug),
+                enabledToSpec: !!pluginsInPath.find(
+                  p => p.name === plugin.slug,
+                ),
+              })),
+          ),
+        );
+        return pluginsList;
+      }
     }
     return [];
   };
@@ -680,14 +691,12 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     method: HttpMethod,
     plugins: IKongPluginSpec[],
   ) => {
-
     try {
       if (selectedSpecState) {
-
         const formattedPath = transformPath(path);
         const specPaths = selectedSpecState.paths;
         const pathSelected = specPaths[formattedPath][method];
-  
+
         // delete kong's plugin (old state)
         for (const key in pathSelected) {
           if (key.startsWith('x-kong')) {
@@ -711,7 +720,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         });
 
         const updatedMethod = { ...pathSelected, ...pluginsWithPrefix };
-        
+
         const definitionUpdated = {
           ...selectedSpecState,
           paths: {
@@ -747,27 +756,26 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
     }
   };
 
-
   React.useEffect(() => {
     if (allAssociatedPluginsState) {
       getAssociatedPuginsName(allAssociatedPluginsState);
     }
   }, [allAssociatedPluginsState]);
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     if (allAssociatedRoutePluginsState) {
       getAssociatedRoutePuginsName(allAssociatedRoutePluginsState);
     }
-  },[allAssociatedRoutePluginsState])
+  }, [allAssociatedRoutePluginsState]);
 
   React.useEffect(() => {
     if (isRoute && routeId) {
       listAllEnabledRoutePlugins();
-    };
-    if(!isRoute && serviceName){
+    }
+    if (!isRoute && serviceName) {
       listAllEnabledPlugins();
     }
-    
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchTerm]);
 
@@ -832,7 +840,7 @@ export const KongServiceManagerProvider: React.FC<KongServiceManagerProviderProp
         listAllServicePluginsForSpec,
         applyKongServicePluginsToSpec,
         listAllRoutePluginsForSpec,
-        applyKongRoutePluginsToSpec
+        applyKongRoutePluginsToSpec,
       }}
     >
       {children}

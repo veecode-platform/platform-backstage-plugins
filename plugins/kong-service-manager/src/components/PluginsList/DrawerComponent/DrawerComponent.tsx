@@ -1,5 +1,17 @@
+/* eslint-disable no-restricted-syntax */
 import React from 'react';
-import { Box, Button, Checkbox, CircularProgress, Drawer, FormControl, FormControlLabel, IconButton, TextField, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  Drawer,
+  FormControl,
+  FormControlLabel,
+  IconButton,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import Close from '@material-ui/icons/Close';
 import { EmptyStateComponent } from '../../shared';
 import { Progress } from '@backstage/core-components';
@@ -8,19 +20,50 @@ import { IncrementalFields, RecordFields } from './FieldsCustom';
 import { useKongServiceManagerContext } from '../../../context';
 import { addFields, FieldsReducer, initialFieldsState } from './state';
 import { PluginFieldsResponse } from '@veecode-platform/backstage-plugin-kong-service-manager-common';
-
+import { PluginImage } from '@veecode-platform/plugin-kong-service-manager-react';
 
 export const DrawerComponent = () => {
-
-  const [ isLoading, setLoading] = React.useState<boolean>(false);
+  const [isLoading, setLoading] = React.useState<boolean>(false);
   const [processingData, setProcessingData] = React.useState<boolean>(false);
-  const [ fieldsState, fieldsDispatch ] = React.useReducer(FieldsReducer, initialFieldsState);
-  const {paper, header,titleBar,pluginIcon, icon, content,form, input,checkbox, secondaryAction, spinner} = useDrawerStyles();
-  const { handleToggleDrawer, openDrawer ,selectedPluginState, allAssociatedPluginsState, allAssociatedRoutePluginsState, setConfigState, configState, enablePlugin, isRoute, enablePluginToRoute, editPlugin, editPluginFromRoute, getPluginFields } = useKongServiceManagerContext();
+  const [fieldsState, fieldsDispatch] = React.useReducer(
+    FieldsReducer,
+    initialFieldsState,
+  );
+  const {
+    paper,
+    header,
+    titleBar,
+    pluginIcon,
+    icon,
+    content,
+    form,
+    input,
+    checkbox,
+    secondaryAction,
+    spinner,
+  } = useDrawerStyles();
+  const {
+    handleToggleDrawer,
+    openDrawer,
+    selectedPluginState,
+    allAssociatedPluginsState,
+    allAssociatedRoutePluginsState,
+    setConfigState,
+    configState,
+    enablePlugin,
+    isRoute,
+    enablePluginToRoute,
+    editPlugin,
+    editPluginFromRoute,
+    getPluginFields,
+  } = useKongServiceManagerContext();
 
-  const handleChangeInput = (key: string, value: string | boolean | string[] | number) => {
-    if(value!==""){
-      setConfigState((prevConfigState : any) => {
+  const handleChangeInput = (
+    key: string,
+    value: string | boolean | string[] | number,
+  ) => {
+    if (value !== '') {
+      setConfigState((prevConfigState: any) => {
         const updatedConfigState = {
           ...prevConfigState,
           [key]: value,
@@ -30,50 +73,48 @@ export const DrawerComponent = () => {
     }
   };
 
-
   const handleEnablePlugin = async () => {
     if (selectedPluginState && allAssociatedPluginsState && configState) {
       setProcessingData(true);
       const config = {
         config: configState,
-        name: selectedPluginState.slug
-      } 
-      if(isRoute) await enablePluginToRoute(config);
+        name: selectedPluginState.slug,
+      };
+      if (isRoute) await enablePluginToRoute(config);
       else await enablePlugin(config);
-      setProcessingData(false)  
+      setProcessingData(false);
       handleToggleDrawer();
     }
   };
 
-  const handleEditAction = async () => { 
+  const handleEditAction = async () => {
     if (selectedPluginState && selectedPluginState.id && configState) {
       setProcessingData(true);
       const id = selectedPluginState.id;
       const config = {
         config: configState,
-        name: selectedPluginState.slug
-      } 
-      if(isRoute) await editPluginFromRoute(id,config)
-      else await editPlugin(id,config);
-      setProcessingData(false)  
+        name: selectedPluginState.slug,
+      };
+      if (isRoute) await editPluginFromRoute(id, config);
+      else await editPlugin(id, config);
+      setProcessingData(false);
       handleToggleDrawer();
     }
-  }
+  };
 
   const handlePluginFields = async (pluginName: string) => {
     const fields = await getPluginFields(pluginName);
-    
+
     if (fields) {
       let fieldsData: PluginFieldsResponse[] = [];
 
-
-      if(isRoute){
-        if(selectedPluginState?.associated && allAssociatedRoutePluginsState) {
-          allAssociatedRoutePluginsState.forEach((plugin) => {
+      if (isRoute) {
+        if (selectedPluginState?.associated && allAssociatedRoutePluginsState) {
+          allAssociatedRoutePluginsState.forEach(plugin => {
             if (plugin.name === selectedPluginState.slug) {
               const config = plugin.config;
-              const updateFields: PluginFieldsResponse[] = [];          
-              fields.forEach((field) => {    
+              const updateFields: PluginFieldsResponse[] = [];
+              fields.forEach(field => {
                 if (config[field.name] !== null) {
                   updateFields.push({
                     ...field,
@@ -88,11 +129,11 @@ export const DrawerComponent = () => {
       }
 
       if (selectedPluginState?.associated && allAssociatedPluginsState) {
-        allAssociatedPluginsState.forEach((plugin) => {
+        allAssociatedPluginsState.forEach(plugin => {
           if (plugin.name === selectedPluginState.slug) {
             const config = plugin.config;
-            const updateFields: PluginFieldsResponse[] = [];          
-            fields.forEach((field) => {    
+            const updateFields: PluginFieldsResponse[] = [];
+            fields.forEach(field => {
               if (config[field.name] !== null) {
                 updateFields.push({
                   ...field,
@@ -103,13 +144,11 @@ export const DrawerComponent = () => {
             fieldsData = fieldsData.concat(updateFields);
           }
         });
-      }
-     
-      else fieldsData = fields;
-      
+      } else fieldsData = fields;
+
       let updatedConfigState = { ...configState };
-      
-      fieldsData.forEach((f) => {
+
+      fieldsData.forEach(f => {
         if (f.defaultValue !== undefined) {
           updatedConfigState = {
             ...updatedConfigState,
@@ -117,22 +156,22 @@ export const DrawerComponent = () => {
           };
         }
       });
-  
+
       setConfigState(updatedConfigState);
       fieldsDispatch(addFields(fieldsData));
     }
   };
 
-  React.useEffect(()=>{
-   if(selectedPluginState) {
-    handlePluginFields(selectedPluginState.slug as string);
-  }
-   setLoading(true);
-   setTimeout(()=>{
-    setLoading(false)
-   },1000)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[selectedPluginState]);
+  React.useEffect(() => {
+    if (selectedPluginState) {
+      handlePluginFields(selectedPluginState.slug as string);
+    }
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedPluginState]);
 
   return (
     <Drawer
@@ -145,12 +184,14 @@ export const DrawerComponent = () => {
     >
       <div className={header}>
         <div className={titleBar}>
-          <img
-            src={selectedPluginState?.image}
+          <PluginImage
+            pluginSlug={selectedPluginState?.slug as string}
             alt={selectedPluginState?.description}
             className={pluginIcon}
           />
-          <Typography variant="h5">{selectedPluginState?.name} Plugin</Typography>
+          <Typography variant="h5">
+            {selectedPluginState?.name} Plugin
+          </Typography>
         </div>
         <IconButton
           key="dismiss"
@@ -173,104 +214,106 @@ export const DrawerComponent = () => {
                 autoComplete="off"
                 className={form}
               >
-                  {fieldsState.map((field,index) => {
-                    switch (field.type) {
-                      case 'string':
-                        return (
-                          <TextField
-                            id={field.name}
-                            name={field.name}
-                            type={field.type}
-                            required={field.required}
-                            key={index}
-                            label={`config.${field.name}`}
-                            variant="outlined"
-                            className={input}
-                            defaultValue={field.defaultValue}
-                            onChange={event =>
-                              handleChangeInput(
-                                field.name,
-                                event?.target.value as string,
-                              )
-                            }
-                          />
-                        );
-                      case 'number':
-                        return (
-                          <TextField
-                            id={field.name}
-                            name={field.name}
-                            type={field.type}
-                            required={field.required}
-                            key={index}
-                            label={`config.${field.name}`}
-                            variant="outlined"
-                            className={input}
-                            defaultValue={field.defaultValue}
-                            onChange={event =>
-                              handleChangeInput(
-                                field.name,
-                                Number(event?.target.value),
-                              )
-                            }
-                          />
-                        );
-                      case 'boolean':
-                        return (
-                          <FormControlLabel
-                            key={index}
-                            labelPlacement="end"
-                            label={`config.${field.name}`}
-                            control={
-                              <Checkbox
-                                color="primary"
-                                required={field.required}
-                                name={field.name}
-                                defaultChecked={field.defaultValue as boolean}
-                                onChange={e =>
-                                  handleChangeInput(
-                                    field.name,
-                                    e.target.checked as boolean,
-                                  )
-                                }
-                              />
-                            }
-                            className={checkbox}
-                          />
-                        );
-                      case 'array':
-                        if (field.arrayType === 'string')
-                          return (
-                            <IncrementalFields
-                              key={index}
+                {fieldsState.map((field, index) => {
+                  switch (field.type) {
+                    case 'string':
+                      return (
+                        <TextField
+                          id={field.name}
+                          name={field.name}
+                          type={field.type}
+                          required={field.required}
+                          key={index}
+                          label={`config.${field.name}`}
+                          variant="outlined"
+                          className={input}
+                          defaultValue={field.defaultValue}
+                          onChange={event =>
+                            handleChangeInput(
+                              field.name,
+                              event?.target.value as string,
+                            )
+                          }
+                        />
+                      );
+                    case 'number':
+                      return (
+                        <TextField
+                          id={field.name}
+                          name={field.name}
+                          type={field.type}
+                          required={field.required}
+                          key={index}
+                          label={`config.${field.name}`}
+                          variant="outlined"
+                          className={input}
+                          defaultValue={field.defaultValue}
+                          onChange={event =>
+                            handleChangeInput(
+                              field.name,
+                              Number(event?.target.value),
+                            )
+                          }
+                        />
+                      );
+                    case 'boolean':
+                      return (
+                        <FormControlLabel
+                          key={index}
+                          labelPlacement="end"
+                          label={`config.${field.name}`}
+                          control={
+                            <Checkbox
+                              color="primary"
+                              required={field.required}
                               name={field.name}
-                              required={field.required}
-                              items={
-                                (field.defaultValue
-                                  ? field.defaultValue
-                                  : field.defaultValues)??[]
+                              defaultChecked={field.defaultValue as boolean}
+                              onChange={e =>
+                                handleChangeInput(
+                                  field.name,
+                                  e.target.checked as boolean,
+                                )
                               }
-                              setState={setConfigState}
                             />
-                          );
-                        if (field.arrayType === 'record')
-                          return (
-                            <RecordFields
-                              inputName={field.name}
-                              required={field.required}
-                              defaultValues={field.defaultValue}
-                              recordFields={field.recordFields}
-                              key={index}
-                              setConfig={setConfigState}
-                            />
-                          );
-                        return <></>;
-                      default:
-                        return <></>;
-                    }
-                  })}
+                          }
+                          className={checkbox}
+                        />
+                      );
+                    case 'array':
+                      if (field.arrayType === 'string')
+                        return (
+                          <IncrementalFields
+                            key={index}
+                            name={field.name}
+                            required={field.required}
+                            items={
+                              (field.defaultValue
+                                ? field.defaultValue
+                                : field.defaultValues) ?? []
+                            }
+                            setState={setConfigState}
+                          />
+                        );
+                      if (field.arrayType === 'record')
+                        return (
+                          <RecordFields
+                            inputName={field.name}
+                            required={field.required}
+                            defaultValues={field.defaultValue}
+                            recordFields={field.recordFields}
+                            key={index}
+                            setConfig={setConfigState}
+                          />
+                        );
+                      return <></>;
+                    default:
+                      return <></>;
+                  }
+                })}
               </FormControl>
-            ) : <EmptyStateComponent /> }
+            ) : (
+              <EmptyStateComponent />
+            )}
           </>
         )}
       </Box>
