@@ -1,0 +1,46 @@
+{
+  "name": "@veecode-platform/plugin-kong-service-manager-react",
+  "version": "0.1.1",
+  "license": "Apache-2.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "publishConfig": {
+    "access": "public",
+    "main": "dist/index.esm.js",
+    "types": "dist/index.d.ts"
+  },
+  "backstage": {
+    "role": "web-library",
+    "pluginId": "kong-service-manager",
+    "pluginPackages": [
+      "@veecode-platform/backstage-plugin-kong-service-manager-common",
+      "@veecode-platform/plugin-kong-service-manager",
+      "@veecode-platform/plugin-kong-service-manager-backend",
+      "@veecode-platform/plugin-kong-service-manager-react"
+    ]
+  },
+  "sideEffects": false,
+  "scripts": {
+    "start": "backstage-cli package start",
+    "build": "backstage-cli package build",
+    "lint": "backstage-cli package lint",
+    "test": "backstage-cli package test",
+    "clean": "backstage-cli package clean",
+    "prepack": "backstage-cli package prepack",
+    "postpack": "backstage-cli package postpack"
+  },
+  "dependencies": {
+    "@mui/material": "^6.1.2"
+  },
+  "devDependencies": {
+    "@backstage/cli": "^0.31.1",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@types/react": "^16"
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "react": "^16.13.1 || ^17.0.0 || ^18.0.0"
+  }
+}

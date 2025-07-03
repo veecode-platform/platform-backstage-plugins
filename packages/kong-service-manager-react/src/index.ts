@@ -1,0 +1,1 @@
+export { PluginImage } from './components';
