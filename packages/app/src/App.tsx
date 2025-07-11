@@ -28,7 +28,11 @@ import { entityPage } from './components/catalog/EntityPage';
 import { searchPage } from './components/search/SearchPage';
 import { Root } from './components/Root';
 
-import { AlertDisplay, OAuthRequestDialog, SignInPage } from '@backstage/core-components';
+import {
+  AlertDisplay,
+  OAuthRequestDialog,
+  SignInPage,
+} from '@backstage/core-components';
 import { createApp } from '@backstage/app-defaults';
 import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
@@ -40,11 +44,17 @@ import { ClusterExplorerPage } from '@veecode-platform/backstage-plugin-cluster-
 import type { IdentityApi } from '@backstage/core-plugin-api';
 
 import { KongServiceManagerContent } from '@veecode-platform/plugin-kong-service-manager';
-import { RepoUrlSelectorExtension, ResourcePickerExtension, UploadFilePickerExtension,OptionsPickerExtension } from '@veecode-platform/veecode-scaffolder-extensions';
+import {
+  RepoUrlSelectorExtension,
+  ResourcePickerExtension,
+  UploadFilePickerExtension,
+  OptionsPickerExtension,
+} from '@veecode-platform/veecode-scaffolder-extensions';
 import { apiDocsPlugin } from '@backstage/plugin-api-docs';
 import { KubernetesGptAnalyzerPage } from '@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer';
 
-import { VeeHomepage } from "@veecode-platform/backstage-plugin-vee"
+import { VeeHomepage } from '@veecode-platform/backstage-plugin-vee';
+import { TenantExplorerPage } from '@veecode-platform/backstage-plugin-tenant-explorer';
 
 const app = createApp({
   apis,
@@ -56,7 +66,7 @@ const app = createApp({
           providers={[...providers]}
           title="Select a sign-in method"
           align="center"
-          onSignInSuccess={async (identityApi: IdentityApi) => {           
+          onSignInSuccess={async (identityApi: IdentityApi) => {
             props.onSignInSuccess(identityApi);
           }}
         />
@@ -81,7 +91,7 @@ const app = createApp({
     });
   },
 });
- 
+
 const routes = (
   <FlatRoutes>
     <Route path="/" element={<Navigate to="catalog" />} />
@@ -103,10 +113,10 @@ const routes = (
     </Route>
     <Route path="/create" element={<ScaffolderPage />}>
       <ScaffolderFieldExtensions>
-          <RepoUrlSelectorExtension/>
-          <ResourcePickerExtension/>
-          <UploadFilePickerExtension/>
-          <OptionsPickerExtension/>
+        <RepoUrlSelectorExtension />
+        <ResourcePickerExtension />
+        <UploadFilePickerExtension />
+        <OptionsPickerExtension />
       </ScaffolderFieldExtensions>
     </Route>
     <Route path="/api-docs" element={<ApiExplorerPage />} />
@@ -128,9 +138,16 @@ const routes = (
     </Route>
     <Route path="/settings" element={<UserSettingsPage />} />
     <Route path="/catalog-graph" element={<CatalogGraphPage />} />
-    <Route path="/kong-service-manager" element={<KongServiceManagerContent />} />
-    <Route path="/kubernetes-gpt-analyzer" element={<KubernetesGptAnalyzerPage />} />
-    <Route path="/vee" element={<VeeHomepage/>}/>
+    <Route
+      path="/kong-service-manager"
+      element={<KongServiceManagerContent />}
+    />
+    <Route
+      path="/kubernetes-gpt-analyzer"
+      element={<KubernetesGptAnalyzerPage />}
+    />
+    <Route path="/tenant-explorer" element={<TenantExplorerPage />} />
+    <Route path="/vee" element={<VeeHomepage />} />
   </FlatRoutes>
 );
 

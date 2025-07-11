@@ -23,8 +23,10 @@ import {
 const defaultColumns: TableColumn<CatalogTableRow>[] = [
   CatalogTable.columns.createTitleColumn({ hidden: true }),
   CatalogTable.columns.createNameColumn({ defaultKind: 'Tenant' }),
+  CatalogTable.columns.createStatusColumn(),
+  CatalogTable.columns.createUsersColumn(),
+  CatalogTable.columns.createTagsColumn(),
   CatalogTable.columns.createOwnerColumn(),
-  CatalogTable.columns.createSpecTypeColumn(),
   CatalogTable.columns.createSpecLifecycleColumn(),
 ];
 

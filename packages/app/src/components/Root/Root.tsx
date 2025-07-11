@@ -28,6 +28,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import LockIcon from '@material-ui/icons/Lock';
 import { AssistantAIMenu } from '@veecode-platform/backstage-plugin-vee';
+import ThreeDRotationOutlined from '@material-ui/icons/ThreeDRotationOutlined';
 
 const useSidebarLogoStyles = makeStyles({
   root: {
@@ -69,11 +70,20 @@ export const Root = ({ children }: PropsWithChildren<{}>) => (
         {/* Global nav, not org-specific */}
         <SidebarItem icon={HomeIcon} to="catalog" text="Home" />
         <SidebarItem icon={ExtensionIcon} to="api-docs" text="APIs" />
-        <SidebarItem icon={ExtensionIcon} to="cluster-explorer" text="Cluster" />
-        <SidebarItem icon={LockIcon} to="vault-explorer" text="Vault"/>
+        <SidebarItem
+          icon={ExtensionIcon}
+          to="cluster-explorer"
+          text="Cluster"
+        />
+        <SidebarItem icon={LockIcon} to="vault-explorer" text="Vault" />
         <SidebarItem icon={LibraryBooks} to="docs" text="Docs" />
+        <SidebarItem
+          icon={ThreeDRotationOutlined}
+          to="tenant-explorer"
+          text="Tenants"
+        />
         <SidebarItem icon={CreateComponentIcon} to="create" text="Create..." />
-        <AssistantAIMenu/>
+        <AssistantAIMenu />
         {/* End global nav */}
         <SidebarDivider />
         <SidebarScrollWrapper>

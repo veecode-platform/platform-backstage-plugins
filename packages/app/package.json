@@ -51,6 +51,7 @@
     "@veecode-platform/backstage-plugin-gitlab-pipelines": "workspace:^",
     "@veecode-platform/backstage-plugin-infracost": "workspace:^",
     "@veecode-platform/backstage-plugin-kubernetes-gpt-analyzer": "workspace:^",
+    "@veecode-platform/backstage-plugin-tenant-explorer": "workspace:^",
     "@veecode-platform/backstage-plugin-vee": "workspace:^",
     "@veecode-platform/backstage-plugin-zora-oss": "workspace:^",
     "@veecode-platform/plugin-kong-service-manager": "workspace:^",

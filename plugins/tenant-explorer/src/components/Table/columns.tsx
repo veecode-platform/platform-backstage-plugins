@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import React from 'react';
 import {
   humanizeEntityRef,
@@ -42,19 +43,6 @@ export const columnFactories = Object.freeze({
           title={entity.metadata?.title}
         />
       ),
-      width: 'auto'
-    };
-  },
-  createSystemColumn(): TableColumn<CatalogTableRow> {
-    return {
-      title: 'System',
-      field: 'resolved.partOfSystemRelationTitle',
-      render: ({ resolved }) => (
-        <EntityRefLinks
-          entityRefs={resolved.partOfSystemRelations}
-          defaultKind="system"
-        />
-      ),
       width: 'auto',
     };
   },
@@ -87,7 +75,7 @@ export const columnFactories = Object.freeze({
           )}
         </>
       ),
-      width: 'auto'
+      width: 'auto',
     };
   },
   createSpecTypeColumn(): TableColumn<CatalogTableRow> {
@@ -195,6 +183,20 @@ export const columnFactories = Object.freeze({
     return {
       title: 'Namespace',
       field: 'entity.metadata.namespace',
+      width: 'auto',
+    };
+  },
+  createUsersColumn(): TableColumn<CatalogTableRow> {
+    return {
+      title: 'Users',
+      field: 'entity.metadata.users',
+      width: 'auto',
+    };
+  },
+  createStatusColumn(): TableColumn<CatalogTableRow> {
+    return {
+      title: 'Active',
+      field: 'entity.metadata.status',
       width: 'auto',
     };
   },
