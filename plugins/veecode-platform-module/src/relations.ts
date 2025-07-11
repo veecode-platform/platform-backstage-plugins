@@ -8,7 +8,7 @@ Naming rules for relations in priority order:
 
 /**
  * Reversed direction of {@link RELATION_ENVIRONMENT_OF}.
- * 
+ *
  *
  * @public
  */
@@ -21,3 +21,18 @@ export const RELATION_FROM_ENVIRONMENT = 'fromEnvironment';
  * @public
  */
 export const RELATION_ENVIRONMENT_OF = 'environmentOf';
+
+/**
+ * Reversed direction of {@link RELATION_PROVIDED_BY}.
+ *
+ * This is the 1-to-N case, where a cluster control plane can provide several tenants.
+ *
+ * @public
+ */
+export const RELATION_PROVIDED_BY = 'providedBy';
+
+/**
+ *
+ * TODO It is worth considering that a tenant can consume cataloged resources such as a database, a vault, a Kong service, etc. In the future, it would be interesting to add these relations to the Tenant kind.
+ *
+ */

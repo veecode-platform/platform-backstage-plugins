@@ -1,21 +1,13 @@
 {
-  "name": "@veecode-platform/plugin-kong-service-manager",
-  "version": "2.1.3",
+  "name": "@veecode-platform/backstage-plugin-tenant-explorer",
+  "version": "0.1.0",
   "main": "src/index.ts",
   "types": "src/index.ts",
   "license": "Apache-2.0",
   "publishConfig": {
-    "access": "public"
-  },
-  "backstage": {
-    "role": "frontend-plugin",
-    "pluginId": "kong-service-manager",
-    "pluginPackages": [
-      "@veecode-platform/backstage-plugin-kong-service-manager-common",
-      "@veecode-platform/plugin-kong-service-manager",
-      "@veecode-platform/plugin-kong-service-manager-backend",
-      "@veecode-platform/plugin-kong-service-manager-react"
-    ]
+    "access": "public",
+    "main": "dist/index.esm.js",
+    "types": "dist/index.d.ts"
   },
   "exports": {
     ".": "./src/index.ts",
@@ -34,12 +26,21 @@
   },
   "keywords": [
     "backstage",
-    "kong"
+    "control-plane",
+    "tenant",
+    "tenant-explorer"
   ],
+  "backstage": {
+    "role": "frontend-plugin",
+    "pluginId": "tenant-explorer",
+    "pluginPackages": [
+      "@veecode-platform/backstage-plugin-tenant-explorer"
+    ]
+  },
   "sideEffects": false,
   "scripts": {
     "start": "backstage-cli package start",
-    "build": "backstage-cli package build && cp -r ./src/assets ./dist/assets",
+    "build": "backstage-cli package build",
     "lint": "backstage-cli package lint",
     "test": "backstage-cli package test",
     "clean": "backstage-cli package clean",
@@ -55,42 +56,34 @@
     "@backstage/integration": "^1.17.0",
     "@backstage/integration-react": "^1.2.7",
     "@backstage/plugin-catalog-react": "^1.18.0",
-    "@backstage/plugin-permission-react": "^0.4.30",
     "@backstage/theme": "^0.6.3",
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
+    "@backstage/types": "^1.2.1",
+    "@material-ui/core": "^4.9.13",
+    "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.61",
-    "@mui/icons-material": "^6.4.7",
-    "@mui/material": "^6.1.2",
-    "@octokit/rest": "^21.0.2",
-    "@veecode-platform/backstage-plugin-kong-service-manager-common": "^0.5.3",
-    "@veecode-platform/plugin-kong-service-manager-react": "^0.1.1",
-    "dayjs": "^1.11.10",
-    "js-base64": "^3.7.7",
-    "js-yaml": "^4.1.0",
-    "react-icons": "^5.3.0",
-    "react-lottie": "^1.2.4",
-    "react-use": "^17.5.1",
-    "yaml": "^2.5.1"
+    "@veecode-platform/plugin-kubernetes-react": "0.4.2-next.1",
+    "lodash": "^4.17.21",
+    "pluralize": "^8.0.0",
+    "react-use": "^17.2.4"
   },
   "peerDependencies": {
-    "react": "^18.0.2",
-    "react-router-dom": "^6.3.0"
+    "react": "^16.13.1 || ^17.0.0",
+    "react-router-dom": "^6.24.1"
   },
   "devDependencies": {
     "@backstage/cli": "^0.32.1",
     "@backstage/core-app-api": "^1.17.0",
     "@backstage/dev-utils": "^1.1.10",
     "@backstage/frontend-test-utils": "^0.3.2",
+    "@backstage/plugin-catalog-graph": "^0.4.15",
     "@backstage/test-utils": "^1.7.4",
     "@testing-library/jest-dom": "^5.10.1",
     "@testing-library/react": "^12.1.3",
     "@testing-library/user-event": "^14.0.0",
+    "@veecode-platform/plugin-kubernetes": "^0.11.13-next.2",
     "msw": "^1.0.0"
   },
   "files": [
-    "dist",
-    "config.d.ts",
-    "public/"
+    "dist"
   ]
 }

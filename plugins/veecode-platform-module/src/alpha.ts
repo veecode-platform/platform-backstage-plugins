@@ -1,1 +1,0 @@
-export { catalogModuleVeeCodeProcessor } from './module'
