@@ -1,6 +1,11 @@
 /* eslint-disable @backstage/no-undeclared-imports */
-import { createBackendModule } from '@backstage/backend-plugin-api';
+import {
+  createBackendModule,
+  coreServices,
+  createBackendPlugin,
+} from '@backstage/backend-plugin-api';
 import { catalogProcessingExtensionPoint } from '@backstage/plugin-catalog-node/alpha';
+import { BackendDynamicPluginInstaller } from '@backstage/backend-dynamic-feature-service';
 import {
   ClusterEntitiesProcessor,
   DatabaseEntitiesProcessor,
@@ -27,3 +32,8 @@ export const catalogModuleVeeCodeProcessor = createBackendModule({
     });
   },
 });
+
+export const dynamicPluginInstaller: BackendDynamicPluginInstaller = {
+  kind: 'new',
+  install: () => catalogModuleVeeCodeProcessor,
+};

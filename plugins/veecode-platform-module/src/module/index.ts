@@ -1,1 +1,4 @@
-export {catalogModuleVeeCodeProcessor} from './module';
+export {
+  catalogModuleVeeCodeProcessor,
+  dynamicPluginInstaller,
+} from './module';

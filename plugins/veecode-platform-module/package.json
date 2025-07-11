@@ -7,13 +7,13 @@
   "license": "Apache-2.0",
   "exports": {
     ".": "./src/index.ts",
-    "./alpha": "./src/alpha.ts",
+    "./dynamic": "./src/dynamic.ts",
     "./package.json": "./package.json"
   },
   "typesVersions": {
     "*": {
-      "alpha": [
-        "src/alpha.ts"
+      "dynamic": [
+        "src/dynamic.ts"
       ],
       "package.json": [
         "package.json"
@@ -52,6 +52,7 @@
     "@backstage/plugin-catalog-node": "^1.16.2"
   },
   "dependencies": {
+    "@backstage/backend-dynamic-feature-service": "^0.7.1",
     "@backstage/catalog-model": "^1.7.4"
   }
 }
