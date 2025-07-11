@@ -18148,7 +18148,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veecode-platform/backstage-plugin-kong-service-manager-common@npm:^0.5.2, @veecode-platform/backstage-plugin-kong-service-manager-common@workspace:^, @veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common":
+"@veecode-platform/backstage-plugin-kong-service-manager-common@npm:^0.5.3, @veecode-platform/backstage-plugin-kong-service-manager-common@workspace:^, @veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common":
   version: 0.0.0-use.local
   resolution: "@veecode-platform/backstage-plugin-kong-service-manager-common@workspace:plugins/kong-service-manager-common"
   dependencies:
@@ -18570,7 +18570,7 @@ __metadata:
     "@testing-library/jest-dom": "npm:^5.10.1"
     "@testing-library/react": "npm:^12.1.3"
     "@testing-library/user-event": "npm:^14.0.0"
-    "@veecode-platform/backstage-plugin-kong-service-manager-common": "npm:^0.5.2"
+    "@veecode-platform/backstage-plugin-kong-service-manager-common": "npm:^0.5.3"
     "@veecode-platform/plugin-kong-service-manager-react": "npm:^0.1.1"
     dayjs: "npm:^1.11.10"
     js-base64: "npm:^3.7.7"
