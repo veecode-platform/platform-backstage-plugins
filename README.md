@@ -2,6 +2,8 @@
 Veecode Platform Backstage Plugins
 </h1>
 <br><br>
+<h2>Important: depreecated</h2>
+<p>These plugins are being updated and moved into the https://github.com/veecode-platform/devportal-plugins project, where they will also have a dynamic version published compatible with both VeeCode DevPortal and RHDH (Red Hat Developer Hub).</p>
 <div align="center">
 <img src="https://github.com/veecode-platform/platform-backstage-plugins/assets/84424883/9ad91582-73a5-4def-bd34-2a9a3bbcb451" align="center" width="600"/>
 </div>
