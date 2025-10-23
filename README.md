@@ -1,5 +1,5 @@
 <h1 align="center">
-Veecode Platform Backstage Plugins
+VeeCode Platform Backstage Plugins
 </h1>
 <br><br>
 <h2>Important: deprecated</h2>
